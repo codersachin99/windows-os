@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import styles from "./source.css?raw";
 import { contactsApi, contactInitials, filterContacts, type Contact, type ContactDraft } from "./api";
