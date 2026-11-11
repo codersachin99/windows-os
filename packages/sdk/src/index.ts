@@ -1,5 +1,6 @@
 import type { AppDefinition } from "@windows-os/contracts";
 import { legacyArt } from "@windows-os/assets";
+import sourceShortcuts from "./legacy-shortcuts.json";
 
 // Public, reusable app-registration contract. App implementations live separately
 // from the shell. Never mark an app migrated just because its icon is registered.
@@ -14,11 +15,11 @@ const builtinApps: AppDefinition[] = [
     kind: "system", desktop: true, showInStart: true,
     window: { width: 760, height: 490 }
   },
-  {
-    id: "web_contacts", label: "Contacts", icon: legacyArt.contacts,
-    kind: "web", desktop: true, showInStart: true,
-    window: { width: 780, height: 520 }
-  }
+  ...sourceShortcuts.map(shortcut => ({
+    id: shortcut.key, label: shortcut.lbl, icon: shortcut.icon,
+    kind: "web" as const, desktop: true, showInStart: true,
+    window: { width: shortcut.width, height: shortcut.height }
+  }))
 ];
 
 export class AppRegistry {
