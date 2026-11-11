@@ -31,8 +31,8 @@ test("Contacts is a React app using original styling and API CRUD", async ({ pag
 
   await page.goto("/");
   await page.locator('[data-test-avatar="win7"]').click({ timeout: 12000 });
-  await page.locator('[data-test-desktop-icon="contacts"]').dblclick();
-  const win = page.locator('[data-test-window="contacts"]');
+  await page.locator('[data-test-desktop-icon="web_contacts"]').dblclick();
+  const win = page.locator('[data-test-window="web_contacts"]');
   await expect(win).toBeVisible();
   await expect(win.locator("iframe")).toHaveCount(0);
   await win.locator(".windows-window__titlebar").dblclick({ position: { x: 80, y: 10 } });
@@ -73,8 +73,8 @@ test("Contacts surfaces backend failure rather than fabricating data", async ({ 
   }));
   await page.goto("/");
   await page.locator('[data-test-avatar="win7"]').click({ timeout: 12000 });
-  await page.locator('[data-test-desktop-icon="contacts"]').dblclick();
-  const win = page.locator('[data-test-window="contacts"]');
+  await page.locator('[data-test-desktop-icon="web_contacts"]').dblclick();
+  const win = page.locator('[data-test-window="web_contacts"]');
   await expect(win.getByText("Error loading contacts: Database unavailable")).toBeVisible();
   await expect(win.locator("#contactCount")).toHaveText("0 items");
 });
