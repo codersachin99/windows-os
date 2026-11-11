@@ -2,6 +2,7 @@ import { useEffect, useState, type Dispatch } from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
 import { legacyArt } from "@windows-os/assets";
 import { appRegistry } from "@windows-os/sdk";
+import { ContactsApp } from "@windows-os/apps/contacts";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
 
@@ -12,7 +13,7 @@ interface DesktopShellProps {
 
 function ApplicationContent({ appId }: { appId: string }) {
   if (appId === "contacts") {
-    return <iframe className="windows-window__iframe" src="/apps/contacts/index.html" title="Contacts" />;
+    return <ContactsApp />;
   }
   if (appId === "bin") {
     return <div className="windows-explorer">
