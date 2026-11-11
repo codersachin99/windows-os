@@ -2032,5 +2032,40 @@
       "status": "pending",
       "evidence": []
     }
+  ],
+  "externalApps": [
+    {
+      "source": "apps/contacts/index.html",
+      "sha": "9079378b7349c3ba255e40c40f117d73a6040f32",
+      "status": "implemented",
+      "verification": "pending",
+      "mode": "native-react",
+      "evidence": [
+        "packages/apps/contacts/src/ContactsApp.tsx",
+        "packages/apps/contacts/src/source.css",
+        "packages/apps/contacts/src/api.ts",
+        "packages/apps/contacts/src/api.test.ts",
+        "tests/e2e/contacts.spec.ts"
+      ],
+      "note": "Original standalone Contacts UI rebuilt as React. Exact source CSS preserved in Shadow DOM, same 5 fields and CRUD paths. Integration/browser tests have not been run."
+    },
+    {
+      "source": "apps/illustrator/index.html",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "pending",
+      "verification": "blocked-source",
+      "mode": "source-empty",
+      "evidence": [],
+      "note": "Source checkout stores a zero-byte app entry; must audit actual legacy runtime/availability rather than invent functionality."
+    },
+    {
+      "source": "apps/photoshop/index.html",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "pending",
+      "verification": "blocked-source",
+      "mode": "source-empty",
+      "evidence": [],
+      "note": "Source checkout stores a zero-byte app entry; check legacy runtime/availability before declaring feature parity."
+    }
   ]
 }
