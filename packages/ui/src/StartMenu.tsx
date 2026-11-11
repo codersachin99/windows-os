@@ -34,7 +34,7 @@ export function StartMenu({ dispatch }: StartMenuProps) {
         <strong>Guest</strong>
         <hr />
         <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("computer")! })}>Computer</button>
-        <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("contacts")! })}>Contacts</button>
+        <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("web_contacts")! })}>Contacts</button>
         <hr />
         <button onClick={() => dispatch({ type: "LOG_OFF" })}>Log off</button>
         <button className="windows-startmenu__power" onClick={() => dispatch({ type: "SHUTDOWN" })}>Shut down</button>
