@@ -13,7 +13,8 @@ export default defineConfig({
       "@windows-os/assets": app("./packages/assets/src/index.ts"),
       "@windows-os/engine": app("./packages/engine/src/index.ts"),
       "@windows-os/ui": app("./packages/ui/src/index.ts"),
-      "@windows-os/sdk": app("./packages/sdk/src/index.ts")
+      "@windows-os/sdk": app("./packages/sdk/src/index.ts"),
+      "@windows-os/apps/contacts": app("./packages/apps/contacts/src/index.ts")
     }
   },
   server: {
