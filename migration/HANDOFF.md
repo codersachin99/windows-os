@@ -22,6 +22,13 @@
 - **Dependency reliability:** one accidental CI run on the workflow-change commit failed during `npm install` because a newer Babel dependency requested unavailable `@babel/types@^7.29.14`. Transitive Babel parser/types are pinned through npm overrides to published compatible v7 releases pending a full generated lockfile.
 - **Next coding:** provide source mount metadata at session startup, then plug native Explorer/file dialogs and CodeMirror Notepad into this SDK; verify complete behavior and visuals against pinned original. Do not claim module parity prematurely.
 
+## Update: Notepad source-model port (2026-11-12)
+
+- **Commit:** [399e8b742](https://github.com/codersachin99/windows-os/commit/399e8b742a5e9b96d4252613251a24541f8f871e) implements `packages/apps/notepad/src/document.ts` with the original Notepad's New/Open/Save/Save As behavior, dirty title indicator, close confirmation, font defaults, wrap/status settings, cursor position and date/time formatting. Uses the shared file store rather than separate mock documents.
+- **Source quirk retained:** original New resets its label/content without clearing the previous path; this unusual behavior has an explicit unit test instead of being silently redesigned.
+- **Verification:** the Notepad model and unit test files are committed; they **have not had an opt-in CI run yet**. The preceding filesystem/profile and Babel checkpoint **passed** [run 43092981085](https://github.com/codersachin99/windows-os/actions/runs/43092981085). Normal Notepad commit correctly skipped CI. Do not claim the Notepad model is CI verified.
+- **Next:** port source CodeMirror editing component, full menu/shortcut handling, open/save/font/overwrite dialogs and legacy appearance as native React modules; connect the original session-generated volumes, then add browser behavior comparisons. No source Notepad module is marked verified; the original app's full UI is not yet implemented. See [NOTEPAD.md](NOTEPAD.md).
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.
