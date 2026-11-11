@@ -19,7 +19,11 @@ pnpm dev
 
 The importer verifies the *clean* pinned source Git revision and every imported blob SHA before copying the original, untouched `assets/` and `apps/` to `apps/web/public/`; original CSS goes to `apps/web/public/legacy/styles/`. It does **not** copy Vue executable bundles into the React application or change the old project. Commit imported asset files into `windows-os` after provenance/license review (third-party components may have separate rights). Until the import is performed, exact wallpaper, avatars, styles, sound and icon resources **will not render**.
 
-The original Python API and unresolved apps are not yet ported; run the original server separately only when comparing behavior. This new React application is **incomplete**, not a replacement for the full legacy product.
+The original Python API modules have been retained under `services/api/` as a loopback-only development service, but are not security-certified. The original standalone Contacts app is now a native React port under `packages/apps/contacts` with the same CSS and API CRUD; it is **implemented pending tests**, not full acceptance. The original Photoshop and Illustrator standalone `index.html` files are zero bytes at the pinned checkpoint; their runtime capability requires investigation rather than an invented implementation. This new React application is **incomplete**, not a replacement for the full legacy product.
+
+## Standalone source applications
+
+All three `apps/*/index.html` entries from the original source are now recorded in `module-tracker.json.externalApps`, and `npm run audit:legacy` verifies the SHA and status for each. Contacts uses the exact original CSS extracted from its source HTML and React components instead of a legacy iframe. Source 23-file Python backend was preserved separately. **Original module bundles are still predominantly pending**: the tracker reflects this instead of treating basic shell screenshots as full functionality.
 
 ## Migration order
 
