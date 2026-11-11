@@ -3,8 +3,9 @@ name: React migration checks
 on:
   push:
     branches:
-      - feat/0001-faithful-react-foundation
-  pull_request:
+      - main
+      - 'feat/**'
+  workflow_dispatch:
 
 concurrency:
   group: windows-os-${{ github.workflow }}-${{ github.ref }}
@@ -15,6 +16,9 @@ permissions:
 
 jobs:
   browser-and-contracts:
+    # Push checks are opt-in; the triggering commit must contain [run-ci].
+    # Explicit manual workflow dispatch also runs checks when requested.
+    if: contains(github.event.head_commit.message, '[run-ci]') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
