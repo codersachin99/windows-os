@@ -2,7 +2,7 @@
 
 This is the new **React + TypeScript + Vite** home for the existing WindowsOS product. The design and functional specification is the private [legacy-win7 repository](https://github.com/codersachin99/legacy-win7) at the pinned commit `4e63290d783009e1293433c6ccf252abba9c1187`. It is a **port, not a redesign**.
 
-**Current status: conversion underway, not complete.** This first slice provides the source-art-backed Windows 7 login and Guest desktop, boot/session transitions, Start menu, taskbar, desktop shortcuts, a shared window manager, and a modular app registry. The Contacts HTML is preserved temporarily inside a source app iframe. Its backend integration and the full legacy apps/games/gadgets/themes remain to be ported. The app must not be called fully equivalent until every original behavior is verified.
+**Current status: conversion underway, not complete.** This first slice provides the source-art-backed Windows 7 login and Guest desktop, boot/session transitions, Start menu, taskbar, desktop shortcuts, a shared window manager, and a modular app registry. **Contacts has now been rebuilt as a native React application**, preserving its original source stylesheet through an isolated Shadow DOM and using the same Python CRUD endpoints (`/api/contacts`, `/api/contacts/save`, `/api/contacts/delete`). It supports New/Edit/Delete, refresh, search across name/email/phone/company, details, original form fields and status messages. This is implemented but full browser/integration validation is pending. The full legacy apps/games/gadgets/themes still require migration. The app must not be called fully equivalent until every original behavior is verified.
 
 ## Run locally
 
@@ -36,6 +36,12 @@ npm run test:e2e
 npm run build
 ```
 
+## First source-following app: Contacts
+
+Original source: `legacy-win7/apps/contacts/index.html` and `api/controllers/contact_controller.py`, pinned to the same Git commit. The source's external shortcut key `web_contacts` is preserved in the new registry. The React implementation uses its **actual CSS** rather than a rewritten cosmetic approximation, embedded inside a Shadow Root to protect the shell's styles. Unlike the earlier prototype, no iframe is used. Form fields and API payloads match the source.
+
+The 6 API/model unit tests and the browser CRUD test are committed, but a test file is **not evidence of a passing test**. Use `npm test` and `npm run test:e2e`; the browser tests can use mocked responses and do not require the local Python service. For manual persistent data, run the API service on localhost first. The preserved backend still uses legacy authentication/security and **must not be publicly exposed** until separately hardened.
+
 ## Preserved Python API (optional during the React migration)
 
 The source's **23 Python API/controller/model files** have been copied verbatim into `services/api/api/`, with the original `app.config.json` and a private SQLite `db.config.example.json`. The original backend endpoints remain available during the React conversion, rather than being rewritten or removed prematurely. They have **not** yet passed integrated endpoint tests and are not a production security certification.
@@ -57,6 +63,7 @@ Do not commit the populated DB config, SQLite database, tokens or user data. The
 | `packages/engine` | Pure desktop/session/window state, source-aligned events |
 | `packages/ui` | React boot, login, desktop, taskbar, Start and window components |
 | `packages/sdk` | App registry and shared extension contract |
+| `packages/apps/contacts` | First source-following React app port; original Contacts CSS, REST service adapter, and unit/e2e tests |
 | `apps/web` | Vite browser entry point, React application and public resources |
 | `migration` | Locked full source inventory, status per module and migration runbook |
 | `scripts` | Auditing and byte-for-byte asset/style import |
