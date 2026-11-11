@@ -12,7 +12,7 @@ interface DesktopShellProps {
 }
 
 function ApplicationContent({ appId }: { appId: string }) {
-  if (appId === "contacts") {
+  if (appId === "web_contacts") {
     return <ContactsApp />;
   }
   if (appId === "bin") {
