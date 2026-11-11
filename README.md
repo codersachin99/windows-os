@@ -36,6 +36,18 @@ npm run test:e2e
 npm run build
 ```
 
+## Preserved Python API (optional during the React migration)
+
+The source's **23 Python API/controller/model files** have been copied verbatim into `services/api/api/`, with the original `app.config.json` and a private SQLite `db.config.example.json`. The original backend endpoints remain available during the React conversion, rather than being rewritten or removed prematurely. They have **not** yet passed integrated endpoint tests and are not a production security certification.
+
+```powershell
+Copy-Item services/api/db.config.example.json services/api/db.config.json
+npm run dev:api   # separate terminal; localhost:8099
+npm run dev       # localhost:1420, proxies /api to backend
+```
+
+Do not commit the populated DB config, SQLite database, tokens or user data. The API must stay on loopback until reviewed; see [services/api/README.md](services/api/README.md).
+
 ## Modular implementation
 
 | Package | Responsibility |

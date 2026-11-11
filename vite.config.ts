@@ -16,7 +16,11 @@ export default defineConfig({
       "@windows-os/sdk": app("./packages/sdk/src/index.ts")
     }
   },
-  server: { host: "127.0.0.1", port: 1420, strictPort: true, fs: { allow: [app(".")] } },
+  server: {
+    host: "127.0.0.1", port: 1420, strictPort: true,
+    fs: { allow: [app(".")] },
+    proxy: { "/api": { target: "http://127.0.0.1:8099", changeOrigin: false } }
+  },
   build: { outDir: app("./dist/web"), emptyOutDir: true },
   test: { include: ["../../packages/**/*.test.ts", "src/**/*.test.ts"] }
 });

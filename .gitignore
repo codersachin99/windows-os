@@ -8,3 +8,8 @@ dist/
 artifacts/
 coverage/
 .DS_Store
+
+services/api/db.config.json
+services/api/data/
+**/__pycache__/
+*.pyc
