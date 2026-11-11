@@ -5,6 +5,14 @@
 **PR:** https://github.com/codersachin99/windows-os/pull/1 (draft; not merged)  
 **Status:** the first React application slice is working and CI-tested; **the full product is not migrated or release-ready**.
 
+## Checkpoint: shared filesystem substrate (2026-11-12)
+
+- **Commit:** [8f09f912](https://github.com/codersachin99/windows-os/commit/8f09f912011c042cfc80298ebc297c5809f47071); **PR Chromium/TypeScript/unit/build CI:** [43089881176](https://github.com/codersachin99/windows-os/actions/runs/43089881176), passed.
+- **Implemented:** `packages/filesystem` source-style absolute URI paths; typed `list`, `stat`, `read`, `write`, `mkdir`, `remove`, `copy`, `move`, `isExisting`; metadata including UTF-8 text byte size; persistent Guest browser store; SDK singleton `packages/sdk/src/files.ts`. Seven new unit cases cover paths, nesting, errors, copy/move, storage recovery and write failure.
+- **Limitations:** only text files/directories; source disks, binary/media, permissions, account-specific volumes, shortcut metadata, trash, search and file-dialog behavior are **not** implemented. This core is not yet connected to an authentic Computer/Explorer or Notepad UI.
+- **Source references:** original `src/modules/apps/notepad.js` uses `read(path,true)`/`write(content,path)`/`getParentDirectory(path)`; `computer.js` uses `uri`, `type`, `mtime`, `size`; `cmd.js` uses `fs.list/read/stat` with drive-letter mapping. See [FILESYSTEM.md](FILESYSTEM.md).
+- **Next:** map source disk mounts + folders into one source-compatible volume/session adapter, then wire native Explorer and the full CodeMirror-based Notepad to the shared filesystem with comparable interactions. Do not replace the source editor with a basic textarea or declare the files/apps migrated.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.
