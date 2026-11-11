@@ -21,7 +21,7 @@ test("Guest opens the real Win7 desktop with original wallpaper and shortcuts", 
   await expect(page.locator('[data-test-taskbar="base"]')).toBeVisible();
   await expect(page.locator('[data-test-desktop-icon="bin"]')).toBeVisible();
   await expect(page.locator('[data-test-desktop-icon="computer"]')).toBeVisible();
-  await expect(page.locator('[data-test-desktop-icon="contacts"]')).toBeVisible();
+  await expect(page.locator('[data-test-desktop-icon="web_contacts"]')).toBeVisible();
   const bg = await page.locator("[data-test-desktop-background]").evaluate(element =>
     getComputedStyle(element).backgroundImage);
   expect(bg).toContain("default.deccec52.webp");
@@ -34,7 +34,7 @@ test("Start menu launches Computer and supports minimize, restore and close", as
   await page.getByRole("button", { name: "Open Start menu" }).click();
   const menu = page.locator("[data-test-start-menu]");
   await expect(menu).toBeVisible();
-  await menu.getByRole("button", { name: "Computer" }).click();
+  await menu.locator('[data-test-program="computer"]').click();
   await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
   await page.getByRole("button", { name: "Minimize Computer" }).click();
   await expect(page.locator('[data-test-window="computer"]')).toHaveCount(0);
