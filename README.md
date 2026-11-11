@@ -73,3 +73,7 @@ This repository currently does **not** represent the whole product; see [the mig
 ## Migration rule
 
 Port the **source code and behavior**, preserving component names/semantics and original image/fonts/CSS where appropriate. When a module is migrated, attach functional tests and screenshot state evidence before changing its status to verified. Every legacy module is accounted for in the source inventory. Work on functional vertical slices until the source and target pass the same behavior suite, including responsive and desktop/mobile interactions.
+
+## Development CI policy
+
+Regular commits do not spend runner time. GitHub Actions runs only for a push whose **latest commit message** includes `[run-ci]`, or an explicit manual workflow dispatch. PR updates do not automatically trigger the workflow. For a checkpoint run, use a commit message such as `test: verify migration checkpoint [run-ci]`; ordinary implementation commits omit that marker. Note: the workflow will still show a skipped run for routine pushes, but no test job is executed.

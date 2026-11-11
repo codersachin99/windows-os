@@ -49,12 +49,11 @@ export class LegacyVolumeSession {
       || new Set(drives.map(d => d.path)).size !== drives.length) {
       throw new FileStoreError("EINVAL", "Duplicate source disk mount");
     }
-    if (!drives.some(d => runtime.disks.some(raw =>
+    // Validate every supplied disk, not just one matching entry. If the source
+    // supplies zero disks (e.g., not yet installed), do not fabricate any.
+    if (drives.some(d => !runtime.disks.some(raw =>
       normalizeFileUri(raw.path ?? "/") === normalizeFileUri(root + "/" + d.path)))) {
-      // Empty drive configurations are allowed for first-run/uninstalled source.
-      if (drives.length) {
-        throw new FileStoreError("EINVAL", "Disk mounts do not belong to source system root");
-      }
+      throw new FileStoreError("EINVAL", "Disk mounts do not belong to source system root");
     }
     for (const path of [this.desktopPath, this.trashPath]) {
       if (path === root || !path.startsWith(root + "/")) {

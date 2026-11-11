@@ -14,6 +14,14 @@
 - **Drive-path follow-up:** commit [909a4f13](https://github.com/codersachin99/windows-os/commit/909a4f13a24e48c534d6c4a16fc21bd65cb8aab2) ports the source CMD drive-letter parsing, working-directory resolution, drive stats and Guest user-name-to-URI mount translation in `packages/filesystem/src/drivePaths.ts`; tests cover D: and C: volumes, cross-drive paths and unknown disks. [PR CI 43090752469](https://github.com/codersachin99/windows-os/actions/runs/43090752469) passed. This is a path adapter, **not** a mounted or seeded source volume.
 - **Next:** map source disk mounts + folders into one source-compatible volume/session adapter, then wire native Explorer and the full CodeMirror-based Notepad to the shared filesystem with comparable interactions. Do not replace the source editor with a basic textarea or declare the files/apps migrated.
 
+## Update: opt-in CI and source-configured volumes (2026-11-12)
+
+- **CI workflow:** routine commits no longer run tests; the job only executes when the latest push commit message contains the literal `[run-ci]` marker or the workflow is manually dispatched. `pull_request` auto-run was removed. Working branch and `main` are supported. Source: `.github/workflows/react-checks.yml`.
+- **File store:** added change-event subscribers for File Explorer/Notepad/Recycle Bin to observe writes, moves, copies and removal after successful persistence; observers cannot undo a committed write. Added separate persistent user-scoped stores with a backwards-compatible Guest key.
+- **Runtime mounts:** `LegacyVolumeSession` accepts actual source `systemPath`-based root, `desktopPath`, `trashPath`, and disk `getStats()` entries. Only source-provided directories are created, rather than a fabricated C: drive or default document tree. Validation and idempotency are tested. These are integration contracts, **not** a completed Explorer/Notepad implementation.
+- **Dependency reliability:** one accidental CI run on the workflow-change commit failed during `npm install` because a newer Babel dependency requested unavailable `@babel/types@^7.29.14`. Transitive Babel parser/types are pinned through npm overrides to published compatible v7 releases pending a full generated lockfile.
+- **Next coding:** provide source mount metadata at session startup, then plug native Explorer/file dialogs and CodeMirror Notepad into this SDK; verify complete behavior and visuals against pinned original. Do not claim module parity prematurely.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

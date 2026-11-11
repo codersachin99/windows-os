@@ -38,6 +38,11 @@ describe("legacy volume/session boundary", () => {
     expect(() => new LegacyVolumeSession(new VirtualFileStore(), {
       ...runtime, desktopPath: "/outside/Desktop"
     })).toThrow("outside source system root");
+    expect(() => new LegacyVolumeSession(new VirtualFileStore(), {
+      ...runtime, disks: [runtime.disks[0], {
+        letter: "D", path: "/elsewhere/disk-2"
+      }]
+    })).toThrow("do not belong to source system root");
     const store = new VirtualFileStore();
     await store.mkdir("/storage");
     await store.write("taken", "/storage/system");
