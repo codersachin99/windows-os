@@ -15,3 +15,7 @@ Current real implementation: packages/filesystem/src/index.ts.
 NEXT: map original disk mounts, seeded source folders, actual user identity/session isolation and binary media; implement native Explorer, file dialogs, Notepad, CMD, Recycle Bin and test cross-app persistence. Original source contains more operations, special folders, permission checks and search behavior; do not mark these source modules verified from file-store unit tests alone.
 
 Run npm test for filesystem unit coverage. Green tests do not imply full source parity.
+
+## CMD drive-path adapter checkpoint
+
+The original src/modules/apps/cmd.js drive-path functions m/g/y/w/v/x/k/E are mapped in packages/filesystem/src/drivePaths.ts. It converts Windows drive-letter input (including current-drive relative path resolution and Guest profile-name translation) into the common slash-URI store contract. Mount metadata is supplied through drivesFromLegacyStats; no default drives have been invented. The tested path adapter does not yet mount any source disks or populate an Explorer.
