@@ -39,6 +39,9 @@
       ],
       "@windows-os/sdk": [
         "packages/sdk/src/index.ts"
+      ],
+      "@windows-os/apps/contacts": [
+        "packages/apps/contacts/src/index.ts"
       ]
     }
   },
