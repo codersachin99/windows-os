@@ -15,7 +15,7 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
-    id: "contacts", label: "Contacts", icon: legacyArt.contacts,
+    id: "web_contacts", label: "Contacts", icon: legacyArt.contacts,
     kind: "web", desktop: true, showInStart: true,
     window: { width: 780, height: 520 }
   }
@@ -27,7 +27,7 @@ export class AppRegistry {
     for (const app of initial) this.register(app);
   }
   register(app: AppDefinition): void {
-    if (!/^[a-z][a-z0-9-]*$/.test(app.id)) throw new Error(`Invalid app id: ${app.id}`);
+    if (!/^[a-z][a-z0-9_-]*$/.test(app.id)) throw new Error(`Invalid app id: ${app.id}`);
     if (this.apps.has(app.id)) throw new Error(`Duplicate app id: ${app.id}`);
     this.apps.set(app.id, Object.freeze({ ...app, window: { ...app.window } }));
   }
