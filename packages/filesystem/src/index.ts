@@ -47,7 +47,27 @@ export function getFileName(path: string): string {
   return uri === "/" ? "/" : uri.slice(uri.lastIndexOf("/") + 1);
 }
 const root: StoredEntry = { uri: "/", type: "directory", mtime: 0 };
+export type FileStoreChange =
+  | { type: "created" | "updated" | "removed"; path: string }
+  | { type: "copied" | "moved"; from: string; to: string };
+
 export class VirtualFileStore {
+  private readonly listeners = new Set<(change: FileStoreChange) => void>();
+
+  /** Notify all open applications after a successfully persisted change. */
+  subscribe(listener: (change: FileStoreChange) => void): () => void {
+    this.listeners.add(listener);
+    return () => { this.listeners.delete(listener); };
+  }
+
+  private notify(change: FileStoreChange): void {
+    for (const listener of this.listeners) {
+      try { listener(change); } catch {
+        // A crashed UI subscriber must not make a committed filesystem write fail.
+      }
+    }
+  }
+
   private entries = new Map<string, StoredEntry>([["/", root]]);
   constructor(
     private readonly storage?: FileStoreStorage,
@@ -102,7 +122,7 @@ export class VirtualFileStore {
     this.directory(getParentDirectory(uri));
     if (this.entries.has(uri)) throw new FileStoreError("EEXIST", "Path exists: " + uri);
   }
-  private commit(next: Map<string, StoredEntry>): void {
+  private commit(next: Map<string, StoredEntry>, change: FileStoreChange): void {
     if (this.storage) {
       const state: Snapshot = {
         version: 1,
@@ -112,6 +132,7 @@ export class VirtualFileStore {
       this.storage.setItem(this.storageKey, JSON.stringify(state));
     }
     this.entries = next;
+    this.notify(change);
   }
   async stat(path: string): Promise<FileEntry | null> {
     const item = this.entries.get(normalizeFileUri(path));
@@ -142,10 +163,11 @@ export class VirtualFileStore {
     if (this.entries.get(uri)?.type === "directory") {
       throw new FileStoreError("EISDIR", "Cannot write to a directory");
     }
+    const existed = this.entries.has(uri);
     const item: StoredEntry = { uri, type: "file", content, mtime: Date.now() };
     const next = new Map(this.entries);
     next.set(uri, item);
-    this.commit(next);
+    this.commit(next, { type: existed ? "updated" : "created", path: uri });
     return this.entry(item);
   }
   async mkdir(path: string): Promise<FileEntry> {
@@ -154,7 +176,7 @@ export class VirtualFileStore {
     const item: StoredEntry = { uri, type: "directory", mtime: Date.now() };
     const next = new Map(this.entries);
     next.set(uri, item);
-    this.commit(next);
+    this.commit(next, { type: "created", path: uri });
     return this.entry(item);
   }
   async remove(path: string): Promise<void> {
@@ -166,7 +188,7 @@ export class VirtualFileStore {
     }
     const next = new Map(this.entries);
     next.delete(uri);
-    this.commit(next);
+    this.commit(next, { type: "removed", path: uri });
   }
   private transfer(source: string, destination: string, move: boolean): void {
     const from = normalizeFileUri(source);
@@ -185,7 +207,7 @@ export class VirtualFileStore {
       if (next.has(path)) throw new FileStoreError("EEXIST", "Path exists: " + path);
       next.set(path, { ...item, uri: path, mtime: Date.now() });
     }
-    this.commit(next);
+    this.commit(next, { type: move ? "moved" : "copied", from, to });
   }
   async move(from: string, to: string): Promise<void> { this.transfer(from, to, true); }
   async copy(from: string, to: string): Promise<void> { this.transfer(from, to, false); }
@@ -193,3 +215,5 @@ export class VirtualFileStore {
 }
 
 export * from "./drivePaths";
+
+export * from "./volumeSession";

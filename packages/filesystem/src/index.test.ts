@@ -86,6 +86,33 @@ describe("VirtualFileStore", () => {
     await expect(fs.mkdir("/Docs")).rejects.toThrow("Quota exceeded");
     expect(await fs.stat("/Docs")).toBeNull();
   });
+
+  it("notifies multiple file-using apps on persisted changes and supports unsubscribe", async () => {
+    const fs = new VirtualFileStore();
+    const events: string[] = [];
+    const unsub = fs.subscribe(e => events.push(e.type));
+    fs.subscribe(() => { throw new Error("UI listener failed"); });
+    await fs.mkdir("/Docs");
+    await fs.write("first", "/Docs/note.txt");
+    await fs.write("second", "/Docs/note.txt");
+    await fs.copy("/Docs/note.txt", "/Docs/copy.txt");
+    await fs.move("/Docs/copy.txt", "/Docs/moved.txt");
+    await fs.remove("/Docs/moved.txt");
+    expect(events).toEqual(["created", "created", "updated", "copied", "moved", "removed"]);
+    unsub();
+    await fs.write("again", "/Docs/note.txt");
+    expect(events).toHaveLength(6);
+  });
+  it("does not notify subscribers if persistent writes fail", async () => {
+    const fs = new VirtualFileStore({
+      getItem: () => null,
+      setItem: () => { throw new Error("Quota exceeded"); }
+    });
+    let notified = false;
+    fs.subscribe(() => { notified = true; });
+    await expect(fs.mkdir("/Docs")).rejects.toThrow("Quota exceeded");
+    expect(notified).toBe(false);
+  });
   it("does not overwrite corrupt persisted files", () => {
     const storage = new MemoryStorage();
     const bad = '{"version":1,"entries":[{"uri":"/missing/file","type":"file","content":"x","mtime":1}]}';
