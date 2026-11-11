@@ -14,7 +14,8 @@
     "check:legacy": "node scripts/import-legacy.mjs --from ../legacy-win7 --check",
     "test:e2e": "playwright test",
     "audit:legacy": "node scripts/audit-legacy.mjs",
-    "dev:api": "python services/api/api/server.py"
+    "dev:api": "python services/api/api/server.py",
+    "test:source": "node --test scripts/source-contacts.test.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
