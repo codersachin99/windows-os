@@ -191,3 +191,5 @@ export class VirtualFileStore {
   async copy(from: string, to: string): Promise<void> { this.transfer(from, to, false); }
   getParentDirectory(path: string): string { return getParentDirectory(path); }
 }
+
+export * from "./drivePaths";

@@ -8,3 +8,6 @@ function browserStorage(): FileStoreStorage | undefined {
 export const fileStore = new VirtualFileStore(browserStorage());
 export type { FileEntry, FileEntryType, FileStoreErrorCode } from "@windows-os/filesystem";
 export { FileStoreError, getFileName, getParentDirectory, normalizeFileUri } from "@windows-os/filesystem";
+
+export { drivesFromLegacyStats, fromStorageUri, parseWindowsPath, resolveWindowsPath, toStorageUri, windowsFileName, windowsParentDirectory, windowsPath } from "@windows-os/filesystem";
+export type { LegacyDrive, LegacyPathConfig, LegacyDriveStats } from "@windows-os/filesystem";
