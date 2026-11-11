@@ -12,3 +12,9 @@ Preserved from original Vue component:
 - Source quirk: New resets content/name but retains the previous file path. Documented and unit tested rather than silently changing legacy semantics.
 
 This is **not a complete Notepad port**. Full UI still requires CodeMirror editor extensions and shortcuts, menubar, source font/open/save dialogs, overwrite confirmations, theme-specific CSS, and desktop/mobile visual/interaction parity. Do not mark source notepad.js verified.
+
+## CodeMirror editor adapter
+
+The native `packages/apps/notepad/src/NotepadEditor.tsx` now uses real CodeMirror 6, with source-equivalent `set`, `insert`, `focus`, `selectAll`, wrap, cursor notifications, configurable fonts and original Alt-command key binding support. The 424-byte original `src/styles/apps/notepad.css` was ported verbatim into `source.css`; `editor.css` adds only container sizing.
+
+The editor remains a reusable component and has **not yet been wired into the desktop window, menu, dialogs or source Close lifecycle**. Its dependency versions have been pinned, but this subsequent change has not yet had an opt-in CI run. The full original Notepad application is still pending.
