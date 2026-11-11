@@ -6,6 +6,10 @@ on:
       - feat/0001-faithful-react-foundation
   pull_request:
 
+concurrency:
+  group: windows-os-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -26,6 +30,8 @@ jobs:
         run: npm test
       - name: Check original source migration inventory
         run: npm run audit:legacy
+      - name: Verify original Contacts source style and shortcut fidelity
+        run: npm run test:source
       - name: Build Vite application
         run: npm run build
       - name: Install Chromium
