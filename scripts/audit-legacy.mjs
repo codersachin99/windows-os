@@ -27,6 +27,20 @@ for (const entry of tracker.modules) {
     failures.push(`Missing test/source evidence for ${entry.source}`);
   }
 }
+const externalSources = inventory.filter(x => /^apps\\/[^/]+\\/index\\.html$/.test(x.path));
+const externalEntries = tracker.externalApps ?? [];
+const externalPaths = new Set(externalEntries.map(x => x.source));
+if (externalPaths.size !== externalEntries.length) failures.push("Duplicate external app entries");
+for (const src of externalSources) {
+  const entry = externalEntries.find(x => x.source === src.path);
+  if (!entry) failures.push(`Untracked external app: ${src.path}`);
+  else if (entry.sha !== src.sha) failures.push(`External app SHA mismatch: ${src.path}`);
+  else if (["implemented", "verified"].includes(entry.status) && !entry.evidence?.length)
+    failures.push(`External app without implementation evidence: ${src.path}`);
+}
+for (const entry of externalEntries) {
+  if (!externalSources.some(src => src.path === entry.source)) failures.push(`Invented external app: ${entry.source}`);
+}
 const byStatus = Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
   .map(status => [status, tracker.modules.filter(m => m.status === status).length]));
 console.log(JSON.stringify({
@@ -35,9 +49,13 @@ console.log(JSON.stringify({
   sourceModules: sourceModules.length,
   assets: inventory.filter(x => x.path.startsWith("assets/")).length,
   styles: inventory.filter(x => x.path.startsWith("src/styles/")).length,
-  byStatus, failures
+  byStatus,
+  externalApps: externalEntries.length,
+  externalAppStatus: Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
+    .map(status => [status, externalEntries.filter(x => x.status === status).length])),
+  failures
 }, null, 2));
-if (process.argv.includes("--require-complete") && byStatus.pending + byStatus["in-progress"] > 0) {
+if (process.argv.includes("--require-complete") && (byStatus.pending + byStatus["in-progress"] > 0 || externalEntries.some(x => x.status !== "verified"))) {
   console.error("Full legacy functional parity not yet established.");
   process.exitCode = 1;
 }
