@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: windows-os-${{ github.workflow }}-${{ github.ref }}
+  # Include commit SHA: normal skipped pushes cannot cancel an opted-in CI run.
+  group: windows-os-${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 
 permissions:
