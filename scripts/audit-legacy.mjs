@@ -27,7 +27,10 @@ for (const entry of tracker.modules) {
     failures.push(`Missing test/source evidence for ${entry.source}`);
   }
 }
-const externalSources = inventory.filter(x => /^apps\\/[^/]+\\/index\\.html$/.test(x.path));
+const externalSources = inventory.filter(x => {
+  const parts = x.path.split("/");
+  return parts.length === 3 && parts[0] === "apps" && parts[2] === "index.html";
+});
 const externalEntries = tracker.externalApps ?? [];
 const externalPaths = new Set(externalEntries.map(x => x.source));
 if (externalPaths.size !== externalEntries.length) failures.push("Duplicate external app entries");
