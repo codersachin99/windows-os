@@ -39,3 +39,5 @@ export class AppRegistry {
 }
 
 export const appRegistry = new AppRegistry(builtinApps);
+
+export { fileStore } from "./files";

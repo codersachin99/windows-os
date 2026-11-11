@@ -1,0 +1,10 @@
+import { VirtualFileStore, type FileStoreStorage } from "@windows-os/filesystem";
+// Shared across future Explorer, Notepad, Recycle Bin, media and file dialogs.
+// No host-disk access is implied. User-specific profile mounts remain pending.
+function browserStorage(): FileStoreStorage | undefined {
+  if (typeof window === "undefined") return undefined;
+  try { return window.localStorage; } catch { return undefined; }
+}
+export const fileStore = new VirtualFileStore(browserStorage());
+export type { FileEntry, FileEntryType, FileStoreErrorCode } from "@windows-os/filesystem";
+export { FileStoreError, getFileName, getParentDirectory, normalizeFileUri } from "@windows-os/filesystem";

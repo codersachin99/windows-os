@@ -42,6 +42,9 @@
       ],
       "@windows-os/apps/contacts": [
         "packages/apps/contacts/src/index.ts"
+      ],
+      "@windows-os/filesystem": [
+        "packages/filesystem/src/index.ts"
       ]
     }
   },
