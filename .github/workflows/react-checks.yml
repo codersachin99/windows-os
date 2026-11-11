@@ -1,0 +1,43 @@
+name: React migration checks
+
+on:
+  push:
+    branches:
+      - feat/0001-faithful-react-foundation
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-and-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install npm dependencies
+        run: npm install --no-audit --no-fund
+      - name: Verify TypeScript
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Check original source migration inventory
+        run: npm run audit:legacy
+      - name: Build Vite application
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Test boot, Guest desktop, windows and Contacts interactions
+        run: npm run test:e2e
+      - name: Preserve test failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
