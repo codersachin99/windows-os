@@ -16,6 +16,7 @@ import {
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import { importDroppedFiles, SHELL_DRAG_TYPE } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
+import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
@@ -75,6 +76,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [drag, setDrag] = useState<{ keys: string[]; offset: DesktopPoint } | null>(null);
   const [overBin, setOverBin] = useState(false);
   const [nativeDesktopDropHover, setNativeDesktopDropHover] = useState(false);
+  const [nativeIconDropHover, setNativeIconDropHover] = useState<string | null>(null);
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -591,6 +593,69 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     }
   };
 
+  /** Native HTML Explorer drag destination on a real Desktop file-backed
+   * folder, or on the original visible Bin system icon. Unlike background
+   * File imports, recycling requires a trusted in-process drag token. */
+  const overNativeIconDrop = (
+    event: import("react").DragEvent<HTMLButtonElement>, item: DesktopItem
+  ) => {
+    event.stopPropagation();
+    const target = nativeDesktopIconDropTarget(item,Array.from(event.dataTransfer.types));
+    if (!target) {
+      setNativeIconDropHover(null);
+      return;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = target.kind === "recycle" ? "move"
+      : event.ctrlKey || event.metaKey
+        || !Array.from(event.dataTransfer.types).includes(SHELL_DRAG_TYPE)
+        ? "copy" : "move";
+    setNativeDesktopDropHover(false);
+    setNativeIconDropHover(item.id);
+  };
+  const dropNativeIconFiles = (
+    event: import("react").DragEvent<HTMLButtonElement>, item: DesktopItem
+  ) => {
+    const types = Array.from(event.dataTransfer.types);
+    setNativeIconDropHover(null);
+    if (!types.includes(SHELL_DRAG_TYPE) && !types.includes("Files")) return;
+    event.preventDefault(); event.stopPropagation();
+    const target = nativeDesktopIconDropTarget(item,types);
+    if (!target) return;
+    const token = event.dataTransfer.getData(SHELL_DRAG_TYPE);
+    if (target.kind === "recycle") {
+      // Untrusted File objects are never installed as fake Recycle Bin files.
+      const paths = token && fileDragSession.snapshot(token);
+      const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
+      if (!paths?.length || !trashPath) {
+        setError("Cannot recycle this drag without a mounted source Recycle Bin.");
+        return;
+      }
+      void fileStore.trashMany(paths,trashPath).then(() => {
+        setError(null);
+      }).catch(cause => setError(
+        cause instanceof Error ? cause.message : "Cannot recycle Explorer files"
+      ));
+      return;
+    }
+    if (token) {
+      const mode = event.ctrlKey || event.metaKey ? "copy" : "move";
+      void fileDragSession.drop(fileStore,token,target.directory,mode).then(() => {
+        setError(null);
+      }).catch(cause => setError(
+        cause instanceof Error ? cause.message : "Cannot transfer files into Desktop folder"
+      ));
+    } else {
+      const incoming = Array.from(event.dataTransfer.files);
+      if (!incoming.length) return;
+      void importDroppedFiles(fileStore,incoming,target.directory).then(() => {
+        setError(null);
+      }).catch(cause => setError(
+        cause instanceof Error ? cause.message : "Cannot import files into Desktop folder"
+      ));
+    }
+  };
+
   const contextMenu = (event: ReactMouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -674,11 +739,20 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         className={"desktop__icon-item windows-desktop__shortcut" +
           (selected.includes(app.id) ? " is-active" : "") +
           (offset ? " is-dragging" : "") +
-          (app.id === "bin" && overBin ? " is-drop-target" : "")}
+          (app.id === "bin" && overBin ? " is-drop-target" : "") +
+          (nativeIconDropHover === app.id ? " is-native-icon-drop-target" : "")}
         style={{
           width: size, height: size,
           transform: "translate(" + position.x + "px, " + position.y + "px)"
         }}
+        data-test-native-icon-drop-target={nativeIconDropHover === app.id ? "true" : undefined}
+        onDragOver={event => overNativeIconDrop(event,app)}
+        onDragLeave={event => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+            setNativeIconDropHover(null);
+          }
+        }}
+        onDrop={event => dropNativeIconFiles(event,app)}
         onPointerDown={event => startPress(event,app)}
         onClick={event => {
           event.stopPropagation();
