@@ -9,6 +9,7 @@ import {
 } from "./desktopSelection";
 import { appRegistry, browserStorage, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
+import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
@@ -67,6 +68,8 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [renaming, setRenaming] = useState<{id:string;value:string} | null>(null);
+  const renameRef = useRef<{id:string;value:string} | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const press = useRef<ActivePress | null>(null);
   const bandPress = useRef<ActiveBand | null>(null);
@@ -146,6 +149,44 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     }
     void fileStore.trash(file.entry.uri, trashPath).catch(cause =>
       setError(cause instanceof Error ? cause.message : "Cannot delete desktop file"));
+  };
+
+  const beginRename = (file: SourceDesktopFile) => {
+    const value = desktopEditableName(file.entry);
+    renameRef.current = { id:file.id, value };
+    setRenaming({id:file.id,value});
+    setSelected([file.id]);
+    anchor.current = file.id;
+    setMenu(null);
+    setError(null);
+  };
+  const changeRename = (id: string, value: string) => {
+    if (renameRef.current?.id !== id) return;
+    renameRef.current = {id,value};
+    setRenaming({id,value});
+  };
+  const cancelRename = () => {
+    renameRef.current = null;
+    setRenaming(null);
+  };
+  const finishRename = (file: SourceDesktopFile) => {
+    const edit = renameRef.current;
+    if (!edit || edit.id !== file.id) return;
+    renameRef.current = null;
+    setRenaming(null);
+    void renameSourceDesktopFile(fileStore,file.entry,edit.value).then(to => {
+      if (to === file.entry.uri) return;
+      const nextId = "file:" + to;
+      try {
+        layout.rekey(file.id,nextId);
+        setOptions(layout.snapshot());
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : "Desktop icon position could not be saved");
+      }
+      setSelected(previous => previous.map(key => key === file.id ? nextId : key));
+      if (anchor.current === file.id) anchor.current = nextId;
+    }).catch(cause =>
+      setError(cause instanceof Error ? cause.message : "Desktop file could not be renamed"));
   };
 
   const keyIndex = (key: string) => items.findIndex(item => item.id === key);
@@ -298,6 +339,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
 
   const startPress = (event: ReactPointerEvent<HTMLButtonElement>, app: DesktopItem) => {
     if (event.button !== 0) return;
+    if ((event.target as HTMLElement).closest("input")) { event.stopPropagation(); return; }
     event.stopPropagation();
     const wasSelected = selected.includes(app.id);
     const modifier = event.ctrlKey || event.metaKey;
@@ -379,6 +421,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         onPointerDown={event => startPress(event,app)}
         onClick={event => {
           event.stopPropagation();
+          if ((event.target as HTMLElement).closest("input")) return;
           if (ignoreClick.current) {ignoreClick.current=false;return;}
           if (!(event.ctrlKey || event.metaKey || event.shiftKey)) {
             setSelected([app.id]);anchor.current=app.id;
@@ -387,13 +430,40 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         }}
         onDoubleClick={event => {
           event.stopPropagation();
+          if ((event.target as HTMLElement).closest("input")) return;
           if (ignoreClick.current) {ignoreClick.current=false;return;}
           openItem(app);
+        }}
+        onKeyDown={event => {
+          if (event.key === "F2" && app.file && !renaming) {
+            event.preventDefault();
+            event.stopPropagation();
+            beginRename(app.file);
+          }
         }}
         aria-label={app.label} title={app.label}>
         <span className="desktop__icon-box"><img className="desktop__icon-icon"
           src={app.icon} draggable={false} alt="" /></span>
-        <span className="desktop__icon-name">{app.label}</span>
+        <span className="desktop__icon-name">
+          {app.file && renaming?.id === app.id
+            ? <input className="windows-desktop__rename-input" autoFocus
+                data-test-desktop-rename=""
+                aria-label={"Rename " + app.file.label} maxLength={30}
+                value={renaming.value}
+                onFocus={event => event.currentTarget.select()}
+                onPointerDown={event => event.stopPropagation()}
+                onChange={event => changeRename(app.id,event.target.value)}
+                onKeyDown={event => {
+                  event.stopPropagation();
+                  if (event.key === "Enter") {
+                    event.preventDefault(); finishRename(app.file!);
+                  } else if (event.key === "Escape") {
+                    event.preventDefault(); cancelRename();
+                  }
+                }}
+                onBlur={() => finishRename(app.file!)} />
+            : app.label}
+        </span>
         {offset && <span data-test-desktop-ghost=""
           className="desktop__icon-ghost" style={{
             transform: "translate(" + offset.x + "px," + offset.y + "px)"
@@ -415,12 +485,18 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
           setMenu(null);
           if (app) openItem(app);
         }}>Open</button>
-        {items.find(item => item.id === menu.id)?.file && <button role="menuitem"
-          onClick={() => {
+        {items.find(item => item.id === menu.id)?.file && <>
+          <button role="menuitem" onClick={() => {
+            const file = items.find(item => item.id === menu.id)?.file;
+            setMenu(null);
+            if (file) beginRename(file);
+          }}>Rename</button>
+          <button role="menuitem" onClick={() => {
             const file = items.find(item => item.id === menu.id)?.file;
             setMenu(null);
             if (file) deleteFile(file);
-          }}>Delete</button>}
+          }}>Delete</button>
+        </>}
         <button role="menuitem" disabled title="Original shortcut properties are pending">Properties</button>
       </> : <>
         <button role="menuitem" aria-expanded={menu.view}

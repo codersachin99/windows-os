@@ -61,3 +61,12 @@
 .windows-desktop__workspace:has([data-test-desktop-menu]) {
   z-index: 4001;
 }
+
+.windows-desktop__rename-input {
+  box-sizing:border-box;
+  max-width:100%; width:100%; min-width:38px;
+  border:1px solid #397dc2; border-radius:1px;
+  font:12px/1.25 "Segoe UI",Tahoma,sans-serif;
+  text-align:center; background:#fff; color:#152738;
+  padding:1px; text-shadow:none; outline:1px solid #cce9ff;
+}
