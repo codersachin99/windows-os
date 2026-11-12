@@ -66,6 +66,21 @@ describe("source-following Explorer navigation contract", () => {
     await expect(explorer.createFolder("../bad")).rejects.toMatchObject({ code: "EINVAL" });
     explorer.close();
   });
+  it("keeps source Recycle Bin Explorer within its hoisted trashPath", async () => {
+    const fs = new VirtualFileStore();
+    await fs.mkdir("/system");
+    await fs.mkdir("/system/trash");
+    await fs.mkdir("/system/trash/Sub");
+    const explorer = new ExplorerSession(fs, "/system/trash", "/system/trash");
+    await explorer.refresh();
+    await explorer.up();
+    expect(explorer.snapshot().path).toBe("/system/trash");
+    await expect(explorer.open("/system")).rejects.toMatchObject({ code: "EINVAL" });
+    await explorer.open("/system/trash/Sub");
+    await explorer.up();
+    expect(explorer.snapshot().path).toBe("/system/trash");
+    explorer.close();
+  });
   it("rejects opening files as folders without changing active path", async () => {
     const fs = new VirtualFileStore();
     await fs.write("text", "/note.txt");

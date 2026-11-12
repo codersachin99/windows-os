@@ -23,6 +23,7 @@ export interface ExplorerState {
 
 export class ExplorerSession {
   private paths: string[];
+  private readonly rootPath: string | null;
   private position = 0;
   private state: ExplorerState;
   private readonly listeners = new Set<(state: ExplorerState) => void>();
@@ -30,8 +31,12 @@ export class ExplorerSession {
   private closed = false;
   private revision = 0;
 
-  constructor(private readonly filesystem: VirtualFileStore, path = "/") {
+  constructor(private readonly filesystem: VirtualFileStore, path = "/", rootPath?: string) {
     const initial = normalizeFileUri(path);
+    this.rootPath = rootPath ? normalizeFileUri(rootPath) : null;
+    if (this.rootPath && initial !== this.rootPath && !initial.startsWith(this.rootPath + "/")) {
+      throw new FileStoreError("EINVAL", "Explorer path is outside its hoisted root");
+    }
     this.paths = [initial];
     this.state = {
       path: initial, items: [], selected: [], search: "", viewMode: "details",
@@ -111,6 +116,9 @@ export class ExplorerSession {
 
   async open(path: string, addHistory = true): Promise<void> {
     const uri = normalizeFileUri(path);
+    if (this.rootPath && uri !== this.rootPath && !uri.startsWith(this.rootPath + "/")) {
+      throw new FileStoreError("EINVAL", "Path is outside the hoisted Explorer root");
+    }
     const item = await this.filesystem.stat(uri);
     if (!item) throw new FileStoreError("ENOENT", "Folder not found: " + uri);
     if (item.type !== "directory") throw new FileStoreError("ENOTDIR", "Not a folder: " + uri);
@@ -132,6 +140,7 @@ export class ExplorerSession {
     await this.open(this.paths[this.position], false);
   }
   async up(): Promise<void> {
+    if (this.rootPath && this.state.path === this.rootPath) return;
     await this.open(getParentDirectory(this.state.path));
   }
   async createFolder(name: string): Promise<void> {
