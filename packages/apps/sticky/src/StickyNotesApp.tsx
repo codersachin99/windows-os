@@ -33,7 +33,7 @@ export function StickyNotesApp({zIndex,minimized,onClose,onFocus}:StickyNotesApp
   const notesRef=useRef(notes);
   const nextId=useRef(Math.max(...initial.notes.map(x=>x.id))+1);
   const gesture=useRef<Gesture|null>(null);
-  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const timer=useRef<number|null>(null);
   const [error,setError]=useState(initial.error);
   const cancelTimer=()=>{
     if(timer.current!==null){window.clearTimeout(timer.current);timer.current=null;}
