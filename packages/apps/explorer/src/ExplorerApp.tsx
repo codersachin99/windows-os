@@ -99,7 +99,6 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
         <button className="explorer-navigation__home" onClick={() => void execute(() => session.open("/"))}>
           <img src={legacyArt.computer} alt="" /> Computer
         </button>
-        <small>Source disks appear here when mounted by the runtime.</small>
       </aside>
       <section className="explorer-content" aria-label="Folder contents">
         {state.viewMode === "details" && <div className="explorer-columns" aria-hidden="true">

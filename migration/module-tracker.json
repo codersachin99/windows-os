@@ -48,8 +48,14 @@
       "source": "src/modules/apps/computer.js",
       "sha": "47aa521237c10f5e6763df37a1d8dcd73330f84f",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/explorer/src/model.ts",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "packages/apps/explorer/src/source.css",
+        "tests/e2e/explorer.spec.ts",
+        "migration/EXPLORER.md"
+      ]
     },
     {
       "source": "src/modules/apps/cpanel.js",
