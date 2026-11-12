@@ -44,10 +44,11 @@ describe("source Computer search scope/pattern/subfolder contract", () => {
     const fs = await fixture();
     const updates: number[] = [];
     const result = await searchFiles(fs, {
-      scope: "/data", subfolders: true, maxResults: 3
+      scope: "/data", subfolders: true, namePattern: "*.txt", maxResults: 1
     }, { onProgress: p => updates.push(p.foldersScanned) });
-    expect(result.files).toHaveLength(3);
-    expect(updates).toEqual([1,2]);
+    expect(result.files).toHaveLength(1);
+    expect(result.truncated).toBe(true);
+    expect(updates).toEqual([1]);
     const controller = new AbortController();
     controller.abort();
     await expect(searchFiles(fs, { scope: "/data", subfolders: true },
