@@ -96,7 +96,7 @@
 - Implemented reusable `StandardCalculator` model in `packages/apps/calculator/src/standard.ts`, native `CalculatorApp.tsx`, original unmodified `source.css`, React-specific layout, source-menu controls, history/grouping and keyboard/clipboard. Wired registered `calc` program through Start menu and `Calculator.lnk`/.exe association. Original source icon referenced by exact path, not substituted.
 - Added unit and browser tests for left-to-right arithmetic, source key order, errors, memory, history, grouping, keyboard and launch from original installed shortcut. Existing source-program browser tests now expect Calculator to be functional; another unported app is still explicitly disabled.
 - **Scope:** only original **Standard** mode, not Scientific, Programmer, Statistics, worksheets, unit/date conversion or full extended expression implementation. Tracker `calc.js` remains `in-progress`, not verified. See [CALCULATOR.md](CALCULATOR.md).
-- **Verification:** pending deliberate `[run-ci]` checkpoint. Green prior installer run [43167441493](https://github.com/codersachin99/windows-os/actions/runs/43167441493) predates this Calculator port.
+- **Verification:** deliberate opt-in test checkpoint requested by this commit; inspect TypeScript, Vitest, build and Chromium results before marking Standard port verified.
 
 ## Tested implementation
 
