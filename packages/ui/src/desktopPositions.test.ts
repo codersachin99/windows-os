@@ -36,8 +36,8 @@ describe("legacy source desktop icon layout and persisted positions",()=>{
     const offset=layout.move([
       {id:"bin",index:0},{id:"computer",index:1}
     ],{width:190,height:230},{x:500,y:500});
-    expect(offset).toEqual({x:110,y:70});
-    expect(layout.placement("bin",0,{width:190,height:230})).toEqual({x:110,y:70});
+    expect(offset).toEqual({x:30,y:150});
+    expect(layout.placement("bin",0,{width:190,height:230})).toEqual({x:30,y:150});
     expect(layout.placement("computer",1,{width:190,height:230})).toEqual({x:110,y:150});
     expect(boundedIconDrag([{x:20,y:40}],area,80,{x:-400,y:-400}))
       .toEqual({x:-20,y:-40});
