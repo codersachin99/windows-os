@@ -31,7 +31,7 @@ test("legacy Find: 480px source window, all three tabs and source reset semantic
   await expect(find.getByRole("textbox", { name: "Named" })).toHaveValue("");
   await expect(find.getByRole("checkbox", { name: "Include subfolders" })).toBeChecked();
   await find.getByRole("tab", { name: "Date Modified" }).click();
-  await expect(find.getByRole("radio", { name: "All files" })).toBeChecked();
+  await expect(find.getByRole("radio", { name: "All files", exact: true })).toBeChecked();
   await find.getByRole("tab", { name: "Advanced" }).click();
   await expect(find.getByRole("combobox", { name: "Of type" })).toHaveValue("");
   await expect(find.getByRole("combobox", { name: "Size is" })).toHaveValue("");
