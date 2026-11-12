@@ -104,7 +104,7 @@
 - `packages/filesystem/src/drag.ts` adds a tokenized, same-document `FileDragSession`, copy modifier and an external browser `File` importer. The importer refuses existing/duplicate filenames, retains Unicode text for Notepad and binary bytes for non-TXT files; no host filesystem writes.
 - `ExplorerApp.tsx` now has draggable virtual files and folders, native folder and folder-background drop targets, visual drop feedback, and explicit Upload selection. Recycle Bin drag is disabled until original Bin drag protocols are mapped. Drag does not overwrite Cut/Copy clipboard state.
 - New Vitest and Chromium tests: copy/move, nested folder and collisions, expired token rejection, text/binary import, host File event drop into a child folder and opening imported TXT in native Notepad. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md). Full desktop/icon drag, host directory recursion and exact source visuals remain incomplete.
-- **Verification is pending** a deliberate CI checkpoint. The prior 48-test green run [43171852845](https://github.com/codersachin99/windows-os/actions/runs/43171852845) covers the Calculator slice before these changes.
+- **Verification:** requesting the explicit opt-in CI checkpoint in this commit. The previous 48-browser-test run [43171852845](https://github.com/codersachin99/windows-os/actions/runs/43171852845) verifies the Calculator state, not these new drag/upload flows. Do not call this slice verified until TypeScript, Vitest, source checks, Vite build and Chromium complete.
 
 ## Tested implementation
 
