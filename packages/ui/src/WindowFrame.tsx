@@ -47,10 +47,10 @@ export function WindowFrame({ window: win, dispatch, children, onRequestClose }:
         <img src={win.icon} width={18} height={18} alt="" draggable={false} />
         <span className="windows-window__title">{win.title}</span>
         <div className="windows-window__buttons">
-          {win.resizable !== false && <>
-            <button aria-label={`Minimize ${win.title}`} onClick={() => dispatch({ type: "MINIMIZE_WINDOW", id: win.id })}>─</button>
-            <button aria-label={`Maximize ${win.title}`} onClick={() => dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id })}>□</button>
-          </>}
+          {(win.resizable !== false || win.minimizable === true) &&
+            <button aria-label={`Minimize ${win.title}`} onClick={() => dispatch({ type: "MINIMIZE_WINDOW", id: win.id })}>─</button>}
+          {win.resizable !== false &&
+            <button aria-label={`Maximize ${win.title}`} onClick={() => dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id })}>□</button>}
           <button className="windows-window__close" aria-label={`Close ${win.title}`} onClick={() => onRequestClose ? onRequestClose() : dispatch({ type: "CLOSE_WINDOW", id: win.id })}>×</button>
         </div>
       </div>

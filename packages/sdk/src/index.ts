@@ -35,7 +35,7 @@ const builtinApps: AppDefinition[] = [
     kind: "utility", desktop: false, showInStart: true,
     // Source Win7 WindowMain: w=260, h="auto", resizable=false.
     // 86px fits the source 32px commands, 6px body pad and chrome.
-    window: { width: 260, height: 86, resizable: false }
+    window: { width: 260, height: 86, resizable: false, minimizable: true }
   },
   {
     id: "run", label: "Run", icon: legacyArt.run,
