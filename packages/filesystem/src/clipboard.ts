@@ -1,7 +1,8 @@
 import {
-  FileStoreError, getFileName, normalizeFileUri,
+  FileStoreError, normalizeFileUri,
   type VirtualFileStore, type FileEntry
 } from "./index";
+import { transferFiles } from "./transfer";
 
 /**
  * One shell clipboard shared across Explorer windows.
@@ -50,39 +51,12 @@ export class FileClipboard {
 
   /** Validate every destination before modifying the file store. */
   async paste(files: Pick<VirtualFileStore, "stat" | "copy" | "move">, destination: string): Promise<FileEntry[]> {
-    const directory = normalizeFileUri(destination);
     const snapshot = this.snapshot();
     if (!snapshot.operation || !snapshot.paths.length) {
       throw new FileStoreError("EINVAL", "Clipboard is empty");
     }
-    const folder = await files.stat(directory);
-    if (folder?.type !== "directory") {
-      throw new FileStoreError("ENOTDIR", "Paste destination is not a folder");
-    }
-    const moves = snapshot.paths.map(from => ({
-      from, to: normalizeFileUri((directory === "/" ? "" : directory) + "/" + getFileName(from))
-    }));
-    for (const { from, to } of moves) {
-      const exists = await files.stat(from);
-      if (!exists) throw new FileStoreError("ENOENT", "Source no longer exists: " + from);
-      if (to === from || to.startsWith(from + "/")) {
-        throw new FileStoreError("EINVAL", "Cannot paste into the same file or a nested folder");
-      }
-      if (await files.stat(to)) {
-        throw new FileStoreError("EEXIST", "Destination already exists: " + to);
-      }
-    }
-    // Multiple sources can have the same filename. Reject before any writes.
-    if (new Set(moves.map(item => item.to)).size !== moves.length) {
-      throw new FileStoreError("EEXIST", "Selected files share a destination name");
-    }
-    const result: FileEntry[] = [];
-    for (const { from, to } of moves) {
-      if (snapshot.operation === "cut") await files.move(from, to);
-      else await files.copy(from, to);
-      const added = await files.stat(to);
-      if (added) result.push(added);
-    }
+    const result = await transferFiles(files, snapshot.paths, destination,
+      snapshot.operation === "cut" ? "move" : "copy");
     // Cut clears the clipboard only after successful paste; copy remains reusable.
     if (snapshot.operation === "cut") this.clear();
     return result;

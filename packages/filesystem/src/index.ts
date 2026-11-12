@@ -388,3 +388,6 @@ export type { FileSearchRequest, FileSearchResult, FileSearchProgress } from "./
 export * from "./sourceGuest";
 
 export * from "./sourcePrograms";
+
+export { transferFiles } from "./transfer";
+export type { FileTransferMode } from "./transfer";
