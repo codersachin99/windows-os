@@ -14,6 +14,7 @@ import {
   createSourceDesktopItem, createSourceDesktopShortcut, type DesktopNewItem
 } from "./desktopCreate";
 import { sourcePrograms } from "@windows-os/filesystem";
+import { hitDesktopRecycleBin } from "./desktopDrop";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
@@ -69,6 +70,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     }))
   ], [apps, guestFiles]);
   const [drag, setDrag] = useState<{ keys: string[]; offset: DesktopPoint } | null>(null);
+  const [overBin, setOverBin] = useState(false);
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -268,6 +270,16 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const closePress = useCallback(() => {
     press.current = null;
     setDrag(null);
+    setOverBin(false);
+  }, []);
+  const onRecycleBin = useCallback((clientX: number, clientY: number): boolean => {
+    const bin = list.current?.querySelector<HTMLElement>('[data-test-desktop-icon="bin"]');
+    if (!bin || !hitDesktopRecycleBin({ x: clientX, y: clientY }, bin.getBoundingClientRect())) {
+      return false;
+    }
+    // A window covering the icon is not a desktop drop target.
+    const top = document.elementFromPoint(clientX, clientY);
+    return top === bin || !!(top instanceof Element && bin.contains(top));
   }, []);
 
   useEffect(() => {
@@ -278,17 +290,44 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       if (!current.moved
         && Math.hypot(raw.x, raw.y) < SOURCE_DESKTOP_DRAG_THRESHOLD) return;
       current.moved = true;
+      const allFileItems = current.keys.every(key =>
+        items.some(item => item.id === key && !!item.file)
+      );
+      setOverBin(allFileItems && onRecycleBin(event.clientX, event.clientY));
       if (options.autoArrange) return;
       current.offset = boundedIconDrag(
         current.points, area, SOURCE_DESKTOP_ICON_SIZES[options.iconSize], raw
       );
       setDrag({ keys: current.keys, offset: current.offset });
     };
-    const up = () => {
+    const up = (event: PointerEvent) => {
       const current = press.current;
       if (!current) return;
       if (current.moved) {
         ignoreClick.current = true;
+        if (current.id !== "bin" && onRecycleBin(event.clientX, event.clientY)) {
+          const selectedFiles = current.keys.map(key =>
+            items.find(item => item.id === key)?.file
+          );
+          const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
+          if (selectedFiles.some(file => !file)) {
+            setError("System icons cannot be moved to Recycle Bin.");
+          } else if (!trashPath) {
+            setError("The original Recycle Bin is not mounted.");
+          } else {
+            void fileStore.trashMany(
+              selectedFiles.map(file => file!.entry.uri), trashPath
+            ).then(() => {
+              setSelected([]);
+              anchor.current = null;
+              setError(null);
+            }).catch(cause =>
+              setError(cause instanceof Error ? cause.message : "Cannot recycle selected files")
+            );
+          }
+          closePress();
+          return;
+        }
         if (!options.autoArrange && (current.offset.x || current.offset.y)) {
           try {
             layout.move(current.indices, area, current.offset);
@@ -313,7 +352,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       window.removeEventListener("pointercancel", closePress);
       window.removeEventListener("blur", closePress);
     };
-  }, [options.autoArrange, options.iconSize, area, layout, closePress]);
+  }, [options.autoArrange, options.iconSize, area, layout, closePress, items, onRecycleBin]);
 
   /** Source main.js: handlePointerDown falls back to startBand on desktop background. */
   useEffect(() => {
@@ -472,7 +511,8 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         data-test-desktop-selected={selected.includes(app.id)}
         className={"desktop__icon-item windows-desktop__shortcut" +
           (selected.includes(app.id) ? " is-active" : "") +
-          (offset ? " is-dragging" : "")}
+          (offset ? " is-dragging" : "") +
+          (app.id === "bin" && overBin ? " is-drop-target" : "")}
         style={{
           width: size, height: size,
           transform: "translate(" + position.x + "px, " + position.y + "px)"

@@ -98,3 +98,9 @@
   background:linear-gradient(#fff,#dceaf5); font:inherit; cursor:pointer;
 }
 .windows-desktop__create-actions button:disabled { opacity:.5; cursor:default; }
+
+/* The mounted Recycle Bin is a real drop target, not a decorative icon. */
+.windows-desktop__shortcut.is-drop-target .desktop__icon-box {
+  outline:2px solid #438fd2; outline-offset:2px; border-radius:3px;
+  background:#a8d8ff55;
+}
