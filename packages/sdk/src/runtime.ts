@@ -1,7 +1,8 @@
 import {
   LegacyVolumeSession, type LegacyRuntimeMounts, type VirtualFileStore,
   type FileStoreStorage, sourceGuestMounts,
-  ensureSourceGuestDirectories
+  ensureSourceGuestDirectories, installSourceGuestPrograms,
+  SOURCE_COMPUTER_ROOT
 } from "@windows-os/filesystem";
 import { browserStorage, fileStore } from "./files";
 
@@ -17,7 +18,8 @@ export class SourceFilesystemRuntime {
   constructor(
     private readonly store: VirtualFileStore,
     private readonly storage?: FileStoreStorage,
-    private readonly key = "windows-os:legacy-source-mounts:guest:v1"
+    private readonly key = "windows-os:legacy-source-mounts:guest:v1",
+    private readonly installKey = "windows-os:legacy-program-install:guest:v1"
   ) {}
   snapshot(): LegacyVolumeSession | null { return this.session; }
   subscribe(listener: (session: LegacyVolumeSession | null) => void): () => void {
@@ -42,15 +44,31 @@ export class SourceFilesystemRuntime {
    * then the Guest user folder is populated (g.ensureUser(null)).
    * If a prior *explicit* source runtime is supplied, restore it instead.
    */
+  private async ensureSourceInstalled(): Promise<void> {
+    if (this.storage?.getItem(this.installKey) ===
+      "4e63290d783009e1293433c6ccf252abba9c1187") return;
+    await ensureSourceGuestDirectories(this.store);
+    await installSourceGuestPrograms(this.store);
+    this.storage?.setItem(this.installKey,
+      "4e63290d783009e1293433c6ccf252abba9c1187");
+  }
+
   async startGuest(): Promise<void> {
     if (this.session) return;
     if (this.storage?.getItem(this.key)) {
       await this.restorePersisted();
+      // Upgrade Guest installations created by the previous migration slice.
+      // Never install legacy source artifacts into a custom supplied volume.
+      if (this.session?.pathConfig.root === SOURCE_COMPUTER_ROOT
+        && this.session.desktopPath === sourceGuestMounts().desktopPath
+        && this.session.trashPath === sourceGuestMounts().trashPath) {
+        await this.ensureSourceInstalled();
+      }
       return;
     }
     const source = sourceGuestMounts();
     const candidate = new LegacyVolumeSession(this.store, source);
-    await ensureSourceGuestDirectories(this.store);
+    await this.ensureSourceInstalled();
     // One document holds the source-defined C: and special-folder paths.
     this.storage?.setItem(this.key, JSON.stringify({ version: 1, runtime: source }));
     this.session = candidate;

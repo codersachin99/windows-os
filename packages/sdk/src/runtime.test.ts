@@ -68,12 +68,57 @@ describe("source filesystem runtime", () => {
       .toMatchObject({ type: "directory" });
     expect(await files.stat("/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/Start Menu/Programs/Games"))
       .toMatchObject({ type: "directory" });
+    const shortcut = "/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/Start Menu/Programs/Accessories/Notepad.lnk";
+    const executable = "/EXTERNAL/computer/drive0/Windows/System32/notepad.exe";
+    expect(await files.read(shortcut)).toBe('{"exe":"notepad","icon":"notepad"}');
+    expect((await files.readBytes(executable)).slice(0, 2))
+      .toEqual(new Uint8Array([77, 90]));
+    expect((await files.stat(executable))?.size).toBe(1024);
     await files.write("safe", session.desktopPath + "/saved.txt");
     await runtime.startGuest();
     expect(await files.read(session.desktopPath + "/saved.txt")).toBe("safe");
     const reopened = new SourceFilesystemRuntime(new VirtualFileStore(storage), storage);
     await reopened.startGuest();
     expect(reopened.snapshot()?.trashPath).toBe(session.trashPath);
+  });
+  it("preserves intentionally removed source shortcuts after an installed Guest reload", async () => {
+    const values = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => { values.set(key, value); }
+    };
+    const files = new VirtualFileStore(storage);
+    const first = new SourceFilesystemRuntime(files, storage);
+    await first.startGuest();
+    const path = "/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/Start Menu/Programs/Accessories/Notepad.lnk";
+    await files.remove(path);
+    const next = new SourceFilesystemRuntime(new VirtualFileStore(storage), storage);
+    await next.startGuest();
+    expect(await next.snapshot()?.store.stat(path)).toBeNull();
+    expect(next.snapshot()?.desktopPath).toBe(first.snapshot()?.desktopPath);
+  });
+  it("upgrades an earlier source Guest session once without deleting its files", async () => {
+    const values = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => { values.set(key, value); }
+    };
+    const files = new VirtualFileStore(storage);
+    const existing = new SourceFilesystemRuntime(files, storage);
+    await existing.configure({
+      root: "/EXTERNAL/computer",
+      desktopPath: "/EXTERNAL/computer/drive0/Users/Guest/Desktop",
+      trashPath: "/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/RecycleBin",
+      disks: [{ path: "/EXTERNAL/computer/drive0", letter: "C", label: "System" }],
+      user: { folder: "Guest", name: "Guest" }
+    });
+    await files.write("existing", "/keep.txt");
+    const upgraded = new SourceFilesystemRuntime(new VirtualFileStore(storage), storage);
+    await upgraded.startGuest();
+    expect(await upgraded.snapshot()?.store.read("/keep.txt")).toBe("existing");
+    expect(await upgraded.snapshot()?.store.read(
+      "/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/Start Menu/Programs/Accessories/Notepad.lnk"
+    )).toBe('{"exe":"notepad","icon":"notepad"}');
   });
   it("prefers an existing explicit source runtime without overwriting it on login", async () => {
     const storageMap = new Map<string, string>();
