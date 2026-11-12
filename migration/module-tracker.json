@@ -13,8 +13,15 @@
       "source": "src/modules/apps/bin.js",
       "sha": "c23d256403c1c37812c61bdeef9a0f4edaef6c39",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/filesystem/src/index.ts",
+        "packages/sdk/src/runtime.ts",
+        "packages/apps/explorer/src/RecycleBinApp.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/bin.spec.ts",
+        "migration/RECYCLE-BIN.md"
+      ]
     },
     {
       "source": "src/modules/apps/calc.js",

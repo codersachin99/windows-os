@@ -55,6 +55,14 @@
 - **Still pending:** source disk mounts and `trashPath` runtime initialization, original search index/ranking/full query operators, Recycle Bin operations and visual parity. Original `bin.js` wraps Computer Explorer at the runtime `trashPath` and is **not** implemented by these clipboard/search changes. Do not claim more.
 - **Verification:** this code has been pushed but the new tests have not yet completed the deliberate opt-in CI checkpoint.
 
+## Source-configured Recycle Bin + shared file actions (2026-11-12)
+
+- **Clipboard and search:** source-oriented shell Cut/Copy/Paste with collision protection and multi-select, including Ctrl+C/X/V and Ctrl+A, and recursive scoped filename search with wildcards, exclusions and cancellation. Original Computer `FileCopy/FileMove` and `listSearch/searchIndex.walk` are mapped to `packages/filesystem/src/clipboard.ts` and `search.ts` and wired into native Explorer.
+- **Recycle Bin:** original `src/modules/apps/bin.js` is an Explorer instance hoisted to dynamic `trashPath`; React now reuses native Explorer at that path with Confirm Delete, Restore, Empty, permanent deletion and original-path metadata in the same atomic VFS snapshot. `LegacyVolumeSession` enforces source-supplied disk/profile metadata, and `SourceFilesystemRuntime` persists only explicit source mounts. No default disk/trash/user tree is generated.
+- **Verification design:** unit tests cover recursive tree removal, trash persistence/restore/collisions and runtime mounts. Desktop/mobile Chromium tests cover shared clipboard, wildcard recursive search and a **test-only source-shaped mount fixture** for Computer -> Bin -> Restore -> reload. Default Bin displays "not mounted" rather than falsely claiming empty.
+- **CI:** previous run [43155884899](https://github.com/codersachin99/windows-os/actions/runs/43155884899) passed TypeScript, unit tests, source audit and Vite build, but had one browser timeout: the search test clicked Explorer behind a foreground Notepad window. The test now closes Notepad first (commit `c3b8d0eb`). This new combined checkpoint is awaiting opt-in verification.
+- **Still pending:** actual legacy `getStats()` and user/session mount data producer, exact source trash metadata format, file dialogs, permission/shortcut services, binary media, full Explorer search-index behavior, original theme/layout/asset parity. `computer.js` and `bin.js` remain in-progress, not verified. See [EXPLORER.md](EXPLORER.md) and [RECYCLE-BIN.md](RECYCLE-BIN.md).
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

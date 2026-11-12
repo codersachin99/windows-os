@@ -27,3 +27,7 @@ The original src/modules/apps/cmd.js drive-path functions m/g/y/w/v/x/k/E are ma
 Separate user-id keyed browser stores avoid mixing users; the original first-slice Guest key is retained. The file store now emits change events after a successfully persisted mutation, so future Explorer and Notepad instances can refresh against the same data. Observer errors cannot roll back a completed mutation.
 
 Still pending: source startup/session runtime wiring, real source mount metadata, per-user storage backend parity, binary files, folder/shortcut metadata, recycle semantics, file dialogs, and app UIs.
+
+## Explicit source-driven Recycle Bin
+
+The original bin.js renders Computer hoisted to its runtime `trashPath`. The React port now has trash/restore/empty operations with original-location metadata atomically stored in the virtual filesystem snapshot. `SourceFilesystemRuntime` can mount and persist only source-supplied root/disks/Desktop/trash metadata. A missing source runtime leaves the Bin **unmounted**; no fake C: drive or empty Trash is manufactured. See [RECYCLE-BIN.md](RECYCLE-BIN.md). This atomic metadata implementation is functionally motivated, not byte-for-byte compatible with the original internal storage.
