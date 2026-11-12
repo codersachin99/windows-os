@@ -30,4 +30,4 @@ Unit tests cover original Standard button sequence, simple left-to-right operati
 
 The original source artwork `assets/images/calc.1733a9a0.webp` is referenced by its exact name but must be imported through the verified pinned asset importer before a distributable build can claim visual parity.
 
-**CI**: Source Standard port has new unit and browser coverage; opt-in checkpoint required before any verification claim.
+**CI verified for this bounded slice:** [GitHub Actions 43171852845](https://github.com/codersachin99/windows-os/actions/runs/43171852845) passed TypeScript, 13 unit-test files, original source fidelity checks, Vite production build and **48 Chromium desktop/mobile tests**. The full Calculator source remains unverified and incomplete.

@@ -46,3 +46,7 @@ The program manifest is recovered faithfully; **application feature parity remai
 ## Calculator now launches a migrated Standard-mode React implementation
 
 The installed `Accessories/Calculator.lnk` and original `Windows/System32/calc.exe` source IDs route to the real native `CalculatorApp`, rather than remaining disabled. This port covers the original Standard calculator control surface only; Scientific, Programmer, Statistics, conversions and worksheets remain unmigrated. See [CALCULATOR.md](CALCULATOR.md).
+
+## Source Calculator Standard checkpoint verified
+
+[CI 43171852845](https://github.com/codersachin99/windows-os/actions/runs/43171852845) passed unit, TypeScript, build and **48 Chromium browser tests** after adding native Standard Calculator and original Calculator.lnk routing. The source installer contract remains intact; full Calculator Scientific/Programmer/Statistics and other program implementations remain incomplete. See [CALCULATOR.md](CALCULATOR.md).
