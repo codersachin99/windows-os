@@ -8,12 +8,14 @@ export interface FileEntry {
   type: FileEntryType;
   size: number;
   mtime: number;
+  originalPath?: string;
+  deletedAt?: number;
 }
 export interface FileStoreStorage {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
 }
-type StoredEntry = { uri: string; type: FileEntryType; mtime: number; content?: string };
+type StoredEntry = { uri: string; type: FileEntryType; mtime: number; content?: string; originalPath?: string; deletedAt?: number };
 type Snapshot = { version: 1; entries: StoredEntry[] };
 export type FileStoreErrorCode = "EINVAL" | "ENOENT" | "EEXIST" | "ENOTDIR" | "EISDIR" | "ENOTEMPTY";
 export class FileStoreError extends Error {
@@ -48,8 +50,8 @@ export function getFileName(path: string): string {
 }
 const root: StoredEntry = { uri: "/", type: "directory", mtime: 0 };
 export type FileStoreChange =
-  | { type: "created" | "updated" | "removed"; path: string }
-  | { type: "copied" | "moved"; from: string; to: string };
+  | { type: "created" | "updated" | "removed" | "emptied"; path: string }
+  | { type: "copied" | "moved" | "trashed" | "restored"; from: string; to: string };
 
 export class VirtualFileStore {
   private readonly listeners = new Set<(change: FileStoreChange) => void>();
@@ -85,6 +87,11 @@ export class VirtualFileStore {
           || (item.type !== "file" && item.type !== "directory")
           || !Number.isFinite(item.mtime)
           || (item.type === "file" && typeof item.content !== "string")
+          || (item.originalPath !== undefined && (
+            typeof item.originalPath !== "string"
+            || normalizeFileUri(item.originalPath) !== item.originalPath
+            || typeof item.deletedAt !== "number" || !Number.isFinite(item.deletedAt)
+          ))
           || restored.has(item.uri)) throw new Error("Invalid node");
         restored.set(item.uri, { ...item });
       }
@@ -103,7 +110,10 @@ export class VirtualFileStore {
     return {
       uri: item.uri, name: getFileName(item.uri), type: item.type,
       size: item.type === "file" ? new TextEncoder().encode(item.content ?? "").byteLength : 0,
-      mtime: item.mtime
+      mtime: item.mtime,
+      ...(item.originalPath === undefined ? {} : {
+        originalPath: item.originalPath, deletedAt: item.deletedAt
+      })
     };
   }
   private required(path: string): StoredEntry {
@@ -203,6 +213,83 @@ export class VirtualFileStore {
       if (key === uri || key.startsWith(uri + "/")) next.delete(key);
     }
     this.commit(next, { type: "removed", path: uri });
+  }
+  /**
+   * Source Recycle Bin uses a session-specific trashPath supplied by the
+   * shell (bin.js wraps Computer at that path). No default trash mount is
+   * created here. Trash metadata lives in the SAME persistent VFS snapshot
+   * as the moved item so a failed storage commit cannot orphan its metadata.
+   */
+  async trash(path: string, trashPath: string): Promise<FileEntry> {
+    const from = normalizeFileUri(path);
+    const bin = this.directory(trashPath).uri;
+    if (from === "/" || from === bin || from.startsWith(bin + "/")
+      || bin.startsWith(from + "/")) {
+      throw new FileStoreError("EINVAL", "Cannot recycle a system root or trash item");
+    }
+    const source = this.required(from);
+    const name = getFileName(from);
+    const extAt = name.lastIndexOf(".");
+    const base = extAt > 0 ? name.slice(0, extAt) : name;
+    const extension = extAt > 0 ? name.slice(extAt) : "";
+    let to = normalizeFileUri(bin + "/" + name);
+    let attempt = 0;
+    while (this.entries.has(to)) {
+      attempt++;
+      to = normalizeFileUri(bin + "/" + base + " (" + attempt + ")" + extension);
+    }
+    const affected = [...this.entries.values()].filter(item =>
+      item.uri === from || item.uri.startsWith(from + "/"));
+    const next = new Map(this.entries);
+    for (const item of affected) next.delete(item.uri);
+    const deletedAt = Date.now();
+    for (const item of affected) {
+      const target = to + item.uri.slice(from.length);
+      next.set(target, {
+        ...item, uri: target,
+        ...(item.uri === from ? { originalPath: from, deletedAt } : {})
+      });
+    }
+    this.commit(next, { type: "trashed", from, to });
+    return this.entry(next.get(to) ?? source);
+  }
+
+  async restore(trashItem: string, trashPath: string): Promise<FileEntry> {
+    const from = normalizeFileUri(trashItem);
+    const bin = this.directory(trashPath).uri;
+    if (getParentDirectory(from) !== bin) {
+      throw new FileStoreError("EINVAL", "Item is not in the session Recycle Bin");
+    }
+    const item = this.required(from);
+    const destination = item.originalPath;
+    if (!destination) throw new FileStoreError("EINVAL", "Recycle metadata is missing");
+    this.destination(destination);
+    const affected = [...this.entries.values()].filter(child =>
+      child.uri === from || child.uri.startsWith(from + "/"));
+    const next = new Map(this.entries);
+    for (const child of affected) next.delete(child.uri);
+    for (const child of affected) {
+      const target = destination + child.uri.slice(from.length);
+      if (next.has(target)) throw new FileStoreError("EEXIST", "Restore destination exists");
+      const copied = { ...child, uri: target };
+      if (child.uri === from) {
+        delete copied.originalPath;
+        delete copied.deletedAt;
+      }
+      next.set(target, copied);
+    }
+    this.commit(next, { type: "restored", from, to: destination });
+    return this.entry(next.get(destination)!);
+  }
+
+  /** Permanently remove all bin contents; retain its configured directory. */
+  async emptyTrash(trashPath: string): Promise<void> {
+    const bin = this.directory(trashPath).uri;
+    const next = new Map(this.entries);
+    for (const path of next.keys()) {
+      if (path.startsWith(bin + "/")) next.delete(path);
+    }
+    this.commit(next, { type: "emptied", path: bin });
   }
   private transfer(source: string, destination: string, move: boolean): void {
     const from = normalizeFileUri(source);

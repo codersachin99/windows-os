@@ -85,6 +85,76 @@ describe("VirtualFileStore", () => {
     await expect(fs.removeTree("/")).rejects.toMatchObject({ code: "EINVAL" });
     await expect(fs.removeTree("/missing")).rejects.toMatchObject({ code: "ENOENT" });
   });
+  it("recycles and restores text and directory trees using only source-configured trashPath", async () => {
+    const storage = new MemoryStorage();
+    const fs = new VirtualFileStore(storage);
+    await fs.mkdir("/system");
+    await fs.mkdir("/system/trash");
+    await fs.mkdir("/Users");
+    await fs.mkdir("/Users/Guest");
+    await fs.write("text", "/Users/Guest/test.txt");
+    await fs.mkdir("/Users/Guest/Docs");
+    await fs.write("inside", "/Users/Guest/Docs/deep.txt");
+    const moved = await fs.trash("/Users/Guest/test.txt", "/system/trash");
+    expect(moved).toMatchObject({
+      uri: "/system/trash/test.txt", originalPath: "/Users/Guest/test.txt", type: "file"
+    });
+    expect(moved.deletedAt).toEqual(expect.any(Number));
+    await fs.trash("/Users/Guest/Docs", "/system/trash");
+    const revived = new VirtualFileStore(storage);
+    expect(await revived.read("/system/trash/Docs/deep.txt")).toBe("inside");
+    await revived.restore("/system/trash/Docs", "/system/trash");
+    expect(await revived.read("/Users/Guest/Docs/deep.txt")).toBe("inside");
+    const restored = await revived.restore("/system/trash/test.txt", "/system/trash");
+    expect(restored.originalPath).toBeUndefined();
+    expect(await revived.read("/Users/Guest/test.txt")).toBe("text");
+    expect(await revived.list("/system/trash")).toEqual([]);
+  });
+  it("recycle collisions remain distinct and restores never overwrite an existing file", async () => {
+    const fs = new VirtualFileStore();
+    await fs.mkdir("/trash");
+    await fs.mkdir("/a");
+    await fs.mkdir("/b");
+    await fs.write("one", "/a/note.txt");
+    await fs.write("two", "/b/note.txt");
+    const first = await fs.trash("/a/note.txt", "/trash");
+    const second = await fs.trash("/b/note.txt", "/trash");
+    expect(first.name).toBe("note.txt");
+    expect(second.name).toBe("note (1).txt");
+    await fs.write("collision", "/a/note.txt");
+    await expect(fs.restore(first.uri, "/trash")).rejects.toMatchObject({ code: "EEXIST" });
+    expect(await fs.read(first.uri)).toBe("one");
+    expect(await fs.read("/a/note.txt")).toBe("collision");
+    await fs.restore(second.uri, "/trash");
+    expect(await fs.read("/b/note.txt")).toBe("two");
+  });
+  it("permanent empty uses one transaction and never deletes the source Trash directory", async () => {
+    const fs = new VirtualFileStore();
+    await fs.mkdir("/bin");
+    await fs.mkdir("/files");
+    await fs.mkdir("/files/folder");
+    await fs.write("x", "/files/folder/deep.txt");
+    await fs.trash("/files/folder", "/bin");
+    await fs.emptyTrash("/bin");
+    expect(await fs.stat("/bin")).toMatchObject({ type: "directory" });
+    expect(await fs.list("/bin")).toEqual([]);
+    await expect(fs.restore("/bin/folder", "/bin")).rejects.toMatchObject({ code: "ENOENT" });
+    await expect(fs.trash("/bin", "/bin")).rejects.toMatchObject({ code: "EINVAL" });
+    await expect(fs.trash("/files", "/not-mounted")).rejects.toMatchObject({ code: "ENOENT" });
+  });
+  it("does not move files to trash when persistent snapshot cannot be saved", async () => {
+    const storage = new MemoryStorage();
+    const good = new VirtualFileStore(storage);
+    await good.mkdir("/bin");
+    await good.write("safe", "/safe.txt");
+    const failing = new VirtualFileStore({
+      getItem: key => storage.getItem(key),
+      setItem: () => { throw new Error("Disk full"); }
+    });
+    await expect(failing.trash("/safe.txt", "/bin")).rejects.toThrow("Disk full");
+    expect(await failing.read("/safe.txt")).toBe("safe");
+    expect(await failing.list("/bin")).toEqual([]);
+  });
   it("persists and restores user files through injected storage", async () => {
     const storage = new MemoryStorage();
     const fs = new VirtualFileStore(storage);
