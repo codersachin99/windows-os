@@ -1,0 +1,11 @@
+# Guest Desktop drag-to-Recycle-Bin — source bounded implementation
+
+**Source:** `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`, desktop source module `src/modules/system/main.js`, existing desktop pointer drag/selection and source Bin/Trash operations. The source creates an actual session `trashPath`; the target uses `SourceFilesystemRuntime` and the already ported `RecycleBinApp`.
+
+**Engine change:** `VirtualFileStore.trashMany(paths,trashPath)` keeps source file contents, binary bytes, directory trees and originalPath/deletedAt metadata. It validates all selected source URIs before mutation, handles same-name destination collisions using source existing `(1)` suffix rules, then commits one durable snapshot. Storage failure leaves every file intact; success publishes change notifications after the single commit. The pre-existing single `trash()` API now delegates to it. This is a source-aligned browser virtual disk, not a host filesystem operation.
+
+**UI:** `DesktopIcons.tsx` uses the existing 4px gesture detector, selected/group drag state and source Bin app icon as the drop target. Hit testing uses the actual icon bounding box *and* the top visible DOM element, so an Explorer window obscuring the desktop cannot receive a drop. Only real file-backed entries can be recycled, not virtual system icons. The bin icon highlights while hovering; ordinary free position drag remains unchanged outside the bin. Drag-and-drop supports pointer gestures and selected groups. No host Drag and Drop API call or independent trash state is created.
+
+**Tests:** `packages/filesystem/src/desktopTrash.test.ts` verifies directories, original paths, multi-file name collisions, fail-fast validation and atomic persistence failure. `packages/ui/src/desktopDrop.test.ts` verifies rectangle geometry. `tests/e2e/desktop-bin-drop.spec.ts` covers Guest Desktop folder recycling/restoring and group move/reload persistence in desktop/mobile Chromium.
+
+**Not yet fully migrated:** exact source drop animations, file dragging into arbitrary Explorer views, advanced multi-selection keyboard and touch gesture parity, all desktop context actions, themes and screenshots. Original desktop module remains `in-progress`.
