@@ -38,3 +38,7 @@ Unit tests assert the original 42/34 manifest count, exact source folder and sho
 The original MZ files are **placeholder install bytes**, not runnable Windows PE executables. Reproducing them preserves the exact simulated file content but does not implement the programs. Original app implementations for Calculator, Command Prompt, WordPad, browser, games, media, themes, etc., remain pending. Full Start Menu theme/layout, localization, system-wide file association map, hover/keyboard navigation, folder dragging, per-user installers, upgrade build marker and all original art require additional source mapping and tests.
 
 The program manifest is recovered faithfully; **application feature parity remains incomplete**.
+
+## Opt-in CI verified: 2026-11-12
+
+[GitHub Actions run 43167441493](https://github.com/codersachin99/windows-os/actions/runs/43167441493) **passed** TypeScript, unit tests, pinned migration/source checks, Vite build and **42 Chromium desktop/mobile browser tests**. The new tests verify source manifest count 42/34, original MZ binary data and shortcut JSON, idempotent install on Guest login, All Programs navigation and Notepad launching through the installed shortcut, plus intact data after reload. An initial run 43167307049 found a TypeScript-only session narrowing issue, fixed in 43ac2877 before the passing checkpoint. Green tests verify this bounded slice, not the many unmigrated apps.

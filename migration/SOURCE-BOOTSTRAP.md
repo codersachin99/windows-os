@@ -50,3 +50,7 @@ The original `computer.js`, `bin.js`, and relevant large webpack chunks remain `
 ## Original program installer recovered
 
 Source webpack c170 program manifest was found in `src/modules/system/testmode.js` and original 757f/760d installer functions were ported into shared program metadata, 1,024-byte MZ stubs and persistent JSON `.lnk` shortcuts. See [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md). The 42 app definitions and 34 installed executable/shortcut records are not claims that 42 apps are implemented.
+
+## Source program installation verified
+
+[CI 43167441493](https://github.com/codersachin99/windows-os/actions/runs/43167441493) passed the new c170/757f/760d program installer and Guest persistence tests. This adds the exact source program metadata, 1024-byte MZ installation stubs and Start Menu .lnk files to the previously verified system/Guest folder hierarchy. See [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md) for remaining installer/UI gaps.
