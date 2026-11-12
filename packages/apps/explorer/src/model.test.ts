@@ -1,0 +1,74 @@
+import { describe, it, expect } from "vitest";
+import { VirtualFileStore } from "@windows-os/filesystem";
+import { ExplorerSession } from "./model";
+
+describe("source-following Explorer navigation contract", () => {
+  it("navigates folders with history, back, forward and up", async () => {
+    const fs = new VirtualFileStore();
+    await fs.mkdir("/users");
+    await fs.mkdir("/users/Guest");
+    const explorer = new ExplorerSession(fs);
+    await explorer.refresh();
+    expect(explorer.visible().map(x => x.name)).toEqual(["users"]);
+    await explorer.open("/users");
+    await explorer.open("/users/Guest");
+    expect(explorer.snapshot()).toMatchObject({ path: "/users/Guest", canGoBack: true, canGoForward: false });
+    await explorer.back();
+    expect(explorer.snapshot().path).toBe("/users");
+    await explorer.back();
+    expect(explorer.snapshot()).toMatchObject({ path: "/", canGoBack: false, canGoForward: true });
+    await explorer.forward();
+    expect(explorer.snapshot().path).toBe("/users");
+    await explorer.up();
+    expect(explorer.snapshot().path).toBe("/");
+    explorer.close();
+  });
+  it("filters actual files and supports source view modes and selection", async () => {
+    const fs = new VirtualFileStore();
+    await fs.write("a", "/alpha.txt");
+    await fs.write("b", "/beta.txt");
+    const explorer = new ExplorerSession(fs);
+    await explorer.refresh();
+    explorer.search("ALP");
+    expect(explorer.visible().map(x => x.name)).toEqual(["alpha.txt"]);
+    explorer.setViewMode("tiles");
+    expect(explorer.snapshot().viewMode).toBe("tiles");
+    explorer.select("/alpha.txt");
+    explorer.select("/beta.txt", true);
+    expect(explorer.snapshot().selected).toEqual(["/alpha.txt", "/beta.txt"]);
+    explorer.select("/alpha.txt", true);
+    expect(explorer.snapshot().selected).toEqual(["/beta.txt"]);
+    explorer.close();
+  });
+  it("refreshes automatically when a shared Notepad document is written", async () => {
+    const fs = new VirtualFileStore();
+    const explorer = new ExplorerSession(fs);
+    await explorer.refresh();
+    const states: number[] = [];
+    explorer.subscribe(s => { if (!s.busy) states.push(s.items.length); });
+    await fs.write("Notepad content", "/written.txt");
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(explorer.visible().map(x => x.name)).toEqual(["written.txt"]);
+    expect(states).toContain(1);
+    explorer.close();
+  });
+  it("creates and renames folders without writing to host filesystem", async () => {
+    const fs = new VirtualFileStore();
+    const explorer = new ExplorerSession(fs);
+    await explorer.createFolder("Documents");
+    await explorer.rename("/Documents", "Notes");
+    expect(await fs.stat("/Notes")).toMatchObject({ name: "Notes", type: "directory" });
+    expect(await fs.stat("/Documents")).toBeNull();
+    await expect(explorer.createFolder("../bad")).rejects.toMatchObject({ code: "EINVAL" });
+    explorer.close();
+  });
+  it("rejects opening files as folders without changing active path", async () => {
+    const fs = new VirtualFileStore();
+    await fs.write("text", "/note.txt");
+    const explorer = new ExplorerSession(fs);
+    await explorer.refresh();
+    await expect(explorer.open("/note.txt")).rejects.toMatchObject({ code: "ENOTDIR" });
+    expect(explorer.snapshot().path).toBe("/");
+    explorer.close();
+  });
+});
