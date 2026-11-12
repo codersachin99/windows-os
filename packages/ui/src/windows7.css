@@ -172,3 +172,15 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
  .windows-window:not(.is-maximized) { max-width: 100vw; max-height: calc(100vh - 40px); }
  .windows-startmenu { max-width: 100vw; grid-template-columns: minmax(155px, 1fr) minmax(110px, 140px); min-height: 270px; }
 }
+
+/* Original Start Menu's All Programs tree is backed by installed .lnk files. */
+.windows-startmenu__programs { overflow-y:auto; max-height:min(460px, 68vh); }
+.windows-startmenu__all-programs {
+  padding:5px 14px; margin:0 4px 3px;
+  font:12px "Segoe UI",Tahoma,sans-serif; text-align:right;
+  border:1px solid transparent; background:linear-gradient(#fafafa,#e6eef7);
+  color:#1a4467; cursor:pointer;
+}
+.windows-startmenu__all-programs:hover { background:linear-gradient(#e7f5ff,#b7d7f1); border-color:#80b4d9; }
+.windows-startmenu__program:disabled { opacity:.52; cursor:default; }
+.windows-startmenu__chevron { margin-left:auto; font-size:13px; color:#567; }
