@@ -386,3 +386,5 @@ export { searchFiles, matchFilePattern } from "./search";
 export type { FileSearchRequest, FileSearchResult, FileSearchProgress } from "./search";
 
 export * from "./sourceGuest";
+
+export * from "./sourcePrograms";
