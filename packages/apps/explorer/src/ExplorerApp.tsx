@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
+import { searchFiles, type FileEntry } from "@windows-os/filesystem";
 import { fileClipboard, fileStore } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import "./source.css";
@@ -30,6 +31,13 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
+  const [subfolders, setSubfolders] = useState(false);
+  const [namePattern, setNamePattern] = useState("");
+  const [found, setFound] = useState<FileEntry[] | null>(null);
+  const [searchBusy, setSearchBusy] = useState(false);
+  const [searchTruncated, setSearchTruncated] = useState(false);
+  const [foldersScanned, setFoldersScanned] = useState(0);
+  const currentSearch = useRef<AbortController | null>(null);
   useEffect(() => {
     const unsubscribe = session.subscribe(setState);
     const disconnect = session.connect();
@@ -37,7 +45,14 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     return () => { unsubscribe(); disconnect(); };
   }, [session]);
   useEffect(() => fileClipboard.subscribe(setClipboardState), []);
-  const visible = session.visible();
+  useEffect(() => {
+    currentSearch.current?.abort();
+    setFound(null);
+    setSearchBusy(false);
+    setFoldersScanned(0);
+  }, [state.path, state.search, subfolders, namePattern]);
+  useEffect(() => () => currentSearch.current?.abort(), []);
+  const visible = found ?? session.visible();
   const selected = state.items.find(item => item.uri === state.selected[0]);
 
   const execute = async (operation: () => Promise<unknown>) => {
@@ -86,6 +101,39 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
       event.preventDefault(); session.selectAll();
     }
   };
+  const runSearch = () => {
+    currentSearch.current?.abort();
+    const controller = new AbortController();
+    currentSearch.current = controller;
+    setSearchBusy(true);
+    setFound(null);
+    setMessage("");
+    setFoldersScanned(0);
+    void searchFiles(fileStore, {
+      scope: state.path,
+      text: state.search,
+      namePattern: namePattern.trim() || null,
+      subfolders,
+      maxResults: 500
+    }, {
+      signal: controller.signal,
+      onProgress: progress => {
+        if (currentSearch.current === controller) setFoldersScanned(progress.foldersScanned);
+      }
+    }).then(result => {
+      if (currentSearch.current !== controller) return;
+      setFound(result.files);
+      setSearchTruncated(result.truncated);
+    }).catch(cause => {
+      if (currentSearch.current !== controller && cause instanceof Error && cause.name === "AbortError") return;
+      if (cause instanceof Error && cause.name !== "AbortError") setMessage(cause.message);
+    }).finally(() => {
+      if (currentSearch.current === controller) {
+        currentSearch.current = null;
+        setSearchBusy(false);
+      }
+    });
+  };
   const requestRename = () => {
     if (!selected) return;
     setName(selected.name);
@@ -103,6 +151,19 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
       <input className="explorer-address__search" type="search"
         placeholder="Search" aria-label="Search files" value={state.search}
         onChange={event => session.search(event.target.value)} />
+      <button type="button" onClick={runSearch} disabled={searchBusy}
+        aria-label="Find files">Find</button>
+    </div>
+    <div className="explorer-search-controls">
+      <label><input type="checkbox" checked={subfolders}
+        onChange={event => setSubfolders(event.target.checked)} /> Search subfolders</label>
+      <label>File pattern:
+        <input aria-label="File name pattern" value={namePattern}
+          placeholder="*.txt" onChange={event => setNamePattern(event.target.value)} />
+      </label>
+      {found !== null && <button type="button" onClick={() => setFound(null)}>Clear results</button>}
+      {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}
+      {searchBusy && <span role="status">Searching {foldersScanned} folders...</span>}
     </div>
     <div className="explorer-command">
       <button disabled title="Source Organize menu is pending">Organize</button>
@@ -143,14 +204,14 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
             <span className="listview__item-iconbox">
               <img src={item.type === "directory" ? legacyArt.folder : legacyArt.file} alt="" draggable={false} />
             </span>
-            <span className="listview__item-label">{item.name}</span>
+            <span className="listview__item-label" title={item.uri}>{item.name}</span>
             {state.viewMode === "details" && <>
               <span>{new Date(item.mtime).toLocaleString()}</span>
               <span>{item.type === "directory" ? "File folder" : "TXT File"}</span>
               <span>{item.type === "directory" ? "" : item.size + " B"}</span>
             </>}
           </button>)}
-          {!state.busy && !visible.length && <p className="explorer-empty">
+          {!state.busy && !searchBusy && !visible.length && <p className="explorer-empty">
             {state.search ? "No items match your search." : "This folder is empty."}
           </p>}
         </div>
