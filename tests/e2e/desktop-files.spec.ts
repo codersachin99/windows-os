@@ -74,6 +74,9 @@ test("Guest file shortcut Delete uses the mounted source Recycle Bin",async({pag
   await icon.click({button:"right"});
   const menu=page.locator('[data-test-desktop-menu]');
   await menu.getByRole("menuitem",{name:"Delete"}).click();
+  const confirmation=page.getByRole("alertdialog",{name:"Confirm desktop deletion"});
+  await expect(confirmation).toBeVisible();
+  await confirmation.getByRole("button",{name:"Yes"}).click();
   await expect(icon).toHaveCount(0);
   await page.locator('[data-test-desktop-icon="bin"]').dblclick();
   const bin=page.locator('[data-test-window="bin"]');
