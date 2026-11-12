@@ -23,6 +23,7 @@ export default defineConfig({
       "@windows-os/apps/magnifier": app("./packages/apps/magnifier/src/index.ts"),
       "@windows-os/apps/about": app("./packages/apps/about/src/index.ts"),
       "@windows-os/apps/taskmgr": app("./packages/apps/taskmgr/src/index.ts"),
+      "@windows-os/apps/find": app("./packages/apps/find/src/index.ts"),
       "@windows-os/apps/explorer": app("./packages/apps/explorer/src/index.ts"),
       "@windows-os/apps/shared": app("./packages/apps/shared/src/index.ts")
     }
