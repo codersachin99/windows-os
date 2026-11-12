@@ -70,3 +70,31 @@
   text-align:center; background:#fff; color:#152738;
   padding:1px; text-shadow:none; outline:1px solid #cce9ff;
 }
+
+/* Native adapter for source New > Shortcut wizard. No host filesystem access. */
+.windows-desktop__workspace:has([data-test-desktop-create]) { z-index:4001; }
+.windows-desktop__create-backdrop {
+  position:absolute; inset:0; z-index:4002; display:flex; align-items:center;
+  justify-content:center; background:rgba(0,0,0,.3); color:#1b3147; text-shadow:none;
+}
+.windows-desktop__create-dialog {
+  box-sizing:border-box; width:min(390px,calc(100% - 24px)); display:flex;
+  flex-direction:column; gap:9px; padding:17px;
+  border:1px solid #729dbb; border-radius:4px;
+  background:linear-gradient(#f7fcff,#e4eff9); box-shadow:0 8px 26px #0007;
+  font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop__create-dialog h3 { margin:0 0 2px; font-size:17px; font-weight:500; }
+.windows-desktop__create-dialog p { margin:0 0 5px; line-height:1.4; }
+.windows-desktop__create-dialog label { font-weight:600; }
+.windows-desktop__create-dialog input,
+.windows-desktop__create-dialog select {
+  width:100%; min-height:32px; box-sizing:border-box; border:1px solid #9ab4ce;
+  border-radius:2px; padding:4px 6px; font:inherit; color:#243748; background:white;
+}
+.windows-desktop__create-actions { display:flex; justify-content:flex-end; gap:7px; margin-top:8px; }
+.windows-desktop__create-actions button {
+  min-width:74px; min-height:28px; border:1px solid #819fb9; border-radius:2px;
+  background:linear-gradient(#fff,#dceaf5); font:inherit; cursor:pointer;
+}
+.windows-desktop__create-actions button:disabled { opacity:.5; cursor:default; }

@@ -11,6 +11,10 @@ import { appRegistry, browserStorage, fileStore, sourceFilesystemRuntime } from 
 import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
 import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
+  createSourceDesktopItem, createSourceDesktopShortcut, type DesktopNewItem
+} from "./desktopCreate";
+import { sourcePrograms } from "@windows-os/filesystem";
+import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
 } from "./desktopPositions";
@@ -37,7 +41,7 @@ interface ActivePress {
   offset: DesktopPoint;
   narrowTo: string | null;
 }
-type DesktopMenu = { x: number; y: number; id: string | null; view: boolean };
+type DesktopMenu = { x: number; y: number; id: string | null; view: boolean; newOpen: boolean };
 interface ActiveBand {
   start: DesktopPoint;
   previous: string[];
@@ -68,6 +72,12 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [createdId, setCreatedId] = useState<string | null>(null);
+  const [shortcutDraft, setShortcutDraft] = useState<{ programId: string; name: string } | null>(null);
+  const [creatingShortcut, setCreatingShortcut] = useState(false);
+  const shortcutTargets = useMemo(() => sourcePrograms.filter(program =>
+    program.installPath && appRegistry.get(program.id)
+  ), []);
   const [renaming, setRenaming] = useState<{id:string;value:string} | null>(null);
   const renameRef = useRef<{id:string;value:string} | null>(null);
   const list = useRef<HTMLDivElement>(null);
@@ -160,6 +170,55 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     setMenu(null);
     setError(null);
   };
+  // The VFS publishes before the async create promise resolves. Observe both
+  // createdId and the refreshed Guest file list so inline rename cannot race.
+  useEffect(() => {
+    if (!createdId) return;
+    const file = guestFiles.find(item => item.id === createdId);
+    if (!file) return;
+    setCreatedId(null);
+    beginRename(file);
+  }, [createdId, guestFiles]);
+
+  const newDesktopItem = (kind: DesktopNewItem) => {
+    setMenu(null);
+    const path = sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if (!path) { setError("The original Guest Desktop is not mounted."); return; }
+    void createSourceDesktopItem(fileStore, path, kind).then(uri => {
+      setCreatedId("file:" + uri);
+      setError(null);
+    }).catch(cause =>
+      setError(cause instanceof Error ? cause.message : "Cannot create desktop item"));
+  };
+
+  const openShortcutWizard = () => {
+    setMenu(null);
+    const first = shortcutTargets[0];
+    if (!first) { setError("No migrated source programs are available for shortcuts."); return; }
+    setShortcutDraft({
+      programId: first.id,
+      name: (appRegistry.get(first.id)?.label ?? first.name) + " - Shortcut"
+    });
+    setError(null);
+  };
+  const submitShortcut = () => {
+    if (!shortcutDraft || creatingShortcut) return;
+    const path = sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if (!path) { setError("The original Guest Desktop is not mounted."); return; }
+    setCreatingShortcut(true);
+    void createSourceDesktopShortcut(
+      fileStore, path, shortcutDraft.programId, shortcutDraft.name
+    ).then(uri => {
+      const id = "file:" + uri;
+      setShortcutDraft(null);
+      setSelected([id]);
+      anchor.current = id;
+      setError(null);
+    }).catch(cause =>
+      setError(cause instanceof Error ? cause.message : "Cannot create shortcut")
+    ).finally(() => setCreatingShortcut(false));
+  };
+
   const changeRename = (id: string, value: string) => {
     if (renameRef.current?.id !== id) return;
     renameRef.current = {id,value};
@@ -303,7 +362,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     if (event.button !== 0 || !options.showIcons || press.current) return;
     const target = event.target as HTMLElement;
     if (target.closest(
-      "[data-test-desktop-icon], [data-test-desktop-menu], .windows-desktop__layout-error"
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-create], .windows-desktop__layout-error"
     )) return;
     const bounds = list.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -367,7 +426,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     if (id && !selected.includes(id)) pick(id, false, false);
     const bounds = list.current?.getBoundingClientRect();
     setMenu({
-      id, view: false,
+      id, view: false, newOpen: false,
       x: Math.max(0, Math.min(event.clientX - (bounds?.left ?? 0), Math.max(0, area.width - 196))),
       y: Math.max(0, Math.min(event.clientY - (bounds?.top ?? 0), Math.max(0, area.height - 270)))
     });
@@ -392,7 +451,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     onPointerDown={startBand}
     onClick={event => {
       if (ignoreClick.current) {ignoreClick.current=false;return;}
-      if ((event.target as HTMLElement).closest("[data-test-desktop-menu]")) return;
+      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-create]")) return;
       if ((event.target as HTMLElement).closest("[data-test-desktop-icon]")) return;
       setSelected([]);anchor.current=null;dispatch({ type:"SELECT_ICON", id:null });
     }}
@@ -500,7 +559,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         <button role="menuitem" disabled title="Original shortcut properties are pending">Properties</button>
       </> : <>
         <button role="menuitem" aria-expanded={menu.view}
-          onClick={() => setMenu({ ...menu, view: !menu.view })}>View ▸</button>
+          onClick={() => setMenu({ ...menu, view: !menu.view, newOpen: false })}>View ▸</button>
         {menu.view && <>
           {([["lg","Large icons"],["md","Medium icons"],["sm","Small icons"]] as const)
             .map(([value,label]) => <button key={value} role="menuitemradio"
@@ -516,7 +575,62 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         </>}
         <button role="menuitem" onClick={() => {setMenu(null);setOptions(layout.snapshot());}}>
           Refresh</button>
+        <button role="menuitem" aria-expanded={menu.newOpen}
+          data-test-desktop-new=""
+          onClick={() => setMenu({ ...menu, newOpen: !menu.newOpen, view: false })}>
+          New ▸</button>
+        {menu.newOpen && <>
+          <button role="menuitem" data-test-desktop-new-folder=""
+            onClick={() => newDesktopItem("folder")}>Folder</button>
+          <button role="menuitem" data-test-desktop-new-shortcut=""
+            onClick={openShortcutWizard}>Shortcut</button>
+          <button role="menuitem" data-test-desktop-new-richtext=""
+            onClick={() => newDesktopItem("richtext")}>Rich Text Document</button>
+          <button role="menuitem" data-test-desktop-new-text=""
+            onClick={() => newDesktopItem("text")}>Text Document</button>
+        </>}
       </>}
+    </div>}
+    {shortcutDraft && <div className="windows-desktop__create-backdrop"
+      data-test-desktop-create="" role="dialog" aria-modal="true"
+      aria-label="Create desktop shortcut"
+      onPointerDown={event => event.stopPropagation()}
+      onClick={event => event.stopPropagation()}
+      onContextMenu={event => event.stopPropagation()}
+      onKeyDown={event => {
+        if (event.key === "Escape") {
+          event.preventDefault(); event.stopPropagation(); setShortcutDraft(null);
+        }
+      }}>
+      <form className="windows-desktop__create-dialog" onSubmit={event => {
+        event.preventDefault(); submitShortcut();
+      }}>
+        <h3>Create Shortcut</h3>
+        <p>Select a migrated source program. The shortcut is stored in your Guest Desktop.</p>
+        <label htmlFor="desktop-shortcut-target">Program</label>
+        <select id="desktop-shortcut-target" aria-label="Shortcut program"
+          value={shortcutDraft.programId} disabled={creatingShortcut}
+          onChange={event => {
+            const programId = event.target.value;
+            const target = shortcutTargets.find(item => item.id === programId);
+            if (target) setShortcutDraft({
+              programId, name: (appRegistry.get(programId)?.label ?? target.name) + " - Shortcut"
+            });
+          }}>
+          {shortcutTargets.map(program => <option key={program.id} value={program.id}>
+            {appRegistry.get(program.id)?.label ?? program.name}
+          </option>)}
+        </select>
+        <label htmlFor="desktop-shortcut-name">Name</label>
+        <input id="desktop-shortcut-name" aria-label="Shortcut name" maxLength={30}
+          autoFocus value={shortcutDraft.name} disabled={creatingShortcut}
+          onChange={event => setShortcutDraft({ ...shortcutDraft, name: event.target.value })} />
+        <div className="windows-desktop__create-actions">
+          <button type="button" onClick={() => setShortcutDraft(null)}
+            disabled={creatingShortcut}>Cancel</button>
+          <button type="submit" disabled={creatingShortcut}>Create</button>
+        </div>
+      </form>
     </div>}
     {error && <div className="windows-desktop__layout-error" role="alert">
       {error}<button onClick={() => setError(null)}>×</button>
