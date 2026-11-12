@@ -98,6 +98,14 @@
 - **Scope:** only original **Standard** mode, not Scientific, Programmer, Statistics, worksheets, unit/date conversion or full extended expression implementation. Tracker `calc.js` remains `in-progress`, not verified. See [CALCULATOR.md](CALCULATOR.md).
 - **Verified bounded Standard-mode slice:** opt-in [CI run 43171852845](https://github.com/codersachin99/windows-os/actions/runs/43171852845) **passed** TypeScript, 13 Vitest test files, original source inventory/Contacts fidelity checks, Vite production build, and **48 desktop/mobile Chromium browser tests** including Calculator controls, history, grouping, keyboard and Calculator.lnk execution. Full Calc app remains `in-progress` because Scientific, Programmer, Statistics, conversions and worksheets are not implemented.
 
+## Explorer drag/drop and safe host File import (2026-11-12)
+
+- Pinned source `src/modules/apps/computer.js` calls shared drop-parser `_parse(event, activePath)` from the `mounted()` onDrop handler. Source FileCopy/FileMove behavior was mapped to reusable `packages/filesystem/src/transfer.ts`; shared `FileClipboard` now delegates to the same preflight transaction used by Explorer drag/drop.
+- `packages/filesystem/src/drag.ts` adds a tokenized, same-document `FileDragSession`, copy modifier and an external browser `File` importer. The importer refuses existing/duplicate filenames, retains Unicode text for Notepad and binary bytes for non-TXT files; no host filesystem writes.
+- `ExplorerApp.tsx` now has draggable virtual files and folders, native folder and folder-background drop targets, visual drop feedback, and explicit Upload selection. Recycle Bin drag is disabled until original Bin drag protocols are mapped. Drag does not overwrite Cut/Copy clipboard state.
+- New Vitest and Chromium tests: copy/move, nested folder and collisions, expired token rejection, text/binary import, host File event drop into a child folder and opening imported TXT in native Notepad. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md). Full desktop/icon drag, host directory recursion and exact source visuals remain incomplete.
+- **Verification is pending** a deliberate CI checkpoint. The prior 48-test green run [43171852845](https://github.com/codersachin99/windows-os/actions/runs/43171852845) covers the Calculator slice before these changes.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

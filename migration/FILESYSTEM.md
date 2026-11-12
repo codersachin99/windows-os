@@ -43,3 +43,7 @@ The original source webpack files were traced to functions and constants `5401`,
 ## Binary bytes and source program installation
 
 `VirtualFileStore.readBytes/writeBytes` now supports binary files via validated base64 snapshots. This reproduces the original installer-generated 1,024-byte MZ stubs for the 34 installed original programs, and preserves existing VFS text semantics. `sourcePrograms.ts` installs source-defined executable and Start Menu paths idempotently without overwriting data; see [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md).
+
+## Shared FileMove/FileCopy and host-browser file drops
+
+`transferFiles` applies one common collision/nesting/duplicate-source check to both clipboard and Explorer drag, preserving source files on copy and source folder trees on move. `importDroppedFiles` accepts explicit browser File objects only, converts TXT into editable text and retains other file bytes as stored binary. No host-disk write or read of arbitrary host paths is exposed. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md).

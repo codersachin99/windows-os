@@ -76,7 +76,11 @@
         "tests/e2e/clipboard.spec.ts",
         "tests/e2e/search.spec.ts",
         "packages/filesystem/src/sourceGuest.ts",
-        "tests/e2e/source-guest.spec.ts"
+        "tests/e2e/source-guest.spec.ts",
+        "packages/filesystem/src/transfer.ts",
+        "packages/filesystem/src/drag.ts",
+        "tests/e2e/explorer-drag.spec.ts",
+        "migration/EXPLORER-DRAGDROP.md"
       ]
     },
     {

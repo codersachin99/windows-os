@@ -45,3 +45,7 @@ Computer's navigation panel now shows the source-defined System (C:) volume, Des
 ## Source .lnk shortcut and executable associations
 
 Explorer recognizes source .lnk JSON shortcuts and known installed executable paths (from the full original c170 manifest). Installed Notepad shortcuts launch the migrated React Notepad; programs not yet ported report pending implementation. The exact 34 source program placeholders now appear on the C: disk, and All Programs reads real persisted shortcuts in root/Accessories/Games. See [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md).
+
+## Drag-drop and host File import
+
+Source `computer.js` used a mounted shared drop handler to parse File events into active virtual folders. Explorer now supports in-app folder/file drag-move, Ctrl/Meta copy, browser host File drops and a manual Upload control. All moves/copies share `transferFiles` preflight checking and preserve the original virtual file store and clipboard semantics. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md). Desktop icon movement and native host directory import are not yet ported.
