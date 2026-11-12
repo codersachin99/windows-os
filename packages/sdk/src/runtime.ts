@@ -59,9 +59,10 @@ export class SourceFilesystemRuntime {
       await this.restorePersisted();
       // Upgrade Guest installations created by the previous migration slice.
       // Never install legacy source artifacts into a custom supplied volume.
-      if (this.session?.pathConfig.root === SOURCE_COMPUTER_ROOT
-        && this.session.desktopPath === sourceGuestMounts().desktopPath
-        && this.session.trashPath === sourceGuestMounts().trashPath) {
+      const mounted = this.snapshot();
+      if (mounted?.pathConfig.root === SOURCE_COMPUTER_ROOT
+        && mounted.desktopPath === sourceGuestMounts().desktopPath
+        && mounted.trashPath === sourceGuestMounts().trashPath) {
         await this.ensureSourceInstalled();
       }
       return;
