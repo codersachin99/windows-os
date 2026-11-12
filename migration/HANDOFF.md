@@ -5,6 +5,14 @@
 **PR:** https://github.com/codersachin99/windows-os/pull/1 (draft; not merged)  
 **Status:** the first React application slice is working and CI-tested; **the full product is not migrated or release-ready**.
 
+## Desktop New submenu checkpoint (2026-11-12) — verification pending
+
+- Source-traced original `legacy-win7/src/modules/system/main.js` background New submenu: Folder, Shortcut, Rich Text Document, Text Document. Source Shortcut opens a dedicated application wizard (not yet ported), so React currently uses a limited inline chooser for installed and already migrated apps; full original wizard and all program choices are **not** claimed complete.
+- New `packages/ui/src/desktopCreate.ts` uses the active Guest `desktopPath`, source JSON `{exe,icon}` .lnk serialization, collision-safe default names and strict target/filename validation. Shared `VirtualFileStore.createFile` is create-only, never overwriting another user's item when competing with a file creation. Folders, UTF-8 TXT and minimal valid RTF persist as real VFS items. Rich-text editing/WordPad remains unported.
+- UI `DesktopIcons.tsx` exposes the source menu, quick item creation with automatic F2-like rename, and a shortcut selector limited to source-installed programs already registered as working React apps. No host executable or arbitrary path is launched. Tests in `desktopCreate.test.ts` and `tests/e2e/desktop-create.spec.ts` cover persistence, Notepad/Calculator integration, duplicate names and invalid shortcuts.
+- **Code commits:** `a9c6b368` (file contracts/tests) and `84620792` (menu/wizard/browser cases). **CI is pending** for this checkpoint until the explicit `[run-ci]` commit completes. Previous bounded rename checkpoint passed [43191657508](https://github.com/codersachin99/windows-os/actions/runs/43191657508).
+- **Next:** fix any CI findings, then implement source-aligned dragging Desktop file(s) onto the Recycle Bin icon, further shortcut wizard and original legacy visual/theme parity. Do not mark `system/main.js` fully verified, merge this draft PR, or release yet. See [DESKTOP-CREATE.md](DESKTOP-CREATE.md).
+
 ## Checkpoint: shared filesystem substrate (2026-11-12)
 
 - **Commit:** [8f09f912](https://github.com/codersachin99/windows-os/commit/8f09f912011c042cfc80298ebc297c5809f47071); **PR Chromium/TypeScript/unit/build CI:** [43089881176](https://github.com/codersachin99/windows-os/actions/runs/43089881176), passed.
