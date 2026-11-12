@@ -26,6 +26,9 @@ async function openDocuments(page: Page): Promise<Locator> {
   const explorer = page.locator('[data-test-window="computer"]').last();
   await explorer.getByRole("button", {name:"Documents",exact:true}).click();
   await expect(explorer.getByRole("textbox",{name:"Folder address"})).toHaveValue(documents);
+  // A responsive Explorer must scroll its own navigation area, not pan the
+  // whole document and push Desktop icons off the left edge.
+  expect(await page.evaluate(() => window.scrollX)).toBe(0);
   return explorer;
 }
 async function createExplorerFolder(explorer: Locator, name: string) {
