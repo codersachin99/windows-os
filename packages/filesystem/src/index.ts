@@ -217,3 +217,6 @@ export class VirtualFileStore {
 export * from "./drivePaths";
 
 export * from "./volumeSession";
+
+export { FileClipboard } from "./clipboard";
+export type { ClipboardOperation, FileClipboardState } from "./clipboard";

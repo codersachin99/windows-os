@@ -1,4 +1,4 @@
-import { VirtualFileStore, type FileStoreStorage } from "@windows-os/filesystem";
+import { FileClipboard, VirtualFileStore, type FileStoreStorage } from "@windows-os/filesystem";
 // Shared across future Explorer, Notepad, Recycle Bin, media and file dialogs.
 // No host-disk access is implied. Source sessions and mounts are opt-in.
 function browserStorage(): FileStoreStorage | undefined {
@@ -14,3 +14,5 @@ export type { LegacyDrive, LegacyPathConfig, LegacyDriveStats } from "@windows-o
 
 export { LegacyVolumeSession, createProfileFileStore } from "@windows-os/filesystem";
 export type { LegacyRuntimeMounts, FileStoreChange } from "@windows-os/filesystem";
+
+export const fileClipboard = new FileClipboard();
