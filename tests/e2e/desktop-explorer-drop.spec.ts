@@ -41,8 +41,29 @@ async function pointerDrop(page: Page, icon: Locator, target: Locator, copy = fa
   if (!a || !b) throw new Error("Cannot resolve visible Desktop/Explorer pointer targets");
   const startX = a.x + Math.min(19, a.width / 2);
   const startY = a.y + Math.min(24, a.height / 2);
-  const destX = b.x + Math.min(b.width / 2, 90);
-  const destY = b.y + Math.min(b.height / 2, 85);
+  // On narrow mobile viewports, the Explorer content pane can extend under
+  // the window's own scrollbars / right clipping. Select an ACTUALLY visible,
+  // unobscured target cell rather than assuming (x+90,y+85) is hittable.
+  const visible = await target.evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    const left = Math.max(0,rect.left + 4);
+    const right = Math.min(window.innerWidth - 1,rect.right - 4);
+    const top = Math.max(0,rect.top + 4);
+    const bottom = Math.min(window.innerHeight - 1,rect.bottom - 4);
+    for (const yf of [0.55,0.78,0.3,0.9,0.15]) {
+      for (const xf of [0.4,0.6,0.2,0.8,0.1]) {
+        const x=left+(right-left)*xf, y=top+(bottom-top)*yf;
+        const hit=document.elementFromPoint(x,y);
+        if (hit?.closest("[data-windows-os-drop-directory]")===element) {
+          return {x,y};
+        }
+      }
+    }
+    return null;
+  });
+  if (!visible) throw new Error(
+    "Explorer drop area is fully covered or clipped at the current viewport");
+  const destX = visible.x, destY = visible.y;
   await page.mouse.move(startX,startY);
   await page.mouse.down();
   // Press Ctrl only AFTER pointerdown so the modifier does not toggle the
