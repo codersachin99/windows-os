@@ -31,6 +31,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 200, height: 200, resizable: false, centered: true }
   },
   {
+    id: "magnifier", label: "Magnifier", icon: legacyArt.magnifier,
+    kind: "utility", desktop: false, showInStart: true,
+    // Source Win7 WindowMain: w=260, h="auto", resizable=false.
+    // 86px fits the source 32px commands, 6px body pad and chrome.
+    window: { width: 260, height: 86, resizable: false }
+  },
+  {
     id: "run", label: "Run", icon: legacyArt.run,
     kind: "utility", desktop: false, showInStart: true,
     window: { width: 450, height: 220, resizable: false, location: "bottom-left" }

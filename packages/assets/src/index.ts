@@ -25,6 +25,8 @@ export const legacyArt = {
   sticky: "/assets/images/sticky.e63cea5a.webp",
   stickyAdd: "/assets/images/stickynotes-add.bfbefc41.webp",
   stickyClose: "/assets/images/stickynotes-close.80b2c95a.webp",
+  magnifier: "/assets/images/magnifier.66b65661.webp",
+  magnifierHelp: "/assets/images/help.a34353ca.webp",
   folder: "/assets/images/folder.677f8e80.webp",
   file: "/assets/images/file.73b2d097.webp",
   shortcut: "/assets/images/shortcut.e8c69673.webp",

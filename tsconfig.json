@@ -63,6 +63,9 @@
       ],
       "@windows-os/apps/sticky": [
         "packages/apps/sticky/src/index.ts"
+      ],
+      "@windows-os/apps/magnifier": [
+        "packages/apps/magnifier/src/index.ts"
       ]
     }
   },
