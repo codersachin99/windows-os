@@ -18,4 +18,4 @@ model.test.ts covers IDs, aliases, installed executable names and drive/path gua
 
 The Run command-entry flow is intentionally limited to **already implemented** programs. This is a source-bounded vertical slice; it does not constitute porting the unimplemented original Paint, Command Prompt, WordPad or other programs. No release or merge before full parity.
 
-**Status:** implementation committed; opt-in CI pending.
+**Status: CI verified.** Opt-in [GitHub Actions 43242039487](https://github.com/codersachin99/windows-os/actions/runs/43242039487) passed **156 Vitest tests (29 files)**, **164 Chromium desktop/mobile browser tests**, TypeScript/source/Contacts checks and Vite build. Pixel-perfect source screenshot comparison remains pending.
