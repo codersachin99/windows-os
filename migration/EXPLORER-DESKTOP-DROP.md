@@ -1,0 +1,11 @@
+# Explorer → Guest Desktop native drag/drop and external File import
+
+**Pinned source:** \`legacy-win7/src/modules/system/main.js\` binds a desktop \`onDrop\` handler that parses external files into its runtime \`desktopPath\`; \`legacy-win7/src/modules/apps/computer.js\` handles drag and folder operations through its Computer filesystem session. This native drag receiver integrates the already verified React Explorer file token implementation with those original shell contracts.
+
+**Implementation:** Explorer continues producing the existing \`SHELL_DRAG_TYPE\` in its \`onDragStart\`. \`DesktopIcons.tsx\` accepts native \`dragover\` / \`drop\` on **empty desktop background only**, never when the drop is over a system/Guest desktop icon or menu. A valid internal token calls \`fileDragSession.drop(fileStore, token, guestDesktopPath, "move" | "copy")\`; Ctrl/Meta chooses copy. The shared VFS validates all paths and refuses same-directory or duplicate names, avoiding silent overwrite. Native File objects from the browser are passed to \`importDroppedFiles\` which preflights names/target, preserves UTF-8 .txt as text and other files as bytes; no host filesystem path is trusted. Successful operations appear in live Explorer/Desktop and persist after reload. Clipboard contents are not modified.
+
+**Tests:** \`tests/e2e/explorer-desktop-drop.spec.ts\` covers moving from Documents to Desktop and reload, Ctrl-copy/collision, selected Explorer groups, and host drop/repeated import protection in desktop/mobile Chromium. Existing \`tests/e2e/explorer-drag.spec.ts\` exercises native Explorer drag and File inputs, while \`desktop-explorer-drop.spec.ts\` covers the pointer-driven opposite direction.
+
+**Limitations:** drops onto an icon, including folders and Recycle Bin, remain unsupported in this native reverse path; only empty Desktop background is accepted. Browser drag behavior may differ on real touch devices; host file system writing is deliberately forbidden. Full source drag-ghost visuals, touch and theme variants, pixel-by-pixel screenshot matching and multi-item atomic rollback after storage failures remain to be implemented. Original desktop/Computer modules remain \`in-progress\`; no full parity or release claim.
+
+**Status:** pending opt-in CI.
