@@ -30,6 +30,15 @@
 - **CodeMirror follow-up:** [ce06a6dc](https://github.com/codersachin99/windows-os/commit/ce06a6dc194b8cbf49f86933095aef8eded85d3b) implements a reusable native CodeMirror 6 editor adapter with source-oriented set/insert/focus/select-all/shortcut, cursor, wrapping and font behavior. The Notepad stylesheet is verified byte-for-byte against the source Git blob SHA `d8ac17121e7d28106d6986d4adccd795c69d1066`. It is not yet wired into the shell UI; no visual parity claim. Package versions for CodeMirror 6 are pinned.
 - **Next:** integrate the CodeMirror editor into the native Notepad window, implement full menu/shortcut handling, open/save/font/overwrite dialogs and legacy appearance as native React modules; connect the original session-generated volumes, then add browser behavior comparisons. No source Notepad module is marked verified; the original app's full UI is not yet implemented. See [NOTEPAD.md](NOTEPAD.md).
 
+## Native Notepad integration checkpoint (2026-11-12)
+
+- Source-mapped Notepad now mounts as a native React Start menu app (not an iframe) using the original CodeMirror 6 adapter and source CSS. Dirty titles flow through the window manager and show in the taskbar.
+- Source File/Edit/Format/View menus, keyboard bindings, font, word-wrap, status bar, date insertion and confirmation on close have React implementations. A reusable simulated filesystem file picker supports opening, saving, overwrite prompts, and folder navigation.
+- App state is retained during minimize/restore; Windows titlebar close and Alt+F4 both use application-specific close requests. See `packages/ui/src/WindowFrame.tsx`, `DesktopShell.tsx`, `packages/apps/notepad`, `packages/apps/shared`.
+- Desktop/mobile Playwright tests were added for document persistence, save and open, minimize, and Yes/No/Cancel close. **This is an opt-in CI verification checkpoint; do not claim it passed until the workflow completes.**
+- Known source gaps: final Win7 Notepad icon `/assets/images/notepad.90e3ce4c.webp` must be copied through the pinned importer, active source disk/bootstrap metadata is not yet supplied, and shared file/font dialog CSS and all keyboard/touch states remain unverified against source. This is an in-progress port, not full Notepad parity.
+- **Next:** Run source-parity screenshot comparisons, move the shared file dialogs closer to original source behavior, initialize verified guest volume metadata, and wire Computer/Explorer to the same filesystem.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

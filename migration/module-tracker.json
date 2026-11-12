@@ -118,8 +118,14 @@
       "source": "src/modules/apps/notepad.js",
       "sha": "f373cdc2dd1b1e77b7495d450fa464d829671384",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/notepad/src/document.ts",
+        "packages/apps/notepad/src/NotepadApp.tsx",
+        "packages/apps/notepad/src/NotepadEditor.tsx",
+        "tests/e2e/notepad.spec.ts",
+        "migration/NOTEPAD.md"
+      ]
     },
     {
       "source": "src/modules/apps/paint.js",

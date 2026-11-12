@@ -26,3 +26,7 @@ A native React Notepad shell view is now wired through the app registry and desk
 Window engine changes keep app components mounted during minimize so documents do not vanish. All close routes (titlebar and Alt+F4) now request confirmation through app lifecycle interception; title changes reflect dirty/save state.
 
 This is a genuine functional vertical slice, not full legacy parity. In particular, the source's file-dialog and font-dialog CSS/behavior have not been fully reproduced; active disk bootstrap and source Notepad icon must be imported from the pinned legacy repository. Unit tests and Playwright integration tests were added; do not mark verified without successful opted-in CI and source screenshot comparisons.
+
+## Checkpoint verification
+
+Native app integration and reusable file dialogs have been added. Source tracker is now `in-progress`, not `verified`. Opt-in GitHub Actions must pass the unit/build/browser suite and original visuals must still be compared before promotion. File-dialog initial location currently uses the real virtual root when no legacy source mount is configured; it does **not** claim the original disk directory layout.
