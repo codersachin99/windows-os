@@ -22,6 +22,10 @@ test("Explorer recursively finds real documents from Notepad with source-style f
   await dialog.getByRole("textbox", { name: "File name:" }).fill("Report");
   await dialog.getByRole("button", { name: "Save", exact: true }).click();
   await expect(dialog).toHaveCount(0);
+  // The floating Notepad window is above Computer. Close it before interacting
+  // with Explorer's search controls; the saved file remains in shared storage.
+  await note.getByRole("button", { name: /^Close / }).click();
+  await expect(note).toHaveCount(0);
 
   await explorer.getByRole("searchbox", { name: "Search files" }).fill("report");
   await expect(explorer.locator('[data-test-explorer-item="Report.txt"]')).toHaveCount(0);
