@@ -119,7 +119,7 @@
 - **Implementation:** `packages/ui/src/desktopSelection.ts` adds viewport-clamped rectangular hit testing against the saved/source auto-arranged 50/80/120px icon bounds; helper supports replace, Ctrl-toggle and Shift-add selections without moving or persisting any icons. `DesktopIcons.tsx` handles background-only PointerEvents, translucent `desktop__icon-band`, selection persistence after release, cleanup, menu priority and subsequent group drag. Existing icon move/save/UI contracts unchanged.
 - **Coverage:** five new pure geometry/selection unit tests and four desktop/mobile Chromium interaction tests including reverse-direction rectangle, Ctrl and Shift modifiers, drag-after-select, deselection, right-click menu and double-click launch.
 - **Remaining:** exact original external `03f3` mixin edge cases, touch band handling, file-backed user desktop shortcuts, marquee auto-scroll, icon file renaming, drag to Recycle Bin and theme screenshot parity are not yet migrated. Source `system/main.js` stays `in-progress`.
-- **Verification:** added tests; opt-in CI checkpoint is pending. See [DESKTOP-BAND.md](DESKTOP-BAND.md).
+- **Verification:** this commit intentionally requests the opt-in GitHub Actions checkpoint; do not call the band-selection slice verified until TypeScript, Vitest, source checks, build and Chromium desktop/mobile tests complete. See [DESKTOP-BAND.md](DESKTOP-BAND.md).
 
 ## Tested implementation
 
