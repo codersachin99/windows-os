@@ -1,3 +1,11 @@
+## Guest Desktop → Explorer folder drag/drop checkpoint (2026-11-12) — CI pending
+
+- **Original source:** pinned `src/modules/system/main.js` desktop pointer selection/drag and `src/modules/apps/computer.js` Explorer folder/drop workflows. The React cross-window pointer bridge is a bounded shell feature reconstructed from those original primitives, not a fabricated host filesystem integration.
+- **Implemented:** topmost-Explorer-directory hit testing in `packages/ui/src/desktopExplorerDrop.ts`, pointer-controlled Guest Desktop group drag into current Computer contents or a visible directory row, destination highlighting, and a shared `fileDragSession` token. Ctrl/Meta-drop copies, normal release moves; desktop selection and file clipboard remain independent. Windows overlaid on target folders, Recycle Bin windows and system icons cannot act as ordinary file transfer targets.
+- **Safety:** existing source `transferFiles` preflights full selection and rejects missing files, same directory/nested folders and collisions without overwriting VFS entries. Cancel/blur cleans pointer session/highlight; no local host file access. Multi-item storage quota failure can still result in partial copy/move and remains separate filesystem work.
+- **Code:** `b0636814` hit detector + unit tests, `7979c931` Desktop/Explorer integration, `53914003` browser tests and docs. `tests/e2e/desktop-explorer-drop.spec.ts` covers move, Ctrl-copy/collision, multi-selection folder-row drop and same-directory guard on desktop/mobile Chromium. **CI pending**; no parity or verification claim until opt-in run passes. [Detailed map](migration/DESKTOP-EXPLORER-DROP.md).
+- **Still pending:** Explorer→Desktop native drag, source screenshot matching and touch/keyboard accessibility. Original `main.js` and `computer.js` remain in-progress, PR draft; do not merge/release.
+
 ## Original Shortcut Wizard Browse/Finish React checkpoint (2026-11-12) — CI verified
 
 - **Pinned source:** `legacy-win7/src/modules/shell/shortcutwiz.js` webpack module `a8a1` (window-main 550×400; browse second window; allProgramItems selection; Finish/Cancel; JSON `{exe,icon}` shortcut), and `src/modules/system/main.js` desktop New→Shortcut dispatch.
