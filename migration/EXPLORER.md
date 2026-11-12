@@ -49,3 +49,7 @@ Explorer recognizes source .lnk JSON shortcuts and known installed executable pa
 ## Drag-drop and host File import
 
 Source `computer.js` used a mounted shared drop handler to parse File events into active virtual folders. Explorer now supports in-app folder/file drag-move, Ctrl/Meta copy, browser host File drops and a manual Upload control. All moves/copies share `transferFiles` preflight checking and preserve the original virtual file store and clipboard semantics. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md). Desktop icon movement and native host directory import are not yet ported.
+
+## Verified drag-and-drop checkpoint
+
+[Opt-in CI run 43177091763](https://github.com/codersachin99/windows-os/actions/runs/43177091763) passed all checks and **56 Chromium browser tests** including internal file/folder drag, Ctrl+drag copy, binary/text uploads and conflict prevention. This only verifies the mapped basic drag/drop operations; original desktop icon drag, recursive host directory upload and pixel-perfect UI remain pending. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md).

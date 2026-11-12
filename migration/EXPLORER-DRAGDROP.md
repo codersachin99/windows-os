@@ -22,4 +22,4 @@ Unit tests cover internal copy/move, malicious/expired session tokens, recursive
 
 **Limitations:** No complete source-equivalent folder-file paste/replace prompt, same-directory copy naming, multi-file atomic rollback on storage-quota failure, host directory upload traversal, native file system API/Capacitor bridge, Recycle Bin drag target, drag from Desktop/Start Menu, icon reordering or exact source hover drag visuals. Generic HTML drag is a React implementation adapter of the source action contract, not evidence of pixel-perfect UI parity.
 
-**Verification:** pending opt-in `[run-ci]` checkpoint. Keep `src/modules/apps/computer.js` as `in-progress`.
+**Verification passed for this bounded slice:** [opt-in CI 43177091763](https://github.com/codersachin99/windows-os/actions/runs/43177091763) passed TypeScript, unit tests, source checks, build and **56 Chromium browser tests**, including drag-move, Ctrl+drag copy, File Upload, host File drop and conflict handling. The original full `src/modules/apps/computer.js` remains `in-progress`.

@@ -47,3 +47,7 @@ The original source webpack files were traced to functions and constants `5401`,
 ## Shared FileMove/FileCopy and host-browser file drops
 
 `transferFiles` applies one common collision/nesting/duplicate-source check to both clipboard and Explorer drag, preserving source files on copy and source folder trees on move. `importDroppedFiles` accepts explicit browser File objects only, converts TXT into editable text and retains other file bytes as stored binary. No host-disk write or read of arbitrary host paths is exposed. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md).
+
+## Verified shared file transfer checkpoint
+
+The reusable FileCopy/FileMove transfer is used by both Clipboard Paste and Explorer Drag, while the external File importer stores text or unchanged binary bytes. [CI 43177091763](https://github.com/codersachin99/windows-os/actions/runs/43177091763) passed source tests, TypeScript, unit tests, build and **56 Chromium browser tests**. Future work: multi-item transactions with rollback and original replace-conflict dialogs.
