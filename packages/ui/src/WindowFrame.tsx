@@ -44,7 +44,8 @@ export function WindowFrame({ window: win, dispatch, children, onRequestClose }:
         onPointerUp={pointerUp} onDoubleClick={() => {
           if (win.resizable !== false) dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id });
         }}>
-        <img src={win.icon} width={18} height={18} alt="" draggable={false} />
+        {win.titlebarIcon !== false &&
+          <img src={win.icon} width={18} height={18} alt="" draggable={false} />}
         <span className="windows-window__title">{win.title}</span>
         <div className="windows-window__buttons">
           {(win.resizable !== false || win.minimizable === true) &&

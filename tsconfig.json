@@ -66,6 +66,9 @@
       ],
       "@windows-os/apps/magnifier": [
         "packages/apps/magnifier/src/index.ts"
+      ],
+      "@windows-os/apps/about": [
+        "packages/apps/about/src/index.ts"
       ]
     }
   },
