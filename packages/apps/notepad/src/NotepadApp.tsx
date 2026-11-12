@@ -50,7 +50,11 @@ export function NotepadApp({ initialFilePath, onClose, onTitleChange, onRegister
     } else after();
   }, [document]);
 
-  const requestClose = useCallback(() => guard(onClose), [guard, onClose]);
+  // The original Notepad locks titlebar actions while modal dialogs are open.
+  const requestClose = useCallback(() => {
+    if (dialog) return;
+    guard(onClose);
+  }, [guard, onClose, dialog]);
   useEffect(() => onRegisterClose(requestClose), [onRegisterClose, requestClose]);
 
   const newDocument = useCallback(() => guard(() => {

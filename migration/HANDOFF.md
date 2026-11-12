@@ -47,6 +47,14 @@
 - Browser tests now cover Computer/Notepad shared files, text-file association, creating a folder and back/forward navigation. **Verified:** opt-in [CI run 43147045676](https://github.com/codersachin99/windows-os/actions/runs/43147045676) passed TypeScript, unit, source inventory checks, production build and the existing/new desktop/mobile Chromium tests.
 - Module tracker `computer.js` is `in-progress`. Source disk initialization/drive lists, deep search, devices, clipboard, drag/drop, Recycle Bin delete/restore, full list rendering and context menu parity remain pending. See [EXPLORER.md](EXPLORER.md).
 
+## Explorer clipboard and scoped search (2026-11-12)
+
+- **Source reference:** original `src/modules/apps/computer.js` dispatches shell `FileCopy` and `FileMove` and searches using scope, name pattern and `subfolders`; these are now implemented as reusable source-mapped contracts rather than browser/host file operations.
+- **Shared clipboard:** `packages/filesystem/src/clipboard.ts` and `packages/sdk/src/files.ts` implement shared cut/copy/paste with collision validation (including different source folders containing the same target name), nested-folder protection and unit tests. Explorer has toolbar controls and Ctrl+C/X/V/A support; `tests/e2e/clipboard.spec.ts` exercises copy, cut and error behavior.
+- **Scoped filename search:** `packages/filesystem/src/search.ts` supports filename wildcards `*` and `?`, scope, optional subfolders, excluded paths, progress, cancellation and limits. Explorer exposes Find, Search subfolders and file pattern controls; `tests/e2e/search.spec.ts` exercises finding a Notepad-saved file inside a nested folder.
+- **Still pending:** source disk mounts and `trashPath` runtime initialization, original search index/ranking/full query operators, Recycle Bin operations and visual parity. Original `bin.js` wraps Computer Explorer at the runtime `trashPath` and is **not** implemented by these clipboard/search changes. Do not claim more.
+- **Verification:** this code has been pushed but the new tests have not yet completed the deliberate opt-in CI checkpoint.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

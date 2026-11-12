@@ -28,7 +28,7 @@ test("Explorer recursively finds real documents from Notepad with source-style f
   await explorer.getByRole("checkbox", { name: "Search subfolders" }).check();
   await explorer.getByRole("button", { name: "Find files" }).click();
   await expect(explorer.locator('[data-test-explorer-item="Report.txt"]')).toBeVisible();
-  await expect(explorer.getByRole("status", { name: "1 found" })).toBeVisible();
+  await expect(explorer.getByText("1 found", { exact: true })).toBeVisible();
   await explorer.getByRole("textbox", { name: "File name pattern" }).fill("*.pdf");
   await explorer.getByRole("button", { name: "Find files" }).click();
   await expect(explorer.locator('[data-test-explorer-item="Report.txt"]')).toHaveCount(0);

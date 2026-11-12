@@ -54,7 +54,11 @@
         "packages/apps/explorer/src/ExplorerApp.tsx",
         "packages/apps/explorer/src/source.css",
         "tests/e2e/explorer.spec.ts",
-        "migration/EXPLORER.md"
+        "migration/EXPLORER.md",
+        "packages/filesystem/src/clipboard.ts",
+        "packages/filesystem/src/search.ts",
+        "tests/e2e/clipboard.spec.ts",
+        "tests/e2e/search.spec.ts"
       ]
     },
     {
