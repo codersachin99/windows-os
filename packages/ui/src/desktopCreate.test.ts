@@ -45,9 +45,12 @@ describe("source desktop New submenu / FileCreate", () => {
     expect(parseSourceShortcut(await store.read(path))).toEqual({
       exe: "notepad", icon: "notepad"
     });
-    await expect(createSourceDesktopShortcut(store, desktop, "notepad", "notes SHORTCUT"))
-      .rejects.toMatchObject({ code: "EEXIST" });
+    const duplicate = await createSourceDesktopShortcut(store, desktop, "notepad", "notes SHORTCUT");
+    expect(duplicate).toBe(desktop + "/notes SHORTCUT (2).lnk");
+    expect(parseSourceShortcut(await store.read(duplicate))?.exe).toBe("notepad");
     expect(parseSourceShortcut(await store.read(path))?.exe).toBe("notepad");
+    await expect(createSourceDesktopShortcut(store, desktop, "notepad", "Notes shortcut",
+      { collision: "reject" })).rejects.toMatchObject({ code: "EEXIST" });
   });
   it("does not execute or accept host paths, unknown programs, reserved names or bad extensions", async () => {
     const store = await setup();

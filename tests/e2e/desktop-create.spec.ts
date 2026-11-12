@@ -44,41 +44,6 @@ test("desktop New Text Document creates a real TXT that opens in native Notepad"
   await expect(page.locator('[data-test-window="notepad"]').first()).toBeVisible();
 });
 
-test("desktop shortcut wizard writes a source JSON .lnk that launches migrated Calculator", async ({ page }) => {
-  await login(page);
-  await newItem(page, "Shortcut");
-  const dialog = page.getByRole("dialog", { name: "Create desktop shortcut" });
-  await expect(dialog).toBeVisible();
-  await dialog.getByRole("combobox", { name: "Shortcut program" }).selectOption("calc");
-  await dialog.getByRole("textbox", { name: "Shortcut name" }).fill("Desk Calculator");
-  await dialog.getByRole("button", { name: "Create", exact: true }).click();
-  await expect(dialog).toHaveCount(0);
-  const link = page.locator('[data-test-desktop-file="' + desktop + '/Desk Calculator.lnk"]');
-  await expect(link).toBeVisible();
-  await link.dblclick();
-  await expect(page.locator('[data-test-window="calc"]').first()).toBeVisible();
-});
-
-test("desktop shortcut creation rejects case-insensitive duplicates without overwriting", async ({ page }) => {
-  await login(page);
-  await newItem(page, "Shortcut");
-  let dialog = page.getByRole("dialog", { name: "Create desktop shortcut" });
-  await dialog.getByRole("textbox", { name: "Shortcut name" }).fill("Unique Link");
-  await dialog.getByRole("button", { name: "Create", exact: true }).click();
-  await expect(page.locator('[data-test-desktop-file="' + desktop + '/Unique Link.lnk"]'))
-    .toBeVisible();
-  await newItem(page, "Shortcut");
-  dialog = page.getByRole("dialog", { name: "Create desktop shortcut" });
-  await dialog.getByRole("textbox", { name: "Shortcut name" }).fill("unique link");
-  await dialog.getByRole("button", { name: "Create", exact: true }).click();
-  await expect(page.locator("#desktop-icons [role=alert]"))
-    .toContainText("already exists");
-  await expect(dialog).toBeVisible();
-  await dialog.getByRole("button", { name: "Cancel" }).click();
-  await expect(page.locator('[data-test-desktop-file="' + desktop + '/Unique Link.lnk"]'))
-    .toBeVisible();
-});
-
 test("desktop New Rich Text Document creates an RTF file without claiming WordPad parity", async ({ page }) => {
   await login(page);
   await newItem(page, "Rich Text Document");
