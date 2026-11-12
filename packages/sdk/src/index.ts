@@ -50,6 +50,6 @@ export class AppRegistry {
 
 export const appRegistry = new AppRegistry(builtinApps);
 
-export { fileStore, fileClipboard } from "./files";
+export { fileStore, fileClipboard, fileDragSession } from "./files";
 
 export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";

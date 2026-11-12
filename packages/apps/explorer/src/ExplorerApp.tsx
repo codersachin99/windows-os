@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
 import {
   searchFiles, parseSourceShortcut, sourcePrograms,
+  importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
   type FileEntry
 } from "@windows-os/filesystem";
-import { fileClipboard, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
+import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import "./source.css";
 import "./ExplorerApp.css";
@@ -56,6 +57,9 @@ export function ExplorerApp({
   const [searchTruncated, setSearchTruncated] = useState(false);
   const [foldersScanned, setFoldersScanned] = useState(0);
   const currentSearch = useRef<AbortController | null>(null);
+  const fileInput = useRef<HTMLInputElement | null>(null);
+  const dragToken = useRef<string | null>(null);
+  const [dropTarget, setDropTarget] = useState<string | null>(null);
   useEffect(() => {
     const unsubscribe = session.subscribe(setState);
     const disconnect = session.connect();
@@ -158,6 +162,53 @@ export function ExplorerApp({
   const pasteSelection = () => void execute(async () => {
     await fileClipboard.paste(fileStore, state.path);
   });
+  /** Native drag state is independent from Cut/Copy clipboard contents. */
+  const startDrag = (event: DragEvent<HTMLElement>, uri: string) => {
+    if (isBin) { event.preventDefault(); return; }
+    const paths = state.selected.includes(uri) ? state.selected : [uri];
+    const token = fileDragSession.begin(paths);
+    dragToken.current = token;
+    event.dataTransfer.setData(SHELL_DRAG_TYPE, token);
+    event.dataTransfer.effectAllowed = "copyMove";
+    setMessage("");
+  };
+  const endDrag = () => {
+    if (dragToken.current) fileDragSession.end(dragToken.current);
+    dragToken.current = null;
+    setDropTarget(null);
+  };
+  const canDrop = (event: DragEvent<HTMLElement>) =>
+    !isBin && (Array.from(event.dataTransfer.types).includes(SHELL_DRAG_TYPE)
+      || Array.from(event.dataTransfer.types).includes("Files"));
+  const overDrop = (event: DragEvent<HTMLElement>, directory: string) => {
+    if (!canDrop(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const internal = Array.from(event.dataTransfer.types).includes(SHELL_DRAG_TYPE);
+    event.dataTransfer.dropEffect = !internal || event.ctrlKey || event.metaKey
+      ? "copy" : "move";
+    if (dropTarget !== directory) setDropTarget(directory);
+  };
+  const dropFiles = (event: DragEvent<HTMLElement>, directory: string) => {
+    if (!canDrop(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setDropTarget(null);
+    const token = event.dataTransfer.getData(SHELL_DRAG_TYPE);
+    const copy = event.ctrlKey || event.metaKey;
+    const incoming = Array.from(event.dataTransfer.files);
+    void execute(async () => {
+      if (token) {
+        await fileDragSession.drop(fileStore, token, directory, copy ? "copy" : "move");
+      } else if (incoming.length) {
+        await importDroppedFiles(fileStore, incoming, directory);
+      }
+    });
+  };
+  const upload = (files: FileList | null) => {
+    if (!files || isBin) return;
+    void execute(() => importDroppedFiles(fileStore, Array.from(files), state.path));
+  };
   const handleKeys = (event: import("react").KeyboardEvent<HTMLDivElement>) => {
     const focused = event.target as HTMLElement;
     if (focused.closest("input,textarea,select,[contenteditable=true]")) return;
@@ -286,6 +337,12 @@ export function ExplorerApp({
         <button disabled={!state.items.length} onClick={() => setConfirm("empty")}>Empty Recycle Bin</button>
       </> : <>
         <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>
+        <button type="button" onClick={() => fileInput.current?.click()}>Upload</button>
+        <input ref={fileInput} aria-label="Upload files" type="file" multiple hidden
+          onChange={event => {
+            upload(event.currentTarget.files);
+            event.currentTarget.value = "";
+          }} />
         <button onClick={requestRename} disabled={state.selected.length !== 1}>Rename</button>
         <button disabled={!state.selected.length} onClick={() => copySelection("cut")}>Cut</button>
         <button disabled={!state.selected.length} onClick={() => copySelection("copy")}>Copy</button>
@@ -332,7 +389,14 @@ export function ExplorerApp({
           DVD RW Drive (Z:)
         </button>}
       </aside>
-      <section className="explorer-content" aria-label="Folder contents"
+      <section className={"explorer-content" +
+          (dropTarget === state.path ? " is-drop-target" : "")}
+        aria-label="Folder contents"
+        onDragOver={event => overDrop(event, state.path)}
+        onDragLeave={event => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node)) setDropTarget(null);
+        }}
+        onDrop={event => dropFiles(event, state.path)}
         onContextMenu={event => {
           if (!(event.target as HTMLElement).closest(".explorer-item")) {
             showContext(event, "background");
@@ -345,8 +409,18 @@ export function ExplorerApp({
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] :
           state.viewMode === "tiles" ? "has-tiles" :
           state.viewMode === "content" ? "has-content" : "has-" + state.viewMode)}>
-          {visible.map(item => <button key={item.uri} type="button" className={"listview__item explorer-item " +
-            (state.selected.includes(item.uri) ? "is-selected" : "")}
+          {visible.map(item => <button key={item.uri} type="button"
+            draggable={!isBin}
+            onDragStart={event => startDrag(event, item.uri)}
+            onDragEnd={endDrag}
+            onDragOver={item.type === "directory" && !isBin
+              ? event => overDrop(event, item.uri) : undefined}
+            onDragLeave={item.type === "directory" ? () => setDropTarget(null) : undefined}
+            onDrop={item.type === "directory" && !isBin
+              ? event => dropFiles(event, item.uri) : undefined}
+            className={"listview__item explorer-item " +
+              (state.selected.includes(item.uri) ? "is-selected " : "") +
+              (dropTarget === item.uri ? "is-drop-target" : "")}
             data-test-explorer-item={item.name} aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}
             onContextMenu={event => showContext(event, "item", item.uri)}

@@ -98,3 +98,13 @@
   background:linear-gradient(#e7f4fd,#bbddf6); border-color:#75b0db;
 }
 .explorer-context-menu button:disabled { opacity:.5; cursor:default; }
+
+/* Internal Explorer FileCopy/FileMove and source onDrop -> file parser feedback. */
+.explorer-content.is-drop-target { background:#f0f8ff; outline:2px inset #a9ccea; }
+.explorer-item.is-drop-target {
+  border:1px dashed #3987bd !important;
+  background:#c5e7fd !important;
+  outline:2px solid #96c8e5; outline-offset:-3px;
+}
+.explorer-item[draggable=true] { cursor:grab; }
+.explorer-item[draggable=true]:active { cursor:grabbing; }
