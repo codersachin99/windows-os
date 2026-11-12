@@ -44,3 +44,12 @@
   .windows-desktop__icons { width:100%; }
   .windows-desktop__shortcut { width:auto; height:auto; }
 }
+
+/* The source desktop__icon-band is the classic translucent selection rectangle.
+   Pointer events stay on the desktop and never intercept icon gestures. */
+.windows-desktop__band {
+  position:absolute; z-index:3; pointer-events:none;
+  border:1px solid #549adb; background:rgba(108,175,237,.25);
+  box-shadow:inset 0 0 0 1px #f7fcff77;
+  box-sizing:border-box;
+}

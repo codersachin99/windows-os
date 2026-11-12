@@ -3,6 +3,10 @@ import {
   type Dispatch, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent
 } from "react";
 import type { AppDefinition, DesktopAction } from "@windows-os/contracts";
+import {
+  desktopBand, desktopBandHits, desktopBandSelection,
+  type DesktopBand, type DesktopBandModifier
+} from "./desktopSelection";
 import { browserStorage } from "@windows-os/sdk";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
@@ -25,6 +29,12 @@ interface ActivePress {
   narrowTo: string | null;
 }
 type DesktopMenu = { x: number; y: number; id: string | null; view: boolean };
+interface ActiveBand {
+  start: DesktopPoint;
+  previous: string[];
+  modifier: DesktopBandModifier;
+  moved: boolean;
+}
 
 export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const layout = useMemo(() => new DesktopPositionStore(browserStorage()), []);
@@ -35,10 +45,12 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   });
   const [selected, setSelected] = useState<string[]>([]);
   const [drag, setDrag] = useState<{ keys: string[]; offset: DesktopPoint } | null>(null);
+  const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const press = useRef<ActivePress | null>(null);
+  const bandPress = useRef<ActiveBand | null>(null);
   const anchor = useRef<string | null>(null);
   const ignoreClick = useRef(false);
 
@@ -123,6 +135,69 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     };
   }, [options.autoArrange, options.iconSize, area, layout, closePress]);
 
+  /** Source main.js: handlePointerDown falls back to startBand on desktop background. */
+  useEffect(() => {
+    const move = (event: PointerEvent) => {
+      const active = bandPress.current;
+      const host = list.current;
+      if (!active || !host) return;
+      const bounds = host.getBoundingClientRect();
+      const point = {
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top
+      };
+      if (!active.moved && Math.hypot(
+        point.x - active.start.x, point.y - active.start.y
+      ) < SOURCE_DESKTOP_DRAG_THRESHOLD) return;
+      active.moved = true;
+      const shape = desktopBand(active.start, point, area);
+      setBand(shape);
+      const targets = apps.map((app, index) => ({ id: app.id, index }));
+      setSelected(desktopBandSelection(
+        active.previous, desktopBandHits(targets, shape, options, area),
+        active.modifier
+      ));
+    };
+    const up = () => {
+      const active = bandPress.current;
+      if (!active) return;
+      if (active.moved) ignoreClick.current = true;
+      bandPress.current = null;
+      setBand(null);
+    };
+    const cancel = () => { bandPress.current = null; setBand(null); };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", cancel);
+    window.addEventListener("blur", cancel);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", cancel);
+      window.removeEventListener("blur", cancel);
+    };
+  }, [apps, area, options]);
+
+  const startBand = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0 || !options.showIcons || press.current) return;
+    const target = event.target as HTMLElement;
+    if (target.closest(
+      "[data-test-desktop-icon], [data-test-desktop-menu], .windows-desktop__layout-error"
+    )) return;
+    const bounds = list.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const modifier: DesktopBandModifier = event.ctrlKey || event.metaKey
+      ? "toggle" : event.shiftKey ? "add" : "replace";
+    bandPress.current = {
+      start: { x: event.clientX - bounds.left, y: event.clientY - bounds.top },
+      previous: selected,
+      modifier,
+      moved: false
+    };
+    if (modifier === "replace") { setSelected([]); anchor.current = null; }
+    setMenu(null);
+  };
+
   useEffect(() => {
     if (!menu) return;
     const dismiss = (event: PointerEvent) => {
@@ -192,7 +267,10 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     aria-label="Desktop icons"
     data-test-desktop-layout={options.autoArrange ? "auto" : "free"}
     onContextMenu={contextMenu}
+    onPointerDown={startBand}
     onClick={event => {
+      if (ignoreClick.current) {ignoreClick.current=false;return;}
+      if ((event.target as HTMLElement).closest("[data-test-desktop-menu]")) return;
       if ((event.target as HTMLElement).closest("[data-test-desktop-icon]")) return;
       setSelected([]);anchor.current=null;dispatch({ type:"SELECT_ICON", id:null });
     }}
@@ -245,6 +323,9 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         </span>}
       </button>;
     })}
+    {band && <div data-test-desktop-band="" className="desktop__icon-band windows-desktop__band"
+      style={{ left: band.left, top: band.top, width: band.width, height: band.height }}
+      aria-hidden="true" />}
     {menu && <div role="menu" className="windows-desktop__menu"
       data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}>
       {menu.id ? <>
