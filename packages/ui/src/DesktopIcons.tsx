@@ -7,7 +7,7 @@ import {
   desktopBand, desktopBandHits, desktopBandSelection,
   type DesktopBand, type DesktopBandModifier
 } from "./desktopSelection";
-import { appRegistry, browserStorage, fileClipboard, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
+import { appRegistry, browserStorage, fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
 import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
@@ -15,6 +15,7 @@ import {
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
+import { explorerDropTargetAt } from "./desktopExplorerDrop";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
@@ -41,6 +42,7 @@ interface ActivePress {
   moved: boolean;
   offset: DesktopPoint;
   narrowTo: string | null;
+  dragToken: string | null;
 }
 type DesktopMenu = { x: number; y: number; id: string | null; view: boolean; newOpen: boolean };
 interface ActiveBand {
@@ -84,6 +86,18 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const bandPress = useRef<ActiveBand | null>(null);
   const anchor = useRef<string | null>(null);
   const ignoreClick = useRef(false);
+  const highlightedExplorerDrop = useRef<HTMLElement | null>(null);
+  const clearExplorerDropHighlight = useCallback(() => {
+    highlightedExplorerDrop.current?.removeAttribute("data-desktop-pointer-hover");
+    highlightedExplorerDrop.current = null;
+  }, []);
+  const showExplorerDropHighlight = useCallback((target: HTMLElement | null) => {
+    if (highlightedExplorerDrop.current === target) return;
+    highlightedExplorerDrop.current?.removeAttribute("data-desktop-pointer-hover");
+    highlightedExplorerDrop.current = target;
+    target?.setAttribute("data-desktop-pointer-hover", "true");
+  }, []);
+
 
   // Explorer and Desktop share one file clipboard. The host OS clipboard is
   // intentionally untouched and unmounted data is never fabricated.
@@ -288,10 +302,13 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     return next;
   };
   const closePress = useCallback(() => {
+    const token = press.current?.dragToken;
+    if (token) fileDragSession.end(token);
+    clearExplorerDropHighlight();
     press.current = null;
     setDrag(null);
     setOverBin(false);
-  }, []);
+  }, [clearExplorerDropHighlight]);
   const onRecycleBin = useCallback((clientX: number, clientY: number): boolean => {
     const bin = list.current?.querySelector<HTMLElement>('[data-test-desktop-icon="bin"]');
     if (!bin || !hitDesktopRecycleBin({ x: clientX, y: clientY }, bin.getBoundingClientRect())) {
@@ -313,7 +330,18 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       const allFileItems = current.keys.every(key =>
         items.some(item => item.id === key && !!item.file)
       );
-      setOverBin(allFileItems && onRecycleBin(event.clientX, event.clientY));
+      // A desktop pointer gesture cannot emit the native HTML drag event used
+      // inside Explorer, so start the same shell drag token once the original
+      // 4px selection/position threshold has been crossed.
+      if (allFileItems && !current.dragToken) {
+        const paths = desktopSelectedFilePaths(items, current.keys);
+        if (paths.length) current.dragToken = fileDragSession.begin(paths);
+      }
+      const binTarget = allFileItems && onRecycleBin(event.clientX, event.clientY);
+      setOverBin(binTarget);
+      const folderTarget = allFileItems && !binTarget
+        ? explorerDropTargetAt({x:event.clientX,y:event.clientY}) : null;
+      showExplorerDropHighlight(folderTarget?.element ?? null);
       if (options.autoArrange) return;
       current.offset = boundedIconDrag(
         current.points, area, SOURCE_DESKTOP_ICON_SIZES[options.iconSize], raw
@@ -348,6 +376,40 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
           closePress();
           return;
         }
+        const explorerTarget = explorerDropTargetAt({
+          x: event.clientX, y: event.clientY
+        });
+        if (explorerTarget) {
+          const allFiles = current.keys.every(key =>
+            items.some(item => item.id === key && !!item.file));
+          if (!allFiles || !current.dragToken) {
+            setError("Only real Guest Desktop files can be moved into Explorer.");
+          } else {
+            // Ctrl/Meta drag is copy; normal drag moves. Reuse Explorer's own
+            // token + transferFiles preflight, not clipboard state or host data.
+            const mode = event.ctrlKey || event.metaKey ? "copy" : "move";
+            void fileDragSession.drop(
+              fileStore, current.dragToken, explorerTarget.directory, mode
+            ).then(() => {
+              if (mode === "move") {
+                setSelected(previous => previous.filter(id => !current.keys.includes(id)));
+                anchor.current = null;
+              }
+              setError(null);
+            }).catch(cause => setError(
+              cause instanceof Error ? cause.message : "Could not transfer desktop files"
+            ));
+          }
+          closePress();
+          return;
+        }
+        // Dragging over a window that is not an eligible Explorer directory
+        // cannot reposition a desktop icon behind that window.
+        if (document.elementFromPoint(event.clientX, event.clientY)
+          ?.closest(".windows-window")) {
+          closePress();
+          return;
+        }
         if (!options.autoArrange && (current.offset.x || current.offset.y)) {
           try {
             layout.move(current.indices, area, current.offset);
@@ -372,7 +434,8 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       window.removeEventListener("pointercancel", closePress);
       window.removeEventListener("blur", closePress);
     };
-  }, [options.autoArrange, options.iconSize, area, layout, closePress, items, onRecycleBin]);
+  }, [options.autoArrange, options.iconSize, area, layout, closePress,
+    items, onRecycleBin, showExplorerDropHighlight]);
 
   /** Source main.js: handlePointerDown falls back to startBand on desktop background. */
   useEffect(() => {
@@ -472,6 +535,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       keys, indices,
       points: indices.map(item => layout.placement(item.id, item.index, area)),
       moved: false, offset: { x: 0, y: 0 },
+      dragToken: null,
       narrowTo: wasSelected && !modifier && !event.shiftKey && keys.length > 1 ? app.id : null
     };
     setMenu(null);

@@ -108,3 +108,12 @@
 }
 .explorer-item[draggable=true] { cursor:grab; }
 .explorer-item[draggable=true]:active { cursor:grabbing; }
+
+/* Pointer gestures from the source desktop share Explorer's destination
+   semantics without synthesizing a browser-native drag and drop event. */
+.explorer-content[data-desktop-pointer-hover="true"],
+.explorer-item[data-desktop-pointer-hover="true"] {
+  outline: 2px solid #4c9fdf;
+  outline-offset: -2px;
+  background-color: #c7e7ff77;
+}

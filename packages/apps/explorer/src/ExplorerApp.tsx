@@ -392,6 +392,7 @@ export function ExplorerApp({
       </aside>
       <section className={"explorer-content" +
           (dropTarget === state.path ? " is-drop-target" : "")}
+        data-windows-os-drop-directory={isBin ? undefined : state.path}
         aria-label="Folder contents"
         onDragOver={event => overDrop(event, state.path)}
         onDragLeave={event => {
@@ -422,7 +423,9 @@ export function ExplorerApp({
             className={"listview__item explorer-item " +
               (state.selected.includes(item.uri) ? "is-selected " : "") +
               (dropTarget === item.uri ? "is-drop-target" : "")}
-            data-test-explorer-item={item.name} aria-label={item.name}
+            data-test-explorer-item={item.name}
+            data-windows-os-drop-directory={!isBin && item.type === "directory" ? item.uri : undefined}
+            aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}
             onContextMenu={event => showContext(event, "item", item.uri)}
             onDoubleClick={() => openEntry(item.uri, item.type)}
