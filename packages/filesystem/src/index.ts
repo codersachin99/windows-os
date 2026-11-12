@@ -220,3 +220,6 @@ export * from "./volumeSession";
 
 export { FileClipboard } from "./clipboard";
 export type { ClipboardOperation, FileClipboardState } from "./clipboard";
+
+export { searchFiles, matchFilePattern } from "./search";
+export type { FileSearchRequest, FileSearchResult, FileSearchProgress } from "./search";
