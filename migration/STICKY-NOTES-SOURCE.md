@@ -28,4 +28,4 @@
 
 **Boundaries:** This is a faithful functional slice for the default Win7 Guest theme. Pixel-by-pixel visual baseline comparisons, RTL variations, all other original Win7 programs, and non-default source themes remain separate migration work. Browser localStorage provides the target guest-config adapter; it is not claimed byte-compatible with the original Vuex backend. The overall simulator is not fully ported; do not merge/release as complete.
 
-**CI status:** implementation committed, opt-in verification pending.
+**CI status: VERIFIED.** First opt-in [CI 43249169205](https://github.com/codersachin99/windows-os/actions/runs/43249169205) identified one TypeScript browser timer handle mismatch, corrected in `3f3b9301`. [Opt-in rerun 43249454264](https://github.com/codersachin99/windows-os/actions/runs/43249454264) passed **166 Vitest unit tests across 30 files**, **174 Chromium desktop/mobile browser tests**, TypeScript, source/Contacts checks and Vite production build. Source palette, asset Git SHAs and data schema are checked; exact screenshot parity across other themes remains open.
