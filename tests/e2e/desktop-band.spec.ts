@@ -61,7 +61,7 @@ test("reverse rectangle direction selects icons; selection supports existing gro
   const desktop=page.locator("#desktop-icons");
   const bin=desktop.locator('[data-test-desktop-icon="bin"]');
   const computer=desktop.locator('[data-test-desktop-icon="computer"]');
-  await rectangle(page,{x:8,y:8},{x:142,y:146});
+  await rectangle(page,{x:142,y:8},{x:8,y:146});
   await expect(bin).toHaveAttribute("data-test-desktop-selected","true");
   await expect(computer).toHaveAttribute("data-test-desktop-selected","true");
   const box=await bin.boundingBox();
