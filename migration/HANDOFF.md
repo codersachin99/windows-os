@@ -136,7 +136,7 @@
 - **Port:** `packages/ui/src/desktopRename.ts` validates the editable base name and collision-safe destination before `VirtualFileStore.move`, preserves source file extensions/content and directory descendants; rejects Windows reserved names, path separators and collisions. `DesktopIcons.tsx` adds F2, context Rename, inline editor, Enter/blur commit and Escape cancel. `DesktopPositionStore.rekey` carries saved free-placement coordinates from the old URI key to the new URI key.
 - **Tests:** unit checks for file/shortcut extension integrity, descendant moves, duplicate names, invalid names, stale entry, no-op and case-only rename, stored icon coordinate migration. Browser checks for F2 TXT and Notepad content, folder rename with descendants and saved location, collision, reserved name and Escape cancellation in desktop/mobile Chromium.
 - **Scope:** this is the bounded source file-backed desktop rename action; creating desktop shortcuts, drag-to-Bin, all original menu actions, filename display preferences and screenshot/theme parity remain pending. Module `src/modules/system/main.js` stays `in-progress`.
-- **Verification:** awaiting opt-in `[run-ci]` checkpoint. See [DESKTOP-RENAME.md](DESKTOP-RENAME.md).
+- **Verification:** this commit explicitly requests a one-time `[run-ci]` checkpoint for desktop file rename and all prior regressions. Check TypeScript, Vitest, source fidelity, Vite build and Chromium before marking the slice verified. See [DESKTOP-RENAME.md](DESKTOP-RENAME.md).
 
 ## Tested implementation
 
