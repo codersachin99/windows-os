@@ -48,7 +48,8 @@ export async function listSourceDesktopFiles(
     return {
       id: "file:" + entry.uri,
       label,
-      icon: entry.type === "directory" ? legacyArt.folder : legacyArt.file,
+      icon: entry.type === "directory" ? legacyArt.folder
+        : programId === "paint" ? legacyArt.paint : legacyArt.file,
       entry,
       programId
     };

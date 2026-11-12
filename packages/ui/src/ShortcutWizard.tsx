@@ -105,7 +105,8 @@ export function ShortcutWizard({ onClose, onRegisterClose }: ShortcutWizardProps
                   (highlight === program.id ? " is-selected" : "")}
                 onClick={() => setHighlight(program.id)}
                 onDoubleClick={() => choose(program.id)}>
-                <img src={appRegistry.get(program.id)?.icon ?? legacyArt.file}
+                <img src={appRegistry.get(program.id)?.icon ??
+                  (program.id === "paint" ? legacyArt.paint : legacyArt.file)}
                   alt="" width={28} height={28} draggable={false} />
                 <span className="windows-shortcut__program-name">{program.name}</span>
                 {!migrated && <span className="windows-shortcut__program-pending">Migration pending</span>}

@@ -16,7 +16,7 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
-    id: "shortcut", label: "Shortcut", icon: legacyArt.file,
+    id: "shortcut", label: "Shortcut", icon: legacyArt.shortcut,
     kind: "system", desktop: false, showInStart: false,
     window: { width: 550, height: 400, resizable: false, centered: true }
   },

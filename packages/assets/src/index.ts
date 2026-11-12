@@ -23,6 +23,8 @@ export const legacyArt = {
   calculator: "/assets/images/calc.1733a9a0.webp",
   folder: "/assets/images/folder.677f8e80.webp",
   file: "/assets/images/file.73b2d097.webp",
+  shortcut: "/assets/images/shortcut.e8c69673.webp",
+  paint: "/assets/images/paint.37480453.webp",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   contacts: "/apps/contacts/icon.webp"
 } as const;
