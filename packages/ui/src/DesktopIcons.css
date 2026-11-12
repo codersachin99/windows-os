@@ -1,0 +1,46 @@
+/* Source main.js c5f4 pixel-positioned shortcut template and drag-ghost.
+ * The original CSS asset classes are kept; only the React layout adapter
+ * changes positioning from the earlier fixed flex-column placeholder. */
+.windows-desktop__icons {
+  position:absolute; inset:0; width:100%; height:100%; display:block;
+  overflow:hidden; touch-action:pan-y; outline:none;
+}
+.windows-desktop__shortcut {
+  position:absolute; left:0; top:0; margin:0;
+  box-sizing:border-box; padding:3px 2px; cursor:default;
+  touch-action:none; user-select:none;
+}
+.windows-desktop__shortcut.is-dragging { z-index:2; }
+.windows-desktop__shortcut .desktop__icon-ghost {
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+  border:1px solid #b8dcff; border-radius:2px; padding:3px 2px;
+  pointer-events:none; background:#c7e8ff55; box-shadow:0 2px 8px #0004;
+}
+.windows-desktop__shortcut .desktop__icon-box { flex-shrink:0; }
+.windows-desktop__shortcut .desktop__icon-name {
+  max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.windows-desktop__menu {
+  position:absolute; width:194px; padding:4px; z-index:3500;
+  display:flex; flex-direction:column; color:#203447; text-shadow:none;
+  background:linear-gradient(#f8fcff,#e6f0fb); border:1px solid #6b98b8;
+  box-shadow:2px 4px 12px #0007; font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop__menu button {
+  min-height:27px; text-align:left; border:1px solid transparent;
+  background:transparent; color:inherit; padding:5px 10px; font:inherit;
+}
+.windows-desktop__menu button:not(:disabled):hover {
+  background:linear-gradient(#e7f4fd,#b8d8f2); border-color:#85b5d6;
+}
+.windows-desktop__menu button:disabled { opacity:.5; }
+.windows-desktop__layout-error {
+  position:absolute; left:12px; bottom:12px; z-index:3500;
+  background:#fff6e7; color:#653b19; border:1px solid #bba070;
+  padding:6px 10px; text-shadow:none;
+}
+.windows-desktop__layout-error button { margin-left:10px; }
+@media(max-width:650px) {
+  .windows-desktop__icons { width:100%; }
+  .windows-desktop__shortcut { width:auto; height:auto; }
+}
