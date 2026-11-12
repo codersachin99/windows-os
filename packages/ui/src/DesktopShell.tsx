@@ -6,6 +6,7 @@ import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
 import { RunApp } from "@windows-os/apps/run";
+import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -119,7 +120,14 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         onClick={() => dispatch({ type: "SELECT_ICON", id: null })}>
         <DesktopIcons apps={desktop} dispatch={dispatch} />
       </div>
-      {state.windows.map(win => (
+      {state.windows.map(win => win.appId === "sticky" ? (
+        // The pinned source renders sticky notes as multiple floating panels,
+        // not inside a single WindowMain/WindowFrame. The shell still owns the
+        // taskbar app, z-order and minimize/restore lifecycle.
+        <StickyNotesApp key={win.id} zIndex={win.z} minimized={win.minimized}
+          onClose={() => dispatch({ type: "CLOSE_WINDOW", id: win.id })}
+          onFocus={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })} />
+      ) : (
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}

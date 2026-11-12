@@ -19,6 +19,7 @@ export default defineConfig({
       "@windows-os/apps/notepad": app("./packages/apps/notepad/src/index.ts"),
       "@windows-os/apps/calculator": app("./packages/apps/calculator/src/index.ts"),
       "@windows-os/apps/run": app("./packages/apps/run/src/index.ts"),
+      "@windows-os/apps/sticky": app("./packages/apps/sticky/src/index.ts"),
       "@windows-os/apps/explorer": app("./packages/apps/explorer/src/index.ts"),
       "@windows-os/apps/shared": app("./packages/apps/shared/src/index.ts")
     }
