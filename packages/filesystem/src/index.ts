@@ -391,3 +391,5 @@ export * from "./sourcePrograms";
 
 export { transferFiles } from "./transfer";
 export type { FileTransferMode } from "./transfer";
+
+export { FileDragSession, SHELL_DRAG_TYPE, importDroppedFiles } from "./drag";
