@@ -11,9 +11,8 @@ import { appRegistry, browserStorage, fileClipboard, fileStore, sourceFilesystem
 import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
 import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
-  createSourceDesktopItem, createSourceDesktopShortcut, type DesktopNewItem
+  createSourceDesktopItem, type DesktopNewItem
 } from "./desktopCreate";
-import { sourcePrograms } from "@windows-os/filesystem";
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import {
@@ -78,11 +77,6 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
   const [createdId, setCreatedId] = useState<string | null>(null);
-  const [shortcutDraft, setShortcutDraft] = useState<{ programId: string; name: string } | null>(null);
-  const [creatingShortcut, setCreatingShortcut] = useState(false);
-  const shortcutTargets = useMemo(() => sourcePrograms.filter(program =>
-    program.installPath && appRegistry.get(program.id)
-  ), []);
   const [renaming, setRenaming] = useState<{id:string;value:string} | null>(null);
   const renameRef = useRef<{id:string;value:string} | null>(null);
   const list = useRef<HTMLDivElement>(null);
@@ -241,30 +235,10 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
 
   const openShortcutWizard = () => {
     setMenu(null);
-    const first = shortcutTargets[0];
-    if (!first) { setError("No migrated source programs are available for shortcuts."); return; }
-    setShortcutDraft({
-      programId: first.id,
-      name: (appRegistry.get(first.id)?.label ?? first.name) + " - Shortcut"
-    });
+    const app = appRegistry.get("shortcut");
+    if (!app) { setError("The original Shortcut Wizard is unavailable."); return; }
+    dispatch({ type: "OPEN_APP", app });
     setError(null);
-  };
-  const submitShortcut = () => {
-    if (!shortcutDraft || creatingShortcut) return;
-    const path = sourceFilesystemRuntime.snapshot()?.desktopPath;
-    if (!path) { setError("The original Guest Desktop is not mounted."); return; }
-    setCreatingShortcut(true);
-    void createSourceDesktopShortcut(
-      fileStore, path, shortcutDraft.programId, shortcutDraft.name
-    ).then(uri => {
-      const id = "file:" + uri;
-      setShortcutDraft(null);
-      setSelected([id]);
-      anchor.current = id;
-      setError(null);
-    }).catch(cause =>
-      setError(cause instanceof Error ? cause.message : "Cannot create shortcut")
-    ).finally(() => setCreatingShortcut(false));
   };
 
   const changeRename = (id: string, value: string) => {
@@ -702,47 +676,6 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
             onClick={() => newDesktopItem("text")}>Text Document</button>
         </>}
       </>}
-    </div>}
-    {shortcutDraft && <div className="windows-desktop__create-backdrop"
-      data-test-desktop-create="" role="dialog" aria-modal="true"
-      aria-label="Create desktop shortcut"
-      onPointerDown={event => event.stopPropagation()}
-      onClick={event => event.stopPropagation()}
-      onContextMenu={event => event.stopPropagation()}
-      onKeyDown={event => {
-        if (event.key === "Escape") {
-          event.preventDefault(); event.stopPropagation(); setShortcutDraft(null);
-        }
-      }}>
-      <form className="windows-desktop__create-dialog" onSubmit={event => {
-        event.preventDefault(); submitShortcut();
-      }}>
-        <h3>Create Shortcut</h3>
-        <p>Select a migrated source program. The shortcut is stored in your Guest Desktop.</p>
-        <label htmlFor="desktop-shortcut-target">Program</label>
-        <select id="desktop-shortcut-target" aria-label="Shortcut program"
-          value={shortcutDraft.programId} disabled={creatingShortcut}
-          onChange={event => {
-            const programId = event.target.value;
-            const target = shortcutTargets.find(item => item.id === programId);
-            if (target) setShortcutDraft({
-              programId, name: (appRegistry.get(programId)?.label ?? target.name) + " - Shortcut"
-            });
-          }}>
-          {shortcutTargets.map(program => <option key={program.id} value={program.id}>
-            {appRegistry.get(program.id)?.label ?? program.name}
-          </option>)}
-        </select>
-        <label htmlFor="desktop-shortcut-name">Name</label>
-        <input id="desktop-shortcut-name" aria-label="Shortcut name" maxLength={30}
-          autoFocus value={shortcutDraft.name} disabled={creatingShortcut}
-          onChange={event => setShortcutDraft({ ...shortcutDraft, name: event.target.value })} />
-        <div className="windows-desktop__create-actions">
-          <button type="button" onClick={() => setShortcutDraft(null)}
-            disabled={creatingShortcut}>Cancel</button>
-          <button type="submit" disabled={creatingShortcut}>Create</button>
-        </div>
-      </form>
     </div>}
     {pendingDelete && <div className="windows-desktop__create-backdrop"
       data-test-desktop-confirm="" role="alertdialog" aria-modal="true"

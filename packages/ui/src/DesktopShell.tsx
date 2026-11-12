@@ -9,6 +9,7 @@ import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
+import { ShortcutWizard } from "./ShortcutWizard";
 
 interface DesktopShellProps {
   state: DesktopState;
@@ -23,6 +24,9 @@ interface ApplicationContentProps {
   registerClose(id: string, handler: () => void): () => void;
 }
 function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose }: ApplicationContentProps) {
+  if (appId === "shortcut") return <ShortcutWizard
+    onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
+    onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "notepad") return <NotepadApp initialFilePath={filePath}
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
