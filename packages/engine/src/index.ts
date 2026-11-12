@@ -34,10 +34,10 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
     width: app.window.width,
     height: app.window.height,
     x: app.window.centered
-      ? Math.max(0, Math.round(((typeof window === "undefined" ? 960 : window.innerWidth) - app.window.width) / 2))
+      ? Math.max(0, Math.round(((typeof globalThis.window === "undefined" ? 960 : globalThis.window.innerWidth) - app.window.width) / 2))
       : 70 + ((ordinal - 1) % 7) * 26,
     y: app.window.centered
-      ? Math.max(0, Math.round(((typeof window === "undefined" ? 700 : window.innerHeight - 40) - app.window.height) / 2))
+      ? Math.max(0, Math.round(((typeof globalThis.window === "undefined" ? 700 : globalThis.window.innerHeight - 40) - app.window.height) / 2))
       : 58 + ((ordinal - 1) % 7) * 26,
     z: state.topZ + 1,
     minimized: false,
