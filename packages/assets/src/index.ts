@@ -20,5 +20,8 @@ export const legacyArt = {
   recycleBin: "/assets/images/bin.7193a1d7.webp",
   computer: "/assets/images/computer.f1f7f519.webp",
   notepad: "/assets/images/notepad.90e3ce4c.webp",
+  folder: "/assets/images/folder.677f8e80.webp",
+  file: "/assets/images/file.73b2d097.webp",
+  fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   contacts: "/apps/contacts/icon.webp"
 } as const;

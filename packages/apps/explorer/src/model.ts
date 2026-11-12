@@ -26,7 +26,7 @@ export class ExplorerSession {
   private position = 0;
   private state: ExplorerState;
   private readonly listeners = new Set<(state: ExplorerState) => void>();
-  private readonly stop: () => void;
+  private stop: (() => void) | null = null;
   private closed = false;
   private revision = 0;
 
@@ -37,7 +37,7 @@ export class ExplorerSession {
       path: initial, items: [], selected: [], search: "", viewMode: "details",
       busy: false, error: null, canGoBack: false, canGoForward: false
     };
-    this.stop = filesystem.subscribe(() => { void this.refresh(); });
+
   }
 
   snapshot(): ExplorerState {
@@ -47,10 +47,18 @@ export class ExplorerSession {
     this.listeners.add(listener);
     return () => { this.listeners.delete(listener); };
   }
+  connect(): () => void {
+    if (!this.stop) this.stop = this.filesystem.subscribe(() => { void this.refresh(); });
+    return () => {
+      this.stop?.();
+      this.stop = null;
+    };
+  }
   close(): void {
     this.closed = true;
     this.revision++;
-    this.stop();
+    this.stop?.();
+    this.stop = null;
     this.listeners.clear();
   }
   private emit(): void {

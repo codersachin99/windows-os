@@ -43,6 +43,7 @@ describe("source-following Explorer navigation contract", () => {
   it("refreshes automatically when a shared Notepad document is written", async () => {
     const fs = new VirtualFileStore();
     const explorer = new ExplorerSession(fs);
+    const disconnect = explorer.connect();
     await explorer.refresh();
     const states: number[] = [];
     explorer.subscribe(s => { if (!s.busy) states.push(s.items.length); });
@@ -50,6 +51,7 @@ describe("source-following Explorer navigation contract", () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(explorer.visible().map(x => x.name)).toEqual(["written.txt"]);
     expect(states).toContain(1);
+    disconnect();
     explorer.close();
   });
   it("creates and renames folders without writing to host filesystem", async () => {
