@@ -17,3 +17,9 @@ Playwright tests cover saved text files opening from Computer and folder navigat
 ## Verified implementation checkpoint
 
 [GitHub Actions run 43147045676](https://github.com/codersachin99/windows-os/actions/runs/43147045676) passed the current unit tests, TypeScript, Vite build, source inventory and desktop/mobile Chromium tests, including the newly introduced cross-app Computer/Notepad behavior. This is **not source screenshot parity** and does not verify special folders/disks/trash.
+
+## Shared shell clipboard checkpoint
+
+Source module `src/modules/apps/computer.js` wires `FileCopy`/`FileMove` actions through the Vuex shell, not through browser/host clipboard APIs. The React port now has `FileClipboard` in the shared filesystem package and a singleton in the SDK. Explorer exposes Cut/Copy/Paste, Ctrl+X/C/V, and Ctrl+A (within Explorer), with explicit conflict validation, multi-select support and persistently shared updates between windows. No writes are allowed to host disk, and no silent overwrites occur.
+
+Unit tests exercise copy/cut/clear, directory and missing-file protection, prevalidated multi-selection conflicts and subtree prevention. New Chromium tests exercise shared Notepad file copy/move and paste error handling. Full clipboard parity (context menus, overwrite prompts, drag/drop and source shortcut metadata) remains pending.
