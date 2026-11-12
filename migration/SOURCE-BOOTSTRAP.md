@@ -42,3 +42,7 @@ Computer now exposes the source System (C:) and Guest directories in its navigat
 This milestone **does not** import the original bundled executables, shortcuts, UI icon assets, audio, localforage files, metadata files, dynamic disk quota, alternate user accounts, removable volumes, Windows native host files, or original installer shell events. Those require independent source mapping and visual/functional tests. The original source's installation build marker is not emulated as a claim of full installation.
 
 The original `computer.js`, `bin.js`, and relevant large webpack chunks remain `in-progress`. The source-root migration is evidence-backed; full simulator parity is not reached.
+
+## Verification checkpoint — 2026-11-12
+
+[Opt-in GitHub Actions run 43164294440](https://github.com/codersachin99/windows-os/actions/runs/43164294440) **passed** TypeScript, unit tests, source inventory, Contacts checks, production build and 36 Chromium desktop/mobile tests. That includes original source-derived first Guest C: and special-folder path assertions, Bin initial mount and persisted state, and native Explorer context menu create/rename/dismiss interactions. This is contract verification of a React port, not visual screenshot/source behavior parity acceptance.

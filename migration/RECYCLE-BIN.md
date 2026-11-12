@@ -17,3 +17,7 @@ Limits: The original Vue/webpack source uses its own trash metadata and shell ev
 ## Verified Recycle Bin checkpoint
 
 Opt-in [GitHub Actions run 43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) passed TypeScript, tests, source inventory, build and Chromium desktop/mobile interactions including the explicit source-runtime fixture and unmounted-session fallback. Real legacy `getStats` and session metadata acquisition is still missing; no normal Guest disk or Bin path is invented.
+
+## First-run Guest mount now source-derived
+
+Unlike the earlier test-only source mount fixture, the Guest login now initializes the original `drive0` system disk and `Users/Guest` special folders directly from pinned webpack source definitions. An explicitly supplied prior source mount still takes precedence. The Bin resolves under `Users/Guest/AppData/Roaming/WindowsOS/Windows/RecycleBin`. The updated first-login and persisted Bin browser tests passed [CI 43164294440](https://github.com/codersachin99/windows-os/actions/runs/43164294440). Device-specific Capacitor URI support and native source data import are still outstanding.

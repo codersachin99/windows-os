@@ -37,3 +37,7 @@ Opt-in [GitHub Actions run 43157555063](https://github.com/codersachin99/windows
 ## First-run System (C:) and original context-menu routing
 
 Computer's navigation panel now shows the source-defined System (C:) volume, Desktop, Documents, Downloads, Pictures, Music and Videos. The optical Z: source device appears disabled, not fabricated as a writable VFS disk. Right-click file/folder and background menu actions (Open, Cut, Copy, Rename, Delete, Restore, New folder, Paste, Refresh) use shared Explorer commands, while unmigrated Properties remains disabled. Context-menu creation/rename and source drive navigation have browser tests. See [SOURCE-BOOTSTRAP.md](SOURCE-BOOTSTRAP.md).
+
+## Verified source Guest navigation and context menus
+
+[CI 43164294440](https://github.com/codersachin99/windows-os/actions/runs/43164294440) passed 36 Chromium browser tests, including the source System (C:) and Guest directory navigation and right-click background/item actions. The navigation sidebar is horizontally scrollable at small viewports so the drive/user-folder shortcuts remain accessible on mobile. Full original Explorer properties dialogs, plugin shell context-menu handlers and exact theme visuals remain pending.
