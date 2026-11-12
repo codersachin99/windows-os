@@ -14,4 +14,4 @@ All production entry points (Explorer Upload button, folder-row File drops, Desk
 
 **Boundaries:** Browser File objects stay inside the Guest browser VFS; there is no reading or writing host paths. Existing Win7 interface is preserved. This doesn't imply source app/theme pixel fidelity or completion of remaining original apps. No full product release or merge.
 
-**Status:** Implemented; CI pending.
+**Status: verified.** [Opt-in GitHub Actions run 43231526749](https://github.com/codersachin99/windows-os/actions/runs/43231526749) passed **150 unit tests (28 Vitest files)**, **152 desktop/mobile Chromium browser tests**, TypeScript, source/Contacts checks and production Vite build. New browser quota fault-injection cases passed. This does not imply entire Windows 7 simulator parity.
