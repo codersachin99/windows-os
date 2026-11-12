@@ -23,10 +23,6 @@ export function CalculatorApp() {
     model.press(button);
     root.current?.focus();
   };
-  const action = (key: string) => {
-    const found = STANDARD_BUTTONS.find(button => button.label === key);
-    if (found) press(found);
-  };
   const pasteValue = (value: string) => {
     const text = value.trim().replaceAll(",", "");
     if (!/^-?\d{1,16}(?:\.\d*)?$/.test(text)) {
