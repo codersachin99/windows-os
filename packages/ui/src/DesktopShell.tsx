@@ -33,7 +33,7 @@ function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onLaunchProgram={programId => {
       const app = appRegistry.get(programId);
-      if (!app || app.id === "run") return false;
+      if (!app) return false;
       dispatch({ type: "OPEN_APP", app });
       return true;
     }} />;
