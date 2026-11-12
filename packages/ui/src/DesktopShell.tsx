@@ -8,6 +8,7 @@ import { CalculatorApp } from "@windows-os/apps/calculator";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
+import { DesktopIcons } from "./DesktopIcons";
 
 interface DesktopShellProps {
   state: DesktopState;
@@ -91,18 +92,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         style={{ backgroundImage: `url("${state.wallpaper}")` }} />
       <div id="desktop" className="desktop__wrapper windows-desktop__workspace"
         onClick={() => dispatch({ type: "SELECT_ICON", id: null })}>
-        <div id="desktop-icons" className="desktop__icon-list windows-desktop__icons">
-          {desktop.map(app => (
-            <button key={app.id} data-test-desktop-icon={app.id}
-              className={`desktop__icon-item windows-desktop__shortcut ${state.selectedIcon === app.id ? "is-active" : ""}`}
-              onClick={event => { event.stopPropagation(); dispatch({ type: "SELECT_ICON", id: app.id }); }}
-              onDoubleClick={event => { event.stopPropagation(); dispatch({ type: "OPEN_APP", app }); }}
-              aria-label={app.label} title={app.label}>
-              <span className="desktop__icon-box"><img className="desktop__icon-icon" src={app.icon} draggable={false} alt="" /></span>
-              <span className="desktop__icon-name">{app.label}</span>
-            </button>
-          ))}
-        </div>
+        <DesktopIcons apps={desktop} dispatch={dispatch} />
       </div>
       {state.windows.map(win => (
         <WindowFrame key={win.id} window={win} dispatch={dispatch}

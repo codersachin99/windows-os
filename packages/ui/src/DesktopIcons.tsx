@@ -8,7 +8,6 @@ import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
 } from "./desktopPositions";
-import "./DesktopIcons.css";
 
 interface DesktopIconsProps {
   apps: readonly AppDefinition[];
