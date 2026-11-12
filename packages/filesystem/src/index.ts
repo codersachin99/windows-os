@@ -190,6 +190,20 @@ export class VirtualFileStore {
     next.delete(uri);
     this.commit(next, { type: "removed", path: uri });
   }
+  /**
+   * Source FileRemove/Recycle Bin permanent removal must also handle folders
+   * containing files. Commit the entire subtree as one persistent VFS change.
+   */
+  async removeTree(path: string): Promise<void> {
+    const uri = normalizeFileUri(path);
+    if (uri === "/") throw new FileStoreError("EINVAL", "Cannot delete root");
+    this.required(uri);
+    const next = new Map(this.entries);
+    for (const key of next.keys()) {
+      if (key === uri || key.startsWith(uri + "/")) next.delete(key);
+    }
+    this.commit(next, { type: "removed", path: uri });
+  }
   private transfer(source: string, destination: string, move: boolean): void {
     const from = normalizeFileUri(source);
     const to = normalizeFileUri(destination);

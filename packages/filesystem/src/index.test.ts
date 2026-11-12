@@ -69,6 +69,22 @@ describe("VirtualFileStore", () => {
     await fs.remove("/Docs");
     expect(await fs.list("/")).toEqual([]);
   });
+  it("removes whole directory trees as a single persistent source-style deletion", async () => {
+    const fs = new VirtualFileStore();
+    await fs.mkdir("/Folders");
+    await fs.mkdir("/Folders/Sub");
+    await fs.write("deep", "/Folders/Sub/deep.txt");
+    await fs.write("keep", "/keep.txt");
+    const events: string[] = [];
+    fs.subscribe(event => events.push(event.type + ":" + ("path" in event ? event.path : event.to)));
+    await fs.removeTree("/Folders");
+    expect(await fs.stat("/Folders")).toBeNull();
+    expect(await fs.stat("/Folders/Sub/deep.txt")).toBeNull();
+    expect(await fs.read("/keep.txt")).toBe("keep");
+    expect(events).toEqual(["removed:/Folders"]);
+    await expect(fs.removeTree("/")).rejects.toMatchObject({ code: "EINVAL" });
+    await expect(fs.removeTree("/missing")).rejects.toMatchObject({ code: "ENOENT" });
+  });
   it("persists and restores user files through injected storage", async () => {
     const storage = new MemoryStorage();
     const fs = new VirtualFileStore(storage);
