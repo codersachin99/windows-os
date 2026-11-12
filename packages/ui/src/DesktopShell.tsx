@@ -4,7 +4,7 @@ import { legacyArt } from "@windows-os/assets";
 import { appRegistry } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
-import { ExplorerApp } from "@windows-os/apps/explorer";
+import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
 
@@ -29,13 +29,7 @@ function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
-  if (appId === "bin") {
-    return <div className="windows-explorer">
-      <div className="windows-explorer__toolbar">Organize　　Empty the Recycle Bin</div>
-      <div className="windows-explorer__crumb">Recycle Bin</div>
-      <div className="windows-explorer__empty">Recycle Bin is empty.</div>
-    </div>;
-  }
+  if (appId === "bin") return <RecycleBinApp />;
   if (appId === "computer") return <ExplorerApp
     onOpenTextFile={path => {
       const app = appRegistry.get("notepad");
