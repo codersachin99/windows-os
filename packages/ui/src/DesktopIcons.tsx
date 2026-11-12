@@ -625,7 +625,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     const token = event.dataTransfer.getData(SHELL_DRAG_TYPE);
     if (target.kind === "recycle") {
       // Untrusted File objects are never installed as fake Recycle Bin files.
-      const paths = token && fileDragSession.snapshot(token);
+      const paths = token ? fileDragSession.snapshot(token) : null;
       const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
       if (!paths?.length || !trashPath) {
         setError("Cannot recycle this drag without a mounted source Recycle Bin.");
