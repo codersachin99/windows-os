@@ -242,6 +242,43 @@ export class VirtualFileStore {
   }
 
   /**
+   * Import a complete browser File selection with one persisted Guest snapshot.
+   * Browser File decoding occurs before this call; validation of every target
+   * is repeated here to close races with another open Explorer/Desktop window.
+   * Unlike write()/writeBytes(), this operation is create-only and can never
+   * overwrite an existing user entry. Storage/quota failure leaves the
+   * in-memory tree untouched and publishes no partial file events.
+   */
+  async createFilesAtomic(
+    files: readonly { path: string; content: string | Uint8Array }[]
+  ): Promise<FileEntry[]> {
+    if (!files.length) return [];
+    const staged: StoredEntry[] = [];
+    const seen = new Set<string>();
+    const timestamp = Date.now();
+    for (const file of files) {
+      const uri = normalizeFileUri(file.path);
+      if (uri === "/") throw new FileStoreError("EINVAL", "Cannot create filesystem root");
+      const key = uri.toLocaleLowerCase();
+      if (seen.has(key)) throw new FileStoreError("EEXIST", "Duplicate import target: " + uri);
+      seen.add(key);
+      this.destination(uri);
+      if (typeof file.content !== "string" && !(file.content instanceof Uint8Array))
+        throw new FileStoreError("EINVAL", "Imported file needs text or binary content");
+      staged.push({
+        uri, type: "file", mtime: timestamp,
+        ...(typeof file.content === "string"
+          ? { content: file.content } : { bytes: encodeBytes(file.content) })
+      });
+    }
+    const next = new Map(this.entries);
+    for (const item of staged) next.set(item.uri, item);
+    this.commit(next, { type: "created", path: staged[0].uri });
+    for (const item of staged.slice(1)) this.notify({ type: "created", path: item.uri });
+    return staged.map(item => this.entry(item));
+  }
+
+  /**
    * Source FileCreate semantics: create an empty/new text-backed file without
    * replacing a name that already exists. Unlike write(), a race with another
    * creator is an EEXIST error, never a silent overwrite.

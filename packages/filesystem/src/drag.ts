@@ -42,7 +42,8 @@ export class FileDragSession {
  * in native Notepad; all other files preserve original binary bytes.
  */
 export async function importDroppedFiles(
-  filesystem: Pick<VirtualFileStore, "stat" | "write" | "writeBytes">,
+  filesystem: Pick<VirtualFileStore, "stat" | "write" | "writeBytes">
+    & Partial<Pick<VirtualFileStore, "createFilesAtomic">>,
   files: readonly File[],
   destination: string
 ): Promise<FileEntry[]> {
@@ -69,13 +70,25 @@ export async function importDroppedFiles(
     }
     plan.push({ file, target });
   }
-  const created: FileEntry[] = [];
+  // Read every host payload before writing anything. A failed text()/arrayBuffer()
+  // cannot leave a partial upload. The mounted Guest VirtualFileStore performs
+  // a second collision check and ONE storage commit after all bytes are ready.
+  const staged: { path: string; content: string | Uint8Array }[] = [];
   for (const { file, target } of plan) {
-    if (/\.txt$/i.test(file.name)) {
-      created.push(await filesystem.write(await file.text(), target));
-    } else {
-      created.push(await filesystem.writeBytes(new Uint8Array(await file.arrayBuffer()), target));
-    }
+    staged.push({
+      path: target,
+      content: /\.txt$/i.test(file.name)
+        ? await file.text() : new Uint8Array(await file.arrayBuffer())
+    });
+  }
+  if (filesystem.createFilesAtomic) return filesystem.createFilesAtomic(staged);
+  // Legacy adapter compatibility only: an adapter not supporting atomic
+  // snapshots retains sequential writes. Production SDK fileStore is atomic.
+  const created: FileEntry[] = [];
+  for (const item of staged) {
+    if (typeof item.content === "string")
+      created.push(await filesystem.write(item.content, item.path));
+    else created.push(await filesystem.writeBytes(item.content, item.path));
   }
   return created;
 }
