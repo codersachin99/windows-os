@@ -7,7 +7,7 @@ import {
   desktopBand, desktopBandHits, desktopBandSelection,
   type DesktopBand, type DesktopBandModifier
 } from "./desktopSelection";
-import { appRegistry, browserStorage, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
+import { appRegistry, browserStorage, fileClipboard, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
 import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
@@ -15,6 +15,7 @@ import {
 } from "./desktopCreate";
 import { sourcePrograms } from "@windows-os/filesystem";
 import { hitDesktopRecycleBin } from "./desktopDrop";
+import { desktopSelectedFilePaths } from "./desktopFileActions";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
@@ -74,6 +75,8 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
+  const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
   const [createdId, setCreatedId] = useState<string | null>(null);
   const [shortcutDraft, setShortcutDraft] = useState<{ programId: string; name: string } | null>(null);
   const [creatingShortcut, setCreatingShortcut] = useState(false);
@@ -87,6 +90,10 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const bandPress = useRef<ActiveBand | null>(null);
   const anchor = useRef<string | null>(null);
   const ignoreClick = useRef(false);
+
+  // Explorer and Desktop share one file clipboard. The host OS clipboard is
+  // intentionally untouched and unmounted data is never fabricated.
+  useEffect(() => fileClipboard.subscribe(setClipboardState), []);
 
   useEffect(() => {
     const host = list.current;
@@ -153,14 +160,53 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     }
   };
 
-  const deleteFile = (file: SourceDesktopFile) => {
-    const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
-    if (!trashPath) {
+  const prepareDesktopClipboard = (mode: "copy" | "cut", keys: readonly string[]) => {
+    const paths = desktopSelectedFilePaths(items, keys);
+    if (!paths.length) return;
+    try {
+      fileClipboard.prepare(paths, mode);
+      setError(null);
+      setMenu(null);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Desktop clipboard error");
+    }
+  };
+  const pasteDesktopFiles = () => {
+    setMenu(null);
+    const desktopPath = sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if (!desktopPath) {
+      setError("The original Guest Desktop is not mounted.");
+      return;
+    }
+    void fileClipboard.paste(fileStore, desktopPath).then(created => {
+      setSelected(created.map(entry => "file:" + entry.uri));
+      setError(null);
+    }).catch(cause =>
+      setError(cause instanceof Error ? cause.message : "Cannot paste on desktop"));
+  };
+  const requestDesktopDelete = (keys: readonly string[]) => {
+    setMenu(null);
+    const paths = desktopSelectedFilePaths(items, keys);
+    if (!paths.length) return;
+    if (!sourceFilesystemRuntime.snapshot()?.trashPath) {
       setError("The original Recycle Bin is not mounted.");
       return;
     }
-    void fileStore.trash(file.entry.uri, trashPath).catch(cause =>
-      setError(cause instanceof Error ? cause.message : "Cannot delete desktop file"));
+    setPendingDelete(paths);
+    setError(null);
+  };
+  const confirmDesktopDelete = () => {
+    const paths = pendingDelete;
+    setPendingDelete(null);
+    const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
+    if (!paths?.length || !trashPath) return;
+    void fileStore.trashMany(paths, trashPath).then(() => {
+      setSelected(previous => previous.filter(id =>
+        !paths.includes(items.find(item => item.id === id)?.file?.entry.uri ?? "")));
+      anchor.current = null;
+      setError(null);
+    }).catch(cause =>
+      setError(cause instanceof Error ? cause.message : "Cannot delete desktop files"));
   };
 
   const beginRename = (file: SourceDesktopFile) => {
@@ -401,7 +447,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     if (event.button !== 0 || !options.showIcons || press.current) return;
     const target = event.target as HTMLElement;
     if (target.closest(
-      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-create], .windows-desktop__layout-error"
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-create], [data-test-desktop-confirm], .windows-desktop__layout-error"
     )) return;
     const bounds = list.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -490,16 +536,36 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     onPointerDown={startBand}
     onClick={event => {
       if (ignoreClick.current) {ignoreClick.current=false;return;}
-      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-create]")) return;
+      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-create], [data-test-desktop-confirm]")) return;
       if ((event.target as HTMLElement).closest("[data-test-desktop-icon]")) return;
       setSelected([]);anchor.current=null;dispatch({ type:"SELECT_ICON", id:null });
     }}
     onKeyDown={event => {
-      if (event.target !== event.currentTarget) return;
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "a") {
-        event.preventDefault();setSelected(items.map(item=>item.id));
+      const target = event.target as HTMLElement;
+      // Desktop keyboard scope is its focused background/icons only, never a
+      // rename field, shortcut wizard, menu, modal or another application's UI.
+      if (target.closest("input,textarea,select,[contenteditable='true'],[role='dialog'],[data-test-desktop-menu]")) return;
+      if (target !== event.currentTarget && !target.closest("[data-test-desktop-icon]")) return;
+      const key = event.key.toLowerCase();
+      const modifier = event.ctrlKey || event.metaKey;
+      if (modifier && !event.altKey) {
+        if (key === "a") {
+          event.preventDefault(); setSelected(items.map(item => item.id));
+        } else if (key === "c" || key === "x") {
+          const paths = desktopSelectedFilePaths(items, selected);
+          if (paths.length) {
+            event.preventDefault();
+            prepareDesktopClipboard(key === "c" ? "copy" : "cut", selected);
+          }
+        } else if (key === "v" && clipboardState.paths.length) {
+          event.preventDefault(); pasteDesktopFiles();
+        }
+      } else if (event.key === "Delete" && !event.altKey && !event.shiftKey) {
+        if (desktopSelectedFilePaths(items, selected).length) {
+          event.preventDefault(); requestDesktopDelete(selected);
+        }
       } else if (event.key === "Escape") {
-        setSelected([]);setMenu(null);
+        setSelected([]); setMenu(null);
       }
     }}>
     {options.showIcons && items.map((app,index) => {
@@ -586,14 +652,18 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         }}>Open</button>
         {items.find(item => item.id === menu.id)?.file && <>
           <button role="menuitem" onClick={() => {
+            prepareDesktopClipboard("cut", selected.includes(menu.id!) ? selected : [menu.id!]);
+          }}>Cut</button>
+          <button role="menuitem" onClick={() => {
+            prepareDesktopClipboard("copy", selected.includes(menu.id!) ? selected : [menu.id!]);
+          }}>Copy</button>
+          <button role="menuitem" onClick={() => {
             const file = items.find(item => item.id === menu.id)?.file;
             setMenu(null);
             if (file) beginRename(file);
           }}>Rename</button>
           <button role="menuitem" onClick={() => {
-            const file = items.find(item => item.id === menu.id)?.file;
-            setMenu(null);
-            if (file) deleteFile(file);
+            requestDesktopDelete(selected.includes(menu.id!) ? selected : [menu.id!]);
           }}>Delete</button>
         </>}
         <button role="menuitem" disabled title="Original shortcut properties are pending">Properties</button>
@@ -615,6 +685,8 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         </>}
         <button role="menuitem" onClick={() => {setMenu(null);setOptions(layout.snapshot());}}>
           Refresh</button>
+        <button role="menuitem" disabled={!clipboardState.paths.length}
+          onClick={pasteDesktopFiles}>Paste</button>
         <button role="menuitem" aria-expanded={menu.newOpen}
           data-test-desktop-new=""
           onClick={() => setMenu({ ...menu, newOpen: !menu.newOpen, view: false })}>
@@ -671,6 +743,26 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
           <button type="submit" disabled={creatingShortcut}>Create</button>
         </div>
       </form>
+    </div>}
+    {pendingDelete && <div className="windows-desktop__create-backdrop"
+      data-test-desktop-confirm="" role="alertdialog" aria-modal="true"
+      aria-label="Confirm desktop deletion"
+      onPointerDown={event => event.stopPropagation()}
+      onClick={event => event.stopPropagation()}
+      onContextMenu={event => event.stopPropagation()}
+      onKeyDown={event => {
+        if (event.key === "Escape") {
+          event.preventDefault(); event.stopPropagation(); setPendingDelete(null);
+        }
+      }}>
+      <div className="windows-desktop__create-dialog">
+        <h3>Move to Recycle Bin</h3>
+        <p>Move {pendingDelete.length} selected item{pendingDelete.length === 1 ? "" : "s"} to the Recycle Bin?</p>
+        <div className="windows-desktop__create-actions">
+          <button autoFocus type="button" onClick={() => setPendingDelete(null)}>No</button>
+          <button type="button" onClick={confirmDesktopDelete}>Yes</button>
+        </div>
+      </div>
     </div>}
     {error && <div className="windows-desktop__layout-error" role="alert">
       {error}<button onClick={() => setError(null)}>×</button>

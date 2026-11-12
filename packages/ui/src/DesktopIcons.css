@@ -104,3 +104,6 @@
   outline:2px solid #438fd2; outline-offset:2px; border-radius:3px;
   background:#a8d8ff55;
 }
+
+/* Source desktop Delete uses the same modal shell treatment as New Shortcut. */
+.windows-desktop__workspace:has([data-test-desktop-confirm]) { z-index:4001; }
