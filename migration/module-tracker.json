@@ -1561,7 +1561,12 @@
       "sha": "dc9f6cde12815fd43ccac78bb698cc2685db68cd",
       "area": "system",
       "status": "in-progress",
-      "evidence": []
+      "evidence": [
+        "packages/ui/src/desktopPositions.ts",
+        "packages/ui/src/DesktopIcons.tsx",
+        "tests/e2e/desktop-icons.spec.ts",
+        "migration/DESKTOP-ICONS.md"
+      ]
     },
     {
       "source": "src/modules/system/mediacenter.js",

@@ -106,6 +106,13 @@
 - New Vitest and Chromium tests: copy/move, nested folder and collisions, expired token rejection, text/binary import, host File event drop into a child folder and opening imported TXT in native Notepad. See [EXPLORER-DRAGDROP.md](EXPLORER-DRAGDROP.md). Full desktop/icon drag, host directory recursion and exact source visuals remain incomplete.
 - **Verification passed for this bounded slice:** opt-in [CI 43177091763](https://github.com/codersachin99/windows-os/actions/runs/43177091763) completed TypeScript, Vitest, original source inventory and Contacts fidelity checks, Vite build and **56 desktop/mobile Chromium browser tests**. New cases cover internal drag-move, Ctrl+drag copy, text/binary Upload, browser File drop into a child directory and overwrite refusal. Source `computer.js` remains **in-progress**, not fully verified.
 
+## Source desktop shortcut coordinates and drag (2026-11-12)
+
+- **Source evidence:** `legacy-win7/src/modules/system/main.js` original `c5f4` item renderer, `743b` desktop preferences and pointer drag mixin define small/medium/large 50/80/120px icons, default column-first placement, pixel `item.x/y` positions, 4px drag threshold, multi-selection, clamped ghost motion, `ShortcutMove` commit and View menu Auto Arrange/Show Desktop Icons toggles. See [DESKTOP-ICONS.md](DESKTOP-ICONS.md).
+- **Implemented:** `packages/ui/src/desktopPositions.ts` independent typed Guest-scoped persistent source layout; `DesktopIcons.tsx` replaces the placeholder flex-column layout and integrates original app windows/Start menu, pointer drag and source View context settings. User positions survive reloads and screen resize without rewriting the saved coordinates; group drag and Ctrl selection supported.
+- **Tests:** source-dimension, column order, group bounds, persistence, auto mode, corrupted store plus Playwright single/group drag, ghost, context View toggles and mobile viewport; added without inventing source filesystem positions. **Verification pending explicit `[run-ci]` run.**
+- **Not full shell parity:** desktop rubber-band selection, source backed file shortcuts, rename, drag from Explorer/host/Recycle Bin, RTL and original visual screenshot comparison still pending. Source `src/modules/system/main.js` remains `in-progress`.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.
