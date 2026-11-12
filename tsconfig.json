@@ -54,6 +54,9 @@
       ],
       "@windows-os/apps/explorer": [
         "packages/apps/explorer/src/index.ts"
+      ],
+      "@windows-os/apps/calculator": [
+        "packages/apps/calculator/src/index.ts"
       ]
     }
   },

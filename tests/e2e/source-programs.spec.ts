@@ -14,7 +14,8 @@ test("All Programs is populated from original installed .lnk shortcuts", async (
   await expect(start.locator('[data-test-source-program="chrome"]')).toBeDisabled();
   await start.locator('[data-test-source-program-folder="Accessories"]').click();
   await expect(start.locator('[data-test-source-program="notepad"]')).toBeEnabled();
-  await expect(start.locator('[data-test-source-program="calc"]')).toBeDisabled();
+  await expect(start.locator('[data-test-source-program="calc"]')).toBeEnabled();
+  await expect(start.locator('[data-test-source-program="cmd"]')).toBeDisabled();
   await start.locator('[data-test-source-program="notepad"]').click();
   await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
 });
@@ -26,9 +27,9 @@ test("Explorer opens original Notepad .lnk and keeps nonported programs nonexecu
   await explorer.locator('[data-test-explorer-item="Accessories"]').dblclick();
   await expect(explorer.locator('[data-test-explorer-item="Notepad.lnk"]')).toBeVisible();
 
-  await explorer.locator('[data-test-explorer-item="Calculator.lnk"]').dblclick();
-  await expect(explorer.getByRole("alert")).toContainText("Calculator application has not been migrated yet");
-  await expect(page.locator('[data-test-window="calc"]')).toHaveCount(0);
+  await explorer.locator('[data-test-explorer-item="Command Prompt.lnk"]').dblclick();
+  await expect(explorer.getByRole("alert")).toContainText("Command Prompt application has not been migrated yet");
+  await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
 
   await explorer.locator('[data-test-explorer-item="Notepad.lnk"]').dblclick();
   await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();

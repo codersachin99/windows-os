@@ -4,6 +4,7 @@ import { legacyArt } from "@windows-os/assets";
 import { appRegistry } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
+import { CalculatorApp } from "@windows-os/apps/calculator";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -21,6 +22,7 @@ interface ApplicationContentProps {
   registerClose(id: string, handler: () => void): () => void;
 }
 function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose }: ApplicationContentProps) {
+  if (appId === "calc") return <CalculatorApp />;
   if (appId === "notepad") return <NotepadApp initialFilePath={filePath}
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
