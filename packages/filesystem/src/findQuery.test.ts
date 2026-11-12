@@ -11,7 +11,7 @@ describe("original Find (16d5) query adapter", () => {
     expect(decodeSourceFindPath("/guest")).toBeNull();
     expect(decodeSourceFindPath("win7-find:%7Bbad")).toBeNull();
     expect(decodeSourceFindPath("win7-find:" + encodeURIComponent(JSON.stringify({
-      ...q, scope: "../../host" }))).toBeNull();
+      ...q, scope: "../../host" })))).toBeNull();
   });
   it("matches source substring, semicolon/comma options, wildcards and extensionless .*", () => {
     expect(matchSourceNamePattern("Meeting-Report.txt", "report")).toBe(true);
