@@ -8,6 +8,7 @@ import { CalculatorApp } from "@windows-os/apps/calculator";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
+import { AboutApp } from "@windows-os/apps/about";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -32,6 +33,7 @@ function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "calc") return <CalculatorApp />;
+  if (appId === "about") return <AboutApp />;
   if (appId === "magnifier") return <MagnifierApp onScaleChange={onMagnifierScale} />;
   if (appId === "run") return <RunApp
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
