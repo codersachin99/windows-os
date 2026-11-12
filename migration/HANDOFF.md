@@ -130,6 +130,14 @@
 - **Open gaps:** full original file-type associations, shortcut rename/create wizard and context-menu actions, exact per-user shortcut metadata/icon mapping, binary image previews, desktop folder dragging into other apps, source `03f3` band library and screenshot parity. Main desktop module tracker remains `in-progress`.
 - **Verification passed:** initial [CI 43187940651](https://github.com/codersachin99/windows-os/actions/runs/43187940651) passed source/type/build and 103 unit tests but found desktop context-menu stacking behind an open Explorer window (82/84 browser tests). Fixed the actual UI stacking in commit `871b5e48`, then **[CI 43188802257](https://github.com/codersachin99/windows-os/actions/runs/43188802257) passed TypeScript, 18 Vitest files / 103 unit tests, source inventory and Contacts checks, production Vite build and all 84 Chromium desktop/mobile tests**. File-backed icon creation, TXT and source .lnk execution, folder navigation, Bin deletion and invalid link handling are now verified as a bounded slice. The full source desktop app remains `in-progress`.
 
+## Source Desktop FileRename / F2 (2026-11-12)
+
+- **Source:** `legacy-win7/src/modules/system/main.js` `c5f4` icon editor enables `renaming` with an input `maxlength=30`, calls `FileRename({path,name})` on blur/Enter, and keeps file extension separately; `toggleRenaming` is invoked from the original desktop item context menu.
+- **Port:** `packages/ui/src/desktopRename.ts` validates the editable base name and collision-safe destination before `VirtualFileStore.move`, preserves source file extensions/content and directory descendants; rejects Windows reserved names, path separators and collisions. `DesktopIcons.tsx` adds F2, context Rename, inline editor, Enter/blur commit and Escape cancel. `DesktopPositionStore.rekey` carries saved free-placement coordinates from the old URI key to the new URI key.
+- **Tests:** unit checks for file/shortcut extension integrity, descendant moves, duplicate names, invalid names, stale entry, no-op and case-only rename, stored icon coordinate migration. Browser checks for F2 TXT and Notepad content, folder rename with descendants and saved location, collision, reserved name and Escape cancellation in desktop/mobile Chromium.
+- **Scope:** this is the bounded source file-backed desktop rename action; creating desktop shortcuts, drag-to-Bin, all original menu actions, filename display preferences and screenshot/theme parity remain pending. Module `src/modules/system/main.js` stays `in-progress`.
+- **Verification:** awaiting opt-in `[run-ci]` checkpoint. See [DESKTOP-RENAME.md](DESKTOP-RENAME.md).
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

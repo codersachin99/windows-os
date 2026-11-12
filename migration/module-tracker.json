@@ -1573,7 +1573,11 @@
         "packages/ui/src/desktopFiles.ts",
         "packages/ui/src/desktopFiles.test.ts",
         "tests/e2e/desktop-files.spec.ts",
-        "migration/DESKTOP-FILES.md"
+        "migration/DESKTOP-FILES.md",
+        "packages/ui/src/desktopRename.ts",
+        "packages/ui/src/desktopRename.test.ts",
+        "tests/e2e/desktop-rename.spec.ts",
+        "migration/DESKTOP-RENAME.md"
       ]
     },
     {

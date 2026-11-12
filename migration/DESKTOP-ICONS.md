@@ -38,3 +38,7 @@ Original `main.js` webpack `6271` merges default desktop icons with user `shortc
 ## Verified source Guest Desktop file-backed icons
 
 [CI 43188802257](https://github.com/codersachin99/windows-os/actions/runs/43188802257) passed **103 unit tests and 84 Chromium browser tests** after wiring real Guest Desktop filesystem entries to the desktop icon model. Source folders and TXT documents open in the real React Explorer/Notepad, recognized .lnk shortcuts resolve through the pinned program registry, and file Delete routes through the mounted Bin. The desktop context-menu stacking issue behind an open Explorer was fixed and retested. The original main.js desktop implementation remains in-progress, with icon file-type artwork, shortcut editing and other source interactions pending.
+
+## F2 source desktop FileRename
+
+File-backed Guest Desktop icons support F2 and the original right-click Rename workflow (30-character editable base name, Enter/blur commit, Escape cancel). The shared VFS handles moves while `DesktopPositionStore.rekey` preserves manually placed coordinates. Built-in system icons are not file paths and remain protected. [Source/behavior mapping](DESKTOP-RENAME.md). Tests added; opt-in CI pending.
