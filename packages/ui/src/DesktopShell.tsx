@@ -7,6 +7,7 @@ import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
+import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -24,12 +25,14 @@ interface ApplicationContentProps {
   windowId: string;
   dispatch: Dispatch<DesktopAction>;
   registerClose(id: string, handler: () => void): () => void;
+  onMagnifierScale(scale: number): void;
 }
-function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose }: ApplicationContentProps) {
+function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose, onMagnifierScale }: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "calc") return <CalculatorApp />;
+  if (appId === "magnifier") return <MagnifierApp onScaleChange={onMagnifierScale} />;
   if (appId === "run") return <RunApp
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onLaunchProgram={programId => {
@@ -75,6 +78,21 @@ function Clock() {
 
 export function DesktopShell({ state, dispatch }: DesktopShellProps) {
   const desktop = appRegistry.desktop();
+  const [magnifierScale, setMagnifierScale] = useState(1);
+  const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
+  const magnifierActive = state.windows.some(win => win.appId === "magnifier");
+  // Original magnifier follows document mousemove while mounted, even at 1x,
+  // so the first Zoom In uses the position of the last pointer movement.
+  useEffect(() => {
+    if (!magnifierActive) { setMagnifierScale(1); return; }
+    const onMove = (event: MouseEvent) => setMagnifierOrigin(
+      sourceMagnifierOrigin(event.clientX, event.clientY,
+        {width: window.innerWidth, height: window.innerHeight},
+        navigator.maxTouchPoints > 0)
+    );
+    document.addEventListener("mousemove", onMove);
+    return () => document.removeEventListener("mousemove", onMove);
+  }, [magnifierActive]);
   const closeHandlers = useRef(new Map<string, () => void>());
   const registerClose = useCallback((id: string, handler: () => void) => {
     closeHandlers.current.set(id, handler);
@@ -113,6 +131,17 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
 
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}>
+      {/* In the legacy build the magnifier transforms the desktop container.
+          Keep taskbar and Magnifier toolbar outside the scaled canvas so they
+          stay accessible at the original source maximum of 16x. */}
+      <div className="windows-desktop__magnify-target"
+        data-test-magnify-target="" data-test-magnification={magnifierScale}
+        style={{
+          transform: sourceMagnifierTransform(magnifierScale) || undefined,
+          transformOrigin: magnifierScale > 1
+            ? magnifierOrigin.x + "% " + magnifierOrigin.y + "%" : undefined,
+          transition: magnifierActive ? "transform 0.1s ease-out" : undefined
+        }}>
       <div className="desktop-background is-static windows-desktop__wallpaper"
         data-test-desktop-background={state.wallpaper}
         style={{ backgroundImage: `url("${state.wallpaper}")` }} />
@@ -120,7 +149,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         onClick={() => dispatch({ type: "SELECT_ICON", id: null })}>
         <DesktopIcons apps={desktop} dispatch={dispatch} />
       </div>
-      {state.windows.map(win => win.appId === "sticky" ? (
+      {state.windows.filter(win => win.appId !== "magnifier").map(win => win.appId === "sticky" ? (
         // The pinned source renders sticky notes as multiple floating panels,
         // not inside a single WindowMain/WindowFrame. The shell still owns the
         // taskbar app, z-order and minimize/restore lifecycle.
@@ -131,10 +160,20 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} />
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} />
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch} />}
+      </div>
+      {/* The control surface remains independent of the transformed canvas;
+          other programs and their windows zoom together with the desktop. */}
+      {state.windows.filter(win => win.appId === "magnifier").map(win => (
+        <WindowFrame key={win.id} window={win} dispatch={dispatch}
+          onRequestClose={() => requestClose(win.id)}>
+          <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} />
+        </WindowFrame>
+      ))}
       <footer className="windows-taskbar" data-test-taskbar="base">
         <button className="windows-taskbar__start" data-test-start-button="" aria-label="Open Start menu"
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
