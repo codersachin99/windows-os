@@ -19,4 +19,4 @@ Tests: `desktopSelection.test.ts` (pure geometry, saved/auto positions, additive
 
 **Not covered:** complete source `03f3` library, touch-specific long press and band behavior, selection of file-backed desktop shortcuts, touch/RTL, auto-scroll and exact source CSS screenshots. Source `main.js` remains `in-progress`; no full parity claim.
 
-**CI:** pending explicit opt-in verification.
+**CI verified for the bounded source band slice:** [run 43186461842](https://github.com/codersachin99/windows-os/actions/runs/43186461842) passed TypeScript, 99 unit tests in 17 files, original source checks, Vite build and 74 Chromium browser tests. This does not verify the subsequently added file-backed desktop items.

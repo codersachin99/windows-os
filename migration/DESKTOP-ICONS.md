@@ -30,3 +30,7 @@ Unit tests validate exact source icon dimensions, default column fill, 4px thres
 ## Bounded source desktop band-selection slice
 
 The original desktop rendered `desktop__icon-band` on background drag and routed background pointer-down through `pressIcon || startBand`. React now has a separate pure viewport-safe `desktopSelection.ts` for intersection geometry and replace/Ctrl-toggle/Shift-add selection and a band gesture in `DesktopIcons.tsx`. Group drag follows selection without modifying saved coordinates until an actual icon move. See [DESKTOP-BAND.md](DESKTOP-BAND.md). Browser/unit tests added; verification pending.
+
+## Guest Desktop files and source .lnk shortcuts
+
+Original `main.js` webpack `6271` merges default desktop icons with user `shortcuts`, whose paths refer to source desktop files. The React `desktopFiles.ts` bridge now reads real entries from mounted `desktopPath` and the same shared VFS used by Explorer, Notepad and Recycle Bin; file changes immediately refresh the icon list. Folders open an Explorer window at the path, TXT files open Notepad, supported source JSON shortcuts launch the React app registry and unknown file types show a clear error. Right-click file Delete moves to the source-mounted Bin. See [DESKTOP-FILES.md](DESKTOP-FILES.md). User-created shortcut wizard/rename and broader file types remain pending.

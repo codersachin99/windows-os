@@ -1569,7 +1569,11 @@
         "packages/ui/src/desktopSelection.ts",
         "packages/ui/src/desktopSelection.test.ts",
         "tests/e2e/desktop-band.spec.ts",
-        "migration/DESKTOP-BAND.md"
+        "migration/DESKTOP-BAND.md",
+        "packages/ui/src/desktopFiles.ts",
+        "packages/ui/src/desktopFiles.test.ts",
+        "tests/e2e/desktop-files.spec.ts",
+        "migration/DESKTOP-FILES.md"
       ]
     },
     {
