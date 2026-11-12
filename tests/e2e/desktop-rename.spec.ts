@@ -49,6 +49,12 @@ test("Desktop context Rename preserves folder tree and manually saved icon coord
   await createFolder(explorer,"Old Folder");
   await explorer.locator('[data-test-explorer-item="Old Folder"]').dblclick();
   await createFolder(explorer,"Inside");
+  // In both desktop and mobile Playwright projects, test a real unobstructed
+  // desktop drag at desktop width: a foreground Explorer intercepts pointer
+  // events and a mobile viewport may clip a wide move.
+  await explorer.getByRole("button",{name:/^Close /}).click();
+  await expect(explorer).toHaveCount(0);
+  await page.setViewportSize({width:1280,height:720});
   const old=page.locator('[data-test-desktop-file="'+DESKTOP+'/Old Folder"]');
   const box=await old.boundingBox();
   if (!box) throw Error("Old desktop folder missing");
