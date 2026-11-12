@@ -1,3 +1,7 @@
+## Windows 7 Find migration — 2026-11-13, pending CI
+
+- Source-backed Find window and real Computer results handoff implemented on feature branch; search filter model/worker extended without host filesystem access. See [source trace](migration/FIND-SOURCE.md). CI checkpoint will be verified after `[run-ci]` commit. Original auto-height, precise type taxonomy, source search-index path format and pixel screenshot parity remain open.
+
 ## Original Windows 7 Task Manager — 2026-11-12, CI verified
 
 - **Pinned source:** `legacy-win7/src/modules/apps/taskmgr.js` module d64a, `src/styles/system/taskmgr.css`, source `c170.d` program list = original non-hidden source IDs. Source window id `window-taskmgr`, height 450 and inherited default width, Minimize allowed but **Maximize hidden**. [Source trace](migration/TASKMGR-SOURCE.md).
