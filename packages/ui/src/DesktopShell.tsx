@@ -9,6 +9,7 @@ import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { AboutApp } from "@windows-os/apps/about";
+import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -27,13 +28,25 @@ interface ApplicationContentProps {
   dispatch: Dispatch<DesktopAction>;
   registerClose(id: string, handler: () => void): () => void;
   onMagnifierScale(scale: number): void;
+  windows: DesktopState["windows"];
+  onRequestCloseWindow(id: string): void;
 }
-function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose, onMagnifierScale }: ApplicationContentProps) {
+function ApplicationContent({
+  appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
+  windows, onRequestCloseWindow
+}: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
+  if (appId === "taskmgr") return <TaskManagerApp
+    windows={windows}
+    onCloseWindow={onRequestCloseWindow}
+    onOpenProgram={programId => {
+      const app = appRegistry.get(programId);
+      if (app) dispatch({ type: "OPEN_APP", app });
+    }} />;
   if (appId === "magnifier") return <MagnifierApp onScaleChange={onMagnifierScale} />;
   if (appId === "run") return <RunApp
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
@@ -162,7 +175,8 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale} />
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale}
+            windows={state.windows} onRequestCloseWindow={requestClose} />
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch} />}
@@ -173,7 +187,8 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale} />
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale}
+            windows={state.windows} onRequestCloseWindow={requestClose} />
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base">
