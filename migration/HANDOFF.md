@@ -1,3 +1,11 @@
+## Desktop file clipboard and confirmed Delete checkpoint (2026-11-12) — CI pending
+
+- **Pinned source:** original `src/modules/system/main.js` desktop item Cut/Copy menu, background Paste, Ctrl+A/Delete selection behavior and `getShortcut(path)` mapping. The app's actual Guest Desktop path, file selections, Recycle Bin and shared Explorer clipboard are reused.
+- **Implemented:** `packages/ui/src/desktopFileActions.ts` turns selected desktop IDs into real VFS paths, excluding system icons. `DesktopIcons.tsx` offers context Cut/Copy, background Paste, Ctrl/Meta+C/X/V, and confirmation-based Delete for one or multiple items. `FileClipboard` is shared with Explorer; `VirtualFileStore.trashMany` atomically recycles a selected group. The clipboard does not touch host files or override rename/Notepad/Explorer input.
+- **Tests:** `desktopFileActions.test.ts` validates paths and cross-directory copy/cut/no-overwrite; `tests/e2e/desktop-clipboard.spec.ts` checks source-style Desktop→Explorer and Explorer→Desktop flows, context menu copy, filename collisions, Delete cancellation/confirmation and protection of builtin icons in Chromium desktop/mobile configurations.
+- **Commits:** `6b3c062e`, `a338d222`, `15b0dea0`, and `90166c46`. **Verification pending** until deliberate opt-in CI completes. Previous completed CI [43198433398](https://github.com/codersachin99/windows-os/actions/runs/43198433398) passed 121 unit / 106 browser tests. [Detailed source mapping](migration/DESKTOP-CLIPBOARD.md).
+- **Still pending:** source's exact same-folder file duplication suffix policy; selected-item properties, comprehensive keyboard scopes/themes, original shortcut wizard and source visual acceptance. Keep `system/main.js` in-progress and PR draft; do not merge/release.
+
 # WindowsOS conversion — implementation handoff
 
 **Canonical source:** `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`  
