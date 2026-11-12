@@ -45,6 +45,7 @@ test("source Sticky Notes opens a frameless centered yellow 200x200 note with ex
   await expect(app.locator('[data-test-sticky-notes]')).toHaveCount(1);
   const note=app.locator('[data-test-sticky-notes]').first();
   await expect(note).toHaveAttribute("data-test-sticky-color","yellow");
+  await expect(note).toHaveCSS("background-color","rgb(255, 254, 179)");
   const rect=await note.boundingBox();
   if(!rect)throw Error("Missing note bounds");
   const viewport=page.viewportSize();
