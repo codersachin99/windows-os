@@ -22,16 +22,6 @@ async function folder(win:Locator,name:string) {
   await form.getByRole("button",{name:"OK"}).click();
   await expect(win.locator('[data-test-explorer-item="'+name+'"]')).toBeVisible();
 }
-async function desktopFolder(page:Page,name:string) {
-  await page.locator("#desktop-icons").click({button:"right",position:{x:28,y:440}});
-  const menu=page.locator("[data-test-desktop-menu]");
-  await menu.getByRole("menuitem",{name:/^New/}).click();
-  await menu.getByRole("menuitem",{name:"Folder",exact:true}).click();
-  const editor=page.locator("[data-test-desktop-rename]");
-  await editor.fill(name);
-  await editor.press("Enter");
-  return page.locator('[data-test-desktop-file="'+desktop+"/"+name+'"]');
-}
 async function dragToBackground(page:Page,source:Locator,copy=false) {
   const rect=await page.locator("#desktop-icons").boundingBox();
   if (!rect) throw new Error("Guest desktop is unavailable");
