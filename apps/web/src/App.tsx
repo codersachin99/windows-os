@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { desktopReducer, initialDesktopState } from "@windows-os/engine";
 import { BootScreen, DesktopShell, LogonScreen } from "@windows-os/ui";
+import { sourceFilesystemRuntime } from "@windows-os/sdk";
 
 export default function App() {
   const [state, dispatch] = useReducer(desktopReducer, undefined, initialDesktopState);
@@ -18,7 +19,13 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [state.phase]);
   if (state.phase === "boot") return <BootScreen onComplete={finishBoot} />;
-  if (state.phase === "logon") return <LogonScreen onGuest={() => dispatch({ type: "GUEST_LOGIN" })}
+  if (state.phase === "logon") return <LogonScreen onGuest={() => {
+    // Mount only previously supplied source metadata, if available.
+    void sourceFilesystemRuntime.restorePersisted().catch(error => {
+      console.warn("Legacy source filesystem was not restored", error);
+    });
+    dispatch({ type: "GUEST_LOGIN" });
+  }}
     onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
   if (state.phase === "shutdown") return <main className="windows-shutdown">
     <img src="/assets/images/start-button-classic.ec7b0b9f.webp" width={64} height={64} alt="" />

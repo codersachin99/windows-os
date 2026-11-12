@@ -1,7 +1,7 @@
 import { FileClipboard, VirtualFileStore, type FileStoreStorage } from "@windows-os/filesystem";
 // Shared across future Explorer, Notepad, Recycle Bin, media and file dialogs.
 // No host-disk access is implied. Source sessions and mounts are opt-in.
-function browserStorage(): FileStoreStorage | undefined {
+export function browserStorage(): FileStoreStorage | undefined {
   if (typeof window === "undefined") return undefined;
   try { return window.localStorage; } catch { return undefined; }
 }

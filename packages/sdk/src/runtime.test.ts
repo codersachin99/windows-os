@@ -28,6 +28,22 @@ describe("source filesystem runtime", () => {
     expect(events).toEqual([source.trashPath, "absent"]);
     unsub();
   });
+  it("persists only source-supplied metadata and restores after a new Guest session", async () => {
+    const store = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => { store.set(key, value); }
+    };
+    const fs = new VirtualFileStore(storage);
+    const first = new SourceFilesystemRuntime(fs, storage);
+    await first.configure(source);
+    const newSession = new SourceFilesystemRuntime(new VirtualFileStore(storage), storage);
+    await newSession.restorePersisted();
+    expect(newSession.snapshot()?.trashPath).toBe(source.trashPath);
+    await newSession.snapshot()?.store.write("persisted", source.desktopPath + "/saved.txt");
+    expect(await fs.stat(source.desktopPath + "/saved.txt")).toBeNull();
+    expect((await newSession.snapshot()?.store.read(source.desktopPath + "/saved.txt"))).toBe("persisted");
+  });
   it("does not expose source path after failed mount", async () => {
     const fs = new VirtualFileStore();
     const runtime = new SourceFilesystemRuntime(fs);
