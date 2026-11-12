@@ -10,6 +10,7 @@ import { NotepadEditor, type NotepadEditorHandle } from "./NotepadEditor";
 import "./NotepadApp.css";
 
 interface NotepadAppProps {
+  initialFilePath?: string;
   onClose(): void;
   onTitleChange(title: string): void;
   onRegisterClose(handler: () => void): () => void;
@@ -19,7 +20,7 @@ type ActiveDialog = "open" | "save" | "font" | "confirm" | null;
 type MenuId = "File" | "Edit" | "Format" | "View" | null;
 
 /** Source-style Notepad menus, using the shared native editor and document SDK. */
-export function NotepadApp({ onClose, onTitleChange, onRegisterClose }: NotepadAppProps) {
+export function NotepadApp({ initialFilePath, onClose, onTitleChange, onRegisterClose }: NotepadAppProps) {
   // Per-window model; all windows share only the virtual file store.
   const document = useMemo(() => new NotepadDocument(fileStore), []);
   const [snapshot, setSnapshot] = useState(() => document.snapshot());
@@ -32,6 +33,14 @@ export function NotepadApp({ onClose, onTitleChange, onRegisterClose }: NotepadA
   const pending = useRef<(() => void) | null>(null);
 
   useEffect(() => document.subscribe(setSnapshot), [document]);
+  useEffect(() => {
+    if (!initialFilePath) return;
+    let active = true;
+    void document.open(initialFilePath).catch(cause => {
+      if (active) setError(cause instanceof Error ? cause.message : "Unable to open file");
+    });
+    return () => { active = false; };
+  }, [document, initialFilePath]);
   useEffect(() => { onTitleChange(document.title()); }, [document, snapshot.fileName, snapshot.isChanged, onTitleChange]);
 
   const guard = useCallback((after: () => void) => {

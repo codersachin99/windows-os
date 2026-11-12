@@ -51,6 +51,9 @@
       ],
       "@windows-os/apps/shared": [
         "packages/apps/shared/src/index.ts"
+      ],
+      "@windows-os/apps/explorer": [
+        "packages/apps/explorer/src/index.ts"
       ]
     }
   },

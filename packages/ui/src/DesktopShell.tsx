@@ -4,6 +4,7 @@ import { legacyArt } from "@windows-os/assets";
 import { appRegistry } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
+import { ExplorerApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
 
@@ -14,12 +15,13 @@ interface DesktopShellProps {
 
 interface ApplicationContentProps {
   appId: string;
+  filePath?: string;
   windowId: string;
   dispatch: Dispatch<DesktopAction>;
   registerClose(id: string, handler: () => void): () => void;
 }
-function ApplicationContent({ appId, windowId, dispatch, registerClose }: ApplicationContentProps) {
-  if (appId === "notepad") return <NotepadApp
+function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose }: ApplicationContentProps) {
+  if (appId === "notepad") return <NotepadApp initialFilePath={filePath}
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
@@ -34,16 +36,11 @@ function ApplicationContent({ appId, windowId, dispatch, registerClose }: Applic
       <div className="windows-explorer__empty">Recycle Bin is empty.</div>
     </div>;
   }
-  if (appId === "computer") {
-    return <div className="windows-explorer">
-      <div className="windows-explorer__toolbar">Organize　　System properties</div>
-      <div className="windows-explorer__crumb">Computer</div>
-      <div className="windows-explorer__empty">
-        This browser-based computer view does not expose host drives.
-        Source-equivalent simulated files and devices are pending migration.
-      </div>
-    </div>;
-  }
+  if (appId === "computer") return <ExplorerApp
+    onOpenTextFile={path => {
+      const app = appRegistry.get("notepad");
+      if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
+    }} />;
   return null;
 }
 
@@ -108,7 +105,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
       {state.windows.map(win => (
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
-          <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
+          <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} />
         </WindowFrame>
       ))}

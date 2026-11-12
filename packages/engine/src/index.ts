@@ -22,12 +22,13 @@ export function initialDesktopState(): DesktopState {
   };
 }
 
-function openWindow(state: DesktopState, app: AppDefinition): DesktopState {
+function openWindow(state: DesktopState, app: AppDefinition, file?: { path: string }): DesktopState {
   if (state.phase !== "desktop") return state;
   const ordinal = state.nextWindowId;
   const window = {
     id: `${app.id}-${ordinal}`,
     appId: app.id,
+    file,
     title: app.label,
     icon: app.icon,
     width: app.window.width,
@@ -64,7 +65,7 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
       return { ...restored, theme: state.theme, wallpaper: state.wallpaper };
     }
     case "OPEN_APP":
-      return openWindow(state, action.app);
+      return openWindow(state, action.app, action.file);
     case "FOCUS_WINDOW": {
       if (!state.windows.some(window => window.id === action.id)) return state;
       return {

@@ -15,6 +15,7 @@ export interface AppDefinition {
 export interface DesktopWindow {
   id: string;
   appId: string;
+  file?: { path: string };
   title: string;
   icon: string;
   x: number;
@@ -44,7 +45,7 @@ export type DesktopAction =
   | { type: "LOG_OFF" }
   | { type: "SHUTDOWN" }
   | { type: "RESTART" }
-  | { type: "OPEN_APP"; app: AppDefinition }
+  | { type: "OPEN_APP"; app: AppDefinition; file?: { path: string } }
   | { type: "FOCUS_WINDOW"; id: string }
   | { type: "MOVE_WINDOW"; id: string; x: number; y: number }
   | { type: "MINIMIZE_WINDOW"; id: string }
