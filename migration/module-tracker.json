@@ -20,7 +20,9 @@
         "packages/apps/explorer/src/RecycleBinApp.tsx",
         "packages/apps/explorer/src/ExplorerApp.tsx",
         "tests/e2e/bin.spec.ts",
-        "migration/RECYCLE-BIN.md"
+        "migration/RECYCLE-BIN.md",
+        "packages/filesystem/src/sourceGuest.ts",
+        "tests/e2e/source-guest.spec.ts"
       ]
     },
     {
@@ -65,7 +67,9 @@
         "packages/filesystem/src/clipboard.ts",
         "packages/filesystem/src/search.ts",
         "tests/e2e/clipboard.spec.ts",
-        "tests/e2e/search.spec.ts"
+        "tests/e2e/search.spec.ts",
+        "packages/filesystem/src/sourceGuest.ts",
+        "tests/e2e/source-guest.spec.ts"
       ]
     },
     {

@@ -35,3 +35,7 @@ The original bin.js renders Computer hoisted to its runtime `trashPath`. The Rea
 ## Recycle/restore atomic snapshot and source mount cache
 
 The in-progress Recycle Bin port now supports `VirtualFileStore.trash/restore/emptyTrash/removeTree` using the *supplied* `trashPath`, with original-path metadata persisted inside the same VFS snapshot as the file move to prevent loss on failed writes. Source mount metadata can be provided and cached through `SourceFilesystemRuntime.configure` and reloaded on Guest login; no runtime-derived drive list is invented. [CI 43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) passed.
+
+## Exact first-run source directory bootstrap
+
+The original source webpack files were traced to functions and constants `5401`, `4cca`, `757f`, `760d` and the filesystem service's `init()`/`ensureUser()`. Instead of relying solely on supplied fixtures, the Guest login now seeds the **actual original** `EXTERNAL/computer/drive0` / `Users/Guest` special-folder tree. It preserves prior user data and provided custom source mounts. See [SOURCE-BOOTSTRAP.md](SOURCE-BOOTSTRAP.md) and its explicit limitations.

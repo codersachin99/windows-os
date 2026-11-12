@@ -73,6 +73,14 @@
 - **Source art requirement:** `apps/web/public/assets/images` currently has only the previously imported shell artwork. Original `notepad.*`, `file.*`, and `folder.*` image files must be imported from the pinned original checkout via `npm run import:legacy -- --from <source-path>`. The runtime references original filenames but unimported images will not display correctly.
 - **Next:** capture source `getStats()`, `systemPath`, `desktopPath`, `trashPath` initialization/session data and tie into the source filesystem adapter; then improve Explorer context menus, search index and drag/drop, and compare visual snapshots against original.
 
+## Source-derived first-run Guest disk initialization (2026-11-12)
+
+- **Source recovered:** Original webpack modules `5401`, `4cca`, `757f`, `760d` and the filesystem service in `shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js` define the first-run `computer/drive0` System C: disk, `Users/Guest` profile, `AppData/Roaming/WindowsOS/Windows/RecycleBin` and special folders. See [SOURCE-BOOTSTRAP.md](SOURCE-BOOTSTRAP.md) for exact source mapping.
+- **Implemented:** `packages/filesystem/src/sourceGuest.ts` seeds source-defined system and Guest directories idempotently in the existing persistent guest VFS. `SourceFilesystemRuntime.startGuest` is called during Guest login, preserves explicitly supplied prior mount snapshots, and does not overwrite existing files. Computer shows System (C:), Desktop and Guest Documents/Downloads/Pictures/Music/Videos; Z: DVD is displayed as unavailable rather than falsely writable.
+- **Explorer menus:** native right-click file and background context menus use the shared operations and source-based item/background distinction; unsupported Properties remains disabled. Browser tests added for source first-run mounts, context-menu create/rename/Escape behavior and reload persistence.
+- **Verification:** code and tests are pushed; this milestone has not passed the new opt-in `[run-ci]` verification yet. Existing [43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) verifies the *previous* clipboard/search/Bin slice only.
+- **Remaining:** actual platform Capacitor URI support, dynamic quota/disk enumeration, original installers and program shortcut files, original desktop profile integration, rich Explorer menu behavior, missing original artwork, screenshots and full application parity.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.
