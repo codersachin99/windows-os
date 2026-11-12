@@ -240,6 +240,24 @@ export class VirtualFileStore {
     this.commit(next, { type: existed ? "updated" : "created", path: uri });
     return this.entry(item);
   }
+
+  /**
+   * Source FileCreate semantics: create an empty/new text-backed file without
+   * replacing a name that already exists. Unlike write(), a race with another
+   * creator is an EEXIST error, never a silent overwrite.
+   */
+  async createFile(content: string, path: string): Promise<FileEntry> {
+    if (typeof content !== "string") {
+      throw new FileStoreError("EINVAL", "Text content required");
+    }
+    const uri = normalizeFileUri(path);
+    this.destination(uri);
+    const item: StoredEntry = { uri, type: "file", content, mtime: Date.now() };
+    const next = new Map(this.entries);
+    next.set(uri, item);
+    this.commit(next, { type: "created", path: uri });
+    return this.entry(item);
+  }
   async mkdir(path: string): Promise<FileEntry> {
     const uri = normalizeFileUri(path);
     this.destination(uri);
