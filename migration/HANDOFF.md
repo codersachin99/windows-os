@@ -90,6 +90,14 @@
 - Unit and Chromium browser tests were added for manifest count, source MZ and shortcut bytes, idempotent installation, upgrade and reload persistence, All Programs grouping, Notepad shortcut launching, and unmigrated program behavior. Initial opt-in [CI 43167307049](https://github.com/codersachin99/windows-os/actions/runs/43167307049) failed at TypeScript because TS incorrectly narrowed `this.session` after awaited restore; fixed in commit `43ac2877` using the typed snapshot getter. **Verified:** opt-in [CI 43167441493](https://github.com/codersachin99/windows-os/actions/runs/43167441493) passed TypeScript, Vitest, migration/source audit, original Contacts fidelity checks, Vite production build and **42 Chromium desktop/mobile tests** including new source installer/Start Menu/shortcut coverage.
 - Remaining: port each original program engine/UI, native executable routing beyond metadata, dynamic Build-version installer upgrades, desktop shortcut placements and locale/theme parity, visual screenshot parity and bundled licensed source artwork.
 
+## Native Calculator: source Standard mode (2026-11-12)
+
+- Recovered original `src/modules/apps/calc.js` Standard button array (28 labels), `Vt.methods` digit/decimal/evaluate/clear/memory/unary semantics, `3b1d` default config, the 5x6 grid, and original Calc source CSS SHA `e4a76c147d6f10c7153c6448a67a2802da0767c5`.
+- Implemented reusable `StandardCalculator` model in `packages/apps/calculator/src/standard.ts`, native `CalculatorApp.tsx`, original unmodified `source.css`, React-specific layout, source-menu controls, history/grouping and keyboard/clipboard. Wired registered `calc` program through Start menu and `Calculator.lnk`/.exe association. Original source icon referenced by exact path, not substituted.
+- Added unit and browser tests for left-to-right arithmetic, source key order, errors, memory, history, grouping, keyboard and launch from original installed shortcut. Existing source-program browser tests now expect Calculator to be functional; another unported app is still explicitly disabled.
+- **Scope:** only original **Standard** mode, not Scientific, Programmer, Statistics, worksheets, unit/date conversion or full extended expression implementation. Tracker `calc.js` remains `in-progress`, not verified. See [CALCULATOR.md](CALCULATOR.md).
+- **Verification:** pending deliberate `[run-ci]` checkpoint. Green prior installer run [43167441493](https://github.com/codersachin99/windows-os/actions/runs/43167441493) predates this Calculator port.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

@@ -29,8 +29,15 @@
       "source": "src/modules/apps/calc.js",
       "sha": "7ea0b7e05905100fc3b3eaddf85d321e88411ac8",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/calculator/src/standard.ts",
+        "packages/apps/calculator/src/standard.test.ts",
+        "packages/apps/calculator/src/CalculatorApp.tsx",
+        "packages/apps/calculator/src/source.css",
+        "tests/e2e/calculator.spec.ts",
+        "migration/CALCULATOR.md"
+      ]
     },
     {
       "source": "src/modules/apps/camera.js",

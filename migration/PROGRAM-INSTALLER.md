@@ -42,3 +42,7 @@ The program manifest is recovered faithfully; **application feature parity remai
 ## Opt-in CI verified: 2026-11-12
 
 [GitHub Actions run 43167441493](https://github.com/codersachin99/windows-os/actions/runs/43167441493) **passed** TypeScript, unit tests, pinned migration/source checks, Vite build and **42 Chromium desktop/mobile browser tests**. The new tests verify source manifest count 42/34, original MZ binary data and shortcut JSON, idempotent install on Guest login, All Programs navigation and Notepad launching through the installed shortcut, plus intact data after reload. An initial run 43167307049 found a TypeScript-only session narrowing issue, fixed in 43ac2877 before the passing checkpoint. Green tests verify this bounded slice, not the many unmigrated apps.
+
+## Calculator now launches a migrated Standard-mode React implementation
+
+The installed `Accessories/Calculator.lnk` and original `Windows/System32/calc.exe` source IDs route to the real native `CalculatorApp`, rather than remaining disabled. This port covers the original Standard calculator control surface only; Scientific, Programmer, Statistics, conversions and worksheets remain unmigrated. See [CALCULATOR.md](CALCULATOR.md).
