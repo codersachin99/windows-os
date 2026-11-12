@@ -5,9 +5,10 @@ interface WindowFrameProps {
   window: DesktopWindow;
   dispatch: Dispatch<DesktopAction>;
   children: ReactNode;
+  onRequestClose?: () => void;
 }
 
-export function WindowFrame({ window: win, dispatch, children }: WindowFrameProps) {
+export function WindowFrame({ window: win, dispatch, children, onRequestClose }: WindowFrameProps) {
   const drag = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const style: CSSProperties = win.maximized
     ? { inset: "0 0 40px 0", zIndex: win.z }
@@ -33,11 +34,12 @@ export function WindowFrame({ window: win, dispatch, children }: WindowFrameProp
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
-  if (win.minimized) return null;
+  // Keep the app mounted while minimized so its unsaved document survives.
   return (
-    <section role="dialog" aria-label={win.title} data-test-window={win.appId}
+    <section role="dialog" aria-label={win.title} aria-hidden={win.minimized || undefined}
+      data-test-window={win.minimized ? undefined : win.appId}
       className={`windows-window ${win.maximized ? "is-maximized" : ""}`}
-      style={style} onPointerDown={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })}>
+      style={win.minimized ? { ...style, display: "none" } : style} onPointerDown={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })}>
       <div className="windows-window__titlebar" onPointerDown={pointerDown} onPointerMove={pointerMove}
         onPointerUp={pointerUp} onDoubleClick={() => dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id })}>
         <img src={win.icon} width={18} height={18} alt="" draggable={false} />
@@ -45,7 +47,7 @@ export function WindowFrame({ window: win, dispatch, children }: WindowFrameProp
         <div className="windows-window__buttons">
           <button aria-label={`Minimize ${win.title}`} onClick={() => dispatch({ type: "MINIMIZE_WINDOW", id: win.id })}>─</button>
           <button aria-label={`Maximize ${win.title}`} onClick={() => dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id })}>□</button>
-          <button className="windows-window__close" aria-label={`Close ${win.title}`} onClick={() => dispatch({ type: "CLOSE_WINDOW", id: win.id })}>×</button>
+          <button className="windows-window__close" aria-label={`Close ${win.title}`} onClick={() => onRequestClose ? onRequestClose() : dispatch({ type: "CLOSE_WINDOW", id: win.id })}>×</button>
         </div>
       </div>
       <div className="windows-window__body">{children}</div>

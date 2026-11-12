@@ -90,6 +90,10 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
         : window) };
     case "CLOSE_WINDOW":
       return { ...state, windows: state.windows.filter(window => window.id !== action.id) };
+    case "SET_WINDOW_TITLE":
+      if (!state.windows.some(window => window.id === action.id && window.title !== action.title)) return state;
+      return { ...state, windows: state.windows.map(window => window.id === action.id
+        ? { ...window, title: action.title } : window) };
     case "TOGGLE_START":
       return state.phase === "desktop"
         ? { ...state, startOpen: !state.startOpen, selectedIcon: null }

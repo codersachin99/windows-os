@@ -1,4 +1,4 @@
-import { useEffect, useState, type Dispatch } from "react";
+import { useCallback, useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
 import { legacyArt } from "@windows-os/assets";
 import { appRegistry } from "@windows-os/sdk";
@@ -49,6 +49,30 @@ function Clock() {
 
 export function DesktopShell({ state, dispatch }: DesktopShellProps) {
   const desktop = appRegistry.desktop();
+  const closeHandlers = useRef(new Map<string, () => void>());
+  const registerClose = useCallback((id: string, handler: () => void) => {
+    closeHandlers.current.set(id, handler);
+    return () => { if (closeHandlers.current.get(id) === handler) closeHandlers.current.delete(id); };
+  }, []);
+  const requestClose = useCallback((id: string) => {
+    const handler = closeHandlers.current.get(id);
+    if (handler) handler();
+    else dispatch({ type: "CLOSE_WINDOW", id });
+  }, [dispatch]);
+  useEffect(() => {
+    const keydown = (event: KeyboardEvent) => {
+      if (!event.altKey || event.key !== "F4" || event.repeat || state.phase !== "desktop") return;
+      const focused = [...state.windows].filter(win => !win.minimized)
+        .sort((a, b) => b.z - a.z)[0];
+      if (focused) {
+        event.preventDefault();
+        requestClose(focused.id);
+      }
+    };
+    window.addEventListener("keydown", keydown);
+    return () => window.removeEventListener("keydown", keydown);
+  }, [state.windows, state.phase, requestClose]);
+
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}>
       <div className="desktop-background is-static windows-desktop__wallpaper"
@@ -70,7 +94,8 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         </div>
       </div>
       {state.windows.map(win => (
-        <WindowFrame key={win.id} window={win} dispatch={dispatch}>
+        <WindowFrame key={win.id} window={win} dispatch={dispatch}
+          onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} />
         </WindowFrame>
       ))}

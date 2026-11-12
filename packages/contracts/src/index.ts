@@ -50,6 +50,7 @@ export type DesktopAction =
   | { type: "MINIMIZE_WINDOW"; id: string }
   | { type: "TOGGLE_MAXIMIZE"; id: string }
   | { type: "CLOSE_WINDOW"; id: string }
+  | { type: "SET_WINDOW_TITLE"; id: string; title: string }
   | { type: "TOGGLE_START" }
   | { type: "CLOSE_START" }
   | { type: "SELECT_ICON"; id: string | null }

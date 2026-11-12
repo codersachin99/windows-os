@@ -34,6 +34,15 @@ describe("legacy state transitions", () => {
     const closed = desktopReducer(focused, { type: "CLOSE_WINDOW", id: twice.windows[0].id });
     expect(closed.windows.map(window => window.id)).toEqual([twice.windows[1].id]);
   });
+  it("updates only the intended running window title for document dirty state", () => {
+    const app = appRegistry.get("computer")!;
+    const desktop = desktopReducer(desktopReducer(initialDesktopState(), { type: "BOOT_COMPLETE" }), { type: "GUEST_LOGIN" });
+    const twice = desktopReducer(desktopReducer(desktop, { type: "OPEN_APP", app }), { type: "OPEN_APP", app });
+    const changed = desktopReducer(twice, { type: "SET_WINDOW_TITLE", id: twice.windows[0].id, title: "*Note.txt - Notepad" });
+    expect(changed.windows[0].title).toBe("*Note.txt - Notepad");
+    expect(changed.windows[1].title).toBe("Computer");
+    expect(desktopReducer(changed, { type: "SET_WINDOW_TITLE", id: "missing", title: "x" })).toBe(changed);
+  });
   it("does not create windows before entering a desktop session", () => {
     const app = appRegistry.get("computer")!;
     expect(desktopReducer(initialDesktopState(), { type: "OPEN_APP", app }).windows).toHaveLength(0);

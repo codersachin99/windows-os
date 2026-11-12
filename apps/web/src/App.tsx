@@ -13,15 +13,10 @@ export default function App() {
         event.preventDefault();
         dispatch({ type: "TOGGLE_START" });
       }
-      if (event.altKey && event.key === "F4") {
-        event.preventDefault();
-        const top = [...state.windows].filter(win => !win.minimized).sort((a, b) => b.z - a.z)[0];
-        if (top) dispatch({ type: "CLOSE_WINDOW", id: top.id });
-      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [state.phase, state.windows]);
+  }, [state.phase]);
   if (state.phase === "boot") return <BootScreen onComplete={finishBoot} />;
   if (state.phase === "logon") return <LogonScreen onGuest={() => dispatch({ type: "GUEST_LOGIN" })}
     onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
