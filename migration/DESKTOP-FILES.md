@@ -24,3 +24,7 @@ The original desktop is not only a list of program registry icons. Its `defaultS
 ## Desktop file rename (F2 and context menu)
 
 Source `c5f4` binds a 30-character inline editor to `FileRename` and keeps file extensions separately. React now supports F2/right-click Rename for actual mounted Guest Desktop files only. TXT and .lnk extensions, file bytes and folder descendants are retained; collision/invalid names are refused, and saved icon coordinates are rekeyed to the renamed path. See [DESKTOP-RENAME.md](DESKTOP-RENAME.md). Source full shortcut context menu and wizard remain pending.
+
+## Verified source desktop file rename milestone
+
+[CI 43191657508](https://github.com/codersachin99/windows-os/actions/runs/43191657508) passed all automated checks (110 unit tests and 92 Chromium tests) after F2 and context Rename were integrated. This covers only bounded FileRename semantics, not original shortcut editor/wizard or full desktop parity. See [DESKTOP-RENAME.md](DESKTOP-RENAME.md).

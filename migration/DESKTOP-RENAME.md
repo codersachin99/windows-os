@@ -16,4 +16,4 @@ Tests: `desktopRename.test.ts`, `desktopPositions.test.ts`, and `tests/e2e/deskt
 
 **Scope limitation:** the original full shortcut metadata, filename extension hide/show choices, custom shortcut wizard, desktop New menu, rename across mounted user accounts, full UI/source screenshot comparisons and all other desktop actions remain incomplete. `system/main.js` is `in-progress`, not `verified`.
 
-**Verification:** pending opt-in CI run.
+**Bounded implementation verified:** [GitHub Actions run 43191657508](https://github.com/codersachin99/windows-os/actions/runs/43191657508) passed TypeScript, 110 Vitest unit tests across 19 files, source fidelity/inventory checks, production Vite build and **92 Chromium desktop/mobile browser tests**. One earlier browser fixture had attempted to drag an icon behind Explorer; the fixture was corrected before this green run. Full desktop/source parity remains incomplete.
