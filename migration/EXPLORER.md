@@ -5,3 +5,11 @@ Source reference: legacy-win7/src/modules/apps/computer.js at 4e63290d783009e129
 ExplorerSession (packages/apps/explorer/src/model.ts) now manages folder navigation and history, back/forward/up, selectable file entries, case-insensitive current-folder name filtering, view-mode state, create-folder and rename operations. It observes the same VirtualFileStore as Notepad through change events; unit tests exercise history and document updates.
 
 The source Computer app has much more: disk enumeration from getStats, special folders, breadcrumb layout, search index and wildcards/date/size filters, drag/drop, Windows shell shortcuts, full context menus, Recycle Bin actions, device mounting and numerous view modes. The model is an incremental basis, **not complete original behavior**. Do not invent disk metadata; source runtime mounts are still pending.
+
+## Connected native Computer view
+
+`packages/apps/explorer/src/ExplorerApp.tsx` now replaces the Computer placeholder. It renders the source stylesheet unchanged plus layout adapters and accepts only real filesystem entries. It supports folder navigation, back/forward/up, local name search, view modes, folder creation, rename and shared updates. The known `.txt` association opens the native Notepad with a selected file path carried by the shared window contract.
+
+The original Win7 folder and file images remain referenced under their exact legacy paths and need checksum-verified asset import before full visual acceptance. This implementation does not invent guest drives. Until source runtime volumes are mounted, the Explorer view displays the actual virtual root rather than a fabricated `C:` volume. No permanent-delete operation is offered before Recycle Bin semantics are implemented.
+
+Playwright tests cover saved text files opening from Computer and folder navigation history. Parity acceptance against the original `computer.js` UI, special folders, search index, selection, drag/drop and device list is still pending.
