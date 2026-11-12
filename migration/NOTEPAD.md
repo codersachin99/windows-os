@@ -30,3 +30,7 @@ This is a genuine functional vertical slice, not full legacy parity. In particul
 ## Checkpoint verification
 
 Native app integration and reusable file dialogs have been added. Source tracker is now `in-progress`, not `verified`. Opt-in GitHub Actions must pass the unit/build/browser suite and original visuals must still be compared before promotion. File-dialog initial location currently uses the real virtual root when no legacy source mount is configured; it does **not** claim the original disk directory layout.
+
+## Verified integrated Notepad checkpoint
+
+[GitHub Actions run 43145958318](https://github.com/codersachin99/windows-os/actions/runs/43145958318) passed the newly introduced Notepad UI/browser tests, along with the existing suites. The later [Computer integration checkpoint 43147045676](https://github.com/codersachin99/windows-os/actions/runs/43147045676) also passed and exercises opening saved Notepad files from Explorer. Full original app parity remains pending.

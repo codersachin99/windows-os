@@ -13,3 +13,7 @@ The source Computer app has much more: disk enumeration from getStats, special f
 The source Computer stylesheet has been imported byte-for-byte (Git blob SHA `f0cd08ab11f0c38a69cfacf602566059003afd99`). The original Win7 folder and file images remain referenced under their exact legacy paths and need checksum-verified asset import before full visual acceptance. This implementation does not invent guest drives. Until source runtime volumes are mounted, the Explorer view displays the actual virtual root rather than a fabricated `C:` volume. No permanent-delete operation is offered before Recycle Bin semantics are implemented.
 
 Playwright tests cover saved text files opening from Computer and folder navigation history. Parity acceptance against the original `computer.js` UI, special folders, search index, selection, drag/drop and device list is still pending.
+
+## Verified implementation checkpoint
+
+[GitHub Actions run 43147045676](https://github.com/codersachin99/windows-os/actions/runs/43147045676) passed the current unit tests, TypeScript, Vite build, source inventory and desktop/mobile Chromium tests, including the newly introduced cross-app Computer/Notepad behavior. This is **not source screenshot parity** and does not verify special folders/disks/trash.

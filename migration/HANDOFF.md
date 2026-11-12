@@ -35,7 +35,7 @@
 - Source-mapped Notepad now mounts as a native React Start menu app (not an iframe) using the original CodeMirror 6 adapter and source CSS. Dirty titles flow through the window manager and show in the taskbar.
 - Source File/Edit/Format/View menus, keyboard bindings, font, word-wrap, status bar, date insertion and confirmation on close have React implementations. A reusable simulated filesystem file picker supports opening, saving, overwrite prompts, and folder navigation.
 - App state is retained during minimize/restore; Windows titlebar close and Alt+F4 both use application-specific close requests. See `packages/ui/src/WindowFrame.tsx`, `DesktopShell.tsx`, `packages/apps/notepad`, `packages/apps/shared`.
-- Desktop/mobile Playwright tests were added for document persistence, save and open, minimize, and Yes/No/Cancel close. **This is an opt-in CI verification checkpoint; do not claim it passed until the workflow completes.**
+- Desktop/mobile Playwright tests were added for document persistence, save and open, minimize, and Yes/No/Cancel close. **Verified:** opt-in [CI run 43145958318](https://github.com/codersachin99/windows-os/actions/runs/43145958318) passed TypeScript, unit tests, build and desktop/mobile Chromium tests for Notepad.
 - Known source gaps: final Win7 Notepad icon `/assets/images/notepad.90e3ce4c.webp` must be copied through the pinned importer, active source disk/bootstrap metadata is not yet supplied, and shared file/font dialog CSS and all keyboard/touch states remain unverified against source. This is an in-progress port, not full Notepad parity.
 - **Next:** Run source-parity screenshot comparisons, move the shared file dialogs closer to original source behavior, initialize verified guest volume metadata, and wire Computer/Explorer to the same filesystem.
 
@@ -44,7 +44,7 @@
 - The original Computer placeholder was replaced by `packages/apps/explorer` with source-following navigation history, current-folder filtering, selection, view modes, create-folder/rename and live updates from the same simulated filesystem used by Notepad.
 - `.txt` association opens a separate native Notepad window with file path passed through the shared window contract. React StrictMode subscription lifecycle avoids leaked file listeners and maintains window state on minimize/restore.
 - Original `src/styles/apps/computer.css` was copied byte-for-byte, SHA `f0cd08ab11f0c38a69cfacf602566059003afd99`. Exact source icons are referenced but require the pinned importer to render all original files.
-- Browser tests now cover Computer/Notepad shared files, text-file association, creating a folder and back/forward navigation. **Opt-in CI has been requested; do not mark these tests passed until verified.**
+- Browser tests now cover Computer/Notepad shared files, text-file association, creating a folder and back/forward navigation. **Verified:** opt-in [CI run 43147045676](https://github.com/codersachin99/windows-os/actions/runs/43147045676) passed TypeScript, unit, source inventory checks, production build and the existing/new desktop/mobile Chromium tests.
 - Module tracker `computer.js` is `in-progress`. Source disk initialization/drive lists, deep search, devices, clipboard, drag/drop, Recycle Bin delete/restore, full list rendering and context menu parity remain pending. See [EXPLORER.md](EXPLORER.md).
 
 ## Tested implementation
