@@ -19,4 +19,4 @@ The original desktop is not only a list of program registry icons. Its `defaultS
 
 **Pending:** full original desktop icons/association maps, shortcut wizard and editing, shortcut `path` targets, Windows special file types, metadata persistence exactly as source Vuex `shortcuts`, drag-to-folder/Bin, icon visuals, original source menu and screenshot parity. Source `main.js` is still `in-progress`.
 
-**CI:** pending this slice's opt-in run. Rubber band functionality already verified by [run 43186461842](https://github.com/codersachin99/windows-os/actions/runs/43186461842).
+**CI verified:** [GitHub Actions run 43188802257](https://github.com/codersachin99/windows-os/actions/runs/43188802257) passed TypeScript, 103 Vitest unit tests across 18 files, original source checks, Vite build and **84 Chromium desktop/mobile tests** including all new Guest Desktop file-backed cases. The initial run 43187940651 exposed a real context-menu z-index issue underneath Explorer; this was fixed in commit 871b5e48. Rubber-band selection was previously verified in [run 43186461842](https://github.com/codersachin99/windows-os/actions/runs/43186461842).

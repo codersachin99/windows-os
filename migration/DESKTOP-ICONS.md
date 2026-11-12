@@ -34,3 +34,7 @@ The original desktop rendered `desktop__icon-band` on background drag and routed
 ## Guest Desktop files and source .lnk shortcuts
 
 Original `main.js` webpack `6271` merges default desktop icons with user `shortcuts`, whose paths refer to source desktop files. The React `desktopFiles.ts` bridge now reads real entries from mounted `desktopPath` and the same shared VFS used by Explorer, Notepad and Recycle Bin; file changes immediately refresh the icon list. Folders open an Explorer window at the path, TXT files open Notepad, supported source JSON shortcuts launch the React app registry and unknown file types show a clear error. Right-click file Delete moves to the source-mounted Bin. See [DESKTOP-FILES.md](DESKTOP-FILES.md). User-created shortcut wizard/rename and broader file types remain pending.
+
+## Verified source Guest Desktop file-backed icons
+
+[CI 43188802257](https://github.com/codersachin99/windows-os/actions/runs/43188802257) passed **103 unit tests and 84 Chromium browser tests** after wiring real Guest Desktop filesystem entries to the desktop icon model. Source folders and TXT documents open in the real React Explorer/Notepad, recognized .lnk shortcuts resolve through the pinned program registry, and file Delete routes through the mounted Bin. The desktop context-menu stacking issue behind an open Explorer was fixed and retested. The original main.js desktop implementation remains in-progress, with icon file-type artwork, shortcut editing and other source interactions pending.
