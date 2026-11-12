@@ -63,6 +63,18 @@ describe("responsive native window cascade", () => {
     expect(compact.x).toBe(50);
     expect(compact.width).toBe(270);
   });
+  it("anchors original Run dialog to bottom-left taskbar edge and keeps mobile viewport safe", () => {
+    const run = appRegistry.get("run")!;
+    expect(run.window).toMatchObject({
+      width:450,height:220,resizable:false,location:"bottom-left"
+    });
+    expect(sourceWindowPlacement(run.window,1,{width:1280,height:720}))
+      .toEqual({x:0,y:460,width:450,height:220});
+    expect(sourceWindowPlacement(run.window,7,{width:393,height:915}))
+      .toEqual({x:0,y:655,width:393,height:220});
+    expect(sourceWindowPlacement(run.window,1,{width:240,height:200}))
+      .toEqual({x:0,y:0,width:240,height:160});
+  });
   it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
     expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
       {width:393,height:915})).toEqual({x:0,y:238,width:393,height:400});
