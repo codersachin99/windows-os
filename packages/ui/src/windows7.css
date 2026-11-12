@@ -69,6 +69,12 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   position: fixed; inset: 0; overflow: hidden; background: #187fd5; color: #fff;
   font: 12px "Segoe UI", Tahoma, sans-serif; user-select: none;
 }
+/* Source Magnifier targets the desktop surface, not the host document.
+   This positioned canvas keeps window and shortcut coordinates stable at 1x;
+   the taskbar/Magnifier controls are siblings and stay reachable at 16x. */
+.windows-desktop__magnify-target {
+  position: absolute; inset: 0; overflow: visible; z-index: 1;
+}
 .windows-desktop__wallpaper {
   position: absolute; inset: 0 0 var(--taskbar-height) 0; width: 100%; height: calc(100% - var(--taskbar-height));
   background-position: center center !important; background-size: cover !important; background-repeat: no-repeat !important;
