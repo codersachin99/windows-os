@@ -45,6 +45,12 @@
       ],
       "@windows-os/filesystem": [
         "packages/filesystem/src/index.ts"
+      ],
+      "@windows-os/apps/notepad": [
+        "packages/apps/notepad/src/index.ts"
+      ],
+      "@windows-os/apps/shared": [
+        "packages/apps/shared/src/index.ts"
       ]
     }
   },

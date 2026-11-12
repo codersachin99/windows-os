@@ -19,5 +19,6 @@ export const legacyArt = {
   win7Brand: "/assets/images/start-button-classic.ec7b0b9f.webp",
   recycleBin: "/assets/images/bin.7193a1d7.webp",
   computer: "/assets/images/computer.f1f7f519.webp",
+  notepad: "/assets/images/notepad.90e3ce4c.webp",
   contacts: "/apps/contacts/icon.webp"
 } as const;

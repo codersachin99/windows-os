@@ -15,6 +15,11 @@ const builtinApps: AppDefinition[] = [
     kind: "system", desktop: true, showInStart: true,
     window: { width: 760, height: 490 }
   },
+  {
+    id: "notepad", label: "Notepad", icon: legacyArt.notepad,
+    kind: "utility", desktop: false, showInStart: true,
+    window: { width: 620, height: 440 }
+  },
   ...sourceShortcuts.map(shortcut => ({
     id: shortcut.key, label: shortcut.lbl, icon: shortcut.icon,
     kind: "web" as const, desktop: true, showInStart: true,

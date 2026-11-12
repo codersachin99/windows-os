@@ -3,6 +3,7 @@ import type { DesktopAction, DesktopState } from "@windows-os/contracts";
 import { legacyArt } from "@windows-os/assets";
 import { appRegistry } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
+import { NotepadApp } from "@windows-os/apps/notepad";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
 
@@ -11,7 +12,18 @@ interface DesktopShellProps {
   dispatch: Dispatch<DesktopAction>;
 }
 
-function ApplicationContent({ appId }: { appId: string }) {
+interface ApplicationContentProps {
+  appId: string;
+  windowId: string;
+  dispatch: Dispatch<DesktopAction>;
+  registerClose(id: string, handler: () => void): () => void;
+}
+function ApplicationContent({ appId, windowId, dispatch, registerClose }: ApplicationContentProps) {
+  if (appId === "notepad") return <NotepadApp
+    onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
+    onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
+    onRegisterClose={handler => registerClose(windowId, handler)} />;
+
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
@@ -96,7 +108,8 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
       {state.windows.map(win => (
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
-          <ApplicationContent appId={win.appId} />
+          <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
+            registerClose={registerClose} />
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch} />}
