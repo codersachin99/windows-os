@@ -4,13 +4,23 @@ This is the new **React + TypeScript + Vite** home for the existing WindowsOS pr
 
 **Current status: conversion underway, not complete.** This first slice provides the source-art-backed Windows 7 login and Guest desktop, boot/session transitions, Start menu, taskbar, desktop shortcuts, a shared window manager, and a modular app registry. **Contacts has now been rebuilt as a native React application**, preserving its original source stylesheet through an isolated Shadow DOM and using the same Python CRUD endpoints (`/api/contacts`, `/api/contacts/save`, `/api/contacts/delete`). It supports New/Edit/Delete, refresh, search across name/email/phone/company, details, original form fields and status messages. Contacts browser CRUD/error tests have passed against mock responses; complete live backend integration and production security hardening remain pending. The full legacy apps/games/gadgets/themes still require migration. The app must not be called fully equivalent until every original behavior is verified.
 
+## Verified original Windows 7 Sticky Notes — 12 November 2026
+
+The original **Sticky Notes** utility from pinned `src/modules/apps/stickynotes.js` now lives in a separate modular React/TypeScript app (`packages/apps/sticky`). Unlike an ordinary framed window, the source displays independently floating notes controlled by **one taskbar entry**. The migration preserves the centered 200×200 yellow default note, random selection from six exact source colors (**#c3f3fa, #c8fec0, #f9ccf8, #d2d7fc, #eaeaea, #fffeb3**), and original image files for the app icon and note add/close buttons (identical Git blob bytes to the pinned source). Each note supports writing, dragging by its toolbar, resizing via eight handles with 150×100 minimum dimensions, focus-to-front, adding, deleting and app closure when the last note is removed.
+
+Note records are saved in Guest-scoped browser storage as the original `{notes:[{x,y,w,h,color,content}]}` shape, with the source's **600 ms debounced text saving** and immediate structural/drag/resize saves. Notes survive reload, and the source `StikyNot.exe` command now launches the real app through Run. Minimize/restore preserves unsaved state without unmounting the app.
+
+**[Deliberate opt-in CI 43249454264](https://github.com/codersachin99/windows-os/actions/runs/43249454264) passed TypeScript, 166 Vitest unit tests across 30 files, Vite production build and all 174 Chromium desktop/mobile browser tests.** Tests cover pixel-sized default geometry, source yellow color, exact assets, editing/save/reload, multiple notes, drag/resize persistence, minimize/restore, final-close/reopen, and Run integration. See [the source-specific implementation map](migration/STICKY-NOTES-SOURCE.md) and [durable migration handoff](migration/HANDOFF.md).
+
+**Next:** source-backed Magnifier or About, then additional original apps/games and visual baseline comparison across source themes. The Windows 7 look and feature set are still incomplete; this is not a parity-complete product or release. Draft PR remains unmerged.
+
 ## Verified native Windows 7 Run dialog — 12 November 2026
 
 The original **Run** utility from pinned `src/modules/apps/run.js` is now implemented in modular React/TypeScript as `packages/apps/run`: **450×220**, non-resizable, bottom-left placement, the **byte-identical original Run WebP icon** (Git SHA `6f669cbb5865e3c342d2f8b16c86051acd63e861`), focused **Open:** input, OK/Cancel, Enter/Escape, Windows+R and retryable errors. Its command resolver uses the pinned source program manifest, original aliases and installed executable names: `calc`/`calculator`, `notepad.exe`, `explorer` and exact C: installed paths open only real migrated apps. Unknown commands and recognized-but-unported apps cannot launch host programs or masquerade as working applications.
 
 **[Opt-in CI 43242039487](https://github.com/codersachin99/windows-os/actions/runs/43242039487) passed 156 unit tests across 29 files and 164 desktop/mobile Chromium browser tests**, along with TypeScript, original-source/Contacts checks and production Vite build. See [Run source-to-React mapping](migration/RUN-SOURCE.md) and [migration handoff](migration/HANDOFF.md).
 
-**Next:** original source Sticky Notes, broader source application coverage, exact theme assets and screenshot parity. Run's successful migration does not imply legacy Paint, Command Prompt, WordPad, or complete desktop equivalence. PR remains draft; `main` is untouched.
+**Subsequent milestone:** original source Sticky Notes has now been migrated and verified above; broader application coverage, exact theme assets and screenshot parity remain pending. Run's successful migration does not imply legacy Paint, Command Prompt, WordPad, or complete desktop equivalence. PR remains draft; `main` is untouched.
 
 ## Atomic external File imports — 12 November 2026
 
