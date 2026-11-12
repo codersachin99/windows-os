@@ -139,6 +139,28 @@ describe("responsive native window cascade", () => {
     const closed=desktopReducer(twice,{type:"CLOSE_WINDOW",id:twice.windows[0].id});
     expect(closed.windows).toHaveLength(0);
   });
+  it("registers pinned Task Manager height 450 with source Minimize and disabled Maximize",()=>{
+    const app=appRegistry.get("taskmgr")!;
+    expect(app.icon).toContain("taskmgr.af82f08f.webp");
+    expect(app.showInStart).toBe(false);
+    expect(app.window).toMatchObject({height:450,resizable:false,minimizable:true});
+    const mobile=sourceWindowPlacement(app.window,1,{width:393,height:915});
+    expect(mobile.x+mobile.width).toBeLessThanOrEqual(393);
+    expect(mobile.y+mobile.height).toBeLessThanOrEqual(875);
+  });
+  it("relaunching Task Manager through the source process ID restores its singleton",()=>{
+    const app=appRegistry.get("taskmgr")!;
+    const boot=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const first=desktopReducer(boot,{type:"OPEN_APP",app});
+    const repeat=desktopReducer(first,{type:"OPEN_APP",app});
+    expect(repeat.windows).toHaveLength(1);
+    expect(repeat.windows[0].id).toBe(first.windows[0].id);
+    const min=desktopReducer(repeat,{type:"MINIMIZE_WINDOW",id:repeat.windows[0].id});
+    const restored=desktopReducer(min,{type:"OPEN_APP",app});
+    expect(restored.windows).toHaveLength(1);
+    expect(restored.windows[0].minimized).toBe(false);
+  });
   it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
     expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
       {width:393,height:915})).toEqual({x:0,y:238,width:393,height:400});
