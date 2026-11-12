@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
-import { searchFiles, SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE, type FileEntry } from "@windows-os/filesystem";
+import {
+  searchFiles, parseSourceShortcut, sourcePrograms,
+  sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
+  SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
+  type FileEntry
+} from "@windows-os/filesystem";
 import { fileClipboard, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import "./source.css";
@@ -8,6 +13,7 @@ import "./ExplorerApp.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
+  onLaunchSourceProgram?(programId: string): boolean;
   recycleBinPath?: string;
 }
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
@@ -25,7 +31,9 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * original Computer session/view model. Source disks, shell actions, drag/drop
  * and trash semantics are still pending and intentionally not fabricated.
  */
-export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps) {
+export function ExplorerApp({
+  onOpenTextFile, onLaunchSourceProgram, recycleBinPath
+}: ExplorerAppProps) {
   const isBin = Boolean(recycleBinPath);
   const session = useMemo(() => new ExplorerSession(
     fileStore, recycleBinPath ?? "/", recycleBinPath
@@ -68,6 +76,7 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
     ?? found?.find(item => item.uri === state.selected[0]);
   const sourceGuest = !isBin && volume?.pathConfig.root === SOURCE_COMPUTER_ROOT;
   const shortcuts = sourceGuest ? [
+    { label: "Programs", path: SOURCE_START_MENU_PROGRAMS },
     { label: "Documents", path: SOURCE_GUEST_PROFILE + "/Documents" },
     { label: "Downloads", path: SOURCE_GUEST_PROFILE + "/Downloads" },
     { label: "Pictures", path: SOURCE_GUEST_PROFILE + "/Pictures" },
@@ -87,8 +96,24 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
       setMessage("Restore this item from the Recycle Bin before opening it.");
     } else if (/\.txt$/i.test(path)) {
       onOpenTextFile(path);
+    } else if (/\.lnk$/i.test(path)) {
+      void execute(async () => {
+        const data = parseSourceShortcut(await fileStore.read(path));
+        if (!data) throw new Error("The original Windows shortcut data is invalid.");
+        if (!onLaunchSourceProgram?.(data.exe)) {
+          throw new Error("The original " + (sourcePrograms.find(p => p.id === data.exe)?.name ?? data.exe)
+            + " application has not been migrated yet.");
+        }
+      });
     } else {
-      setMessage("No original application association has been migrated for this file type.");
+      const installed = sourcePrograms.find(program => sourceExecutablePath(program) === path);
+      if (installed) {
+        if (!onLaunchSourceProgram?.(installed.id)) {
+          setMessage("The original " + installed.name + " application has not been migrated yet.");
+        }
+      } else {
+        setMessage("No original application association has been migrated for this file type.");
+      }
     }
   };
 
@@ -335,7 +360,12 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
             </span>
             {state.viewMode === "details" && <>
               <span>{new Date(item.mtime).toLocaleString()}</span>
-              <span>{item.type === "directory" ? "File folder" : "TXT File"}</span>
+              <span>{item.type === "directory" ? "File folder"
+                : /\.lnk$/i.test(item.name) ? "Shortcut"
+                : /\.exe$/i.test(item.name) ? "Application"
+                : /\.cpl$/i.test(item.name) ? "Control Panel Item"
+                : /\.txt$/i.test(item.name) ? "Text Document"
+                : "File"}</span>
               <span>{item.type === "directory" ? "" : item.size + " B"}</span>
             </>}
           </button>)}

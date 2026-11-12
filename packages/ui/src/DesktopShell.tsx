@@ -34,6 +34,12 @@ function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose
     onOpenTextFile={path => {
       const app = appRegistry.get("notepad");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
+    }}
+    onLaunchSourceProgram={programId => {
+      const app = appRegistry.get(programId);
+      if (!app) return false;
+      dispatch({ type: "OPEN_APP", app });
+      return true;
     }} />;
   return null;
 }
