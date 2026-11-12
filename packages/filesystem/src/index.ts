@@ -399,6 +399,59 @@ export class VirtualFileStore {
     }
     this.commit(next, { type: "emptied", path: bin });
   }
+  /**
+   * Atomic multi-file FileCopy/FileMove for mounted Guest volumes. Validate
+   * every root and descendant and stage all changes before ONE storage write.
+   * If storage.setItem throws (quota, I/O), this.entries and subscribers never
+   * observe a partial transfer; no rollback writes are attempted.
+   *
+   * Source order controls the returned roots; nested selections are deduped.
+   */
+  async transferMany(
+    paths: readonly string[], destination: string, mode: "copy" | "move"
+  ): Promise<FileEntry[]> {
+    if (mode !== "copy" && mode !== "move")
+      throw new FileStoreError("EINVAL", "Invalid transfer mode");
+    if (!paths.length) throw new FileStoreError("EINVAL", "No files selected");
+    const folder = this.directory(destination).uri;
+    const unique = [...new Set(paths.map(normalizeFileUri))];
+    if (unique.includes("/")) throw new FileStoreError("EINVAL", "Cannot transfer filesystem root");
+    const sources = unique.filter(from => !unique.some(parent =>
+      from !== parent && from.startsWith(parent + "/")));
+    const plan = sources.map(from => ({
+      from, to: normalizeFileUri((folder === "/" ? "" : folder) + "/" + getFileName(from))
+    }));
+    if (new Set(plan.map(({to}) => to)).size !== plan.length) {
+      throw new FileStoreError("EEXIST", "Selected files share a destination name");
+    }
+    for (const {from,to} of plan) {
+      this.required(from);
+      if (from === to || to.startsWith(from + "/"))
+        throw new FileStoreError("EINVAL", "Cannot paste into the same file or a nested folder");
+      if (this.entries.has(to))
+        throw new FileStoreError("EEXIST", "Destination already exists: " + to);
+    }
+    const next = new Map(this.entries);
+    const changes: {from:string;to:string}[] = [];
+    const timestamp = Date.now();
+    for (const {from,to} of plan) {
+      const children = [...this.entries.values()].filter(item =>
+        item.uri === from || item.uri.startsWith(from + "/"));
+      if (mode === "move") for (const child of children) next.delete(child.uri);
+      for (const child of children) {
+        const uri = to + child.uri.slice(from.length);
+        if (next.has(uri)) throw new FileStoreError("EEXIST", "Path exists: " + uri);
+        next.set(uri, { ...child, uri, mtime: timestamp });
+      }
+      changes.push({from,to});
+    }
+    const type = mode === "move" ? "moved" : "copied";
+    this.commit(next, { type, ...changes[0] });
+    // Notify each source only AFTER the atomic snapshot has persisted.
+    for (const change of changes.slice(1)) this.notify({ type, ...change });
+    return changes.map(({to}) => this.entry(next.get(to)!));
+  }
+
   private transfer(source: string, destination: string, move: boolean): void {
     const from = normalizeFileUri(source);
     const to = normalizeFileUri(destination);

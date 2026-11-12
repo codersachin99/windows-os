@@ -4,21 +4,23 @@ import {
 } from "./index";
 
 export type FileTransferMode = "copy" | "move";
+type TransferStore = Pick<VirtualFileStore, "stat" | "copy" | "move">
+  & Partial<Pick<VirtualFileStore, "transferMany">>;
 
 /**
- * Shared shell transfer for Explorer's source FileCopy/FileMove actions.
- * Validates all paths before changing the persistent VFS; neither drag and
- * drop nor paste should silently overwrite an existing user document.
- *
- * A batch may still be partly committed on a storage quota error; atomic
- * multi-item transactions remain separate migration work.
+ * Shared source FileCopy/FileMove entry point for Explorer, Desktop, clipboard
+ * and shell drag. Mounted VirtualFileStore uses transferMany: one persisted
+ * snapshot for every selected root and its descendants. The compatibility
+ * fallback is for adapters without transferMany and does not promise
+ * cross-file storage atomicity.
  */
 export async function transferFiles(
-  filesystem: Pick<VirtualFileStore, "stat" | "copy" | "move">,
+  filesystem: TransferStore,
   paths: readonly string[],
   destination: string,
   mode: FileTransferMode
 ): Promise<FileEntry[]> {
+  if (filesystem.transferMany) return filesystem.transferMany(paths, destination, mode);
   if (!paths.length) throw new FileStoreError("EINVAL", "No files selected");
   const folder = normalizeFileUri(destination);
   if ((await filesystem.stat(folder))?.type !== "directory") {
