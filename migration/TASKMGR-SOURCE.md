@@ -30,4 +30,4 @@ Desktop and mobile Chromium browser tests verify original icon/height/tabs/Servi
 
 Remaining parity gaps: inherited source default width is not verified; exact listview/tab pixels and translated labels in non-English themes need baseline comparisons. Full legacy feature and theme coverage remains incomplete. This module manages only the simulator's own window lifecycle.
 
-**CI status:** implementation and tests committed; deliberate opt-in verification pending.
+**CI status: VERIFIED.** [Deliberate opt-in GitHub Actions run 43278169231](https://github.com/codersachin99/windows-os/actions/runs/43278169231) passed **188 Vitest unit tests (33 files)**, **204 desktop/mobile Chromium browser tests**, pinned-source/Contacts checks, TypeScript and Vite build. All five new Task Manager browser cases passed. The 560px inherited-width approximation and per-theme pixel alignment still need source screenshots.
