@@ -53,3 +53,11 @@
   box-shadow:inset 0 0 0 1px #f7fcff77;
   box-sizing:border-box;
 }
+
+/* In the original desktop, context menus rise above application windows.
+   The desktop workspace is its own stacking context, so elevating only the
+   menu child would still leave the menu hidden behind Explorer. Raise the
+   workspace only while a desktop context menu is actually open. */
+.windows-desktop__workspace:has([data-test-desktop-menu]) {
+  z-index: 4001;
+}
