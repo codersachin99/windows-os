@@ -37,6 +37,13 @@ const builtinApps: AppDefinition[] = [
       titlebarIcon: false }
   },
   {
+    id: "taskmgr", label: "Task Manager", icon: legacyArt.taskmgr,
+    kind: "system", desktop: false, showInStart: false,
+    // Source taskmgr.js only specifies h=450; its inherited default width
+    // is represented by this shared-shell 560px default pending screenshot parity.
+    window: { width: 560, height: 450, resizable: false, minimizable: true }
+  },
+  {
     id: "magnifier", label: "Magnifier", icon: legacyArt.magnifier,
     kind: "utility", desktop: false, showInStart: true,
     // Source Win7 WindowMain: w=260, h="auto", resizable=false.
