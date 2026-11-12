@@ -26,6 +26,11 @@ const builtinApps: AppDefinition[] = [
     window: { width: 280, height: 430 }
   },
   {
+    id: "sticky", label: "Sticky Notes", icon: legacyArt.sticky,
+    kind: "utility", desktop: false, showInStart: true,
+    window: { width: 200, height: 200, resizable: false, centered: true }
+  },
+  {
     id: "run", label: "Run", icon: legacyArt.run,
     kind: "utility", desktop: false, showInStart: true,
     window: { width: 450, height: 220, resizable: false, location: "bottom-left" }
