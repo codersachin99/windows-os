@@ -72,6 +72,9 @@
       ],
       "@windows-os/apps/taskmgr": [
         "packages/apps/taskmgr/src/index.ts"
+      ],
+      "@windows-os/apps/find": [
+        "packages/apps/find/src/index.ts"
       ]
     }
   },

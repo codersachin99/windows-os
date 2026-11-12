@@ -55,7 +55,7 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
   // Source Sticky Notes and Magnifier each address a single shell window
   // by their original fixed program IDs, even across repeated Start/Run opens.
   const singleton = app.id === "sticky" || app.id === "magnifier"
-    || app.id === "about" || app.id === "taskmgr";
+    || app.id === "about" || app.id === "taskmgr" || app.id === "find";
   const alreadyOpen = singleton
     ? state.windows.find(window => window.appId === app.id) : undefined;
   if (alreadyOpen) return {

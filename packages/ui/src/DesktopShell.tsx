@@ -10,6 +10,7 @@ import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { AboutApp } from "@windows-os/apps/about";
 import { TaskManagerApp } from "@windows-os/apps/taskmgr";
+import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -40,6 +41,10 @@ function ApplicationContent({
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
+  if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {
+    const computer = appRegistry.get("computer");
+    if (computer) dispatch({ type: "OPEN_APP", app: computer, file: { path } });
+  }} />;
   if (appId === "taskmgr") return <TaskManagerApp
     windows={windows}
     onCloseWindow={onRequestCloseWindow}
@@ -66,6 +71,10 @@ function ApplicationContent({
   }
   if (appId === "bin") return <RecycleBinApp />;
   if (appId === "computer") return <ExplorerApp initialPath={filePath}
+    onOpenFind={scope => {
+      const app = appRegistry.get("find");
+      if (app) dispatch({ type: "OPEN_APP", app, file: { path: scope } });
+    }}
     onOpenTextFile={path => {
       const app = appRegistry.get("notepad");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
@@ -130,6 +139,12 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
           event.preventDefault();
           dispatch({ type: "OPEN_APP", app: run });
         }
+        return;
+      }
+      if (event.metaKey && !event.ctrlKey && !event.altKey
+        && event.key.toLowerCase() === "f") {
+        const find = appRegistry.get("find");
+        if (find) { event.preventDefault(); dispatch({ type: "OPEN_APP", app: find }); }
         return;
       }
       if (!event.altKey || event.key !== "F4") return;

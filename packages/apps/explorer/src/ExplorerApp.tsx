@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
 import {
-  searchFiles, parseSourceShortcut, sourcePrograms,
+  searchFiles, decodeSourceFindPath, sourceFindSearchRequest,
+  parseSourceShortcut, sourcePrograms,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
@@ -17,6 +18,7 @@ interface ExplorerAppProps {
   onLaunchSourceProgram?(programId: string): boolean;
   initialPath?: string;
   recycleBinPath?: string;
+  onOpenFind?(scope: string): void;
 }
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
   { value: "details", label: "Details" },
@@ -34,12 +36,14 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * and trash semantics are still pending and intentionally not fabricated.
  */
 export function ExplorerApp({
-  onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath
+  onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind
 }: ExplorerAppProps) {
   const isBin = Boolean(recycleBinPath);
+  const initialFind = useMemo(() => decodeSourceFindPath(initialPath), [initialPath]);
+  const startPath = initialFind?.scope ?? initialPath;
   const session = useMemo(() => new ExplorerSession(
-    fileStore, recycleBinPath ?? initialPath ?? "/", recycleBinPath
-  ), [initialPath, recycleBinPath]);
+    fileStore, recycleBinPath ?? startPath ?? "/", recycleBinPath
+  ), [startPath, recycleBinPath]);
   const [volume, setVolume] = useState(() => sourceFilesystemRuntime.snapshot());
   const trashPath = recycleBinPath ?? volume?.trashPath ?? null;
   const [state, setState] = useState(() => session.snapshot());
@@ -51,8 +55,8 @@ export function ExplorerApp({
     kind: "item" | "background"; x: number; y: number; uri?: string
   } | null>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
-  const [subfolders, setSubfolders] = useState(false);
-  const [namePattern, setNamePattern] = useState("");
+  const [subfolders, setSubfolders] = useState(initialFind?.subfolders ?? false);
+  const [namePattern, setNamePattern] = useState(initialFind?.namePattern ?? "");
   const [found, setFound] = useState<FileEntry[] | null>(null);
   const [searchBusy, setSearchBusy] = useState(false);
   const [searchTruncated, setSearchTruncated] = useState(false);
@@ -239,10 +243,10 @@ export function ExplorerApp({
     setMessage("");
     setFoldersScanned(0);
     void searchFiles(fileStore, {
-      scope: state.path,
+      ...(initialFind
+        ? sourceFindSearchRequest({ ...initialFind, scope: state.path, namePattern, subfolders })
+        : { scope: state.path, namePattern: namePattern.trim() || null, subfolders }),
       text: state.search,
-      namePattern: namePattern.trim() || null,
-      subfolders,
       maxResults: 500,
       skipPaths: isBin || !trashPath ? [] : [trashPath]
     }, {
@@ -264,6 +268,8 @@ export function ExplorerApp({
       }
     });
   };
+  // Original Find Now opens a new Computer window directly in search results.
+  useEffect(() => { if (initialFind) runSearch(); }, [initialFind]);
   useEffect(() => {
     if (!context) return;
     const dismiss = (event: PointerEvent) => {
@@ -326,6 +332,8 @@ export function ExplorerApp({
         <input aria-label="File name pattern" value={namePattern}
           placeholder="*.txt" onChange={event => setNamePattern(event.target.value)} />
       </label>
+      {!isBin && onOpenFind && <button type="button" aria-label="Advanced Find"
+        onClick={() => onOpenFind(state.path)}>Advanced Find...</button>}
       {found !== null && <button type="button" onClick={() => setFound(null)}>Clear results</button>}
       {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}
       {searchBusy && <span role="status">Searching {foldersScanned} folders...</span>}

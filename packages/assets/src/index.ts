@@ -28,6 +28,7 @@ export const legacyArt = {
   magnifier: "/assets/images/magnifier.66b65661.webp",
   magnifierHelp: "/assets/images/help.a34353ca.webp",
   taskmgr: "/assets/images/taskmgr.af82f08f.webp",
+  search: "/assets/images/search.5b30849a.webp",
   folder: "/assets/images/folder.677f8e80.webp",
   file: "/assets/images/file.73b2d097.webp",
   shortcut: "/assets/images/shortcut.e8c69673.webp",

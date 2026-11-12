@@ -520,7 +520,11 @@ export * from "./volumeSession";
 export { FileClipboard } from "./clipboard";
 export type { ClipboardOperation, FileClipboardState } from "./clipboard";
 
-export { searchFiles, matchFilePattern } from "./search";
+export { searchFiles, matchFilePattern, matchSourceNamePattern, matchesSourceKind } from "./search";
+export type { FileSearchRequest, FileSearchResult } from "./search";
+export { createSourceFindQuery, encodeSourceFindPath, decodeSourceFindPath, sourceFindSearchRequest,
+  SOURCE_FIND_PREFIX } from "./findQuery";
+export type { SourceFindQuery } from "./findQuery";
 export type { FileSearchRequest, FileSearchResult, FileSearchProgress } from "./search";
 
 export * from "./sourceGuest";

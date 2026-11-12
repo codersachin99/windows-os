@@ -37,6 +37,13 @@ const builtinApps: AppDefinition[] = [
       titlebarIcon: false }
   },
   {
+    id: "find", label: "Find: All Files", icon: legacyArt.search,
+    kind: "system", desktop: false, showInStart: false,
+    // Original w=480, h=auto, resizable=false, Maximize hidden.
+    // 350px is interim until the source auto sizing is reproduced.
+    window: { width: 480, height: 350, resizable: false, minimizable: true }
+  },
+  {
     id: "taskmgr", label: "Task Manager", icon: legacyArt.taskmgr,
     kind: "system", desktop: false, showInStart: false,
     // Source taskmgr.js only specifies h=450; its inherited default width
