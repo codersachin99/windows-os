@@ -41,3 +41,7 @@ Computer's navigation panel now shows the source-defined System (C:) volume, Des
 ## Verified source Guest navigation and context menus
 
 [CI 43164294440](https://github.com/codersachin99/windows-os/actions/runs/43164294440) passed 36 Chromium browser tests, including the source System (C:) and Guest directory navigation and right-click background/item actions. The navigation sidebar is horizontally scrollable at small viewports so the drive/user-folder shortcuts remain accessible on mobile. Full original Explorer properties dialogs, plugin shell context-menu handlers and exact theme visuals remain pending.
+
+## Source .lnk shortcut and executable associations
+
+Explorer recognizes source .lnk JSON shortcuts and known installed executable paths (from the full original c170 manifest). Installed Notepad shortcuts launch the migrated React Notepad; programs not yet ported report pending implementation. The exact 34 source program placeholders now appear on the C: disk, and All Programs reads real persisted shortcuts in root/Accessories/Games. See [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md).

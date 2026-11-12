@@ -789,8 +789,12 @@
       "source": "src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
       "sha": "a3edd490a0f4e23052f2a3a74a694c8991911c56",
       "area": "chunks",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/filesystem/src/sourceProgramManifest.json",
+        "packages/filesystem/src/sourcePrograms.ts",
+        "tests/e2e/source-programs.spec.ts"
+      ]
     },
     {
       "source": "src/modules/chunks/shared~plugin-embed~sandbox~vue-app~vue-i18n~vue-store.js",
@@ -1587,8 +1591,12 @@
       "source": "src/modules/system/testmode.js",
       "sha": "52675b6640fba8b5de2eefeaa1c97d3490865880",
       "area": "system",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/filesystem/src/sourceProgramManifest.json",
+        "packages/filesystem/src/sourcePrograms.ts",
+        "tests/e2e/source-programs.spec.ts"
+      ]
     },
     {
       "source": "src/modules/system/vue2-touch.js",

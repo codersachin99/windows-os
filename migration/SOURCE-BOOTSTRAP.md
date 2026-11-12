@@ -46,3 +46,7 @@ The original `computer.js`, `bin.js`, and relevant large webpack chunks remain `
 ## Verification checkpoint — 2026-11-12
 
 [Opt-in GitHub Actions run 43164294440](https://github.com/codersachin99/windows-os/actions/runs/43164294440) **passed** TypeScript, unit tests, source inventory, Contacts checks, production build and 36 Chromium desktop/mobile tests. That includes original source-derived first Guest C: and special-folder path assertions, Bin initial mount and persisted state, and native Explorer context menu create/rename/dismiss interactions. This is contract verification of a React port, not visual screenshot/source behavior parity acceptance.
+
+## Original program installer recovered
+
+Source webpack c170 program manifest was found in `src/modules/system/testmode.js` and original 757f/760d installer functions were ported into shared program metadata, 1,024-byte MZ stubs and persistent JSON `.lnk` shortcuts. See [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md). The 42 app definitions and 34 installed executable/shortcut records are not claims that 42 apps are implemented.

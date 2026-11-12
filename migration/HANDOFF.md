@@ -81,6 +81,15 @@
 - **Verification PASSED:** [GitHub Actions run 43164294440](https://github.com/codersachin99/windows-os/actions/runs/43164294440) successfully completed TypeScript, Vitest, migration inventory audit, original Contacts CSS/shortcut checks, Vite production build and **36 desktop/mobile Chromium browser tests**. New tests cover source Guest C: initialization, special folders, Bin auto-mount, right-click item/background commands and persistence. Existing [43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) verifies the *previous* clipboard/search/Bin slice only.
 - **Remaining:** actual platform Capacitor URI support, dynamic quota/disk enumeration, original installers and program shortcut files, original desktop profile integration, rich Explorer menu behavior, missing original artwork, screenshots and full application parity.
 
+## Source program installer and real All Programs shortcuts (2026-11-12)
+
+- Source discovery: `legacy-win7/src/modules/system/testmode.js` webpack `c170` contains exactly 42 base-variant apps (34 installed); webpack `757f`/`760d` provide executable MZ stubs, install parent paths, special menu categories and JSON `.lnk` serialization. Exact locale labels come from pinned `assets/locales/en-US.json`. See [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md).
+- Ported complete source program metadata to `packages/filesystem/src/sourceProgramManifest.json`, plus shared `sourcePrograms.ts` installer, paths, shortcut parser and unit tests. New `VirtualFileStore.readBytes/writeBytes` preserves binary MZ files alongside text through existing persistent copy, move and Bin semantics.
+- Guest login installs all 34 original 1,024-byte MZ program placeholders plus 34 original JSON shortcuts **once per pinned source revision**; existing user-edited files and intentionally removed shortcut entries remain intact. Custom source-runtime mounts are not seeded.
+- Native Explorer now resolves installed `.lnk`/known executable paths through the React app registry, so `Notepad.lnk` and `notepad.exe` launch real React Notepad, while source programs not yet migrated show an explicit pending message. Start Menu's `All Programs` hierarchy reads the real installed shortcut files and marks unsupported apps as unavailable rather than claiming implementation.
+- Unit and Chromium browser tests were added for manifest count, source MZ and shortcut bytes, idempotent installation, upgrade and reload persistence, All Programs grouping, Notepad shortcut launching, and unmigrated program behavior. **Await one deliberate opt-in CI result before marking this slice verified.**
+- Remaining: port each original program engine/UI, native executable routing beyond metadata, dynamic Build-version installer upgrades, desktop shortcut placements and locale/theme parity, visual screenshot parity and bundled licensed source artwork.
+
 ## Tested implementation
 
 - Boot → Windows 7 logon → source Guest session → Windows 7 desktop; source wallpaper/Guest avatar/window icons/Start art copied byte-for-byte, with original initial defaults `skipBoot=false`, `nativeCursor=false`, `theme=win7`.

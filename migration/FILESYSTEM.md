@@ -39,3 +39,7 @@ The in-progress Recycle Bin port now supports `VirtualFileStore.trash/restore/em
 ## Exact first-run source directory bootstrap
 
 The original source webpack files were traced to functions and constants `5401`, `4cca`, `757f`, `760d` and the filesystem service's `init()`/`ensureUser()`. Instead of relying solely on supplied fixtures, the Guest login now seeds the **actual original** `EXTERNAL/computer/drive0` / `Users/Guest` special-folder tree. It preserves prior user data and provided custom source mounts. See [SOURCE-BOOTSTRAP.md](SOURCE-BOOTSTRAP.md) and its explicit limitations.
+
+## Binary bytes and source program installation
+
+`VirtualFileStore.readBytes/writeBytes` now supports binary files via validated base64 snapshots. This reproduces the original installer-generated 1,024-byte MZ stubs for the 34 installed original programs, and preserves existing VFS text semantics. `sourcePrograms.ts` installs source-defined executable and Start Menu paths idempotently without overwriting data; see [PROGRAM-INSTALLER.md](PROGRAM-INSTALLER.md).
