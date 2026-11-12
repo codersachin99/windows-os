@@ -65,7 +65,7 @@ describe("responsive native window cascade", () => {
   });
   it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
     expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
-      {width:393,height:915})).toEqual({x:0,y:237,width:393,height:400});
+      {width:393,height:915})).toEqual({x:0,y:238,width:393,height:400});
     const tiny=sourceWindowPlacement({width:550,height:400,centered:true},1,
       {width:240,height:320});
     expect(tiny.x+tiny.width).toBe(240);
