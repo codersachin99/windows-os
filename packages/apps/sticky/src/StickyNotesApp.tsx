@@ -145,7 +145,9 @@ export function StickyNotesApp({zIndex,minimized,onClose,onFocus}:StickyNotesApp
     {error&&<p role="alert" className="windows-sticky__error">{error}</p>}
   </div>;
 }
+// Exact source module 2299 export "b" in pinned testmode.js, in the
+// same order as the original stickynotes.js note color names.
 const noteColor:Record<StickyNote["color"],string>={
-  blue:"#bdd9fa",green:"#c1e8af",pink:"#f9c5d3",
-  purple:"#dbc8f1",white:"#f3f3f0",yellow:"#fbefa3"
+  blue:"#c3f3fa",green:"#c8fec0",pink:"#f9ccf8",
+  purple:"#d2d7fc",white:"#eaeaea",yellow:"#fffeb3"
 };
