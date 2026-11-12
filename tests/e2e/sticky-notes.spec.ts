@@ -133,12 +133,15 @@ test("one source app owns all notes; minimize/restore retains edits; final close
   await login(page);
   const app=await openSticky(page);
   const initial=app.locator('[data-test-sticky-notes]').first();
+  await initial.getByRole("textbox",{name:"Sticky note text"}).fill("Keep on minimize");
   await initial.getByRole("button",{name:"Add note"}).click();
   await expect(app.locator('[data-test-sticky-notes]')).toHaveCount(2);
   await page.getByRole("button",{name:"Switch to Sticky Notes"}).click();
   await expect(page.locator('[data-test-window="sticky"]')).toHaveCount(0);
   await page.getByRole("button",{name:"Switch to Sticky Notes"}).click();
   await expect(app).toBeVisible();
+  await expect(app.locator('[data-test-sticky-notes]').first()
+    .getByRole("textbox",{name:"Sticky note text"})).toHaveValue("Keep on minimize");
   await openSticky(page);
   await expect(page.getByRole("button",{name:"Switch to Sticky Notes"})).toHaveCount(1);
   await expect(app.locator('[data-test-sticky-notes]')).toHaveCount(2);
