@@ -33,7 +33,7 @@ function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose
     return <ContactsApp />;
   }
   if (appId === "bin") return <RecycleBinApp />;
-  if (appId === "computer") return <ExplorerApp
+  if (appId === "computer") return <ExplorerApp initialPath={filePath}
     onOpenTextFile={path => {
       const app = appRegistry.get("notepad");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path } });

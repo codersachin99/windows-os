@@ -15,6 +15,7 @@ import "./ExplorerApp.css";
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
   onLaunchSourceProgram?(programId: string): boolean;
+  initialPath?: string;
   recycleBinPath?: string;
 }
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
@@ -33,12 +34,12 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * and trash semantics are still pending and intentionally not fabricated.
  */
 export function ExplorerApp({
-  onOpenTextFile, onLaunchSourceProgram, recycleBinPath
+  onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath
 }: ExplorerAppProps) {
   const isBin = Boolean(recycleBinPath);
   const session = useMemo(() => new ExplorerSession(
-    fileStore, recycleBinPath ?? "/", recycleBinPath
-  ), [recycleBinPath]);
+    fileStore, recycleBinPath ?? initialPath ?? "/", recycleBinPath
+  ), [initialPath, recycleBinPath]);
   const [volume, setVolume] = useState(() => sourceFilesystemRuntime.snapshot());
   const trashPath = recycleBinPath ?? volume?.trashPath ?? null;
   const [state, setState] = useState(() => session.snapshot());
