@@ -52,10 +52,11 @@ export function sourceWindowPlacement(
 
 function openWindow(state: DesktopState, app: AppDefinition, file?: { path: string }): DesktopState {
   if (state.phase !== "desktop") return state;
-  // Source Sticky Notes uses one shell app window whose DOM fragment
-  // contains several independently positioned notes, never one frame each.
-  const alreadyOpen = app.id === "sticky"
-    ? state.windows.find(window => window.appId === "sticky") : undefined;
+  // Source Sticky Notes and Magnifier each address a single shell window
+  // by their original fixed program IDs, even across repeated Start/Run opens.
+  const singleton = app.id === "sticky" || app.id === "magnifier";
+  const alreadyOpen = singleton
+    ? state.windows.find(window => window.appId === app.id) : undefined;
   if (alreadyOpen) return {
     ...state, topZ: state.topZ + 1, startOpen: false,
     windows: state.windows.map(window => window.id === alreadyOpen.id
