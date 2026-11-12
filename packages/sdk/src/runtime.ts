@@ -1,6 +1,7 @@
 import {
   LegacyVolumeSession, type LegacyRuntimeMounts, type VirtualFileStore,
-  type FileStoreStorage
+  type FileStoreStorage, sourceGuestMounts,
+  ensureSourceGuestDirectories
 } from "@windows-os/filesystem";
 import { browserStorage, fileStore } from "./files";
 
@@ -33,6 +34,25 @@ export class SourceFilesystemRuntime {
     await candidate.mount();
     // Only source-provided mount metadata is retained. No fallback disk layout.
     this.storage?.setItem(this.key, JSON.stringify({ version: 1, runtime: sourceRuntime }));
+    this.session = candidate;
+    this.publish();
+  }
+  /**
+   * Original source: drive0 System C: is created on first boot (g.init),
+   * then the Guest user folder is populated (g.ensureUser(null)).
+   * If a prior *explicit* source runtime is supplied, restore it instead.
+   */
+  async startGuest(): Promise<void> {
+    if (this.session) return;
+    if (this.storage?.getItem(this.key)) {
+      await this.restorePersisted();
+      return;
+    }
+    const source = sourceGuestMounts();
+    const candidate = new LegacyVolumeSession(this.store, source);
+    await ensureSourceGuestDirectories(this.store);
+    // One document holds the source-defined C: and special-folder paths.
+    this.storage?.setItem(this.key, JSON.stringify({ version: 1, runtime: source }));
     this.session = candidate;
     this.publish();
   }

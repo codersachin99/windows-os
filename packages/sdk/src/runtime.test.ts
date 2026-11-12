@@ -44,6 +44,51 @@ describe("source filesystem runtime", () => {
     expect(await fs.stat(source.desktopPath + "/saved.txt")).toBeNull();
     expect((await newSession.snapshot()?.store.read(source.desktopPath + "/saved.txt"))).toBe("persisted");
   });
+  it("auto-installs exact source drive0 C: and Guest folders on first login", async () => {
+    const storageMap = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => storageMap.get(key) ?? null,
+      setItem: (key: string, data: string) => { storageMap.set(key, data); }
+    };
+    const files = new VirtualFileStore(storage);
+    const runtime = new SourceFilesystemRuntime(files, storage);
+    await runtime.startGuest();
+    const session = runtime.snapshot()!;
+    expect(session.pathConfig.root).toBe("/EXTERNAL/computer");
+    expect(session.pathConfig.drives).toEqual([expect.objectContaining({
+      path: "drive0", letter: "C", label: "System"
+    })]);
+    expect(session.desktopPath).toBe("/EXTERNAL/computer/drive0/Users/Guest/Desktop");
+    expect(session.trashPath).toBe(
+      "/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/RecycleBin"
+    );
+    expect(await files.stat("/EXTERNAL/computer/drive0/Windows/System32"))
+      .toMatchObject({ type: "directory" });
+    expect(await files.stat("/EXTERNAL/computer/drive0/Users/Guest/Documents"))
+      .toMatchObject({ type: "directory" });
+    expect(await files.stat("/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/Start Menu/Programs/Games"))
+      .toMatchObject({ type: "directory" });
+    await files.write("safe", session.desktopPath + "/saved.txt");
+    await runtime.startGuest();
+    expect(await files.read(session.desktopPath + "/saved.txt")).toBe("safe");
+    const reopened = new SourceFilesystemRuntime(new VirtualFileStore(storage), storage);
+    await reopened.startGuest();
+    expect(reopened.snapshot()?.trashPath).toBe(session.trashPath);
+  });
+  it("prefers an existing explicit source runtime without overwriting it on login", async () => {
+    const storageMap = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => storageMap.get(key) ?? null,
+      setItem: (key: string, value: string) => { storageMap.set(key, value); }
+    };
+    const first = new SourceFilesystemRuntime(new VirtualFileStore(storage), storage);
+    await first.configure(source);
+    const nextFiles = new VirtualFileStore(storage);
+    const next = new SourceFilesystemRuntime(nextFiles, storage);
+    await next.startGuest();
+    expect(next.snapshot()?.pathConfig.root).toBe("/data/system");
+    expect(await nextFiles.stat("/EXTERNAL/computer")).toBeNull();
+  });
   it("does not expose source path after failed mount", async () => {
     const fs = new VirtualFileStore();
     const runtime = new SourceFilesystemRuntime(fs);

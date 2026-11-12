@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { desktopReducer, initialDesktopState } from "@windows-os/engine";
 import { BootScreen, DesktopShell, LogonScreen } from "@windows-os/ui";
 import { sourceFilesystemRuntime } from "@windows-os/sdk";
 
 export default function App() {
   const [state, dispatch] = useReducer(desktopReducer, undefined, initialDesktopState);
+  const guestLoginPending = useRef(false);
   const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -20,11 +21,16 @@ export default function App() {
   }, [state.phase]);
   if (state.phase === "boot") return <BootScreen onComplete={finishBoot} />;
   if (state.phase === "logon") return <LogonScreen onGuest={() => {
-    // Mount only previously supplied source metadata, if available.
-    void sourceFilesystemRuntime.restorePersisted().catch(error => {
-      console.warn("Legacy source filesystem was not restored", error);
-    });
-    dispatch({ type: "GUEST_LOGIN" });
+    if (guestLoginPending.current) return;
+    guestLoginPending.current = true;
+    // Source g.init() creates drive0/System C: and g.ensureUser(null) creates
+    // the Guest profile. Prefer any previously supplied runtime metadata.
+    void sourceFilesystemRuntime.startGuest()
+      .catch(error => console.warn("Legacy Guest filesystem could not initialize", error))
+      .finally(() => {
+        guestLoginPending.current = false;
+        dispatch({ type: "GUEST_LOGIN" });
+      });
   }}
     onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
   if (state.phase === "shutdown") return <main className="windows-shutdown">
