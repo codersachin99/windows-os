@@ -4,13 +4,21 @@ This is the new **React + TypeScript + Vite** home for the existing WindowsOS pr
 
 **Current status: conversion underway, not complete.** This first slice provides the source-art-backed Windows 7 login and Guest desktop, boot/session transitions, Start menu, taskbar, desktop shortcuts, a shared window manager, and a modular app registry. **Contacts has now been rebuilt as a native React application**, preserving its original source stylesheet through an isolated Shadow DOM and using the same Python CRUD endpoints (`/api/contacts`, `/api/contacts/save`, `/api/contacts/delete`). It supports New/Edit/Delete, refresh, search across name/email/phone/company, details, original form fields and status messages. Contacts browser CRUD/error tests have passed against mock responses; complete live backend integration and production security hardening remain pending. The full legacy apps/games/gadgets/themes still require migration. The app must not be called fully equivalent until every original behavior is verified.
 
+## Verified native Windows 7 Run dialog — 12 November 2026
+
+The original **Run** utility from pinned `src/modules/apps/run.js` is now implemented in modular React/TypeScript as `packages/apps/run`: **450×220**, non-resizable, bottom-left placement, the **byte-identical original Run WebP icon** (Git SHA `6f669cbb5865e3c342d2f8b16c86051acd63e861`), focused **Open:** input, OK/Cancel, Enter/Escape, Windows+R and retryable errors. Its command resolver uses the pinned source program manifest, original aliases and installed executable names: `calc`/`calculator`, `notepad.exe`, `explorer` and exact C: installed paths open only real migrated apps. Unknown commands and recognized-but-unported apps cannot launch host programs or masquerade as working applications.
+
+**[Opt-in CI 43242039487](https://github.com/codersachin99/windows-os/actions/runs/43242039487) passed 156 unit tests across 29 files and 164 desktop/mobile Chromium browser tests**, along with TypeScript, original-source/Contacts checks and production Vite build. See [Run source-to-React mapping](migration/RUN-SOURCE.md) and [migration handoff](migration/HANDOFF.md).
+
+**Next:** original source Sticky Notes, broader source application coverage, exact theme assets and screenshot parity. Run's successful migration does not imply legacy Paint, Command Prompt, WordPad, or complete desktop equivalence. PR remains draft; `main` is untouched.
+
 ## Atomic external File imports — 12 November 2026
 
 The browser now stages all dropped/uploaded File payloads before writing to the mounted Guest virtual filesystem and commits the complete selection **as one create-only persisted snapshot**. This applies to Explorer Upload, Explorer folder drops, Desktop background drops and real Desktop folder-icon drops. It preserves mixed Unicode text and binary bytes; duplicate targets, concurrent file creation, read failures and storage-quota exceptions cannot produce a partially imported selection or overwrite existing data. Generic non-atomic filesystem adapters remain a documented compatibility exception; the production Guest store is atomic.
 
 **[Opt-in CI 43231526749](https://github.com/codersachin99/windows-os/actions/runs/43231526749) passed TypeScript, 150 Vitest unit tests across 28 files, Vite build and all 152 Chromium desktop/mobile browser tests.** New tests explicitly measure one VFS storage write, inject quota failure, verify zero partial items and successfully retry. See the [source implementation map](migration/ATOMIC-HOST-IMPORT.md) and [durable handoff](migration/HANDOFF.md).
 
-**Next:** continue source-backed Run dialog and other smaller original modules, followed by larger Paint/WordPad and accurate visual asset/theme/screenshots. The conversion is not a complete product; feature branch and draft PR remain unmerged.
+**This earlier import milestone is complete.** Run was ported in the verified milestone above; next continue original Sticky Notes, Paint/WordPad and visual asset/theme/screenshot parity. The conversion is not a complete product; feature branch and draft PR remain unmerged.
 
 ## Verified atomic transfers and Desktop folder/Bin drops — 12 November 2026
 
@@ -18,7 +26,7 @@ Existing Guest-to-Guest multi-file **copy/move is now atomic**: the VirtualFileS
 
 **[Opt-in GitHub Actions 43221928672](https://github.com/codersachin99/windows-os/actions/runs/43221928672) passed 143 unit tests (27 files) and 146 desktop/mobile Chromium browser tests**, plus TypeScript, source/Contacts checks and production build. Unit tests inject storage quota exceptions to verify no partial changes; Playwright tests verify folder drops, duplicate refusal, multi-selection recycling/restoring and host-file safety. See the [implementation and source trace](migration/ATOMIC-TRANSFER-DESKTOP-ICONS.md) and [engineering handoff](migration/HANDOFF.md).
 
-Multi-file external browser uploads are still sequential rather than atomic, and numerous original applications, visual themes, and pixel-level screenshot comparisons remain unfinished. The migration PR is still draft; `main` is untouched and there is no release.
+At that earlier copy/move checkpoint multi-file browser uploads were still sequential; the subsequent atomic-import milestone above completed that work. Numerous original applications, visual themes, and pixel-level screenshot comparisons remain unfinished. The migration PR is still draft; `main` is untouched and there is no release.
 
 ## Verified Desktop ↔ Explorer file drag/drop — 12 November 2026
 
