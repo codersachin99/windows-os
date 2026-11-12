@@ -20,11 +20,12 @@ export function MagnifierApp({ onScaleChange }: MagnifierAppProps) {
     return () => onScaleChange(1);
   }, [onScaleChange]);
 
-  const changeScale = (delta: number) => setScale(current => {
-    const next = sourceMagnifierChangeScale(current, delta);
-    if (next !== current) onScaleChange(next);
-    return next;
-  });
+  const changeScale = (delta: number) => {
+    const next = sourceMagnifierChangeScale(scale, delta);
+    if (next === scale) return;
+    setScale(next);
+    onScaleChange(next);
+  };
   return <div className="windows-magnifier" data-test-magnifier="">
     <div className="windows-magnifier__zoom">
       <button type="button" className="windows-magnifier__command"
