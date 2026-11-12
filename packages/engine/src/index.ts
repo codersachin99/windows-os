@@ -33,11 +33,16 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
     icon: app.icon,
     width: app.window.width,
     height: app.window.height,
-    x: 70 + ((ordinal - 1) % 7) * 26,
-    y: 58 + ((ordinal - 1) % 7) * 26,
+    x: app.window.centered
+      ? Math.max(0, Math.round(((typeof window === "undefined" ? 960 : window.innerWidth) - app.window.width) / 2))
+      : 70 + ((ordinal - 1) % 7) * 26,
+    y: app.window.centered
+      ? Math.max(0, Math.round(((typeof window === "undefined" ? 700 : window.innerHeight - 40) - app.window.height) / 2))
+      : 58 + ((ordinal - 1) % 7) * 26,
     z: state.topZ + 1,
     minimized: false,
-    maximized: false
+    maximized: false,
+    resizable: app.window.resizable
   };
   return {
     ...state,
@@ -87,7 +92,8 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
         : window) };
     case "TOGGLE_MAXIMIZE":
       return { ...state, windows: state.windows.map(window => window.id === action.id
-        ? { ...window, maximized: !window.maximized, minimized: false }
+        ? window.resizable === false ? window
+          : { ...window, maximized: !window.maximized, minimized: false }
         : window) };
     case "CLOSE_WINDOW":
       return { ...state, windows: state.windows.filter(window => window.id !== action.id) };

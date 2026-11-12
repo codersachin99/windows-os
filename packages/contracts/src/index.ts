@@ -7,7 +7,7 @@ export interface AppDefinition {
   label: string;
   icon: string;
   kind: AppKind;
-  window: { width: number; height: number };
+  window: { width: number; height: number; resizable?: boolean; centered?: boolean };
   desktop?: boolean;
   showInStart?: boolean;
 }
@@ -25,6 +25,7 @@ export interface DesktopWindow {
   z: number;
   minimized: boolean;
   maximized: boolean;
+  resizable?: boolean;
 }
 
 export interface DesktopState {

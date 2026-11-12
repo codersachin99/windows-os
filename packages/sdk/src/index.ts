@@ -16,6 +16,11 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
+    id: "shortcut", label: "Shortcut", icon: legacyArt.file,
+    kind: "system", desktop: false, showInStart: false,
+    window: { width: 550, height: 400, resizable: false, centered: true }
+  },
+  {
     id: "calc", label: "Calculator", icon: legacyArt.calculator,
     kind: "utility", desktop: false, showInStart: true,
     window: { width: 280, height: 430 }

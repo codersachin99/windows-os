@@ -64,7 +64,8 @@ export async function createSourceDesktopItem(
  */
 export async function createSourceDesktopShortcut(
   store: Pick<VirtualFileStore, "list" | "createFile">,
-  desktopPath: string, programId: string, displayName: string
+  desktopPath: string, programId: string, displayName: string,
+  options: { collision?: "reject" | "suffix" } = {}
 ): Promise<string> {
   const program = sourceProgramsById.get(programId);
   if (!program?.installPath) {
@@ -75,12 +76,30 @@ export async function createSourceDesktopShortcut(
     throw new FileStoreError("EINVAL", "Enter a shortcut name without the .lnk extension");
   }
   const folder = normalizeFileUri(desktopPath);
-  const filename = name + ".lnk";
-  const entries = await store.list(folder);
-  if (entries.some(entry => entry.name.toLocaleLowerCase() === filename.toLocaleLowerCase())) {
-    throw new FileStoreError("EEXIST", "A desktop item with that name already exists");
+  const names = new Set((await store.list(folder)).map(entry => entry.name.toLocaleLowerCase()));
+  // Source shortcutwiz.js finish() uses an available .lnk basename rather than
+  // destroying an existing shortcut. The previous direct API can still opt
+  // into strict collision rejection; the original Wizard chooses suffix mode.
+  for (let number = 1; number <= 9999; number++) {
+    const filename = name + (number === 1 ? "" : " (" + number + ")") + ".lnk";
+    if (names.has(filename.toLocaleLowerCase())) {
+      if (options.collision === "reject") {
+        throw new FileStoreError("EEXIST", "A desktop item with that name already exists");
+      }
+      continue;
+    }
+    const path = folder === "/" ? "/" + filename : folder + "/" + filename;
+    try {
+      await store.createFile(JSON.stringify(sourceShortcut(program)), path);
+      return path;
+    } catch (cause) {
+      if (cause instanceof FileStoreError && cause.code === "EEXIST") {
+        if (options.collision === "reject") throw cause;
+        names.add(filename.toLocaleLowerCase());
+        continue;
+      }
+      throw cause;
+    }
   }
-  const path = folder === "/" ? "/" + filename : folder + "/" + filename;
-  await store.createFile(JSON.stringify(sourceShortcut(program)), path);
-  return path;
+  throw new FileStoreError("EEXIST", "No available shortcut filename");
 }
