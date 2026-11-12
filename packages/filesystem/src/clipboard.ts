@@ -1,5 +1,5 @@
 import {
-  FileStoreError, getFileName, getParentDirectory, normalizeFileUri,
+  FileStoreError, getFileName, normalizeFileUri,
   type VirtualFileStore, type FileEntry
 } from "./index";
 
@@ -71,6 +71,10 @@ export class FileClipboard {
       if (await files.stat(to)) {
         throw new FileStoreError("EEXIST", "Destination already exists: " + to);
       }
+    }
+    // Multiple sources can have the same filename. Reject before any writes.
+    if (new Set(moves.map(item => item.to)).size !== moves.length) {
+      throw new FileStoreError("EEXIST", "Selected files share a destination name");
     }
     const result: FileEntry[] = [];
     for (const { from, to } of moves) {

@@ -31,6 +31,8 @@ describe("source-following Explorer navigation contract", () => {
     await explorer.refresh();
     explorer.search("ALP");
     expect(explorer.visible().map(x => x.name)).toEqual(["alpha.txt"]);
+    explorer.selectAll();
+    expect(explorer.snapshot().selected).toEqual(["/alpha.txt"]);
     explorer.setViewMode("tiles");
     expect(explorer.snapshot().viewMode).toBe("tiles");
     explorer.select("/alpha.txt");

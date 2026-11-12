@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
-import { fileStore } from "@windows-os/sdk";
+import { fileClipboard, fileStore } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import "./source.css";
 import "./ExplorerApp.css";
@@ -29,12 +29,14 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
   const [prompt, setPrompt] = useState<"folder" | "rename" | null>(null);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   useEffect(() => {
     const unsubscribe = session.subscribe(setState);
     const disconnect = session.connect();
     void session.refresh();
     return () => { unsubscribe(); disconnect(); };
   }, [session]);
+  useEffect(() => fileClipboard.subscribe(setClipboardState), []);
   const visible = session.visible();
   const selected = state.items.find(item => item.uri === state.selected[0]);
 
@@ -63,13 +65,34 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
       setName("");
     });
   };
+  const copySelection = (mode: "cut" | "copy") => {
+    if (!state.selected.length) return;
+    fileClipboard.prepare(state.selected, mode);
+  };
+  const pasteSelection = () => void execute(async () => {
+    await fileClipboard.paste(fileStore, state.path);
+  });
+  const handleKeys = (event: import("react").KeyboardEvent<HTMLDivElement>) => {
+    if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+    const focused = event.target as HTMLElement;
+    if (focused.closest("input,textarea,select,[contenteditable=true]")) return;
+    if (event.key.toLowerCase() === "c" && state.selected.length) {
+      event.preventDefault(); copySelection("copy");
+    } else if (event.key.toLowerCase() === "x" && state.selected.length) {
+      event.preventDefault(); copySelection("cut");
+    } else if (event.key.toLowerCase() === "v" && clipboardState.paths.length) {
+      event.preventDefault(); pasteSelection();
+    } else if (event.key.toLowerCase() === "a") {
+      event.preventDefault(); session.selectAll();
+    }
+  };
   const requestRename = () => {
     if (!selected) return;
     setName(selected.name);
     setPrompt("rename");
   };
 
-  return <div className="windows-explorer explorer-stage" data-test-explorer="">
+  return <div className="windows-explorer explorer-stage" data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
       <button aria-label="Back" disabled={!state.canGoBack} onClick={() => void execute(() => session.back())}>◀</button>
       <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
@@ -84,7 +107,10 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     <div className="explorer-command">
       <button disabled title="Source Organize menu is pending">Organize</button>
       <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>
-      <button onClick={requestRename} disabled={!selected}>Rename</button>
+      <button onClick={requestRename} disabled={state.selected.length !== 1}>Rename</button>
+      <button disabled={!state.selected.length} onClick={() => copySelection("cut")}>Cut</button>
+      <button disabled={!state.selected.length} onClick={() => copySelection("copy")}>Copy</button>
+      <button disabled={!clipboardState.paths.length} onClick={pasteSelection}>Paste</button>
       <button disabled title="Requires source Recycle Bin protocol">Delete</button>
       <button onClick={() => void execute(() => session.refresh())}>Refresh</button>
       <label>View:
@@ -133,6 +159,7 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     </div>
     <footer className="explorer-status">{visible.length} {visible.length === 1 ? "item" : "items"}
       {state.selected.length > 0 && " — " + state.selected.length + " selected"}
+      {clipboardState.paths.length > 0 && " — " + clipboardState.operation + " " + clipboardState.paths.length}
     </footer>
     {(state.error || message) && <div role="alert" className="explorer-error">
       {state.error || message}

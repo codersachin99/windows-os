@@ -33,6 +33,20 @@ describe("Explorer shell file clipboard", () => {
     expect(await fs.read("/A/one.txt")).toBe("one");
     expect(clipboard.snapshot().operation).toBe("cut");
   });
+  it("prevents partial multi-selection copy when names collide", async () => {
+    const fs = new VirtualFileStore();
+    await fs.mkdir("/A");
+    await fs.mkdir("/B");
+    await fs.mkdir("/Target");
+    await fs.write("a", "/A/readme.txt");
+    await fs.write("b", "/B/readme.txt");
+    const clipboard = new FileClipboard();
+    clipboard.prepare(["/A/readme.txt", "/B/readme.txt"], "cut");
+    await expect(clipboard.paste(fs, "/Target")).rejects.toMatchObject({ code: "EEXIST" });
+    expect(await fs.list("/Target")).toHaveLength(0);
+    expect(await fs.read("/A/readme.txt")).toBe("a");
+    expect(await fs.read("/B/readme.txt")).toBe("b");
+  });
   it("rejects folder self-paste, descendant paste, and empty clipboard", async () => {
     const fs = new VirtualFileStore();
     await fs.mkdir("/Folder");
