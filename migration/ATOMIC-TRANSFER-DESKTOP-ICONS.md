@@ -16,4 +16,4 @@
 
 **Limitations:** \`importDroppedFiles\` still writes multiple *host-uploaded* files sequentially and lacks all-or-none quota rollback; this work guarantees atomicity of **existing VFS multi-copy/move**, not multi-file uploads. Exact original drag-ghost art, broader touch support, incomplete Windows app migrations and pixel-by-pixel screenshot parity remain open. No full product claim.
 
-**Status:** code and tests pushed, opt-in CI pending.
+**Status: CI verified.** Deliberate [GitHub Actions run 43221928672](https://github.com/codersachin99/windows-os/actions/runs/43221928672) passed **143 Vitest tests across 27 files**, **146 desktop/mobile Chromium browser tests**, TypeScript, source/Contacts checks and Vite build. The first opt-in run [43221750218](https://github.com/codersachin99/windows-os/actions/runs/43221750218) stopped on a TypeScript optional-token narrowing error, fixed in `43d3ed51` and reverified. All work remains on the feature branch and draft PR.
