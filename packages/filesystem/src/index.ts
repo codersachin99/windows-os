@@ -298,38 +298,68 @@ export class VirtualFileStore {
    * created here. Trash metadata lives in the SAME persistent VFS snapshot
    * as the moved item so a failed storage commit cannot orphan its metadata.
    */
-  async trash(path: string, trashPath: string): Promise<FileEntry> {
-    const from = normalizeFileUri(path);
+  /**
+   * Atomically recycle a desktop multi-selection. The original desktop can
+   * move multiple FileMove/TrashAdd paths in one drag; one persisted snapshot
+   * prevents storage failure from sending only part of a group to Recycle Bin.
+   * Keep the single-item API as a wrapper for existing Explorer/Delete users.
+   */
+  async trashMany(paths: readonly string[], trashPath: string): Promise<FileEntry[]> {
     const bin = this.directory(trashPath).uri;
-    if (from === "/" || from === bin || from.startsWith(bin + "/")
-      || bin.startsWith(from + "/")) {
-      throw new FileStoreError("EINVAL", "Cannot recycle a system root or trash item");
+    if (!paths.length) return [];
+    const originals = paths.map(normalizeFileUri);
+    if (new Set(originals).size !== originals.length) {
+      throw new FileStoreError("EINVAL", "Duplicate file selection");
     }
-    const source = this.required(from);
-    const name = getFileName(from);
-    const extAt = name.lastIndexOf(".");
-    const base = extAt > 0 ? name.slice(0, extAt) : name;
-    const extension = extAt > 0 ? name.slice(extAt) : "";
-    let to = normalizeFileUri(bin + "/" + name);
-    let attempt = 0;
-    while (this.entries.has(to)) {
-      attempt++;
-      to = normalizeFileUri(bin + "/" + base + " (" + attempt + ")" + extension);
+    for (const from of originals) {
+      if (from === "/" || from === bin || from.startsWith(bin + "/")
+        || bin.startsWith(from + "/")) {
+        throw new FileStoreError("EINVAL", "Cannot recycle a system root or trash item");
+      }
+      this.required(from);
+      if (originals.some(other => other !== from && from.startsWith(other + "/"))) {
+        throw new FileStoreError("EINVAL", "Nested folders cannot both be recycled");
+      }
     }
-    const affected = [...this.entries.values()].filter(item =>
-      item.uri === from || item.uri.startsWith(from + "/"));
     const next = new Map(this.entries);
-    for (const item of affected) next.delete(item.uri);
+    const changes: { from: string; to: string }[] = [];
+    const result: FileEntry[] = [];
     const deletedAt = Date.now();
-    for (const item of affected) {
-      const target = to + item.uri.slice(from.length);
-      next.set(target, {
-        ...item, uri: target,
-        ...(item.uri === from ? { originalPath: from, deletedAt } : {})
-      });
+    for (const from of originals) {
+      const name = getFileName(from);
+      const extAt = name.lastIndexOf(".");
+      const base = extAt > 0 ? name.slice(0, extAt) : name;
+      const extension = extAt > 0 ? name.slice(extAt) : "";
+      let to = normalizeFileUri(bin + "/" + name);
+      let attempt = 0;
+      while (next.has(to)) {
+        attempt++;
+        to = normalizeFileUri(bin + "/" + base + " (" + attempt + ")" + extension);
+      }
+      const affected = [...this.entries.values()].filter(item =>
+        item.uri === from || item.uri.startsWith(from + "/"));
+      for (const item of affected) next.delete(item.uri);
+      for (const item of affected) {
+        const target = to + item.uri.slice(from.length);
+        next.set(target, {
+          ...item, uri: target,
+          ...(item.uri === from ? { originalPath: from, deletedAt } : {})
+        });
+      }
+      changes.push({ from, to });
+      result.push(this.entry(next.get(to)!));
     }
-    this.commit(next, { type: "trashed", from, to });
-    return this.entry(next.get(to) ?? source);
+    this.commit(next, { type: "trashed", ...changes[0] });
+    // Compatibility: subscribers that inspect individual paths still receive
+    // every moved file, but only after the entire batch has persisted.
+    for (const change of changes.slice(1)) {
+      this.notify({ type: "trashed", ...change });
+    }
+    return result;
+  }
+
+  async trash(path: string, trashPath: string): Promise<FileEntry> {
+    return (await this.trashMany([path], trashPath))[0];
   }
 
   async restore(trashItem: string, trashPath: string): Promise<FileEntry> {
