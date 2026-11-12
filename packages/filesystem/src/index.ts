@@ -15,7 +15,16 @@ export interface FileStoreStorage {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
 }
-type StoredEntry = { uri: string; type: FileEntryType; mtime: number; content?: string; originalPath?: string; deletedAt?: number };
+type StoredEntry = {
+  uri: string;
+  type: FileEntryType;
+  mtime: number;
+  /** UTF-8 text or base64 bytes; never both. */
+  content?: string;
+  bytes?: string;
+  originalPath?: string;
+  deletedAt?: number;
+};
 type Snapshot = { version: 1; entries: StoredEntry[] };
 export type FileStoreErrorCode = "EINVAL" | "ENOENT" | "EEXIST" | "ENOTDIR" | "EISDIR" | "ENOTEMPTY";
 export class FileStoreError extends Error {
@@ -49,6 +58,21 @@ export function getFileName(path: string): string {
   return uri === "/" ? "/" : uri.slice(uri.lastIndexOf("/") + 1);
 }
 const root: StoredEntry = { uri: "/", type: "directory", mtime: 0 };
+
+function encodeBytes(bytes: Uint8Array): string {
+  let binary = "";
+  for (let offset = 0; offset < bytes.length; offset += 0x4000) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x4000));
+  }
+  return btoa(binary);
+}
+function decodeBytes(base64: string): Uint8Array {
+  return Uint8Array.from(atob(base64), char => char.charCodeAt(0));
+}
+function validBase64(value: unknown): value is string {
+  return typeof value === "string" && value.length % 4 === 0
+    && /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value);
+}
 export type FileStoreChange =
   | { type: "created" | "updated" | "removed" | "emptied"; path: string }
   | { type: "copied" | "moved" | "trashed" | "restored"; from: string; to: string };
@@ -86,7 +110,11 @@ export class VirtualFileStore {
           || normalizeFileUri(item.uri) !== item.uri
           || (item.type !== "file" && item.type !== "directory")
           || !Number.isFinite(item.mtime)
-          || (item.type === "file" && typeof item.content !== "string")
+          || (item.type === "file" && !(
+            (typeof item.content === "string" && item.bytes === undefined)
+            || (item.content === undefined && validBase64(item.bytes))
+          ))
+          || (item.type === "directory" && (item.content !== undefined || item.bytes !== undefined))
           || (item.originalPath !== undefined && (
             typeof item.originalPath !== "string"
             || normalizeFileUri(item.originalPath) !== item.originalPath
@@ -109,7 +137,10 @@ export class VirtualFileStore {
   private entry(item: StoredEntry): FileEntry {
     return {
       uri: item.uri, name: getFileName(item.uri), type: item.type,
-      size: item.type === "file" ? new TextEncoder().encode(item.content ?? "").byteLength : 0,
+      size: item.type !== "file" ? 0 : item.bytes !== undefined
+        ? (item.bytes.length / 4) * 3 - (item.bytes.endsWith("==") ? 2
+          : item.bytes.endsWith("=") ? 1 : 0)
+        : new TextEncoder().encode(item.content ?? "").byteLength,
       mtime: item.mtime,
       ...(item.originalPath === undefined ? {} : {
         originalPath: item.originalPath, deletedAt: item.deletedAt
@@ -163,7 +194,36 @@ export class VirtualFileStore {
   async read(path: string, _asText = true): Promise<string> {
     const item = this.required(path);
     if (item.type !== "file") throw new FileStoreError("EISDIR", "Not a file: " + item.uri);
+    if (item.bytes !== undefined) {
+      throw new FileStoreError("EINVAL", "Binary file cannot be read as text: " + item.uri);
+    }
     return item.content ?? "";
+  }
+  /** Preserve exact binary data, including source's installed 1024-byte MZ stubs. */
+  async readBytes(path: string): Promise<Uint8Array> {
+    const item = this.required(path);
+    if (item.type !== "file") throw new FileStoreError("EISDIR", "Not a file: " + item.uri);
+    return item.bytes !== undefined
+      ? decodeBytes(item.bytes) : new TextEncoder().encode(item.content ?? "");
+  }
+  async writeBytes(bytes: Uint8Array, path: string): Promise<FileEntry> {
+    if (!(bytes instanceof Uint8Array)) {
+      throw new FileStoreError("EINVAL", "Binary Uint8Array content is required");
+    }
+    const uri = normalizeFileUri(path);
+    if (uri === "/") throw new FileStoreError("EISDIR", "Cannot write root");
+    this.directory(getParentDirectory(uri));
+    if (this.entries.get(uri)?.type === "directory") {
+      throw new FileStoreError("EISDIR", "Cannot write to a directory");
+    }
+    const item: StoredEntry = {
+      uri, type: "file", bytes: encodeBytes(bytes), mtime: Date.now()
+    };
+    const existed = this.entries.has(uri);
+    const next = new Map(this.entries);
+    next.set(uri, item);
+    this.commit(next, { type: existed ? "updated" : "created", path: uri });
+    return this.entry(item);
   }
   async write(content: string, path: string): Promise<FileEntry> {
     if (typeof content !== "string") throw new FileStoreError("EINVAL", "Text content required");

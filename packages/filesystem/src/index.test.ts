@@ -155,6 +155,28 @@ describe("VirtualFileStore", () => {
     expect(await failing.read("/safe.txt")).toBe("safe");
     expect(await failing.list("/bin")).toEqual([]);
   });
+  it("stores binary MZ executable stubs byte-for-byte alongside text documents", async () => {
+    const storage = new MemoryStorage();
+    const fs = new VirtualFileStore(storage);
+    await fs.mkdir("/Windows");
+    const exe = new Uint8Array(1024);
+    exe.set([77, 90]);
+    exe[123] = 201;
+    const result = await fs.writeBytes(exe, "/Windows/notepad.exe");
+    expect(result.size).toBe(1024);
+    expect(Array.from(await fs.readBytes("/Windows/notepad.exe"))).toEqual(Array.from(exe));
+    await expect(fs.read("/Windows/notepad.exe")).rejects.toMatchObject({ code: "EINVAL" });
+    await fs.write("text", "/Windows/notes.txt");
+    expect(new TextDecoder().decode(await fs.readBytes("/Windows/notes.txt"))).toBe("text");
+    const reopened = new VirtualFileStore(storage);
+    expect((await reopened.readBytes("/Windows/notepad.exe"))[123]).toBe(201);
+    await reopened.copy("/Windows/notepad.exe", "/Windows/copy.exe");
+    expect(Array.from(await reopened.readBytes("/Windows/copy.exe"))).toEqual(Array.from(exe));
+    await reopened.move("/Windows/copy.exe", "/Windows/moved.exe");
+    expect((await reopened.stat("/Windows/moved.exe"))?.size).toBe(1024);
+    await reopened.write("replacement", "/Windows/notepad.exe");
+    expect(await reopened.read("/Windows/notepad.exe")).toBe("replacement");
+  });
   it("persists and restores user files through injected storage", async () => {
     const storage = new MemoryStorage();
     const fs = new VirtualFileStore(storage);
