@@ -107,3 +107,11 @@
 
 /* Source desktop Delete uses the same modal shell treatment as New Shortcut. */
 .windows-desktop__workspace:has([data-test-desktop-confirm]) { z-index:4001; }
+
+/* Original main.js binds desktop onDrop to the source Guest desktopPath.
+   Display a pointer-transparent indication when Explorer/host data can land. */
+.windows-desktop__icons.is-native-drop-target {
+  outline: 2px solid #5aa5e0;
+  outline-offset: -3px;
+  background: rgba(174, 219, 255, .11);
+}

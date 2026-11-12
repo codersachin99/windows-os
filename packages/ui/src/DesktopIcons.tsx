@@ -14,6 +14,7 @@ import {
   createSourceDesktopItem, type DesktopNewItem
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
+import { importDroppedFiles, SHELL_DRAG_TYPE } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
 import {
@@ -73,6 +74,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   ], [apps, guestFiles]);
   const [drag, setDrag] = useState<{ keys: string[]; offset: DesktopPoint } | null>(null);
   const [overBin, setOverBin] = useState(false);
+  const [nativeDesktopDropHover, setNativeDesktopDropHover] = useState(false);
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -541,6 +543,54 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     setMenu(null);
   };
 
+  // Explorer produces source-compatible HTML file-drag tokens. Its reverse
+  // drop onto empty Desktop space uses the same FileDragSession as folder
+  // drag and the original source's external-file _parse(...,desktopPath).
+  const acceptsNativeDesktopDrop = (event: import("react").DragEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.closest(
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-confirm], .windows-desktop__layout-error"
+    )) return false;
+    const types = Array.from(event.dataTransfer.types);
+    return types.includes(SHELL_DRAG_TYPE) || types.includes("Files");
+  };
+  const overNativeDesktopDrop = (event: import("react").DragEvent<HTMLDivElement>) => {
+    if (!acceptsNativeDesktopDrop(event)) {
+      setNativeDesktopDropHover(false);
+      return;
+    }
+    event.preventDefault(); event.stopPropagation();
+    const internal = Array.from(event.dataTransfer.types).includes(SHELL_DRAG_TYPE);
+    event.dataTransfer.dropEffect = !internal || event.ctrlKey || event.metaKey ? "copy" : "move";
+    setNativeDesktopDropHover(true);
+  };
+  const dropNativeDesktopFiles = (event: import("react").DragEvent<HTMLDivElement>) => {
+    setNativeDesktopDropHover(false);
+    if (!acceptsNativeDesktopDrop(event)) return;
+    event.preventDefault(); event.stopPropagation();
+    const desktop = sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if (!desktop) { setError("The original Guest Desktop is not mounted."); return; }
+    const token = event.dataTransfer.getData(SHELL_DRAG_TYPE);
+    if (token) {
+      const mode = event.ctrlKey || event.metaKey ? "copy" : "move";
+      void fileDragSession.drop(fileStore, token, desktop, mode).then(created => {
+        setSelected(created.map(entry => "file:" + entry.uri));
+        setError(null);
+      }).catch(cause => setError(
+        cause instanceof Error ? cause.message : "Cannot drop Explorer files on Desktop"
+      ));
+    } else {
+      const files = Array.from(event.dataTransfer.files);
+      if (!files.length) return;
+      void importDroppedFiles(fileStore, files, desktop).then(created => {
+        setSelected(created.map(entry => "file:" + entry.uri));
+        setError(null);
+      }).catch(cause => setError(
+        cause instanceof Error ? cause.message : "Cannot import desktop files"
+      ));
+    }
+  };
+
   const contextMenu = (event: ReactMouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -567,10 +617,18 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const size = SOURCE_DESKTOP_ICON_SIZES[options.iconSize];
 
   return <div id="desktop-icons" ref={list}
-    className="desktop__icon-list windows-desktop__icons" tabIndex={0}
+    className={"desktop__icon-list windows-desktop__icons" +
+      (nativeDesktopDropHover ? " is-native-drop-target" : "")} tabIndex={0}
     aria-label="Desktop icons"
     data-test-desktop-layout={options.autoArrange ? "auto" : "free"}
     onContextMenu={contextMenu}
+    onDragOver={overNativeDesktopDrop}
+    onDragLeave={event => {
+      if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+        setNativeDesktopDropHover(false);
+      }
+    }}
+    onDrop={dropNativeDesktopFiles}
     onPointerDown={startBand}
     onClick={event => {
       if (ignoreClick.current) {ignoreClick.current=false;return;}
