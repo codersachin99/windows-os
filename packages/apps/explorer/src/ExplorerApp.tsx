@@ -220,7 +220,7 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
         <button disabled={!clipboardState.paths.length} onClick={pasteSelection}>Paste</button>
         <button disabled={!state.selected.length || !trashPath} onClick={requestDelete}
           title={trashPath ? "Move selected items to the Recycle Bin" : "Source trashPath not mounted"}>Delete</button>
-      </>
+      </>}
       <button onClick={() => void execute(() => session.refresh())}>Refresh</button>
       <label>View:
         <select aria-label="Explorer view" value={state.viewMode}
