@@ -58,11 +58,29 @@ test("Bin shares source-provided trashPath with Computer and restores files with
   await expect(page.locator('[data-test-window="computer"] [data-test-explorer-item="recoverable.txt"]')).toBeVisible();
 });
 
-test("unconfigured Bin does not fabricate source disks or claim items are empty", async ({ page }) => {
+test("first Guest login creates the actual source drive0 and Recycle Bin paths", async ({ page }) => {
   await page.goto("/");
   await page.locator('[data-test-avatar="win7"]').click({ timeout: 12000 });
+  const sourceMount = await page.evaluate(() => {
+    const raw = localStorage.getItem("windows-os:legacy-source-mounts:guest:v1");
+    return raw ? JSON.parse(raw) as { runtime: {
+      root: string; desktopPath: string; trashPath: string; disks: { letter: string; path: string }[]
+    } } : null;
+  });
+  expect(sourceMount).toMatchObject({ runtime: {
+    root: "/EXTERNAL/computer",
+    disks: [{ letter: "C", path: "/EXTERNAL/computer/drive0" }],
+    desktopPath: "/EXTERNAL/computer/drive0/Users/Guest/Desktop",
+    trashPath: "/EXTERNAL/computer/drive0/Users/Guest/AppData/Roaming/WindowsOS/Windows/RecycleBin"
+  } });
   await page.locator('[data-test-desktop-icon="bin"]').dblclick();
   const bin = page.locator('[data-test-window="bin"]');
-  await expect(bin.locator('[data-test-recycle-bin="unmounted"]')).toBeVisible();
-  await expect(bin).toContainText("source Recycle Bin volume has not been mounted");
+  await expect(bin.locator('[data-test-recycle-bin="unmounted"]')).toHaveCount(0);
+  await expect(bin).toContainText("Recycle Bin");
+  await expect(bin.getByRole("button", { name: "Empty Recycle Bin" })).toBeDisabled();
+
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({ timeout: 12000 });
+  await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+  await expect(page.locator('[data-test-window="bin"] [data-test-recycle-bin="unmounted"]')).toHaveCount(0);
 });
