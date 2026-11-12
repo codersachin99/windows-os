@@ -26,3 +26,7 @@ Unit tests validate exact source icon dimensions, default column fill, 4px thres
 **Limitations:** the legacy source supports additional desktop features including background rubber-band selection, built-in file/shortcut icon rename, file-backed user shortcuts and icon context-menu actions, desktop file drops from Explorer/host, desktop icon drag-to-Recycle-Bin, full right-click Properties, icon clipping/RTL, per-user source-shaped filesystem position persistence, exact theme family icon sizes and animation. Those need later source mapping and tests.
 
 **Verified bounded desktop positioning slice:** [GitHub Actions 43184057406](https://github.com/codersachin99/windows-os/actions/runs/43184057406) passed TypeScript, 94 unit tests across 16 test files, source inventory and Contacts checks, production Vite build, and **66 Chromium desktop/mobile browser tests**. The original `src/modules/system/main.js` tracker stays `in-progress` because full desktop/theme parity is not reached.
+
+## Bounded source desktop band-selection slice
+
+The original desktop rendered `desktop__icon-band` on background drag and routed background pointer-down through `pressIcon || startBand`. React now has a separate pure viewport-safe `desktopSelection.ts` for intersection geometry and replace/Ctrl-toggle/Shift-add selection and a band gesture in `DesktopIcons.tsx`. Group drag follows selection without modifying saved coordinates until an actual icon move. See [DESKTOP-BAND.md](DESKTOP-BAND.md). Browser/unit tests added; verification pending.

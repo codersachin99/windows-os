@@ -1565,7 +1565,11 @@
         "packages/ui/src/desktopPositions.ts",
         "packages/ui/src/DesktopIcons.tsx",
         "tests/e2e/desktop-icons.spec.ts",
-        "migration/DESKTOP-ICONS.md"
+        "migration/DESKTOP-ICONS.md",
+        "packages/ui/src/desktopSelection.ts",
+        "packages/ui/src/desktopSelection.test.ts",
+        "tests/e2e/desktop-band.spec.ts",
+        "migration/DESKTOP-BAND.md"
       ]
     },
     {
