@@ -25,4 +25,4 @@ Model tests verify five source keys, valid configured HTTPS URLs, missing config
 
 Visual screenshot pixel comparison remains pending; version exporter 9224 is not yet recovered; the full legacy app/theme matrix is incomplete. No product merge/release or claim of complete simulator parity.
 
-**Status:** code/tests committed, deliberate opt-in CI pending.
+**Status: CI VERIFIED.** [Deliberate GitHub Actions run 43273716820](https://github.com/codersachin99/windows-os/actions/runs/43273716820) passed **179 Vitest tests in 32 files**, **194 desktop/mobile Chromium browser tests**, TypeScript, pinned source/Contacts checks and production Vite build. All five new About browser scenarios passed. Original webpack 9224 version string remains unresolved (the target truthfully displays its current 0.0.1 package version), and pixel-level/themed screenshot comparison remains open.
