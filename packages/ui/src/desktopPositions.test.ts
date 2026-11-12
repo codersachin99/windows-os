@@ -82,3 +82,23 @@ describe("legacy source desktop icon layout and persisted positions",()=>{
       .toEqual({x:0,y:80});
   });
 });
+
+describe("desktop file-backed icon renaming preserves saved coordinates", () => {
+  it("moves the persisted key without moving the visible pixel position", () => {
+    const storage=new Storage(), layout=new DesktopPositionStore(storage);
+    layout.move([{id:"file:/Guest/Desktop/Work",index:1}],area,{x:185,y:65});
+    const before=layout.placement("file:/Guest/Desktop/Work",1,area);
+    layout.rekey("file:/Guest/Desktop/Work","file:/Guest/Desktop/Projects");
+    const restored=new DesktopPositionStore(storage);
+    expect(restored.placement("file:/Guest/Desktop/Projects",1,area)).toEqual(before);
+    expect(restored.snapshot().positions).not.toHaveProperty("file:/Guest/Desktop/Work");
+    layout.rekey("file:/Guest/Desktop/Projects","file:/Guest/Desktop/Projects");
+    expect(restored.snapshot().positions).not.toHaveProperty("file:/Guest/Desktop/Work");
+  });
+  it("does not create a saved position when the original icon had none", () => {
+    const storage=new Storage(), layout=new DesktopPositionStore(storage);
+    layout.rekey("file:/Guest/Desktop/a","file:/Guest/Desktop/b");
+    expect(layout.snapshot().positions).toEqual({});
+    expect(storage.data.size).toBe(0);
+  });
+});

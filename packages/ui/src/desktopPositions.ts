@@ -133,6 +133,15 @@ export class DesktopPositionStore {
   setShowIcons(showIcons: boolean): void {
     this.commit({ ...this.state, showIcons });
   }
+  /** Preserve a manually placed file icon across the source FileRename path. */
+  rekey(oldId: string, newId: string): void {
+    if (oldId === newId || !Object.hasOwn(this.state.positions, oldId)) return;
+    const positions = { ...this.state.positions };
+    const point = positions[oldId];
+    delete positions[oldId];
+    positions[newId] = point;
+    this.commit({ ...this.state, positions });
+  }
   placement(id: string, index: number, area: DesktopArea): DesktopPoint {
     return positionForIcon(index, this.state.positions[id], this.state, area);
   }
