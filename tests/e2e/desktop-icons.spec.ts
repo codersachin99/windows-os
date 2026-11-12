@@ -115,6 +115,9 @@ test("source desktop View toggles icon size and visibility, settings persist",as
 
 test("saved icon coordinates are clamped on mobile and restored at desktop size",async({page})=>{
   await logon(page);
+  // CI runs both desktop and initially narrow mobile projects.
+  // Begin at desktop width so a 430px move is physically possible in both.
+  await page.setViewportSize({width:1280,height:720});
   const computer=page.locator('[data-test-desktop-icon="computer"]');
   await dragIcon(page,computer,430,245);
   await expect(computer).toHaveAttribute("data-test-desktop-x","430");
