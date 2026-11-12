@@ -29,3 +29,7 @@ Unit tests exercise copy/cut/clear, directory and missing-file protection, preva
 `packages/filesystem/src/search.ts` introduces a bounded source-mapped search contract: scoped folder, optional child folders, case-insensitive substring and DOS-style `*`/`?` name wildcards, skipped roots, result limit, progress and abort. Explorer exposes a Find action, subfolder toggle and file pattern input. The browser test creates a document in a virtual subfolder through Notepad, then finds it from Computer using recursive wildcard search.
 
 The original `searchIndex.walk`, full content indexing, search operators and ranking are not yet reproduced, nor is the original search dialog layout. These capabilities remain `in-progress`.
+
+## Verified clipboard and search checkpoint
+
+Opt-in [GitHub Actions run 43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) succeeded after the foreground-window browser test fix. It covers new scoped filename search, original-style wildcard matching and shared clipboard operations, as well as original-source inventory and the previous Contacts/Notepad/Computer interaction suite. Full original search-index and appearance equivalence remain outstanding.

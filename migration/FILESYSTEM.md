@@ -31,3 +31,7 @@ Still pending: source startup/session runtime wiring, real source mount metadata
 ## Explicit source-driven Recycle Bin
 
 The original bin.js renders Computer hoisted to its runtime `trashPath`. The React port now has trash/restore/empty operations with original-location metadata atomically stored in the virtual filesystem snapshot. `SourceFilesystemRuntime` can mount and persist only source-supplied root/disks/Desktop/trash metadata. A missing source runtime leaves the Bin **unmounted**; no fake C: drive or empty Trash is manufactured. See [RECYCLE-BIN.md](RECYCLE-BIN.md). This atomic metadata implementation is functionally motivated, not byte-for-byte compatible with the original internal storage.
+
+## Recycle/restore atomic snapshot and source mount cache
+
+The in-progress Recycle Bin port now supports `VirtualFileStore.trash/restore/emptyTrash/removeTree` using the *supplied* `trashPath`, with original-path metadata persisted inside the same VFS snapshot as the file move to prevent loss on failed writes. Source mount metadata can be provided and cached through `SourceFilesystemRuntime.configure` and reloaded on Guest login; no runtime-derived drive list is invented. [CI 43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) passed.

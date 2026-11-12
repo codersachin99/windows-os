@@ -13,3 +13,7 @@ Tests:
 - Playwright explicit-source-runtime fixture coverage for Computer -> Bin -> Restore -> reload persistence, and unconfigured source sessions.
 
 Limits: The original Vue/webpack source uses its own trash metadata and shell events; the new atomic VFS metadata format is an implementation-level replacement, not byte-level compatibility with source on-disk internals. Source disk provisioning, original permission/shortcut handling, rename/upload/drag/drop and complete Win7 Bin visuals remain incomplete. \`bin.js\` is **in-progress**, not verified.
+
+## Verified Recycle Bin checkpoint
+
+Opt-in [GitHub Actions run 43157555063](https://github.com/codersachin99/windows-os/actions/runs/43157555063) passed TypeScript, tests, source inventory, build and Chromium desktop/mobile interactions including the explicit source-runtime fixture and unmounted-session fallback. Real legacy `getStats` and session metadata acquisition is still missing; no normal Guest disk or Bin path is invented.
