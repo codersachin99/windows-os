@@ -75,6 +75,20 @@ describe("responsive native window cascade", () => {
     expect(sourceWindowPlacement(run.window,1,{width:240,height:200}))
       .toEqual({x:0,y:0,width:240,height:160});
   });
+  it("keeps one original Sticky Notes taskbar app when launched repeatedly and restores on reopen",()=>{
+    const app=appRegistry.get("sticky")!;
+    expect(app.icon).toContain("sticky.e63cea5a.webp");
+    const desktop=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const opened=desktopReducer(desktop,{type:"OPEN_APP",app});
+    expect(opened.windows).toHaveLength(1);
+    const minimized=desktopReducer(opened,{type:"MINIMIZE_WINDOW",id:opened.windows[0].id});
+    expect(minimized.windows[0].minimized).toBe(true);
+    const reopened=desktopReducer(minimized,{type:"OPEN_APP",app});
+    expect(reopened.windows).toHaveLength(1);
+    expect(reopened.windows[0].minimized).toBe(false);
+    expect(reopened.windows[0].z).toBeGreaterThan(opened.windows[0].z);
+  });
   it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
     expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
       {width:393,height:915})).toEqual({x:0,y:238,width:393,height:400});
