@@ -5,15 +5,15 @@
 **PR:** https://github.com/codersachin99/windows-os/pull/1 (draft; not merged)  
 **Status:** the first React application slice is working and CI-tested; **the full product is not migrated or release-ready**.
 
-## Desktop file/group drag to Recycle Bin checkpoint (2026-11-12) — verification pending
+## Desktop file/group drag to Recycle Bin checkpoint (2026-11-12) — CI verified
 
 - **Source:** pinned `legacy-win7/src/modules/system/main.js` desktop shortcut drag gestures and Bin drop/TrashAdd flows, reusing the active session `trashPath` and native Explorer-backed Bin (not moving files in host OS).
 - **VFS:** `VirtualFileStore.trashMany` performs multi-item preflight (duplicate, missing, nested ancestors, root/trash guards) and moves selected files/directories, descendants and original-path metadata in **one persisted snapshot**. A failed save leaves every source unchanged, avoiding partially recycled multi-selection. Existing `trash` delegates to the same core, and subscribers get source-path notifications after commit.
 - **Desktop UI:** pointer release over the unobscured Bin shortcut recycles selected Guest VFS files. The original 4px gesture threshold and existing icon movement remain in use; Bin highlights as a drop target. System icons cannot be recycled and drop over an app window is rejected. Bin and Explorer see live file changes and restored items reappear on the desktop.
-- **Code:** `4cc1f46d` (atomic source filesystem batch + unit tests) and `3016fd28` (desktop hit detection/interaction + desktop/mobile browser cases). **Verification pending** until the opt-in `[run-ci]` run completes. Tests: `desktopTrash.test.ts`, `desktopDrop.test.ts`, `desktop-bin-drop.spec.ts`.
+- **Code:** `4cc1f46d` (atomic source filesystem batch + unit tests) and `3016fd28` (desktop hit detection/interaction + desktop/mobile browser cases). **Verified:** opt-in [CI 43198433398](https://github.com/codersachin99/windows-os/actions/runs/43198433398) passed TypeScript, **121 unit tests in 22 files**, original-source/Contacts checks, production Vite build, and **106 desktop/mobile Chromium tests**, including individual and group Bin drops. Tests: `desktopTrash.test.ts`, `desktopDrop.test.ts`, `desktop-bin-drop.spec.ts`.
 - **Remaining:** native drag from desktop into arbitrary Explorer folder, drag-out, shortcut wizard parity, complete source drag behavior on touch and visual screenshot matching. The original `system/main.js` is still `in-progress`. See [DESKTOP-BIN-DROP.md](DESKTOP-BIN-DROP.md).
 
-## Desktop New submenu checkpoint (2026-11-12) — verification pending
+## Desktop New submenu checkpoint (2026-11-12) — CI verified
 
 - Source-traced original `legacy-win7/src/modules/system/main.js` background New submenu: Folder, Shortcut, Rich Text Document, Text Document. Source Shortcut opens a dedicated application wizard (not yet ported), so React currently uses a limited inline chooser for installed and already migrated apps; full original wizard and all program choices are **not** claimed complete.
 - New `packages/ui/src/desktopCreate.ts` uses the active Guest `desktopPath`, source JSON `{exe,icon}` .lnk serialization, collision-safe default names and strict target/filename validation. Shared `VirtualFileStore.createFile` is create-only, never overwriting another user's item when competing with a file creation. Folders, UTF-8 TXT and minimal valid RTF persist as real VFS items. Rich-text editing/WordPad remains unported.

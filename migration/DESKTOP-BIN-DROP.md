@@ -9,3 +9,5 @@
 **Tests:** `packages/filesystem/src/desktopTrash.test.ts` verifies directories, original paths, multi-file name collisions, fail-fast validation and atomic persistence failure. `packages/ui/src/desktopDrop.test.ts` verifies rectangle geometry. `tests/e2e/desktop-bin-drop.spec.ts` covers Guest Desktop folder recycling/restoring and group move/reload persistence in desktop/mobile Chromium.
 
 **Not yet fully migrated:** exact source drop animations, file dragging into arbitrary Explorer views, advanced multi-selection keyboard and touch gesture parity, all desktop context actions, themes and screenshots. Original desktop module remains `in-progress`.
+
+**CI verification:** [opt-in run 43198433398](https://github.com/codersachin99/windows-os/actions/runs/43198433398) completed successfully: TypeScript, 121 Vitest cases/22 files, source audit and Contacts fidelity, Vite build, and 106 desktop/mobile Chromium browser tests. The `[run-ci]` marker appeared only on the deliberate checkpoint; routine code/docs commits skipped test jobs.
