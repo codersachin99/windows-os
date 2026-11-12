@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
 import { searchFiles, type FileEntry } from "@windows-os/filesystem";
-import { fileClipboard, fileStore } from "@windows-os/sdk";
+import { fileClipboard, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import "./source.css";
 import "./ExplorerApp.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
+  recycleBinPath?: string;
 }
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
   { value: "details", label: "Details" },
@@ -24,12 +25,18 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * original Computer session/view model. Source disks, shell actions, drag/drop
  * and trash semantics are still pending and intentionally not fabricated.
  */
-export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
-  const session = useMemo(() => new ExplorerSession(fileStore), []);
+export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps) {
+  const isBin = Boolean(recycleBinPath);
+  const session = useMemo(() => new ExplorerSession(
+    fileStore, recycleBinPath ?? "/", recycleBinPath
+  ), [recycleBinPath]);
+  const [volume, setVolume] = useState(() => sourceFilesystemRuntime.snapshot());
+  const trashPath = recycleBinPath ?? volume?.trashPath ?? null;
   const [state, setState] = useState(() => session.snapshot());
   const [prompt, setPrompt] = useState<"folder" | "rename" | null>(null);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [confirm, setConfirm] = useState<"recycle" | "permanent" | "empty" | null>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [subfolders, setSubfolders] = useState(false);
   const [namePattern, setNamePattern] = useState("");
@@ -45,6 +52,7 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     return () => { unsubscribe(); disconnect(); };
   }, [session]);
   useEffect(() => fileClipboard.subscribe(setClipboardState), []);
+  useEffect(() => sourceFilesystemRuntime.subscribe(setVolume), []);
   useEffect(() => {
     currentSearch.current?.abort();
     setFound(null);
@@ -63,6 +71,8 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
   const openEntry = (path: string, type: "directory" | "file") => {
     if (type === "directory") {
       void execute(() => session.open(path));
+    } else if (isBin) {
+      setMessage("Restore this item from the Recycle Bin before opening it.");
     } else if (/\.txt$/i.test(path)) {
       onOpenTextFile(path);
     } else {
@@ -80,6 +90,30 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
       setName("");
     });
   };
+  const requestDelete = () => {
+    if (!state.selected.length) return;
+    if (isBin) setConfirm("permanent");
+    else if (trashPath) setConfirm("recycle");
+  };
+  const executeDelete = () => {
+    const operation = confirm;
+    setConfirm(null);
+    void execute(async () => {
+      if (operation === "empty" && recycleBinPath) {
+        await fileStore.emptyTrash(recycleBinPath);
+      } else if (operation === "permanent" && recycleBinPath) {
+        for (const path of state.selected) await fileStore.removeTree(path);
+      } else if (operation === "recycle" && trashPath) {
+        for (const path of state.selected) await fileStore.trash(path, trashPath);
+      }
+    });
+  };
+  const restoreSelection = () => {
+    if (!recycleBinPath) return;
+    void execute(async () => {
+      for (const path of state.selected) await fileStore.restore(path, recycleBinPath);
+    });
+  };
   const copySelection = (mode: "cut" | "copy") => {
     if (!state.selected.length) return;
     fileClipboard.prepare(state.selected, mode);
@@ -88,9 +122,15 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     await fileClipboard.paste(fileStore, state.path);
   });
   const handleKeys = (event: import("react").KeyboardEvent<HTMLDivElement>) => {
-    if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
     const focused = event.target as HTMLElement;
     if (focused.closest("input,textarea,select,[contenteditable=true]")) return;
+    if (event.key === "Delete" && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      requestDelete();
+      return;
+    }
+    if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+    if (isBin && event.key.toLowerCase() !== "a") return;
     if (event.key.toLowerCase() === "c" && state.selected.length) {
       event.preventDefault(); copySelection("copy");
     } else if (event.key.toLowerCase() === "x" && state.selected.length) {
@@ -114,7 +154,8 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
       text: state.search,
       namePattern: namePattern.trim() || null,
       subfolders,
-      maxResults: 500
+      maxResults: 500,
+      skipPaths: isBin || !trashPath ? [] : [trashPath]
     }, {
       signal: controller.signal,
       onProgress: progress => {
@@ -146,7 +187,7 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
       <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
       <button aria-label="Up" disabled={state.path === "/"} onClick={() => void execute(() => session.up())}>↑</button>
       <label className="explorer-address__location">Address:
-        <input aria-label="Folder address" readOnly value={state.path === "/" ? "Computer" : state.path} />
+        <input aria-label="Folder address" readOnly value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
       </label>
       <input className="explorer-address__search" type="search"
         placeholder="Search" aria-label="Search files" value={state.search}
@@ -167,12 +208,19 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     </div>
     <div className="explorer-command">
       <button disabled title="Source Organize menu is pending">Organize</button>
-      <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>
-      <button onClick={requestRename} disabled={state.selected.length !== 1}>Rename</button>
-      <button disabled={!state.selected.length} onClick={() => copySelection("cut")}>Cut</button>
-      <button disabled={!state.selected.length} onClick={() => copySelection("copy")}>Copy</button>
-      <button disabled={!clipboardState.paths.length} onClick={pasteSelection}>Paste</button>
-      <button disabled title="Requires source Recycle Bin protocol">Delete</button>
+      {isBin ? <>
+        <button disabled={!selected?.originalPath} onClick={restoreSelection}>Restore</button>
+        <button disabled={!state.selected.length} onClick={requestDelete}>Delete permanently</button>
+        <button disabled={!state.items.length} onClick={() => setConfirm("empty")}>Empty Recycle Bin</button>
+      </> : <>
+        <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>
+        <button onClick={requestRename} disabled={state.selected.length !== 1}>Rename</button>
+        <button disabled={!state.selected.length} onClick={() => copySelection("cut")}>Cut</button>
+        <button disabled={!state.selected.length} onClick={() => copySelection("copy")}>Copy</button>
+        <button disabled={!clipboardState.paths.length} onClick={pasteSelection}>Paste</button>
+        <button disabled={!state.selected.length || !trashPath} onClick={requestDelete}
+          title={trashPath ? "Move selected items to the Recycle Bin" : "Source trashPath not mounted"}>Delete</button>
+      </>
       <button onClick={() => void execute(() => session.refresh())}>Refresh</button>
       <label>View:
         <select aria-label="Explorer view" value={state.viewMode}
@@ -183,8 +231,8 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     </div>
     <div className="explorer-workspace">
       <aside className="explorer-navigation">
-        <button className="explorer-navigation__home" onClick={() => void execute(() => session.open("/"))}>
-          <img src={legacyArt.computer} alt="" /> Computer
+        <button className="explorer-navigation__home" onClick={() => void execute(() => session.open(recycleBinPath ?? "/"))}>
+          <img src={isBin ? legacyArt.recycleBin : legacyArt.computer} alt="" /> {isBin ? "Recycle Bin" : "Computer"}
         </button>
       </aside>
       <section className="explorer-content" aria-label="Folder contents">
@@ -204,7 +252,9 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
             <span className="listview__item-iconbox">
               <img src={item.type === "directory" ? legacyArt.folder : legacyArt.file} alt="" draggable={false} />
             </span>
-            <span className="listview__item-label" title={item.uri}>{item.name}</span>
+            <span className="listview__item-label" title={item.uri}>
+              {isBin && item.originalPath ? item.originalPath.split("/").pop() : item.name}
+            </span>
             {state.viewMode === "details" && <>
               <span>{new Date(item.mtime).toLocaleString()}</span>
               <span>{item.type === "directory" ? "File folder" : "TXT File"}</span>
@@ -225,6 +275,17 @@ export function ExplorerApp({ onOpenTextFile }: ExplorerAppProps) {
     {(state.error || message) && <div role="alert" className="explorer-error">
       {state.error || message}
       <button aria-label="Dismiss Explorer message" onClick={() => setMessage("")}>×</button>
+    </div>}
+    {confirm && <div className="explorer-prompt__backdrop">
+      <section className="explorer-prompt" role="alertdialog" aria-label="Confirm file operation" aria-modal="true">
+        <p>{confirm === "empty" ? "Permanently delete every item in the Recycle Bin?" :
+          confirm === "permanent" ? "Permanently delete the selected items?" :
+          "Move the selected items to the Recycle Bin?"}</p>
+        <div>
+          <button type="button" onClick={executeDelete}>Yes</button>
+          <button type="button" onClick={() => setConfirm(null)}>No</button>
+        </div>
+      </section>
     </div>}
     {prompt && <div className="explorer-prompt__backdrop">
       <form className="explorer-prompt" role="dialog" aria-label={prompt === "folder" ? "New folder" : "Rename"}
