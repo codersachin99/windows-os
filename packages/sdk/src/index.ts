@@ -26,6 +26,11 @@ const builtinApps: AppDefinition[] = [
     window: { width: 280, height: 430 }
   },
   {
+    id: "run", label: "Run", icon: legacyArt.run,
+    kind: "utility", desktop: false, showInStart: true,
+    window: { width: 450, height: 220, resizable: false, location: "bottom-left" }
+  },
+  {
     id: "notepad", label: "Notepad", icon: legacyArt.notepad,
     kind: "utility", desktop: false, showInStart: true,
     window: { width: 620, height: 440 }

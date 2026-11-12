@@ -38,11 +38,12 @@ export function sourceWindowPlacement(
   const availableMinWidth = Math.min(vw, 270);
   const defaultX = 70 + ((ordinal - 1) % 7) * 26;
   const defaultY = 58 + ((ordinal - 1) % 7) * 26;
-  const x = config.centered
+  const x = config.location === "bottom-left" ? 0 : config.centered
     ? Math.max(0, Math.round((vw - Math.min(config.width, vw)) / 2))
     : Math.max(0, Math.min(defaultX, vw - availableMinWidth));
   const width = Math.min(config.width, Math.max(1, vw - x));
-  const y = config.centered
+  const y = config.location === "bottom-left"
+    ? Math.max(0, vh - Math.min(config.height, vh)) : config.centered
     ? Math.max(0, Math.round((vh - Math.min(config.height, vh)) / 2))
     : Math.max(0, Math.min(defaultY, Math.max(0, vh - Math.min(vh, 170))));
   const height = Math.min(config.height, Math.max(1, vh - y));

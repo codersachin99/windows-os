@@ -7,7 +7,8 @@ export interface AppDefinition {
   label: string;
   icon: string;
   kind: AppKind;
-  window: { width: number; height: number; resizable?: boolean; centered?: boolean };
+  window: { width: number; height: number; resizable?: boolean; centered?: boolean;
+    location?: "bottom-left" };
   desktop?: boolean;
   showInStart?: boolean;
 }

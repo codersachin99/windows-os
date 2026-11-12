@@ -21,6 +21,7 @@ export const legacyArt = {
   computer: "/assets/images/computer.f1f7f519.webp",
   notepad: "/assets/images/notepad.90e3ce4c.webp",
   calculator: "/assets/images/calc.1733a9a0.webp",
+  run: "/assets/images/run.cf7c0332.webp",
   folder: "/assets/images/folder.677f8e80.webp",
   file: "/assets/images/file.73b2d097.webp",
   shortcut: "/assets/images/shortcut.e8c69673.webp",
