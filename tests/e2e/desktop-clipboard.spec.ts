@@ -105,7 +105,9 @@ test("Desktop Delete confirms a selected group and ignores built-in system icons
   await confirm.getByRole("button", { name: "No" }).click();
   await expect(first).toBeVisible();
   await expect(second).toBeVisible();
-  // Keyboard focus belongs to the last clicked icon.
+  // Modal dismissal can move focus to the document; explicitly return it
+  // to the original desktop shortcut keyboard scope before retrying.
+  await page.locator('[data-test-desktop-icon="computer"]').focus();
   await page.keyboard.press("Delete");
   confirm = page.getByRole("alertdialog", { name: "Confirm desktop deletion" });
   await confirm.getByRole("button", { name: "Yes" }).click();
