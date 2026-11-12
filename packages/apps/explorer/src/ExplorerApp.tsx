@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { legacyArt } from "@windows-os/assets";
-import { searchFiles, type FileEntry } from "@windows-os/filesystem";
+import { searchFiles, SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE, type FileEntry } from "@windows-os/filesystem";
 import { fileClipboard, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import "./source.css";
@@ -37,6 +37,9 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [confirm, setConfirm] = useState<"recycle" | "permanent" | "empty" | null>(null);
+  const [context, setContext] = useState<{
+    kind: "item" | "background"; x: number; y: number; uri?: string
+  } | null>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [subfolders, setSubfolders] = useState(false);
   const [namePattern, setNamePattern] = useState("");
@@ -61,7 +64,16 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
   }, [state.path, state.search, subfolders, namePattern]);
   useEffect(() => () => currentSearch.current?.abort(), []);
   const visible = found ?? session.visible();
-  const selected = state.items.find(item => item.uri === state.selected[0]);
+  const selected = state.items.find(item => item.uri === state.selected[0])
+    ?? found?.find(item => item.uri === state.selected[0]);
+  const sourceGuest = !isBin && volume?.pathConfig.root === SOURCE_COMPUTER_ROOT;
+  const shortcuts = sourceGuest ? [
+    { label: "Documents", path: SOURCE_GUEST_PROFILE + "/Documents" },
+    { label: "Downloads", path: SOURCE_GUEST_PROFILE + "/Downloads" },
+    { label: "Pictures", path: SOURCE_GUEST_PROFILE + "/Pictures" },
+    { label: "Music", path: SOURCE_GUEST_PROFILE + "/Music" },
+    { label: "Videos", path: SOURCE_GUEST_PROFILE + "/Videos" }
+  ] : [];
 
   const execute = async (operation: () => Promise<unknown>) => {
     setMessage("");
@@ -175,6 +187,41 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
       }
     });
   };
+  useEffect(() => {
+    if (!context) return;
+    const dismiss = (event: PointerEvent) => {
+      if (!(event.target instanceof Element
+        && event.target.closest("[data-test-explorer-context]"))) setContext(null);
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setContext(null);
+    };
+    window.addEventListener("pointerdown", dismiss);
+    window.addEventListener("keydown", escape);
+    return () => {
+      window.removeEventListener("pointerdown", dismiss);
+      window.removeEventListener("keydown", escape);
+    };
+  }, [context]);
+
+  const showContext = (
+    event: import("react").MouseEvent<HTMLElement>,
+    kind: "item" | "background", uri?: string
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (kind === "item" && uri && !state.selected.includes(uri)) session.select(uri);
+    if (kind === "background") session.clearSelection();
+    setContext({
+      kind, uri,
+      x: Math.max(4, Math.min(event.clientX, window.innerWidth - 215)),
+      y: Math.max(4, Math.min(event.clientY, window.innerHeight - 280))
+    });
+  };
+  const contextAction = (action: () => void) => {
+    setContext(null);
+    action();
+  };
   const requestRename = () => {
     if (!selected) return;
     setName(selected.name);
@@ -231,11 +278,41 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
     </div>
     <div className="explorer-workspace">
       <aside className="explorer-navigation">
-        <button className="explorer-navigation__home" onClick={() => void execute(() => session.open(recycleBinPath ?? "/"))}>
-          <img src={isBin ? legacyArt.recycleBin : legacyArt.computer} alt="" /> {isBin ? "Recycle Bin" : "Computer"}
+        <button className="explorer-navigation__home"
+          onClick={() => void execute(() => session.open(recycleBinPath ?? "/"))}>
+          <img src={isBin ? legacyArt.recycleBin : legacyArt.computer} alt="" />
+          {isBin ? "Recycle Bin" : "Computer"}
         </button>
+        {!isBin && volume?.pathConfig.drives.map(drive =>
+          <button key={drive.letter} className="explorer-navigation__home"
+            onClick={() => void execute(() => session.open(
+              volume.pathConfig.root + "/" + drive.path
+            ))} title={drive.label + " (" + drive.letter + ":)"}>
+            <img src={legacyArt.computer} alt="" />
+            {drive.label} ({drive.letter}:)
+          </button>
+        )}
+        {!isBin && volume && <button className="explorer-navigation__home"
+          onClick={() => void execute(() => session.open(volume.desktopPath))}>
+          <img src={legacyArt.folder} alt="" /> Desktop
+        </button>}
+        {shortcuts.map(shortcut =>
+          <button key={shortcut.label} className="explorer-navigation__home"
+            onClick={() => void execute(() => session.open(shortcut.path))}>
+            <img src={legacyArt.folder} alt="" /> {shortcut.label}
+          </button>
+        )}
+        {sourceGuest && <button className="explorer-navigation__home" disabled
+          title="The source Z: DVD device is not writable or mounted">
+          DVD RW Drive (Z:)
+        </button>}
       </aside>
-      <section className="explorer-content" aria-label="Folder contents">
+      <section className="explorer-content" aria-label="Folder contents"
+        onContextMenu={event => {
+          if (!(event.target as HTMLElement).closest(".explorer-item")) {
+            showContext(event, "background");
+          }
+        }}>
         {state.viewMode === "details" && <div className="explorer-columns" aria-hidden="true">
           <span>Name</span><span>Date modified</span><span>Type</span><span>Size</span>
         </div>}
@@ -247,6 +324,7 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
             (state.selected.includes(item.uri) ? "is-selected" : "")}
             data-test-explorer-item={item.name} aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}
+            onContextMenu={event => showContext(event, "item", item.uri)}
             onDoubleClick={() => openEntry(item.uri, item.type)}
             onKeyDown={event => { if (event.key === "Enter") openEntry(item.uri, item.type); }}>
             <span className="listview__item-iconbox">
@@ -275,6 +353,46 @@ export function ExplorerApp({ onOpenTextFile, recycleBinPath }: ExplorerAppProps
     {(state.error || message) && <div role="alert" className="explorer-error">
       {state.error || message}
       <button aria-label="Dismiss Explorer message" onClick={() => setMessage("")}>×</button>
+    </div>}
+    {context && <div role="menu" className="explorer-context-menu"
+      data-test-explorer-context={context.kind}
+      aria-label={context.kind === "item" ? "File actions" : "Folder actions"}
+      style={{ left: context.x, top: context.y }}>
+      {context.kind === "item" && context.uri && <>
+        <button role="menuitem" onClick={() => contextAction(() => {
+          const item = visible.find(entry => entry.uri === context.uri);
+          if (item) openEntry(item.uri, item.type);
+        })}>{isBin ? "Open folder" : "Open"}</button>
+        {isBin
+          ? <>
+              <button role="menuitem" disabled={!selected?.originalPath}
+                onClick={() => contextAction(restoreSelection)}>Restore</button>
+              <button role="menuitem"
+                onClick={() => contextAction(requestDelete)}>Delete permanently</button>
+            </>
+          : <>
+              <button role="menuitem" onClick={() => contextAction(() => copySelection("cut"))}>Cut</button>
+              <button role="menuitem" onClick={() => contextAction(() => copySelection("copy"))}>Copy</button>
+              <button role="menuitem" onClick={() => contextAction(requestRename)}>Rename</button>
+              <button role="menuitem" disabled={!trashPath}
+                onClick={() => contextAction(requestDelete)}>Delete</button>
+            </>}
+        <button role="menuitem" disabled title="Source Properties dialog is not migrated">Properties</button>
+      </>}
+      {context.kind === "background" && <>
+        {!isBin && <>
+          <button role="menuitem" onClick={() => contextAction(pasteSelection)}
+            disabled={!clipboardState.paths.length}>Paste</button>
+          <button role="menuitem" onClick={() => contextAction(() => {
+            setName(""); setPrompt("folder");
+          })}>New folder</button>
+        </>}
+        {isBin && <button role="menuitem" disabled={!state.items.length}
+          onClick={() => contextAction(() => setConfirm("empty"))}>Empty Recycle Bin</button>}
+        <button role="menuitem" onClick={() => contextAction(
+          () => void execute(() => session.refresh())
+        )}>Refresh</button>
+      </>}
     </div>}
     {confirm && <div className="explorer-prompt__backdrop">
       <section className="explorer-prompt" role="alertdialog" aria-label="Confirm file operation" aria-modal="true">

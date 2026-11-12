@@ -93,6 +93,7 @@ export class ExplorerSession {
     } else this.set({ selected: [uri] });
   }
   selectAll(): void { this.set({ selected: this.visible().map(item => item.uri) }); }
+  clearSelection(): void { this.set({ selected: [] }); }
   search(query: string): void { this.set({ search: query }); }
   setViewMode(viewMode: ExplorerViewMode): void { this.set({ viewMode }); }
 
