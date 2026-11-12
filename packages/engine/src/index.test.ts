@@ -89,6 +89,34 @@ describe("responsive native window cascade", () => {
     expect(reopened.windows[0].minimized).toBe(false);
     expect(reopened.windows[0].z).toBeGreaterThan(opened.windows[0].z);
   });
+  it("registers original non-resizable 260px source Magnifier and limits mobile placement", () => {
+    const magnifier = appRegistry.get("magnifier")!;
+    expect(magnifier).toMatchObject({id:"magnifier", label:"Magnifier"});
+    expect(magnifier.window).toMatchObject({
+      width:260, resizable:false
+    });
+    expect(magnifier.icon).toContain("magnifier.66b65661.webp");
+    const wide=sourceWindowPlacement(magnifier.window,1,{width:1920,height:1080});
+    expect(wide.width).toBe(260);
+    expect(wide.height).toBeLessThan(110);
+    const tiny=sourceWindowPlacement(magnifier.window,1,{width:240,height:320});
+    expect(tiny.x+tiny.width).toBeLessThanOrEqual(240);
+    expect(tiny.width).toBeGreaterThan(0);
+  });
+  it("reuses one source Magnifier window on repeated Start/Run launch and restores if minimized",()=>{
+    const app=appRegistry.get("magnifier")!;
+    const desktop=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const opened=desktopReducer(desktop,{type:"OPEN_APP",app});
+    const again=desktopReducer(opened,{type:"OPEN_APP",app});
+    expect(again.windows).toHaveLength(1);
+    expect(again.windows[0].id).toBe(opened.windows[0].id);
+    const minimized=desktopReducer(again,{type:"MINIMIZE_WINDOW",id:again.windows[0].id});
+    const restored=desktopReducer(minimized,{type:"OPEN_APP",app});
+    expect(restored.windows).toHaveLength(1);
+    expect(restored.windows[0].minimized).toBe(false);
+    expect(restored.windows[0].z).toBeGreaterThan(minimized.windows[0].z);
+  });
   it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
     expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
       {width:393,height:915})).toEqual({x:0,y:238,width:393,height:400});
