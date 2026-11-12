@@ -184,3 +184,10 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .windows-startmenu__all-programs:hover { background:linear-gradient(#e7f5ff,#b7d7f1); border-color:#80b4d9; }
 .windows-startmenu__program:disabled { opacity:.52; cursor:default; }
 .windows-startmenu__chevron { margin-left:auto; font-size:13px; color:#567; }
+
+/* Keep the window/scrolling document inside narrow mobile screens. Source
+   window proportions survive on desktop, but overflowing mobile windows
+   must not scroll the desktop itself out of reach. */
+@media (max-width: 650px) {
+  .windows-window { min-width: 0; }
+}

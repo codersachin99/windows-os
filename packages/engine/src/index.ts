@@ -22,6 +22,33 @@ export function initialDesktopState(): DesktopState {
   };
 }
 
+/**
+ * Existing desktop window cascade, constrained only when the viewport is
+ * smaller than the source's preferred window. Mobile must keep the desktop
+ * itself at document.scrollX=0: otherwise tapping a horizontally overflowing
+ * Explorer shortcut scrolls the entire page and hides desktop icons.
+ * Minimum width tracks the native WindowFrame's normal 270px threshold.
+ */
+export function sourceWindowPlacement(
+  config: AppDefinition["window"], ordinal: number,
+  viewport: { width: number; height: number }
+): { x: number; y: number; width: number; height: number } {
+  const vw = Math.max(1, viewport.width);
+  const vh = Math.max(1, viewport.height - 40);
+  const availableMinWidth = Math.min(vw, 270);
+  const defaultX = 70 + ((ordinal - 1) % 7) * 26;
+  const defaultY = 58 + ((ordinal - 1) % 7) * 26;
+  const x = config.centered
+    ? Math.max(0, Math.round((vw - Math.min(config.width, vw)) / 2))
+    : Math.max(0, Math.min(defaultX, vw - availableMinWidth));
+  const width = Math.min(config.width, Math.max(1, vw - x));
+  const y = config.centered
+    ? Math.max(0, Math.round((vh - Math.min(config.height, vh)) / 2))
+    : Math.max(0, Math.min(defaultY, Math.max(0, vh - Math.min(vh, 170))));
+  const height = Math.min(config.height, Math.max(1, vh - y));
+  return { x, y, width, height };
+}
+
 function openWindow(state: DesktopState, app: AppDefinition, file?: { path: string }): DesktopState {
   if (state.phase !== "desktop") return state;
   const ordinal = state.nextWindowId;
@@ -31,14 +58,10 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
     file,
     title: app.label,
     icon: app.icon,
-    width: app.window.width,
-    height: app.window.height,
-    x: app.window.centered
-      ? Math.max(0, Math.round(((typeof globalThis.window === "undefined" ? 960 : globalThis.window.innerWidth) - app.window.width) / 2))
-      : 70 + ((ordinal - 1) % 7) * 26,
-    y: app.window.centered
-      ? Math.max(0, Math.round(((typeof globalThis.window === "undefined" ? 700 : globalThis.window.innerHeight - 40) - app.window.height) / 2))
-      : 58 + ((ordinal - 1) % 7) * 26,
+    ...sourceWindowPlacement(app.window, ordinal, {
+      width: typeof globalThis.window === "undefined" ? 960 : globalThis.window.innerWidth,
+      height: typeof globalThis.window === "undefined" ? 700 : globalThis.window.innerHeight
+    }),
     z: state.topZ + 1,
     minimized: false,
     maximized: false,
@@ -84,7 +107,15 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
     }
     case "MOVE_WINDOW":
       return { ...state, windows: state.windows.map(window => window.id === action.id
-        ? { ...window, x: Math.max(0, action.x), y: Math.max(0, action.y) }
+        ? {
+          ...window,
+          x: Math.max(0, Math.min(action.x,
+            Math.max(0, (typeof globalThis.window === "undefined" ? 960
+              : globalThis.window.innerWidth) - window.width))),
+          y: Math.max(0, Math.min(action.y,
+            Math.max(0, (typeof globalThis.window === "undefined" ? 700
+              : globalThis.window.innerHeight) - 40 - window.height)))
+        }
         : window) };
     case "MINIMIZE_WINDOW":
       return { ...state, windows: state.windows.map(window => window.id === action.id

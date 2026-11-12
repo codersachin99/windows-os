@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { desktopReducer, initialDesktopState, LEGACY_DEFAULTS } from "./index";
+import { desktopReducer, initialDesktopState, LEGACY_DEFAULTS, sourceWindowPlacement } from "./index";
 import { appRegistry } from "@windows-os/sdk";
 
 describe("legacy state transitions", () => {
@@ -46,5 +46,29 @@ describe("legacy state transitions", () => {
   it("does not create windows before entering a desktop session", () => {
     const app = appRegistry.get("computer")!;
     expect(desktopReducer(initialDesktopState(), { type: "OPEN_APP", app }).windows).toHaveLength(0);
+  });
+});
+
+describe("responsive native window cascade", () => {
+  it("preserves the original Computer window size and position on spacious desktops", () => {
+    expect(sourceWindowPlacement({width:760,height:490},1,{width:1920,height:1080}))
+      .toEqual({x:70,y:58,width:760,height:490});
+  });
+  it("keeps a mobile Explorer fully within viewport instead of horizontally scrolling the desktop", () => {
+    const result=sourceWindowPlacement({width:760,height:490},1,{width:393,height:915});
+    expect(result).toEqual({x:70,y:58,width:323,height:490});
+    expect(result.x+result.width).toBe(393);
+    const compact=sourceWindowPlacement({width:760,height:490},1,{width:320,height:680});
+    expect(compact.x+compact.width).toBe(320);
+    expect(compact.x).toBe(50);
+    expect(compact.width).toBe(270);
+  });
+  it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
+    expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
+      {width:393,height:915})).toEqual({x:0,y:237,width:393,height:400});
+    const tiny=sourceWindowPlacement({width:550,height:400,centered:true},1,
+      {width:240,height:320});
+    expect(tiny.x+tiny.width).toBe(240);
+    expect(tiny.y+tiny.height).toBe(280);
   });
 });
