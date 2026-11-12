@@ -18,3 +18,11 @@ This is **not a complete Notepad port**. Full UI still requires CodeMirror edito
 The native `packages/apps/notepad/src/NotepadEditor.tsx` now uses real CodeMirror 6, with source-equivalent `set`, `insert`, `focus`, `selectAll`, wrap, cursor notifications, configurable fonts and original Alt-command key binding support. The 424-byte original `src/styles/apps/notepad.css` was ported verbatim into `source.css`; `editor.css` adds only container sizing.
 
 The editor remains a reusable component and has **not yet been wired into the desktop window, menu, dialogs or source Close lifecycle**. Its dependency versions are pinned, and the source-model/editor commit passed the opt-in TypeScript, unit, production-build and existing Chromium suite in [GitHub Actions run 43094398373](https://github.com/codersachin99/windows-os/actions/runs/43094398373). That suite does not yet exercise a mounted Notepad window. The full original Notepad application is still pending.
+
+## Browser integration milestone
+
+A native React Notepad shell view is now wired through the app registry and desktop window manager. It uses the CodeMirror adapter and document state model, with File/Edit/Format/View menus, source shortcut mappings, font editor, cursor status, a reusable simulated file picker, Save As/overwrite handling, and Yes/No/Cancel unsaved close confirmation. Multiple windows share the same virtual file store while retaining independent documents.
+
+Window engine changes keep app components mounted during minimize so documents do not vanish. All close routes (titlebar and Alt+F4) now request confirmation through app lifecycle interception; title changes reflect dirty/save state.
+
+This is a genuine functional vertical slice, not full legacy parity. In particular, the source's file-dialog and font-dialog CSS/behavior have not been fully reproduced; active disk bootstrap and source Notepad icon must be imported from the pinned legacy repository. Unit tests and Playwright integration tests were added; do not mark verified without successful opted-in CI and source screenshot comparisons.
