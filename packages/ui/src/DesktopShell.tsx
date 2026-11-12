@@ -5,6 +5,7 @@ import { appRegistry } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
+import { RunApp } from "@windows-os/apps/run";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import { StartMenu } from "./StartMenu";
@@ -28,6 +29,14 @@ function ApplicationContent({ appId, filePath, windowId, dispatch, registerClose
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "calc") return <CalculatorApp />;
+  if (appId === "run") return <RunApp
+    onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
+    onLaunchProgram={programId => {
+      const app = appRegistry.get(programId);
+      if (!app || app.id === "run") return false;
+      dispatch({ type: "OPEN_APP", app });
+      return true;
+    }} />;
   if (appId === "notepad") return <NotepadApp initialFilePath={filePath}
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
@@ -77,7 +86,19 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
   }, [dispatch]);
   useEffect(() => {
     const keydown = (event: KeyboardEvent) => {
-      if (!event.altKey || event.key !== "F4" || event.repeat || state.phase !== "desktop") return;
+      if (state.phase !== "desktop" || event.repeat) return;
+      // Windows+R is the original Win7 quick launcher. It is a shell command
+      // palette only: RunApp opens registered applications, never host programs.
+      if (event.metaKey && !event.ctrlKey && !event.altKey
+        && event.key.toLowerCase() === "r") {
+        const run = appRegistry.get("run");
+        if (run) {
+          event.preventDefault();
+          dispatch({ type: "OPEN_APP", app: run });
+        }
+        return;
+      }
+      if (!event.altKey || event.key !== "F4") return;
       const focused = [...state.windows].filter(win => !win.minimized)
         .sort((a, b) => b.z - a.z)[0];
       if (focused) {
@@ -87,7 +108,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
     };
     window.addEventListener("keydown", keydown);
     return () => window.removeEventListener("keydown", keydown);
-  }, [state.windows, state.phase, requestClose]);
+  }, [state.windows, state.phase, requestClose, dispatch]);
 
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}>
