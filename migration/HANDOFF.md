@@ -128,7 +128,7 @@
 - **Explorer:** `ExplorerApp` now accepts a source VFS initial path and `DesktopShell` forwards it through the existing OPEN_APP file contract for folder icons.
 - **Coverage:** four isolated source desktop file tests plus Chromium browser tests for file/folder creation and live icons, Guest reload persistence, TXT in Notepad, imported Calculator.lnk, Recycle Bin delete and safe unknown .lnk handling. See [DESKTOP-FILES.md](DESKTOP-FILES.md).
 - **Open gaps:** full original file-type associations, shortcut rename/create wizard and context-menu actions, exact per-user shortcut metadata/icon mapping, binary image previews, desktop folder dragging into other apps, source `03f3` band library and screenshot parity. Main desktop module tracker remains `in-progress`.
-- **Verification pending** opt-in CI checkpoint for this new slice. Earlier [CI 43186461842](https://github.com/codersachin99/windows-os/actions/runs/43186461842) passed **99 unit tests and 74 Chromium tests** for rubber-band selection before adding file-backed items.
+- **Verification:** this commit requests the explicit opt-in CI checkpoint for file-backed desktop items. Earlier [CI 43186461842](https://github.com/codersachin99/windows-os/actions/runs/43186461842) passed **99 unit tests and 74 Chromium tests** for the preceding rubber-band selection slice. Do not mark the new file-backed bridge verified until the new TypeScript, unit, source, build and browser checks complete.
 
 ## Tested implementation
 
