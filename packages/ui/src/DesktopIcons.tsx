@@ -7,7 +7,8 @@ import {
   desktopBand, desktopBandHits, desktopBandSelection,
   type DesktopBand, type DesktopBandModifier
 } from "./desktopSelection";
-import { browserStorage } from "@windows-os/sdk";
+import { appRegistry, browserStorage, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
+import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
 import {
   DesktopPositionStore, SOURCE_DESKTOP_DRAG_THRESHOLD, SOURCE_DESKTOP_ICON_SIZES,
   boundedIconDrag, type DesktopArea, type DesktopIconSize, type DesktopPoint
@@ -16,6 +17,13 @@ import {
 interface DesktopIconsProps {
   apps: readonly AppDefinition[];
   dispatch: Dispatch<DesktopAction>;
+}
+interface DesktopItem {
+  id: string;
+  label: string;
+  icon: string;
+  app?: AppDefinition;
+  file?: SourceDesktopFile;
 }
 interface ActivePress {
   id: string;
@@ -44,6 +52,17 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     height: typeof window === "undefined" ? 620 : Math.max(0, window.innerHeight - 40)
   });
   const [selected, setSelected] = useState<string[]>([]);
+  const [guestFiles, setGuestFiles] = useState<SourceDesktopFile[]>([]);
+  const items: DesktopItem[] = useMemo(() => [
+    ...apps.map(app => ({
+      id: app.id, label: app.label, icon: app.icon, app
+    })),
+    ...guestFiles.map(file => ({
+      id: file.id, label: file.label,
+      icon: file.programId ? appRegistry.get(file.programId)?.icon ?? file.icon : file.icon,
+      file
+    }))
+  ], [apps, guestFiles]);
   const [drag, setDrag] = useState<{ keys: string[]; offset: DesktopPoint } | null>(null);
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
@@ -68,13 +87,74 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     return () => { observer?.disconnect(); window.removeEventListener("resize", resize); };
   }, []);
 
-  const keyIndex = (key: string) => apps.findIndex(app => app.id === key);
+  // Original main.js 6271: defaultShortcuts and file-backed shortcuts share
+  // one desktop item list. Use only the mounted session.desktopPath.
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    const load = () => {
+      const current = ++revision;
+      const runtime = sourceFilesystemRuntime.snapshot();
+      if (!runtime) { setGuestFiles([]); return; }
+      void listSourceDesktopFiles(fileStore, runtime.desktopPath).then(files => {
+        if (active && current === revision) setGuestFiles(files);
+      }).catch(cause => {
+        if (active && current === revision) {
+          setGuestFiles([]);
+          setError(cause instanceof Error ? cause.message : "Cannot read Guest desktop");
+        }
+      });
+    };
+    load();
+    const unsubscribeFiles = fileStore.subscribe(load);
+    const unsubscribeRuntime = sourceFilesystemRuntime.subscribe(load);
+    return () => {
+      active = false; revision++;
+      unsubscribeFiles(); unsubscribeRuntime();
+    };
+  }, []);
+
+  const openItem = (item: DesktopItem) => {
+    if (item.app) {
+      dispatch({ type: "OPEN_APP", app: item.app });
+      return;
+    }
+    const file = item.file;
+    if (!file) return;
+    const computer = appRegistry.get("computer");
+    if (file.entry.type === "directory" && computer) {
+      dispatch({ type: "OPEN_APP", app: computer, file: { path: file.entry.uri } });
+    } else if (file.programId) {
+      const app = appRegistry.get(file.programId);
+      if (app) dispatch({ type: "OPEN_APP", app });
+      else setError("The original " + file.label + " program is not yet migrated.");
+    } else if (/\\.txt$/i.test(file.entry.name)) {
+      const notepad = appRegistry.get("notepad");
+      if (notepad) dispatch({
+        type: "OPEN_APP", app: notepad, file: { path: file.entry.uri }
+      });
+    } else {
+      setError("No original application association has been migrated for " + file.entry.name);
+    }
+  };
+
+  const deleteFile = (file: SourceDesktopFile) => {
+    const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
+    if (!trashPath) {
+      setError("The original Recycle Bin is not mounted.");
+      return;
+    }
+    void fileStore.trash(file.entry.uri, trashPath).catch(cause =>
+      setError(cause instanceof Error ? cause.message : "Cannot delete desktop file"));
+  };
+
+  const keyIndex = (key: string) => items.findIndex(item => item.id === key);
   const pick = (id: string, toggle: boolean, range: boolean): string[] => {
     let next: string[];
     if (range && anchor.current) {
       const a = keyIndex(anchor.current), b = keyIndex(id);
       next = a < 0 || b < 0 ? [id]
-        : apps.slice(Math.min(a, b), Math.max(a, b) + 1).map(app => app.id);
+        : items.slice(Math.min(a, b), Math.max(a, b) + 1).map(item => item.id);
     } else if (toggle) {
       next = selected.includes(id) ? selected.filter(key => key !== id) : [...selected, id];
       anchor.current = id;
@@ -152,7 +232,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       active.moved = true;
       const shape = desktopBand(active.start, point, area);
       setBand(shape);
-      const targets = apps.map((app, index) => ({ id: app.id, index }));
+      const targets = items.map((item, index) => ({ id: item.id, index }));
       setSelected(desktopBandSelection(
         active.previous, desktopBandHits(targets, shape, options, area),
         active.modifier
@@ -176,7 +256,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       window.removeEventListener("pointercancel", cancel);
       window.removeEventListener("blur", cancel);
     };
-  }, [apps, area, options]);
+  }, [items, area, options]);
 
   const startBand = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0 || !options.showIcons || press.current) return;
@@ -216,7 +296,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     };
   }, [menu]);
 
-  const startPress = (event: ReactPointerEvent<HTMLButtonElement>, app: AppDefinition) => {
+  const startPress = (event: ReactPointerEvent<HTMLButtonElement>, app: DesktopItem) => {
     if (event.button !== 0) return;
     event.stopPropagation();
     const wasSelected = selected.includes(app.id);
@@ -277,15 +357,16 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     onKeyDown={event => {
       if (event.target !== event.currentTarget) return;
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "a") {
-        event.preventDefault();setSelected(apps.map(app=>app.id));
+        event.preventDefault();setSelected(items.map(item=>item.id));
       } else if (event.key === "Escape") {
         setSelected([]);setMenu(null);
       }
     }}>
-    {options.showIcons && apps.map((app,index) => {
+    {options.showIcons && items.map((app,index) => {
       const position = layout.placement(app.id, index, area);
       const offset = drag?.keys.includes(app.id) ? drag.offset : null;
       return <button type="button" key={app.id} data-test-desktop-icon={app.id}
+        data-test-desktop-file={app.file?.entry.uri}
         data-test-desktop-x={position.x} data-test-desktop-y={position.y}
         data-test-desktop-selected={selected.includes(app.id)}
         className={"desktop__icon-item windows-desktop__shortcut" +
@@ -307,7 +388,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         onDoubleClick={event => {
           event.stopPropagation();
           if (ignoreClick.current) {ignoreClick.current=false;return;}
-          dispatch({ type:"OPEN_APP", app });
+          openItem(app);
         }}
         aria-label={app.label} title={app.label}>
         <span className="desktop__icon-box"><img className="desktop__icon-icon"
@@ -330,10 +411,16 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}>
       {menu.id ? <>
         <button role="menuitem" onClick={() => {
-          const app = apps.find(item => item.id === menu.id);
+          const app = items.find(item => item.id === menu.id);
           setMenu(null);
-          if (app) dispatch({ type:"OPEN_APP", app });
+          if (app) openItem(app);
         }}>Open</button>
+        {items.find(item => item.id === menu.id)?.file && <button role="menuitem"
+          onClick={() => {
+            const file = items.find(item => item.id === menu.id)?.file;
+            setMenu(null);
+            if (file) deleteFile(file);
+          }}>Delete</button>}
         <button role="menuitem" disabled title="Original shortcut properties are pending">Properties</button>
       </> : <>
         <button role="menuitem" aria-expanded={menu.view}
