@@ -1,0 +1,49 @@
+/* Pinned source src/styles/apps/stickynotes.css: detached note panels,
+   shadow 0 10px 20px #0006, 20px toolbar icons, Segoe Print, hidden handles. */
+.windows-sticky__layer {
+  position:fixed; left:0; top:0; right:0; bottom:40px; overflow:visible;
+}
+.windows-sticky__note {
+  position:absolute; display:flex; flex-direction:column; min-width:0;
+  border:0; box-shadow:0 10px 20px rgba(0,0,0,.4);
+  color:#27211c; border-radius:0; font-size:16px;
+}
+.windows-sticky__header {
+  flex:0 0 34px; display:flex; justify-content:space-between; align-items:flex-start;
+  padding:6px; touch-action:none; cursor:move; user-select:none;
+}
+.windows-sticky__header .note__control-item {
+  width:20px; height:20px; padding:2px; display:grid; place-items:center;
+  border:0; background:transparent; cursor:pointer; color:inherit;
+}
+.windows-sticky__header .note__control-item:hover {box-shadow:0 0 0 1px rgba(0,0,0,.6);}
+.windows-sticky__header .note__control-item img {
+  width:16px;height:16px;object-fit:contain;pointer-events:none;
+}
+.windows-sticky__content {flex:1;min-height:0;padding:0 3px 3px;}
+.windows-sticky__content .note__textarea {
+  box-sizing:border-box;display:block;width:100%;height:100%;padding:8px;
+  border:0;outline:0;resize:none;overflow:auto;background:transparent;
+  font:20px/32px "Segoe Print",segoepr,cursive,sans-serif;color:#27211c;
+}
+.windows-sticky__note .note__resize {
+  position:absolute; width:16px;height:16px;opacity:0;
+  touch-action:none; user-select:none;
+}
+.windows-sticky__note .note__resize-n {top:-5px;left:8px;right:8px;width:auto;height:12px;cursor:n-resize;}
+.windows-sticky__note .note__resize-s {bottom:-5px;left:8px;right:8px;width:auto;height:12px;cursor:s-resize;}
+.windows-sticky__note .note__resize-w {left:-5px;top:8px;bottom:8px;width:12px;height:auto;cursor:w-resize;}
+.windows-sticky__note .note__resize-e {right:-5px;top:8px;bottom:8px;width:12px;height:auto;cursor:e-resize;}
+.windows-sticky__note .note__resize-nw {top:-5px;left:-5px;cursor:nw-resize;}
+.windows-sticky__note .note__resize-ne {top:-5px;right:-5px;cursor:ne-resize;}
+.windows-sticky__note .note__resize-sw {bottom:-5px;left:-5px;cursor:sw-resize;}
+.windows-sticky__note .note__resize-se {bottom:-5px;right:-5px;cursor:se-resize;}
+.windows-sticky__error {
+  position:absolute;bottom:8px;left:10px;max-width:min(330px,95vw);
+  padding:8px 11px;color:#653b19;background:#fff6e7;border:1px solid #bba070;
+  pointer-events:auto;font:12px "Segoe UI",Tahoma,sans-serif;
+}
+@media(max-width:420px) {
+  .windows-sticky__header {flex-basis:30px;padding:4px;}
+  .windows-sticky__content .note__textarea {font-size:18px;line-height:28px;}
+}
