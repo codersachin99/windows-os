@@ -117,6 +117,28 @@ describe("responsive native window cascade", () => {
     expect(restored.windows[0].minimized).toBe(false);
     expect(restored.windows[0].z).toBeGreaterThan(minimized.windows[0].z);
   });
+  it("preserves original centered close-only 520x400 About window without titlebar icon",()=>{
+    const about=appRegistry.get("about")!;
+    expect(about.window).toMatchObject({
+      width:520,height:400,resizable:false,centered:true,titlebarIcon:false
+    });
+    expect(about.showInStart).toBe(false);
+    expect(sourceWindowPlacement(about.window,1,{width:1920,height:1080}))
+      .toEqual({x:700,y:320,width:520,height:400});
+    const mobile=sourceWindowPlacement(about.window,1,{width:393,height:915});
+    expect(mobile).toEqual({x:0,y:238,width:393,height:400});
+  });
+  it("reuses About program singleton and refocuses after repeated winver invocation",()=>{
+    const about=appRegistry.get("about")!;
+    const boot=initialDesktopState();
+    const desktop=desktopReducer(desktopReducer(boot,{type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const once=desktopReducer(desktop,{type:"OPEN_APP",app:about});
+    const twice=desktopReducer(once,{type:"OPEN_APP",app:about});
+    expect(twice.windows).toHaveLength(1);
+    expect(twice.windows[0].id).toBe(once.windows[0].id);
+    const closed=desktopReducer(twice,{type:"CLOSE_WINDOW",id:twice.windows[0].id});
+    expect(closed.windows).toHaveLength(0);
+  });
   it("centers the dedicated Shortcut Wizard and clamps tiny viewports", () => {
     expect(sourceWindowPlacement({width:550,height:400,centered:true},1,
       {width:393,height:915})).toEqual({x:0,y:238,width:393,height:400});
