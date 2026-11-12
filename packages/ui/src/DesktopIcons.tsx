@@ -128,7 +128,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       const app = appRegistry.get(file.programId);
       if (app) dispatch({ type: "OPEN_APP", app });
       else setError("The original " + file.label + " program is not yet migrated.");
-    } else if (/\\.txt$/i.test(file.entry.name)) {
+    } else if (/\.txt$/i.test(file.entry.name)) {
       const notepad = appRegistry.get("notepad");
       if (notepad) dispatch({
         type: "OPEN_APP", app: notepad, file: { path: file.entry.uri }
