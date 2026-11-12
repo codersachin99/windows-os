@@ -8,4 +8,4 @@
 
 **Limitations:** drops onto an icon, including folders and Recycle Bin, remain unsupported in this native reverse path; only empty Desktop background is accepted. Browser drag behavior may differ on real touch devices; host file system writing is deliberately forbidden. Full source drag-ghost visuals, touch and theme variants, pixel-by-pixel screenshot matching and multi-item atomic rollback after storage failures remain to be implemented. Original desktop/Computer modules remain \`in-progress\`; no full parity or release claim.
 
-**Status:** pending opt-in CI.
+**Status: CI verified** — [GitHub Actions 43213708078](https://github.com/codersachin99/windows-os/actions/runs/43213708078) passed 134 unit and 138 desktop/mobile Chromium browser tests, including native Explorer→Desktop move/copy/group and external File import. The original desktop and Explorer modules remain in progress as a whole.
