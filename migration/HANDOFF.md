@@ -1,3 +1,9 @@
+## Win7 Computer clickable breadcrumbs and address refresh — 2026-11-13 (CI pending)
+
+- **Source**: `legacy-win7/src/modules/apps/computer.js#getLocation` produces clickable `Computer → disk → directory` pieces from runtime drive metadata. Source single-crumb special handling covers Bin and unknown/Computer roots. `theme-win7-scss.js` gives the 18px address icon, 22px breadcrumb line, 25px address field, and refresh hover/pressed gradient. `vue-app.css` gives the 25px refresh width.
+- **Port**: `SourceWin7Breadcrumbs.tsx` builds mounted-URI-only breadcrumbs (not host paths), retains original percent-decoded display labels with unchanged raw URI navigation targets, and uses `ExplorerSession.open()` to preserve history. Refresh action calls existing `session.refresh()`. The existing read-only Folder address field is retained for accessibility and current test/contracts; on keyboard focus, it appears instead of the crumbs. Original 27px navigation sprites and search progress remain untouched. Other themes keep their previous address presentation. The refresh glyph is a functional SVG reconstruction, not a claimed byte-identical source icon.
+- **Coverage added**: source breadcrumb geometry/logic unit tests and desktop/mobile Chromium clicks, drive/folder history, 25px control and refresh state checks. Screenshot/pixel comparison, editable address path, folder drop-downs, exact original glyph asset and other apps are pending. PR #1 remains draft, main unchanged, CI opt-in only.
+
 ## Win7 original Explorer navigation sprites — 2026-11-13 (CI VERIFIED)
 
 - **Pinned original**: `legacy-win7@4e63290/src/modules/themes/theme-win7-scss.js`; extracted both original inline WebP data URLs unmodified (nav background and 27px four-row button sprite). Original source uses 27px normal (0), hover (-27px), active (-54px), disabled (-81px), and `scaleX(-1)` for Forward.

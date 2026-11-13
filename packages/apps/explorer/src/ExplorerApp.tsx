@@ -16,6 +16,7 @@ import { SearchCompanion } from "@windows-os/apps/search-companion";
 import { sourceExplorerSearchStyle } from "./searchStyle";
 import { SourceAddressProgress } from "./SourceAddressProgress";
 import { SourceWin7Navigation } from "./SourceWin7Navigation";
+import { SourceWin7Breadcrumbs, sourceComputerBreadcrumbs } from "./SourceWin7Breadcrumbs";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -423,12 +424,31 @@ export function ExplorerApp({
             <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
           </>}
       <button aria-label="Up" disabled={state.path === "/"} onClick={() => void execute(() => session.up())}>↑</button>
-      <label className="explorer-address__location">Address:
+      <div className={"explorer-address__location" + (theme === "win7" ? " is-source-win7" : "")}>
+        <span className="explorer-address__label">Address:</span>
         <span className="explorer-address__location-wrapper">
-          <input aria-label="Folder address" readOnly value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
+          <input aria-label="Folder address" readOnly
+            className={theme === "win7" ? "explorer-address__source-path-input" : undefined}
+            value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
           <SourceAddressProgress fraction={searchBusy ? searchFraction : null} />
+          {theme === "win7" && <>
+            <SourceWin7Breadcrumbs
+              items={sourceComputerBreadcrumbs(state.path, volume?.pathConfig, trashPath)}
+              icon={isBin ? legacyArt.recycleBin : legacyArt.computer}
+              onNavigate={path => void execute(() => session.open(path))} />
+            <button type="button" className="explorer-address__source-refresh"
+              aria-label="Reload current folder" title="Refresh"
+              onClick={() => void execute(() => session.refresh())}>
+              <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true">
+                <path d="M14.5 6.5a6 6 0 1 0 .1 4" fill="none"
+                  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                <path d="M14.5 2.5v4.7h-4.7" fill="none" stroke="currentColor"
+                  strokeWidth="1.8" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </>}
         </span>
-      </label>
+      </div>
       <input className="explorer-address__search" type="search"
         placeholder="Search" aria-label="Search files" value={state.search}
         onChange={event => session.search(event.target.value)} />
