@@ -13,6 +13,8 @@
     "import:legacy": "node scripts/import-legacy.mjs",
     "check:legacy": "node scripts/import-legacy.mjs --from ../legacy-win7 --check",
     "test:e2e": "playwright test",
+    "visual:capture": "node scripts/capture-visual-parity.mjs",
+    "visual:compare": "python scripts/compare-visual-parity.py",
     "audit:legacy": "node scripts/audit-legacy.mjs",
     "dev:api": "python services/api/api/server.py",
     "test:source": "node --test scripts/source-contacts.test.mjs"

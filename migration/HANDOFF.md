@@ -1,3 +1,11 @@
+## Opt-in, isolated visual evidence capture — 2026-11-14 (FIRST RUN PENDING)
+
+- **Goal**: move visual fidelity evaluation beyond unverified screenshots. The pinned source still controls UI/behavior; a React screenshot by itself is **not** proof of parity.
+- **Implementation**: `scripts/capture-visual-parity.mjs` records five deterministic scenes at desktop 1920×1080 and Playwright Pixel 7 sizes, fixed clock, Chromium version, screenshot paths/hashes, and explicit errors into ignored `artifacts/visual-parity/manifest.json`. The `scripts/compare-visual-parity.py` creates human-review overlays and difference metrics **only if** paired source and target images exist. A missing source or failed scene cannot be reported as a pixel match.
+- **Workflow**: `.github/workflows/react-checks.yml` retains `[run-ci]` as the normal opt-in gate and adds a separate visual-only trigger `[capture-visual]` (or deliberate manual `capture_visual=true`). It uploads visual artifacts on success or failure. Optional `LEGACY_SOURCE_READ_TOKEN` allows checkout of exact pinned private source into `legacy-reference`, SHA verification, and local Python server; if missing, the first run is **target-only**, explicitly marked as such.
+- **Scope**: initial scenes are Guest desktop, Computer root, Organize, View, and Recycle Bin. Expanded disk/search/fixtures/screenshots remain unported acceptance tasks. No screenshot difference has yet been measured, no source-server CI execution is claimed. [Runbook](VISUAL-PARITY-RUNBOOK.md).
+- **Next**: use `[capture-visual]` once to check the actual browser capture/zip path without running full CI unnecessarily; document results and fix failures. PR #1 stays draft, `main` unchanged, no release.
+
 ## Integrated View / Bin Save search / original-image audit verification — 2026-11-13 (CI VERIFIED)
 
 - **Green prerequisite**: [CI 43482880673](https://github.com/codersachin99/windows-os/actions/runs/43482880673) passed **269 unit tests / 266 browser tests** after the New Folder and View URL-regex fixes.

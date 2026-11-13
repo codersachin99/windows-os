@@ -6,6 +6,11 @@ on:
       - main
       - 'feat/**'
   workflow_dispatch:
+    inputs:
+      capture_visual:
+        description: "Capture source/React screenshot evidence (instead of full CI)"
+        type: boolean
+        default: false
 
 concurrency:
   # Include commit SHA: normal skipped pushes cannot cancel an opted-in CI run.
@@ -19,7 +24,7 @@ jobs:
   browser-and-contracts:
     # Push checks are opt-in; the triggering commit must contain [run-ci].
     # Explicit manual workflow dispatch also runs checks when requested.
-    if: contains(github.event.head_commit.message, '[run-ci]') || github.event_name == 'workflow_dispatch'
+    if: contains(github.event.head_commit.message, '[run-ci]') || (github.event_name == 'workflow_dispatch' && inputs.capture_visual != true)
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -52,3 +57,96 @@ jobs:
             test-results/
             playwright-report/
           if-no-files-found: ignore
+
+  visual-capture:
+    # Neither ordinary pushes nor [run-ci] commits capture screenshots.
+    # Opt in with [capture-visual] in a commit, or manual dispatch input.
+    if: contains(github.event.head_commit.message, '[capture-visual]') || (github.event_name == 'workflow_dispatch' && inputs.capture_visual == true)
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install frontend dependencies
+        run: npm install --no-audit --no-fund
+      - name: Verify visual capture JavaScript syntax
+        run: node --check scripts/capture-visual-parity.mjs
+      - name: Assert pinned source assets before capture
+        run: npm run audit:legacy
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Detect optional read-only legacy source access
+        id: legacy
+        shell: bash
+        env:
+          SOURCE_TOKEN: ${{ secrets.LEGACY_SOURCE_READ_TOKEN }}
+        run: |
+          if [ -n "$SOURCE_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "No legacy read token: target-only screenshot evidence, not paired parity."
+          fi
+
+      - name: Checkout exact pinned legacy source (optional)
+        if: steps.legacy.outputs.available == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: codersachin99/legacy-win7
+          ref: 4e63290d783009e1293433c6ccf252abba9c1187
+          path: legacy-reference
+          token: ${{ secrets.LEGACY_SOURCE_READ_TOKEN }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        if: steps.legacy.outputs.available == 'true'
+        with:
+          python-version: "3.12"
+      - name: Prepare image comparison (source available only)
+        if: steps.legacy.outputs.available == 'true'
+        run: python -m pip install Pillow
+
+      - name: Capture fixed React and optional pinned source scenes
+        shell: bash
+        env:
+          LEGACY_AVAILABLE: ${{ steps.legacy.outputs.available }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/visual-parity
+          npm run dev > /tmp/windowsos-visual-target.log 2>&1 &
+          TARGET_PID=$!
+          SOURCE_PID=""
+          trap 'kill "$TARGET_PID" 2>/dev/null || true; if [ -n "$SOURCE_PID" ]; then kill "$SOURCE_PID" 2>/dev/null || true; fi' EXIT
+          ready() {
+            local url="$1"
+            for attempt in $(seq 1 60); do
+              if curl -fsS -o /dev/null "$url"; then return 0; fi
+              sleep 1
+            done
+            echo "Server did not start at $url" >&2
+            return 1
+          }
+          ready http://127.0.0.1:1420/
+          if [ "$LEGACY_AVAILABLE" = "true" ]; then
+            (cd legacy-reference && DB_TYPE=sqlite python start.py --host 127.0.0.1 --port 8099 --no-browser) > /tmp/windowsos-visual-source.log 2>&1 &
+            SOURCE_PID=$!
+            ready http://127.0.0.1:8099/
+            # This SHA is checked out by actions/checkout, not merely assumed.
+            test "$(git -C legacy-reference rev-parse HEAD)" = "4e63290d783009e1293433c6ccf252abba9c1187"
+            node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420 --source-url http://127.0.0.1:8099 --source-sha 4e63290d783009e1293433c6ccf252abba9c1187
+            python scripts/compare-visual-parity.py
+          else
+            node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420
+          fi
+
+      - name: Upload visual evidence even if capture fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-parity-${{ github.sha }}
+          path: artifacts/visual-parity/
+          if-no-files-found: warn
+          retention-days: 14
