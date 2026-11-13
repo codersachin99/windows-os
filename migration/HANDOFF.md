@@ -1,3 +1,9 @@
+## Integrated View / Bin Save search / original-image audit verification — 2026-11-13 (CI PENDING)
+
+- **Green prerequisite**: [CI 43482880673](https://github.com/codersachin99/windows-os/actions/runs/43482880673) passed **269 unit tests / 266 browser tests** after the New Folder and View URL-regex fixes.
+- **Additional source changes**: `7b48256` adds disabled non-classic **Save search** in the shared Computer/Bin toolbar; `b957c31` adds image byte checks to the existing source inventory audit. The Git repository tree confirmed **36 of 36** imported images match original Git blob hashes before adding the automated check.
+- **Verification**: the current integrated `[run-ci]` commit triggers one opt-in GitHub Actions check for these previously unverified changes. Do not claim CI success before actual completion. [Source view trace](EXPLORER-VIEW-SOURCE.md). Existing PR #1 remains draft; `main` unchanged.
+
 ## Imported source image byte-fidelity audit — 2026-11-13 (UNVERIFIED SCRIPT CHANGE)
 
 - **Actual Git tree evidence**: comparing pinned `legacy-win7@4e63290` and current `windows-os` repository trees, all **36** imported `apps/web/public/assets/images/*` files match the original `assets/images/*` Git blob SHA exactly, including eight source View icons.
@@ -8,14 +14,15 @@
 
 - **Pinned proof**: `legacy-win7@4e63290/src/modules/apps/computer.js#toolbar()` conditionally appends `this.isSearch && !this.classicSearch && {label:this.$t("save-search"),disabled:true}`. Win7 has non-classic search and `bin.js` inherits the Computer toolbar. The source en-US text is "Save search".
 - **Code**: [7b48256](https://github.com/codersachin99/windows-os/commit/7b48256cc73ce87855f9aafc15e9d3430ea7c75d) adds the source-disabled entry to Win7 Computer/Bin only while the React search-results route is active. It provides no fake Save implementation and retains all existing file/restore actions. Two browser scenarios (desktop/mobile = four cases) check appearance, disabled state and clearing results. [Detailed trace](EXPLORER-VIEW-SOURCE.md).
-- **Verification**: code intentionally committed **without** `[run-ci]` while [repair verification #43482880673](https://github.com/codersachin99/windows-os/actions/runs/43482880673) is running against the previous `fa1c823` commit. This new Save search change is **not** covered by that run; a separate deliberate opt-in CI check is required once appropriate.
+- **Verification**: [repair CI 43482880673 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43482880673) covers the prior `fa1c823` fix, not this Save search change. One deliberate integrated opt-in CI check is now being triggered to cover Save search plus source image checksum audit; the result remains pending until verified.
 - **Next**: verify repair run and commit with Save search tests; continue source screenshot/toolbar parity. Draft PR #1, main unchanged, no release.
 
 ## Win7 View menu browser regression repair — 2026-11-13 (CI PENDING)
 
 - **Failed checks and root cause**: [CI 43476860362](https://github.com/codersachin99/windows-os/actions/runs/43476860362) failed 36/266 Chromium tests (230 passed). [CI 43479294892](https://github.com/codersachin99/windows-os/actions/runs/43479294892) failed 38/266 Chromium tests (228 passed). In both runs, the source-inspired Win7 New folder visibility condition hid the previously working action at React's writable root `"/"`, producing 30-second locator timeouts across desktop/mobile Explorer and search tests. The integrated check additionally had 2 failing new View-icon assertions because a regexp was double-escaped; the DOM did contain the correct original `view-tiles.c4008351.webp` source path. All TypeScript/unit/source audit/build checks passed in the integrated run.
 - **Fix**: Keep `New folder` visible for non-Bin Computer, including the writable React root; original source `activePath` nonnull gating is not directly equivalent to this React path. Bin still does not expose folder creation. Correct the two icon-URL regexp assertions to match literal dots, not backslashes.
-- **Next**: run explicit opt-in CI once for corrected UI and integration; record exact test counts and assess screenshot parity only after all regressions pass. [View source trace](EXPLORER-VIEW-SOURCE.md). No full pixel parity or release claim.
+- **Verification passed**: [corrected opt-in CI 43482880673 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43482880673), implementation SHA `fa1c823389822270cadb99c303719364a2e6ba48`. **269 Vitest unit tests (52 files)**, **266 desktop/mobile Chromium browser cases**, TypeScript, original source inventory, Contacts source audit and Vite build all passed. This run verifies the View popup/source icon URL fixes and preserves all existing Explorer workflows. It does not include the subsequent Save search or image byte-audit code.
+- **Next**: verify subsequent source Save search + image audit changes with one separate opt-in CI run; investigate screenshot parity. [View source trace](EXPLORER-VIEW-SOURCE.md). No full pixel parity or release claim.
 
 ## Original Win7 Computer/Bin View popup and 8-mode slider — 2026-11-13 (FINAL VERIFICATION PENDING)
 
