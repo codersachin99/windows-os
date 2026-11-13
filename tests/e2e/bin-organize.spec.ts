@@ -43,6 +43,13 @@ test("Bin Organize Delete confirms permanent deletion and protects Restore/clipb
   await computer.getByRole("alertdialog",{name:"Confirm file operation"})
     .getByRole("button",{name:"Yes"}).click();
   await expect(original).toHaveCount(0);
+  // Computer was opened after Bin, so it is the top window. Dismiss it
+  // through the already-migrated Organize -> Close lifecycle before
+  // interacting with the Bin behind it; do not bypass pointer hit-testing.
+  await computer.getByRole("button",{name:"Organize",exact:true}).click();
+  await computer.getByRole("menu",{name:"Organize"})
+    .getByRole("menuitem",{name:"Close",exact:true}).click();
+  await expect(computer).toHaveCount(0);
   const recycled=bin.locator('[data-test-explorer-item="BinMenuDeleteProbe"]');
   await expect(recycled).toBeVisible();
   await recycled.click();
