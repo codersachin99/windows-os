@@ -12,6 +12,8 @@ import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } fr
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
+import { sourceExplorerSearchStyle } from "./searchStyle";
+import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
 import "./ExplorerApp.css";
