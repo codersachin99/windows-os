@@ -440,7 +440,7 @@ export function ExplorerApp({
     selectedPaths:state.selected, protectedRoots,
     clipboardHasPaths:clipboardState.paths.length > 0,
     canMoveToTrash:Boolean(trashPath), isRecycleBin:isBin,
-    canCloseWindow:Boolean(onClose)
+    recycleBinPath, canCloseWindow:Boolean(onClose)
   });
   const organizeCommand = (command: SourceOrganizeCommand) => {
     switch(command) {
@@ -532,9 +532,10 @@ export function ExplorerApp({
       {/* Original Computer renders progress in window-addressbar, not here. */}
     </div>
     <div className="explorer-command">
-      {isBin
-        ? <button disabled title="Recycle Bin menu is a separate source surface">Organize</button>
-        : <SourceOrganizeMenu items={organizeItems} onCommand={organizeCommand} />}
+      {/* Original bin.js renders Computer at the trash path; both windows
+          inherit the same Organize component. Unsafe trash transfer commands
+          remain disabled until their source metadata semantics are ported. */}
+      <SourceOrganizeMenu items={organizeItems} onCommand={organizeCommand} />
       {isBin ? <>
         <button disabled={!selected?.originalPath} onClick={restoreSelection}>Restore</button>
         <button disabled={!state.selected.length} onClick={requestDelete}>Delete permanently</button>

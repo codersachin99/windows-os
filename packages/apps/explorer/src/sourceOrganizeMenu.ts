@@ -36,30 +36,38 @@ export interface SourceOrganizeState {
   protectedRoots: readonly string[];
   clipboardHasPaths: boolean;
   canMoveToTrash: boolean;
-  /** Recycle Bin toolbar is a separate source surface, not Computer Organize. */
+  /** Original bin.js mounts Computer id=bin at the real trashPath. */
   isRecycleBin: boolean;
+  recycleBinPath?: string | null;
   canCloseWindow: boolean;
 }
 
 export function sourceOrganizeItems(state: SourceOrganizeState): SourceOrganizeItem[] {
   const selected = state.selectedPaths;
-  const hasItemSelected = !state.isRecycleBin && selected.length > 0 &&
+  const hasItemSelected = selected.length > 0 &&
     !selected.some(uri => state.protectedRoots.includes(uri));
+  // Trash entries carry restore metadata and must not be moved/renamed using
+  // normal file operations. Only allow Delete via the existing permanent
+  // confirmation; never permit deleting the bin root or an unrelated path.
+  const binRoot = state.recycleBinPath?.replace(/\/$/, "");
+  const hasSafeBinSelection = state.isRecycleBin && Boolean(binRoot) &&
+    selected.length > 0 && selected.every(path => path.startsWith(binRoot + "/"));
   return SOURCE_ORGANIZE_DEFINITIONS.map(def => {
     let enabled = false;
     switch (def.id) {
       case "cut":
       case "copy":
-        enabled = hasItemSelected;
+        enabled = !state.isRecycleBin && hasItemSelected;
         break;
       case "paste":
-        enabled = hasItemSelected && state.clipboardHasPaths;
+        enabled = !state.isRecycleBin && hasItemSelected && state.clipboardHasPaths;
         break;
       case "delete":
-        enabled = hasItemSelected && state.canMoveToTrash;
+        enabled = state.isRecycleBin ? hasSafeBinSelection
+          : hasItemSelected && state.canMoveToTrash;
         break;
       case "rename":
-        enabled = hasItemSelected && selected.length === 1;
+        enabled = !state.isRecycleBin && hasItemSelected && selected.length === 1;
         break;
       case "close":
         enabled = state.canCloseWindow;

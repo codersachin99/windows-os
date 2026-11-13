@@ -70,7 +70,8 @@ function ApplicationContent({
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
-  if (appId === "bin") return <RecycleBinApp />;
+  if (appId === "bin") return <RecycleBinApp theme={theme}
+    onClose={() => onRequestCloseWindow(windowId)} />;
   if (appId === "computer") return <ExplorerApp theme={theme} initialPath={filePath}
     onClose={() => onRequestCloseWindow(windowId)}
     onOpenFind={scope => {

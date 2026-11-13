@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import { sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerApp } from "./ExplorerApp";
+import type { ThemeId } from "@windows-os/contracts";
 
 /**
  * Legacy bin.js is an Explorer instance hoisted to the source trashPath.
  * Without source getStats and session paths, never fabricate a mounted disk
  * or falsely claim the Recycle Bin is empty.
  */
-export function RecycleBinApp() {
+interface RecycleBinAppProps {
+  theme?: ThemeId;
+  onClose?(): void;
+}
+
+export function RecycleBinApp({ theme = "win7", onClose }: RecycleBinAppProps) {
   const [session, setSession] = useState(() => sourceFilesystemRuntime.snapshot());
   useEffect(() => sourceFilesystemRuntime.subscribe(setSession), []);
   if (!session) {
@@ -20,5 +26,6 @@ export function RecycleBinApp() {
       </div>
     </div>;
   }
-  return <ExplorerApp recycleBinPath={session.trashPath} onOpenTextFile={() => {}} />;
+  return <ExplorerApp theme={theme} onClose={onClose}
+    recycleBinPath={session.trashPath} onOpenTextFile={() => {}} />;
 }

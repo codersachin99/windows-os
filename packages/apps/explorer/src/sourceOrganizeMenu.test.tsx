@@ -51,9 +51,33 @@ describe("legacy Computer toolbar Organize menu", () => {
     expect(items.find(x=>x.id==="copy")?.enabled).toBe(true);
     expect(items.find(x=>x.id==="delete")?.enabled).toBe(true);
   });
-  it("does not reuse Computer actions for the Recycle Bin or invent Close without a host", () => {
+  it("inherits Computer's 13 Organize entries for Bin but protects trash metadata", () => {
+    const trash="/EXTERNAL/computer/drive0/Users/Guest/RecycleBin";
+    const empty=sourceOrganizeItems({...baseline,selectedPaths:[],
+      isRecycleBin:true,recycleBinPath:trash});
+    expect(empty.map(x=>x.id)).toEqual(SOURCE_ORGANIZE_DEFINITIONS.map(x=>x.id));
+    expect(empty.filter(x=>x.enabled).map(x=>x.id)).toEqual(["close"]);
+    const selected=sourceOrganizeItems({...baseline,
+      selectedPaths:[trash+"/removed.txt"],isRecycleBin:true,recycleBinPath:trash,
+      clipboardHasPaths:true,canMoveToTrash:false});
+    expect(selected.filter(x=>x.enabled).map(x=>x.id)).toEqual(["delete","close"]);
+    for(const id of ["cut","copy","paste","rename","select-all","properties"]) {
+      expect(selected.find(x=>x.id===id)?.enabled).toBe(false);
+    }
+  });
+  it("prevents permanent Delete on the Bin root, out-of-scope, or mixed selection", () => {
+    const trash="/EXTERNAL/computer/drive0/Trash";
+    for(const selectedPaths of [
+      [trash], ["/Documents/file.txt"], [trash+"/a",trash], [trash+"-fake/evil"]
+    ]) {
+      const items=sourceOrganizeItems({...baseline,selectedPaths,
+        isRecycleBin:true,recycleBinPath:trash});
+      expect(items.filter(x=>x.enabled).map(x=>x.id)).toEqual(["close"]);
+    }
+  });
+  it("does not allow trash mutations without a source mount or shell Close without host", () => {
     const items=sourceOrganizeItems({...baseline,selectedPaths:["/trash/x"],
-      isRecycleBin:true,canCloseWindow:false});
+      isRecycleBin:true,recycleBinPath:null,canCloseWindow:false});
     expect(items.some(item=>item.enabled)).toBe(false);
   });
   it("renders a menu trigger without opening a popup during server rendering", () => {
