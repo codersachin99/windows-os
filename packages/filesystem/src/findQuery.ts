@@ -66,7 +66,8 @@ function localDate(value: string, end: boolean): number {
 export function sourceFindSearchRequest(query: SourceFindQuery, now = Date.now()): FileSearchRequest {
   const request: FileSearchRequest = {
     scope: query.scope, sourceNamePattern: query.namePattern,
-    subfolders: query.subfolders, kind: query.kind || undefined
+    subfolders: query.subfolders, kind: query.kind || undefined,
+    sourceRanked: true
   };
   if (query.size) {
     const bytes = Math.max(0, query.size.kb) * 1024;

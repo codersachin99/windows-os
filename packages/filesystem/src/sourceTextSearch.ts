@@ -1,4 +1,5 @@
 import type { FileEntry } from "./index";
+import type { FileSearchRequest } from "./search";
 
 /**
  * Direct port of pinned legacy-win7/src/modules/chunks/
@@ -21,7 +22,7 @@ export interface SourceSearchMatch {
   score: number;
   highlights: SourceSearchHighlight[];
 }
-export type SourceKindMatcher = (entry: FileEntry, kind: string) => boolean;
+export type SourceKindMatcher = (entry: FileEntry, kind: NonNullable<FileSearchRequest["kind"]>) => boolean;
 
 const DAY = 86_400_000;
 const SIZES: Record<string, [number, number]> = {
@@ -224,10 +225,12 @@ export function sourceSearchMatch(
 ): SourceSearchMatch | null {
   if (!query.valid) return null;
   for (const filter of query.filters) {
-    if (filter.field === "kind" && !matchKind(entry, filter.value)) return null;
+    if (filter.field === "kind" && !matchKind(entry,
+      filter.value as NonNullable<FileSearchRequest["kind"]>)) return null;
     if (filter.field === "type") {
       if (entry.type === "directory") return null;
-      const extension = entry.name.slice(entry.name.lastIndexOf(".") + 1).toLowerCase();
+      const dot = entry.name.lastIndexOf(".");
+      const extension = dot === -1 ? "" : entry.name.slice(dot + 1).toLowerCase();
       if (extension !== filter.value.replace(/^\./, "")) return null;
     }
     if (filter.field === "size") {

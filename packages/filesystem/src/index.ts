@@ -521,6 +521,12 @@ export { FileClipboard } from "./clipboard";
 export type { ClipboardOperation, FileClipboardState } from "./clipboard";
 
 export { searchFiles, matchFilePattern, matchSourceNamePattern, matchesSourceKind } from "./search";
+export {
+  normalizeSourceSearchText, parseSourceSearchText, findSourceWordStart,
+  scoreSourceFileName, sourceSearchHighlights, sourceSizeRange,
+  sourceModifiedRange, compileSourceSearch, sourceSearchMatch
+} from "./sourceTextSearch";
+export type { SourceParsedSearch, SourceSearchMatch, SourceSearchHighlight } from "./sourceTextSearch";
 export { sourceSearchLocations } from "./sourceSearchLocations";
 export { createSourceFindQuery, encodeSourceFindPath, decodeSourceFindPath, sourceFindSearchRequest,
   SOURCE_FIND_PREFIX } from "./findQuery";

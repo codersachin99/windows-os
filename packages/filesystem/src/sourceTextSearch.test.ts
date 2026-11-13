@@ -33,7 +33,7 @@ describe("pinned 5985 lexer and ranked filename matching", () => {
   });
   it("merges highlight ranges and drops them when accent decomposition changes offsets", () => {
     expect(sourceSearchHighlights("monthly-report.txt", ["report"])).toEqual([{start:8,end:14}]);
-    expect(sourceSearchHighlights("résumé.txt", ["resume"])).toEqual([]);
+    expect(sourceSearchHighlights("re\u0301sume\u0301.txt", ["resume"])).toEqual([]);
     expect(sourceSearchHighlights("hello world", ["hello", "world"]))
       .toEqual([{start:0,end:5},{start:6,end:11}]);
   });

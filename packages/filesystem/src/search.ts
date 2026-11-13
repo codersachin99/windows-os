@@ -2,6 +2,10 @@ import {
   FileStoreError, normalizeFileUri,
   type FileEntry, type VirtualFileStore
 } from "./index";
+import {
+  compileSourceSearch, normalizeSourceSearchText, sourceSearchMatch,
+  type SourceSearchHighlight
+} from "./sourceTextSearch";
 
 /**
  * The original Computer search tracks scope, namePattern and subfolders
@@ -12,6 +16,8 @@ import {
 export interface FileSearchRequest {
   scope: string;
   text?: string;
+  /** Source 2e2c.e ranking even for classic Find queries without text. */
+  sourceRanked?: boolean;
   namePattern?: string | null;
   /** Original Find and Search Companion support comma/semicolon-separated patterns. */
   sourceNamePattern?: string;
@@ -33,6 +39,8 @@ export interface FileSearchResult {
   files: FileEntry[];
   progress: FileSearchProgress;
   truncated: boolean;
+  /** Source 2e2c.w matched token marks, indexed by Guest VFS URI only. */
+  highlights?: Readonly<Record<string, readonly SourceSearchHighlight[]>>;
 }
 
 /** Case-insensitive filename wildcard matcher (? one char, * any run). */
@@ -45,9 +53,10 @@ export function matchFilePattern(name: string, pattern: string): boolean {
 
 /** Pinned Find/Companion module 16d5.c: substring terms or wildcard tokens. */
 export function matchSourceNamePattern(name: string, sourcePattern: string): boolean {
-  const terms = sourcePattern.split(/[;,]/).map(p => p.trim().toLocaleLowerCase()).filter(Boolean);
+  const terms = sourcePattern.split(/[;,]/).map(p =>
+    normalizeSourceSearchText(p.trim())).filter(Boolean);
   if (!terms.length) return true;
-  const lower = name.toLocaleLowerCase();
+  const lower = normalizeSourceSearchText(name);
   return terms.some(term => {
     if (!/[*?]/.test(term)) return lower.includes(term);
     if (term.endsWith(".*")) {
@@ -97,8 +106,11 @@ export async function searchFiles(
   const hidden = (uri: string) => skip.some(s => uri === s || uri.startsWith(s + "/"));
   const max = request.maxResults ?? Number.MAX_SAFE_INTEGER;
   if (!Number.isInteger(max) || max <= 0) throw new FileStoreError("EINVAL", "Invalid search result limit");
-  const needle = request.text?.trim().toLocaleLowerCase() ?? "";
+  const needle = request.text?.trim() ?? "";
+  const ranked = request.sourceRanked || Boolean(needle);
+  const compiled = ranked ? compileSourceSearch(needle) : null;
   const result: FileEntry[] = [];
+  const ranking: { file: FileEntry; score: number; highlights: SourceSearchHighlight[] }[] = [];
   const queue = [scope];
   let foldersScanned = 0;
   let filesScanned = 0;
@@ -113,23 +125,43 @@ export async function searchFiles(
       if (options.signal?.aborted) throw new DOMException("Search cancelled", "AbortError");
       if (hidden(item.uri)) continue;
       filesScanned++;
-      const matchesText = !needle || item.name.toLocaleLowerCase().includes(needle);
+      const rankedMatch = compiled ? sourceSearchMatch(item, compiled, matchesSourceKind) : null;
+      const matchesText = compiled ? rankedMatch !== null : !needle
+        || item.name.toLocaleLowerCase().includes(needle.toLocaleLowerCase());
       const matchesPattern = (!request.namePattern || matchFilePattern(item.name, request.namePattern))
         && (!request.sourceNamePattern || matchSourceNamePattern(item.name, request.sourceNamePattern));
       const matchesDate = (request.modifiedAfter === undefined || item.mtime >= request.modifiedAfter)
         && (request.modifiedBefore === undefined || item.mtime <= request.modifiedBefore);
-      const matchesSize = (request.minSizeBytes === undefined || item.size >= request.minSizeBytes)
-        && (request.maxSizeBytes === undefined || item.size <= request.maxSizeBytes);
+      const matchesSize = (request.minSizeBytes === undefined && request.maxSizeBytes === undefined)
+        || (item.type === "file"
+          && (request.minSizeBytes === undefined || item.size >= request.minSizeBytes)
+          && (request.maxSizeBytes === undefined || item.size <= request.maxSizeBytes));
       const matchesKind = !request.kind || matchesSourceKind(item, request.kind);
-      if (matchesText && matchesPattern && matchesDate && matchesSize && matchesKind) result.push(item);
+      if (matchesText && matchesPattern && matchesDate && matchesSize && matchesKind) {
+        result.push(item);
+        if (compiled && rankedMatch) ranking.push({ file: item,
+          score: rankedMatch.score, highlights: rankedMatch.highlights });
+      }
       if (item.type === "directory" && request.subfolders) queue.push(item.uri);
-      if (result.length >= max) {
+      if (!ranked && result.length >= max) {
         truncated = queue.length > 0 || list.indexOf(item) !== list.length - 1;
         break;
       }
     }
     options.onProgress?.({ foldersScanned, filesScanned, matches: result.length });
-    if (result.length >= max) break;
+    if (!ranked && result.length >= max) break;
+  }
+  if (ranked) {
+    // The pinned source 2e2c.e ranks the full walk before presenting the list.
+    // Do not stop at the first 500 alphabetical hits: later files may outrank them.
+    ranking.sort((a, b) => b.score - a.score || b.file.mtime - a.file.mtime);
+    const ordered = ranking.slice(0, max);
+    return {
+      files: ordered.map(hit => hit.file),
+      progress: { foldersScanned, filesScanned, matches: result.length },
+      truncated: result.length > max,
+      highlights: Object.fromEntries(ordered.map(hit => [hit.file.uri, hit.highlights]))
+    };
   }
   return { files: result, progress: { foldersScanned, filesScanned, matches: result.length }, truncated };
 }
