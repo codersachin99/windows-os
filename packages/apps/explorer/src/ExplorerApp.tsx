@@ -14,6 +14,7 @@ import { ExplorerSession, type ExplorerViewMode } from "./model";
 import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
 import { sourceExplorerSearchStyle } from "./searchStyle";
+import { SourceAddressProgress } from "./SourceAddressProgress";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -417,10 +418,7 @@ export function ExplorerApp({
       <label className="explorer-address__location">Address:
         <span className="explorer-address__location-wrapper">
           <input aria-label="Folder address" readOnly value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
-          {searchBusy && <span className="explorer-address__progress" role="progressbar"
-            aria-label="Search progress" aria-valuemin={0} aria-valuemax={100}
-            aria-valuenow={Math.round(Math.max(0, Math.min(1, searchFraction)) * 100)}
-            style={{ width: (Math.max(0, Math.min(1, searchFraction)) * 100) + "%" }} />}
+          <SourceAddressProgress fraction={searchBusy ? searchFraction : null} />
         </span>
       </label>
       <input className="explorer-address__search" type="search"
