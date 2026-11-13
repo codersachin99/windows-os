@@ -72,3 +72,16 @@ test("original Win95 theme routes Explorer Find to standalone window, not parent
   await expect(find.getByRole("tab", { name:"Name & Location" })).toHaveAttribute("aria-selected","true");
   await expect(explorer).toBeVisible();
 });
+
+
+test("source Search Dialog Start From navigates within the same Computer session", async ({page}) => {
+  const explorer = await desktop(page,"win31");
+  await explorer.getByRole("button", {name:"Search dialog"}).click();
+  const dialog = explorer.locator('[data-test-search-dialog]');
+  await dialog.getByRole("combobox", {name:"Start from"}).selectOption({label:"Documents"});
+  await dialog.getByRole("button", {name:"OK"}).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(1);
+  await expect(explorer.getByRole("textbox", {name:"Folder address"})).toHaveValue(/Documents$/);
+  await expect(explorer.getByText(/\d+ found/, {exact:false})).toBeVisible();
+});
