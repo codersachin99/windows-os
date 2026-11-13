@@ -1,10 +1,11 @@
-## Original multi-disk Computer search — 2026-11-13, pending opt-in CI
+## Original multi-disk Computer search — 2026-11-13, CI VERIFIED
 
 - **Source:** Pinned `computer.js listSearch` / `2e2c.b` seeds `searchIndex.walk` with `in ? [in] : getStats().map(d => d.path)`. `in=` searches only mounted disks, *not* every child of `/EXTERNAL/computer`.
 - **Implementation:** `sourceMountedSearchRoots(LegacyVolumeSession)` maps validated runtime metadata to Guest VFS mount roots, and `searchFiles({rootScopes})` scans disjoint roots, retains global source relevance ranking/progress/cancellation/trash skipping, rejects invalid/unmounted paths, returns empty for no mounts. `ExplorerApp` uses this for Find `shell:search?in=` and classic Search Dialog/Companion Computer scope, with explicit folder searches unchanged.
 - **Tests:** new 5-case Vitest module covering real two-drive metadata, stray shell node exclusion, `sub=0`, zero/removed/missing drives, overlapping roots, cross-disk result ranking and cancellation; new desktop/mobile browser test exercises Find Now with Computer scope and ensures virtual shell siblings never appear.
-- **Validation:** next deliberate `[run-ci]` checkpoint pending. Previous [223 unit / 222 browser CI 43364173206](https://github.com/codersachin99/windows-os/actions/runs/43364173206) remains verified.
-- **Next:** verify CI, investigate source listing cache/progress behavior, screenshot-level Windows 7 visual fidelity, then remaining original programs/games. Draft PR only, main untouched, no release.
+- **Verified:** [deliberate opt-in CI 43366050095 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43366050095) on code SHA `b6cc1273d8b39648c908dd9c18a4d407d89da0cd`: TypeScript, **228 Vitest unit tests in 45 files**, source/Contacts checks, Vite production build and **224 Chromium desktop/mobile browser tests passed**. The new end-to-end scenario opens Find with Computer scope, finds a real mounted System C: folder and excludes a sibling virtual Computer node.
+- **Previous verified:** [CI 43364173206 SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43364173206), **223 unit / 222 browser** tests.
+- **Next:** original search listing cache and invalidation semantics (2e2c.b), source progress ratio and changed-file refresh, screenshot-level Windows 7 visual fidelity, then remaining original programs/games. Draft PR only, main untouched, no release.
 
 ## Original 5401 shell:search path and 0e9a/de73 type keys — 2026-11-13, CI VERIFIED
 

@@ -19,7 +19,7 @@ Legacy source revision: `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
 
 - `packages/filesystem/src/sourceDiskSearch.test.ts`: two mounted drives; exclusion of unlisted Computer shell nodes; shallow `sub=0`; explicit scoped folder; no mounts; stale drive removed from runtime metadata; missing or file roots and overlapping roots; cancellation; global top-N across disks.
 - `tests/e2e/search-mounted-disks.spec.ts`: desktop/mobile Find Computer selection exercises real Guest System C:, excludes sibling virtual Computer node and opens a separate Computer results window.
-- Verification **pending** opt-in `[run-ci]` commit. The previous source URI/type checkpoint [43364173206](https://github.com/codersachin99/windows-os/actions/runs/43364173206) is green (223 unit / 222 browser).
+- **Verified:** [deliberate CI 43366050095 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43366050095), code SHA `b6cc1273d8b39648c908dd9c18a4d407d89da0cd`: TypeScript, **228 unit tests (45 files)**, source/Contacts checks, Vite production build, **224 Chromium desktop/mobile browser tests passed**. No failures. The prior 223-unit/222-browser [URI/type checkpoint 43364173206](https://github.com/codersachin99/windows-os/actions/runs/43364173206) remains green.
 
 ## Remaining
 

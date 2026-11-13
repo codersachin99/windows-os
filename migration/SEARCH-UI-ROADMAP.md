@@ -40,4 +40,4 @@ The original Computer app chooses **three distinct search UI presentations** by 
 ## Mounted disk root fidelity (2026-11-13)
 
 - First slice implemented: actual Guest runtime `getStats` mount roots replace the previous Computer-container fallback for original empty `in=` queries. See [mounted disk search source trace](SEARCH-DISK-ROOTS.md). Tests for multiple mounts, zero mounts, stale roots, no root-node leakage and global ranking have been committed.
-- **Next verification:** deliberate opt-in CI. **Subsequent work:** original cached search index, full multi-drive progress semantics, screenshot comparisons and unported legacy applications.
+- **Verified:** [opt-in CI 43366050095 — PASS](https://github.com/codersachin99/windows-os/actions/runs/43366050095), **228 unit tests across 45 files and 224 desktop/mobile Chromium browser tests**. **Subsequent work:** original cached search index, full multi-drive progress semantics, screenshot comparisons and unported legacy applications.
