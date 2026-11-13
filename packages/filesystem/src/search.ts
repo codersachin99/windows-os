@@ -67,28 +67,44 @@ export function matchSourceNamePattern(name: string, sourcePattern: string): boo
   });
 }
 
-/** Source file categories are filtered by their actual extension, not host MIME. */
+/**
+ * Pinned legacy 0e9a + de73 type matchers from
+ * shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js.
+ * The original predicates check case-insensitive *suffixes* on the extension,
+ * not MIME types or Word/Office associations. Do not broaden their categories.
+ */
+const ORIGINAL_SOURCE_EXTENSIONS = {
+  document: ["txt", "text", "readme", "md", "json", "xml", "rtf", "wpl", "pdf"],
+  picture: ["bmp", "gif", "svg", "png", "jpg", "jpeg", "jfif", "webp", "ico", "apng"],
+  music: ["webm", "wav", "ogg", "mp3", "wma", "aac", "m4a", "flac", "mid"],
+  video: ["webm", "ogv", "ogm", "mp4", "mpg", "mpeg", "wmv", "avi", "mov"],
+  playlist: ["wpl"],
+  program: ["exe", "msi", "apk"],
+  link: ["lnk"],
+  webpage: ["html", "htm"]
+} as const;
+
 export function matchesSourceKind(entry: FileEntry, kind: NonNullable<FileSearchRequest["kind"]>): boolean {
   if (kind === "folder") return entry.type === "directory";
   if (entry.type !== "file") return false;
-  const extension = entry.name.split(".").pop()?.toLocaleLowerCase() ?? "";
-  const kinds: Record<Exclude<NonNullable<FileSearchRequest["kind"]>, "folder">, readonly string[]> = {
-    text: ["txt", "log", "ini", "csv"],
-    image: ["bmp", "gif", "jpg", "jpeg", "png", "webp", "svg"],
-    audio: ["aac", "flac", "m4a", "mp3", "ogg", "wav", "wma"],
-    video: ["avi", "mkv", "mov", "mp4", "mpeg", "mpg", "webm", "wmv"],
-    document: ["doc", "docx", "odt", "pdf", "rtf", "txt"],
-    archive: ["7z", "gz", "rar", "tar", "zip"],
-    application: ["bat", "cmd", "com", "exe", "msi"],
-    picture: ["bmp", "gif", "ico", "jpeg", "jpg", "png", "svg", "webp"],
-    music: ["aac", "flac", "m4a", "mp3", "ogg", "wav", "wma"],
-    movie: ["avi", "mkv", "mov", "mp4", "mpeg", "mpg", "webm", "wmv"],
-    playlist: ["m3u", "m3u8", "pls", "wpl"],
-    program: ["bat", "cmd", "com", "exe", "msi"],
-    link: ["lnk", "url"],
-    webpage: ["htm", "html", "mht", "mhtml"]
-  };
-  return kinds[kind].includes(extension);
+  const dot = entry.name.lastIndexOf(".");
+  if (dot === -1) return false;
+  const extension = entry.name.slice(dot + 1).toLowerCase();
+  const suffix = (extensions: readonly string[]) => extensions.some(value => extension.endsWith(value));
+  switch (kind) {
+    case "document": return suffix(ORIGINAL_SOURCE_EXTENSIONS.document);
+    case "picture": case "image": return suffix(ORIGINAL_SOURCE_EXTENSIONS.picture);
+    case "music": case "audio": return suffix(ORIGINAL_SOURCE_EXTENSIONS.music);
+    case "video": case "movie": return suffix(ORIGINAL_SOURCE_EXTENSIONS.video);
+    case "playlist": return suffix(ORIGINAL_SOURCE_EXTENSIONS.playlist);
+    case "program": case "application": return suffix(ORIGINAL_SOURCE_EXTENSIONS.program);
+    case "link": return suffix(ORIGINAL_SOURCE_EXTENSIONS.link);
+    case "webpage": return suffix(ORIGINAL_SOURCE_EXTENSIONS.webpage);
+    // Compatibility-only non-original category aliases retained for existing
+    // internal clients. The pinned 2e2c UI never offers text/archive.
+    case "text": return suffix(["txt", "text", "readme", "md", "json", "xml", "rtf", "wpl"]);
+    case "archive": return suffix(["7z", "gz", "rar", "tar", "zip"]);
+  }
 }
 
 export async function searchFiles(
