@@ -57,3 +57,18 @@ test("original Search Companion sidebar replaces navigation and searches same Co
   await expect(companion).toHaveCount(0);
   await expect(explorer.locator(".explorer-navigation")).toBeVisible();
 });
+
+
+test("original Win95 theme routes Explorer Find to standalone window, not parent search", async ({page}) => {
+  await page.goto("/?theme=win95");
+  await page.locator('[data-test-avatar="win7"]').click({ timeout: 12000 });
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer = page.locator('[data-test-window="computer"]');
+  await expect(explorer.getByRole("button", { name:"Search Companion" })).toHaveCount(0);
+  await expect(explorer.getByRole("button", { name:"Search dialog" })).toHaveCount(0);
+  await explorer.getByRole("button", { name:"Advanced Find" }).click();
+  const find = page.locator('[data-test-window="find"]');
+  await expect(find).toBeVisible();
+  await expect(find.getByRole("tab", { name:"Name & Location" })).toHaveAttribute("aria-selected","true");
+  await expect(explorer).toBeVisible();
+});
