@@ -18,7 +18,7 @@ test("Win7 Computer uses source View popup with eight modes and 0-7 slider", asy
   const computer=await openSourceExplorer(page,"computer");
   const view=computer.getByRole("button",{name:"View",exact:true});
   await expect(view).toBeVisible();
-  await expect(view.locator("img")).toHaveAttribute("src",/view-details\\.6c230237\\.webp$/);
+  await expect(view.locator("img")).toHaveAttribute("src",/view-tiles\\.c4008351\\.webp$/);
   await expect(computer.getByRole("combobox",{name:"Explorer view"})).toHaveCount(0);
   await view.click();
   const popup=computer.getByRole("menu",{name:"View options"});
@@ -27,8 +27,8 @@ test("Win7 Computer uses source View popup with eight modes and 0-7 slider", asy
   const slider=popup.getByRole("slider",{name:"View size"});
   await expect(slider).toHaveAttribute("min","0");
   await expect(slider).toHaveAttribute("max","7");
-  await expect(slider).toHaveValue("5"); // original Details entry is slot five
-  await expect(popup.getByRole("menuitemradio",{name:"Details"}))
+  await expect(slider).toHaveValue("6"); // original cb81 defaults to Tiles at slot six
+  await expect(popup.getByRole("menuitemradio",{name:"Tiles"}))
     .toHaveAttribute("aria-checked","true");
   await popup.getByRole("menuitemradio",{name:"Extra large icons"}).click();
   await expect(computer.locator(".explorer-list")).toHaveClass(/is-extra/);

@@ -39,7 +39,7 @@ export class ExplorerSession {
     }
     this.paths = [initial];
     this.state = {
-      path: initial, items: [], selected: [], search: "", viewMode: "details",
+      path: initial, items: [], selected: [], search: "", viewMode: "tiles",
       busy: false, error: null, canGoBack: false, canGoForward: false
     };
 

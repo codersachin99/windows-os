@@ -29,6 +29,8 @@ describe("source-following Explorer navigation contract", () => {
     await fs.write("b", "/beta.txt");
     const explorer = new ExplorerSession(fs);
     await explorer.refresh();
+    // Original webpack cb81 initializes every Computer session in Tiles.
+    expect(explorer.snapshot().viewMode).toBe("tiles");
     explorer.search("ALP");
     expect(explorer.visible().map(x => x.name)).toEqual(["alpha.txt"]);
     explorer.selectAll();

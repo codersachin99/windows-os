@@ -7,7 +7,7 @@ Pinned reference: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9
 - `src/modules/apps/bin.js` renders the Computer component with `id="bin"` and `hoistedPath=trashPath`; the Bin therefore inherits Computer's same toolbar and View menu.
 - `src/modules/apps/computer.js` renders a right-aligned menu item with the current `themeData.icon["view-" + viewMode]`, hidden label, eight `viewModeItems` and a `winui-slider` with `min="0"`, `max="7"`, `value=viewModeValue`. `inputViewMode(index)` calls `session.setViewMode(this.viewModes[index].value)`; selecting a View item also sets `session.viewMode`.
 - Original `src/styles/apps/computer.css` (tracked verbatim in `packages/apps/explorer/src/source.css`) specifies a 192px slider, rotated for LTR, and right-aligned `.winui-menu.is-view`. Original `assets/locales/en-US.json` contains the eight corresponding labels: `xl-icons`, `lg-icons`, `md-icons`, `sm-icons`, `list`, `details`, `tiles`, `content`.
-- The original view-mode sequence is imported from webpack module `cb81`, which still needs independent array-order verification; the React ordering follows the conventional large-to-small, then List / Details / Tiles / Content sequence. Do not claim exact item ordering or pixel parity without resolving the shared module.
+- **Exact original mode ordering and default verified** in `src/modules/chunks/shared~bsod~games~main.js`, webpack module `cb81`: `["xl-icons","lg-icons","md-icons","sm-icons","list","details","tiles","content"]`; initial `viewMode = "tiles"`. React's eight-mode order and initial Tiles view now follow that source. These are source-function proofs, not a visual screenshot comparison.
 
 ## React implementation
 
@@ -32,4 +32,4 @@ The eight original WebP files were fetched from the pinned private source as bas
 
 ## Scope and remaining parity
 
-Do not claim screenshot or pixel parity; original menu styles, alternate theme skins, and source `cb81` ordering still require separate verification. No dangerous trash Cut / Copy / Paste / Rename or untracked New Folder writes were enabled. Existing Bin Restore, Delete permanently and Empty controls remain safe and functional. Source asset licensing/public distribution approval is still a release blocker. Only deliberately opt-in to CI using `[run-ci]`.
+Do not claim screenshot or pixel parity; original popup rendering, default mode appearance in other themes, and alternate theme skins still require separate comparison. The exact source `cb81` order and Tiles default are verified. No dangerous trash Cut / Copy / Paste / Rename or untracked New Folder writes were enabled. Existing Bin Restore, Delete permanently and Empty controls remain safe and functional. Source asset licensing/public distribution approval is still a release blocker. Only deliberately opt-in to CI using `[run-ci]`.
