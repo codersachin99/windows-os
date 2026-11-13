@@ -27,7 +27,8 @@ describe("exact pinned 0e9a/de73 file-kind predicate extensions",()=>{
     accepts("playlist",["a.wpl"],["a.m3u","a.m3u8","a.pls"]);
     accepts("program",["a.exe","a.msi","a.apk"],["a.bat","a.cmd","a.com"]);
     accepts("link",["a.lnk"],["a.url","a.website"]);
-    accepts("webpage",["a.htm","a.html"],["a.mhtml","a.mht"]);
+    // Source /(?:html|htm)$/ deliberately also matches the mhtml suffix.
+    accepts("webpage",["a.htm","a.html","a.mhtml"],["a.mht"]);
     expect(matchesSourceKind({...file("some"),type:"directory"},"folder")).toBe(true);
     expect(matchesSourceKind({...file("some"),type:"directory"},"document")).toBe(false);
   });

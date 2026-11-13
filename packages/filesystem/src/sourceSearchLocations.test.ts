@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createSourceFindQuery, decodeSourceFindPath, encodeSourceFindPath,
-  sourceFindSearchRequest, matchesSourceKind } from "./index";
+import { createSourceFindQuery, decodeSourceSearchPath, encodeSourceFindPath,
+  parseSourceSearchText, sourceFindSearchRequest, matchesSourceKind } from "./index";
 import { sourceSearchLocations } from "./sourceSearchLocations";
 
 describe("original shared search kinds and scopes", () => {
@@ -8,7 +8,9 @@ describe("original shared search kinds and scopes", () => {
     for (const kind of ["folder", "document", "picture", "music", "video",
       "playlist", "program", "link", "webpage"] as const) {
       const q = { ...createSourceFindQuery("/"), kind };
-      expect(decodeSourceFindPath(encodeSourceFindPath(q))?.kind).toBe(kind);
+      const searchPath = decodeSourceSearchPath(encodeSourceFindPath(q));
+      expect(searchPath?.text).toBe("kind:" + kind);
+      expect(parseSourceSearchText(searchPath?.text || "").filters.kind).toBe(kind);
       expect(sourceFindSearchRequest(q).kind).toBe(kind);
     }
     expect(matchesSourceKind({ uri:"/a.lnk", name:"a.lnk", type:"file", size:1, mtime:0 }, "link")).toBe(true);

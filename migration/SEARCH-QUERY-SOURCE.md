@@ -26,3 +26,7 @@ Baseline source: codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1
 - Source 0e9a category extension helpers remain under investigation; provisional explicit mappings are documented. Original VFS disk walker (search all disks on blank scope), screenshot visual parity, result grouping and full WinXP/Win31 themes remain separate tasks.
 - No shell/host filesystem is searched. Keep draft PR #1, main unchanged, no release.
 - Run CI only for deliberate [run-ci] commits or manually.
+
+## Source-suffix regression correction
+
+Pinned `0e9a.q` tests `/(html|htm)$/` on the extension, so **mhtml is classified as a webpage**. Do not replace this with exact-list matching or expect mhtml to be excluded. The previous migration-only `decodeSourceFindPath(encodeSourceFindPath(q))` JSON round-trip was intentionally superseded by the actual `shell:search` query URI. Test its `q` filter tokens through `decodeSourceSearchPath`/`parseSourceSearchText`, not through the legacy decoder.
