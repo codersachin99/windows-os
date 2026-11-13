@@ -423,7 +423,7 @@ export function ExplorerApp({
 
   const protectedRoots = [
     "/", ...(volume ? [volume.pathConfig.root, ...volume.pathConfig.drives.map(
-      drive => volume.pathConfig.root.replace(/\\/$/, "") + "/" + drive.path
+      drive => volume.pathConfig.root.replace(/\/$/, "") + "/" + drive.path
     )] : [])
   ];
   const organizeItems = sourceOrganizeItems({
