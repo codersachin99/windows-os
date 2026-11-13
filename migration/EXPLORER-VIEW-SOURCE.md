@@ -33,3 +33,7 @@ The eight original WebP files were fetched from the pinned private source as bas
 ## Scope and remaining parity
 
 Do not claim screenshot or pixel parity; original popup rendering, default mode appearance in other themes, and alternate theme skins still require separate comparison. The exact source `cb81` order and Tiles default are verified. No dangerous trash Cut / Copy / Paste / Rename or untracked New Folder writes were enabled. Existing Bin Restore, Delete permanently and Empty controls remain safe and functional. Source asset licensing/public distribution approval is still a release blocker. Only deliberately opt-in to CI using `[run-ci]`.
+
+## Follow-up: source non-classic search toolbar (verification pending)
+
+Original `src/modules/apps/computer.js#toolbar()` adds `save-search` with `disabled: true` when `isSearch && !classicSearch`. The Win7 Computer and inherited Bin are both non-classic; React's mounted search-results state maps to the source virtual search location. The shared toolbar now exposes the same disabled "Save search" entry only during search, without inventing a Save function or disturbing file operation controls. Added desktop/mobile search-and-clear test cases for Computer and Bin. This is not a claim of exact source search-history routes.

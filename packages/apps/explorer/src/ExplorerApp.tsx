@@ -537,6 +537,13 @@ export function ExplorerApp({
           inherit the same Organize component. Unsafe trash transfer commands
           remain disabled until their source metadata semantics are ported. */}
       <SourceOrganizeMenu items={organizeItems} onCommand={organizeCommand} />
+      {/* Pinned Computer.toolbar(): a non-classic shell:search location adds
+          a disabled Save search entry; bin.js inherits Computer.toolbar().
+          React represents that virtual location while results are active. */}
+      {theme === "win7" && (searchBusy || found !== null) &&
+        <button type="button" disabled title="Original Save search is not implemented">
+          Save search
+        </button>}
       {isBin ? <>
         <button disabled={!selected?.originalPath} onClick={restoreSelection}>Restore</button>
         <button disabled={!state.selected.length} onClick={requestDelete}>Delete permanently</button>
