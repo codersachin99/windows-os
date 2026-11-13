@@ -1,3 +1,11 @@
+## Source query lexer, metadata filters, relevance and highlighting — 2026-11-13, pending CI
+
+- **Pinned source**: webpack `5985` and `2e2c` in shared search chunk, plus Computer `listSearch`. Lexer supports exact/quoted/typed filters, accent normalization and word starts; relevance exact > prefix > ordered match, with mtime tiebreak. Date, size, type and kind predicates are evaluated on Guest VFS only; results are ranked before the cap and highlight matches as escaped React text.
+- **Implementation**: `packages/filesystem/src/sourceTextSearch.ts`, `search.ts` VFS integration, `findQuery.ts` ordering, Explorer name-highlights; source-specific unit/integration tests and desktop/mobile `search-relevance.spec.ts`.
+- **Source guardrails**: no verified `5401.k` virtual search URI prefix, 0e9a original file extension helpers not yet pinned, no source full disk walker, screenshot comparisons pending. Preserve safe internal `win7-find:` URI and do not claim original URI exactness.
+- **Verification**: **pending deliberate opt-in CI** on next `[run-ci]` commit. Prior source-theme search checkpoint remains green: [205 unit and 218 browser tests](https://github.com/codersachin99/windows-os/actions/runs/43357788138).
+- **Next**: check CI, correct failures, update PR and source trace with verified results. Keep `main` unchanged, PR draft, no release.
+
 ## Source Search Dialog, Companion and theme dispatch — 2026-11-13, CI verified
 
 - **Source:** `legacy-win7/src/modules/apps/search-dialog.js` module `fbbb` (parent-owned 360px, auto-height, close-only, initial `*.*`, start-from and subdirectories with OK/Cancel); `src/modules/apps/search-companion.js` module `7a5f` (inside Computer replacing navigation, filename/look-in, date/size/advanced collapse, Back/Search, original date/size presets). Pin `2e2c` file-kind keys `folder/document/picture/music/video/playlist/program/link/webpage`; `movie` exists in engine but is excluded from companion options.
