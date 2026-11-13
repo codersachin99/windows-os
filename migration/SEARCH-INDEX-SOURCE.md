@@ -25,3 +25,7 @@ Source revision: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c
 
 - Original index performs `Promise.all` per breadth-first folder layer; port currently awaits each folder in queue order (the same order of folders, but not identical concurrency). Source store notification payload differs, so the bridge has stronger parent-directory invalidation to keep Guest search results correct. Long-running searches update the control's progress; final Search UI screenshot/pixel parity has not yet been measured.
 - In-memory cache is isolated to a Computer window and never persisted or exposed to host filesystem. Search content indexing, screenshot/alternate-theme fidelity and many legacy applications are still separate workstreams. PR #1 draft; main unchanged, no release.
+
+## Source-consistent descendant invalidation regression
+
+The first CI attempt [43369157632](https://github.com/codersachin99/windows-os/actions/runs/43369157632) compiled, but two new tests assumed that a changed parent would preserve cached descendants and that VFS alphabetic directory traversal would end at a specific child. Pinned `2e2c.b.invalidate` intentionally evicts a changed directory **and every descendant cached key**; `VirtualFileStore.list` orders folders by name. Keep that source behavior and assert those reloads and path membership rather than a fabricated targeted one-directory invalidation or a fixed final directory order.

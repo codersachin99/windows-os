@@ -38,7 +38,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     } finally { index.dispose(); }
   });
 
-  it("invalidates affected parent after create, update and delete, but retains unrelated folders", async () => {
+  it("invalidates parent and cached descendants after create/update/delete, but retains unrelated disks", async () => {
     const store = await fixture();
     const list = vi.spyOn(store, "list");
     const index = new SourceSearchIndex(store);
@@ -49,22 +49,22 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
       const created = await searchFiles(index, ranked);
       expect(created.files.map(entry => entry.name).sort())
         .toEqual(["Report-New.txt", "Report.txt"]);
-      expect(list).toHaveBeenCalledTimes(4); // only /data/Docs is invalidated
+      expect(list).toHaveBeenCalledTimes(5); // source evicts Docs and Deep descendants
 
       await store.write("updated longer text", "/data/Docs/Report.txt");
       const updated = await searchFiles(index, ranked);
       expect(updated.files.find(entry => entry.name === "Report.txt")?.size)
         .toBe("updated longer text".length);
-      expect(list).toHaveBeenCalledTimes(5);
+      expect(list).toHaveBeenCalledTimes(7);
 
       await store.remove("/data/Docs/Report-New.txt");
       const removed = await searchFiles(index, ranked);
       expect(removed.files.map(entry => entry.name)).toEqual(["Report.txt"]);
-      expect(list).toHaveBeenCalledTimes(6);
+      expect(list).toHaveBeenCalledTimes(9);
 
       await store.write("x", "/bin/Ignore-2.txt");
       await searchFiles(index, ranked);
-      expect(list).toHaveBeenCalledTimes(6);
+      expect(list).toHaveBeenCalledTimes(9);
     } finally { index.dispose(); }
   });
 
@@ -80,7 +80,9 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
       expect(after.files.map(entry => entry.uri))
         .toEqual(["/data/Deep-Moved/Notes.txt"]);
       expect(list).toHaveBeenCalledTimes(6);
-      expect(list.mock.calls.at(-1)?.[0]).toBe("/data/Deep-Moved");
+      expect(list.mock.calls.slice(3).map(([path]) => path).sort()).toEqual([
+        "/data", "/data/Deep-Moved", "/data/Docs"
+      ].sort());
     } finally { index.dispose(); }
   });
 
