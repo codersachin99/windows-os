@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sourceExplorerSearchStyle, sourceWin7InstantSearch } from "./searchStyle";
+import { SOURCE_INSTANT_SEARCH_DELAY_MS, sourceExplorerSearchStyle, sourceWin7InstantSearch } from "./searchStyle";
 
 describe("pinned vue-app.js f3ad theme search dispatch", () => {
   it("does NOT show classic Find or Companion in default Win7", () => {
@@ -7,12 +7,16 @@ describe("pinned vue-app.js f3ad theme search dispatch", () => {
       expect(sourceExplorerSearchStyle(theme)).toBeNull();
     }
   });
-  it("migrates instant search only on the source Win7 Computer surface", () => {
+  it("inherits the same Win7 instant search in Computer and Bin", () => {
     expect(sourceWin7InstantSearch("win7", false)).toBe(true);
-    expect(sourceWin7InstantSearch("win7", true)).toBe(false);
+    expect(sourceWin7InstantSearch("win7", true)).toBe(true);
     for (const theme of ["winxp","win10","win11","winvista","win95","win98","win31"]) {
       expect(sourceWin7InstantSearch(theme, false)).toBe(false);
+      expect(sourceWin7InstantSearch(theme, true)).toBe(false);
     }
+  });
+  it("uses original webpack 1902 debounce default rather than a guessed delay", () => {
+    expect(SOURCE_INSTANT_SEARCH_DELAY_MS).toBe(300);
   });
   it("maps legacy XP, 95/98 and 3.1 into their original distinct search surfaces", () => {
     expect(sourceExplorerSearchStyle("winxp")).toBe("companion");

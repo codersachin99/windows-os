@@ -7,10 +7,15 @@
 export type SourceExplorerSearchStyle = "companion" | "find" | "dialog" | null;
 
 /** Pinned Computer uses window-addressbar-search instant for non-classic
- * themes. The Win7 slice is migrated first; leave other themes' interim
- * explicit Find control until their complete search chrome is reviewed. */
-export function sourceWin7InstantSearch(theme: string, recycleBin: boolean): boolean {
-  return theme === "win7" && !recycleBin;
+ * themes. bin.js renders the same Computer component at hoistedPath=trashPath,
+ * so the search slot is inherited by Recycle Bin too. Other theme chrome
+ * remains migration-era until independently source-verified.
+ *
+ * Original computer.js uses webpack module 1902's default 300ms delay. */
+export const SOURCE_INSTANT_SEARCH_DELAY_MS = 300;
+
+export function sourceWin7InstantSearch(theme: string, _recycleBin: boolean): boolean {
+  return theme === "win7";
 }
 
 

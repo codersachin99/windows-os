@@ -13,7 +13,7 @@ import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } fr
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
-import { sourceExplorerSearchStyle, sourceWin7InstantSearch } from "./searchStyle";
+import { SOURCE_INSTANT_SEARCH_DELAY_MS, sourceExplorerSearchStyle, sourceWin7InstantSearch } from "./searchStyle";
 import { SourceAddressProgress } from "./SourceAddressProgress";
 import { SourceWin7Navigation, showExplorerUpControl } from "./SourceWin7Navigation";
 import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
@@ -150,7 +150,7 @@ export function ExplorerApp({
   }), [searchIndex]);
   // Original computer.js 'location' computed: a virtual search path has a
   // single non-clickable result label instead of the real VFS folder trail.
-  const showSourceSearchLocation = !isBin && (searchBusy || found !== null);
+  const showSourceSearchLocation = searchBusy || found !== null;
   const classicSourceSearch = Boolean(initialFind || (initialSourceSearch &&
     initialSourceSearch.namePattern !== null));
   const visible = found ?? session.visible();
@@ -364,10 +364,10 @@ export function ExplorerApp({
   // Source Computer.search(e) calls delayedSearch.type(e) from
   // window-addressbar-search(instant). Only run a nonempty query; clearing
   // the field returns to real folder breadcrumbs and the original listing.
-  // The 250ms delay is a bounded replacement for the source delay utility.
+  // Both Computer and Bin use source webpack 1902's 300ms default delay.
   useEffect(() => {
     if (!instantSearch || !state.search.trim()) return;
-    const handle = window.setTimeout(() => rerunActiveSearch.current(), 250);
+    const handle = window.setTimeout(() => rerunActiveSearch.current(), SOURCE_INSTANT_SEARCH_DELAY_MS);
     return () => window.clearTimeout(handle);
   }, [instantSearch, state.search, subfolders, namePattern]);
   const searchInComputer = (query: SourceFindQuery) => {
