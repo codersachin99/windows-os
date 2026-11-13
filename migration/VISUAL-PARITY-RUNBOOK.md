@@ -48,7 +48,7 @@ Capture with *deterministic file names and folder fixtures* in both applications
 - `bin.js` delegates to the Computer component with `id="bin"` and the source `trashPath`.
 - `computer.js#toolbar()` includes Organize, non-classic disabled Save search when searching, New folder on a non-null non-search active path, and a right-aligned View control.
 - Shared webpack module `cb81` defines exactly eight modes in this order: XL/LG/MD/SM icons, List, Details, Tiles, Content; default is Tiles.
-- All **36** current imported `apps/web/public/assets/images` files were compared against the pinned source tree and had matching Git blob SHA values. The source inventory audit has a new automated recheck (CI verification pending as of creation of this runbook).
+- All **36** current imported `apps/web/public/assets/images` files were compared against the pinned source tree and had matching Git blob SHA values. The source inventory audit has an automated recheck verified by [CI 43484632290](https://github.com/codersachin99/windows-os/actions/runs/43484632290): all 36 imported images passed byte verification.
 
 ## Important known differences
 

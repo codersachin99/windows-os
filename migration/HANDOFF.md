@@ -1,20 +1,20 @@
-## Integrated View / Bin Save search / original-image audit verification — 2026-11-13 (CI PENDING)
+## Integrated View / Bin Save search / original-image audit verification — 2026-11-13 (CI VERIFIED)
 
 - **Green prerequisite**: [CI 43482880673](https://github.com/codersachin99/windows-os/actions/runs/43482880673) passed **269 unit tests / 266 browser tests** after the New Folder and View URL-regex fixes.
 - **Additional source changes**: `7b48256` adds disabled non-classic **Save search** in the shared Computer/Bin toolbar; `b957c31` adds image byte checks to the existing source inventory audit. The Git repository tree confirmed **36 of 36** imported images match original Git blob hashes before adding the automated check.
-- **Verification**: the current integrated `[run-ci]` commit triggers one opt-in GitHub Actions check for these previously unverified changes. Do not claim CI success before actual completion. [Source view trace](EXPLORER-VIEW-SOURCE.md). Existing PR #1 remains draft; `main` unchanged.
+- **Verification passed**: [opt-in GitHub Actions 43484632290 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43484632290) at code SHA `340beee5c3573ddc1adc99459ecff30cf19063f4`: **269 Vitest tests (52 files)**, **270 Chromium desktop/mobile browser tests**, TypeScript, pinned source inventory, Contacts source audit, Vite production build all green. Automated imported-image audit reports `byteCheckedImportedImages:36` and `failures:[]`. This verifies the Save search regression cases and 36 byte-identical source images; no screenshot/pixel equality claim. [Source view trace](EXPLORER-VIEW-SOURCE.md), [visual parity runbook](VISUAL-PARITY-RUNBOOK.md). PR #1 remains draft; `main` unchanged.
 
-## Imported source image byte-fidelity audit — 2026-11-13 (UNVERIFIED SCRIPT CHANGE)
+## Imported source image byte-fidelity audit — 2026-11-13 (CI VERIFIED)
 
 - **Actual Git tree evidence**: comparing pinned `legacy-win7@4e63290` and current `windows-os` repository trees, all **36** imported `apps/web/public/assets/images/*` files match the original `assets/images/*` Git blob SHA exactly, including eight source View icons.
 - **Code change**: `scripts/audit-legacy.mjs` now checks each imported image filename against the source migration inventory, reads the bytes and computes the Git-compatible `sha1("blob " + size + "\\0" + bytes)`. Changed bytes, non-source images, or mismatched lengths fail the existing `npm run audit:legacy` step; no separate always-running workflow is introduced.
-- **Verification**: direct Git tree comparison confirmed the source/checksum equality. The updated script itself requires the next opt-in CI run; do not claim verified script execution yet. The existing [repair CI 43482880673](https://github.com/codersachin99/windows-os/actions/runs/43482880673) predates this audit edit. PR #1 draft, main unchanged.
+- **Verification passed**: direct Git tree comparison and [opt-in CI 43484632290 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43484632290) confirmed all 36 imported assets checksum-match the pinned source; the source audit reported `byteCheckedImportedImages:36` with no failures. PR #1 draft, main unchanged.
 
-## Original non-classic Computer/Bin Save search toolbar — 2026-11-13 (UNVERIFIED)
+## Original non-classic Computer/Bin Save search toolbar — 2026-11-13 (CI VERIFIED)
 
 - **Pinned proof**: `legacy-win7@4e63290/src/modules/apps/computer.js#toolbar()` conditionally appends `this.isSearch && !this.classicSearch && {label:this.$t("save-search"),disabled:true}`. Win7 has non-classic search and `bin.js` inherits the Computer toolbar. The source en-US text is "Save search".
 - **Code**: [7b48256](https://github.com/codersachin99/windows-os/commit/7b48256cc73ce87855f9aafc15e9d3430ea7c75d) adds the source-disabled entry to Win7 Computer/Bin only while the React search-results route is active. It provides no fake Save implementation and retains all existing file/restore actions. Two browser scenarios (desktop/mobile = four cases) check appearance, disabled state and clearing results. [Detailed trace](EXPLORER-VIEW-SOURCE.md).
-- **Verification**: [repair CI 43482880673 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43482880673) covers the prior `fa1c823` fix, not this Save search change. One deliberate integrated opt-in CI check is now being triggered to cover Save search plus source image checksum audit; the result remains pending until verified.
+- **Verification passed**: [integrated opt-in CI 43484632290 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43484632290) covers this Save search change and image audit, with 269 units and 270 browser cases passing. Previous [repair CI 43482880673 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43482880673) remains the base verified checkpoint for New Folder and View regex repair.
 - **Next**: verify repair run and commit with Save search tests; continue source screenshot/toolbar parity. Draft PR #1, main unchanged, no release.
 
 ## Win7 View menu browser regression repair — 2026-11-13 (CI PENDING)
