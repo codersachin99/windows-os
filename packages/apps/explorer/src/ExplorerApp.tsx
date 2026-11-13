@@ -20,6 +20,7 @@ import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
 import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } from "./sourceExplorerAddress";
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
+import { SourceViewMenu } from "./SourceViewMenu";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -541,7 +542,8 @@ export function ExplorerApp({
         <button disabled={!state.selected.length} onClick={requestDelete}>Delete permanently</button>
         <button disabled={!state.items.length} onClick={() => setConfirm("empty")}>Empty Recycle Bin</button>
       </> : <>
-        <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>
+        {(theme !== "win7" || (state.path !== "/" && found === null && !state.search.trim())) &&
+          <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>}
         <button type="button" onClick={() => fileInput.current?.click()}>Upload</button>
         <input ref={fileInput} aria-label="Upload files" type="file" multiple hidden
           onChange={event => {
@@ -556,12 +558,14 @@ export function ExplorerApp({
           title={trashPath ? "Move selected items to the Recycle Bin" : "Source trashPath not mounted"}>Delete</button>
       </>}
       <button onClick={() => void execute(() => session.refresh())}>Refresh</button>
-      <label>View:
-        <select aria-label="Explorer view" value={state.viewMode}
-          onChange={event => session.setViewMode(event.target.value as ExplorerViewMode)}>
-          {viewOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-        </select>
-      </label>
+      {theme === "win7"
+        ? <SourceViewMenu value={state.viewMode} onChange={view => session.setViewMode(view)} />
+        : <label>View:
+            <select aria-label="Explorer view" value={state.viewMode}
+              onChange={event => session.setViewMode(event.target.value as ExplorerViewMode)}>
+              {viewOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
+          </label>}
     </div>
     <div className="explorer-workspace">
       {!isBin && showCompanion ? <SearchCompanion key={state.path}

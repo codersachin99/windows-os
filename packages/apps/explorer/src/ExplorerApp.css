@@ -64,6 +64,10 @@
 .explorer-list.has-icons.is-medium .explorer-item .listview__item-iconbox { width:64px; height:64px; flex-basis:64px; }
 .explorer-list.has-icons.is-large .explorer-item { width:152px; min-height:150px; }
 .explorer-list.has-icons.is-large .explorer-item .listview__item-iconbox { width:112px; height:112px; flex-basis:112px; }
+.explorer-list.has-icons.is-extra .explorer-item { width:192px; min-height:190px; }
+.explorer-list.has-icons.is-extra .explorer-item .listview__item-iconbox {
+  width:160px; height:160px; flex-basis:160px;
+}
 .explorer-list.has-tiles .explorer-item { width:230px; min-height:50px; }
 .explorer-list.has-content .explorer-item { width:100%; min-height:50px; }
 .explorer-empty { flex:1; text-align:center; color:#62788a; padding:24px; }
@@ -293,4 +297,49 @@
 }
 .explorer-organize__separator {
   border-top:1px solid #9db4c6; margin:3px 6px;
+}
+
+/* Original Win7 Computer window-menubar View popup: eight rows with a
+   192px slider (source css). The trigger glyph is a temporary source-icon
+   asset mapping gap; no claim of pixel-perfect styling yet. */
+.explorer-view { position:relative; display:flex; align-items:center; margin-left:auto; flex:0 0 auto; }
+.explorer-command .explorer-view__trigger {
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  min-width:49px; min-height:25px; padding:2px 6px;
+  color:#234962; border-color:transparent; background:transparent;
+}
+.explorer-command .explorer-view__trigger:hover,
+.explorer-command .explorer-view__trigger[aria-expanded="true"] {
+  border-color:#81afd0; background:linear-gradient(#f8fcff,#d7e9f7);
+}
+.explorer-view__symbol { font-size:19px; line-height:1; }
+.explorer-view__arrow { font-size:10px; }
+.explorer-view__menu {
+  position:fixed; z-index:80; display:grid; grid-template-columns:28px 1fr;
+  box-sizing:border-box; width:220px; min-height:224px; padding:5px 3px;
+  border:1px solid #7da8c2; border-radius:2px;
+  background:linear-gradient(#fafcff,#eaf2f8); box-shadow:2px 5px 12px #0005;
+}
+.explorer-view__choices { display:flex; flex-direction:column; min-width:0; }
+.explorer-command .explorer-view__choices button {
+  display:flex; align-items:center; text-align:left;
+  width:100%; min-height:26px; padding:4px 8px;
+  border:1px solid transparent; border-radius:0; background:transparent;
+  color:#1b3956; white-space:nowrap;
+}
+.explorer-command .explorer-view__choices button:hover,
+.explorer-command .explorer-view__choices button:focus-visible,
+.explorer-command .explorer-view__choices button.is-selected {
+  background:linear-gradient(#e7f4fd,#bbddf6); border-color:#75b0db;
+}
+.explorer-view__slider-wrap {
+  display:flex; align-items:center; justify-content:center; height:218px;
+}
+.explorer-view__slider-wrap input[type="range"] {
+  width:18px; height:192px; padding:0; margin:0;
+  writing-mode:vertical-lr; direction:rtl; accent-color:#599fcf;
+}
+@media (max-width:580px) {
+  .explorer-view { margin-left:auto; }
+  .explorer-command .explorer-view__trigger { padding:2px 6px; }
 }

@@ -35,6 +35,8 @@ describe("source-following Explorer navigation contract", () => {
     expect(explorer.snapshot().selected).toEqual(["/alpha.txt"]);
     explorer.setViewMode("tiles");
     expect(explorer.snapshot().viewMode).toBe("tiles");
+    explorer.setViewMode("extra-large-icons");
+    expect(explorer.snapshot().viewMode).toBe("extra-large-icons");
     explorer.select("/alpha.txt");
     explorer.select("/beta.txt", true);
     expect(explorer.snapshot().selected).toEqual(["/alpha.txt", "/beta.txt"]);

@@ -8,7 +8,7 @@ import {
  * open, history, back/forward, selection, view mode and shared file updates.
  * Full disk, search index and Recycle Bin protocols remain pending.
  */
-export type ExplorerViewMode = "details" | "list" | "small-icons" | "medium-icons" | "large-icons" | "tiles" | "content";
+export type ExplorerViewMode = "details" | "list" | "small-icons" | "medium-icons" | "large-icons" | "extra-large-icons" | "tiles" | "content";
 export interface ExplorerState {
   path: string;
   items: FileEntry[];
