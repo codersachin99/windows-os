@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, t
 import { legacyArt } from "@windows-os/assets";
 import {
   searchFiles, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
+  sourceMountedSearchRoots,
   parseSourceShortcut, sourcePrograms,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
@@ -281,8 +282,14 @@ export function ExplorerApp({
     setFoundHighlights({});
     setMessage("");
     setFoldersScanned(0);
+    // Blank original in= means actual mounted disk roots; do not search the
+    // /EXTERNAL/computer container (which may hold non-disk virtual entries).
+    const allMountedDisks = query?.scope === ""
+      || (!query && initialSourceSearch?.scope === null);
     void searchFiles(fileStore, {
-      ...(query ? sourceFindSearchRequest(query)
+      ...(query ? sourceFindSearchRequest({
+          ...query, scope: query.scope || state.path
+        })
         : initialSourceSearch ? {
             scope: state.path, sourceNamePattern: namePattern,
             subfolders, sourceRanked: true
@@ -291,6 +298,7 @@ export function ExplorerApp({
         : { scope: state.path, namePattern: namePattern.trim() || null, subfolders }),
       text: query ? state.search : initialSourceSearch
         ? state.search || initialSourceSearch.text : state.search,
+      rootScopes: allMountedDisks ? sourceMountedSearchRoots(volume) : undefined,
       maxResults: 500,
       skipPaths: isBin || !trashPath ? [] : [trashPath]
     }, {
@@ -315,7 +323,7 @@ export function ExplorerApp({
   };
   const searchInComputer = (query: SourceFindQuery) => {
     setShowSearchDialog(false);
-    if (query.scope !== state.path) {
+    if (query.scope && query.scope !== state.path) {
       // Preserve source searchFromDialog/openPath parent navigation rather
       // than opening a second shell window as standalone Find does.
       setPendingSearch(query);

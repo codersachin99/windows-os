@@ -15,6 +15,12 @@ import {
  */
 export interface FileSearchRequest {
   scope: string;
+  /**
+   * Source Computer listSearch on in= (all disks) passes each actual mounted
+   * disk root from getStats(), not the Computer container directory. When set,
+   * these replace scope as initial traversal roots; [] means no mounted disks.
+   */
+  rootScopes?: readonly string[];
   text?: string;
   /** Source 2e2c.e ranking even for classic Find queries without text. */
   sourceRanked?: boolean;
@@ -112,11 +118,27 @@ export async function searchFiles(
   request: FileSearchRequest,
   options: { signal?: AbortSignal; onProgress?: (p: FileSearchProgress) => void } = {}
 ): Promise<FileSearchResult> {
-  const scope = normalizeFileUri(request.scope);
-  const entry = await filesystem.stat(scope);
-  if (!entry) throw new FileStoreError("ENOENT", "Search location does not exist: " + scope);
-  if (entry.type !== "directory") {
-    throw new FileStoreError("ENOTDIR", "Search location is not a folder: " + scope);
+  // Preserve explicit folder search semantics. For source in=, validate all
+  // provided mounted roots before walking any, so a missing drive never
+  // silently falls back to scanning the Computer container or "/" VFS root.
+  const roots = request.rootScopes === undefined
+    ? [normalizeFileUri(request.scope)]
+    : [...new Set(request.rootScopes.map(normalizeFileUri))];
+  if (request.rootScopes !== undefined) {
+    // Each physical source disk is a disjoint root; overlapping roots would
+    // count files twice. Deduplication above handles identical paths.
+    for (const root of roots) {
+      if (roots.some(other => other !== root && root.startsWith(other + "/"))) {
+        throw new FileStoreError("EINVAL", "Overlapping search disk roots");
+      }
+    }
+  }
+  for (const root of roots) {
+    const entry = await filesystem.stat(root);
+    if (!entry) throw new FileStoreError("ENOENT", "Search location does not exist: " + root);
+    if (entry.type !== "directory") {
+      throw new FileStoreError("ENOTDIR", "Search location is not a folder: " + root);
+    }
   }
   const skip = (request.skipPaths ?? []).map(normalizeFileUri);
   const hidden = (uri: string) => skip.some(s => uri === s || uri.startsWith(s + "/"));
@@ -127,10 +149,11 @@ export async function searchFiles(
   const compiled = ranked ? compileSourceSearch(needle) : null;
   const result: FileEntry[] = [];
   const ranking: { file: FileEntry; score: number; highlights: SourceSearchHighlight[] }[] = [];
-  const queue = [scope];
+  const queue = [...roots];
   let foldersScanned = 0;
   let filesScanned = 0;
   let truncated = false;
+  if (options.signal?.aborted) throw new DOMException("Search cancelled", "AbortError");
   while (queue.length) {
     if (options.signal?.aborted) throw new DOMException("Search cancelled", "AbortError");
     const directory = queue.shift()!;

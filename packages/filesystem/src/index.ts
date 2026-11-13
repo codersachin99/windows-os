@@ -527,7 +527,7 @@ export {
   sourceModifiedRange, compileSourceSearch, sourceSearchMatch
 } from "./sourceTextSearch";
 export type { SourceParsedSearch, SourceSearchMatch, SourceSearchHighlight } from "./sourceTextSearch";
-export { sourceSearchLocations } from "./sourceSearchLocations";
+export { sourceSearchLocations, sourceMountedSearchRoots } from "./sourceSearchLocations";
 export { encodeSourceSearchPath, decodeSourceSearchPath, isSourceSearchPath,
   SOURCE_SEARCH_URI_PREFIX } from "./sourceSearchPath";
 export type { SourceSearchPath } from "./sourceSearchPath";
