@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { SourceWin7Navigation } from "./SourceWin7Navigation";
+import { SourceWin7Navigation, showExplorerUpControl } from "./SourceWin7Navigation";
 
 describe("source Win7 27px Explorer history navigation", () => {
   const noop = () => {};
@@ -15,6 +15,12 @@ describe("source Win7 27px Explorer history navigation", () => {
     expect(html).toContain('aria-hidden="true"');
     expect(html).toMatch(/aria-label="Forward"[^>]*disabled=""/);
     expect(html).not.toMatch(/aria-label="Back"[^>]*disabled=""/);
+  });
+  it("omits the migration-era Up control only for the source Win7 addressbar", () => {
+    expect(showExplorerUpControl("win7")).toBe(false);
+    for (const theme of ["winxp", "win11", "win10", "winvista", "win31", "win95", "win98"] as const) {
+      expect(showExplorerUpControl(theme)).toBe(true);
+    }
   });
   it("uses both disabled states at a fresh Explorer history root", () => {
     const html = renderToStaticMarkup(<SourceWin7Navigation

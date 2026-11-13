@@ -15,7 +15,7 @@ import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
 import { sourceExplorerSearchStyle } from "./searchStyle";
 import { SourceAddressProgress } from "./SourceAddressProgress";
-import { SourceWin7Navigation } from "./SourceWin7Navigation";
+import { SourceWin7Navigation, showExplorerUpControl } from "./SourceWin7Navigation";
 import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
 import { sourceExplorerAddressBreadcrumbs } from "./sourceExplorerAddress";
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
@@ -455,7 +455,12 @@ export function ExplorerApp({
             <button aria-label="Back" disabled={!state.canGoBack} onClick={() => void execute(() => session.back())}>◀</button>
             <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
           </>}
-      <button aria-label="Up" disabled={state.path === "/"} onClick={() => void execute(() => session.up())}>↑</button>
+      {/* Original Computer's Win7 address bar contains only the Back/Forward
+          nav, location and optional search slot. Preserve the migration-era
+          Up control solely for other themes until their source layouts port. */}
+      {showExplorerUpControl(theme) &&
+        <button aria-label="Up" disabled={state.path === "/"}
+          onClick={() => void execute(() => session.up())}>↑</button>}
       <div className={"explorer-address__location" + (theme === "win7" ? " is-source-win7" : "")}>
         <span className="explorer-address__label">Address:</span>
         <span className="explorer-address__location-wrapper">
