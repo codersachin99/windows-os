@@ -32,8 +32,9 @@ export function decodeSourceFindPath(path: string | undefined): SourceFindQuery 
       || normalizeFileUri(q.scope) !== q.scope
       || typeof q.namePattern !== "string" || typeof q.subfolders !== "boolean"
       || typeof q.kind !== "string"
-      || !["", "folder", "text", "image", "audio", "video", "document",
-        "archive", "application"].includes(q.kind)) return null;
+      || !["", "folder", "document", "picture", "music", "video", "movie",
+        "playlist", "program", "link", "webpage", "text", "image",
+        "audio", "archive", "application"].includes(q.kind)) return null;
     if (q.size !== null && q.size !== undefined &&
       (typeof q.size.atLeast !== "boolean" || !Number.isFinite(q.size.kb)
         || q.size.kb < 0)) return null;

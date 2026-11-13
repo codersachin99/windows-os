@@ -19,7 +19,7 @@ export interface FileSearchRequest {
   modifiedBefore?: number;
   minSizeBytes?: number;
   maxSizeBytes?: number;
-  kind?: "folder" | "text" | "image" | "audio" | "video" | "document" | "archive" | "application";
+  kind?: "folder" | "document" | "picture" | "music" | "video" | "movie" | "playlist" | "program" | "link" | "webpage" | "text" | "image" | "audio" | "archive" | "application";
   subfolders?: boolean;
   skipPaths?: readonly string[];
   maxResults?: number;
@@ -70,7 +70,14 @@ export function matchesSourceKind(entry: FileEntry, kind: NonNullable<FileSearch
     video: ["avi", "mkv", "mov", "mp4", "mpeg", "mpg", "webm", "wmv"],
     document: ["doc", "docx", "odt", "pdf", "rtf", "txt"],
     archive: ["7z", "gz", "rar", "tar", "zip"],
-    application: ["bat", "cmd", "com", "exe", "msi"]
+    application: ["bat", "cmd", "com", "exe", "msi"],
+    picture: ["bmp", "gif", "ico", "jpeg", "jpg", "png", "svg", "webp"],
+    music: ["aac", "flac", "m4a", "mp3", "ogg", "wav", "wma"],
+    movie: ["avi", "mkv", "mov", "mp4", "mpeg", "mpg", "webm", "wmv"],
+    playlist: ["m3u", "m3u8", "pls", "wpl"],
+    program: ["bat", "cmd", "com", "exe", "msi"],
+    link: ["lnk", "url"],
+    webpage: ["htm", "html", "mht", "mhtml"]
   };
   return kinds[kind].includes(extension);
 }

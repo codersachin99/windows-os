@@ -20,10 +20,11 @@ interface Fields {
 }
 const kinds: { value: Kind; label: string }[] = [
   { value: "", label: "All files and folders" },
-  { value: "folder", label: "File folders" }, { value: "text", label: "Text files" },
-  { value: "document", label: "Documents" }, { value: "image", label: "Pictures" },
-  { value: "audio", label: "Music" }, { value: "video", label: "Videos" },
-  { value: "archive", label: "Archives" }, { value: "application", label: "Applications" }
+  { value: "folder", label: "File folders" },
+  { value: "document", label: "Documents" }, { value: "picture", label: "Pictures" },
+  { value: "music", label: "Music" }, { value: "video", label: "Videos" },
+  { value: "playlist", label: "Playlists" }, { value: "program", label: "Programs" },
+  { value: "link", label: "Links" }, { value: "webpage", label: "Webpages" }
 ];
 function localToday(): string {
   const d = new Date();
