@@ -238,3 +238,10 @@
 @media (prefers-reduced-motion:reduce) {
   .explorer-address__source-refresh::before { transition:none; }
 }
+
+/* Source string-valued Search Results locations are not clickable crumbs. */
+.explorer-address .explorer-address__source-static,
+.explorer-address .explorer-address__source-static:hover {
+  cursor:default; background:transparent; border-color:transparent;
+  max-width:none; color:#19384d;
+}

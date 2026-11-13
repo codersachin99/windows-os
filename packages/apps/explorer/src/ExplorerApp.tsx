@@ -16,7 +16,8 @@ import { SearchCompanion } from "@windows-os/apps/search-companion";
 import { sourceExplorerSearchStyle } from "./searchStyle";
 import { SourceAddressProgress } from "./SourceAddressProgress";
 import { SourceWin7Navigation } from "./SourceWin7Navigation";
-import { SourceWin7Breadcrumbs, sourceComputerBreadcrumbs } from "./SourceWin7Breadcrumbs";
+import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
+import { sourceExplorerAddressBreadcrumbs } from "./sourceExplorerAddress";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -143,6 +144,11 @@ export function ExplorerApp({
   useEffect(() => searchIndex.subscribeInvalidation(() => {
     if (searchActive.current) rerunActiveSearch.current();
   }), [searchIndex]);
+  // Original computer.js 'location' computed: a virtual search path has a
+  // single non-clickable result label instead of the real VFS folder trail.
+  const showSourceSearchLocation = !isBin && (searchBusy || found !== null);
+  const classicSourceSearch = Boolean(initialFind || (initialSourceSearch &&
+    initialSourceSearch.namePattern !== null));
   const visible = found ?? session.visible();
   const selected = state.items.find(item => item.uri === state.selected[0])
     ?? found?.find(item => item.uri === state.selected[0]);
@@ -433,8 +439,10 @@ export function ExplorerApp({
           <SourceAddressProgress fraction={searchBusy ? searchFraction : null} />
           {theme === "win7" && <>
             <SourceWin7Breadcrumbs
-              items={sourceComputerBreadcrumbs(state.path, volume?.pathConfig, trashPath)}
-              icon={isBin ? legacyArt.recycleBin : legacyArt.computer}
+              items={sourceExplorerAddressBreadcrumbs(state.path, volume?.pathConfig,
+                trashPath, showSourceSearchLocation, classicSourceSearch)}
+              icon={showSourceSearchLocation ? legacyArt.search :
+                isBin ? legacyArt.recycleBin : legacyArt.computer}
               onNavigate={path => void execute(() => session.open(path))} />
             <button type="button" className="explorer-address__source-refresh"
               aria-label="Reload current folder" title="Refresh"

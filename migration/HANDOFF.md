@@ -1,3 +1,10 @@
+## Original Computer search-results address location — 2026-11-13 (CI pending)
+
+- **Pinned behavior**: `legacy-win7/src/modules/apps/computer.js` computed `location()` renders `[this.$t("search-results")]` for classic Find, otherwise `[this.$t("search-results-in",[this.searchLocation])]`; `searchLocation()` uses the last label in source `getLocation(searchScope)`. Original `assets/locales/en-US.json` strings are **Search Results** and **Search Results in {0}**. Search labels are plain strings, unlike navigable breadcrumb objects.
+- **Port**: `sourceExplorerAddress.ts` maps mounted VFS scopes to static source search location text without forging a `shell:search` filesystem path. `ExplorerApp` presents the search icon during an active or completed search and preserves the existing readonly address input, clickable breadcrumb paths outside search, progress overlay, navigation/history, and all other themes. `SourceWin7Breadcrumbs` now renders non-clickable source string locations.
+- **Coverage added**: five unit/component checks (scoped paths, classic Find, root/Bin fallback, static accessibility), and desktop/mobile Chromium tests for standard and classic Find navigation and Clear results. Visual screenshot comparison and actual source address editing remain out of scope.
+- **Verification**: deliberate opt-in `[run-ci]` commit below; record actual result before calling this checked.
+
 ## Win7 Computer clickable breadcrumbs and address refresh — 2026-11-13 (CI VERIFIED)
 
 - **Source**: `legacy-win7/src/modules/apps/computer.js#getLocation` produces clickable `Computer → disk → directory` pieces from runtime drive metadata. Source single-crumb special handling covers Bin and unknown/Computer roots. `theme-win7-scss.js` gives the 18px address icon, 22px breadcrumb line, 25px address field, and refresh hover/pressed gradient. `vue-app.css` gives the 25px refresh width.

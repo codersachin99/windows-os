@@ -6,7 +6,9 @@ import type { LegacyPathConfig } from "@windows-os/filesystem";
  */
 export interface SourceBreadcrumb {
   label: string;
-  path: string;
+  /** Source window-addressbar accepts location entries as strings for search
+   * results, and as objects with click handlers for filesystem breadcrumbs. */
+  path: string | null;
 }
 
 function displaySegment(segment: string): string {
@@ -69,15 +71,20 @@ export function SourceWin7Breadcrumbs({
     aria-label="Folder path">
     <img className="explorer-address__source-icon" src={icon} alt="" />
     {items.map((item, index) =>
-      <button type="button" key={item.path}
-        className="explorer-address__source-crumb"
-        aria-current={index === items.length - 1 ? "location" : undefined}
-        title={item.label}
-        onClick={() => onNavigate(item.path)}>
-        <span className="explorer-address__source-crumb-text">{item.label}</span>
-        {index < items.length - 1 &&
-          <span className="explorer-address__source-crumb-chevron"
-            aria-hidden="true">›</span>}
-      </button>)}
+      item.path === null
+        ? <span className="explorer-address__source-crumb explorer-address__source-static"
+            key={"static-" + index} aria-current="location">
+            <span className="explorer-address__source-crumb-text">{item.label}</span>
+          </span>
+        : <button type="button" key={item.path}
+            className="explorer-address__source-crumb"
+            aria-current={index === items.length - 1 ? "location" : undefined}
+            title={item.label}
+            onClick={() => onNavigate(item.path!)}>
+            <span className="explorer-address__source-crumb-text">{item.label}</span>
+            {index < items.length - 1 &&
+              <span className="explorer-address__source-crumb-chevron"
+                aria-hidden="true">›</span>}
+          </button>)}
   </nav>;
 }
