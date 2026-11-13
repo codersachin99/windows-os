@@ -56,3 +56,8 @@ The original Computer app chooses **three distinct search UI presentations** by 
 
 - Original Computer passes `searchProgress` to `window-addressbar` and renders green Win7 gradient within 25px location field, not a separate search-toolbar indicator. React has the correct location-bar placement/gradient and unit/accessibility tests; see [source addressbar trace](SEARCH-ADDRESSBAR-SOURCE.md).
 - **Verification pending** one deliberate CI checkpoint. **Remaining:** original decorated breadcrumb, graphical navigation/refresh, source search options skin, side-by-side desktop/mobile screenshots and remaining unported apps.
+
+## Verified Win7 addressbar progress — 2026-11-13
+
+- [Deliberate CI 43374274437 — PASS](https://github.com/codersachin99/windows-os/actions/runs/43374274437): **241 unit tests in 47 files, 228 desktop/mobile Chromium browser tests**, including all four `.test.tsx` component cases enabled by the Vitest test glob correction.
+- Pinned 25px location field and exact `window__addressbar-progress` green gradient integrated; no progressbar remains in the unrelated options row. **Next:** migrate original embedded 27px back/forward nav sprite states and breadcrumb/refresh interaction, then side-by-side screenshots. Do not claim whole-Explorer visual parity yet.

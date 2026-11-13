@@ -1,8 +1,8 @@
-## Win7 addressbar progress + TSX test discovery — 2026-11-13, pending complete CI
+## Win7 addressbar progress + TSX test discovery — 2026-11-13, CI VERIFIED
 
 - **Pinned original**: `computer.js` `window-addressbar(progress=searchProgress)` with null-on-finish; Win7 theme 25px location field and exact green progress gradient.
 - **Code**: `SourceAddressProgress.tsx` renders ARIA 0–100 progress *inside* Explorer address field; full source gradient/geometry in `ExplorerApp.css`, separate search option-row progress removed. Four `SourceAddressProgress.test.tsx` tests cover null, clamp, percentage and SSR markup.
-- **Important coverage correction**: first opt-in [CI 43373230742](https://github.com/codersachin99/windows-os/actions/runs/43373230742) passed 237 existing unit and 228 Chromium tests, but its original Vitest glob excluded `.test.tsx`. Changed `vite.config.ts` to include `.test.{ts,tsx}` in all packages and app. The **4 new component tests were not counted in the prior green run**; a deliberate CI with this correction is pending.
+- **Verified coverage correction:** initial [CI 43373230742](https://github.com/codersachin99/windows-os/actions/runs/43373230742) passed 237 existing unit and 228 Chromium tests but silently excluded `.test.tsx`. After expanding the `vite.config.ts` glob to `.test.{ts,tsx}`, **[final opt-in CI 43374274437 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43374274437)** ran all **241 Vitest unit tests across 47 files**, including the four new TSX component tests, and **228 desktop/mobile Chromium browser tests**, plus TypeScript, source checks and Vite production build. Verified code SHA `f5e5cbd27c45eef52ea736d43a3e80e374b334a6`.
 - **Remaining**: original decorated breadcrumb/navigation sprite states, source toolbar skin and actual source-vs-React screenshots. Keep PR #1 draft, main untouched, CI only on `[run-ci]` commits.
 
 ## Pinned Win7 addressbar search progress — 2026-11-13, CI pending

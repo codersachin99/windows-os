@@ -24,3 +24,9 @@ Legacy baseline: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c
 ## Test discovery correction — 2026-11-13
 
 The first opt-in run [43373230742](https://github.com/codersachin99/windows-os/actions/runs/43373230742) was **green (237 unit / 228 browser)**, but the Vitest configuration only included `**/*.test.ts`, so the four newly authored `SourceAddressProgress.test.tsx` component tests were silently excluded. The shared `vite.config.ts` test include glob is now extended to `**/*.test.{ts,tsx}` (in both packages and web app). This is a real coverage correction; the prior green run must **not** be presented as having verified those four tests. The deliberate [run-ci] checkpoint now validates their actual execution along with the 228 browser tests.
+
+## Verified checkpoint — 2026-11-13
+
+- [Opt-in CI run 43374274437 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43374274437), code SHA `f5e5cbd27c45eef52ea736d43a3e80e374b334a6`: TypeScript, original source/Contacts checks, production Vite build, **241 Vitest unit tests in 47 files**, and **228 Chromium desktop/mobile browser tests passed**. The previously skipped four TSX component tests are explicitly included in that 241 count. No reported failures.
+- Source UI placement and gradient are code-and-CSS verified, but an actual screenshot diff against running legacy-win7 is still needed for a full visual parity claim.
+- Next exact original asset checkpoint: Win7 theme embeds nav background sprite (1,160 base64 chars) and back/forward states (3,652 base64 chars). Back/forward controls are 27px with normal `0`, hover `-27px`, pressed `-54px` and disabled `-81px` background-offset states. Preserve actual source sprites and pointer/focus semantics rather than approximating an icon, then compare original breadcrumbs and refresh control styling.
