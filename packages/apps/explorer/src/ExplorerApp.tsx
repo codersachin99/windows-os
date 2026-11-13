@@ -18,6 +18,8 @@ import { SourceAddressProgress } from "./SourceAddressProgress";
 import { SourceWin7Navigation } from "./SourceWin7Navigation";
 import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
 import { sourceExplorerAddressBreadcrumbs } from "./sourceExplorerAddress";
+import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
+import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -29,6 +31,7 @@ interface ExplorerAppProps {
   initialPath?: string;
   recycleBinPath?: string;
   onOpenFind?(scope: string): void;
+  onClose?(): void;
   theme?: ThemeId;
 }
 /** Source 2e2c.w merge offsets; never interpolate filename text as HTML. */
@@ -63,7 +66,7 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  */
 export function ExplorerApp({
   onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind,
-  theme = "win7"
+  onClose, theme = "win7"
 }: ExplorerAppProps) {
   const classicSearchStyle = sourceExplorerSearchStyle(theme);
   const isBin = Boolean(recycleBinPath);
@@ -285,7 +288,7 @@ export function ExplorerApp({
   };
   const handleKeys = (event: import("react").KeyboardEvent<HTMLDivElement>) => {
     const focused = event.target as HTMLElement;
-    if (focused.closest("input,textarea,select,[contenteditable=true]")) return;
+    if (focused.closest("input,textarea,select,[contenteditable=true],[role=menu]")) return;
     if (event.key === "Delete" && !event.ctrlKey && !event.altKey && !event.metaKey) {
       event.preventDefault();
       requestDelete();
@@ -418,6 +421,29 @@ export function ExplorerApp({
     setPrompt("rename");
   };
 
+  const protectedRoots = [
+    "/", ...(volume ? [volume.pathConfig.root, ...volume.pathConfig.drives.map(
+      drive => volume.pathConfig.root.replace(/\\/$/, "") + "/" + drive.path
+    )] : [])
+  ];
+  const organizeItems = sourceOrganizeItems({
+    selectedPaths:state.selected, protectedRoots,
+    clipboardHasPaths:clipboardState.paths.length > 0,
+    canMoveToTrash:Boolean(trashPath), isRecycleBin:isBin,
+    canCloseWindow:Boolean(onClose)
+  });
+  const organizeCommand = (command: SourceOrganizeCommand) => {
+    switch(command) {
+      case "cut": copySelection("cut"); break;
+      case "copy": copySelection("copy"); break;
+      case "paste": pasteSelection(); break;
+      case "delete": requestDelete(); break;
+      case "rename": requestRename(); break;
+      case "close": onClose?.(); break;
+      // Explicitly disabled source menu items cannot reach the callback.
+    }
+  };
+
   return <div className="windows-explorer explorer-stage" data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
       {theme === "win7"
@@ -487,7 +513,9 @@ export function ExplorerApp({
       {/* Original Computer renders progress in window-addressbar, not here. */}
     </div>
     <div className="explorer-command">
-      <button disabled title="Source Organize menu is pending">Organize</button>
+      {isBin
+        ? <button disabled title="Recycle Bin menu is a separate source surface">Organize</button>
+        : <SourceOrganizeMenu items={organizeItems} onCommand={organizeCommand} />}
       {isBin ? <>
         <button disabled={!selected?.originalPath} onClick={restoreSelection}>Restore</button>
         <button disabled={!state.selected.length} onClick={requestDelete}>Delete permanently</button>

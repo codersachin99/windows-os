@@ -72,6 +72,7 @@ function ApplicationContent({
   }
   if (appId === "bin") return <RecycleBinApp />;
   if (appId === "computer") return <ExplorerApp theme={theme} initialPath={filePath}
+    onClose={() => onRequestCloseWindow(windowId)}
     onOpenFind={scope => {
       const app = appRegistry.get("find");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path: scope } });
