@@ -1,13 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { decodeSourceFindPath, encodeSourceFindPath, createSourceFindQuery,
   sourceFindSearchRequest } from "./findQuery";
-import { matchSourceNamePattern, matchesSourceKind, searchFiles, VirtualFileStore } from "./index";
+import { matchSourceNamePattern, matchesSourceKind, searchFiles, VirtualFileStore,
+  decodeSourceSearchPath } from "./index";
 
 describe("original Find (16d5) query adapter", () => {
   it("preserves source defaults and all query options in the virtual Computer path", () => {
     const q = { ...createSourceFindQuery("/guest"), namePattern: "*.txt; Report",
       kind: "document" as const, date: { days: 7 }, size: { atLeast: true, kb: 1 } };
-    expect(decodeSourceFindPath(encodeSourceFindPath(q))).toEqual(q);
+    const path = encodeSourceFindPath(q, new Date(2026, 10, 13).getTime());
+    expect(decodeSourceSearchPath(path)).toEqual({
+      text: "kind:document size:>=1kb datemodified:2026-11-06..2026-11-13",
+      scope: "/guest", namePattern: "*.txt; Report", subfolders: true
+    });
     expect(decodeSourceFindPath("/guest")).toBeNull();
     expect(decodeSourceFindPath("win7-find:%7Bbad")).toBeNull();
     expect(decodeSourceFindPath("win7-find:" + encodeURIComponent(JSON.stringify({

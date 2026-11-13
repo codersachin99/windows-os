@@ -1,10 +1,12 @@
 import { normalizeFileUri, type FileSearchRequest } from "./index";
+import { encodeSourceSearchPath } from "./sourceSearchPath";
 
 /**
  * Original src/modules/apps/find.js 16d5.a constructs a virtual Computer
  * search path from namePattern, scope, subfolders, date, kind and size.
- * Keep that file.path launch contract without allowing a virtual path to enter
- * the real Guest VFS. This adapter is internal, not a host filesystem URI.
+ * The source file.path now uses exact 5401.k shell:search? q/in/name/sub
+ * serialization. The old win7-find: decoder remains ONLY for compatibility
+ * with early migration-era window state. Neither prefix is a Guest VFS path.
  */
 export interface SourceFindQuery {
   scope: string;
@@ -19,8 +21,36 @@ export const SOURCE_FIND_PREFIX = "win7-find:";
 export function createSourceFindQuery(scope = "/"): SourceFindQuery {
   return { scope, namePattern: "", subfolders: true, kind: "", date: null, size: null };
 }
-export function encodeSourceFindPath(query: SourceFindQuery): string {
-  return SOURCE_FIND_PREFIX + encodeURIComponent(JSON.stringify(query));
+/** Original 16d5.b uses local YYYY-MM-DD without UTC drift. */
+function sourceDateString(date: Date): string {
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")].join("-");
+}
+
+/** Original 16d5.a delegates to 2e2c.f after building metadata filter tokens. */
+export function encodeSourceFindPath(query: SourceFindQuery, now = Date.now()): string {
+  const terms: string[] = [];
+  if (query.kind) terms.push("kind:" + query.kind);
+  if (query.size) {
+    terms.push("size:" + (query.size.atLeast ? ">=" : "<=") + query.size.kb + "kb");
+  }
+  if (query.date) {
+    let range: string;
+    if ("from" in query.date) range = query.date.from + ".." + query.date.to;
+    else {
+      const date = new Date(now);
+      const days = "days" in query.date ? query.date.days : 0;
+      const months = "months" in query.date ? query.date.months : 0;
+      const from = new Date(date.getFullYear(), date.getMonth() - months,
+        date.getDate() - days);
+      range = sourceDateString(from) + ".." + sourceDateString(date);
+    }
+    terms.push("datemodified:" + range);
+  }
+  return encodeSourceSearchPath({
+    text: terms.join(" "), scope: query.scope || null,
+    namePattern: query.namePattern, subfolders: query.subfolders
+  });
 }
 export function decodeSourceFindPath(path: string | undefined): SourceFindQuery | null {
   if (!path?.startsWith(SOURCE_FIND_PREFIX)) return null;

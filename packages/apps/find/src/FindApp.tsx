@@ -76,7 +76,8 @@ export function FindApp({ initialScope, onFind }: FindAppProps) {
     locations.unshift({ value: scope, label: scope.split("/").pop() || scope });
   const find = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onFind(encodeSourceFindPath(sourceFindFormQuery(fields, scope || root)));
+    // An empty Computer option becomes source in= (all mounted Guest disks).
+    onFind(encodeSourceFindPath(sourceFindFormQuery(fields, scope)));
   };
   return <form className="windows-find" data-test-find="" onSubmit={find}>
     <div className="windows-find__panel">

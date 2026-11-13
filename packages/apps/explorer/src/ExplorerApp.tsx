@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
 import { legacyArt } from "@windows-os/assets";
 import {
-  searchFiles, decodeSourceFindPath, sourceFindSearchRequest,
+  searchFiles, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   parseSourceShortcut, sourcePrograms,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
@@ -63,7 +63,12 @@ export function ExplorerApp({
   const classicSearchStyle = sourceExplorerSearchStyle(theme);
   const isBin = Boolean(recycleBinPath);
   const initialFind = useMemo(() => decodeSourceFindPath(initialPath), [initialPath]);
-  const startPath = initialFind?.scope ?? initialPath;
+  const initialSourceSearch = useMemo(() => decodeSourceSearchPath(initialPath), [initialPath]);
+  // Original shell:search is a virtual URI; route to its guest search scope
+  // before constructing ExplorerSession, never normalize it as a file path.
+  const startPath = initialSourceSearch
+    ? initialSourceSearch.scope || SOURCE_COMPUTER_ROOT
+    : initialFind?.scope ?? initialPath;
   const session = useMemo(() => new ExplorerSession(
     fileStore, recycleBinPath ?? startPath ?? "/", recycleBinPath
   ), [startPath, recycleBinPath]);
@@ -78,8 +83,10 @@ export function ExplorerApp({
     kind: "item" | "background"; x: number; y: number; uri?: string
   } | null>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
-  const [subfolders, setSubfolders] = useState(initialFind?.subfolders ?? false);
-  const [namePattern, setNamePattern] = useState(initialFind?.namePattern ?? "");
+  const [subfolders, setSubfolders] = useState(
+    initialSourceSearch?.subfolders ?? initialFind?.subfolders ?? false);
+  const [namePattern, setNamePattern] = useState(
+    initialSourceSearch?.namePattern ?? initialFind?.namePattern ?? "");
   const [found, setFound] = useState<FileEntry[] | null>(null);
   const [foundHighlights, setFoundHighlights] = useState<
     Readonly<Record<string, readonly SourceSearchHighlight[]>>
@@ -276,9 +283,14 @@ export function ExplorerApp({
     setFoldersScanned(0);
     void searchFiles(fileStore, {
       ...(query ? sourceFindSearchRequest(query)
+        : initialSourceSearch ? {
+            scope: state.path, sourceNamePattern: namePattern,
+            subfolders, sourceRanked: true
+          }
         : initialFind ? sourceFindSearchRequest({ ...initialFind, scope: state.path, namePattern, subfolders })
         : { scope: state.path, namePattern: namePattern.trim() || null, subfolders }),
-      text: state.search,
+      text: query ? state.search : initialSourceSearch
+        ? state.search || initialSourceSearch.text : state.search,
       maxResults: 500,
       skipPaths: isBin || !trashPath ? [] : [trashPath]
     }, {
@@ -318,7 +330,9 @@ export function ExplorerApp({
     runSearch(pendingSearch);
   }, [pendingSearch, state.path]);
   // Original Find Now opens a new Computer window directly in search results.
-  useEffect(() => { if (initialFind) runSearch(); }, [initialFind]);
+  useEffect(() => {
+    if (initialFind || initialSourceSearch) runSearch();
+  }, [initialFind, initialSourceSearch]);
   useEffect(() => {
     if (!context) return;
     const dismiss = (event: PointerEvent) => {
