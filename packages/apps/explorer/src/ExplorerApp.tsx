@@ -10,6 +10,9 @@ import {
 } from "@windows-os/filesystem";
 import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
+import { SearchDialog } from "@windows-os/apps/search-dialog";
+import { SearchCompanion } from "@windows-os/apps/search-companion";
+import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
 import "./ExplorerApp.css";
 
@@ -60,6 +63,10 @@ export function ExplorerApp({
   const [found, setFound] = useState<FileEntry[] | null>(null);
   const [searchBusy, setSearchBusy] = useState(false);
   const [searchTruncated, setSearchTruncated] = useState(false);
+  // Original Computer owns the child SearchDialog and inline SearchCompanion.
+  const [showSearchDialog, setShowSearchDialog] = useState(false);
+  const [showCompanion, setShowCompanion] = useState(false);
+  const [pendingSearch, setPendingSearch] = useState<SourceFindQuery | null>(null);
   const [foldersScanned, setFoldersScanned] = useState(0);
   const currentSearch = useRef<AbortController | null>(null);
   const fileInput = useRef<HTMLInputElement | null>(null);
@@ -234,7 +241,7 @@ export function ExplorerApp({
       event.preventDefault(); session.selectAll();
     }
   };
-  const runSearch = () => {
+  const runSearch = (query?: SourceFindQuery) => {
     currentSearch.current?.abort();
     const controller = new AbortController();
     currentSearch.current = controller;
@@ -243,8 +250,8 @@ export function ExplorerApp({
     setMessage("");
     setFoldersScanned(0);
     void searchFiles(fileStore, {
-      ...(initialFind
-        ? sourceFindSearchRequest({ ...initialFind, scope: state.path, namePattern, subfolders })
+      ...(query ? sourceFindSearchRequest(query)
+        : initialFind ? sourceFindSearchRequest({ ...initialFind, scope: state.path, namePattern, subfolders })
         : { scope: state.path, namePattern: namePattern.trim() || null, subfolders }),
       text: state.search,
       maxResults: 500,
@@ -268,6 +275,22 @@ export function ExplorerApp({
       }
     });
   };
+  const searchInComputer = (query: SourceFindQuery) => {
+    setShowSearchDialog(false);
+    if (query.scope !== state.path) {
+      // Preserve source searchFromDialog/openPath parent navigation rather
+      // than opening a second shell window as standalone Find does.
+      setPendingSearch(query);
+      void execute(() => session.open(query.scope));
+    } else {
+      runSearch(query);
+    }
+  };
+  useEffect(() => {
+    if (!pendingSearch || pendingSearch.scope !== state.path) return;
+    setPendingSearch(null);
+    runSearch(pendingSearch);
+  }, [pendingSearch, state.path]);
   // Original Find Now opens a new Computer window directly in search results.
   useEffect(() => { if (initialFind) runSearch(); }, [initialFind]);
   useEffect(() => {
@@ -332,8 +355,15 @@ export function ExplorerApp({
         <input aria-label="File name pattern" value={namePattern}
           placeholder="*.txt" onChange={event => setNamePattern(event.target.value)} />
       </label>
-      {!isBin && onOpenFind && <button type="button" aria-label="Advanced Find"
-        onClick={() => onOpenFind(state.path)}>Advanced Find...</button>}
+      {!isBin && <>
+        <button type="button" aria-label="Search dialog"
+          onClick={() => setShowSearchDialog(true)}>Search...</button>
+        <button type="button" aria-label="Search Companion"
+          aria-pressed={showCompanion} onClick={() => setShowCompanion(showing => !showing)}>
+          Search Companion</button>
+        {onOpenFind && <button type="button" aria-label="Advanced Find"
+          onClick={() => onOpenFind(state.path)}>Advanced Find...</button>}
+      </>}
       {found !== null && <button type="button" onClick={() => setFound(null)}>Clear results</button>}
       {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}
       {searchBusy && <span role="status">Searching {foldersScanned} folders...</span>}
@@ -368,6 +398,9 @@ export function ExplorerApp({
       </label>
     </div>
     <div className="explorer-workspace">
+      {!isBin && showCompanion ? <SearchCompanion key={state.path}
+        initialScope={state.path} initialNamePattern={namePattern}
+        onSearch={searchInComputer} onClose={() => setShowCompanion(false)} /> :
       <aside className="explorer-navigation">
         <button className="explorer-navigation__home"
           onClick={() => void execute(() => session.open(recycleBinPath ?? "/"))}>
@@ -397,7 +430,7 @@ export function ExplorerApp({
           title="The source Z: DVD device is not writable or mounted">
           DVD RW Drive (Z:)
         </button>}
-      </aside>
+      </aside>}
       <section className={"explorer-content" +
           (dropTarget === state.path ? " is-drop-target" : "")}
         data-windows-os-drop-directory={isBin ? undefined : state.path}
@@ -510,6 +543,8 @@ export function ExplorerApp({
         )}>Refresh</button>
       </>}
     </div>}
+    {showSearchDialog && !isBin && <SearchDialog initialScope={state.path}
+      onSearch={searchInComputer} onClose={() => setShowSearchDialog(false)} />}
     {confirm && <div className="explorer-prompt__backdrop">
       <section className="explorer-prompt" role="alertdialog" aria-label="Confirm file operation" aria-modal="true">
         <p>{confirm === "empty" ? "Permanently delete every item in the Recycle Bin?" :

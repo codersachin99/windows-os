@@ -75,6 +75,12 @@
       ],
       "@windows-os/apps/find": [
         "packages/apps/find/src/index.ts"
+      ],
+      "@windows-os/apps/search-dialog": [
+        "packages/apps/search-dialog/src/index.ts"
+      ],
+      "@windows-os/apps/search-companion": [
+        "packages/apps/search-companion/src/index.ts"
       ]
     }
   },

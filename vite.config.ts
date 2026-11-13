@@ -24,6 +24,8 @@ export default defineConfig({
       "@windows-os/apps/about": app("./packages/apps/about/src/index.ts"),
       "@windows-os/apps/taskmgr": app("./packages/apps/taskmgr/src/index.ts"),
       "@windows-os/apps/find": app("./packages/apps/find/src/index.ts"),
+      "@windows-os/apps/search-dialog": app("./packages/apps/search-dialog/src/index.ts"),
+      "@windows-os/apps/search-companion": app("./packages/apps/search-companion/src/index.ts"),
       "@windows-os/apps/explorer": app("./packages/apps/explorer/src/index.ts"),
       "@windows-os/apps/shared": app("./packages/apps/shared/src/index.ts")
     }

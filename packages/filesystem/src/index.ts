@@ -521,6 +521,7 @@ export { FileClipboard } from "./clipboard";
 export type { ClipboardOperation, FileClipboardState } from "./clipboard";
 
 export { searchFiles, matchFilePattern, matchSourceNamePattern, matchesSourceKind } from "./search";
+export { sourceSearchLocations } from "./sourceSearchLocations";
 export { createSourceFindQuery, encodeSourceFindPath, decodeSourceFindPath, sourceFindSearchRequest,
   SOURCE_FIND_PREFIX } from "./findQuery";
 export type { SourceFindQuery } from "./findQuery";
