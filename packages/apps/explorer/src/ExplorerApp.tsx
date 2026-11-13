@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
 import { legacyArt } from "@windows-os/assets";
 import {
   searchFiles, decodeSourceFindPath, sourceFindSearchRequest,
@@ -6,7 +6,7 @@ import {
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
-  type FileEntry
+  type FileEntry, type SourceSearchHighlight
 } from "@windows-os/filesystem";
 import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
@@ -26,6 +26,21 @@ interface ExplorerAppProps {
   onOpenFind?(scope: string): void;
   theme?: ThemeId;
 }
+/** Source 2e2c.w merge offsets; never interpolate filename text as HTML. */
+function sourceMarkedName(name: string, ranges: readonly SourceSearchHighlight[] | undefined): ReactNode {
+  if (!ranges?.length) return name;
+  const parts: ReactNode[] = [];
+  let from = 0;
+  for (const { start, end } of ranges) {
+    if (start < from || end > name.length || start >= end) continue;
+    if (start > from) parts.push(name.slice(from, start));
+    parts.push(<mark key={start} className="explorer-search-mark">{name.slice(start, end)}</mark>);
+    from = end;
+  }
+  if (from < name.length) parts.push(name.slice(from));
+  return parts;
+}
+
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
   { value: "details", label: "Details" },
   { value: "list", label: "List" },
@@ -66,6 +81,9 @@ export function ExplorerApp({
   const [subfolders, setSubfolders] = useState(initialFind?.subfolders ?? false);
   const [namePattern, setNamePattern] = useState(initialFind?.namePattern ?? "");
   const [found, setFound] = useState<FileEntry[] | null>(null);
+  const [foundHighlights, setFoundHighlights] = useState<
+    Readonly<Record<string, readonly SourceSearchHighlight[]>>
+  >({});
   const [searchBusy, setSearchBusy] = useState(false);
   const [searchTruncated, setSearchTruncated] = useState(false);
   // Original Computer owns the child SearchDialog and inline SearchCompanion.
@@ -88,6 +106,7 @@ export function ExplorerApp({
   useEffect(() => {
     currentSearch.current?.abort();
     setFound(null);
+    setFoundHighlights({});
     setSearchBusy(false);
     setFoldersScanned(0);
   }, [state.path, state.search, subfolders, namePattern]);
@@ -252,6 +271,7 @@ export function ExplorerApp({
     currentSearch.current = controller;
     setSearchBusy(true);
     setFound(null);
+    setFoundHighlights({});
     setMessage("");
     setFoldersScanned(0);
     void searchFiles(fileStore, {
@@ -269,6 +289,7 @@ export function ExplorerApp({
     }).then(result => {
       if (currentSearch.current !== controller) return;
       setFound(result.files);
+      setFoundHighlights(result.highlights ?? {});
       setSearchTruncated(result.truncated);
     }).catch(cause => {
       if (currentSearch.current !== controller && cause instanceof Error && cause.name === "AbortError") return;
@@ -371,7 +392,9 @@ export function ExplorerApp({
             onClick={() => onOpenFind(state.path)}>
             {classicSearchStyle === "find" ? "Find..." : "Advanced Find..."}</button>}
       </>}
-      {found !== null && <button type="button" onClick={() => setFound(null)}>Clear results</button>}
+      {found !== null && <button type="button" onClick={() => {
+        setFound(null); setFoundHighlights({});
+      }}>Clear results</button>}
       {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}
       {searchBusy && <span role="status">Searching {foldersScanned} folders...</span>}
     </div>
@@ -482,7 +505,8 @@ export function ExplorerApp({
               <img src={item.type === "directory" ? legacyArt.folder : legacyArt.file} alt="" draggable={false} />
             </span>
             <span className="listview__item-label" title={item.uri}>
-              {isBin && item.originalPath ? item.originalPath.split("/").pop() : item.name}
+              {isBin && item.originalPath ? item.originalPath.split("/").pop()
+                : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
             </span>
             {state.viewMode === "details" && <>
               <span>{new Date(item.mtime).toLocaleString()}</span>

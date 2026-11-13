@@ -117,3 +117,6 @@
   outline-offset: -2px;
   background-color: #c7e7ff77;
 }
+
+/* Source 2e2c.w search highlights are spans inside file titles, not HTML injection. */
+.explorer-search-mark { color:inherit; font:inherit; background:#ffe38c; padding:0; }
