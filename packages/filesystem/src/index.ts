@@ -528,6 +528,9 @@ export {
 } from "./sourceTextSearch";
 export type { SourceParsedSearch, SourceSearchMatch, SourceSearchHighlight } from "./sourceTextSearch";
 export { sourceSearchLocations } from "./sourceSearchLocations";
+export { encodeSourceSearchPath, decodeSourceSearchPath, isSourceSearchPath,
+  SOURCE_SEARCH_URI_PREFIX } from "./sourceSearchPath";
+export type { SourceSearchPath } from "./sourceSearchPath";
 export { createSourceFindQuery, encodeSourceFindPath, decodeSourceFindPath, sourceFindSearchRequest,
   SOURCE_FIND_PREFIX } from "./findQuery";
 export type { SourceFindQuery } from "./findQuery";
