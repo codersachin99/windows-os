@@ -30,3 +30,9 @@ Baseline source: codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1
 ## Source-suffix regression correction
 
 Pinned `0e9a.q` tests `/(html|htm)$/` on the extension, so **mhtml is classified as a webpage**. Do not replace this with exact-list matching or expect mhtml to be excluded. The previous migration-only `decodeSourceFindPath(encodeSourceFindPath(q))` JSON round-trip was intentionally superseded by the actual `shell:search` query URI. Test its `q` filter tokens through `decodeSourceSearchPath`/`parseSourceSearchText`, not through the legacy decoder.
+
+## Verification — 2026-11-13
+
+- [GitHub Actions opt-in 43364173206 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43364173206), source-path implementation SHA `2ca87d51db829b33fb74a189c5fe4c7a6e6785d0`. TypeScript, 223 Vitest unit tests (44 files), pinned source/Contacts checks, production Vite build, 222 Chromium desktop/mobile browser tests passed.
+- Tested source `5401.k` virtual URI order, q/in/name/sub parse, `16d5.a` metadata token serialization, source `0e9a` extension suffix quirks, and end-to-end source Find Now results in a distinct Computer window.
+- First attempt 43363988969 failed only two stale test assumptions; corrected before the final all-green run. This does not imply full disk mount/screenshot parity.

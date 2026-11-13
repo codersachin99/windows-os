@@ -30,3 +30,9 @@ The original Computer app chooses **three distinct search UI presentations** by 
 
 - [GitHub Actions 43357788138](https://github.com/codersachin99/windows-os/actions/runs/43357788138) succeeded after theme integration: 205 Vitest tests (40 files), production Vite build, 218 desktop/mobile Chromium tests.
 - The actual f3ad theme dispatch is pinned. Remaining visual, source query serialization/relevance scoring, original file predicates and unported WinXP/Win31 complete themes remain explicit tasks.
+
+## Source search closing checkpoint — verified
+
+- [CI 43364173206](https://github.com/codersachin99/windows-os/actions/runs/43364173206) — 223 unit tests / 44 files and 222 desktop/mobile Chromium browser tests passed. Exact `shell:search` URI and pinned `0e9a`/`de73` file predicates are now implemented.
+- **Next targeted parity gap:** source `computer.js listSearch` searches `getStats().map(disk => disk.path)` when query `in=` is empty. React currently scans the mounted Guest Computer root instead, which can include non-drive nodes. Implement scoped multi-root traversal from actual mounted Guest disk metadata, with rejection of unmounted disks and no host access.
+- Then screenshot-compare default Win7 source/React Computer and Find at desktop/mobile breakpoints; exact child modal focus/chrome and alternate legacy skins remain pending. Many other applications/games are not yet migrated.
