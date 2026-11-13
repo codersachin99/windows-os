@@ -1,3 +1,10 @@
+## Win7 Bin instant search source inheritance — 2026-11-13 (verification pending)
+
+- **Source proof**: `legacy-win7/bin.js` wraps Computer; Computer always supplies the non-classic `window-addressbar-search instant` slot, including for `id="bin"`. Original webpack `1902` uses **300ms** debounce (React previously used 250ms).
+- **Implementation**: [1931776](https://github.com/codersachin99/windows-os/commit/193177650b69b3004728f92cee684e9070cf5b11) enables Win7 Bin instant search, source-style placeholder/search-results label, and shared trash-scoped search without changing Restore/Empty or destructive confirmation. Browser test covers searching, no-results, clearing, and restore.
+- **Verification**: [opt-in run 43470482517](https://github.com/codersachin99/windows-os/actions/runs/43470482517) has passed TypeScript/unit/source checks/build; browser checks still running at this handoff.
+- **Next**: confirm CI then source-accurate Win7 Computer/Bin New Folder + View popup/slider toolbar, source search index differences and screenshots; do not strip functional file operations or enable unsafe Bin clipboard paths. [Detailed source trace](BIN-SEARCH-SOURCE.md). PR #1 draft, main unchanged, no release.
+
 ## Source bin.js inherits Computer Organize toolbar and shell Close — 2026-11-13 (CI VERIFIED)
 
 - **Pinned source**: `legacy-win7@4e63290/src/modules/apps/bin.js` renders `<computer id="bin" hoistedPath={trashPath} />`; the Computer component supplies identical `window-menubar` Organize items in the same order, dividers and source-disabled states. The original `computer.js#toolbar()` shows selection-dependent Cut/Copy/Paste/Delete/Rename but does not attach click actions to those entries; the React migration wires only safe, actually implemented operations.
