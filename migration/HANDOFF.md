@@ -1,3 +1,10 @@
+## Win7 addressbar progress + TSX test discovery — 2026-11-13, pending complete CI
+
+- **Pinned original**: `computer.js` `window-addressbar(progress=searchProgress)` with null-on-finish; Win7 theme 25px location field and exact green progress gradient.
+- **Code**: `SourceAddressProgress.tsx` renders ARIA 0–100 progress *inside* Explorer address field; full source gradient/geometry in `ExplorerApp.css`, separate search option-row progress removed. Four `SourceAddressProgress.test.tsx` tests cover null, clamp, percentage and SSR markup.
+- **Important coverage correction**: first opt-in [CI 43373230742](https://github.com/codersachin99/windows-os/actions/runs/43373230742) passed 237 existing unit and 228 Chromium tests, but its original Vitest glob excluded `.test.tsx`. Changed `vite.config.ts` to include `.test.{ts,tsx}` in all packages and app. The **4 new component tests were not counted in the prior green run**; a deliberate CI with this correction is pending.
+- **Remaining**: original decorated breadcrumb/navigation sprite states, source toolbar skin and actual source-vs-React screenshots. Keep PR #1 draft, main untouched, CI only on `[run-ci]` commits.
+
 ## Pinned Win7 addressbar search progress — 2026-11-13, CI pending
 
 - **Source**: legacy `computer.js` binds fractional searchProgress to `window-addressbar` (0 on start, null on end), while `theme-win7-scss.js` defines 25px location height and exact green gradient `#e6fbe8 → #bbf9ca → #7ade96 → #89f097`.

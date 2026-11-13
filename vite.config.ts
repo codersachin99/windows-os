@@ -36,5 +36,7 @@ export default defineConfig({
     proxy: { "/api": { target: "http://127.0.0.1:8099", changeOrigin: false } }
   },
   build: { outDir: app("./dist/web"), emptyOutDir: true },
-  test: { include: ["../../packages/**/*.test.ts", "src/**/*.test.ts"] }
+  // Source migration packages contain both logic .test.ts and UI .test.tsx
+  // regression cases. Do not silently exclude TSX component tests from CI.
+  test: { include: ["../../packages/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"] }
 });

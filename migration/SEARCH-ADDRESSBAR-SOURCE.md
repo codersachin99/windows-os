@@ -20,3 +20,7 @@ Legacy baseline: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c
 - **Deliberate [run-ci] verification pending** on this checkpoint. Previous [CI 43370515230 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43370515230): 237 unit tests / 46 files, 228 Chromium desktop/mobile browser tests.
 - This is **source-based component/style parity**, not an actual screenshot diff against a running copy of legacy-win7. Existing custom search options row, breadcrumb/path rendering, original back/forward sprite states and whole-window layout need visual comparison and migration.
 - Continue visual/source parity in the modular Explorer package, then original missing applications. No premature merge/release: PR #1 remains draft, `main` unchanged.
+
+## Test discovery correction — 2026-11-13
+
+The first opt-in run [43373230742](https://github.com/codersachin99/windows-os/actions/runs/43373230742) was **green (237 unit / 228 browser)**, but the Vitest configuration only included `**/*.test.ts`, so the four newly authored `SourceAddressProgress.test.tsx` component tests were silently excluded. The shared `vite.config.ts` test include glob is now extended to `**/*.test.{ts,tsx}` (in both packages and web app). This is a real coverage correction; the prior green run must **not** be presented as having verified those four tests. The deliberate [run-ci] checkpoint now validates their actual execution along with the 228 browser tests.
