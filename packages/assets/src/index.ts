@@ -35,5 +35,15 @@ export const legacyArt = {
   paint: "/assets/images/paint.37480453.webp",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
+  viewModeIcon: {
+    "extra-large-icons": "/assets/images/view-xl-icons.98501d90.webp",
+    "large-icons": "/assets/images/view-lg-icons.5eeaf0f2.webp",
+    "medium-icons": "/assets/images/view-md-icons.13e6ed1c.webp",
+    "small-icons": "/assets/images/view-sm-icons.198c1e08.webp",
+    "list": "/assets/images/view-list.daaaa500.webp",
+    "details": "/assets/images/view-details.6c230237.webp",
+    "tiles": "/assets/images/view-tiles.c4008351.webp",
+    "content": "/assets/images/view-content.fe756cda.webp"
+  },
   contacts: "/apps/contacts/icon.webp"
 } as const;

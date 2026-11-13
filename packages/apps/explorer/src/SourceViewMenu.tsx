@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { legacyArt } from "@windows-os/assets";
 import type { ExplorerViewMode } from "./model";
 import { SOURCE_VIEW_MODES, sourceViewModeAt, sourceViewModeIndex } from "./sourceViewModes";
 
@@ -9,6 +10,7 @@ interface SourceViewMenuProps {
 
 /** The original Computer window-menubar has a right-aligned icon-only
  * "View" trigger, eight view entries and a 0..7 vertical slider.
+ * Use exact pinned source WebP view-* icons (blob SHA verified).
  * Keep this accessible while still using a single ExplorerSession.
  * Both Computer and bin.js (hoisted Computer) reuse this component.
  */
@@ -76,7 +78,7 @@ export function SourceViewMenu({ value, onChange }: SourceViewMenuProps) {
       aria-label="View" aria-haspopup="menu" aria-expanded={open}
       title={"View: " + (SOURCE_VIEW_MODES.find(item => item.value === value)?.label ?? "Details")}
       onClick={toggle}>
-      <span className="explorer-view__symbol" aria-hidden="true">▦</span>
+      <img className="explorer-view__icon" src={legacyArt.viewModeIcon[value]} alt="" />
       <span className="explorer-view__arrow" aria-hidden="true">▾</span>
     </button>
     {open && <div className="explorer-view__menu" ref={menu}
@@ -92,6 +94,8 @@ export function SourceViewMenu({ value, onChange }: SourceViewMenuProps) {
           role="menuitemradio" aria-checked={value === mode.value}
           className={value === mode.value ? "is-selected" : ""}
           onClick={() => { onChange(mode.value); setOpen(false); }}>
+          <img className="explorer-view__choice-icon"
+            src={legacyArt.viewModeIcon[mode.value]} alt="" />
           {mode.label}
         </button>)}
       </div>

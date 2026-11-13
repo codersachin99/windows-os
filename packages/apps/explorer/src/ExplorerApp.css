@@ -300,8 +300,8 @@
 }
 
 /* Original Win7 Computer window-menubar View popup: eight rows with a
-   192px slider (source css). The trigger glyph is a temporary source-icon
-   asset mapping gap; no claim of pixel-perfect styling yet. */
+   192px slider and exact pinned view-* WebP icon artwork.
+   Overall menu geometry still requires source screenshot comparison. */
 .explorer-view { position:relative; display:flex; align-items:center; margin-left:auto; flex:0 0 auto; }
 .explorer-command .explorer-view__trigger {
   display:flex; align-items:center; justify-content:center; gap:5px;
@@ -312,7 +312,10 @@
 .explorer-command .explorer-view__trigger[aria-expanded="true"] {
   border-color:#81afd0; background:linear-gradient(#f8fcff,#d7e9f7);
 }
-.explorer-view__symbol { font-size:19px; line-height:1; }
+.explorer-view__icon, .explorer-view__choice-icon {
+  width:16px; height:16px; flex:0 0 16px; object-fit:contain;
+}
+.explorer-view__choice-icon { margin-right:6px; }
 .explorer-view__arrow { font-size:10px; }
 .explorer-view__menu {
   position:fixed; z-index:80; display:grid; grid-template-columns:28px 1fr;

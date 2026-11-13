@@ -1,3 +1,10 @@
+## Original Win7 Computer/Bin View popup and 8-mode slider — 2026-11-13 (FINAL VERIFICATION PENDING)
+
+- **Original source**: pinned `legacy-win7/computer.js` renders the same right-side View popup for Computer and `bin.js` (a Computer wrapper), eight entries, a `winui-slider` with 0..7 value and icon lookup `view-${viewMode}`. Source `computer.css` specifies a 192px slider; `en-US.json` supplies `xl/lg/md/sm-icons`, List, Details, Tiles, Content labels.
+- **Implementation**: [5c6fee5](https://github.com/codersachin99/windows-os/commit/5c6fee5e7f9e40ef689721ad2243ea2a6ce53b6e) adds reusable `SourceViewMenu`, 8-mode typed model, new extra-large icon VFS layout and desktop/mobile browser tests. Eight original WebP images are staged with **byte-matching Git blob SHA** to source, used by the popup and source-style icon-only trigger; see [source asset trace](EXPLORER-VIEW-SOURCE.md).
+- **Verification**: first opt-in [CI 43476860362](https://github.com/codersachin99/windows-os/actions/runs/43476860362) verifies the View menu code before icon enrichment; the complete source-icon commit still needs a final deliberate CI checkpoint. Do not yet claim full verified parity.
+- **Boundaries**: `cb81` shared mode array order and source pixel comparison remain to be independently verified; source Win7 toolbar still includes retained migration-era file-operation controls to prevent functionality regression. Unsafe Bin New Folder/Cut/Copy/Paste/Rename remain blocked. PR #1 draft, main unchanged, no release.
+
 ## Win7 Bin instant search source inheritance — 2026-11-13 (CI VERIFIED)
 
 - **Source proof**: `legacy-win7/bin.js` wraps Computer; Computer always supplies the non-classic `window-addressbar-search instant` slot, including for `id="bin"`. Original webpack `1902` uses **300ms** debounce (React previously used 250ms).
