@@ -9,7 +9,7 @@ async function openComputer(page: import("@playwright/test").Page) {
 
 test("source Organize menu has original commands, separators, and selection gates", async ({page}) => {
   const explorer=await openComputer(page);
-  const trigger=explorer.getByRole("button",{name:"Organize"});
+  const trigger=explorer.getByRole("button",{name:"Organize",exact:true});
   await trigger.click();
   const menu=explorer.getByRole("menu",{name:"Organize"});
   await expect(menu).toBeVisible();
@@ -57,7 +57,7 @@ test("source Organize Delete uses existing confirmation; Close uses shell lifecy
   await create.getByRole("button",{name:"OK"}).click();
   const folder=explorer.locator('[data-test-explorer-item="OrganizeDeleteProbe"]');
   await folder.click();
-  await explorer.getByRole("button",{name:"Organize"}).click();
+  await explorer.getByRole("button",{name:"Organize",exact:true}).click();
   await explorer.getByRole("menu",{name:"Organize"})
     .getByRole("menuitem",{name:"Delete"}).click();
   const dialog=explorer.getByRole("alertdialog",{name:"Confirm file operation"});
@@ -65,7 +65,7 @@ test("source Organize Delete uses existing confirmation; Close uses shell lifecy
   await dialog.getByRole("button",{name:"Yes"}).click();
   await expect(folder).toHaveCount(0);
 
-  await explorer.getByRole("button",{name:"Organize"}).click();
+  await explorer.getByRole("button",{name:"Organize",exact:true}).click();
   await explorer.getByRole("menu",{name:"Organize"})
     .getByRole("menuitem",{name:"Close"}).click();
   await expect(explorer).toHaveCount(0);
@@ -73,7 +73,7 @@ test("source Organize Delete uses existing confirmation; Close uses shell lifecy
 
 test("Organize supports keyboard arrows, Escape, and outside click dismissal", async ({page}) => {
   const explorer=await openComputer(page);
-  const trigger=explorer.getByRole("button",{name:"Organize"});
+  const trigger=explorer.getByRole("button",{name:"Organize",exact:true});
   await trigger.click();
   const menu=explorer.getByRole("menu",{name:"Organize"});
   await expect(menu.getByRole("menuitem",{name:"Close"})).toBeFocused();
