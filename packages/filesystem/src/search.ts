@@ -40,6 +40,8 @@ export interface FileSearchProgress {
   foldersScanned: number;
   filesScanned: number;
   matches: number;
+  /** Source 2e2c.b progress callback c / discovered-directory-count. */
+  fraction?: number;
 }
 export interface FileSearchResult {
   files: FileEntry[];
@@ -151,6 +153,9 @@ export async function searchFiles(
   const ranking: { file: FileEntry; score: number; highlights: SourceSearchHighlight[] }[] = [];
   const queue = [...roots];
   let foldersScanned = 0;
+  // Source 2e2c.b initializes total to the count of selected roots, then
+  // grows it as it discovers subdirectories (not ahead-of-time enumeration).
+  let foldersDiscovered = roots.length;
   let filesScanned = 0;
   let truncated = false;
   if (options.signal?.aborted) throw new DOMException("Search cancelled", "AbortError");
@@ -181,13 +186,19 @@ export async function searchFiles(
         if (compiled && rankedMatch) ranking.push({ file: item,
           score: rankedMatch.score, highlights: rankedMatch.highlights });
       }
-      if (item.type === "directory" && request.subfolders) queue.push(item.uri);
+      if (item.type === "directory" && request.subfolders) {
+        queue.push(item.uri);
+        if (!hidden(item.uri)) foldersDiscovered++;
+      }
       if (!ranked && result.length >= max) {
         truncated = queue.length > 0 || list.indexOf(item) !== list.length - 1;
         break;
       }
     }
-    options.onProgress?.({ foldersScanned, filesScanned, matches: result.length });
+    options.onProgress?.({
+      foldersScanned, filesScanned, matches: result.length,
+      fraction: foldersDiscovered ? foldersScanned / foldersDiscovered : 1
+    });
     if (!ranked && result.length >= max) break;
   }
   if (ranked) {

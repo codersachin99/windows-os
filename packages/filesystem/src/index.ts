@@ -521,6 +521,7 @@ export { FileClipboard } from "./clipboard";
 export type { ClipboardOperation, FileClipboardState } from "./clipboard";
 
 export { searchFiles, matchFilePattern, matchSourceNamePattern, matchesSourceKind } from "./search";
+export { SourceSearchIndex } from "./sourceSearchIndex";
 export {
   normalizeSourceSearchText, parseSourceSearchText, findSourceWordStart,
   scoreSourceFileName, sourceSearchHighlights, sourceSizeRange,

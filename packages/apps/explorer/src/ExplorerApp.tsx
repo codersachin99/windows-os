@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
 import { legacyArt } from "@windows-os/assets";
 import {
-  searchFiles, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
+  searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
   parseSourceShortcut, sourcePrograms,
   importDroppedFiles, SHELL_DRAG_TYPE,
@@ -73,6 +73,9 @@ export function ExplorerApp({
   const session = useMemo(() => new ExplorerSession(
     fileStore, recycleBinPath ?? startPath ?? "/", recycleBinPath
   ), [startPath, recycleBinPath]);
+  // Original Computer owns a per-window listing cache; close it on unmount,
+  // not on every search, so repeated Find searches reuse the same index.
+  const searchIndex = useMemo(() => new SourceSearchIndex(fileStore), []);
   const [volume, setVolume] = useState(() => sourceFilesystemRuntime.snapshot());
   const trashPath = recycleBinPath ?? volume?.trashPath ?? null;
   const [state, setState] = useState(() => session.snapshot());
@@ -99,6 +102,9 @@ export function ExplorerApp({
   const [showCompanion, setShowCompanion] = useState(false);
   const [pendingSearch, setPendingSearch] = useState<SourceFindQuery | null>(null);
   const [foldersScanned, setFoldersScanned] = useState(0);
+  const [searchFraction, setSearchFraction] = useState(0);
+  const searchActive = useRef(false);
+  const rerunActiveSearch = useRef<() => void>(() => {});
   const currentSearch = useRef<AbortController | null>(null);
   const fileInput = useRef<HTMLInputElement | null>(null);
   const dragToken = useRef<string | null>(null);
@@ -117,8 +123,18 @@ export function ExplorerApp({
     setFoundHighlights({});
     setSearchBusy(false);
     setFoldersScanned(0);
+    setSearchFraction(0);
+    searchActive.current = false;
   }, [state.path, state.search, subfolders, namePattern]);
-  useEffect(() => () => currentSearch.current?.abort(), []);
+  useEffect(() => () => {
+    currentSearch.current?.abort();
+    searchIndex.dispose();
+  }, [searchIndex]);
+  // A source Computer search refreshes when the indexed directory changes.
+  // Invalidation happens before this callback; no stale result is reused.
+  useEffect(() => searchIndex.subscribeInvalidation(() => {
+    if (searchActive.current) rerunActiveSearch.current();
+  }), [searchIndex]);
   const visible = found ?? session.visible();
   const selected = state.items.find(item => item.uri === state.selected[0])
     ?? found?.find(item => item.uri === state.selected[0]);
@@ -274,6 +290,7 @@ export function ExplorerApp({
     }
   };
   const runSearch = (query?: SourceFindQuery) => {
+    searchActive.current = true;
     currentSearch.current?.abort();
     const controller = new AbortController();
     currentSearch.current = controller;
@@ -282,11 +299,12 @@ export function ExplorerApp({
     setFoundHighlights({});
     setMessage("");
     setFoldersScanned(0);
+    setSearchFraction(0);
     // Blank original in= means actual mounted disk roots; do not search the
     // /EXTERNAL/computer container (which may hold non-disk virtual entries).
     const allMountedDisks = query?.scope === ""
       || (!query && initialSourceSearch?.scope === null);
-    void searchFiles(fileStore, {
+    void searchFiles(searchIndex, {
       ...(query ? sourceFindSearchRequest({
           ...query, scope: query.scope || state.path
         })
@@ -304,7 +322,10 @@ export function ExplorerApp({
     }, {
       signal: controller.signal,
       onProgress: progress => {
-        if (currentSearch.current === controller) setFoldersScanned(progress.foldersScanned);
+        if (currentSearch.current === controller) {
+          setFoldersScanned(progress.foldersScanned);
+          setSearchFraction(progress.fraction ?? 0);
+        }
       }
     }).then(result => {
       if (currentSearch.current !== controller) return;
@@ -321,6 +342,7 @@ export function ExplorerApp({
       }
     });
   };
+  rerunActiveSearch.current = () => runSearch();
   const searchInComputer = (query: SourceFindQuery) => {
     setShowSearchDialog(false);
     if (query.scope && query.scope !== state.path) {
@@ -415,10 +437,13 @@ export function ExplorerApp({
             {classicSearchStyle === "find" ? "Find..." : "Advanced Find..."}</button>}
       </>}
       {found !== null && <button type="button" onClick={() => {
+        searchActive.current = false;
         setFound(null); setFoundHighlights({});
       }}>Clear results</button>}
       {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}
       {searchBusy && <span role="status">Searching {foldersScanned} folders...</span>}
+      {searchBusy && <progress aria-label="Search progress"
+        value={searchFraction} max={1} />}
     </div>
     <div className="explorer-command">
       <button disabled title="Source Organize menu is pending">Organize</button>
