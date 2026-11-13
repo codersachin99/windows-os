@@ -51,9 +51,10 @@ for (const entry of externalEntries) {
 // contains the matching immutable Git blob object IDs for source images.
 const importedImageDir = resolve(root, "apps/web/public/assets/images");
 const importedImages = (await readdir(importedImageDir))
-  .filter(name => /\\.(webp|png|svg|jpg|jpeg)$/i.test(name));
+  .filter(name => /\.(webp|png|svg|jpg|jpeg)$/i.test(name));
 const expectedImages = new Map(inventory.filter(x => x.path.startsWith("assets/images/"))
   .map(x => [x.path.slice("assets/images/".length), x]));
+if (importedImages.length === 0) failures.push("No imported source images found to audit");
 for (const name of importedImages) {
   const original = expectedImages.get(name);
   if (!original) {
@@ -62,7 +63,7 @@ for (const name of importedImages) {
   }
   const bytes = await readFile(resolve(importedImageDir, name));
   const gitBlobSha = createHash("sha1")
-    .update(`blob ${bytes.length}\\0`)
+    .update(`blob ${bytes.length}\0`)
     .update(bytes)
     .digest("hex");
   if (bytes.length !== original.bytes || gitBlobSha !== original.sha) {
