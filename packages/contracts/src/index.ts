@@ -1,4 +1,4 @@
-export type ThemeId = "win7" | "winxp" | "win11" | "win10" | "winvista";
+export type ThemeId = "win7" | "winxp" | "win11" | "win10" | "winvista" | "win31" | "win95" | "win98";
 export type SessionPhase = "boot" | "logon" | "desktop" | "shutdown";
 export type AppKind = "system" | "utility" | "media" | "game" | "web";
 

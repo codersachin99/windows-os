@@ -29,12 +29,13 @@ interface ApplicationContentProps {
   dispatch: Dispatch<DesktopAction>;
   registerClose(id: string, handler: () => void): () => void;
   onMagnifierScale(scale: number): void;
+  theme: DesktopState["theme"];
   windows: DesktopState["windows"];
   onRequestCloseWindow(id: string): void;
 }
 function ApplicationContent({
   appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
-  windows, onRequestCloseWindow
+  windows, onRequestCloseWindow, theme
 }: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
@@ -70,7 +71,7 @@ function ApplicationContent({
     return <ContactsApp />;
   }
   if (appId === "bin") return <RecycleBinApp />;
-  if (appId === "computer") return <ExplorerApp initialPath={filePath}
+  if (appId === "computer") return <ExplorerApp theme={theme} initialPath={filePath}
     onOpenFind={scope => {
       const app = appRegistry.get("find");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path: scope } });
@@ -190,7 +191,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
             windows={state.windows} onRequestCloseWindow={requestClose} />
         </WindowFrame>
       ))}
@@ -202,7 +203,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
         <WindowFrame key={win.id} window={win} dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
             windows={state.windows} onRequestCloseWindow={requestClose} />
         </WindowFrame>
       ))}

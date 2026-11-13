@@ -8,10 +8,19 @@ export const LEGACY_DEFAULTS = Object.freeze({
   soundVolume: 1
 });
 
+/** Legacy testmode.js supports a query-string theme override; never accept unknown skin IDs. */
+export function sourceTestTheme(search: string): DesktopState["theme"] | null {
+  const theme = new URLSearchParams(search).get("theme");
+  return theme && ["win7", "winxp", "win11", "win10", "winvista",
+    "win31", "win95", "win98"].includes(theme)
+    ? theme as DesktopState["theme"] : null;
+}
+
 export function initialDesktopState(): DesktopState {
   return {
     phase: LEGACY_DEFAULTS.skipBoot ? "desktop" : "boot",
-    theme: LEGACY_DEFAULTS.theme,
+    theme: (typeof window !== "undefined"
+      ? sourceTestTheme(window.location.search) : null) ?? LEGACY_DEFAULTS.theme,
     session: null,
     windows: [],
     nextWindowId: 1,

@@ -22,6 +22,7 @@ interface ExplorerAppProps {
   initialPath?: string;
   recycleBinPath?: string;
   onOpenFind?(scope: string): void;
+  theme?: ThemeId;
 }
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
   { value: "details", label: "Details" },
@@ -39,8 +40,10 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * and trash semantics are still pending and intentionally not fabricated.
  */
 export function ExplorerApp({
-  onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind
+  onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind,
+  theme = "win7"
 }: ExplorerAppProps) {
+  const classicSearchStyle = sourceExplorerSearchStyle(theme);
   const isBin = Boolean(recycleBinPath);
   const initialFind = useMemo(() => decodeSourceFindPath(initialPath), [initialPath]);
   const startPath = initialFind?.scope ?? initialPath;
@@ -356,13 +359,15 @@ export function ExplorerApp({
           placeholder="*.txt" onChange={event => setNamePattern(event.target.value)} />
       </label>
       {!isBin && <>
-        <button type="button" aria-label="Search dialog"
-          onClick={() => setShowSearchDialog(true)}>Search...</button>
-        <button type="button" aria-label="Search Companion"
+        {classicSearchStyle === "dialog" && <button type="button" aria-label="Search dialog"
+          onClick={() => setShowSearchDialog(true)}>Search...</button>}
+        {classicSearchStyle === "companion" && <button type="button" aria-label="Search Companion"
           aria-pressed={showCompanion} onClick={() => setShowCompanion(showing => !showing)}>
-          Search Companion</button>
-        {onOpenFind && <button type="button" aria-label="Advanced Find"
-          onClick={() => onOpenFind(state.path)}>Advanced Find...</button>}
+          Search Companion</button>}
+        {onOpenFind && (classicSearchStyle === "find" || classicSearchStyle === null) &&
+          <button type="button" aria-label="Advanced Find"
+            onClick={() => onOpenFind(state.path)}>
+            {classicSearchStyle === "find" ? "Find..." : "Advanced Find..."}</button>}
       </>}
       {found !== null && <button type="button" onClick={() => setFound(null)}>Clear results</button>}
       {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}

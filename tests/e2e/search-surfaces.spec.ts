@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-async function desktop(page: import("@playwright/test").Page) {
-  await page.goto("/");
+async function desktop(page: import("@playwright/test").Page, theme: "win31" | "winxp") {
+  await page.goto("/?theme=" + theme);
   await page.locator('[data-test-avatar="win7"]').click({ timeout: 12000 });
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
   return page.locator('[data-test-window="computer"]');
@@ -15,7 +15,7 @@ async function newFolder(explorer: import("@playwright/test").Locator, label: st
 }
 
 test("original child Search Dialog searches parent Computer without another window", async ({ page }) => {
-  const explorer = await desktop(page);
+  const explorer = await desktop(page, "win31");
   await newFolder(explorer, "DialogOnlyTarget");
   await explorer.getByRole("button", { name: "Search dialog" }).click();
   const search = explorer.locator('[data-test-search-dialog]');
@@ -36,7 +36,7 @@ test("original child Search Dialog searches parent Computer without another wind
 });
 
 test("original Search Companion sidebar replaces navigation and searches same Computer", async ({ page }) => {
-  const explorer = await desktop(page);
+  const explorer = await desktop(page, "winxp");
   await newFolder(explorer, "CompanionOnlyTarget");
   await explorer.getByRole("button", { name: "Search Companion" }).click();
   const companion = explorer.locator('[data-test-search-companion]');
