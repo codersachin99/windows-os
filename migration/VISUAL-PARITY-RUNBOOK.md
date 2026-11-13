@@ -50,6 +50,12 @@ Capture with *deterministic file names and folder fixtures* in both applications
 - Shared webpack module `cb81` defines exactly eight modes in this order: XL/LG/MD/SM icons, List, Details, Tiles, Content; default is Tiles.
 - All **36** current imported `apps/web/public/assets/images` files were compared against the pinned source tree and had matching Git blob SHA values. The source inventory audit has an automated recheck verified by [CI 43484632290](https://github.com/codersachin99/windows-os/actions/runs/43484632290): all 36 imported images passed byte verification.
 
+### Verified first opt-in run — target-only React baseline
+
+[GitHub Actions run #43490774615](https://github.com/codersachin99/windows-os/actions/runs/43490774615) successfully captured **10 of 10** target screenshots, zero errors, for the five initial scenes across desktop and mobile. It uploaded artifact `visual-parity-0e1ea5752982b84905e8381b5e41ff2158988f41` (ID `14067939886`). The visual job's JavaScript check and 36-image audit passed; the normal long browser-and-contracts suite was correctly skipped.
+
+**No original screenshots were captured.** The runner had no `LEGACY_SOURCE_READ_TOKEN`; `manifest.json` reports `sourceConfigured:false`, `sourceCaptured:0`, and `parityStatus:"not-assessed"`. This proves the React capture workflow and upload work, not pixel-level parity. The original source checkout, Python server, source selectors, paired image diff and full acceptance review remain unverified. Source access should be supplied through a GitHub Actions repository secret with only read-only access to the original repository, never in chat, committed code or workflow logs.
+
 ## Important known differences
 
 The React writable filesystem root `"/"` is not identical to original Computer's null root sentinel. `New folder` therefore remains usable at React root to preserve existing document, clipboard and search workflows. The Win7 toolbar still has migration-era file operation controls. The View popup uses source exact icons and source order/default but has not been screenshot-matched for pixels or all theme variants. Do not enable destructive or metadata-corrupting Bin clipboard operations simply to satisfy visual parity.
