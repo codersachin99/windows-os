@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
@@ -44,6 +45,31 @@ for (const src of externalSources) {
 for (const entry of externalEntries) {
   if (!externalSources.some(src => src.path === entry.source)) failures.push(`Invented external app: ${entry.source}`);
 }
+// All imported Computer/desktop visual assets must remain byte-identical
+// to the pinned legacy-win7 snapshot. Git stores the SHA-1 of
+// "blob <size>\\0<bytes>", not the raw-file SHA-1. The original inventory
+// contains the matching immutable Git blob object IDs for source images.
+const importedImageDir = resolve(root, "apps/web/public/assets/images");
+const importedImages = (await readdir(importedImageDir))
+  .filter(name => /\\.(webp|png|svg|jpg|jpeg)$/i.test(name));
+const expectedImages = new Map(inventory.filter(x => x.path.startsWith("assets/images/"))
+  .map(x => [x.path.slice("assets/images/".length), x]));
+for (const name of importedImages) {
+  const original = expectedImages.get(name);
+  if (!original) {
+    failures.push(`Untracked imported image: ${name}`);
+    continue;
+  }
+  const bytes = await readFile(resolve(importedImageDir, name));
+  const gitBlobSha = createHash("sha1")
+    .update(`blob ${bytes.length}\\0`)
+    .update(bytes)
+    .digest("hex");
+  if (bytes.length !== original.bytes || gitBlobSha !== original.sha) {
+    failures.push(`Source image bytes changed: ${name}`);
+  }
+}
+
 const byStatus = Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
   .map(status => [status, tracker.modules.filter(m => m.status === status).length]));
 console.log(JSON.stringify({
@@ -51,6 +77,7 @@ console.log(JSON.stringify({
   totalSourceFiles: inventory.length,
   sourceModules: sourceModules.length,
   assets: inventory.filter(x => x.path.startsWith("assets/")).length,
+  byteCheckedImportedImages: importedImages.length,
   styles: inventory.filter(x => x.path.startsWith("src/styles/")).length,
   byStatus,
   externalApps: externalEntries.length,

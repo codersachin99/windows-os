@@ -1,3 +1,9 @@
+## Imported source image byte-fidelity audit — 2026-11-13 (UNVERIFIED SCRIPT CHANGE)
+
+- **Actual Git tree evidence**: comparing pinned `legacy-win7@4e63290` and current `windows-os` repository trees, all **36** imported `apps/web/public/assets/images/*` files match the original `assets/images/*` Git blob SHA exactly, including eight source View icons.
+- **Code change**: `scripts/audit-legacy.mjs` now checks each imported image filename against the source migration inventory, reads the bytes and computes the Git-compatible `sha1("blob " + size + "\\0" + bytes)`. Changed bytes, non-source images, or mismatched lengths fail the existing `npm run audit:legacy` step; no separate always-running workflow is introduced.
+- **Verification**: direct Git tree comparison confirmed the source/checksum equality. The updated script itself requires the next opt-in CI run; do not claim verified script execution yet. The existing [repair CI 43482880673](https://github.com/codersachin99/windows-os/actions/runs/43482880673) predates this audit edit. PR #1 draft, main unchanged.
+
 ## Original non-classic Computer/Bin Save search toolbar — 2026-11-13 (UNVERIFIED)
 
 - **Pinned proof**: `legacy-win7@4e63290/src/modules/apps/computer.js#toolbar()` conditionally appends `this.isSearch && !this.classicSearch && {label:this.$t("save-search"),disabled:true}`. Win7 has non-classic search and `bin.js` inherits the Computer toolbar. The source en-US text is "Save search".
