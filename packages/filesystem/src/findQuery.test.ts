@@ -18,6 +18,12 @@ describe("original Find (16d5) query adapter", () => {
     expect(decodeSourceFindPath("win7-find:" + encodeURIComponent(JSON.stringify({
       ...q, scope: "../../host" })))).toBeNull();
   });
+  it("serializes source Find with original kind/size tokens and explicit sub=0", () => {
+    const q = { ...createSourceFindQuery("/data"), kind: "picture" as const,
+      size: { atLeast: false, kb: 10 }, subfolders: false };
+    expect(encodeSourceFindPath(q, new Date(2026, 10, 13).getTime())).toBe(
+      "shell:search?q=kind%3Apicture+size%3A%3C%3D10kb&in=%2Fdata&name=&sub=0");
+  });
   it("matches source substring, semicolon/comma options, wildcards and extensionless .*", () => {
     expect(matchSourceNamePattern("Meeting-Report.txt", "report")).toBe(true);
     expect(matchSourceNamePattern("Meeting-Report.txt", "*.pdf; *.TXT")).toBe(true);

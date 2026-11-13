@@ -16,7 +16,7 @@ The original Computer app chooses **three distinct search UI presentations** by 
 1. **DONE** — pinned `src/modules/runtime/vue-app.js` `f3ad` maps WinXP/win2k to Companion, Win95/98 to Find, Win31 to child Dialog, and default Win7 to null; source-grounded tests in `packages/apps/explorer/src/searchStyle.test.ts`.
 2. **DONE first slice** — port the source **Search Dialog** separately with its 360px auto-height parent relationship, initial `*.*` name, focus, cancel, and per-theme entry point. Results should be shown **inside the parent Computer session**, unlike standalone Find's separate Computer window.
 3. **DONE first slice** — port the source **Search Companion** independently as a Computer side pane, including collapse/expansion and date/size presets and source Back/Close semantics. Retain original per-theme conditional rendering.
-4. **PARTIAL** — original `2e2c` file-kind names are pinned in the UI, but the source `0e9a` extension predicate definitions and original relevance ranking need further tracing. Preserve source virtual query serialization/filter semantics without giving access to the host filesystem.
+4. **DONE first source slice** — source `2e2c` kind names and exact `0e9a`/`de73` file extension suffix predicates are now implemented; `5985`/`2e2c` relevance ranking, filter parser and highlights migrated with real Guest VFS integration and verified in earlier CI. Preserve source virtual query serialization/filter semantics without giving access to the host filesystem.
 5. **TODO** — capture actual source and React screenshots for Win7 default and each implemented alternate theme at desktop/mobile sizes, and resolve `h=auto`, Chrome frame, spacing, icon and keyboard/locale differences.
 
 ## Guardrails

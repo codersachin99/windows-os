@@ -1,3 +1,11 @@
+## Original 5401 shell:search path and 0e9a/de73 type keys — 2026-11-13, pending CI
+
+- **Newly located pinned source:** `src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js` modules `5401`, `0e9a` and `de73`. The original search prefix is **`shell:search`**, not the provisional `win7-find:`; the exact query params are `q`, `in`, optional `name`, and `sub=0`.
+- **Implementation:** `sourceSearchPath.ts` exact original prefix/query serializer/parser with canonical Guest-scope validation; `findQuery.ts` now writes original kind/size/dated tokens to `shell:search?`; Computer detects it, extracts scope and text filters and performs a source-ranked Guest VFS search. Existing migration-era `win7-find:` decode remains backward-compatible only. Exact `0e9a` + `de73` image/audio/video/document/playlist/program/link/webpage extension predicates replace provisional classifications. Specific source model tests added.
+- **Prior verified checkpoint:** [CI 43362502506 SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43362502506) at `14ece9c5`: TypeScript, **215 Vitest tests across 42 files**, source checks/build and **220 desktop/mobile Chromium tests passed** for query grammar, relevance, highlights.
+- **New verification pending:** one deliberate `[run-ci]` commit to validate original virtual paths and source extensions. Original `in=` all disks is currently mapped to Guest Computer root rather than per-mounted-drive search; multi-drive fidelity and screenshot parity still pending.
+- **No merge or release:** `main` untouched, PR #1 draft, CI opt-in.
+
 ## Source query lexer, metadata filters, relevance and highlighting — 2026-11-13, pending CI
 
 - **Pinned source**: webpack `5985` and `2e2c` in shared search chunk, plus Computer `listSearch`. Lexer supports exact/quoted/typed filters, accent normalization and word starts; relevance exact > prefix > ordered match, with mtime tiebreak. Date, size, type and kind predicates are evaluated on Guest VFS only; results are ranked before the cap and highlight matches as escaped React text.
