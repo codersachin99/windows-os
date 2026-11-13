@@ -60,31 +60,47 @@ export interface SourceWin7BreadcrumbsProps {
 }
 
 /**
- * Win7 theme's 18px address icon and clickable breadcrumb trail.
- * A sibling readonly input is preserved by ExplorerApp for current
- * keyboard/automation path inspection until editable address mode is ported.
+ * Source `3b99` window-addressbar and `bd65` AddressbarItem from
+ * legacy-win7/shared~bin~bsod~camera~chrome~computer~cpanel~games~ie~
+ * notepad~paint~personalize~player~recorder~sni~17da8929.js.
+ *
+ * Source icon is a 24px button with an 18px image. Each item has a
+ * breadcrumb button and its own 16px "Show sibling folders" disclosure.
+ * Neither icon nor disclosure has a click handler in the original; preserve
+ * that fact rather than inventing an unimplemented sibling-folder menu.
+ *
+ * The hidden readonly Folder address input belongs only to the migration's
+ * ExplorerApp testing contract and is not rendered as a source text editor.
  */
 export function SourceWin7Breadcrumbs({
   items, icon, onNavigate
 }: SourceWin7BreadcrumbsProps) {
   return <nav className="explorer-address__source-crumbs"
     aria-label="Folder path">
-    <img className="explorer-address__source-icon" src={icon} alt="" />
+    <button className="explorer-address__source-root-icon" type="button"
+      tabIndex={-1} aria-label="Folder icon">
+      <img className="explorer-address__source-icon" src={icon} alt="" />
+    </button>
     {items.map((item, index) =>
-      item.path === null
-        ? <span className="explorer-address__source-crumb explorer-address__source-static"
-            key={"static-" + index} aria-current="location">
-            <span className="explorer-address__source-crumb-text">{item.label}</span>
-          </span>
-        : <button type="button" key={item.path}
-            className="explorer-address__source-crumb"
-            aria-current={index === items.length - 1 ? "location" : undefined}
-            title={item.label}
-            onClick={() => onNavigate(item.path!)}>
-            <span className="explorer-address__source-crumb-text">{item.label}</span>
-            {index < items.length - 1 &&
-              <span className="explorer-address__source-crumb-chevron"
-                aria-hidden="true">›</span>}
-          </button>)}
+      <span className="explorer-address__source-item"
+        key={item.path ?? "static-" + index}>
+        {item.path === null
+          ? <span className="explorer-address__source-crumb explorer-address__source-static"
+              aria-current="location">
+              <span className="explorer-address__source-crumb-text">{item.label}</span>
+            </span>
+          : <button type="button"
+              className="explorer-address__source-crumb"
+              aria-current={index === items.length - 1 ? "location" : undefined}
+              title={item.label}
+              onClick={() => onNavigate(item.path!)}>
+              <span className="explorer-address__source-crumb-text">{item.label}</span>
+            </button>}
+        <button type="button" className="explorer-address__source-dropdown"
+          aria-label="Show sibling folders" title="Show sibling folders"
+          tabIndex={-1}>
+          <span className="explorer-address__source-disclosure" aria-hidden="true" />
+        </button>
+      </span>)}
   </nav>;
 }

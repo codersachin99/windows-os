@@ -13,7 +13,9 @@ test("ordinary Computer search uses original static Search Results in scoped dis
   await expect(explorer.getByText(/\d+ found/)).toBeVisible();
   const path=explorer.getByRole("navigation",{name:"Folder path"});
   await expect(path.getByText("Search Results in System (C:)",{exact:true})).toBeVisible();
-  await expect(path.getByRole("button")).toHaveCount(0);
+  await expect(path.getByRole("button",{name:"Show sibling folders"})).toHaveCount(1);
+  await expect(path.locator(".explorer-address__source-static")).toBeVisible();
+  await expect(path.locator(".explorer-address__source-crumb:is(button)")).toHaveCount(0);
   await expect(explorer.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue("/EXTERNAL/computer/drive0");
   await explorer.getByRole("button",{name:"Clear results"}).click();
@@ -33,6 +35,8 @@ test("classic Find opens Computer with non-clickable Search Results location and
   await expect(explorer.getByText(/\d+ found/)).toBeVisible();
   const path=explorer.getByRole("navigation",{name:"Folder path"});
   await expect(path.getByText("Search Results",{exact:true})).toBeVisible();
-  await expect(path.getByRole("button")).toHaveCount(0);
+  await expect(path.getByRole("button",{name:"Show sibling folders"})).toHaveCount(1);
+  await expect(path.locator(".explorer-address__source-static")).toBeVisible();
+  await expect(path.locator(".explorer-address__source-crumb:is(button)")).toHaveCount(0);
   await expect(path.locator(".explorer-address__source-icon")).toHaveAttribute("src",/search/i);
 });

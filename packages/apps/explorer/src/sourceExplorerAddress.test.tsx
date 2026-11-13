@@ -37,6 +37,10 @@ describe("original Computer addressbar search-results location", () => {
     expect(html).toContain("Search Results");
     expect(html).toContain('aria-current="location"');
     expect(html).toContain("explorer-address__source-static");
-    expect(html).not.toContain('type="button"');
+    // Source still renders a folder icon and one inert disclosure button, but
+    // a string-valued Search Results location has no navigable breadcrumb.
+    expect((html.match(/type="button"/g) ?? [])).toHaveLength(2);
+    expect(html).toContain('aria-label="Show sibling folders"');
+    expect(html).not.toContain('title="Search Results"');
   });
 });

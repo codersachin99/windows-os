@@ -50,3 +50,30 @@ test("Win7 25px address refresh keeps location/history and existing folder data"
   await expect(explorer.getByRole("textbox",{name:"Folder address"})).toHaveValue("Computer");
   await expect(explorer.getByRole("navigation",{name:"Folder path"})).toBeVisible();
 });
+
+test("Win7 source AddressbarItem renders 16px disclosure per segment and exact refresh art", async ({page}) => {
+  await page.goto("/?theme=win7");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]');
+  const path=explorer.getByRole("navigation",{name:"Folder path"});
+  await expect(path.getByRole("button",{name:"Folder icon"})).toBeVisible();
+  await expect(path.getByRole("button",{name:"Show sibling folders"})).toHaveCount(1);
+  await expect(path.locator(".explorer-address__source-dropdown")).toHaveCSS("width","16px");
+  // Source 3b99 refreshIcon is themeData.icon["fileexplorer-refresh"].
+  const refresh=explorer.getByRole("button",{name:"Reload current folder"});
+  await expect(refresh.locator("img")).toHaveAttribute(
+    "src","/assets/images/fileexplorer-refresh.7f376545.webp");
+  await expect(refresh.locator("img")).toHaveCSS("width","16px");
+  const response=await page.request.get("/assets/images/fileexplorer-refresh.7f376545.webp");
+  expect(response.ok()).toBe(true);
+  // In the original Vue component the disclosure has no event listener.
+  await path.getByRole("button",{name:"Show sibling folders"}).click();
+  await expect(path.getByRole("button",{name:"Computer"})).toBeVisible();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"})).toHaveAttribute("readonly","");
+  await expect(explorer.getByRole("textbox",{name:"Folder address"})).toHaveAttribute("tabindex","-1");
+  await explorer.getByRole("button",{name:"System (C:)",exact:true}).click();
+  const labels=path.locator(".explorer-address__source-item");
+  await expect(labels).toHaveCount(2);
+  await expect(path.getByRole("button",{name:"Show sibling folders"})).toHaveCount(2);
+});

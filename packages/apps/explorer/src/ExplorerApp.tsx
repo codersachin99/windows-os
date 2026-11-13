@@ -434,6 +434,7 @@ export function ExplorerApp({
         <span className="explorer-address__label">Address:</span>
         <span className="explorer-address__location-wrapper">
           <input aria-label="Folder address" readOnly
+            tabIndex={theme === "win7" ? -1 : undefined}
             className={theme === "win7" ? "explorer-address__source-path-input" : undefined}
             value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
           <SourceAddressProgress fraction={searchBusy ? searchFraction : null} />
@@ -447,12 +448,8 @@ export function ExplorerApp({
             <button type="button" className="explorer-address__source-refresh"
               aria-label="Reload current folder" title="Refresh"
               onClick={() => void execute(() => session.refresh())}>
-              <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true">
-                <path d="M14.5 6.5a6 6 0 1 0 .1 4" fill="none"
-                  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M14.5 2.5v4.7h-4.7" fill="none" stroke="currentColor"
-                  strokeWidth="1.8" strokeLinejoin="round" />
-              </svg>
+              <img className="explorer-address__source-refresh-icon"
+                src={legacyArt.fileExplorerRefresh} alt="" />
             </button>
           </>}
         </span>

@@ -176,7 +176,7 @@
 
 /* Win7 addressbar path control — pinned theme-win7-scss.js 25px translucent
    field, 18px icon, 22px breadcrumb text, 25px refresh and hover/press paint.
-   This is a bounded reconstruction; address editing remains a separate task. */
+   Original 3b99/bd65 uses clickable segments but no editable path input. */
 .explorer-address__location.is-source-win7 .explorer-address__label { display:none; }
 .explorer-address__location.is-source-win7 .explorer-address__location-wrapper {
   align-items:center;
@@ -187,8 +187,32 @@
   position:relative; z-index:1; padding:0 4px; box-sizing:border-box;
 }
 .explorer-address__source-crumbs::-webkit-scrollbar { display:none; }
+.explorer-address .explorer-address__source-root-icon {
+  display:flex; align-items:center; justify-content:center;
+  flex:0 0 24px; width:24px; min-width:24px; height:100%;
+  margin:0; padding:0; border:0; border-radius:0;
+  background:transparent; box-shadow:none; cursor:default;
+}
 .explorer-address__source-icon { flex:0 0 18px; width:18px; height:18px;
-  object-fit:contain; margin-right:4px; }
+  object-fit:contain; }
+.explorer-address__source-item {
+  display:flex; align-items:center; flex:0 0 auto; height:100%;
+}
+.explorer-address .explorer-address__source-dropdown {
+  display:flex; justify-content:center; align-items:center;
+  flex:0 0 16px; width:16px; min-width:16px; height:22px;
+  border:1px solid transparent; border-radius:2px; padding:0;
+  box-shadow:none; background:transparent; cursor:default;
+}
+.explorer-address__source-disclosure {
+  display:block; width:0; height:0;
+  border-top:4px solid transparent; border-bottom:4px solid transparent;
+  border-left:5px solid #65798c;
+}
+.explorer-address .explorer-address__source-dropdown:hover {
+  background:rgba(180,222,248,.35); border-color:rgba(65,140,195,.25);
+}
+
 .explorer-address .explorer-address__source-crumb {
   display:flex; align-items:center; flex:0 0 auto; height:22px; max-width:180px;
   background:transparent; border:1px solid transparent; border-radius:2px;
@@ -201,19 +225,9 @@
   outline:2px solid #2272ad; outline-offset:-2px;
 }
 .explorer-address__source-crumb-text { overflow:hidden; text-overflow:ellipsis; }
-.explorer-address__source-crumb-chevron {
-  color:#597388; padding-left:5px; font-size:15px; line-height:20px;
-}
 .explorer-address__location-wrapper .explorer-address__source-path-input {
   position:absolute; inset:0 25px 0 0; z-index:0; width:calc(100% - 25px);
   opacity:0; pointer-events:none;
-}
-.explorer-address__location-wrapper .explorer-address__source-path-input:focus {
-  z-index:3; opacity:1; pointer-events:auto; color:#23394c;
-  background:rgba(255,255,255,.96); outline:1px solid #78add2;
-}
-.explorer-address__source-path-input:focus ~ .explorer-address__source-crumbs {
-  visibility:hidden;
 }
 .explorer-address .explorer-address__source-refresh {
   flex:0 0 25px; width:25px; height:100%; padding:0;
@@ -244,4 +258,9 @@
 .explorer-address .explorer-address__source-static:hover {
   cursor:default; background:transparent; border-color:transparent;
   max-width:none; color:#19384d;
+}
+
+/* Pinned source 3b99 uses a 16px themeData icon, not an SVG approximation. */
+.explorer-address__source-refresh-icon {
+  display:block; width:16px; height:16px; object-fit:contain;
 }

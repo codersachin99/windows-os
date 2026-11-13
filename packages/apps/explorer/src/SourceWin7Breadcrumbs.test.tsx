@@ -43,7 +43,11 @@ describe("pinned Computer.getLocation breadcrumb semantics", () => {
     expect(html).toContain('aria-label="Folder path"');
     expect(html).toContain('class="explorer-address__source-icon"');
     expect(html).toContain('aria-current="location"');
-    expect((html.match(/type="button"/g) ?? [])).toHaveLength(4);
+    // One source icon button + four clickable labels + four inert disclosures.
+    expect((html.match(/type="button"/g) ?? [])).toHaveLength(9);
+    expect((html.match(/aria-label="Show sibling folders"/g) ?? [])).toHaveLength(4);
+    expect(html).toContain('class="explorer-address__source-item"');
+    expect(html).toContain('class="explorer-address__source-disclosure"');
     expect(html).toContain("System (C:)");
     expect(html).toContain("Guest");
   });

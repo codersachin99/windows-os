@@ -34,5 +34,6 @@ export const legacyArt = {
   shortcut: "/assets/images/shortcut.e8c69673.webp",
   paint: "/assets/images/paint.37480453.webp",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
+  fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
   contacts: "/apps/contacts/icon.webp"
 } as const;
