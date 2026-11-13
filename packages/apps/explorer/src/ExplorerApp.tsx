@@ -415,7 +415,13 @@ export function ExplorerApp({
       <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
       <button aria-label="Up" disabled={state.path === "/"} onClick={() => void execute(() => session.up())}>↑</button>
       <label className="explorer-address__location">Address:
-        <input aria-label="Folder address" readOnly value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
+        <span className="explorer-address__location-wrapper">
+          <input aria-label="Folder address" readOnly value={isBin && state.path === recycleBinPath ? "Recycle Bin" : state.path === "/" ? "Computer" : state.path} />
+          {searchBusy && <span className="explorer-address__progress" role="progressbar"
+            aria-label="Search progress" aria-valuemin={0} aria-valuemax={100}
+            aria-valuenow={Math.round(Math.max(0, Math.min(1, searchFraction)) * 100)}
+            style={{ width: (Math.max(0, Math.min(1, searchFraction)) * 100) + "%" }} />}
+        </span>
       </label>
       <input className="explorer-address__search" type="search"
         placeholder="Search" aria-label="Search files" value={state.search}
@@ -447,8 +453,7 @@ export function ExplorerApp({
       }}>Clear results</button>}
       {found !== null && <span role="status">{found.length} found{searchTruncated ? " (first 500)" : ""}</span>}
       {searchBusy && <span role="status">Searching {foldersScanned} folders...</span>}
-      {searchBusy && <progress aria-label="Search progress"
-        value={searchFraction} max={1} />}
+      {/* Original Computer renders progress in window-addressbar, not here. */}
     </div>
     <div className="explorer-command">
       <button disabled title="Source Organize menu is pending">Organize</button>

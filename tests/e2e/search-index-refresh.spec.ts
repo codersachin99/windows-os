@@ -35,6 +35,9 @@ test("source Find results use cached index and show numeric progress while searc
   await expect(explorer.locator('[data-test-explorer]')).toBeVisible();
   // Search controls retain the source Computer UI after result completion.
   await expect(explorer.getByText(/\d+ found/,{exact:false})).toBeVisible();
+  // Source Computer search progress belongs inside the address/location
+  // wrapper, and 2e2c's finally sets progress=null once search completes.
+  await expect(explorer.locator(".explorer-address__location-wrapper")).toBeVisible();
   await expect(explorer.getByRole("progressbar",{name:"Search progress"}))
     .toHaveCount(0);
 });

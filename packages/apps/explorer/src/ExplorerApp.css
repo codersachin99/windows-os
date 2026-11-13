@@ -7,7 +7,29 @@
 .explorer-address button:disabled,.explorer-command button:disabled { opacity:.5; cursor:default; }
 .explorer-address__location { display:flex; align-items:center; gap:4px; flex:1; min-width:0; }
 .explorer-address input { min-width:0; border:1px solid #b6c8d2; padding:4px; font:inherit; }
-.explorer-address__location input { flex:1; width:100%; background:white; }
+.explorer-address__location-wrapper {
+  position:relative; display:flex; flex:1; min-width:0; height:25px;
+  background:rgba(255,255,255,.67);
+  border:1px solid rgba(0,0,0,.67); border-radius:2px;
+  box-shadow:0 0 0 1px #ffffff77,inset 0 0 0 1px #fff;
+  overflow:hidden;
+}
+.explorer-address__location-wrapper input {
+  position:relative; z-index:1; display:block; flex:1; width:100%; height:100%;
+  box-sizing:border-box; border:0; background:transparent;
+  padding:3px 6px; color:#23394c;
+}
+.explorer-address__location-wrapper input:focus { outline:1px solid #78add2; outline-offset:-1px; }
+.explorer-address__progress {
+  position:absolute; z-index:0; top:0; bottom:0; left:0;
+  pointer-events:none;
+  /* Exact pinned Win7 theme .window__addressbar-progress gradient. */
+  background:linear-gradient(to bottom,#e6fbe8,#bbf9ca 30%,#7ade96 30%,#89f097 100%);
+  transition:width .12s linear;
+}
+@media (prefers-reduced-motion:reduce) {
+  .explorer-address__progress { transition:none; }
+}
 .explorer-address__search { flex:0 1 135px; width:120px; }
 .explorer-command { display:flex; gap:8px; align-items:center; min-height:34px; padding:3px 8px;
   background:linear-gradient(#fff,#e3edf7); border-top:1px solid #e9f2f8; border-bottom:1px solid #b3c6d8; }
