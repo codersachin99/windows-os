@@ -1,3 +1,10 @@
+## Pinned Win7 addressbar search progress — 2026-11-13, CI pending
+
+- **Source**: legacy `computer.js` binds fractional searchProgress to `window-addressbar` (0 on start, null on end), while `theme-win7-scss.js` defines 25px location height and exact green gradient `#e6fbe8 → #bbf9ca → #7ade96 → #89f097`.
+- **Implementation**: moved status paint into Explorer address location control, preserved file search semantics; reusable `SourceAddressProgress` with safe 0–100 ARIA values, rounded/clamped numeric fraction and null disappearance. Source visual CSS matches original progress gradient; existing separate toolbar progress removed.
+- **Tests**: four new component/unit tests plus desktop/mobile browser check for address wrapper and cleanup, existing full search regression preserved. **CI pending**, deliberate `[run-ci]` only.
+- **Source trace**: `migration/SEARCH-ADDRESSBAR-SOURCE.md`. **Next**: verify tests, original breadcrumb/back-forward/refresh visual fidelity, screenshot comparison, then missing legacy apps. Draft PR, main untouched, no release.
+
 ## Source Computer cached search index and progress — 2026-11-13, CI VERIFIED
 
 - **Pinned**: webpack `2e2c.b` caches `Map<uri, Promise<directoryList>>`, ignores `.meta`, invalidates keys matching changed directory/subtree and reports `scanned/discovered` fractional progress across roots. Source `computer.js` refreshes active searches on relevant invalidations.

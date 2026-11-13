@@ -51,3 +51,8 @@ The original Computer app chooses **three distinct search UI presentations** by 
 
 - [Opt-in CI 43370515230 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43370515230): **237 Vitest unit tests / 46 files, 228 Chromium desktop/mobile browser tests**, TypeScript and Vite build green. Source per-window search listing reuse, `.meta` filtering, subtree invalidation, React StrictMode reconnect, live result refresh and fractional progress now verified.
 - **Next source comparison**: exact `window-addressbar` progress UI, original Win7 window frame/search control screenshots, then outstanding source app/game modules; note source `2e2c.b` concurrent breadth-first `Promise.all` loading still differs from React's sequential queue.
+
+## Source addressbar search progress (2026-11-13)
+
+- Original Computer passes `searchProgress` to `window-addressbar` and renders green Win7 gradient within 25px location field, not a separate search-toolbar indicator. React has the correct location-bar placement/gradient and unit/accessibility tests; see [source addressbar trace](SEARCH-ADDRESSBAR-SOURCE.md).
+- **Verification pending** one deliberate CI checkpoint. **Remaining:** original decorated breadcrumb, graphical navigation/refresh, source search options skin, side-by-side desktop/mobile screenshots and remaining unported apps.
