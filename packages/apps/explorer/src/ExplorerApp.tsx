@@ -345,7 +345,7 @@ export function ExplorerApp({
       <input className="explorer-address__search" type="search"
         placeholder="Search" aria-label="Search files" value={state.search}
         onChange={event => session.search(event.target.value)} />
-      <button type="button" onClick={runSearch} disabled={searchBusy}
+      <button type="button" onClick={() => runSearch()} disabled={searchBusy}
         aria-label="Find files">Find</button>
     </div>
     <div className="explorer-search-controls">
