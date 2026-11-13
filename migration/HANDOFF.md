@@ -1,3 +1,9 @@
+## Win7 View menu browser regression repair — 2026-11-13 (CI PENDING)
+
+- **Failed checks and root cause**: [CI 43476860362](https://github.com/codersachin99/windows-os/actions/runs/43476860362) failed 36/266 Chromium tests (230 passed). [CI 43479294892](https://github.com/codersachin99/windows-os/actions/runs/43479294892) failed 38/266 Chromium tests (228 passed). In both runs, the source-inspired Win7 New folder visibility condition hid the previously working action at React's writable root `"/"`, producing 30-second locator timeouts across desktop/mobile Explorer and search tests. The integrated check additionally had 2 failing new View-icon assertions because a regexp was double-escaped; the DOM did contain the correct original `view-tiles.c4008351.webp` source path. All TypeScript/unit/source audit/build checks passed in the integrated run.
+- **Fix**: Keep `New folder` visible for non-Bin Computer, including the writable React root; original source `activePath` nonnull gating is not directly equivalent to this React path. Bin still does not expose folder creation. Correct the two icon-URL regexp assertions to match literal dots, not backslashes.
+- **Next**: run explicit opt-in CI once for corrected UI and integration; record exact test counts and assess screenshot parity only after all regressions pass. [View source trace](EXPLORER-VIEW-SOURCE.md). No full pixel parity or release claim.
+
 ## Original Win7 Computer/Bin View popup and 8-mode slider — 2026-11-13 (FINAL VERIFICATION PENDING)
 
 - **Original source**: pinned `legacy-win7/computer.js` renders the same right-side View popup for Computer and `bin.js` (a Computer wrapper), eight entries, a `winui-slider` with 0..7 value and icon lookup `view-${viewMode}`. Source `computer.css` specifies a 192px slider; `en-US.json` supplies `xl/lg/md/sm-icons`, List, Details, Tiles, Content labels.

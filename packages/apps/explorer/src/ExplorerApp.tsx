@@ -542,8 +542,12 @@ export function ExplorerApp({
         <button disabled={!state.selected.length} onClick={requestDelete}>Delete permanently</button>
         <button disabled={!state.items.length} onClick={() => setConfirm("empty")}>Empty Recycle Bin</button>
       </> : <>
-        {(theme !== "win7" || (state.path !== "/" && found === null && !state.search.trim())) &&
-          <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>}
+        {/* The source Computer allows New folder at activePath; the React
+            Guest VFS root is a real writable folder ("/"), unlike the
+            legacy null Computer sentinel. Do not hide this existing action
+            on root/search screens: it is used by Explorer, Bin and search
+            workflows and must remain available for backwards compatibility. */}
+        <button onClick={() => { setName(""); setPrompt("folder"); }}>New folder</button>
         <button type="button" onClick={() => fileInput.current?.click()}>Upload</button>
         <input ref={fileInput} aria-label="Upload files" type="file" multiple hidden
           onChange={event => {

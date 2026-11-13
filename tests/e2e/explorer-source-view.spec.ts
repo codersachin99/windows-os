@@ -18,7 +18,7 @@ test("Win7 Computer uses source View popup with eight modes and 0-7 slider", asy
   const computer=await openSourceExplorer(page,"computer");
   const view=computer.getByRole("button",{name:"View",exact:true});
   await expect(view).toBeVisible();
-  await expect(view.locator("img")).toHaveAttribute("src",/view-tiles\\.c4008351\\.webp$/);
+  await expect(view.locator("img")).toHaveAttribute("src",/view-tiles\.c4008351\.webp$/);
   await expect(computer.getByRole("combobox",{name:"Explorer view"})).toHaveCount(0);
   await view.click();
   const popup=computer.getByRole("menu",{name:"View options"});
@@ -32,7 +32,7 @@ test("Win7 Computer uses source View popup with eight modes and 0-7 slider", asy
     .toHaveAttribute("aria-checked","true");
   await popup.getByRole("menuitemradio",{name:"Extra large icons"}).click();
   await expect(computer.locator(".explorer-list")).toHaveClass(/is-extra/);
-  await expect(view.locator("img")).toHaveAttribute("src",/view-xl-icons\\.98501d90\\.webp$/);
+  await expect(view.locator("img")).toHaveAttribute("src",/view-xl-icons\.98501d90\.webp$/);
   await expect(popup).toHaveCount(0);
   await view.click();
   await expect(slider).toHaveValue("0");
