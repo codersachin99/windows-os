@@ -1,3 +1,11 @@
+## Original multi-disk Computer search — 2026-11-13, pending opt-in CI
+
+- **Source:** Pinned `computer.js listSearch` / `2e2c.b` seeds `searchIndex.walk` with `in ? [in] : getStats().map(d => d.path)`. `in=` searches only mounted disks, *not* every child of `/EXTERNAL/computer`.
+- **Implementation:** `sourceMountedSearchRoots(LegacyVolumeSession)` maps validated runtime metadata to Guest VFS mount roots, and `searchFiles({rootScopes})` scans disjoint roots, retains global source relevance ranking/progress/cancellation/trash skipping, rejects invalid/unmounted paths, returns empty for no mounts. `ExplorerApp` uses this for Find `shell:search?in=` and classic Search Dialog/Companion Computer scope, with explicit folder searches unchanged.
+- **Tests:** new 5-case Vitest module covering real two-drive metadata, stray shell node exclusion, `sub=0`, zero/removed/missing drives, overlapping roots, cross-disk result ranking and cancellation; new desktop/mobile browser test exercises Find Now with Computer scope and ensures virtual shell siblings never appear.
+- **Validation:** next deliberate `[run-ci]` checkpoint pending. Previous [223 unit / 222 browser CI 43364173206](https://github.com/codersachin99/windows-os/actions/runs/43364173206) remains verified.
+- **Next:** verify CI, investigate source listing cache/progress behavior, screenshot-level Windows 7 visual fidelity, then remaining original programs/games. Draft PR only, main untouched, no release.
+
 ## Original 5401 shell:search path and 0e9a/de73 type keys — 2026-11-13, CI VERIFIED
 
 - **Newly located pinned source:** `src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js` modules `5401`, `0e9a` and `de73`. The original search prefix is **`shell:search`**, not the provisional `win7-find:`; the exact query params are `q`, `in`, optional `name`, and `sub=0`.

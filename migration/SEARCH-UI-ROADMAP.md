@@ -36,3 +36,8 @@ The original Computer app chooses **three distinct search UI presentations** by 
 - [CI 43364173206](https://github.com/codersachin99/windows-os/actions/runs/43364173206) — 223 unit tests / 44 files and 222 desktop/mobile Chromium browser tests passed. Exact `shell:search` URI and pinned `0e9a`/`de73` file predicates are now implemented.
 - **Next targeted parity gap:** source `computer.js listSearch` searches `getStats().map(disk => disk.path)` when query `in=` is empty. React currently scans the mounted Guest Computer root instead, which can include non-drive nodes. Implement scoped multi-root traversal from actual mounted Guest disk metadata, with rejection of unmounted disks and no host access.
 - Then screenshot-compare default Win7 source/React Computer and Find at desktop/mobile breakpoints; exact child modal focus/chrome and alternate legacy skins remain pending. Many other applications/games are not yet migrated.
+
+## Mounted disk root fidelity (2026-11-13)
+
+- First slice implemented: actual Guest runtime `getStats` mount roots replace the previous Computer-container fallback for original empty `in=` queries. See [mounted disk search source trace](SEARCH-DISK-ROOTS.md). Tests for multiple mounts, zero mounts, stale roots, no root-node leakage and global ranking have been committed.
+- **Next verification:** deliberate opt-in CI. **Subsequent work:** original cached search index, full multi-drive progress semantics, screenshot comparisons and unported legacy applications.
