@@ -1,9 +1,9 @@
-## Source Computer cached search index and progress — 2026-11-13, pending CI
+## Source Computer cached search index and progress — 2026-11-13, CI VERIFIED
 
 - **Pinned**: webpack `2e2c.b` caches `Map<uri, Promise<directoryList>>`, ignores `.meta`, invalidates keys matching changed directory/subtree and reports `scanned/discovered` fractional progress across roots. Source `computer.js` refreshes active searches on relevant invalidations.
 - **Implemented**: `packages/filesystem/src/sourceSearchIndex.ts` per-Computer window, `searchFiles` optional `fraction` progress, Explorer cache lifecycle and automatic active-result refresh. The Guest VFS event bridge additionally invalidates containing folders when a single file changes; moves/trash/restore invalidate both old/new parents and subtree caches.
-- **Tests**: eight new unit cases (cached repeat, `.meta`, update/create/delete, move, recycle/restore, concurrent list, invalid root, progress ratio/exclusions), two browser scenarios run at desktop/mobile profiles. **Opt-in CI pending**.
-- **Source trace**: `migration/SEARCH-INDEX-SOURCE.md`. **Next**: check CI, fix only real failures, record verified SHA; then source search UI/screenshot parity and unported application modules. PR draft, main untouched, no release.
+- **Tests**: nine new unit cases (including React StrictMode cleanup/reconnect), two Playwright scenarios exercised on desktop and mobile. **[Opt-in CI 43370515230 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43370515230)** at code SHA `2b17780fe2cf0a5c6a9dcb66d275828f25b5dfb6`: TypeScript, **237 Vitest tests across 46 files**, original source/Contacts checks, Vite production build and **228 Chromium desktop/mobile browser tests passed**. The live-refresh regression now passes on both devices.
+- **Source trace**: `migration/SEARCH-INDEX-SOURCE.md`. **Next**: source original-window search controls/screenshot parity, broader Win7 skin fidelity and unported app/game modules. Two earlier CI attempts found stale test assumptions and a real StrictMode event listener defect; both were corrected and the final browser suite is fully green. PR draft, main untouched, no release.
 
 ## Original multi-disk Computer search — 2026-11-13, CI VERIFIED
 

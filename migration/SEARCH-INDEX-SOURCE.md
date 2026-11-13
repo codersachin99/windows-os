@@ -33,3 +33,9 @@ The first CI attempt [43369157632](https://github.com/codersachin99/windows-os/a
 ## React Strict Mode lifecycle correction
 
 The first integrated browser checkpoint [43369359381](https://github.com/codersachin99/windows-os/actions/runs/43369359381) showed **236 unit tests passing and 226 of 228 Chromium tests passing**; both failures were the desktop/mobile live-refresh scenario. `apps/web/src/main.tsx` mounts under `React.StrictMode`, whose development effect setup/cleanup/setup disposed the search index and did not reconnect the VFS subscription. Also, eager subscribing in a `useMemo` constructor would leak the discarded first StrictMode constructor. SourceSearchIndex now has a **side-effect-free constructor** and idempotent `connect()/dispose()` lifecycle, called from the Explorer effect. A dedicated unit test exercises development cleanup/remount and successful post-remount invalidation. The live-refresh browser test remains unchanged to verify the actual fix.
+
+## Final green checkpoint — 2026-11-13
+
+- [GitHub Actions run 43370515230 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43370515230), code SHA `2b17780fe2cf0a5c6a9dcb66d275828f25b5dfb6`: TypeScript, **237 unit tests in 46 files**, source/Contacts checks, Vite build, **228 Chromium desktop/mobile browser tests passed**.
+- React StrictMode repeatable `connect()/dispose()` resolves the desktop and mobile live-result refresh defect. The relevant browser regression was **not weakened or removed**. Source file event semantics, cache reuse, fractional progress, zero/removed drives and prior search category/path surfaces remain covered.
+- Next: inspect original `window-addressbar` search progress rendering and screenshot-level Win7 parity, and continue missing original apps. No unrelated Github Actions were run; normal documentation commits skip the opt-in CI workflow.

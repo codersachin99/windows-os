@@ -46,3 +46,8 @@ The original Computer app chooses **three distinct search UI presentations** by 
 
 - Per-Computer `2e2c.b` listing cache, VFS-change invalidation and scanned/discovered progress fraction implemented, with source/pinned regression cases and React active-search refresh. [Source trace](SEARCH-INDEX-SOURCE.md).
 - **Verification pending:** one deliberate `[run-ci]` run after test/code checkpoint. Next capture actual legacy and migrated browser screenshots and compare original search surfaces and window chrome before declaring visual parity.
+
+## Cached Computer index checkpoint — verified 2026-11-13
+
+- [Opt-in CI 43370515230 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43370515230): **237 Vitest unit tests / 46 files, 228 Chromium desktop/mobile browser tests**, TypeScript and Vite build green. Source per-window search listing reuse, `.meta` filtering, subtree invalidation, React StrictMode reconnect, live result refresh and fractional progress now verified.
+- **Next source comparison**: exact `window-addressbar` progress UI, original Win7 window frame/search control screenshots, then outstanding source app/game modules; note source `2e2c.b` concurrent breadth-first `Promise.all` loading still differs from React's sequential queue.
