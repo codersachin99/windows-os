@@ -22,6 +22,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     const store = await fixture();
     const list = vi.spyOn(store, "list");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       const first = await searchFiles(index, ranked);
       const second = await searchFiles(index, { ...ranked, text: "notes" });
@@ -42,6 +43,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     const store = await fixture();
     const list = vi.spyOn(store, "list");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       await searchFiles(index, ranked);
       expect(list).toHaveBeenCalledTimes(3);
@@ -72,6 +74,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     const store = await fixture();
     const list = vi.spyOn(store, "list");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       await searchFiles(index, { ...ranked, text: "notes" });
       expect(list).toHaveBeenCalledTimes(3);
@@ -89,6 +92,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
   it("notifies listeners only for changed cached listings and stops after dispose", async () => {
     const store = await fixture();
     const index = new SourceSearchIndex(store);
+    index.connect();
     const listener = vi.fn();
     index.subscribeInvalidation(listener);
     await searchFiles(index, { scope: "/data", subfolders: false });
@@ -110,6 +114,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     const store = await fixture();
     await store.mkdir("/Trash");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       await searchFiles(index, ranked);
       await store.trash("/data/Docs/Report.txt", "/Trash");
@@ -125,6 +130,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     const store = await fixture();
     const list = vi.spyOn(store, "list");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       const [first, second] = await Promise.all([
         index.list("/data/Docs"), index.list("/data/Docs")
@@ -141,6 +147,29 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     } finally { index.dispose(); }
   });
 
+  it("survives React StrictMode setup/cleanup/remount and resumes change notifications", async () => {
+    const store = await fixture();
+    const spy = vi.spyOn(store,"subscribe");
+    const index = new SourceSearchIndex(store);
+    expect(spy).not.toHaveBeenCalled(); // pure constructor, no abandoned listener
+    const stopA = index.connect();
+    const stopAgain = index.connect();
+    expect(spy).toHaveBeenCalledTimes(1);
+    await searchFiles(index, ranked);
+    stopAgain(); // React StrictMode cleanup
+    stopA(); // idempotent duplicate cleanup
+
+    const stopB = index.connect(); // React StrictMode re-mount
+    const onInvalidation = vi.fn();
+    index.subscribeInvalidation(onInvalidation);
+    await searchFiles(index, ranked);
+    await store.write("after remount", "/data/Docs/Report-New.txt");
+    expect(onInvalidation).toHaveBeenCalledTimes(1);
+    expect((await searchFiles(index, ranked)).files.map(entry => entry.name).sort())
+      .toEqual(["Report-New.txt", "Report.txt"]);
+    stopB();
+  });
+
   it("emits source-style c/discovered fractional progress across multiple disk roots", async () => {
     const store = new VirtualFileStore();
     await store.mkdir("/disk0");
@@ -148,6 +177,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     await store.mkdir("/disk0/Child");
     await store.write("target", "/disk0/Child/Report.txt");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       const fractions: number[] = [];
       const results = await searchFiles(index, {
@@ -170,6 +200,7 @@ describe("pinned 2e2c.b source per-Computer cached search index", () => {
     await store.mkdir("/data/Trash");
     await store.mkdir("/data/Trash/Unseen");
     const index = new SourceSearchIndex(store);
+    index.connect();
     try {
       const fractions: number[] = [];
       const result = await searchFiles(index, {

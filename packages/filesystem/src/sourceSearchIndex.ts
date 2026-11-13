@@ -14,11 +14,21 @@ import {
 export class SourceSearchIndex {
   private readonly listings = new Map<string, Promise<FileEntry[]>>();
   private readonly listeners = new Set<() => void>();
-  private readonly unsubscribe: () => void;
+  private unsubscribe: (() => void) | null = null;
   private disposed = false;
 
-  constructor(private readonly filesystem: Pick<VirtualFileStore, "stat" | "list" | "subscribe">) {
-    this.unsubscribe = filesystem.subscribe(change => this.changed(change));
+  // The constructor must be pure: React StrictMode double-invokes memo
+  // constructors in development, and an eager subscribe would leak the
+  // discarded instance. connect() is intentionally repeatable on remount.
+  constructor(private readonly filesystem: Pick<VirtualFileStore, "stat" | "list" | "subscribe">) {}
+
+  /** Attach the Guest VFS event bridge once per mounted Explorer lifetime. */
+  connect(): () => void {
+    if (!this.unsubscribe) {
+      this.disposed = false;
+      this.unsubscribe = this.filesystem.subscribe(change => this.changed(change));
+    }
+    return () => this.dispose();
   }
 
   stat(path: string): Promise<FileEntry | null> {
@@ -80,7 +90,8 @@ export class SourceSearchIndex {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
-    this.unsubscribe();
+    this.unsubscribe?.();
+    this.unsubscribe = null;
     this.listeners.clear();
     this.clear();
   }

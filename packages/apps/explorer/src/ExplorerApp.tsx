@@ -126,9 +126,14 @@ export function ExplorerApp({
     setSearchFraction(0);
     searchActive.current = false;
   }, [state.path, state.search, subfolders, namePattern]);
-  useEffect(() => () => {
-    currentSearch.current?.abort();
-    searchIndex.dispose();
+  useEffect(() => {
+    // StrictMode runs a setup/cleanup/setup cycle in development; reconnect
+    // after the simulated cleanup rather than leaving Search unsubscribed.
+    const disconnect = searchIndex.connect();
+    return () => {
+      currentSearch.current?.abort();
+      disconnect();
+    };
   }, [searchIndex]);
   // A source Computer search refreshes when the indexed directory changes.
   // Invalidation happens before this callback; no stale result is reused.
