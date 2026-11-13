@@ -24,3 +24,14 @@ export function sourceExplorerAddressBreadcrumbs(
   const location = normal[normal.length - 1]?.label ?? "Computer";
   return [{ label: "Search Results in " + location, path: null }];
 }
+
+/** Source window-addressbar-search currentLocation() uses the final segment
+ * from Computer.getLocation(searchScope), including the mounted disk label. */
+export function sourceExplorerSearchPlaceholder(
+  path: string,
+  config?: Pick<LegacyPathConfig, "root" | "drives"> | null,
+  trashPath?: string | null
+): string {
+  const location = sourceComputerBreadcrumbs(path, config, trashPath).at(-1)?.label ?? "Computer";
+  return "Search " + location;
+}

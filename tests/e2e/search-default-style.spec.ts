@@ -6,6 +6,9 @@ test("default source Win7 hides XP/3.1 classic search entry buttons", async ({pa
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
   const explorer = page.locator('[data-test-window="computer"]');
   await expect(explorer.getByRole("searchbox", { name:"Search files" })).toBeVisible();
+  await expect(explorer.getByRole("searchbox", { name:"Search files" }))
+    .toHaveAttribute("placeholder","Search Computer");
+  await expect(explorer.getByRole("button", { name:"Find files" })).toHaveCount(0);
   await expect(explorer.getByRole("button", { name:"Search Companion" })).toHaveCount(0);
   await expect(explorer.getByRole("button", { name:"Search dialog" })).toHaveCount(0);
   // Existing Advanced Find is an explicitly recorded migration-era affordance.

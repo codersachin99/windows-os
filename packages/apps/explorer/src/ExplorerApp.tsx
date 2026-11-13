@@ -13,11 +13,11 @@ import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } fr
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
-import { sourceExplorerSearchStyle } from "./searchStyle";
+import { sourceExplorerSearchStyle, sourceWin7InstantSearch } from "./searchStyle";
 import { SourceAddressProgress } from "./SourceAddressProgress";
 import { SourceWin7Navigation, showExplorerUpControl } from "./SourceWin7Navigation";
 import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
-import { sourceExplorerAddressBreadcrumbs } from "./sourceExplorerAddress";
+import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } from "./sourceExplorerAddress";
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import type { ThemeId } from "@windows-os/contracts";
@@ -70,6 +70,7 @@ export function ExplorerApp({
 }: ExplorerAppProps) {
   const classicSearchStyle = sourceExplorerSearchStyle(theme);
   const isBin = Boolean(recycleBinPath);
+  const instantSearch = sourceWin7InstantSearch(theme, isBin);
   const initialFind = useMemo(() => decodeSourceFindPath(initialPath), [initialPath]);
   const initialSourceSearch = useMemo(() => decodeSourceSearchPath(initialPath), [initialPath]);
   // Original shell:search is a virtual URI; route to its guest search scope
@@ -360,6 +361,15 @@ export function ExplorerApp({
     });
   };
   rerunActiveSearch.current = () => runSearch();
+  // Source Computer.search(e) calls delayedSearch.type(e) from
+  // window-addressbar-search(instant). Only run a nonempty query; clearing
+  // the field returns to real folder breadcrumbs and the original listing.
+  // The 250ms delay is a bounded replacement for the source delay utility.
+  useEffect(() => {
+    if (!instantSearch || !state.search.trim()) return;
+    const handle = window.setTimeout(() => rerunActiveSearch.current(), 250);
+    return () => window.clearTimeout(handle);
+  }, [instantSearch, state.search, subfolders, namePattern]);
   const searchInComputer = (query: SourceFindQuery) => {
     setShowSearchDialog(false);
     if (query.scope && query.scope !== state.path) {
@@ -486,10 +496,14 @@ export function ExplorerApp({
         </span>
       </div>
       <input className="explorer-address__search" type="search"
-        placeholder="Search" aria-label="Search files" value={state.search}
+        placeholder={instantSearch
+          ? sourceExplorerSearchPlaceholder(state.path, volume?.pathConfig, trashPath)
+          : "Search"}
+        aria-label="Search files" value={state.search}
         onChange={event => session.search(event.target.value)} />
-      <button type="button" onClick={() => runSearch()} disabled={searchBusy}
-        aria-label="Find files">Find</button>
+      {!instantSearch &&
+        <button type="button" onClick={() => runSearch()} disabled={searchBusy}
+          aria-label="Find files">Find</button>}
     </div>
     <div className="explorer-search-controls">
       <label><input type="checkbox" checked={subfolders}
@@ -509,7 +523,7 @@ export function ExplorerApp({
             onClick={() => onOpenFind(state.path)}>
             {classicSearchStyle === "find" ? "Find..." : "Advanced Find..."}</button>}
       </>}
-      {found !== null && <button type="button" onClick={() => {
+      {found !== null && !instantSearch && <button type="button" onClick={() => {
         searchActive.current = false;
         setFound(null); setFoundHighlights({});
       }}>Clear results</button>}

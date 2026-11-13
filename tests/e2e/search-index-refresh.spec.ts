@@ -7,7 +7,6 @@ test("Computer search index revalidates results after Guest folder creation", as
   const explorer=page.locator('[data-test-window="computer"]');
 
   await explorer.getByRole("searchbox",{name:"Search files"}).fill("IndexRefreshProbe");
-  await explorer.getByRole("button",{name:"Find files"}).click();
   await expect(explorer.getByText("0 found",{exact:true})).toBeVisible();
 
   // Explorer remains in the same session. Creating an actual folder emits a
@@ -19,8 +18,10 @@ test("Computer search index revalidates results after Guest folder creation", as
   await expect(explorer.getByText("1 found",{exact:true})).toBeVisible();
   await expect(explorer.locator('[data-test-explorer-item="IndexRefreshProbe"]'))
     .toBeVisible();
-  await explorer.getByRole("button",{name:"Clear results"}).click();
+  await explorer.getByRole("searchbox",{name:"Search files"}).fill("");
   await expect(explorer.getByText("1 found",{exact:true})).toHaveCount(0);
+  await expect(explorer.locator('[data-test-explorer-item="IndexRefreshProbe"]'))
+    .toBeVisible();
 });
 
 test("source Find results use cached index and show numeric progress while searching", async ({page}) => {

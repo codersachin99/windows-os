@@ -9,7 +9,6 @@ test("ordinary Computer search uses original static Search Results in scoped dis
   await expect(explorer.getByRole("navigation",{name:"Folder path"})
     .getByRole("button",{name:"System (C:)",exact:true})).toBeVisible();
   await explorer.getByRole("searchbox",{name:"Search files"}).fill("Program");
-  await explorer.getByRole("button",{name:"Find files"}).click();
   await expect(explorer.getByText(/\d+ found/)).toBeVisible();
   const path=explorer.getByRole("navigation",{name:"Folder path"});
   await expect(path.getByText("Search Results in System (C:)",{exact:true})).toBeVisible();
@@ -18,7 +17,7 @@ test("ordinary Computer search uses original static Search Results in scoped dis
   await expect(path.locator(".explorer-address__source-crumb:is(button)")).toHaveCount(0);
   await expect(explorer.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue("/EXTERNAL/computer/drive0");
-  await explorer.getByRole("button",{name:"Clear results"}).click();
+  await explorer.getByRole("searchbox",{name:"Search files"}).fill("");
   await expect(path.getByRole("button",{name:"System (C:)",exact:true})).toBeVisible();
 });
 

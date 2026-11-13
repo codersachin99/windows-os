@@ -16,7 +16,6 @@ test("pinned Computer relevance order, token boundary and filename highlight", a
   await explorer.locator('[data-test-explorer-item="SearchRankingFixtures"]').dblclick();
   for (const name of ["Prereport","Annual-Report","Report-archive","Report"]) await create(name);
   await explorer.getByRole("searchbox",{name:"Search files"}).fill("report");
-  await explorer.getByRole("button",{name:"Find files"}).click();
   const hits=explorer.locator('[data-test-explorer-item]');
   await expect(hits).toHaveCount(3);
   await expect(hits.first()).toHaveAttribute("data-test-explorer-item","Report");

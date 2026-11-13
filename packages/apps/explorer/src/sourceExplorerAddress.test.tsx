@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { sourceExplorerAddressBreadcrumbs } from "./sourceExplorerAddress";
+import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } from "./sourceExplorerAddress";
 import { SourceWin7Breadcrumbs } from "./SourceWin7Breadcrumbs";
 
 const root="/EXTERNAL/computer";
@@ -9,6 +9,14 @@ const cfg={root,drives:[{path:"drive0",letter:"C",label:"System"}]};
 const bin=disk+"/Users/Guest/AppData/Roaming/WindowsOS/Windows/RecycleBin";
 
 describe("original Computer addressbar search-results location", () => {
+  it("uses the source Search + searchLocation placeholder, not a generic label", () => {
+    expect(sourceExplorerSearchPlaceholder(root,cfg,bin)).toBe("Search Computer");
+    expect(sourceExplorerSearchPlaceholder(disk,cfg,bin)).toBe("Search System (C:)");
+    expect(sourceExplorerSearchPlaceholder(disk+"/Users/Guest/Documents",cfg,bin))
+      .toBe("Search Documents");
+    expect(sourceExplorerSearchPlaceholder(bin,cfg,bin)).toBe("Search Recycle Bin");
+  });
+
   it("retains clickable mounted hierarchy outside a virtual source search", () => {
     const result=sourceExplorerAddressBreadcrumbs(disk+"/Users",cfg,bin,false);
     expect(result.map(x=>x.label)).toEqual(["Computer","System (C:)","Users"]);
