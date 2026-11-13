@@ -36,3 +36,9 @@ The pinned webpack module f3ad in legacy-win7/src/modules/runtime/vue-app.js has
 Target sourceExplorerSearchStyle in packages/apps/explorer/src/searchStyle.ts follows the pinned map. DesktopShell passes the current desktop theme to Explorer. React also accepts only known theme names via the legacy testmode.js-inspired validated "?theme=..." switch, so browser e2e can exercise XP and Win31 behavior without claiming their full visual themes are migrated. Default Win7 does not expose XP and Win31 classic buttons. The preexisting Advanced Find link is migration-era functionality, still pending its exact Win7 source menu mapping. Do not call default Win7 search pixel-identical.
 
 For testing, /?theme=winxp exposes Search Companion and /?theme=win31 exposes Search Dialog. This changes conditional source search behavior; XP/Win31 full desktop skin is still unported.
+
+## Final source theme CI verification — 2026-11-13
+
+- [Opt-in CI 43357788138 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43357788138) on code SHA `e7d50c747ae0fd1e5f44413b80a3030f95b21d49`: TypeScript, **205 unit tests across 40 files**, source/Contacts checks, Vite production build and **218 desktop/mobile Chromium browser tests passed**.
+- Browser cases exercised parent-owned Win31 Search Dialog, WinXP Search Companion, Win95 standalone Find, default Win7's absence of classic search tools, and Start From navigation into the real Guest Documents path.
+- Previous opt-in run caught two missing theme-resolver/type imports at TypeScript stage, corrected before the final green run. No original XP/Win31 skin or full source search ranking fidelity is claimed.

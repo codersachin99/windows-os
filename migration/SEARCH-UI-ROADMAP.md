@@ -25,3 +25,8 @@ The original Computer app chooses **three distinct search UI presentations** by 
 - Reuse `packages/filesystem`'s single Guest virtual-file search implementation, existing Computer session, and shared SDK/WindowFrame. Do not introduce a second file store or external/native host search.
 - Keep PR #1 **draft**, main untouched, no release; only opt-in `[run-ci]` commits or manual dispatch run the expensive CI.
 - Screenshot parity, original query formatting and dynamic theme rules remain explicit unverified items.
+
+## Verified checkpoint
+
+- [GitHub Actions 43357788138](https://github.com/codersachin99/windows-os/actions/runs/43357788138) succeeded after theme integration: 205 Vitest tests (40 files), production Vite build, 218 desktop/mobile Chromium tests.
+- The actual f3ad theme dispatch is pinned. Remaining visual, source query serialization/relevance scoring, original file predicates and unported WinXP/Win31 complete themes remain explicit tasks.
