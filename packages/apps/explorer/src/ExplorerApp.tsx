@@ -15,6 +15,7 @@ import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
 import { sourceExplorerSearchStyle } from "./searchStyle";
 import { SourceAddressProgress } from "./SourceAddressProgress";
+import { SourceWin7Navigation } from "./SourceWin7Navigation";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -412,8 +413,15 @@ export function ExplorerApp({
 
   return <div className="windows-explorer explorer-stage" data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
-      <button aria-label="Back" disabled={!state.canGoBack} onClick={() => void execute(() => session.back())}>◀</button>
-      <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
+      {theme === "win7"
+        ? <SourceWin7Navigation
+            canGoBack={state.canGoBack} canGoForward={state.canGoForward}
+            onBack={() => void execute(() => session.back())}
+            onForward={() => void execute(() => session.forward())} />
+        : <>
+            <button aria-label="Back" disabled={!state.canGoBack} onClick={() => void execute(() => session.back())}>◀</button>
+            <button aria-label="Forward" disabled={!state.canGoForward} onClick={() => void execute(() => session.forward())}>▶</button>
+          </>}
       <button aria-label="Up" disabled={state.path === "/"} onClick={() => void execute(() => session.up())}>↑</button>
       <label className="explorer-address__location">Address:
         <span className="explorer-address__location-wrapper">

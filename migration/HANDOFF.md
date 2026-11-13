@@ -1,3 +1,9 @@
+## Win7 original Explorer navigation sprites — 2026-11-13 (CI pending)
+
+- **Pinned original**: `legacy-win7@4e63290/src/modules/themes/theme-win7-scss.js`; extracted both original inline WebP data URLs unmodified (nav background and 27px four-row button sprite). Original source uses 27px normal (0), hover (-27px), active (-54px), disabled (-81px), and `scaleX(-1)` for Forward.
+- **Port**: new `packages/apps/explorer/src/SourceWin7Navigation.tsx`, with the source graphics in Explorer CSS. Reuses `ExplorerSession.back()/forward()` and their existing history state, no rewritten navigation logic. Other themes continue to use their existing controls; keyboard focus remains visible. Up, the breadcrumb/path editing presentation, toolbar visuals and source-vs-React screenshot comparisons are still pending — this checkpoint does **not** certify entire Computer pixel parity.
+- **Coverage requested**: focused React server-rendering unit cases and desktop/mobile Chromium checks for original sprite image/size, disabled/hover/normal state, mirroring and functional history. CI is opt-in on `[run-ci]`; record result after it finishes. PR #1 stays draft, `main` unchanged.
+
 ## Win7 addressbar progress + TSX test discovery — 2026-11-13, CI VERIFIED
 
 - **Pinned original**: `computer.js` `window-addressbar(progress=searchProgress)` with null-on-finish; Win7 theme 25px location field and exact green progress gradient.
