@@ -10,7 +10,7 @@ test("ordinary Computer search uses original static Search Results in scoped dis
     .getByRole("button",{name:"System (C:)",exact:true})).toBeVisible();
   await explorer.getByRole("searchbox",{name:"Search files"}).fill("Program");
   await explorer.getByRole("button",{name:"Find files"}).click();
-  await expect(explorer.getByText(/\\d+ found/)).toBeVisible();
+  await expect(explorer.getByText(/\d+ found/)).toBeVisible();
   const path=explorer.getByRole("navigation",{name:"Folder path"});
   await expect(path.getByText("Search Results in System (C:)",{exact:true})).toBeVisible();
   await expect(path.getByRole("button")).toHaveCount(0);
@@ -30,7 +30,7 @@ test("classic Find opens Computer with non-clickable Search Results location and
   await find.getByRole("textbox",{name:"Named"}).fill("Documents");
   await find.getByRole("button",{name:"Find Now"}).click();
   const explorer=page.locator('[data-test-window="computer"]').last();
-  await expect(explorer.getByText(/\\d+ found/)).toBeVisible();
+  await expect(explorer.getByText(/\d+ found/)).toBeVisible();
   const path=explorer.getByRole("navigation",{name:"Folder path"});
   await expect(path.getByText("Search Results",{exact:true})).toBeVisible();
   await expect(path.getByRole("button")).toHaveCount(0);
