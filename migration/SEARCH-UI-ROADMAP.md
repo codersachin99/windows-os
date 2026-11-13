@@ -41,3 +41,8 @@ The original Computer app chooses **three distinct search UI presentations** by 
 
 - First slice implemented: actual Guest runtime `getStats` mount roots replace the previous Computer-container fallback for original empty `in=` queries. See [mounted disk search source trace](SEARCH-DISK-ROOTS.md). Tests for multiple mounts, zero mounts, stale roots, no root-node leakage and global ranking have been committed.
 - **Verified:** [opt-in CI 43366050095 — PASS](https://github.com/codersachin99/windows-os/actions/runs/43366050095), **228 unit tests across 45 files and 224 desktop/mobile Chromium browser tests**. **Subsequent work:** original cached search index, full multi-drive progress semantics, screenshot comparisons and unported legacy applications.
+
+## Source cached index progress (2026-11-13)
+
+- Per-Computer `2e2c.b` listing cache, VFS-change invalidation and scanned/discovered progress fraction implemented, with source/pinned regression cases and React active-search refresh. [Source trace](SEARCH-INDEX-SOURCE.md).
+- **Verification pending:** one deliberate `[run-ci]` run after test/code checkpoint. Next capture actual legacy and migrated browser screenshots and compare original search surfaces and window chrome before declaring visual parity.

@@ -1,3 +1,10 @@
+## Source Computer cached search index and progress — 2026-11-13, pending CI
+
+- **Pinned**: webpack `2e2c.b` caches `Map<uri, Promise<directoryList>>`, ignores `.meta`, invalidates keys matching changed directory/subtree and reports `scanned/discovered` fractional progress across roots. Source `computer.js` refreshes active searches on relevant invalidations.
+- **Implemented**: `packages/filesystem/src/sourceSearchIndex.ts` per-Computer window, `searchFiles` optional `fraction` progress, Explorer cache lifecycle and automatic active-result refresh. The Guest VFS event bridge additionally invalidates containing folders when a single file changes; moves/trash/restore invalidate both old/new parents and subtree caches.
+- **Tests**: eight new unit cases (cached repeat, `.meta`, update/create/delete, move, recycle/restore, concurrent list, invalid root, progress ratio/exclusions), two browser scenarios run at desktop/mobile profiles. **Opt-in CI pending**.
+- **Source trace**: `migration/SEARCH-INDEX-SOURCE.md`. **Next**: check CI, fix only real failures, record verified SHA; then source search UI/screenshot parity and unported application modules. PR draft, main untouched, no release.
+
 ## Original multi-disk Computer search — 2026-11-13, CI VERIFIED
 
 - **Source:** Pinned `computer.js listSearch` / `2e2c.b` seeds `searchIndex.walk` with `in ? [in] : getStats().map(d => d.path)`. `in=` searches only mounted disks, *not* every child of `/EXTERNAL/computer`.
