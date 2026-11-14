@@ -3,7 +3,8 @@ import {
   VirtualFileStore,LegacyVolumeSession,sourceGuestMounts,
   ensureSourceGuestDirectories,SOURCE_GUEST_PROFILE
 } from "@windows-os/filesystem";
-import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables} from "./model";
+import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables,
+  sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -291,5 +292,55 @@ describe("pinned cmd.js Ct() percent variable expansion before command parsing",
     await session.run("notacommand");
     expect((await session.run("echo %errorlevel%")).output).toEqual(["9009"]);
     expect((await session.run("echo %errorlevel%")).output).toEqual(["0"]);
+  });
+});
+
+describe("source cmd.js TREE, VOL, DATE and TIME output",()=>{
+  it("calculates original source serial from mounted volume metadata",async()=>{
+    const {session}=await createShell();
+    expect(sourceCmdVolumeSerial("C","System")).toMatch(/^[0-9A-F]{4}-[0-9A-F]{4}$/);
+    expect((await session.run("vol")).output).toEqual([
+      " Volume in drive C is System",
+      " Volume Serial Number is "+sourceCmdVolumeSerial("C","System")
+    ]);
+    expect((await session.run("vol Q:")).output).toEqual([
+      "The system cannot find the drive specified."
+    ]);
+  });
+  it("formats source DATE and TIME from injected clock instead of changing host time",async()=>{
+    const fs=new VirtualFileStore();
+    await ensureSourceGuestDirectories(fs);
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    const date=new Date(2025,4,4,9,3,2,457);
+    const session=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,()=>date);
+    expect(sourceCmdDateValue(date)).toBe("Sun 05/04/2025");
+    expect(sourceCmdTimeValue(date)).toBe("09:03:02.45");
+    expect((await session.run("date")).output).toEqual([
+      "The current date is: Sun 05/04/2025"
+    ]);
+    expect((await session.run("date /t")).output).toEqual(["Sun 05/04/2025"]);
+    expect((await session.run("time")).output).toEqual([
+      "The current time is: 09:03:02.45"
+    ]);
+    expect((await session.run("time /t")).output).toEqual(["09:03:02.45"]);
+  });
+  it("TREE shows the actual Guest VFS source folders with source branch art and /F files",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.mkdir(base+"/Bravo");
+    await fs.mkdir(base+"/Alpha");
+    await fs.write("notes",base+"/notes.txt");
+    const tree=await session.run("tree Documents");
+    expect(tree.output.slice(0,3)).toEqual([
+      "Folder PATH listing for volume System",
+      "Volume Serial Number is "+sourceCmdVolumeSerial("C","System"),
+      "C:\\USERS\\GUEST\\DOCUMENTS"
+    ]);
+    expect(tree.output.slice(3)).toEqual(["├───Alpha","└───Bravo"]);
+    const withFiles=await session.run("tree Documents /f");
+    expect(withFiles.output.slice(3)).toEqual([
+      "├───Alpha","├───Bravo","└───notes.txt"
+    ]);
+    expect((await session.run("tree Documents /q")).errorlevel).toBe(1);
   });
 });

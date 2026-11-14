@@ -26,7 +26,7 @@ export interface SourceCmdColorStyle{
   color:string;
 }
 type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move"|"copy">;
-type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath">;
+type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath"|"pathConfig">;
 
 export const SOURCE_CMD_BANNER=[
   "Microsoft Windows [Version 6.1.7600]",
@@ -40,6 +40,10 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   move:"Moves one or more files from one directory to another directory.",
   cls:"Clears the screen.",
   dir:"Displays a list of files and subdirectories in a directory.",
+  date:"Displays the date.",
+  time:"Displays the system time.",
+  tree:"Graphically displays the directory structure of a drive or path.",
+  vol:"Displays a disk volume label and serial number.",
   del:"Deletes one or more files.",
   rd:"Removes a directory.",
   ren:"Renames a file or directory.",
@@ -125,6 +129,29 @@ export function sourceCmdExpandVariables(
 ):string{
   return input.replace(/%([^%\s]+)%/g,(match,name:string)=>lookup(name)??match);
 }
+
+/** Original CMD ue() deterministic serial of source disk letter+label.
+ * This is a simulator serial, not an invented host disk serial. */
+export function sourceCmdVolumeSerial(letter:string,label:string):string{
+  let value=0;
+  for(const char of letter+":"+label)
+    value=(31*value+char.charCodeAt(0))%4294967295;
+  const hex=value.toString(16).toUpperCase().padStart(8,"0");
+  return hex.slice(0,4)+"-"+hex.slice(4);
+}
+/** Original G/K and Y formatting, with the source's hundredths precision. */
+export function sourceCmdDateValue(date:Date):string{
+  const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const pad=(n:number)=>String(n).padStart(2,"0");
+  return days[date.getDay()]+" "+pad(date.getMonth()+1)+"/"+
+    pad(date.getDate())+"/"+date.getFullYear();
+}
+export function sourceCmdTimeValue(date:Date):string{
+  const pad=(n:number)=>String(n).padStart(2,"0");
+  return [date.getHours(),date.getMinutes(),date.getSeconds()]
+    .map(pad).join(":")+"."+pad(Math.floor(date.getMilliseconds()/10));
+}
+
 const commandNames=Object.keys(SOURCE_CMD_HELP).sort((a,b)=>a.localeCompare(b));
 
 
@@ -151,7 +178,8 @@ export class SourceCmdSession {
   constructor(
     private readonly fs:CmdFilesystem,
     private readonly volume:CmdVolume,
-    startUri:string
+    startUri:string,
+    private readonly now:()=>Date=()=>new Date()
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -238,6 +266,68 @@ export class SourceCmdSession {
       else if(/^(on|off)$/i.test(args))this.echo=args.toLowerCase()==="on";
       else if(args===".")output=[""];
       else output=[rest];
+    }else if(name==="date"||name==="time"){
+      const value=name==="date"
+        ?sourceCmdDateValue(this.now()):sourceCmdTimeValue(this.now());
+      output=[args.toLowerCase()==="/t"
+        ?value:"The current "+name+" is: "+value];
+    }else if(name==="vol"){
+      const letter=args?/^([a-z]):?$/i.exec(args)?.[1]:this.cwd.slice(0,1);
+      const drive=this.volume.pathConfig.drives.find(d=>
+        d.letter.toUpperCase()===letter?.toUpperCase());
+      if(!drive){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+      else output=[
+        " Volume in drive "+drive.letter+" is "+(drive.label??""),
+        " Volume Serial Number is "+
+          sourceCmdVolumeSerial(drive.letter,drive.label??"")
+      ];
+    }else if(name==="tree"){
+      const tokens=sourceCmdArguments(args);
+      const fileFlag=tokens.some(token=>/^\/f$/i.test(token));
+      const unsupported=tokens.some(token=>token.startsWith("/")&&!/^\/f$/i.test(token));
+      const paths=tokens.filter(token=>!/^\/f$/i.test(token)&&!token.startsWith("/"));
+      if(unsupported||paths.length>1){
+        output=["The requested TREE option is not yet available in this migration."];
+        errorlevel=1;
+      }else{
+        try{
+          const root=this.resolve(paths[0]??".");
+          const drive=this.volume.pathConfig.drives.find(d=>
+            d.letter.toUpperCase()===root.win.slice(0,1).toUpperCase());
+          if(!drive||!root.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          else{
+            output=[
+              "Folder PATH listing for volume "+(drive.label??""),
+              "Volume Serial Number is "+
+                sourceCmdVolumeSerial(drive.letter,drive.label??""),
+              root.win.toUpperCase()
+            ];
+            let count=0;
+            const visit=async(uri:string,prefix:readonly boolean[]):Promise<void>=>{
+              if(prefix.length>12||count>=5000)return;
+              let entries:FileEntry[];
+              try{entries=await this.fs.list(uri);}
+              catch{return;}
+              const visible=entries
+                .filter(entry=>fileFlag||entry.type==="directory")
+                .sort((a,b)=>a.name.localeCompare(b.name,undefined,
+                  {sensitivity:"base"}));
+              for(let index=0;index<visible.length;index++){
+                if(count>=5000)break;
+                const entry=visible[index];
+                const isLast=index===visible.length-1;
+                const leader=prefix.map(flag=>flag?"│   ":"    ").join("");
+                output.push(leader+(isLast?"└":"├")+"───"+entry.name);
+                count++;
+                if(entry.type==="directory")
+                  await visit(entry.uri,[...prefix,!isLast]);
+              }
+            };
+            await visit(root.uri,[]);
+            if(!count)output.push("No subfolders exist");
+          }
+        }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
     }else if(name==="ver"){
       output=["",SOURCE_CMD_BANNER[0]];
     }else if(name==="title"){

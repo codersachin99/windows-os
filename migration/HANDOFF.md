@@ -1,3 +1,9 @@
+## Source CMD TREE VOL DATE TIME — 2026-11-15 (CI deferred)
+
+- Added original `TREE` directory traversal and `/F` read-only real Guest VFS listings, source Unicode tree branch layout, 12-level/5000-entry caps; `VOL` with source `ue` deterministic virtual volume serial; `DATE`/`TIME` source local formatting and `/T`, deterministic injected test clock. No host disk or time modification.
+- Prior source CMD run #43643944920 remained in Chromium when this slice was implemented; no `[run-ci]` on this change, so new file transfer/environment/tree commands require next combined on-demand CI.
+- CMD still in-progress. No main merge, no release, no visual pixel-parity claim.
+
 ## CMD original Ct percent variable expansion — 2026-11-15 (CI deferred)
 
 - Source `Ct()` expands known `%NAME%` tokens nonrecursively before command parsing; `Tt.getEnv()` adds dynamic `%CD%`/`%ERRORLEVEL%`. Ported pure helper and session integration with case-insensitive source `bt` environment from prior slice. Unknown variables remain literal; raw prompt history preserved. Vitest and real Guest CMD Playwright tests added.
