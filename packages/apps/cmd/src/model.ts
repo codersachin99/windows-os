@@ -41,6 +41,20 @@ const DRIVE_NOT_FOUND="The system cannot find the drive specified.";
 const PATH_NOT_FOUND="The system cannot find the path specified.";
 const commandNames=Object.keys(SOURCE_CMD_HELP).sort((a,b)=>a.localeCompare(b));
 
+
+/** Pinned cmd.js Tt.unglue / kt: accept familiar DOS tokens without
+ * whitespace (CD.., ECHO., DIR/B), but split only known commands.
+ */
+export function sourceCmdUnglue(input:string):string{
+  const first=/^(\s*)(\S+)([\s\S]*)$/.exec(input);
+  if(!first)return input;
+  const match=/^([a-z]+)(\.\.?|\/.*)$/i.exec(first[2]);
+  if(!match)return input;
+  const command=match[1].toLowerCase();
+  if(!SOURCE_CMD_HELP[command]&&command!=="chdir")return input;
+  return first[1]+match[1]+" "+match[2]+first[3];
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -66,7 +80,7 @@ export class SourceCmdSession {
   async run(raw:string):Promise<SourceCmdResult>{
     const input=String(raw);
     const prompt=this.prompt;
-    const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(input);
+    const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(sourceCmdUnglue(input));
     const name=(match?.[1]??"").toLowerCase();
     const rest=match?.[2]??"";
     const args=rest.trim();

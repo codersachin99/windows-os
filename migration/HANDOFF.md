@@ -1,3 +1,8 @@
+## Original CMD token unglue — 2026-11-15 (not separately CI triggered)
+
+- Added the exact supported subset of source `Tt.unglue` / `kt` for `CD..`, `ECHO.`, `DIR/B`. Parsing transforms only known source commands, preserving full text/prompt display; unknown EXE-like commands remain unknown. Pure tests exercise parser + live Guest shell behavior.
+- CMD module remains in-progress, not complete. This tiny follow-up has no `[run-ci]`; keep browser acceptance as a single on-demand batch. Last combined shell art CI #43640201034 was still in Chromium at check.
+
 ## CMD package build path and scope clarification — 2026-11-15
 
 - Follow-up to CMD first source slice: added `@windows-os/apps/cmd` to **both** TypeScript and Vite aliases (required by `DesktopShell`). Explicitly documented that no-space `ECHO.` source parser is not yet implemented (spaced `ECHO .` works), avoiding an overstated parity claim.

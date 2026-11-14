@@ -3,7 +3,7 @@ import {
   VirtualFileStore,LegacyVolumeSession,sourceGuestMounts,
   ensureSourceGuestDirectories,SOURCE_GUEST_PROFILE
 } from "@windows-os/filesystem";
-import {SOURCE_CMD_BANNER,SourceCmdSession} from "./model";
+import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -59,5 +59,22 @@ describe("pinned cmd.js Tt prompt and first source command engine slice",()=>{
     expect(full.output.some(line=>line.includes("z.txt"))).toBe(true);
     expect((await session.run("dir /b Documents\\*.txt")).output).toEqual(["a.txt","z.txt"]);
     expect((await session.run("dir /s")).errorlevel).toBe(1);
+  });
+});
+
+describe("pinned cmd.js unglue(source Tt.kt) aliases",()=>{
+  it("separates only supported DOS command suffixes without losing input text",()=>{
+    expect(sourceCmdUnglue("CD..")).toBe("CD ..");
+    expect(sourceCmdUnglue("echo.")).toBe("echo .");
+    expect(sourceCmdUnglue("DIR/B")).toBe("DIR /B");
+    expect(sourceCmdUnglue("invalid.exe")).toBe("invalid.exe");
+  });
+  it("runs CD.., ECHO. and DIR/B against the original Guest shell",async()=>{
+    const {session}=await createShell();
+    await session.run("cd Documents");
+    await session.run("cd..");
+    expect(session.prompt).toBe("C:\\Users\\Guest>");
+    expect((await session.run("ECHO.")).output).toEqual([""]);
+    expect((await session.run("DIR/B")).output).toContain("Documents");
   });
 });

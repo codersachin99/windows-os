@@ -16,4 +16,8 @@ Commit is deliberately without CI opt-in while the previous combined icon regres
 
 ## Module resolution
 
-The new `@windows-os/apps/cmd` package is registered in both `tsconfig.json` and `vite.config.ts` aliases, matching the existing per-app package architecture. This follow-up is intentionally without `[run-ci]`; batch with next opt-in CI once the earlier icon run conclusion is known. The initial first-run CMD slice does **not** yet implement the special unspaced `ECHO.` syntax: only spaced `ECHO .` returns the empty line until a later source parser port.
+The new `@windows-os/apps/cmd` package is registered in both `tsconfig.json` and `vite.config.ts` aliases, matching the existing per-app package architecture. This follow-up is intentionally without `[run-ci]`; batch with next opt-in CI once the earlier icon run conclusion is known. The initial first-run CMD slice does **not** yet implement the special unspaced `ECHO.` syntax was subsequently added via the pinned Tt.unglue helper, alongside `CD..` and `DIR/B`.
+
+## Original Tt.unglue command tokens
+
+Original `cmd.js` uses `kt=/^([a-z]+)(\.\.?|\/.*)$/i` and `unglue` to normalize DOS forms `CD..`, `ECHO.` and `DIR/B` only when the prefix is a recognized command, before executing. The React model now exposes `sourceCmdUnglue` with exact supported-subset semantics and regression tests; unsupported words such as `invalid.exe` remain unknown rather than being silently split.
