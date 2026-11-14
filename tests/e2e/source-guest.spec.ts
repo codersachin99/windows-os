@@ -47,9 +47,12 @@ test("Explorer background and item context menus use shared folder commands", as
   await expect(actions.getByRole("menuitem", { name: "Open" })).toBeVisible();
   await expect(actions.getByRole("menuitem", { name: "Copy" })).toBeVisible();
   await actions.getByRole("menuitem", { name: "Rename" }).click();
-  const rename = explorer.getByRole("dialog", { name: "Rename" });
-  await rename.getByRole("textbox", { name: "Rename item" }).fill("Renamed Archive");
-  await rename.getByRole("button", { name: "OK" }).click();
+  // Legacy Win7 0616 uses an inline text field with Enter/blur commit.
+  const rename = explorer.locator('[data-test-source-listview-rename]');
+  await expect(rename).toBeVisible();
+  await rename.fill("Renamed Archive");
+  await rename.press("Enter");
+  await expect(rename).toHaveCount(0);
   await expect(explorer.locator('[data-test-explorer-item="Renamed Archive"]')).toBeVisible();
   await expect(item).toHaveCount(0);
 

@@ -43,9 +43,12 @@ test("source Organize menu has original commands, separators, and selection gate
   await trigger.click();
   await expect(menu.getByRole("menuitem",{name:"Paste"})).toBeEnabled();
   await menu.getByRole("menuitem",{name:"Rename"}).click();
-  const rename=explorer.getByRole("dialog",{name:"Rename"});
-  await rename.getByRole("textbox",{name:"Rename item"}).fill("OrganizeRenamed");
-  await rename.getByRole("button",{name:"OK"}).click();
+  // Win7 source 0616 renames in the list-item itself instead of a modal.
+  const rename=explorer.locator('[data-test-source-listview-rename]');
+  await expect(rename).toBeVisible();
+  await rename.fill("OrganizeRenamed");
+  await rename.press("Enter");
+  await expect(rename).toHaveCount(0);
   await expect(explorer.locator('[data-test-explorer-item="OrganizeRenamed"]')).toBeVisible();
 });
 

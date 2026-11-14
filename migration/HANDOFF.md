@@ -1,3 +1,9 @@
+## Rename regression expectations and checkbox combined verification — 2026-11-14
+
+- Source inline-rename/clickout [CI #43604884502](https://github.com/codersachin99/windows-os/actions/runs/43604884502) **FAILURE**: **315/315 unit in 65 files**, original **55 source-art audits**, TypeScript and production build passed. Chromium **326/330** passed; 4 desktop/mobile cases in explorer-organize.spec.ts and source-guest.spec.ts waited for the old modal Rename dialog. The actual Win7 0616 source now uses the inline text field, so the test contract—not the source behavior—needed updating. Both specs now assert the inline source field, type a real Guest folder rename and press Enter. Do not treat run #43604884502 as a pass.
+- The source fa65 touch-only multi-select checkboxes were committed on 89d659c without [run-ci] specifically to avoid overlapping CI. This next combined [run-ci] commit verifies both updated rename integration and touch checkbox source contract on desktop/mobile, including the prior source-message modal focus regression.
+- Inventory remains 257 pending, 25 in-progress, 8 implemented, 0 complete source parity / 290. Keep PR #1 draft, main unchanged, no release.
+
 ## Source fa65 touchscreen selection checkbox — 2026-11-14 (CI pending)
 
 - Found source fa65 in pinned shared~bsod~games~main.js blob `ecca9d786763c6be07df543e94701fe057e545ad`; source Computer blob `47aa521237c10f5e6763df37a1d8dcd73330f84f` shows checkboxes only on touch when selection nonempty.

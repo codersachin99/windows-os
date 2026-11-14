@@ -32,3 +32,10 @@
 - React Explorer only enables source checkboxes on Win7 touch devices after at least one item is selected; a second checkbox toggles the existing Guest filesystem selection instead of navigating/opening a folder. Tiles and Details CSS explicitly reserve an extra checkbox slot, including compact mobile details columns. No host filesystem access is added.
 - Unit checks cover source checkbox class, attributes and checked/unselected representation; desktop/mobile Playwright creates two real folders and verifies conditional display, checked flags, multi-selection, deselection, keyboard accessibility and unchanged directory location.
 - The source's alternative theme artwork, exact hitbox/pixel sizing, long-tap menus and full source screenshot parity remain unverified; the shared source chunk contains unrelated modules and must not be marked fully migrated.
+
+## Rename regression expectations and checkbox combined verification — 2026-11-14
+
+- Source inline-rename/clickout [CI #43604884502](https://github.com/codersachin99/windows-os/actions/runs/43604884502) **FAILURE**: **315/315 unit in 65 files**, original **55 source-art audits**, TypeScript and production build passed. Chromium **326/330** passed; 4 desktop/mobile cases in explorer-organize.spec.ts and source-guest.spec.ts waited for the old modal Rename dialog. The actual Win7 0616 source now uses the inline text field, so the test contract—not the source behavior—needed updating. Both specs now assert the inline source field, type a real Guest folder rename and press Enter. Do not treat run #43604884502 as a pass.
+- The source fa65 touch-only multi-select checkboxes were committed on 89d659c without [run-ci] specifically to avoid overlapping CI. This next combined [run-ci] commit verifies both updated rename integration and touch checkbox source contract on desktop/mobile, including the prior source-message modal focus regression.
+- Inventory remains 257 pending, 25 in-progress, 8 implemented, 0 complete source parity / 290. Keep PR #1 draft, main unchanged, no release.
+
