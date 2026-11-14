@@ -56,6 +56,22 @@ Capture with *deterministic file names and folder fixtures* in both applications
 
 **No original screenshots were captured.** The runner had no `LEGACY_SOURCE_READ_TOKEN`; `manifest.json` reports `sourceConfigured:false`, `sourceCaptured:0`, and `parityStatus:"not-assessed"`. This proves the React capture workflow and upload work, not pixel-level parity. The original source checkout, Python server, source selectors, paired image diff and full acceptance review remain unverified. Source access should be supplied through a GitHub Actions repository secret with only read-only access to the original repository, never in chat, committed code or workflow logs.
 
+### Extended React capture matrix — 2026-11-14 (verification pending)
+
+The first [visual run #43490774615](https://github.com/codersachin99/windows-os/actions/runs/43490774615) captured the shared five scenes for both desktop and mobile. The capture script now adds **five more React-only scenarios**, using the same functionality already exercised by the repository's passing Explorer/Bin Chromium regression tests:
+
+| Scene | Deterministic state | Visual check |
+| --- | --- | --- |
+| `computer-system-drive` | Open original System (C:) source-backed mounted drive | Drive title, breadcrumb, Users/Windows content |
+| `computer-search-results` | Search `Users` within System (C:), await one result | Search location, result item, disabled Save search |
+| `computer-new-folder` | Open Guest Documents, create `ParityCaptureFolder` | Created folder icon/entry and toolbar |
+| `recycle-bin-populated` | Create `ParityCaptureRecycle` in Computer, confirm Delete, open Bin | Inherited Bin window, deleted folder/Restore |
+| `recycle-bin-search-results` | Search `NonexistentParityCaptureFixture` in Bin, await 0 results | Search location, disabled Save search and empty content |
+
+Every scene begins in a fresh browser context, so added fixtures do not leak across screenshots. The first five scenes remain **source-comparison eligible**. The five new scenes are `targetOnlySceneNames`, and their screenshot records explicitly set `sourceComparisonEligible:false`. The Python difference report lists these as `targetOnlyNotCompared`; it never claims to have measured source screenshots that do not exist. When a pinned source runner becomes available, its equivalent fixture procedures must be independently implemented and verified rather than assumed.
+
+The expected new **target** capture count is 20 (10 scenes × 2 profiles); the existing normal functional browser suite remains untouched and gated with `[run-ci]`. Screenshot execution requires `[capture-visual]` and its own CI result before marking this checkpoint verified.
+
 ## Important known differences
 
 The React writable filesystem root `"/"` is not identical to original Computer's null root sentinel. `New folder` therefore remains usable at React root to preserve existing document, clipboard and search workflows. The Win7 toolbar still has migration-era file operation controls. The View popup uses source exact icons and source order/default but has not been screenshot-matched for pixels or all theme variants. Do not enable destructive or metadata-corrupting Bin clipboard operations simply to satisfy visual parity.
@@ -84,7 +100,7 @@ python -m pip install Pillow
 npm run visual:compare
 ```
 
-Check `manifest.json`, `comparison-report.json`, paired images, and every capture error before assessing visual parity. The source desktop selectors and original-server startup must pass a **real paired run** before being considered verified. The current automated capture covers five fundamental scenes; disk breadcrumb, populated Recycle Bin, search results and New Folder fixture capture from the full matrix remain future work.
+Check `manifest.json`, `comparison-report.json`, paired images, and every capture error before assessing visual parity. The source desktop selectors and original-server startup must pass a **real paired run** before being considered verified. The React capture now covers ten scenes, including source-derived disk/search/folder/Bin workflows. The **source** capture still only supports the initial five scenes; disk/search/creation/populated Bin are not paired until pinned-source fixture procedures are implemented and actually verified.
 
 ## Next executable step
 

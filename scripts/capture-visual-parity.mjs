@@ -12,7 +12,14 @@ import { createHash } from "node:crypto";
 import { resolve, join } from "node:path";
 
 const SOURCE_SHA = "4e63290d783009e1293433c6ccf252abba9c1187";
-const SCENES = ["guest-desktop", "computer-root", "computer-organize", "computer-view", "recycle-bin"];
+const SHARED_SCENES = ["guest-desktop", "computer-root", "computer-organize", "computer-view", "recycle-bin"];
+// Source-side fixture actions for these scenarios have not been verified against
+// pinned Vue runtime. Capture React evidence now, never fabricate source pairs.
+const TARGET_ONLY_SCENES = [
+  "computer-system-drive", "computer-search-results", "computer-new-folder",
+  "recycle-bin-populated", "recycle-bin-search-results"
+];
+const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
 const argv = process.argv.slice(2);
 const argument = (key, fallback = "") => {
@@ -54,6 +61,8 @@ const manifest = {
   targetOrigin,
   sourceOrigin: sourceOrigin || null,
   fixedClock: FIXED_CLOCK,
+  sharedSceneNames: SHARED_SCENES,
+  targetOnlySceneNames: TARGET_ONLY_SCENES,
   captures: [],
   errors: [],
   parityStatus: "not-assessed"
@@ -89,6 +98,59 @@ async function openWindow(page, kind, app) {
 
 async function prepareScene(page, kind, scene) {
   if (scene === "guest-desktop") return;
+
+  // Source selectors and source filesystem mutations require an actual pinned
+  // legacy run. Until tested, these additional fixtures are React-only.
+  if (kind === "target" && TARGET_ONLY_SCENES.includes(scene)) {
+    if (scene === "recycle-bin-search-results") {
+      const bin = await openWindow(page, kind, "bin");
+      const search = bin.getByRole("searchbox", { name: "Search files" });
+      await search.fill("NonexistentParityCaptureFixture");
+      await bin.getByText("0 found", { exact: true }).waitFor({ state: "visible", timeout: 12000 });
+      await bin.getByRole("button", { name: "Save search", exact: true }).waitFor({ state: "visible" });
+      return;
+    }
+    const explorer = await openWindow(page, kind, "computer");
+    if (scene === "recycle-bin-populated") {
+      await explorer.getByRole("button", { name: "New folder" }).click();
+      const create = explorer.getByRole("dialog", { name: "New folder" });
+      await create.getByRole("textbox", { name: "New folder name" }).fill("ParityCaptureRecycle");
+      await create.getByRole("button", { name: "OK" }).click();
+      const item = explorer.locator('[data-test-explorer-item="ParityCaptureRecycle"]');
+      await item.waitFor({ state: "visible" });
+      await item.click();
+      await explorer.getByRole("button", { name: "Delete", exact: true }).click();
+      await explorer.getByRole("alertdialog", { name: "Confirm file operation" })
+        .getByRole("button", { name: "Yes" }).click();
+      await item.waitFor({ state: "detached" });
+      const bin = await openWindow(page, kind, "bin");
+      await bin.locator('[data-test-explorer-item="ParityCaptureRecycle"]')
+        .waitFor({ state: "visible" });
+      return;
+    }
+    if (scene === "computer-new-folder") {
+      await explorer.getByRole("button", { name: "Documents", exact: true }).click();
+      await explorer.getByRole("button", { name: "New folder" }).click();
+      const dialog = explorer.getByRole("dialog", { name: "New folder" });
+      await dialog.getByRole("textbox", { name: "New folder name" }).fill("ParityCaptureFolder");
+      await dialog.getByRole("button", { name: "OK" }).click();
+      await explorer.locator('[data-test-explorer-item="ParityCaptureFolder"]')
+        .waitFor({ state: "visible" });
+      return;
+    }
+    await explorer.getByRole("button", { name: "System (C:)", exact: true }).click();
+    await explorer.locator('[data-test-explorer-item="Users"]')
+      .waitFor({ state: "visible" });
+    if (scene === "computer-search-results") {
+      await explorer.getByRole("searchbox", { name: "Search files" }).fill("Users");
+      await explorer.getByText("1 found", { exact: true })
+        .waitFor({ state: "visible", timeout: 12000 });
+      await explorer.getByRole("button", { name: "Save search", exact: true })
+        .waitFor({ state: "visible" });
+    }
+    return;
+  }
+
   const win = await openWindow(page, kind, scene === "recycle-bin" ? "bin" : "computer");
   if (scene === "computer-organize") {
     const button = kind === "target"
@@ -115,7 +177,7 @@ manifest.chromiumVersion = browser.version();
 try {
   for (const { name, device } of profiles) {
     for (const kind of sourceOrigin ? ["source", "target"] : ["target"]) {
-      for (const scene of SCENES) {
+      for (const scene of kind === "source" ? SHARED_SCENES : SCENES) {
         const origin = kind === "source" ? sourceOrigin : targetOrigin;
         const context = await browser.newContext({
           ...device, locale: "en-US", colorScheme: "light",
@@ -127,6 +189,7 @@ try {
         const record = {
           implementation: kind, profile: name, scene,
           viewport: device.viewport, deviceScaleFactor: device.deviceScaleFactor,
+          sourceComparisonEligible: SHARED_SCENES.includes(scene),
           status: "failed", file: null, screenshotSha256: null, pageErrors
         };
         manifest.captures.push(record);
@@ -142,6 +205,7 @@ try {
           });
           record.file = kind + "/" + name + "/" + scene + ".png";
           record.screenshotSha256 = createHash("sha256").update(screenshot).digest("hex");
+          record.screenshotBytes = screenshot.length;
           record.status = "captured";
           console.log("CAPTURED " + record.file);
         } catch (error) {
@@ -164,6 +228,8 @@ console.log(JSON.stringify({
   sourceConfigured: manifest.sourceConfigured,
   sourceCaptured: manifest.sourceCaptured,
   successes: manifest.captures.filter(c => c.status === "captured").length,
+  targetOnlyCaptured: manifest.captures.filter(c => c.implementation === "target"
+    && !c.sourceComparisonEligible && c.status === "captured").length,
   errors: manifest.errors.length,
   parityStatus: manifest.parityStatus,
   artifactDirectory: outputRoot

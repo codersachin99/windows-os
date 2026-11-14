@@ -27,6 +27,14 @@ def main():
         "sourceRevisionClaimed": manifest.get("sourceRevisionClaimed"),
         "targetRevision": manifest["targetRevision"],
         "parityStatus": "requires-human-review",
+        "comparisonEligibleScenes": manifest.get("sharedSceneNames", []),
+        "targetOnlyScenes": manifest.get("targetOnlySceneNames", []),
+        "targetOnlyNotCompared": [
+            {"profile": record["profile"], "scene": record["scene"], "file": record["file"]}
+            for record in manifest["captures"]
+            if record["implementation"] == "target"
+            and not record.get("sourceComparisonEligible", True)
+        ],
         "comparisons": [],
     }
     out = root / "diffs"
@@ -68,6 +76,7 @@ def main():
     compared = sum(item["status"] == "captured-requires-human-review" for item in report["comparisons"])
     missing = sum(item["status"] != "captured-requires-human-review" for item in report["comparisons"])
     print(json.dumps({"compared": compared, "unpairedOrMismatched": missing,
+                      "targetOnlyNotCompared": len(report["targetOnlyNotCompared"]),
                       "parityStatus": report["parityStatus"]}))
     if missing:
         raise SystemExit("Paired capture is incomplete; see comparison-report.json")

@@ -1,3 +1,10 @@
+## Extended Win7 visual capture to drive/search/folder/Bin states — 2026-11-14 (CI PENDING)
+
+- **Source-grounded target scenes**: previous [CI 43490774615](https://github.com/codersachin99/windows-os/actions/runs/43490774615) verified 10/10 React PNGs over five scenes (desktop and Pixel 7). This follow-up adds System (C:) listing, scoped Computer search with one result/disabled Save search, a new folder in Guest Documents, a truly populated Recycle Bin after confirmed deletion, and Bin search with no results/disabled Save search. The source-backed React behavior and expected UI state are already covered by passing browser regression tests.
+- **Scope**: screenshot runner now records **ten React scenes × two profiles = 20 target PNGs**. Its manifest explicitly marks the five extra scenes `sourceComparisonEligible:false` and retains only the original five for future paired source checks. The comparison report lists `targetOnlyNotCompared`; no source-pixel equality or new original screenshot claim is possible.
+- **Files**: `scripts/capture-visual-parity.mjs`, `scripts/compare-visual-parity.py`, and [visual runbook](VISUAL-PARITY-RUNBOOK.md). Changes stay exclusively on `feat/0001-faithful-react-foundation`. A one-time opt-in `[capture-visual]` run is required to validate the extra screenshots, without triggering the full `[run-ci]` browser suite.
+- **Next**: verify artifact screenshot count and errors, repair any target selector timing issues, then implement real original-source fixture steps once source checkout access is configured. No main merge, no release.
+
 ## Opt-in Win7 screenshot capture — 2026-11-13 (TARGET-ONLY CI VERIFIED)
 
 - **Commit**: [0e1ea575](https://github.com/codersachin99/windows-os/commit/0e1ea5752982b84905e8381b5e41ff2158988f41) adds a deterministic Playwright capture CLI, human-review-only Python difference script and separate `[capture-visual]` workflow gated independently from the existing `[run-ci]` path. Changes remain on `feat/0001-faithful-react-foundation`; `main` unchanged.
