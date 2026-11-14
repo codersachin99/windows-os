@@ -1,0 +1,132 @@
+import {expect,test,type Page} from "@playwright/test";
+
+async function openComputer(page:Page){
+  await page.goto("/?theme=win7");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]');
+  await expect(win).toBeVisible();
+  return win;
+}
+async function setView(win:ReturnType<Page["locator"]>,value:"Details"|"Tiles"){
+  await win.getByRole("button",{name:"View",exact:true}).click();
+  const menu=win.getByRole("menu",{name:"View options"});
+  await menu.getByRole("menuitemradio",{name:value,exact:true}).click();
+}
+test("source listview-tiles inherits file row with actual source extra and navigation",async({page})=>{
+  const win=await openComputer(page);
+  await expect(win.locator('[data-test-source-listview="tiles"]')).toBeVisible();
+  await win.getByRole("button",{name:"New folder"}).click();
+  const create=win.getByRole("dialog",{name:"New folder"});
+  await create.getByRole("textbox",{name:"New folder name"}).fill("TilesLegacy");
+  await create.getByRole("button",{name:"OK"}).click();
+  const row=win.locator('[data-test-explorer-item="TilesLegacy"]');
+  await expect(row).toBeVisible();
+  await expect(row.locator(".listview__item-extra")).toHaveText(["File folder"]);
+  await expect(row).toHaveClass(/listview__item/);
+  await row.click();
+  await expect(row).toHaveClass(/is-selected/);
+  await row.dblclick();
+  await expect(win.getByRole("textbox",{name:"Folder address"})).toHaveValue("/TilesLegacy");
+});
+test("source Details and Tiles share extra component while preserving selection and file operations",async({page})=>{
+  const win=await openComputer(page);
+  await win.getByRole("button",{name:"New folder"}).click();
+  const create=win.getByRole("dialog",{name:"New folder"});
+  await create.getByRole("textbox",{name:"New folder name"}).fill("DetailsLegacy");
+  await create.getByRole("button",{name:"OK"}).click();
+  await setView(win,"Details");
+  await expect(win.locator('[data-test-source-listview="details"]')).toHaveClass(/has-details/);
+  // Source a321 exposes its column header as buttons, not inert spans.
+  const header=win.locator('[data-test-listview-columnheader]');
+  await expect(header).toBeVisible();
+  await expect(header.locator(".listview__header-column"))
+    .toHaveText(["Name","Date modified","Type","Size"]);
+  await expect(header.locator("button")).toHaveCount(4);
+  const row=win.locator('[data-test-explorer-item="DetailsLegacy"]');
+  await expect(row.locator(".listview__item-extra")).toHaveCount(3);
+  await expect(row.locator(".listview__item-extra").nth(1)).toHaveText("File folder");
+  await row.click();
+  await expect(row).toHaveClass(/is-selected/);
+  await setView(win,"Tiles");
+  await expect(win.locator('[data-test-source-listview="tiles"]')).toHaveClass(/has-tiles/);
+  await expect(row.locator(".listview__item-extra")).toHaveText(["File folder"]);
+  await expect(row).toHaveClass(/is-selected/);
+  await win.getByRole("button",{name:"Delete",exact:true}).click();
+  const confirm=win.getByRole("alertdialog",{name:"Confirm file operation"});
+  await expect(confirm).toBeVisible();
+  await confirm.getByRole("button",{name:"No",exact:true}).click();
+  await expect(row).toBeVisible();
+});
+
+test("pinned source Tiles icon and stacked metadata are rendered from Guest rows",async({page})=>{
+  const win=await openComputer(page);
+  await expect(win.locator('[data-test-source-listview="tiles"]')).toBeVisible();
+  const item=win.locator(".explorer-item").first();
+  await expect(item).toBeVisible();
+  const info=item.locator('[data-test-source-tiles-info]');
+  await expect(info).toBeVisible();
+  expect(await info.evaluate(element=>({
+    direction:getComputedStyle(element).flexDirection,
+    gap:getComputedStyle(element).gap
+  }))).toEqual({direction:"column",gap:"2px"});
+  expect(await item.locator(".listview__item-iconbox")
+    .evaluate(element=>getComputedStyle(element).width)).toBe("48px");
+  const dims=await item.evaluate(element=>({
+    minWidth:getComputedStyle(element).minWidth,
+    width:element.getBoundingClientRect().width
+  }));
+  if((await page.viewportSize())!.width<=580){
+    expect(dims.minWidth).toBe("0px");
+  }else{
+    expect(dims.minWidth).toBe("256px");
+    expect(dims.width).toBeGreaterThanOrEqual(256);
+  }
+  await expect(info.locator(".listview__item-extra")).toHaveCount(1);
+});
+
+test("pinned source Win7 Details header and 0616 item widths align to four 220px columns",async({page})=>{
+  const win=await openComputer(page);
+  await win.getByRole("button",{name:"New folder"}).click();
+  const create=win.getByRole("dialog",{name:"New folder"});
+  await create.getByRole("textbox",{name:"New folder name"}).fill("SourceDetailsGeometry");
+  await create.getByRole("button",{name:"OK"}).click();
+  await setView(win,"Details");
+  const row=win.locator('[data-test-explorer-item="SourceDetailsGeometry"]');
+  const info=row.locator('[data-test-source-details-info]');
+  await expect(info).toBeVisible();
+  await expect(info.locator(".listview__item-extra")).toHaveCount(3);
+  await expect(info.locator(".listview__item-extra").nth(1)).toHaveText("File folder");
+  expect(await info.evaluate(el=>getComputedStyle(el).display)).toBe("flex");
+  expect(await row.locator(".listview__item-iconbox")
+    .evaluate(el=>getComputedStyle(el).width)).toBe("16px");
+  const columns=win.locator('[data-test-listview-columnheader] .listview__header-column');
+  await expect(columns).toHaveCount(4);
+  if((await page.viewportSize())!.width>580){
+    for(const button of await columns.all()){
+      expect(await button.evaluate(el=>el.getBoundingClientRect().width)).toBe(220);
+    }
+    expect(await info.locator(".listview__item-label")
+      .evaluate(el=>el.getBoundingClientRect().width)).toBe(204);
+    for(const extra of await info.locator(".listview__item-extra").all()){
+      expect(await extra.evaluate(el=>el.getBoundingClientRect().width)).toBe(220);
+    }
+    const layout=await row.evaluate(el=>{
+      const header=el.closest(".explorer-content")!.querySelector(
+        '[data-test-listview-columnheader] .listview__header-column');
+      const firstExtra=el.querySelector(".listview__item-extra");
+      return {header:header!.getBoundingClientRect().left,
+        firstExtra:firstExtra!.getBoundingClientRect().left};
+    });
+    expect(Math.abs(layout.firstExtra-layout.header-220)).toBeLessThanOrEqual(2);
+  }else{
+    await expect(columns.nth(1)).toBeHidden();
+    await expect(columns.nth(2)).toBeHidden();
+    await expect(columns.nth(3)).toBeVisible();
+    await expect(info.locator(".listview__item-extra").nth(0)).toBeHidden();
+    await expect(info.locator(".listview__item-extra").nth(1)).toBeHidden();
+    await expect(info.locator(".listview__item-extra").nth(2)).toBeVisible();
+  }
+  await row.click();
+  await expect(row).toHaveClass(/is-selected/);
+});

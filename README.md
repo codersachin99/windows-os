@@ -1,2 +1,275 @@
-# windows-os
-WindowsOS
+## Source-faithful Windows 7 Details geometry — 14 November 2026
+
+The original Computer Details layout now renders through the shared `0616` item-info wrapper and source `a321` header: 220px columns, 16px icons, 204px filename widths (or 180px with touch selection). The 580px responsive layout shows Name and Size while retaining all source metadata. Pure and browser contracts added, with full verification requested via `[run-ci]`. Last combined List/Content/Tiles [CI #43617699223](https://github.com/codersachin99/windows-os/actions/runs/43617699223) passed. Source screenshot equivalence remains outstanding. See [Details source trace](migration/LISTVIEW-SOURCE.md).
+
+## Original Win7 Tiles row hierarchy — 14 November 2026
+
+Tiles now shows a source-faithful 48px icon next to vertically stacked filename and metadata, inside the shared item-info element, with original 256px minimum width and 2px gap. The change is Win7-scoped; mobile adapts to the viewport, and existing file operations stay wired. Browser assertions added; newest slice awaits combined verification. See [Listview trace](migration/LISTVIEW-SOURCE.md).
+
+## Win7 source List/Content CSS geometry — 14 November 2026
+
+The original List/Content stylesheet geometry is now scoped to the Win7 Explorer theme: List row minimum 300px and icons 16px; Content icons 48px, metadata grid with source 6px gaps and natural column flow. Narrow screens receive a single-column adaptation and WinXP/Win31 styles stay unchanged. Desktop/mobile browser assertions are added; source screenshot/pixel parity remains unassessed. See [List/Content source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
+## Original Content-search mounted-drive paths — 14 November 2026
+
+Win7 Explorer Content search now converts source-mounted Guest file locations into validated Windows drive-letter paths (for example, `C:\\Users\\Guest\\Documents`) and retains the original raw-parent fallback outside mounted disks. The adapter is reusable under the filesystem package, with unit contracts and a new desktop/mobile real-file search case. The change is staged without CI until the preceding formatter run is resolved; see [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
+## Pinned original 4cca shared file-size formatter — 14 November 2026
+
+The original WindowsOS byte formatter is now a reusable filesystem utility, used across Explorer/Recycle Bin Listview Details/Tiles/Content and search extras. It preserves source units (`bytes`, `KB`, `MB`, `GB`, `TB`), 1024-byte thresholds and one-decimal display. Unit tests and desktop/mobile real Guest upload assertions cover exact 9-byte and 2048-byte outputs. The preceding metadata source slice passed [full CI #43608849980](https://github.com/codersachin99/windows-os/actions/runs/43608849980); this formatter change requires its own opt-in verification. See [migration trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
+## Original Computer metadata across List/Details/Tiles/Content — 14 November 2026
+
+The pinned source Computer `contentItems` metadata selection is now shared across Explorer and Recycle Bin: Content folders show only their modified date, Content files show modified date → extension-derived type → size, and Tiles/Details use the original per-mode slicing. Source Content search metadata also displays modified date and containing path, plus file size. Pure and desktop/mobile browser acceptance was added; full combined CI and pixel parity remain pending. See [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
+## Source List and Content Explorer view components — 14 November 2026
+
+Original 00d7 List and 27b9 Content source view layouts now have reusable packages/ui variants. Explorer and Recycle Bin use those components; Content displays actual file type, modification date and size from the Guest filesystem, while List retains its original item-only view. Unit and desktop/mobile browser tests added. CI and original screenshot parity remain pending; see [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
+## Original Win7 filename extensions preserved during inline Rename — 14 November 2026
+
+Original webpack 0e9a filename splitting has been ported: Win7 Explorer F2 edits a file stem while retaining its extension on save. A desktop/mobile test renames Before.txt to After.txt and opens its unchanged content in Notepad. The source checkbox ARIA TypeScript mismatch is also corrected. The next gated CI must verify both; complete source screenshot parity remains incomplete.
+
+## Original touch-only Explorer selection checkboxes — 14 November 2026
+
+Source `fa65` checkbox rendering is now shared in packages/ui and connected to the Win7 Explorer/Recycle Bin multi-selection model. The original Computer only displays checkboxes on touch devices after a selection starts; the migrated component follows that rule and preserves source ARIA attributes and pointer-event isolation. Pure and desktop/mobile browser tests added; original pixel parity remains pending. See [source trace](migration/LISTITEM-INTERACTIONS-SOURCE.md).
+
+## Win7 Explorer source inline rename and item clickout — 14 November 2026
+
+The pinned original 0616 list-item now supports 30-character inline F2/toolbar/context Rename with Enter or blur commit, and Escape cancellation. Original source 252b item clickout excludes the active popup. A double-click focus-loss reset prevents opening a folder after dismissing a Delete confirmation. Virtual filesystem writes use the existing Guest store, not the host. The preceding 0616 CI identified two such interaction regressions; the combined fix has new unit and desktop/mobile E2E tests and awaits verification. See [source trace](migration/LISTITEM-INTERACTIONS-SOURCE.md). Full original UI parity remains pending.
+
+## Source listview-item and native 400ms double activation — 14 November 2026
+
+The source 0616 list-item button and original vue-click-helper 400ms second-click behavior have been reconstructed in shared packages/ui/sourceListViewItem.tsx. Real Explorer/Recycle Bin rows now carry the original item class, selection, key/type markers, and source filename highlight segmentation while retaining VFS operations. Pure and desktop/mobile browser tests added. Full CI for this increment pending, with original clickout, inline rename, checkbox and screenshot parity still open. The preceding a321 width/header slice passed [CI #43602218473](https://github.com/codersachin99/windows-os/actions/runs/43602218473): 310 unit, 322 browser, 55 original-art audits. See [source trace](migration/LISTVIEW-SOURCE.md).
+
+## Source-exact listview widths and original column headers — 14 November 2026
+
+Located original webpack a321.normalizeWidth in the pinned legacy shared source chunk and ported its exact rule (Details reserves one extra label column). Computer/Recycle Bin Details headers now render original listview__header column buttons through the shared packages/ui component, with responsive grid sizes retained. Unit and browser assertions added. Screenshot fidelity remains unverified; see [source trace](migration/LISTVIEW-SOURCE.md). Full CI pending for this new increment.
+
+## Expanded source UI screenshots captured — 14 November 2026
+
+The dedicated visual workflow captured **40 target-only screenshots** across desktop and mobile, including new Details, Tiles and confirmation states, with zero capture errors. [Visual artifact 14112935185](https://github.com/codersachin99/windows-os/actions/runs/43591033519/artifacts/14112935185). No original-source screenshot was captured because the optional read token was absent; pixel parity is therefore not assessed.
+
+## Source message-dialog tested checkpoint — 14 November 2026
+
+[Full CI #43590165232](https://github.com/codersachin99/windows-os/actions/runs/43590165232) passed 308 unit/322 desktop-mobile browser/53 original-art checks for the source message error/confirm/progress UI and real Explorer/Recycle Bin deletion. The original warning/error WebP icons are separately imported byte-exact and are undergoing combined full CI and target-only visual baseline verification #43591033519. Complete original global message state and screenshot parity remain outstanding; see [source trace](migration/MESSAGES-SOURCE.md).
+
+## Original Windows 7 message artwork — 14 November 2026
+
+The original source warning and error Win7 WebP icons have been imported byte-exactly (original Git blob SHA checked) and are used in the shared Error/Confirm message dialog. The next opt-in CI will verify browser-served hashes and original confirmation behavior. UI screenshot evidence will include Details, Tiles, and Delete-confirmation baselines; pixel-level original comparison still awaits original Vue capture access.
+
+## Source-backed Windows message and confirmation UI — 14 November 2026
+
+The original messages.js error/confirm/progress variants are being rebuilt as a reusable shared SourceMessageDialog in packages/ui. Explorer and Recycle Bin now use its source-accurate Yes/No confirmation events; tests exercise focus, Escape, actual virtual-file deletion and safe progress/error rendering. The original global messages window bus, alert sound and pixel-level original Win7 styling remain unported. See [message source trace](migration/MESSAGES-SOURCE.md). CI pending.
+
+## Source Webapp/Embed green CI checkpoint — 14 November 2026
+
+The original webapp.js and plugin-embed.js have migrated React modules in packages/apps/webapp, packages/sdk/src/embed.ts and packages/ui/src/SourceEmbedBridge.tsx. The secure parent-origin bridge is disabled by default and preserves the original 4.8.0 event protocol. [CI #43586350903](https://github.com/codersachin99/windows-os/actions/runs/43586350903) passed 303 unit, 314 desktop/mobile browser cases and 53 source-art checks; complete original iframe behavior and visual parity are still pending. See [source trace](migration/WEBAPP-EMBED-SOURCE.md).
+
+# WindowsOS — source-faithful React conversion
+
+This is the new **React + TypeScript + Vite** home for the existing WindowsOS product. The design and functional specification is the private [legacy-win7 repository](https://github.com/codersachin99/legacy-win7) at the pinned commit `4e63290d783009e1293433c6ccf252abba9c1187`. It is a **port, not a redesign**.
+
+**Current status: conversion underway, not complete.** This first slice provides the source-art-backed Windows 7 login and Guest desktop, boot/session transitions, Start menu, taskbar, desktop shortcuts, a shared window manager, and a modular app registry. **Contacts has now been rebuilt as a native React application**, preserving its original source stylesheet through an isolated Shadow DOM and using the same Python CRUD endpoints (`/api/contacts`, `/api/contacts/save`, `/api/contacts/delete`). It supports New/Edit/Delete, refresh, search across name/email/phone/company, details, original form fields and status messages. Contacts browser CRUD/error tests have passed against mock responses; complete live backend integration and production security hardening remain pending. The full legacy apps/games/gadgets/themes still require migration. The app must not be called fully equivalent until every original behavior is verified.
+
+## Source-backed Windows Media Player — 14 November 2026
+
+The pinned `player.js` source is being migrated to independent `packages/apps/player`: source Music/Videos/Pictures libraries, real virtual-file audio/video/picture rendering through browser media elements, original stop/play/pause/next/prev/mute/volume/seek and random/repeat UI, a source-style library playlist, source Open dialog, Explorer media double-click association and source-exact original Win7 WebP icon art. Implemented-slice [CI #43585262479](https://github.com/codersachin99/windows-os/actions/runs/43585262479) passed 298 unit/308 desktop-mobile browser/52 source-art tests; original screenshot comparison, codecs, exact media filters, ads, source system volume and original theme graphics remain limitations. See [Media Player source trace](migration/PLAYER-SOURCE.md).
+
+## Source-backed Snipping Tool — 14 November 2026
+
+Original `src/modules/apps/snipping.js` is being ported in `packages/apps/snipping`, with source toolbar/menu modes, interactive rectangle/window/full-screen desktop selection, browser-safe direct Canvas2D DOM rendering, and original PNG/JPG Save As through Guest virtual files. Exact original Win7 Snipping Tool WebP and base-theme SVG are imported. Original source treats Free-form Snip as disabled; it remains disabled in React. Cross-origin/iframe/video capture differences, exact screenshot pixel parity and original Win7-specific WebP art remain tracked. See [Snipping Tool source trace](migration/SNIPPING-SOURCE.md). Full implemented-slice [CI #43583547737](https://github.com/codersachin99/windows-os/actions/runs/43583547737) passed 293 unit and 300 browser tests, but full source parity remains outstanding.
+
+## Source-backed Google Chrome — 14 November 2026
+
+The pinned legacy Chrome tabbed browser now has a modular React implementation in `packages/apps/chrome`: Google-branded blank new tab, tab create/close/switch, Back/Forward history, URL/search, reload/home, 6 original search engines, browser Settings and source menu states. Three source SVG assets are imported byte-exactly, including its base-theme Chrome icon. Full opt-in CI is pending. Original T-Rex game, local file preview, frame plugin/error integration and pixel parity remain unported; the source Win7 WebP icon is now imported. See [Chrome source trace](migration/CHROME-SOURCE.md).
+
+## Source-backed Internet Explorer — 14 November 2026
+
+Pinned legacy IE source is now ported into packages/apps/ie: MSN home, Bing search, address navigation, Back/Forward, disabled Favorites/Bookmarks, iframe and progress/status UI. Exact original onebit SVG is imported; the original Windows 7 WebP icon is now imported byte-identically. Websites may block framing. Unit and browser tests added, CI and screenshot parity pending. See migration/IE-SOURCE.md. PR #1 remains a draft.
+
+## Source-backed Windows Camera — 14 November 2026
+
+The pinned `legacy-win7/src/modules/apps/camera.js` has been migrated into modular `packages/apps/camera`. The React Camera automatically requests the permissioned browser camera at the source's 1280×720 constraints, supports front/rear facing-mode switching, records a live video preview, takes actual JPEG photographs at 100% quality, and saves them as **JPEG files (*.jpeg)** through the virtual filesystem. Its source-style information panel displays Resolution 1280×720, Format JPEG, Quality 100%. Camera tracks are stopped on facing changes or close, and React StrictMode discarded mounts do not trigger duplicate camera permission requests.
+
+**[Full opt-in CI #43571392317 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43571392317)**: 280 passing unit tests (55 files), **280 Chromium desktop/mobile browser cases**, TypeScript, Vite production build, original Contacts checks and 39/39 exact source image audits. Camera E2E tests verify correct constraints, switched-facing and stopped tracks, real JPEG encoding/save to the VFS, opening the resulting photo in the Photo Viewer, and denied camera permission. The tests use a simulated video input, **not physical hardware**.
+
+The original base-theme SVG icon is imported byte-identically; the Win7-specific original `camera.5e0b513d.webp` is now imported byte-identically. Source pixel parity, real camera hardware, theme-specific controls and exact source conversion semantics remain unverified. See [Camera source trace](migration/CAMERA-SOURCE.md), [handoff](migration/HANDOFF.md) and [draft PR #1](https://github.com/codersachin99/windows-os/pull/1). No main merge or release.
+
+## Source-backed Windows Sound Recorder — 14 November 2026
+
+The pinned `legacy-win7/src/modules/apps/recorder.js` now has a modular React/TypeScript application in `packages/apps/recorder`. It uses permissioned browser microphone capture, the original Start/Stop and audio-level meter structure, a seconds counter, a `MediaRecorder` audio source and signed 16-bit PCM RIFF/WAV conversion. An app-specific **Waveform Audio File (*.wav)** Save As dialog persists the recording in the shared virtual filesystem; Notepad retains its original TXT/HTML Save As options. The source Recorder SVG icon was imported byte-for-byte as a temporary theme fallback; the exact Win7-specific icon remains outstanding.
+
+**[Verified full opt-in CI #43567671473](https://github.com/codersachin99/windows-os/actions/runs/43567671473)** passed **277 Vitest tests (54 files), 276 desktop/mobile Playwright cases**, TypeScript, Vite production build, Contacts source verification and **38/38 byte-identical imported source image checks**. The new browser cases test actual WAV conversion/persistence with a deterministic **mock microphone**, and graceful permission denial. See [Recorder source trace](migration/RECORDER-SOURCE.md) and [handoff](migration/HANDOFF.md).
+
+**Not yet full parity:** live microphone hardware, precise source sound encoding, Win7 Recorder screenshot/window geometry, exact theme artwork and all theme variants still require comparison. `recorder.js` remains **in-progress**, not source-verified; the draft PR is unmerged and `main` unchanged.
+
+## Source-backed Windows Photo Viewer — 14 November 2026
+
+The original pinned `photo.js` has been migrated as a modular React/TypeScript **Windows Photo Viewer** in `packages/apps/photo`. Double-clicking an actual picture file in Computer opens it through the source image-file association and the shared shell; the viewer reads real binary virtual filesystem content and supports original same-directory previous/next wrap, 90° rotations persisted on navigation/close for PNG/JPEG/WebP, zoom/fit, 3-second slideshow controls and source-disabled File/Print/E-mail/Burn/Open entries. The original base-theme SVG Photo Viewer icon is imported byte-exactly, while the original Windows 7-specific WebP icon still needs transfer.
+
+**[Explicit opt-in CI #43560941513 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43560941513)**: 274 passing unit tests across 53 files and **272 Chromium desktop/mobile browser tests**, plus TypeScript, original-source Contacts audit, Vite build, and **37 exact source-art checks**. Photo browser tests exercise actual 3×2 image uploads, navigation wrap and persisted rotation. See [Photo source trace](migration/PHOTO-SOURCE.md) and [engineering handoff](migration/HANDOFF.md).
+
+**Remaining:** this is a tested *functional slice*, not original pixel parity. Exact Win7 art/control geometry, some picture-format rotation/export behavior, fullscreen parity, all themes and source-vs-React screenshots remain pending. The draft PR is not merged, and no release is claimed.
+
+## Verified Windows 7 Task Manager — 12 November 2026
+
+The pinned original `src/modules/apps/taskmgr.js` has been migrated into an independent `packages/apps/taskmgr` React/TypeScript module, preserving its **Applications / Processes / Services** tabs, source **450px height**, Minimize without Maximize, and byte-identical original Task Manager artwork. Applications lists the simulator's actual windows with 16px icons and selected **End Task**. Processes uses the exact pinned source c170 **non-hidden program list**, displaying `.exe`, Guest, Running/Stopped, and the original literal `0 MB` column. **Start Process** and **End Process** operate only on real registered WindowsOS applications; the source's Services tab displays **None** with its Services button disabled.
+
+The existing `taskmgr.exe` and `C:\Windows\System32\taskmgr.exe` Run commands now launch the same singleton Task Manager. **End Task respects Notepad's unsaved-document confirmation**, and unported original programs remain marked unavailable instead of opening fake windows or accessing host processes.
+
+**[Deliberate opt-in CI 43278169231](https://github.com/codersachin99/windows-os/actions/runs/43278169231) passed 188 Vitest unit tests across 33 files and all 204 desktop/mobile Chromium browser tests**, alongside TypeScript, original-source/Contacts checks and the production Vite build. Five new Task Manager browser cases verify tabs, real app termination, Notepad safety, source process start/stop and installed Run launcher. [Detailed source map](migration/TASKMGR-SOURCE.md) · [engineering handoff](migration/HANDOFF.md).
+
+**Remaining:** original Task Manager window inherits a source default width not yet measured (the target currently assumes 560px); screenshot/pixel parity, non-English and alternative themes, and many large original programs remain incomplete. PR is still draft, `main` untouched, no release.
+
+## Verified original Windows 7 About dialog — 12 November 2026
+
+The pinned `src/modules/apps/about.js` **About** dialog is rebuilt as a separate React/TypeScript module in `packages/apps/about`. It preserves the original **520×400 centered non-resizable window**, close-only titlebar without icon, classic 44-pixel Windows 7 brand image, Windows® 7 Simulator heading, legal/description copy, three source informational links and Credits button. The original `winver`, `winver.exe`, and installed C-drive `winver.exe` commands launch the same singleton window through the real Run app. Source `APP_CONFIG.getUrl` provides the only allowed destinations; if absent, links stay visible but cannot navigate to invented sites.
+
+**[Opt-in GitHub Actions 43273716820](https://github.com/codersachin99/windows-os/actions/runs/43273716820) passed 179 unit tests across 32 Vitest files and all 194 Chromium desktop/mobile browser tests**, plus TypeScript, source/Contacts checks and Vite production build. Browser coverage validates original source geometry/branding/text/controls, safe missing/configured HTTPS links, Credits activation and Run aliases. See the [About source trace](migration/ABOUT-SOURCE.md) and [engineering handoff](migration/HANDOFF.md).
+
+**Remaining source fidelity:** the original About version is imported from a separate webpack exporter (9224); this new dialog displays the current WindowsOS package version (0.0.1) instead of guessing the pinned build's value. Screenshot-level design parity across source themes and many original applications remain incomplete. No product release or merge has been made.
+
+## Verified original Windows 7 Magnifier — 12 November 2026
+
+The source **Magnifier** from pinned `src/modules/apps/magnifier.js` has been rebuilt as an independent React/TypeScript app in `packages/apps/magnifier`. It preserves the original 260-pixel non-resizable toolbar, **Minimize without Maximize**, byte-identical Magnifier/Help WebP images, disabled Views/Settings/Help controls, **0.5× zoom steps from 100% to 1600%**, source desktop mouse-pointer transform origin and 0/0 touch origin. Closing Magnifier clears the zoom, and `Magnify.exe` in the real Run application opens the same source app ID. The shared shell zooms wallpaper, desktop icons, Start menu and ordinary app windows, while leaving the taskbar and zoom controls usable at the source 16× maximum.
+
+**[Opt-in CI 43268254941](https://github.com/codersachin99/windows-os/actions/runs/43268254941) passed 173 unit tests across 31 Vitest files and 184 desktop/mobile Chromium browser tests**, with TypeScript, source/Contacts checks and production Vite build. The five Magnifier browser scenarios verified real visual scaling, 100–1600% boundaries, touch/pointer origin, minimize/restore, cleanup, and Run integration. See the [source implementation trace](migration/MAGNIFIER-SOURCE.md) and [durable migration handoff](migration/HANDOFF.md).
+
+**Remaining:** the original Magnifier used a direct DOM desktop container and auto-sized height; the React zoom canvas retains recoverable taskbar/toolbar controls and uses an 86-pixel control-window approximation. Multi-theme screenshot comparison and many original apps are still missing. No full legacy parity, merge or release.
+
+## Verified original Windows 7 Sticky Notes — 12 November 2026
+
+The original **Sticky Notes** utility from pinned `src/modules/apps/stickynotes.js` now lives in a separate modular React/TypeScript app (`packages/apps/sticky`). Unlike an ordinary framed window, the source displays independently floating notes controlled by **one taskbar entry**. The migration preserves the centered 200×200 yellow default note, random selection from six exact source colors (**#c3f3fa, #c8fec0, #f9ccf8, #d2d7fc, #eaeaea, #fffeb3**), and original image files for the app icon and note add/close buttons (identical Git blob bytes to the pinned source). Each note supports writing, dragging by its toolbar, resizing via eight handles with 150×100 minimum dimensions, focus-to-front, adding, deleting and app closure when the last note is removed.
+
+Note records are saved in Guest-scoped browser storage as the original `{notes:[{x,y,w,h,color,content}]}` shape, with the source's **600 ms debounced text saving** and immediate structural/drag/resize saves. Notes survive reload, and the source `StikyNot.exe` command now launches the real app through Run. Minimize/restore preserves unsaved state without unmounting the app.
+
+**[Deliberate opt-in CI 43249454264](https://github.com/codersachin99/windows-os/actions/runs/43249454264) passed TypeScript, 166 Vitest unit tests across 30 files, Vite production build and all 174 Chromium desktop/mobile browser tests.** Tests cover pixel-sized default geometry, source yellow color, exact assets, editing/save/reload, multiple notes, drag/resize persistence, minimize/restore, final-close/reopen, and Run integration. See [the source-specific implementation map](migration/STICKY-NOTES-SOURCE.md) and [durable migration handoff](migration/HANDOFF.md).
+
+**Subsequent milestone:** Magnifier was migrated and verified above. The original About window, other source apps/games, and visual baseline comparisons remain. The Windows 7 look and feature set are still incomplete; this is not a parity-complete product or release. Draft PR remains unmerged.
+
+## Verified native Windows 7 Run dialog — 12 November 2026
+
+The original **Run** utility from pinned `src/modules/apps/run.js` is now implemented in modular React/TypeScript as `packages/apps/run`: **450×220**, non-resizable, bottom-left placement, the **byte-identical original Run WebP icon** (Git SHA `6f669cbb5865e3c342d2f8b16c86051acd63e861`), focused **Open:** input, OK/Cancel, Enter/Escape, Windows+R and retryable errors. Its command resolver uses the pinned source program manifest, original aliases and installed executable names: `calc`/`calculator`, `notepad.exe`, `explorer` and exact C: installed paths open only real migrated apps. Unknown commands and recognized-but-unported apps cannot launch host programs or masquerade as working applications.
+
+**[Opt-in CI 43242039487](https://github.com/codersachin99/windows-os/actions/runs/43242039487) passed 156 unit tests across 29 files and 164 desktop/mobile Chromium browser tests**, along with TypeScript, original-source/Contacts checks and production Vite build. See [Run source-to-React mapping](migration/RUN-SOURCE.md) and [migration handoff](migration/HANDOFF.md).
+
+**Subsequent milestone:** original source Sticky Notes has now been migrated and verified above; broader application coverage, exact theme assets and screenshot parity remain pending. Run's successful migration does not imply legacy Paint, Command Prompt, WordPad, or complete desktop equivalence. PR remains draft; `main` is untouched.
+
+## Atomic external File imports — 12 November 2026
+
+The browser now stages all dropped/uploaded File payloads before writing to the mounted Guest virtual filesystem and commits the complete selection **as one create-only persisted snapshot**. This applies to Explorer Upload, Explorer folder drops, Desktop background drops and real Desktop folder-icon drops. It preserves mixed Unicode text and binary bytes; duplicate targets, concurrent file creation, read failures and storage-quota exceptions cannot produce a partially imported selection or overwrite existing data. Generic non-atomic filesystem adapters remain a documented compatibility exception; the production Guest store is atomic.
+
+**[Opt-in CI 43231526749](https://github.com/codersachin99/windows-os/actions/runs/43231526749) passed TypeScript, 150 Vitest unit tests across 28 files, Vite build and all 152 Chromium desktop/mobile browser tests.** New tests explicitly measure one VFS storage write, inject quota failure, verify zero partial items and successfully retry. See the [source implementation map](migration/ATOMIC-HOST-IMPORT.md) and [durable handoff](migration/HANDOFF.md).
+
+**This earlier import milestone is complete.** Run was ported in the verified milestone above; next continue original Sticky Notes, Paint/WordPad and visual asset/theme/screenshot parity. The conversion is not a complete product; feature branch and draft PR remain unmerged.
+
+## Verified atomic transfers and Desktop folder/Bin drops — 12 November 2026
+
+Existing Guest-to-Guest multi-file **copy/move is now atomic**: the VirtualFileStore stages selected roots and their descendants in memory and persists them with one complete snapshot. A quota/storage failure leaves both source and destination unchanged and emits no file-change notifications. The shared Explorer/Desktop drag sessions and Cut/Copy clipboard use this same transfer engine; native Explorer file drags can land on actual Desktop **folder icons** (move or Ctrl-copy) or the visible **Recycle Bin icon** (trusted in-session files only). Original folder metadata, binary content and Recycle Bin restore paths remain intact.
+
+**[Opt-in GitHub Actions 43221928672](https://github.com/codersachin99/windows-os/actions/runs/43221928672) passed 143 unit tests (27 files) and 146 desktop/mobile Chromium browser tests**, plus TypeScript, source/Contacts checks and production build. Unit tests inject storage quota exceptions to verify no partial changes; Playwright tests verify folder drops, duplicate refusal, multi-selection recycling/restoring and host-file safety. See the [implementation and source trace](migration/ATOMIC-TRANSFER-DESKTOP-ICONS.md) and [engineering handoff](migration/HANDOFF.md).
+
+At that earlier copy/move checkpoint multi-file browser uploads were still sequential; the subsequent atomic-import milestone above completed that work. Numerous original applications, visual themes, and pixel-level screenshot comparisons remain unfinished. The migration PR is still draft; `main` is untouched and there is no release.
+
+## Verified Desktop ↔ Explorer file drag/drop — 12 November 2026
+
+The Guest Desktop can now transfer real files/folders and multi-selections to Explorer's current directory or a visible folder row using the original desktop pointer gesture and shared shell VFS drag token. Ctrl/Meta copies; ordinary drag moves. Native Explorer drag also moves/copies files to **empty Desktop background**, and external browser File drops import .txt or binary into the mounted Guest Desktop. Name collisions, nested-folder/self-transfer, hidden windows and builtin icons are rejected without overwriting files. The Desktop and Explorer share one persistent Guest VFS; the file clipboard remains independent.
+
+Mobile CI revealed a real responsive issue: oversized application windows could horizontally pan the entire page and hide Desktop icons. The common shell now bounds window positions and sizes to the viewport, preserving desktop window geometry on large screens and preventing mobile overflow. **[Opt-in CI 43213708078](https://github.com/codersachin99/windows-os/actions/runs/43213708078) passed TypeScript, 134 Vitest unit tests (25 files), source checks, Vite build and all 138 desktop/mobile Chromium browser tests**. See the [forward flow](migration/DESKTOP-EXPLORER-DROP.md), [reverse flow](migration/EXPLORER-DESKTOP-DROP.md), and [engineering handoff](migration/HANDOFF.md).
+
+Remaining work includes drop onto Desktop folder/Bin icons from Explorer, atomic rollback on multi-file quota failures, source-fidelity visual screenshots, theme variants, touch accessibility, and hundreds of other legacy modules. This is **not** complete product parity or a release.
+
+## Verified Shortcut Wizard and restored legacy icons — 12 November 2026
+
+Desktop New → Shortcut now opens a centered non-resizable 550×400 React shell window and a separate Browse window, faithfully following the pinned original `src/modules/shell/shortcutwiz.js` workflow: selection, double-click, disabled Finish/OK until valid, Cancel/Escape, source-format `.lnk` serialization and numbered ` (2)` collision suffixes. Pinned source programs that are not migrated remain selectable but never execute arbitrary host commands. **[Opt-in CI 43207440829](https://github.com/codersachin99/windows-os/actions/runs/43207440829) passed 127 Vitest unit and 122 Chromium browser tests** plus TypeScript, source/Contacts checks and Vite build.
+
+Six original Win7 icons (Shortcut, File, Folder, Calculator, Notepad, Paint) were subsequently imported into the target with **identical Git blob hashes**; this asset-only commit does not imply full art/theme parity. See [Wizard source mapping](migration/SHORTCUT-WIZARD-SOURCE.md) and [exact asset inventory](migration/SHORTCUT-ICON-ASSETS.md). The draft PR remains open; no full product release is claimed.
+
+## Verified Desktop and Explorer clipboard checkpoint — 12 November 2026
+
+Guest Desktop uses the same source-mapped `FileClipboard` instance as Explorer for keyboard Ctrl/Meta+C/X/V and right-click Cut/Copy/Paste. Delete now prompts before recycling selected real files/folders; builtin Computer and Recycle Bin icons are excluded. Data remains in the existing Guest VFS and mounted source `trashPath`. Browser and unit tests exercise cross-window transfers, safe collision behavior and cancellation. **[Opt-in CI run 43202578182](https://github.com/codersachin99/windows-os/actions/runs/43202578182) passed 124 unit tests and 116 Chromium desktop/mobile tests** plus TypeScript/source checks and Vite build. [Detailed mapping](migration/DESKTOP-CLIPBOARD.md).
+
+The original `src/modules/shell/shortcutwiz.js` Browse/Finish wizard now has a dedicated native React window and separate Browse dialog, validated in [CI 43207440829](https://github.com/codersachin99/windows-os/actions/runs/43207440829). Its full localization, icons and screenshot parity are not yet complete. Many applications, themes and screenshot-parity cases are still pending. The draft PR remains unmerged, `main` untouched, and no product release is claimed.
+
+## Latest verified source-migration checkpoints — 12 November 2026
+
+The Guest Desktop now supports the original source **New** submenu actions (Folder, Shortcut, Rich Text Document, Text Document) using real mounted VFS files; created entries can be renamed inline and preserved across reload. A dedicated original-style Shortcut Wizard now creates source `{exe,icon}` `.lnk` files for pinned installed source programs, including programs still awaiting a React implementation. Its two-window Browse/Select/Finish workflow is verified; exact visual/localization parity and WordPad remain pending.
+
+Desktop pointer drag can recycle individual files or selected file/folder groups by dropping onto the visible Recycle Bin icon. Batch Recycle Bin writes use one atomic VFS snapshot; the source-based Bin can restore the file contents and original paths. System icons and hidden/obscured Bin targets are protected. Full drag/drop, touch/source UI parity and exact artwork are not yet verified.
+
+**CI checkpoint:** [43198433398](https://github.com/codersachin99/windows-os/actions/runs/43198433398) passed **121 unit tests** and **106 desktop/mobile Chromium browser tests**, TypeScript, source auditing, Contacts style/source checks, and production Vite build. Earlier New menu checkpoint [43197537081](https://github.com/codersachin99/windows-os/actions/runs/43197537081) passed 116 unit and 102 browser tests. PR #1 remains **draft** and `main` unchanged; the product is **not** at complete legacy parity. [Desktop creation mapping](migration/DESKTOP-CREATE.md) · [Desktop Bin drop mapping](migration/DESKTOP-BIN-DROP.md) · [Handoff](migration/HANDOFF.md).
+
+## Run locally
+
+Requires Node.js 22+, npm or pnpm, and the original checkout if you want **all** original asset/style files.
+
+```powershell
+git clone https://github.com/codersachin99/windows-os.git
+cd windows-os
+git switch feat/0001-faithful-react-foundation
+npm install
+npm run dev
+```
+
+Visit `http://127.0.0.1:1420`. The essential Windows 7 wallpaper, Guest art, Start orb and computer/bin icons have already been transferred byte-for-byte. To import **every** original image/audio/font/style/app resource, verify a clean `legacy-win7` checkout at the pinned commit and run:
+
+```powershell
+node scripts/import-legacy.mjs --from "C:\Sandbox\UNCLEOS\parity\legacy-win7"
+node scripts/import-legacy.mjs --from "C:\Sandbox\UNCLEOS\parity\legacy-win7" --check
+```
+
+Existing source remains untouched. The importer is checksum-verifying, so a wrong revision fails instead of silently substituting artwork. After confirming usage and rights, commit imported public assets to the new repository.
+
+Test the engine and source module coverage, then browser interactions:
+
+```powershell
+npm run typecheck
+npm test
+npm run audit:legacy
+npx playwright install chromium
+npm run test:e2e
+npm run build
+```
+
+## First source-following app: Contacts
+
+Original source: `legacy-win7/apps/contacts/index.html` and `api/controllers/contact_controller.py`, pinned to the same Git commit. The source's external shortcut key `web_contacts` is preserved in the new registry. The React implementation uses its **actual CSS** rather than a rewritten cosmetic approximation, embedded inside a Shadow Root to protect the shell's styles. Unlike the earlier prototype, no iframe is used. Form fields and API payloads match the source.
+
+The 6 API/model unit tests and the browser CRUD test are committed, but a test file is **not evidence of a passing test**. Use `npm test` and `npm run test:e2e`; the browser tests can use mocked responses and do not require the local Python service. For manual persistent data, run the API service on localhost first. The preserved backend still uses legacy authentication/security and **must not be publicly exposed** until separately hardened.
+
+## Preserved Python API (optional during the React migration)
+
+The source's **23 Python API/controller/model files** have been copied verbatim into `services/api/api/`, with the original `app.config.json` and a private SQLite `db.config.example.json`. The original backend endpoints remain available during the React conversion, rather than being rewritten or removed prematurely. They have **not** yet passed integrated endpoint tests and are not a production security certification.
+
+```powershell
+Copy-Item services/api/db.config.example.json services/api/db.config.json
+npm run dev:api   # separate terminal; localhost:8099
+npm run dev       # localhost:1420, proxies /api to backend
+```
+
+Do not commit the populated DB config, SQLite database, tokens or user data. The API must stay on loopback until reviewed; see [services/api/README.md](services/api/README.md).
+
+## Modular implementation
+
+| Package | Responsibility |
+| --- | --- |
+| `packages/contracts` | Shared app, window, session and event contracts |
+| `packages/assets` | Exact original asset path registry, not replacement icons |
+| `packages/engine` | Pure desktop/session/window state, source-aligned events |
+| `packages/ui` | React boot, login, desktop, taskbar, Start and window components |
+| `packages/sdk` | App registry and shared extension contract |
+| `packages/apps/contacts` | First source-following React app port; original Contacts CSS, REST service adapter, and unit/e2e tests |
+| `apps/web` | Vite browser entry point, React application and public resources |
+| `migration` | Locked full source inventory, status per module and migration runbook |
+| `scripts` | Auditing and byte-for-byte asset/style import |
+
+This repository currently does **not** represent the whole product; see [the migration tracker](migration/README.md) and `migration/module-tracker.json` before declaring a feature done. The original backend APIs still need to be ported or maintained through an explicit compatibility layer; no host privileges or fake disks are asserted.
+
+## Migration rule
+
+Port the **source code and behavior**, preserving component names/semantics and original image/fonts/CSS where appropriate. When a module is migrated, attach functional tests and screenshot state evidence before changing its status to verified. Every legacy module is accounted for in the source inventory. Work on functional vertical slices until the source and target pass the same behavior suite, including responsive and desktop/mobile interactions.
+
+## Development CI policy
+
+Regular commits do not spend runner time. GitHub Actions runs only for a push whose **latest commit message** includes `[run-ci]`, or an explicit manual workflow dispatch. PR updates do not automatically trigger the workflow. For a checkpoint run, use a commit message such as `test: verify migration checkpoint [run-ci]`; ordinary implementation commits omit that marker. Note: the workflow will still show a skipped run for routine pushes, but no test job is executed.

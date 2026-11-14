@@ -1,0 +1,131 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": [
+      "vite/client",
+      "vitest/globals"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@windows-os/contracts": [
+        "packages/contracts/src/index.ts"
+      ],
+      "@windows-os/assets": [
+        "packages/assets/src/index.ts"
+      ],
+      "@windows-os/engine": [
+        "packages/engine/src/index.ts"
+      ],
+      "@windows-os/ui/message": [
+        "packages/ui/src/sourceMessage.tsx"
+      ],
+      "@windows-os/ui/checkbox": [
+        "packages/ui/src/sourceItemCheckbox.tsx"
+      ],
+      "@windows-os/ui/rename": [
+        "packages/ui/src/sourceListItemRename.tsx"
+      ],
+      "@windows-os/ui/listitem": [
+        "packages/ui/src/sourceListViewItem.tsx"
+      ],
+      "@windows-os/ui/listview": [
+        "packages/ui/src/sourceListView.tsx"
+      ],
+      "@windows-os/ui": [
+        "packages/ui/src/index.ts"
+      ],
+      "@windows-os/sdk": [
+        "packages/sdk/src/index.ts"
+      ],
+      "@windows-os/apps/contacts": [
+        "packages/apps/contacts/src/index.ts"
+      ],
+      "@windows-os/filesystem": [
+        "packages/filesystem/src/index.ts"
+      ],
+      "@windows-os/apps/notepad": [
+        "packages/apps/notepad/src/index.ts"
+      ],
+      "@windows-os/apps/shared": [
+        "packages/apps/shared/src/index.ts"
+      ],
+      "@windows-os/apps/explorer": [
+        "packages/apps/explorer/src/index.ts"
+      ],
+      "@windows-os/apps/calculator": [
+        "packages/apps/calculator/src/index.ts"
+      ],
+      "@windows-os/apps/run": [
+        "packages/apps/run/src/index.ts"
+      ],
+      "@windows-os/apps/sticky": [
+        "packages/apps/sticky/src/index.ts"
+      ],
+      "@windows-os/apps/magnifier": [
+        "packages/apps/magnifier/src/index.ts"
+      ],
+      "@windows-os/apps/about": [
+        "packages/apps/about/src/index.ts"
+      ],
+      "@windows-os/apps/taskmgr": [
+        "packages/apps/taskmgr/src/index.ts"
+      ],
+      "@windows-os/apps/find": [
+        "packages/apps/find/src/index.ts"
+      ],
+      "@windows-os/apps/search-dialog": [
+        "packages/apps/search-dialog/src/index.ts"
+      ],
+      "@windows-os/apps/search-companion": [
+        "packages/apps/search-companion/src/index.ts"
+      ],
+      "@windows-os/apps/photo": [
+        "packages/apps/photo/src/index.ts"
+      ],
+      "@windows-os/apps/recorder": [
+        "packages/apps/recorder/src/index.ts"
+      ],
+      "@windows-os/apps/camera": [
+        "packages/apps/camera/src/index.ts"
+      ],
+      "@windows-os/apps/ie": [
+        "packages/apps/ie/src/index.ts"
+      ],
+      "@windows-os/apps/chrome": [
+        "packages/apps/chrome/src/index.ts"
+      ],
+      "@windows-os/apps/snipping": [
+        "packages/apps/snipping/src/index.ts"
+      ],
+      "@windows-os/apps/player": [
+        "packages/apps/player/src/index.ts"
+      ],
+      "@windows-os/apps/webapp": [
+        "packages/apps/webapp/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "apps/web/src",
+    "packages",
+    "vite.config.ts"
+  ]
+}

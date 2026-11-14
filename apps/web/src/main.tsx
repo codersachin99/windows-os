@@ -1,0 +1,9 @@
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "../../../packages/ui/src/windows7.css";
+import "../../../packages/ui/src/DesktopIcons.css";
+
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode><App /></React.StrictMode>
+);

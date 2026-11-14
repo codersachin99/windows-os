@@ -1,0 +1,41 @@
+/* Original src/modules/apps/run.js Win7 Run layout:
+ * 450x220 bottom-left window, run__icon, info, Open textbox, OK/Cancel.
+ * Uses the shared source Windows 7 shell chrome and actual pinned Run icon. */
+.windows-run {
+  position:relative; width:100%; height:100%; min-height:0;
+  display:flex; flex-direction:column; color:#1b1d20; background:#f2f6f9;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-run__form {display:flex; flex-direction:column; flex:1; min-height:0; padding:13px 16px 9px;}
+.windows-run__intro {display:flex; align-items:flex-start; gap:13px; min-height:70px;}
+.windows-run__icon {object-fit:contain; width:44px; height:44px; flex-shrink:0;}
+.windows-run__intro p {margin:3px 0 0; font:12px/1.5 "Segoe UI",Tahoma,sans-serif;}
+.windows-run__open {display:flex; align-items:center; gap:12px; margin-top:8px;}
+.windows-run__open span {min-width:43px;}
+.windows-run__open input {
+  min-width:0; flex:1; height:25px; padding:2px 5px; border:1px solid #7e99aa;
+  box-shadow:inset 0 1px 2px #0002; border-radius:2px; background:#fff;
+  font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-run__open input:focus {outline:1px solid #5da9df; outline-offset:0;}
+.windows-run__actions {display:flex; gap:8px; justify-content:flex-end; margin-top:auto; padding-top:12px;}
+.windows-run__actions button, .windows-run__error button {
+  min-width:78px; padding:4px 13px; color:#111; border:1px solid #8b9ca8;
+  border-radius:3px; background:linear-gradient(#fff,#e5edf4); box-shadow:inset 0 1px 0 #fff;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-run__actions .windows-run__default {
+  border-color:#4789b9; box-shadow:0 0 0 1px #aacfe9,inset 0 1px 0 #fff;
+}
+.windows-run__actions button:disabled {opacity:.55; cursor:default;}
+.windows-run__error-scrim {position:absolute; inset:0; display:grid; place-items:center; z-index:3; background:#edf5fcf2;}
+.windows-run__error {width:calc(100% - 26px); padding:12px; border:1px solid #97aab9; box-shadow:0 4px 12px #0005; background:#fff;}
+.windows-run__error strong {font-size:13px;}
+.windows-run__error p {font-size:12px; line-height:1.5; overflow-wrap:anywhere;}
+.windows-run__error button {display:block; margin-left:auto;}
+@media (max-width:480px) {
+  .windows-run__form {padding:8px;}
+  .windows-run__intro {min-height:65px; gap:8px;}
+  .windows-run__icon {width:36px;height:36px;}
+  .windows-run__actions {padding-top:7px;}
+}

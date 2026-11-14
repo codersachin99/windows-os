@@ -1,0 +1,53 @@
+/* Source src/modules/apps/about.js: 520x400 centered fixed dialog,
+ * branded h2 with 44px icon, 48px Windows 7 title, thin 30px Simulator,
+ * 5/6 horizontal rule, source body copy, bottom links and Credits.
+ */
+.windows-about {
+  box-sizing:border-box;display:flex;flex-direction:column;width:100%;
+  height:100%;min-height:0;overflow:auto;padding:14px 16px 10px;
+  color:#181818;background:white;font:16px/1.35 "Segoe UI",Tahoma,sans-serif;
+  user-select:text;
+}
+.windows-about__brand {
+  display:flex;justify-content:center;align-items:center;gap:8px;
+  flex-wrap:nowrap;margin:0 0 18px;font-weight:400;line-height:44px;
+  white-space:nowrap;
+}
+.windows-about__brand img {width:44px;height:44px;object-fit:contain;flex:none;}
+.windows-about__windows {font-size:48px;font-weight:400;letter-spacing:-2px;}
+.windows-about__windows sup {font-size:12px;vertical-align:super;letter-spacing:normal;}
+.windows-about__simulator {
+  align-self:end;font-size:30px;line-height:32px;font-weight:200;letter-spacing:-1px;
+}
+.windows-about__rule {
+  flex:none;border:0;border-bottom:1px solid #666;width:83.333%;margin:0 auto 18px;
+}
+.windows-about__description {
+  flex:none;width:100%;max-width:448px;margin:0 auto;
+  font:16px/1.4 "Segoe UI",Tahoma,sans-serif;
+}
+.windows-about__description p {margin:0 0 8px;}
+.windows-about a {color:#065fbd;text-decoration:underline;}
+.windows-about a:hover {color:#00447e;}
+.windows-about__unavailable {color:#555;text-decoration:underline dotted;cursor:not-allowed;}
+.windows-about__links {
+  margin:auto 0 18px;text-align:center;white-space:normal;font-size:14px;
+}
+.windows-about__footer {display:flex;justify-content:flex-end;}
+.windows-about__footer button {
+  padding:4px 15px;min-width:77px;color:#111;cursor:pointer;
+  border:1px solid #91a4b4;border-radius:3px;
+  background:linear-gradient(white,#e6edf4);box-shadow:inset 0 1px white;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-about__footer button:disabled {cursor:default;opacity:.58;}
+@media(max-width:550px) {
+  .windows-about {padding:10px 9px;}
+  .windows-about__brand {gap:4px;flex-wrap:wrap;margin-bottom:12px;}
+  .windows-about__windows {font-size:clamp(30px,8vw,48px);letter-spacing:-1px;}
+  .windows-about__simulator {font-size:clamp(18px,6vw,30px);line-height:28px;}
+  .windows-about__brand img {width:34px;height:34px;}
+  .windows-about__description {font-size:14px;}
+  .windows-about__rule {margin-bottom:10px;}
+  .windows-about__links {margin:10px 0;}
+}

@@ -1,0 +1,53 @@
+/* Pinned camera.js: live preview with vertical action rail, circular
+ * switch/capture/info controls. Shared WindowFrame supplies source-style chrome. */
+.source-camera{position:relative;display:flex;gap:10px;padding:10px;
+  width:100%;height:100%;min-height:0;background:#111;color:white;
+  font:13px "Segoe UI",Tahoma,Arial,sans-serif}
+.source-camera__preview{position:relative;flex:1;min-width:0;min-height:0;
+  display:flex;align-items:center;justify-content:center;background:#050505;overflow:hidden}
+.source-camera__preview video{width:100%;height:100%;object-fit:contain}
+.source-camera__status{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  padding:4px 9px;border-radius:5px;background:#222b;color:#fff;white-space:nowrap}
+.source-camera__controls{display:flex;flex-direction:column;justify-content:space-evenly;
+  align-items:center;gap:8px;flex:0 0 88px}
+.source-camera__controls button{border-radius:50%;display:grid;place-items:center;
+  transition:background-color .12s,color .12s,box-shadow .12s}
+.source-camera__switch,.source-camera__info{width:48px;height:48px;border:2px solid #fff;
+  color:#fff;background:transparent}
+.source-camera__switch span{font-size:26px;line-height:1}
+.source-camera__info span{font-size:23px;font-weight:600;line-height:1;font-family:serif}
+.source-camera__capture{width:80px;height:80px;border:2px solid #000;
+  background:white;color:#000}
+.source-camera__capture span{font-size:36px;line-height:1}
+.source-camera__controls button:hover:not(:disabled){background:#fff;color:#000}
+.source-camera__capture:hover:not(:disabled){box-shadow:0 0 0 3px #fff}
+.source-camera__controls button:disabled{cursor:default;opacity:.4}
+.source-camera__error-backdrop{position:absolute;inset:0;z-index:4;display:grid;
+  place-items:center;background:#0009}
+.source-camera__error-backdrop [role=alertdialog]{width:min(340px,90%);
+  color:#273d50;background:#f4f6f8;border:1px solid #8ab2d3;padding:15px;
+  box-shadow:0 7px 25px #0007}
+.source-camera__error-backdrop p{margin:0 0 14px}
+.source-camera__error-backdrop button{display:block;margin-left:auto}
+.source-camera__dialog-host{position:fixed;inset:0;z-index:100001;
+  display:grid;place-items:center;background:#26394c66}
+.source-camera__config{width:min(350px,95vw);border:1px solid #779dbd;
+  background:#f2f5f8;color:#1b3449;box-shadow:0 8px 30px #0008;
+  font:12px "Segoe UI",Tahoma,sans-serif}
+.source-camera__config header{height:32px;display:flex;align-items:center;
+  justify-content:space-between;background:linear-gradient(#d2e8f5,#9dc4dc);
+  padding:0 10px;font-size:13px}
+.source-camera__config header button{border:0;background:transparent;font-size:18px}
+.source-camera__config-body{padding:18px 14px 12px}
+.source-camera__config dl{margin:0}
+.source-camera__config dl>div{display:flex;align-items:center;margin-bottom:9px}
+.source-camera__config dt{width:144px}
+.source-camera__config dd{margin:0}
+.source-camera__config footer{display:flex;justify-content:flex-end;gap:8px;margin-top:17px}
+.source-camera__config footer button,.source-camera__error-backdrop button{padding:4px 16px;
+  border:1px solid #9eb2c2;background:linear-gradient(#fff,#dbe7f1);color:#17374a}
+@media(max-width:510px){.source-camera{gap:4px;padding:4px}
+  .source-camera__controls{flex-basis:51px}
+  .source-camera__switch,.source-camera__info{width:35px;height:35px}
+  .source-camera__capture{width:47px;height:47px}
+  .source-camera__capture span{font-size:27px}}

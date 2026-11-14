@@ -1,0 +1,42 @@
+# Windows Camera — source-backed migration
+
+## Immutable source
+
+- Reference: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`
+- Original: `src/modules/apps/camera.js`, Git blob `c87c1df95b581d8dedc8eb3ce490516f5901d995`, webpack `2164`.
+- Source manifest: `camera`, **Camera**, Accessories, `Program Files/WindowsOS/Camera/camera.exe`.
+- Original Win7 image: `assets/images/camera.5e0b513d.webp`, Git blob `db662ea103b74fd7d903f7910383c07d93b824ae`. Imported byte-identically through GitHub Base64 source/target blobs and registered as the Windows 7 icon; rendered screenshot pixel fidelity is still unverified.
+- Original base-theme icon: `assets/images/camera-base.3c876d62.svg` (Git blob `23ce3c1e95d9a0dcf9a7f3a9f2655d07c90b4c9f`), imported **byte-identically** under its original path as an alternative base-theme icon.
+
+## Original behavior mapped to React
+
+| Pinned `camera.js` behavior | React implementation |
+| --- | --- |
+| On component mount, request `getUserMedia({video:{width:1280,height:720,facingMode:"user"}})` | `CameraApp` automatically requests the same video constraints on mount; browser permission is authoritative |
+| Front/rear switch toggles `user` / `environment` and calls `getCamera()` again | React reruns its camera request, stops the previous stream and discards stale asynchronous permission results |
+| Preview video gets `srcObject` and calls `play()` after metadata loads | Managed `video` element with `muted`/`playsInline`, sets ready only after successful playback |
+| `captureImage()` uses video track `getSettings()` dimensions and source capture helper `0fbc.j` | Canvas `drawImage(video)` at track dimensions; quality 1 JPEG; verifies real JPEG MIME and SOI signature before persistence |
+| Image save dialog uses `fileName: Date.now().toString()`, `jpeg: "JPEG file (*.jpeg)"` | Exact JPEG-only filter on shared VFS `VirtualFileDialog`; writes binary bytes, no host-disk access |
+| Information modal shows fixed Resolution 1280×720, Format JPEG, Quality 100% | Modal shows the same fixed values with source OK/Cancel flow |
+| `isLocked = !!error || showConfig || canSave` | Shell close interception protects active error/settings/save overlays; camera capture/switch disabled when locked |
+| `destroyed(): clearStream()` | Cleanup stops all video tracks on switch/close/unmount; epoch guards late grants after close |
+
+The React window currently uses a shared `760×540` resizable `WindowFrame` as a provisional geometry: original `camera.js` inherits the source WindowMain default. Neither dimensions nor control glyph geometry are yet claimed pixel-identical.
+
+## Automated evidence and limits
+
+- Model tests `packages/apps/camera/src/model.test.ts` check exactly 1280×720 and `facingMode`, JPEG-only export and safe capture dimensions.
+- Chromium `tests/e2e/camera.spec.ts` mocks **only** the hardware video source via `HTMLCanvasElement.captureStream()`. It tests the actual app/window, gets stream constraints, changes facing mode, confirms previous tracks stopped, opens source settings, uses real browser Canvas JPEG encoding, saves bytes via the shared VFS, verifies JPEG markers and opens the result in the Photo Viewer. A separate browser case tests `getUserMedia` permission rejection and error dismissal. Both desktop and mobile tests must pass in opt-in CI before this slice is called integrated verified.
+- The simulated video stream is *not* live camera-hardware acceptance. The original source's `0fbc.j` JPEG converter, browser/device-specific facing selection, all themes, source static help window and actual screenshot parity require review against the pinned executable.
+- The Camera entry stays **in-progress** until full original functional/visual equivalence is demonstrated. No main merge or release.
+
+## Verified full opt-in CI — 14 November 2026
+
+- **[Initial implementation e94d616](https://github.com/codersachin99/windows-os/commit/e94d6169eea52651377992dc5b413b5a0b9f3e3f)** ported camera preview, source constraints, JPEG Save As and camera cleanup. [Initial full run #43570514062](https://github.com/codersachin99/windows-os/actions/runs/43570514062) passed TypeScript, 280 unit tests, source audit and build; two browser cases failed on **three rather than two camera hardware requests** after facing switch due to React's development StrictMode effect replay.
+- **[Fix cda8932](https://github.com/codersachin99/windows-os/commit/cda8932896850ce412d005262be2e22150f84c63)** schedules the initial camera request at the next task, canceling the disposable StrictMode mount before it can invoke `getUserMedia`. This also prevents an unnecessary second camera permission request in development.
+- **[Full opt-in CI #43571392317 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43571392317)**: **280 Vitest unit tests in 55 files, 280 desktop/mobile Chromium cases**, TypeScript, source inventory audit, original Contacts checks, Vite build and **39 exact Git-blob image checks**. The Camera browser cases verify requested constraints, settings, facing switch, stopping old tracks, **real browser JPEG encoder output**, saved VFS JPEG bytes, Photo Viewer reopening and denied camera permissions.
+- **Acceptance boundary**: a synthetic canvas video track is used in automated Chromium. Physical camera hardware, exact original `0fbc.j` encoder equivalence, dialog/window geometry and source screenshot parity are not verified, even with the exact original Windows 7 WebP icon; `camera.js` correctly remains in-progress.
+
+## Verification command gate
+
+The executable Camera slice passed the full opt-in `[run-ci]` workflow above. Documentation-only pushes keep full CI skipped; PR stays draft, `main` unchanged.

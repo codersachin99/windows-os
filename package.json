@@ -1,0 +1,43 @@
+{
+  "name": "windows-os",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "vite preview",
+    "import:legacy": "node scripts/import-legacy.mjs",
+    "check:legacy": "node scripts/import-legacy.mjs --from ../legacy-win7 --check",
+    "test:e2e": "playwright test",
+    "visual:capture": "node scripts/capture-visual-parity.mjs",
+    "visual:compare": "python scripts/compare-visual-parity.py",
+    "audit:legacy": "node scripts/audit-legacy.mjs",
+    "dev:api": "python services/api/api/server.py",
+    "test:source": "node --test scripts/source-contacts.test.mjs"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.15"
+  },
+  "devDependencies": {
+    "@types/node": "^22.16.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.0",
+    "vitest": "^3.2.0",
+    "@playwright/test": "^1.56.1"
+  },
+  "overrides": {
+    "@babel/parser": "7.29.13",
+    "@babel/types": "7.29.11"
+  }
+}

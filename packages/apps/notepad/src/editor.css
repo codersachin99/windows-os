@@ -1,0 +1,14 @@
+.notepad-editor-host {
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+}
+.notepad-editor-host .cm-editor {
+  height: 100%;
+}
+.notepad-editor-host .cm-scroller {
+  overflow: auto;
+}

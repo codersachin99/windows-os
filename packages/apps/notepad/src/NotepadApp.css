@@ -1,0 +1,33 @@
+.notepad-stage { position:relative; display:flex; flex-direction:column; width:100%; height:100%; min-height:0;
+  color:#222; background:white; font:12px/1.3 "Segoe UI",Tahoma,sans-serif; }
+.notepad-menu { display:flex; flex:0 0 23px; gap:0; padding:0 3px; border-bottom:1px solid #cdd6dd;
+  background:linear-gradient(#f7faff,#e3ebf2); }
+.notepad-menu button { border:1px solid transparent; background:transparent; color:#1b252e;
+  padding:2px 9px; min-height:22px; font:inherit; cursor:pointer; }
+.notepad-menu button:hover:not(:disabled), .notepad-menu button[aria-expanded="true"] {
+  background:linear-gradient(#e9f5ff,#c7e2f7); border-color:#85b8dd; }
+.notepad-menu__section { position:relative; }
+.notepad-menu__dropdown { position:absolute; z-index:5; top:100%; left:0; min-width:220px; padding:3px;
+  background:#f8faff; box-shadow:2px 5px 14px #0005; border:1px solid #899fac; }
+.notepad-menu__dropdown button { display:flex; align-items:center; justify-content:space-between; width:100%;
+  min-height:25px; padding:3px 12px; text-align:left; }
+.notepad-menu__dropdown kbd { margin-left:12px; font:11px "Segoe UI",Tahoma,sans-serif; color:#555; }
+.notepad-menu__dropdown hr { margin:4px 8px; border:0; border-top:1px solid #ccd8e1; }
+.notepad-menu__help { opacity:.5; }
+.notepad-editor { flex:1; min-height:0; }
+.notepad-status { flex:0 0 22px; display:flex; align-items:center; justify-content:space-between;
+  border-top:1px solid #cad3dc; background:linear-gradient(#f4f6f9,#e6ebf1); padding:0 12px; }
+.notepad-error { position:absolute; left:8px; right:8px; bottom:25px; z-index:3;
+  background:#fff0ea; color:#9c271f; border:1px solid #d6908a; padding:6px; }
+.notepad-modal__backdrop { position:absolute; inset:0; z-index:10; display:grid; place-items:center;
+  background:#20375055; }
+.notepad-modal { display:flex; flex-direction:column; width:min(370px,96%); gap:12px;
+  padding:14px; border:1px solid #5485a9; background:#f2f6fa; color:#173953;
+  box-shadow:0 6px 20px #0006; font:12px "Segoe UI",Tahoma,sans-serif; }
+.notepad-modal h2 { font-size:15px; margin:0; font-weight:500; }
+.notepad-modal p { margin:0; }
+.notepad-modal label { display:grid; gap:4px; }
+.notepad-modal input,.notepad-modal select { padding:4px; border:1px solid #9cb4c4; }
+.notepad-modal__buttons { display:flex; justify-content:flex-end; gap:7px; margin-top:8px; }
+.notepad-modal__buttons button { min-width:65px; padding:5px; border:1px solid #7299b6;
+  background:linear-gradient(#fff,#d5e5f0); border-radius:2px; cursor:pointer; }

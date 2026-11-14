@@ -1,0 +1,2361 @@
+{
+  "referenceSha": "4e63290d783009e1293433c6ccf252abba9c1187",
+  "note": "A tracked source file is not proof of parity. 'implemented' means a React module with code/test evidence exists; 'verified' is reserved for full accepted original-source functional and visual parity.",
+  "modules": [
+    {
+      "source": "src/modules/apps/about.js",
+      "sha": "bad9a14576e16a55b14cb0b6ecf11fc2214c9fb8",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/about/src/AboutApp.tsx",
+        "packages/apps/about/src/model.test.ts",
+        "tests/e2e/about.spec.ts",
+        "migration/ABOUT-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/bin.js",
+      "sha": "c23d256403c1c37812c61bdeef9a0f4edaef6c39",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/filesystem/src/index.ts",
+        "packages/sdk/src/runtime.ts",
+        "packages/apps/explorer/src/RecycleBinApp.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/bin.spec.ts",
+        "migration/RECYCLE-BIN.md",
+        "packages/filesystem/src/sourceGuest.ts",
+        "tests/e2e/source-guest.spec.ts"
+      ]
+    },
+    {
+      "source": "src/modules/apps/calc.js",
+      "sha": "7ea0b7e05905100fc3b3eaddf85d321e88411ac8",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/calculator/src/standard.ts",
+        "packages/apps/calculator/src/standard.test.ts",
+        "packages/apps/calculator/src/CalculatorApp.tsx",
+        "packages/apps/calculator/src/source.css",
+        "tests/e2e/calculator.spec.ts",
+        "migration/CALCULATOR.md"
+      ]
+    },
+    {
+      "source": "src/modules/apps/camera.js",
+      "sha": "c87c1df95b581d8dedc8eb3ce490516f5901d995",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/camera/src/CameraApp.tsx",
+        "packages/apps/camera/src/CameraApp.css",
+        "packages/apps/camera/src/model.ts",
+        "packages/apps/camera/src/model.test.ts",
+        "tests/e2e/camera.spec.ts",
+        "apps/web/public/assets/images/camera-base.3c876d62.svg",
+        "migration/CAMERA-SOURCE.md",
+        "apps/web/public/assets/images/camera.5e0b513d.webp"
+      ],
+      "verification": "CI #43571392317 PASSED for implemented camera scope (280 unit/280 browser, real JPEG); original Win7 WebP imported byte-exact. Real camera hardware and full source screenshot parity pending."
+    },
+    {
+      "source": "src/modules/apps/chrome.js",
+      "sha": "1e717f044c7c96688ef56cb37b36fdb89566e03a",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/chrome/src/ChromeApp.tsx",
+        "packages/apps/chrome/src/ChromeApp.css",
+        "packages/apps/chrome/src/model.ts",
+        "packages/apps/chrome/src/model.test.ts",
+        "tests/e2e/chrome.spec.ts",
+        "apps/web/public/assets/images/chrome-base.d802dcaf.svg",
+        "apps/web/public/assets/images/google.d3503fb1.svg",
+        "apps/web/public/assets/images/google-mic.2a2ca1d4.svg",
+        "migration/CHROME-SOURCE.md",
+        "apps/web/public/assets/images/chrome.0eddc17a.webp"
+      ],
+      "verification": "CI #43577115840 PASSED (289 unit/294 browser); original Win7 WebP imported byte-exact. T-Rex engine, local PDF/HTML, frame plugin integration and full source screenshot parity pending."
+    },
+    {
+      "source": "src/modules/apps/cmd.js",
+      "sha": "d3e991b9604d8b0986676381de532f09b83ab958",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/computer.js",
+      "sha": "47aa521237c10f5e6763df37a1d8dcd73330f84f",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/explorer/src/model.ts",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "packages/apps/explorer/src/source.css",
+        "tests/e2e/explorer.spec.ts",
+        "migration/EXPLORER.md",
+        "packages/filesystem/src/clipboard.ts",
+        "packages/filesystem/src/search.ts",
+        "tests/e2e/clipboard.spec.ts",
+        "tests/e2e/search.spec.ts",
+        "packages/filesystem/src/sourceGuest.ts",
+        "tests/e2e/source-guest.spec.ts",
+        "packages/filesystem/src/transfer.ts",
+        "packages/filesystem/src/drag.ts",
+        "tests/e2e/explorer-drag.spec.ts",
+        "migration/EXPLORER-DRAGDROP.md",
+        "packages/ui/src/sourceItemCheckbox.tsx",
+        "packages/ui/src/sourceItemCheckbox.css",
+        "packages/ui/src/sourceItemCheckbox.test.tsx",
+        "tests/e2e/listview-source-checkbox.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "tests/e2e/listview-source-rename.spec.ts"
+      ],
+      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
+    },
+    {
+      "source": "src/modules/apps/cpanel.js",
+      "sha": "38f2ad53f2d822ffc684a5472a746a81141690a3",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/find.js",
+      "sha": "f0814bd36842ec0ea0af7b503c4128fb999af17c",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/find/src/FindApp.tsx",
+        "packages/apps/find/src/FindApp.test.ts",
+        "tests/e2e/find.spec.ts",
+        "migration/FIND-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/games.js",
+      "sha": "99170e55d7e94e28e146cda8a6f58fbe074439b5",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/ie.js",
+      "sha": "9cf202d89e270465e75467b0c127f87c296ff07b",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/ie/src/InternetExplorerApp.tsx",
+        "packages/apps/ie/src/InternetExplorerApp.css",
+        "packages/apps/ie/src/model.ts",
+        "packages/apps/ie/src/model.test.ts",
+        "tests/e2e/ie.spec.ts",
+        "apps/web/public/assets/images/ie-onebit.37a664e0.svg",
+        "migration/IE-SOURCE.md",
+        "apps/web/public/assets/images/ie.66b8418d.webp"
+      ],
+      "verification": "CI #43574037011 PASSED (284 unit/286 browser); original Win7 WebP imported byte-exact. Runtime URL helper, remote iframe behavior, source window geometry and full screenshot parity pending."
+    },
+    {
+      "source": "src/modules/apps/index.js",
+      "sha": "de7b013391d9ea1a9d9165e5ba1594ef8a2622c3",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/listview-details.js",
+      "sha": "17a7e3d60e15a11c9b364ac78a37e2da257c605d",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-details-tiles.spec.ts",
+        "migration/LISTVIEW-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListViewItem.test.tsx",
+        "tests/e2e/listview-source-item.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceItemCheckbox.tsx",
+        "packages/ui/src/sourceItemCheckbox.css",
+        "packages/ui/src/sourceItemCheckbox.test.tsx",
+        "tests/e2e/listview-source-checkbox.spec.ts"
+      ],
+      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
+    },
+    {
+      "source": "src/modules/apps/listview-tiles.js",
+      "sha": "9b7d039e3f7c628c74dcdbe21e7aa2a59d5db11b",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.css",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-details-tiles.spec.ts",
+        "migration/LISTVIEW-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListViewItem.test.tsx",
+        "tests/e2e/listview-source-item.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceItemCheckbox.tsx",
+        "packages/ui/src/sourceItemCheckbox.css",
+        "packages/ui/src/sourceItemCheckbox.test.tsx",
+        "tests/e2e/listview-source-checkbox.spec.ts"
+      ],
+      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
+    },
+    {
+      "source": "src/modules/apps/magnifier.js",
+      "sha": "11509a605057b007778e9241b0b9d8c4e9384432",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/magnifier/src/MagnifierApp.tsx",
+        "packages/apps/magnifier/src/model.test.ts",
+        "tests/e2e/magnifier.spec.ts",
+        "migration/MAGNIFIER-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/messages.js",
+      "sha": "e5150261d7868071ed3c02aa9ab31ea82fe50b9e",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceMessage.tsx",
+        "packages/ui/src/sourceMessage.css",
+        "packages/ui/src/sourceMessage.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-message.spec.ts",
+        "migration/MESSAGES-SOURCE.md",
+        "apps/web/public/assets/images/warning.cce1fd36.webp",
+        "apps/web/public/assets/images/error.026cae2a.webp"
+      ],
+      "verification": "Core original Error/Confirm/Progress and Explorer VFS Yes/No pass CI #43590165232: 308 unit, 322 browser, 53 art. Win7 warning/error WebP SHA-exact icons + visual target scenes follow-up #43591033519 pending; legacy global message registry, sound and full pixel parity pending."
+    },
+    {
+      "source": "src/modules/apps/notepad.js",
+      "sha": "f373cdc2dd1b1e77b7495d450fa464d829671384",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/notepad/src/document.ts",
+        "packages/apps/notepad/src/NotepadApp.tsx",
+        "packages/apps/notepad/src/NotepadEditor.tsx",
+        "tests/e2e/notepad.spec.ts",
+        "migration/NOTEPAD.md"
+      ]
+    },
+    {
+      "source": "src/modules/apps/paint.js",
+      "sha": "565af433694dcb0b31ced2363f81a7cdb9174ae2",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/photo.js",
+      "sha": "9df699034854fb6bcda027c0c2d8ab61ac6a01b2",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/photo/src/PhotoApp.tsx",
+        "packages/apps/photo/src/PhotoApp.css",
+        "packages/apps/photo/src/model.ts",
+        "packages/apps/photo/src/model.test.ts",
+        "tests/e2e/photo.spec.ts",
+        "apps/web/public/assets/images/photo-base.b5f2d859.svg",
+        "migration/PHOTO-SOURCE.md",
+        "apps/web/public/assets/images/photo.db6c5f81.webp"
+      ],
+      "verification": "CI #43560941513 PASSED for Photo Viewer slice; original Win7 WebP imported byte-exact. Unsupported format writes and original-vs-React screenshot parity pending."
+    },
+    {
+      "source": "src/modules/apps/player.js",
+      "sha": "bea751030d06d2fa11558b6487d99a8ae2383c33",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/player/src/model.ts",
+        "packages/apps/player/src/model.test.ts",
+        "packages/apps/player/src/PlayerApp.tsx",
+        "packages/apps/player/src/PlayerApp.css",
+        "tests/e2e/player.spec.ts",
+        "migration/PLAYER-SOURCE.md",
+        "apps/web/public/assets/images/player-base.3e5b35e3.svg",
+        "apps/web/public/assets/images/player.d45d301d.webp"
+      ],
+      "verification": "Full opt-in CI #43585262479 PASSED: 298 unit, 308 desktop/mobile Chromium, 52 exact source assets, TS/Vite; real Guest PNG/WAV decoding. Complete source multi-entry playlist, original codec filters and screenshot pixel parity still pending."
+    },
+    {
+      "source": "src/modules/apps/plugin-embed.js",
+      "sha": "0cf1d9501703b3d8cf527144fef2a3c5ab51fd26",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/sdk/src/embed.ts",
+        "packages/sdk/src/embed.test.ts",
+        "packages/ui/src/SourceEmbedBridge.tsx",
+        "tests/e2e/embed.spec.ts",
+        "migration/WEBAPP-EMBED-SOURCE.md"
+      ],
+      "verification": "CI #43586350903 PASSED: original ready/opened/closed 4.8.0 and guarded parent; full original slug/iframe/pixel parity pending"
+    },
+    {
+      "source": "src/modules/apps/recorder.js",
+      "sha": "449ee11457fafdbea1f61052a5417a3e85cee022",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/recorder/src/RecorderApp.tsx",
+        "packages/apps/recorder/src/RecorderApp.css",
+        "packages/apps/recorder/src/wav.ts",
+        "packages/apps/recorder/src/wav.test.ts",
+        "packages/apps/shared/src/VirtualFileDialog.tsx",
+        "tests/e2e/recorder.spec.ts",
+        "apps/web/public/assets/images/recorder-onebit.110a9439.svg",
+        "migration/RECORDER-SOURCE.md",
+        "apps/web/public/assets/images/recorder.519283f8.webp"
+      ],
+      "verification": "CI #43567671473 PASSED for Sound Recorder slice; original Win7 WebP imported byte-exact. Physical microphone and source window/widget pixel parity pending."
+    },
+    {
+      "source": "src/modules/apps/run.js",
+      "sha": "78cf59db4949a006f50d81e927d5120b6ceeb503",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/run/src/RunApp.tsx",
+        "packages/apps/run/src/model.test.ts",
+        "tests/e2e/run.spec.ts",
+        "migration/RUN-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/sandbox.js",
+      "sha": "2d5147ca1de22605fc7d0beddca24245814a0d85",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/search-companion.js",
+      "sha": "3b8e868f7f3c694c0466889cb2d0ba0b029ee07f",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/search-companion/src/SearchCompanion.tsx",
+        "packages/apps/search-companion/src/model.test.ts",
+        "tests/e2e/search-surfaces.spec.ts"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/search-dialog.js",
+      "sha": "7a5e24e65f48f839b44bb88b65529a71c59e8125",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/search-dialog/src/SearchDialog.tsx",
+        "packages/apps/search-dialog/src/model.test.ts",
+        "tests/e2e/search-surfaces.spec.ts"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/snipping.js",
+      "sha": "81e4259f5f5188ac303c16e71fc7d1ef073bf601",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/snipping/src/SnippingApp.tsx",
+        "packages/apps/snipping/src/SnippingApp.css",
+        "packages/apps/snipping/src/captureDesktop.ts",
+        "packages/apps/snipping/src/model.ts",
+        "packages/apps/snipping/src/model.test.ts",
+        "tests/e2e/snipping.spec.ts",
+        "apps/web/public/assets/images/snipping-base.9d1d8a3f.svg",
+        "migration/SNIPPING-SOURCE.md",
+        "apps/web/public/assets/images/snipping.2c25345c.webp"
+      ],
+      "verification": "CI #43583547737 PASSED (293 unit/300 browser), including real PNG/JPG save; original Win7 WebP imported byte-exact. Source domToImage, window-selection screenshot parity and exact geometry pending."
+    },
+    {
+      "source": "src/modules/apps/stickynotes.js",
+      "sha": "2a4ad3cd5cbb927858d60c4cc1358239984a4e5c",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/sticky/src/StickyNotesApp.tsx",
+        "packages/apps/sticky/src/model.test.ts",
+        "tests/e2e/sticky-notes.spec.ts",
+        "migration/STICKY-NOTES-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/taskmgr.js",
+      "sha": "a91ca8347299b4b4432252726d864689e734ffb0",
+      "area": "apps",
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/taskmgr/src/TaskManagerApp.tsx",
+        "packages/apps/taskmgr/src/model.test.ts",
+        "tests/e2e/taskmgr.spec.ts",
+        "migration/TASKMGR-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+    },
+    {
+      "source": "src/modules/apps/testbox.js",
+      "sha": "bb1303554478c75da34d7bb8e228e82c468d6774",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/apps/webapp.js",
+      "sha": "3cda3df47565e774bc07eb5ef04b3d3d2e8280f8",
+      "area": "apps",
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/webapp/src/WebAppViewer.tsx",
+        "packages/apps/webapp/src/WebAppViewer.css",
+        "packages/ui/src/SourceEmbedBridge.tsx",
+        "tests/e2e/embed.spec.ts",
+        "migration/WEBAPP-EMBED-SOURCE.md"
+      ],
+      "verification": "CI #43586350903 PASSED: 303 Vitest, 314 Chromium, 53 original image audits; original iframe behavior and screenshot parity pending"
+    },
+    {
+      "source": "src/modules/apps/wordpad.js",
+      "sha": "6432d40fc6344e284986dd659e1c073b92c52f0b",
+      "area": "apps",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0a45fe.js",
+      "sha": "ed07818b66c2889e0fcfd2d16b53d0a79333bd0c",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0abc10.js",
+      "sha": "7d821f524709acd43976e6de8edf036af1589ce1",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0ac931.js",
+      "sha": "9d9f08d1c8d19c1e2f66162796359e6147b0bbd6",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0c211b.js",
+      "sha": "364675f48cd85f48c24c2a25612bb49cacb11363",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0c8407.js",
+      "sha": "d2c612c8cef33104777d510dbc880ebf74180e8e",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0cf315.js",
+      "sha": "215bb44ccb824e3661586abe2b24f7fbb9c240bb",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0e1bd0.js",
+      "sha": "c062ddcf60b66283f768ab2d92c3ac780df3c571",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0e2170.js",
+      "sha": "299b331bee5485cae3b2acf8a748588801ebf924",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d0e9322.js",
+      "sha": "0bdec190c91999d3245785c0989cd038dec4d7c8",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d208e4e.js",
+      "sha": "724c72f2f6f407c28ba3f6a82808b32fa5faba3d",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d20ff54.js",
+      "sha": "3a87656f452c73971bb1e6a5e9b6898a8fa8cff0",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d217def.js",
+      "sha": "e878cbd3c17b90698f092c093baa9d56bc428cb8",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d221815.js",
+      "sha": "28d1661fb7491e2408c05323bd86b4ca648abb18",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d222cca.js",
+      "sha": "9e973ca7a120144b922cb5194974685f7154cb53",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d22895d.js",
+      "sha": "453db7fdd5a971b4281daa927ea8b8f7ff6b05f4",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-2d23721e.js",
+      "sha": "228b7caeb94ceb6a9a7cf8286c2d4028f180057b",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-334ef560.js",
+      "sha": "a0479777c31a7168adc11c3178c7334c07c24029",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-391f23b6.js",
+      "sha": "abd4d5209e35634af0bc6289393e55e26e998ec9",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-517d7f56.js",
+      "sha": "f367b48c19249b8214980167c51ae449ea0579e2",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-5b668987.js",
+      "sha": "0bb453d0c456591d7ea74722fe1b04eb5a43bfa0",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-64c7391e.js",
+      "sha": "3b90984bbda5b474bb9815216cc4d0b99bf03774",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-66b6877e.js",
+      "sha": "9cc55b9c48ef069fb64927bc1b6c60bbfc92d159",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-77138bc7.js",
+      "sha": "9f3946a466bdc687c3b57c09a05d7d23d4666b07",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-9691fd08.js",
+      "sha": "48df2938b2d6aded7419aa828a15d6069a937c49",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-e3c447d8.js",
+      "sha": "9aa58c6ae165baa67209604d56db0f50a2ef86fd",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/chunk-f5481624.js",
+      "sha": "1eaac949ab0338415190af47baa3fd07c3198822",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/index.js",
+      "sha": "2c255ac88d59d167a3e2990362d20400203894a3",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~assistive-control~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~ga~05cdf4de.js",
+      "sha": "5067e4bcad03b240f07150bfede29a07cd2e6c00",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~g-battery~g-calendar~g-clock~eec2253e.js",
+      "sha": "c1bb3d91e5231d69bc053ac66b4b6b28d1b393fb",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~40bd2819.js",
+      "sha": "b0e9fe10e61ccfc12a42bca44c2c35b729dac5be",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~573b2c8a.js",
+      "sha": "be036b6a7ca6d5966fbc7c4f651314a331426e56",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~m~dcfced3e.js",
+      "sha": "07e127c02d67e84cd5efd5367ba0c67223149c17",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~boot~bsod~chess~chrome~dock-macos~dock-ubuntu~find~gadgets~games~ie~installer-screen~lo~d493ad97.js",
+      "sha": "628ab627a5df31ff4271e9289c0a1c73de70a227",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~about~boot~bsod~chess~chrome~find~gadgets~games~ie~logon~logon-aeronoir~logon-chromeos~logon-~936669a0.js",
+      "sha": "568f7cf02c96921a7a7b4682323c0c26492a7d47",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~billing~boot~bsod~chess~database~games~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~31245f2f.js",
+      "sha": "98e9917d8657821194ea7ac05d72aa6b4b5a35cf",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~billing~boot~bsod~chess~games~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-ma~8b2c8930.js",
+      "sha": "35c59fd862a38cc7d691b7a4b808b01420ba6d13",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~chess~chrome~computer~games~ie~installer-screen~logon-win2k~logon-win31~logon~76838f35.js",
+      "sha": "7580849cb1e3689e90b0f26b72fae72ee3c7a275",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~chess~cmd~computer~cpanel~games~mahjong~mouse~notepad~paint~personalize~playe~2fca6577.js",
+      "sha": "985fad773a2b3c84add3bab7a98b4a21cd128ea2",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~chrome~computer~cpanel~games~ie~notepad~paint~personalize~player~recorder~sni~17da8929.js",
+      "sha": "312d622de0a1ee2f36addb744bcc0dbc0b89833d",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~computer~cpanel~games~ie~notepad~paint~player~recorder~snipping~themestudio~wordpad.js",
+      "sha": "c6882e5bb38b96c1fef44deefb7570155f42eb6e",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~computer~cpanel~games~installer-screen~notepad~paint~player~recorder~shortcut~49e2ebd6.js",
+      "sha": "ed3b984138eed7c830b5fbe4a8be08d58328cb35",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~computer~cpanel~games~notepad~paint~personalize~player~recorder~snipping~star~dba60106.js",
+      "sha": "af97a3f29648a9f42a330f41d90e22a5b6c063c6",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~computer~find~games~notepad~paint~player~recorder~search-companion~search-dia~fc0c0d68.js",
+      "sha": "f8ede823c59de0e7f6913e593e503e82f8822873",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bin~bsod~camera~computer~games~notepad~paint~player~recorder~snipping~sound~wordpad.js",
+      "sha": "1bd493881498af653684cd8bcd252fcc5d4def9c",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~boot~chess.js",
+      "sha": "c2131dbd01cc29372654420533a1eba3fd0f4387",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~boot~mahjong.js",
+      "sha": "a1074e42fcdad298c2aa3024c9c9e3822c3964d7",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~boot~mediacenter.js",
+      "sha": "bef9801dce37174ef19e7954501aa5380d337db2",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~boot~purbleplace.js",
+      "sha": "6cde54888b8517f2419bcc13d3f64ef28d6e44d6",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bsod~chess~games~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-macos~logon-one~1a446129.js",
+      "sha": "7fadc6e64783c32160d409cd111d79d3900b974c",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bsod~games~main.js",
+      "sha": "ecca9d786763c6be07df543e94701fe057e545ad",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bsod~games~main~mediacenter.js",
+      "sha": "1bdee015f6b1906f419d5da79d1e4a3c11ca4cad",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~bsod~screensaver~snipping~themestudio.js",
+      "sha": "0576de6002454ec9887ab195171eda4feb85ba42",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~calc~g-calendar~taskbar-base~taskbar-macos~taskbar-ubuntu~themestudio.js",
+      "sha": "387869fd54e1ece2fcb156cf73b4b411e883b881",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~chess~mahjong~minesweeper~purbleplace~solitaire~spidersolitaire~tetris.js",
+      "sha": "4e4a57d5e6d88a156adf8e1d8ae2c5317e118944",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~chess~mahjong~purbleplace.js",
+      "sha": "2382c2777c4ac7ff9e340cfc73bb89ccb4959caa",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~chrome~ie.js",
+      "sha": "9289178b0a1688842d5ecc59c306f480b3be22ea",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~cpanel~logon-onebit.js",
+      "sha": "10f8e5d6c7ad54609c0344367843818f7ae115ac",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~cpanel~startmenu-base~startmenu-chromeos~startmenu-kubuntu~startmenu-launchpad~startmenu-win1~75cb2e76.js",
+      "sha": "87be999c4989753b7452e808fdbe3c5224e87219",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~cursor~mediacenter.js",
+      "sha": "47ddf36a2a577374183bd3c6ce5cf0d0961f0474",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~device~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
+      "sha": "77353e1e361784196e71b69a216f5bb4a1293671",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~g-battery~g-calendar~g-clock~g-currency~g-weather.js",
+      "sha": "5637e2dd2454791373ad0cd14d7dd1c037eb71e6",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-macos~logon-onebit~logon-oxygen~~109c9797.js",
+      "sha": "de00b397c4d7a04a8d9d89a9f2135fb0adc4d24b",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-macos~logon-onebit~logon-oxygen~~1fba687f.js",
+      "sha": "2f8d95bc42069aec789fadc485f58aa23ef8b461",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~logon-win2k~logon-win31~logon-win9x.js",
+      "sha": "aa9f85139ef45b21022c844f53500db00d86e495",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~mahjong~purbleplace.js",
+      "sha": "fe3436fd4309983b3352601d8aea90db1a3a150d",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~mediacenter~purbleplace.js",
+      "sha": "76e2f34ca5e589f8e5221c53529084978d794fc5",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~mime-types~player.js",
+      "sha": "90a1ec32f7401de6c3d60fc05dfe249c1e95cefb",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~notepad~plugin-codemirror~themestudio.js",
+      "sha": "c27cc72de4377e603064323f6a302da616f2882a",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~notepad~themestudio.js",
+      "sha": "d2428e2446cc96dc521c46dfc267bb9ec0ff6fd1",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~paint~themestudio.js",
+      "sha": "319eb99fbf88e0a265b7b2b3e0fd59c2e093b015",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~paint~themestudio~wordpad.js",
+      "sha": "981c5ec4c1f09f38d737d40c630c8c1ea33bb751",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~personalize~plugin-cssvar.js",
+      "sha": "05d8475bdfa4f5dc9931b3259c2805490cc2694b",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~personalize~plugin-cssvar~system.js",
+      "sha": "819d9ed1823145dff7ef2bd4272672c1f691d8e2",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~personalize~themestudio.js",
+      "sha": "12801a35b5570f6c551cc6977ee72d1415e46975",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~plugin-codemirror~plugin-embed~sandbox~vue-app~vue-store.js",
+      "sha": "db03b89ec6a579f1cbe8d098a6580b069b938b55",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~plugin-cssvar~sandbox~vue-app~vue-store.js",
+      "sha": "592e07c9f70bfff5e684467b080dfa062945b919",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
+      "sha": "a3edd490a0f4e23052f2a3a74a694c8991911c56",
+      "area": "chunks",
+      "status": "in-progress",
+      "evidence": [
+        "packages/filesystem/src/sourceProgramManifest.json",
+        "packages/filesystem/src/sourcePrograms.ts",
+        "tests/e2e/source-programs.spec.ts"
+      ]
+    },
+    {
+      "source": "src/modules/chunks/shared~plugin-embed~sandbox~vue-app~vue-i18n~vue-store.js",
+      "sha": "b3614c2b8f89b8312ec839a78ebf130e7d4f36ac",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~sandbox~vue-app~vue-store.js",
+      "sha": "792e4acc5d7f563b4471aea7ac88a1c6da0d90d9",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~solitaire~spidersolitaire.js",
+      "sha": "1a8298f422c4db5405bbcc0e2f624809d8588fc5",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~startmenu-base~startmenu-chromeos~startmenu-kubuntu~startmenu-launchpad~startmenu-win10~start~4b4fcada.js",
+      "sha": "d64510e7b950806e339f2852c75d88dd99c9428b",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~startmenu-win10~startmenu-win8.js",
+      "sha": "6907b7010c25caec9f8f95537b57da59d891a438",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~taskbar-base~taskbar-macos~taskbar-ubuntu~themestudio.js",
+      "sha": "e2731b831eee457d8c4ed03e292c259680ad84a5",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~taskbar-base~themestudio.js",
+      "sha": "a3c89e964d195cef890ab649a171dd7be1d067c5",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/chunks/shared~taskbar-macos~taskbar-ubuntu.js",
+      "sha": "95ca19d8f560451485e7dee2cc238cc894bb4db7",
+      "area": "chunks",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/g-battery.js",
+      "sha": "84e6adbd8e7504f5d31f61e133b1a44dd6417389",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/g-calendar.js",
+      "sha": "e3943e40cd18fad1afa6eb77091b0872841efd5b",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/g-clock.js",
+      "sha": "c2e0e1634041a9ca0e73f3eeb49d2f53ce544942",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/g-currency.js",
+      "sha": "f7b38194571dafde6de76971bef042a3a07dfb55",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/g-weather.js",
+      "sha": "0f0ed9ba3406bf05f43f744097aa9c02f98178dc",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/gadgets.js",
+      "sha": "f7dee70c4dbb155ef71813617b77fa2d51b5e49b",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/gadgets/index.js",
+      "sha": "69e117632de3f692c645df2b2aaef7db44c8c5cf",
+      "area": "gadgets",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/chess.js",
+      "sha": "61b274afc72bd013755dd7ad899cb05004a3abab",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/index.js",
+      "sha": "f8df5c554b4624f8d2cd3cfd4272e16b0e21f1a3",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/mahjong.js",
+      "sha": "ad223d63bc194f368683686c919857c636580c7d",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/minesweeper.js",
+      "sha": "adfe7f694a75d4cb44e77df9b0a8d446cf5ba162",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/onlinegame.js",
+      "sha": "6b7e227dbeac43268c327165842eca0fb4f2f322",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/purbleplace.js",
+      "sha": "913115fe1dbc14b3747bc910f1a9a1cd7c71dfd0",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/solitaire.js",
+      "sha": "517c3786537ce265f288dd91c5ce6a215b4cb7cf",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/spidersolitaire.js",
+      "sha": "3292dc5caeac2689b1bfadca618cd7bc2de9136f",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/games/tetris.js",
+      "sha": "e9d2c95f9ce215ffb12d3645db88b90fba2dd1a3",
+      "area": "games",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/index.js",
+      "sha": "621613510e50a3cda653626d1e5fd2f568171593",
+      "area": "index.js",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/hcaptcha.js",
+      "sha": "30d2391506cd8a86877b506571af54a1ff7aa3b2",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/index.js",
+      "sha": "92db30f521ecef91563de1a46a4865a3d0a31d11",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/plugin-clickout.js",
+      "sha": "7f8f5c392c71ca622bcc59883e24ef5866eae9e9",
+      "area": "plugins",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.test.tsx"
+      ],
+      "verification": "Initial source list-item CI #43603371340 failed 2 message E2E, repaired via focus-loss reset. Follow-up rename/clickout CI #43604884502 passed 315/315 unit, 55 art, TS/build, but 4 legacy E2E expected retired Rename modal; test contracts updated to source inline 0616 rename. Combined touch checkbox + corrected E2E CI pending. Full legacy plugin/pixel parity incomplete."
+    },
+    {
+      "source": "src/modules/plugins/plugin-codemirror.js",
+      "sha": "39c4dd73a669ae888a702c178d2c2e2c2178d5b9",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/plugin-cssvar.js",
+      "sha": "2e951121050e596168623e518796ef2a1eb5e853",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/plugin-eventbus.js",
+      "sha": "442bb7406e2d8ee50fdcbb14361beff6cc23e052",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/plugin-iconify.js",
+      "sha": "bbe6d2a929d5ecd2942268856a2dec6f46c7b88e",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/plugin-longpress.js",
+      "sha": "12de676cb679aa378146f196e52d30cf6fad1cd2",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/plugin-tiptap.js",
+      "sha": "21a2189d44002a97fdcc2af48d130f073392cef9",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/postcss-prefix-selector.js",
+      "sha": "9412050eb532ac8469dd6a9c8e0facab4e3033d7",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/plugins/postcss.js",
+      "sha": "7ab96cf653d2c19cfdfe10d3b452daf1fd363544",
+      "area": "plugins",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/capacitor-app.js",
+      "sha": "0fc860dd68884cfa31b1fb8b965242705d7af43d",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/capacitor-noti.js",
+      "sha": "75626db0342850d5e912572a4b1ea1d02f1cea78",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/capacitor-plugin-device2.js",
+      "sha": "8794a744073483c17db4710861aa479134369c68",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/capacitor-plugin-launcher.js",
+      "sha": "072a9616cbac6fcce6d68e8f942feeb31f7478f7",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/capacitor-plugin-resolution.js",
+      "sha": "e60d347bac876030191e8c25485d1d15832a6d12",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/capacitor-plugin-vpointer.js",
+      "sha": "4de2fed2bd8a088182095d079ca1246b238b8455",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/chunk-vendors-legacy.js",
+      "sha": "42ed3243efbcbd6e171e40d06327dcf96fda189f",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/chunk-vendors.js",
+      "sha": "d49ce8f279805e90c954df655fdb223d1d402201",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/core-js.js",
+      "sha": "c40de863e299d639c5523c8fd3c29f967ac73bb9",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/cursor.js",
+      "sha": "d4a21256ad94faa26a8d09171aa7a2ebdc8fee3f",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/index.js",
+      "sha": "90f2311c72875e7ae680ad185fbe4d54ec58bf45",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/ionic-loader.js",
+      "sha": "6fa4315394e172f9071f3e6c091b717467e6e4e1",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/localforage.js",
+      "sha": "bf6b09c581b926f087a11c7450b592b124e54f2d",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/mime-types.js",
+      "sha": "a431860a1e9a5589b493b6ac75aaab8aace80260",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/regenerator-runtime.js",
+      "sha": "0c6913a3503e41c6aa908afa3c739cf4706891ea",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/registerServiceWorker.js",
+      "sha": "fe89a5950cab0f6663ace1d4ba30d7ea6a4fa7fc",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/stencil-polyfills-css-shim.js",
+      "sha": "a6ad5fc246989323b42ab4b7ddf03dd996cfade9",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/stencil-polyfills-dom.js",
+      "sha": "a1e20d93ce9375b6f40a8fea31b6c1bfe3f2e0b1",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/system-cache.js",
+      "sha": "9c98126959cf4ef171414307ef8d5153283b5b51",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/touchpad.js",
+      "sha": "7bdaf25782f21dc51fa8e61e362e4bfb4ec7f531",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/vue-app.js",
+      "sha": "69982bdf9dce4de2242b5c27a1a2cef9268e7dc4",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/vue-click-helper.js",
+      "sha": "71db7989b3f01b4a6841c5346d6d88ede6cc5169",
+      "area": "runtime",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.test.tsx"
+      ],
+      "verification": "Initial source list-item CI #43603371340 failed 2 message E2E, repaired via focus-loss reset. Follow-up rename/clickout CI #43604884502 passed 315/315 unit, 55 art, TS/build, but 4 legacy E2E expected retired Rename modal; test contracts updated to source inline 0616 rename. Combined touch checkbox + corrected E2E CI pending. Full legacy plugin/pixel parity incomplete."
+    },
+    {
+      "source": "src/modules/runtime/vue-frag.js",
+      "sha": "3d56e43289500dbd2855ded46fa469508dd3e1d9",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/vue-i18n.js",
+      "sha": "aa34bcfb5c0a383191d4c4ace485a8b680ab0e75",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/vue-social-sharing.js",
+      "sha": "8ace34fb156d86797b7a3b44ad03e02520b149db",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/runtime/vue-store.js",
+      "sha": "c4ecb818ab45b9cfa76516a543283d9fc3a05f30",
+      "area": "runtime",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/boot.js",
+      "sha": "339047d21e7c2d73d6501b44cc62c93cc7988465",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/bsod.js",
+      "sha": "02db6cd3963f1b9c142534ba648f3c65a566f079",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/dock-macos.js",
+      "sha": "80bcaf2599879ad06d83d4ada14641fad0a65b95",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/dock-ubuntu.js",
+      "sha": "83260cc48f312597f8f823ebd656c7c9fac4b0c6",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/dock.js",
+      "sha": "279b0769c72cb7d8aae0c2cafc3a2ac83afb6e74",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/hotkey.js",
+      "sha": "1b04f98c293404dafdae9fe2ad667b95b2f3ac45",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/index.js",
+      "sha": "fd0b9442c412889d87d9352cc4f783d20b19cf9f",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/listview-content.js",
+      "sha": "6a0b4416a2b8cca5dce9a31046920828ea955c34",
+      "area": "shell",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.css",
+        "packages/ui/src/sourceListView.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-listview-list-content.spec.ts",
+        "migration/LISTVIEW-LIST-CONTENT-SOURCE.md"
+      ],
+      "verification": "Original 00d7/27b9 shared wrappers, CSS and real Explorer view switches with Content metadata staged. Full CI pending; original cross-theme/pixel parity, full item slots and all source data fields remain incomplete."
+    },
+    {
+      "source": "src/modules/shell/listview-list.js",
+      "sha": "7218186c4db75d10802a6b5e61cb6210f80250d3",
+      "area": "shell",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.css",
+        "packages/ui/src/sourceListView.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-listview-list-content.spec.ts",
+        "migration/LISTVIEW-LIST-CONTENT-SOURCE.md"
+      ],
+      "verification": "Original 00d7/27b9 shared wrappers, CSS and real Explorer view switches with Content metadata staged. Full CI pending; original cross-theme/pixel parity, full item slots and all source data fields remain incomplete."
+    },
+    {
+      "source": "src/modules/shell/logon-base.js",
+      "sha": "c37d622e5919eeeb2a3b8f6eda9d865f00781d21",
+      "area": "shell",
+      "status": "in-progress",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/logon-win7.js",
+      "sha": "7e4a0acc73eeaa9c0c61810d23a2babff9e6f63d",
+      "area": "shell",
+      "status": "in-progress",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/logon.js",
+      "sha": "02097295a1e82cd29c46f22fa6b188a2cd38fb11",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/mouse.js",
+      "sha": "94f18ebc0b6a9f7f452847d3b0fc2ca014843e7e",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/portrait-overlay.js",
+      "sha": "6d462d0793184caa67235e43441d3f99c825ed4f",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/screensaver.js",
+      "sha": "2ef6f4576c678ef41c694ee375f38743f462425e",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/shortcutwiz.js",
+      "sha": "4352d8acf965fb773267bec0bc7359aeeb82e411",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/sound.js",
+      "sha": "334d1c5b8e7fb2e4b5041b3484668a6a16b8aad4",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-base.js",
+      "sha": "97296745a9acc341f927f1bac0feccd58c4fe8c0",
+      "area": "shell",
+      "status": "in-progress",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-chromeos.js",
+      "sha": "020af630f39bb16b0cdc6a52a35b69d31fc3c3ba",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-kubuntu.js",
+      "sha": "eef3a9d6b00f7fea7cf4727efeed002b320c76e4",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-launchpad.js",
+      "sha": "d189fd92d07d1ed8e4c819cf31a60bce99ab7a98",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-win10.js",
+      "sha": "93b08980cbef28e60cb280dfed09378ed9422a82",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-win11.js",
+      "sha": "14b438e5ce0ac4f5e33813edb16f961728c3e772",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-win31.js",
+      "sha": "ac616c660e99cfd20d437df3980d4e2b66a134e9",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-win8.js",
+      "sha": "d1939ca97280c80d3dbfe496774e68a14689412e",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-win9x.js",
+      "sha": "dcfbae7bd7d366f4ed60bd468c6a886580395e28",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/startmenu-winxp.js",
+      "sha": "ea288f31c2b1cd349d5f3bceda3047f425a79759",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/system.js",
+      "sha": "1a970caa3ec010b456f52e49fc5ecfb4434fd06e",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/taskbar-base.js",
+      "sha": "74e14446e3ce189ea741604878ec0e1d7af92838",
+      "area": "shell",
+      "status": "in-progress",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/taskbar-macos.js",
+      "sha": "f0b1d949fa282bb6d1918c115d01a3967022e7cc",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/taskbar-search.js",
+      "sha": "f95c32f1b7af1b7643490ae518873a435838a487",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/taskbar-ubuntu.js",
+      "sha": "af9ed04d19df2c7534f4d6f846636cccfab45511",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/taskbar.js",
+      "sha": "3f61c49c3a1b9d0f74057b32e682e8e2b57845c3",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/touch-feedback.js",
+      "sha": "edc34570304b362665c45bb46206ace65d212bf1",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/shell/win7-ui.js",
+      "sha": "c94d94d47486447a968f89504957ae2c93f60203",
+      "area": "shell",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/app-legacy.js",
+      "sha": "6a8f0ba8095f3457f8b32d9c37723e2d840a4c70",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/app.js",
+      "sha": "c934a376de6879ffd53af74e9ff25de349c5d474",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/billing.js",
+      "sha": "3cd3b450a821a8d039f859422ed39fdc8bfd7aad",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/bios.js",
+      "sha": "5fdc82b675dfcc01719e77f282c7a1464711d242",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/device.js",
+      "sha": "4ce3b2360e679bc7f960cf9d44289ab67f84cdcc",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/firebase-auth.js",
+      "sha": "d7db3140f6763ac18491c3d517b61ed08f98e5fc",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/index.js",
+      "sha": "dfd94009f763e595bb564cfec4d62fc5e816528a",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/installer-screen.js",
+      "sha": "590c6e6a795bcff0d6a5dc1d4bc103460a9b1cd5",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/installer.js",
+      "sha": "b230ca82f61bb65bcf40beea24188ee90a1310e1",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/locale-names.js",
+      "sha": "4b9abdc9da27a7acc0bc4a484498888f9a5eceba",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/main.js",
+      "sha": "dc9f6cde12815fd43ccac78bb698cc2685db68cd",
+      "area": "system",
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/desktopPositions.ts",
+        "packages/ui/src/DesktopIcons.tsx",
+        "tests/e2e/desktop-icons.spec.ts",
+        "migration/DESKTOP-ICONS.md",
+        "packages/ui/src/desktopSelection.ts",
+        "packages/ui/src/desktopSelection.test.ts",
+        "tests/e2e/desktop-band.spec.ts",
+        "migration/DESKTOP-BAND.md",
+        "packages/ui/src/desktopFiles.ts",
+        "packages/ui/src/desktopFiles.test.ts",
+        "tests/e2e/desktop-files.spec.ts",
+        "migration/DESKTOP-FILES.md",
+        "packages/ui/src/desktopRename.ts",
+        "packages/ui/src/desktopRename.test.ts",
+        "tests/e2e/desktop-rename.spec.ts",
+        "migration/DESKTOP-RENAME.md"
+      ]
+    },
+    {
+      "source": "src/modules/system/mediacenter.js",
+      "sha": "2e77fba357973539ad121e05f7a1341381e3df05",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/personalize.js",
+      "sha": "eff37a30fa9d9d8d04d848d5215b0a7ad0eb7164",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/pricing-panel.js",
+      "sha": "20be81908c23b7545da6abcb9d94666c02818644",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/purchase-sub.js",
+      "sha": "1bb2e7c1c9c7d911fcfd970d9121b0ae16592725",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/region.js",
+      "sha": "9f76e92a8148189d3b02491b09ae3f7e0e72d321",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/system/testmode.js",
+      "sha": "52675b6640fba8b5de2eefeaa1c97d3490865880",
+      "area": "system",
+      "status": "in-progress",
+      "evidence": [
+        "packages/filesystem/src/sourceProgramManifest.json",
+        "packages/filesystem/src/sourcePrograms.ts",
+        "tests/e2e/source-programs.spec.ts"
+      ]
+    },
+    {
+      "source": "src/modules/system/vue2-touch.js",
+      "sha": "74120271f4e10f0b4233187fc2af275cc98af0ce",
+      "area": "system",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-aeronoir.js",
+      "sha": "ad8df78acb2b8a7fb32983bb65c22ab0187f3a78",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-chromeos.js",
+      "sha": "96c549ce5be09f294e153e8658bfc91000032366",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-kubuntu.js",
+      "sha": "bd22edff43dbf0f9dd20c24c37949dd0ac0d4761",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-macos.js",
+      "sha": "d40b195c003ad196548ddce25168135ffd516088",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-onebit.js",
+      "sha": "abb06fc8fc2352edaa52df5742446fa183fbd6fe",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-oxygen.js",
+      "sha": "46b8d9247311a2ccb78b3c44b9d4185d66836e9f",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-ubuntu.js",
+      "sha": "d2ea6d45733bd1f15753d4249129cf8647081a9b",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-win-mixed.js",
+      "sha": "cf2e22d8ce602e2674bb35978a6259e832e9d6f3",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-win-x.js",
+      "sha": "48a07e60eb05e85702d5e63b7e46bbef95a96213",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-win31.js",
+      "sha": "f7137eeffa9637fe455c8478612114d0a745d918",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/boot-win9x.js",
+      "sha": "d5f1ace7a65ef69eea9e5b8aed241109af3bcf8d",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/bsod-win10.js",
+      "sha": "012c165c944e3c13431649000bd95e33fe03f6ff",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/bsod-win31.js",
+      "sha": "1f1ad527678b8ba0562a67652d58d42770ea7d66",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/bsod-win8.js",
+      "sha": "705e760ab09dd3b7e95e82568b53969f33112c8d",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/index.js",
+      "sha": "e731b562780be7e977cddd54a7f05f00b20f9b4f",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-aeronoir.js",
+      "sha": "f69a0540d34b4508cceb3fa1e104c9b1fe8f6aaf",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-chromeos.js",
+      "sha": "cb923f36f90d9e6705cba568543dbac3892eefda",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-kubuntu.js",
+      "sha": "86d1c1b09116dde5d213f82381e58c66e7fe54d5",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-macos.js",
+      "sha": "8ed6bce001e3c01632d39a6c0e52787e0c2f023b",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-onebit.js",
+      "sha": "d98f2c98ecfef57011c7489331dfa5c3ff8af11a",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-oxygen.js",
+      "sha": "3d19d65b193351846644f12fe4d6cbeb4c4a3b83",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-ubuntu.js",
+      "sha": "4dd628e377aa0e8ec676e8b10577b47ca1fe8376",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-win10.js",
+      "sha": "093d1d66d9f4f549da06572aa025d8280fd5bc06",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-win11.js",
+      "sha": "002418fc89c729dbb88a188c75001a849d105a96",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-win2k.js",
+      "sha": "5cd8d0d56eaf16a290796e32c731faf11fda76e6",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-win31.js",
+      "sha": "11464ac8e0ddd99bc6450dd0cb56ae2a6c85fe05",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-win8.js",
+      "sha": "9d7d3ae07bfa557ebf600843b50d4f9d8ad181a3",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-win9x.js",
+      "sha": "a1eb278e596a8a910ee772aef8c23a2ec8b75df8",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-winl.js",
+      "sha": "6d91aa061f6737116abe6fa13f81bed14722f3a4",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-winw.js",
+      "sha": "8c3c6f076e29ccc7524a6a2110ae2e8c19b146fc",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/logon-winxp.js",
+      "sha": "0c3a2c4bfd5885a366bd85b75aabe8952eaf1d50",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-ubuntu.js",
+      "sha": "e3a252f13e39fc7fd489908d2ba68134b3737d83",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-win2k.js",
+      "sha": "883599812e13a0da33f7f771a20a89170614d874",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-win31.js",
+      "sha": "b3263e2298601a4026a5aa3efc4799d5f5ec705f",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-win7.js",
+      "sha": "652ce49c5d0eea17a93dd2eab465036b3ed92f93",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-win95.js",
+      "sha": "b89abf2a5adf12f7bc71d68c398c53ec7e0407c0",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-win98.js",
+      "sha": "2bf1b0177a3474c3ef68a5245da135e3189b6a62",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-winl.js",
+      "sha": "7d40dfd36954c725f8af6af7c0391216facd90a2",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-winw.js",
+      "sha": "639d086b956c22be76d5896a7144d3ecdb404299",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-winx.js",
+      "sha": "7f220a458714c4c9baa7104e6f05cd9a18d5ad9c",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown-winxp.js",
+      "sha": "e3049360d923d06095874ec499f76ce597130c66",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/shutdown.js",
+      "sha": "4ba6d3c243b0b57067f24e9856564db2c967342f",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-aeroNoir-scss.js",
+      "sha": "a8a06cc7509b62fc5a8046b9102f4447b2480c5b",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-chromeos-scss.js",
+      "sha": "4c6b9cf8d8d34b3f2eb9826727afa2311499bcad",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-kubuntu-scss.js",
+      "sha": "499cb3fcd3dbe95061fe85fdaf5ea261835bc7ea",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-macos-scss.js",
+      "sha": "29392de13b0fa623ef93e3c232a435e568b81511",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-onebit-scss.js",
+      "sha": "f235214ade2b88c0f76bff3ae5afa7a390969c7f",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-oxygen-scss.js",
+      "sha": "adf12d465c37e8b59a47ee0a2ec1568613272be7",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-preview.js",
+      "sha": "ef453fe8d5db2cfb71010373f6d8bde165395f55",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-ubuntu-scss.js",
+      "sha": "dc002e248190ebb13344f85f9128c3b553808fd5",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win10-scss.js",
+      "sha": "c8996582b7ca4a8e333469d5c9a4407bdc06fa53",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win11-scss.js",
+      "sha": "e4d1d7b4e247702312d5aab976ba6f8f0c5105d7",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win31-scss.js",
+      "sha": "2a2ef0a63d802bebd2db121b646bd51b8c11c8ac",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win7-classic-scss.js",
+      "sha": "217e87cfa1768db730d2b04a542d6e6e9fcbc1c3",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win7-scss.js",
+      "sha": "a92d0190d5e8991e7ffa2e5ed052af552580017a",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win8-scss.js",
+      "sha": "563c9498f203f3b364ec43a35e78b88e665e0679",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-win9x-scss.js",
+      "sha": "93f4373b496c6419aa879f61cd923e539ab951f1",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-winW-scss.js",
+      "sha": "60f84751e9e1a3022310aa13555b76f0c8e49d63",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-winlonghorn-scss.js",
+      "sha": "a4f41ec2c6f8986108395b5415346bf44609667b",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-winvista-scss.js",
+      "sha": "85016821afaba625cf138e7ee26f2a4ef6becbdc",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/theme-winxp-scss.js",
+      "sha": "617359f6dc7a33b3e838c78e6c392b53015ffdc4",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/themes/themestudio.js",
+      "sha": "da5b3539274bd2a364cdb521a01e72ca27099326",
+      "area": "themes",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/workers/chess.worker.js",
+      "sha": "a211abd694f347e8b960a4c5ca59cf213b299ab2",
+      "area": "workers",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/workers/compression.worker.js",
+      "sha": "fcbc0d2474611c116d00d88f25f995d8768dee85",
+      "area": "workers",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/workers/conversion.worker.js",
+      "sha": "b4ca1f51a2a9b7cb0fae3c46f157a79f4bef9cc3",
+      "area": "workers",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "source": "src/modules/workers/index.js",
+      "sha": "53680d39deb64084596ae9e6d2cf3233b379b88a",
+      "area": "workers",
+      "status": "pending",
+      "evidence": []
+    }
+  ],
+  "externalApps": [
+    {
+      "source": "apps/contacts/index.html",
+      "sha": "9079378b7349c3ba255e40c40f117d73a6040f32",
+      "status": "implemented",
+      "verification": "browser-CRUD-and-contract-tests-passed; original-live-backend-and-visual-parity-pending",
+      "mode": "native-react",
+      "evidence": [
+        "packages/apps/contacts/src/ContactsApp.tsx",
+        "packages/apps/contacts/src/source.css",
+        "packages/apps/contacts/src/api.ts",
+        "packages/apps/contacts/src/api.test.ts",
+        "tests/e2e/contacts.spec.ts"
+      ],
+      "note": "Original standalone Contacts UI rebuilt as React with original isolated stylesheet, five source form fields and CRUD routes. Browser mock/error and contract checks passed in integrated CI 43484632290; full live Python backend integration and original screenshot parity remain pending."
+    },
+    {
+      "source": "apps/illustrator/index.html",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "pending",
+      "verification": "blocked-source",
+      "mode": "source-empty",
+      "evidence": [],
+      "note": "Source checkout stores a zero-byte app entry; must audit actual legacy runtime/availability rather than invent functionality."
+    },
+    {
+      "source": "apps/photoshop/index.html",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "pending",
+      "verification": "blocked-source",
+      "mode": "source-empty",
+      "evidence": [],
+      "note": "Source checkout stores a zero-byte app entry; check legacy runtime/availability before declaring feature parity."
+    }
+  ]
+}

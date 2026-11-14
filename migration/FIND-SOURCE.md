@@ -1,0 +1,15 @@
+# Original Windows 7 Find — 2026-11-13 (CI verified)
+
+- Source pinned to legacy-win7 4e63290d7: src/modules/apps/find.js module 709f, cf89 shared scope options, 16d5 search grammar; src/modules/apps/search-dialog.js and search-companion.js studied but NOT migrated.
+- New isolated packages/apps/find contains original Name & Location, Date Modified, Advanced tabs; original Named / Look in / Include subfolders / date modes and 1-month/1-day defaults; advanced type and KB controls; Find Now / source-disabled Stop / New Search, with source-state reset.
+- Find app (source hidden program ID "find") uses source search.5b30849a.webp Git blob c19ea92cfd1e71f1eb5aab87b003330d999dd3b4, 480px width, non-resizable and Minimize enabled/Maximize absent. Original "h=auto" is temporarily a 350px shell height; screenshot size remains unverified.
+- Original Find Now calls OpenWindow computer with file.path virtual search; target preserves that contract with an internal win7-find: URI adapter, which is NOT passed to the Guest VFS. Computer starts the real virtual filesystem filename, extension, date, type and KB search; new Computer results window is separate from Find; Explorer "Advanced Find..." opens it scoped to the current folder; Windows+F opens the singleton. Search remains within the Guest VFS and not the host machine.
+- Source wildcard/substring with comma/semicolon patterns and the special .* suffix are supported. Source 16d5 uses type map from untraced shared webpack module 2e2c; current type categories and extensions are an interim mapping, NOT byte-identical source taxonomy. Legacy search URI serialization also differs; original source search index/pagination, XP Search Companion and child search-dialog are future work.
+- Tests added for source-style query path roundtrip, unsafe path rejection, date/size filters and recursive real VFS results; three-tab reset and form-to-query unit tests; two desktop/mobile Chromium workflows for source controls and actual Computer results.
+- This is a CI-verified **draft PR-only** migration milestone, not a released or pixel-parity-complete product. Run CI only for a deliberate commit with `[run-ci]` or manual dispatch. Next: port source Search Dialog/Search Companion and capture the original screenshot baseline.
+
+## Verification — final opt-in checkpoint
+
+- [GitHub Actions run 43297733943](https://github.com/codersachin99/windows-os/actions/runs/43297733943) **SUCCESS** on code SHA `c14738f0d7ac85c61f4466b765a9c6571f4c8081`: TypeScript, 194/194 unit tests across 35 files, source/Contacts checks, Vite production build, 208/208 desktop/mobile Playwright browser tests.
+- The prior all-browser run had 206/208 passing; both failures were the same Playwright **ambiguous radio name** (`All files` also matched `Find all files modified`), not a functionality failure. The test now selects the exact original radio label.
+- [Related theme-driven search UI roadmap](migration/SEARCH-UI-ROADMAP.md): the original Search Dialog and Search Companion remain unported; no full parity claim.
