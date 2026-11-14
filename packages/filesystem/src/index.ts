@@ -545,3 +545,6 @@ export { transferFiles } from "./transfer";
 export type { FileTransferMode } from "./transfer";
 
 export { FileDragSession, SHELL_DRAG_TYPE, importDroppedFiles } from "./drag";
+
+// Original shared webpack 4cca byte-format contract (Computer + other apps).
+export { sourceSizeFromBytes } from "./sourceSize";

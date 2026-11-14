@@ -1,3 +1,10 @@
+## Exact shared 4cca.getSizeFrom source formatter — 2026-11-14 (CI pending)
+
+- Pinned original module `4cca` (Git blob `a3edd490a0f4e23052f2a3a74a694c8991911c56`) exports byte-size formatting as `0 bytes`, `N bytes`, and binary KB/MB/GB/TB with one decimal. Ported **without altering source rounding or units** into reusable `@windows-os/filesystem` helper `sourceSizeFromBytes`; Explorer and Bin metadata use it in Details, Tiles, Content and search extras.
+- Three new Vitest cases test source thresholds and formatting. Updated previous Explorer metadata expectations, and desktop/mobile browser acceptance uploads real 9-byte and 2048-byte VFS files to verify `9 bytes`/`2.0 KB` UI. Opt-in `[run-ci]` requested once; results must be checked before claiming green.
+- Previous [full CI #43608849980](https://github.com/codersachin99/windows-os/actions/runs/43608849980) **SUCCESS** at 9e764a7 for TypeScript, unit/browser checks, original source-art audit and production build. It verified List/Content and source contentItems, before this formatter change.
+- Inventory remains 290 source modules: 255 pending, 27 in progress, 8 implemented and 0 fully parity verified. Friendly search disk locations, localized labels, source CSS themes and original screenshots remain open. Draft PR #1, unchanged main and no release.
+
 ## Computer contentItems shared source-metadata correction — 2026-11-14 (CI pending)
 
 - Ported source Computer `contentItems` variant selection and last-extension `getFileType` into `packages/apps/explorer/src/sourceComputerExtras.ts`. Corrected Content (folder date-only, files Date → Type → Size), Tiles and Details ordering and original extension-derived labels; Content search gets date/location/size source-specific extras.

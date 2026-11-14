@@ -40,9 +40,10 @@ test("pinned source 00d7 List and 27b9 Content use shared layouts and live VFS e
 
 test("pinned Computer Content file extras use source date/type/size order",async({page})=>{
   const win=await openComputer(page);
-  await win.locator('input[aria-label="Upload files"]').setInputFiles({
-    name:"SourceContent.TXT",mimeType:"text/plain",buffer:Buffer.from("Win7 data")
-  });
+  await win.locator('input[aria-label="Upload files"]').setInputFiles([
+    {name:"SourceContent.TXT",mimeType:"text/plain",buffer:Buffer.from("Win7 data")},
+    {name:"SourceKiB.bin",mimeType:"application/octet-stream",buffer:Buffer.alloc(2048,0x41)}
+  ]);
   const file=win.locator('[data-test-explorer-item="SourceContent.TXT"]');
   await expect(file).toBeVisible();
   await setSourceView(win,"Content");
@@ -50,7 +51,10 @@ test("pinned Computer Content file extras use source date/type/size order",async
   await expect(extras).toHaveCount(3);
   await expect(extras.nth(0)).not.toHaveText("TXT File");
   await expect(extras.nth(1)).toHaveText("TXT File");
-  await expect(extras.nth(2)).toHaveText("9 B");
+  await expect(extras.nth(2)).toHaveText("9 bytes");
+  const larger=win.locator('[data-test-explorer-item="SourceKiB.bin"]');
+  await expect(larger.locator('[data-test-source-content-extras] .listview__item-extra').nth(2))
+    .toHaveText("2.0 KB");
   await file.click();
   await expect(file).toHaveClass(/is-selected/);
 });

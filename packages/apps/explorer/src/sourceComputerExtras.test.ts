@@ -22,9 +22,9 @@ describe("pinned computer.js contentItems and getFileType",()=>{
     expect(sourceComputerFileType(directory)).toBe("File folder");
   });
   it("uses the exact source selection and order for regular files",()=>{
-    expect(sourceComputerItemExtras(file,"details")).toEqual([date,"TXT File","42 B"]);
-    expect(sourceComputerItemExtras(file,"tiles")).toEqual(["TXT File","42 B"]);
-    expect(sourceComputerItemExtras(file,"content")).toEqual([date,"TXT File","42 B"]);
+    expect(sourceComputerItemExtras(file,"details")).toEqual([date,"TXT File","42 bytes"]);
+    expect(sourceComputerItemExtras(file,"tiles")).toEqual(["TXT File","42 bytes"]);
+    expect(sourceComputerItemExtras(file,"content")).toEqual([date,"TXT File","42 bytes"]);
     expect(sourceComputerItemExtras(file,"list")).toEqual([]);
     expect(sourceComputerItemExtras(file,"extra-large-icons")).toEqual([]);
   });
@@ -35,11 +35,11 @@ describe("pinned computer.js contentItems and getFileType",()=>{
   });
   it("replaces Content extras with modified date/location/size on search",()=>{
     expect(sourceComputerItemExtras(file,"content",true)).toEqual([
-      "Date modified: "+date,"/Users/Guest/Documents","Size: 42 B"
+      "Date modified: "+date,"/Users/Guest/Documents","Size: 42 bytes"
     ]);
     expect(sourceComputerItemExtras(directory,"content",true)).toEqual([
       "Date modified: "+date,"/Users/Guest/Documents"
     ]);
-    expect(sourceComputerItemExtras(file,"details",true)).toEqual([date,"TXT File","42 B"]);
+    expect(sourceComputerItemExtras(file,"details",true)).toEqual([date,"TXT File","42 bytes"]);
   });
 });

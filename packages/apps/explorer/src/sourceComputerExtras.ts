@@ -1,4 +1,4 @@
-import { getParentDirectory, type FileEntry } from "@windows-os/filesystem";
+import { getParentDirectory, sourceSizeFromBytes, type FileEntry } from "@windows-os/filesystem";
 import { sourceRenameParts } from "@windows-os/ui/rename";
 import type { ExplorerViewMode } from "./model";
 
@@ -25,7 +25,7 @@ export function sourceComputerItemExtras(
   if(view!=="details"&&view!=="tiles"&&view!=="content")return [];
   const date=new Date(entry.mtime).toLocaleString();
   const type=sourceComputerFileType(entry);
-  const size=entry.size+" B";
+  const size=sourceSizeFromBytes(entry.size);
   const directory=entry.type==="directory";
   if(view==="tiles")return directory?[type]:[type,size];
   if(view==="details")return [date,type,directory?"":size];

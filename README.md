@@ -1,3 +1,7 @@
+## Pinned original 4cca shared file-size formatter — 14 November 2026
+
+The original WindowsOS byte formatter is now a reusable filesystem utility, used across Explorer/Recycle Bin Listview Details/Tiles/Content and search extras. It preserves source units (`bytes`, `KB`, `MB`, `GB`, `TB`), 1024-byte thresholds and one-decimal display. Unit tests and desktop/mobile real Guest upload assertions cover exact 9-byte and 2048-byte outputs. The preceding metadata source slice passed [full CI #43608849980](https://github.com/codersachin99/windows-os/actions/runs/43608849980); this formatter change requires its own opt-in verification. See [migration trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
 ## Original Computer metadata across List/Details/Tiles/Content — 14 November 2026
 
 The pinned source Computer `contentItems` metadata selection is now shared across Explorer and Recycle Bin: Content folders show only their modified date, Content files show modified date → extension-derived type → size, and Tiles/Details use the original per-mode slicing. Source Content search metadata also displays modified date and containing path, plus file size. Pure and desktop/mobile browser acceptance was added; full combined CI and pixel parity remain pending. See [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
