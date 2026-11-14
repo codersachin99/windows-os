@@ -1,3 +1,7 @@
+## Source message-dialog tested checkpoint — 14 November 2026
+
+[Full CI #43590165232](https://github.com/codersachin99/windows-os/actions/runs/43590165232) passed 308 unit/322 desktop-mobile browser/53 original-art checks for the source message error/confirm/progress UI and real Explorer/Recycle Bin deletion. The original warning/error WebP icons are separately imported byte-exact and are undergoing combined full CI and target-only visual baseline verification #43591033519. Complete original global message state and screenshot parity remain outstanding; see [source trace](migration/MESSAGES-SOURCE.md).
+
 ## Original Windows 7 message artwork — 14 November 2026
 
 The original source warning and error Win7 WebP icons have been imported byte-exactly (original Git blob SHA checked) and are used in the shared Error/Confirm message dialog. The next opt-in CI will verify browser-served hashes and original confirmation behavior. UI screenshot evidence will include Details, Tiles, and Delete-confirmation baselines; pixel-level original comparison still awaits original Vue capture access.

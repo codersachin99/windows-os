@@ -218,7 +218,7 @@
         "apps/web/public/assets/images/warning.cce1fd36.webp",
         "apps/web/public/assets/images/error.026cae2a.webp"
       ],
-      "verification": "CI #43590165232 in progress for original Error/Confirm/Progress and VFS Delete; exact original warning/error WebPs imported with SHA match, follow-up combined [run-ci]+[capture-visual] needed. Original notification window registry and full pixel parity pending."
+      "verification": "Core original Error/Confirm/Progress and Explorer VFS Yes/No pass CI #43590165232: 308 unit, 322 browser, 53 art. Win7 warning/error WebP SHA-exact icons + visual target scenes follow-up #43591033519 pending; legacy global message registry, sound and full pixel parity pending."
     },
     {
       "source": "src/modules/apps/notepad.js",

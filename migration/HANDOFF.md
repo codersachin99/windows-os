@@ -1,3 +1,8 @@
+## Source messages.js green functional CI — 2026-11-14
+
+- [Run #43590165232](https://github.com/codersachin99/windows-os/actions/runs/43590165232) **SUCCESS** at commit 4d87b13: 308 unit tests (63 files), 322 desktop/mobile browser cases, 53 original-image audits, TypeScript and Vite build. Original confirm identifiers/default No/Escape and real VFS Delete/Recycle Bin behavior passed. Source messages.js remains In Progress because global Vuex messages registry, Asterisk audio, source window chrome and paired screenshot parity are not migrated.
+- Original warning/error Win7 WebP files imported byte-exact and three additional target-only visual scenes staged/pushed as commit e1697bb with both required opt-in markers; combined run [#43591033519](https://github.com/codersachin99/windows-os/actions/runs/43591033519) verifying source-asset bytes and screenshot rendering. Do not claim success or pixel parity before that run finishes.
+
 ## Exact source Win7 dialog art and expanded capture — 2026-11-14 (combined verification pending)
 
 - Retrieved original warning.cce1fd36.webp (SHA 6bd336aa3a9ba01a4ab2879180a0ba8f5b0301aa) and error.026cae2a.webp (SHA 2a64837b8281a49be0cf491f18727f8978fd0323) through Base64, recreating target Git blobs with identical original hashes. The shared source messages dialog now uses them; source E2E and source-win7-art browser tests also assert the originals. No arbitrary CSS-generated stand-in glyphs for source Win7 warning/error.

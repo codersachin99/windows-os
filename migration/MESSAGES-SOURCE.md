@@ -24,7 +24,7 @@
 - tests/e2e/source-message.spec.ts uses desktop and mobile Chromium: creates a real Guest folder, confirms No, Escape, original yes/no selectors, Yes deletion, and an actual Recycle Bin entry.
 - Existing Explorer delete, bin and file safety regression tests also run in opt-in CI.
 
-Full CI pending, source completeness and pixel parity not asserted; draft PR #1 stays open, main unchanged, no release.
+Core source-message [full CI #43590165232](https://github.com/codersachin99/windows-os/actions/runs/43590165232) **SUCCESS**: 308/308 unit cases (63 files), 322/322 desktop/mobile browser cases, 53 original image integrity checks, TypeScript and Vite production build. Original-warning/error art and three new target-only screenshot scenes are under additional combined verification [#43591033519](https://github.com/codersachin99/windows-os/actions/runs/43591033519). Complete source window registry, alert audio and original pixel parity are not yet implemented; draft PR #1 remains open, main unchanged, no release.
 
 ## Original Win7 message icon import
 
