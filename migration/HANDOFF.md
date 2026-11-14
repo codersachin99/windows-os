@@ -1,3 +1,9 @@
+## Source CMD safe REN RD DEL command slice — 2026-11-15 (CI deferred)
+
+- Added original cmd.js Te `REN`/`RENAME`, `RD`/`RMDIR` and exact-file `DEL`/`ERASE` to mounted Guest VFS, with strict same-directory rename and source error strings. Source confirmation-required recursive `RD /S` and wildcard/directory `DEL` remain non-destructive unsupported paths until the original `waitForKey` interaction is reproduced. Vitest and Playwright acceptance added.
+- [Earlier CMD CI #43642780902](https://github.com/codersachin99/windows-os/actions/runs/43642780902) was still running browser acceptance when this new source slice started; no green claims. This commit intentionally does not trigger CI, honoring on-demand-only condition.
+- `migration/CMD-SOURCE.md` traces source command behavior. Tracker unchanged 290=254 pending / 28 in progress / 8 implemented / 0 full source-visual verified. PR #1 draft, main untouched, no release.
+
 ## CMD source regression fix and Te commands — 2026-11-15 (on-demand CI requested)
 
 - [Original CMD CI #43641366954](https://github.com/codersachin99/windows-os/actions/runs/43641366954) **FAILED 2 browser cases** desktop/mobile solely from stale existing browser assertion `Command Prompt.lnk` must be unimplemented, while the app was now correctly running. Source TypeScript, unit tests, migration audit, Contacts, Vite build all succeeded.

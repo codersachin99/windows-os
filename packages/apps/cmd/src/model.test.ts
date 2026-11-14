@@ -123,3 +123,58 @@ describe("pinned Te TYPE MD and directory stack PUSHD POPD commands",()=>{
     expect(session.prompt).toBe("C:\\Users\\Guest>");
   });
 });
+
+describe("original cmd.js Te REN RD DEL with safe source VFS semantics",()=>{
+  it("REN/RENAME renames actual files and directories without moving them across folders",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.write("journal",base+"/old.txt");
+    expect((await session.run("ren Documents\\old.txt updated.txt")).errorlevel).toBe(0);
+    expect(await fs.stat(base+"/old.txt")).toBeNull();
+    expect(await fs.read(base+"/updated.txt")).toBe("journal");
+    await fs.mkdir(base+"/Work");
+    await fs.write("safe",base+"/keep.txt");
+    expect((await session.run("rename Documents\\Work Projects")).errorlevel).toBe(0);
+    expect(await fs.stat(base+"/Projects")).toMatchObject({type:"directory"});
+    expect((await session.run("ren Documents\\updated.txt keep.txt")).output).toEqual([
+      "A duplicate file name exists, or the file cannot be found."
+    ]);
+    expect((await session.run("ren Documents\\updated.txt ..\\escape.txt")).errorlevel).toBe(1);
+    expect(await fs.read(base+"/updated.txt")).toBe("journal");
+  });
+  it("RD/RMDIR removes only empty directories; /S is withheld pending source confirmation",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest";
+    await session.run("md Scratch");
+    expect((await session.run("rmdir Scratch")).errorlevel).toBe(0);
+    expect(await fs.stat(base+"/Scratch")).toBeNull();
+    await fs.write("preserve",base+"/Documents/safe.txt");
+    expect((await session.run("rd Documents")).output).toEqual(["The directory is not empty."]);
+    expect((await session.run("rd /s Documents")).errorlevel).toBe(1);
+    expect(await fs.read(base+"/Documents/safe.txt")).toBe("preserve");
+    expect((await session.run("rd Documents\\safe.txt")).output).toEqual([
+      "The directory name is invalid."
+    ]);
+    expect((await session.run("rd Scratch")).output).toEqual([
+      "The system cannot find the path specified."
+    ]);
+  });
+});
+
+describe("original cmd.js Te DEL and ERASE without unchecked wildcard removal",()=>{
+  it("deletes a named source VFS file but never deletes a directory or wildcard matches",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.write("temporary",base+"/temp.txt");
+    await fs.write("permanent",base+"/keep.txt");
+    expect((await session.run("erase Documents\\temp.txt")).errorlevel).toBe(0);
+    expect(await fs.stat(base+"/temp.txt")).toBeNull();
+    expect((await session.run("del Documents\\*.txt")).errorlevel).toBe(1);
+    expect(await fs.read(base+"/keep.txt")).toBe("permanent");
+    expect((await session.run("del Documents")).errorlevel).toBe(1);
+    expect(await fs.stat(base)).toMatchObject({type:"directory"});
+    expect((await session.run("del Documents\\missing.txt")).output).toEqual([
+      "Could Not Find C:\\Users\\Guest\\Documents\\missing.txt"
+    ]);
+  });
+});

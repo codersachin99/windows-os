@@ -1,5 +1,5 @@
 import {
-  resolveWindowsPath,matchFilePattern,
+  resolveWindowsPath,matchFilePattern,getParentDirectory,
   type FileEntry,type LegacyVolumeSession,type VirtualFileStore
 } from "@windows-os/filesystem";
 
@@ -19,7 +19,7 @@ export interface SourceCmdResult {
   echo:boolean;
   errorlevel:number;
 }
-type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir">;
+type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath">;
 
 export const SOURCE_CMD_BANNER=[
@@ -31,6 +31,9 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   cd:"Displays the name of or changes the current directory.",
   cls:"Clears the screen.",
   dir:"Displays a list of files and subdirectories in a directory.",
+  del:"Deletes one or more files.",
+  rd:"Removes a directory.",
+  ren:"Renames a file or directory.",
   echo:"Displays messages, or turns command echoing on or off.",
   exit:"Quits the CMD.EXE program (command interpreter).",
   help:"Provides Help information for Windows commands.",
@@ -46,6 +49,19 @@ const PATH_NOT_FOUND="The system cannot find the path specified.";
 const FILE_NOT_FOUND="The system cannot find the file specified.";
 const ACCESS_DENIED="Access is denied.";
 const INVALID_SYNTAX="The syntax of the command is incorrect.";
+const DIR_NOT_EMPTY="The directory is not empty.";
+const NOT_DIRECTORY="The directory name is invalid.";
+const FILE_EXISTS="A duplicate file name exists, or the file cannot be found.";
+/** Source aliases at.cmd.js: rmdir->rd, erase->del, rename->ren. */
+const SOURCE_CMD_ALIASES:Readonly<Record<string,string>>={
+  mkdir:"md",rmdir:"rd",erase:"del",rename:"ren"
+};
+/** Preserve the exact quoted argument boundaries from original cmd ft().
+ * This subset rejects arbitrary command-line evaluation / host execution. */
+function sourceCmdArguments(value:string):string[]{
+  return (value.match(/"[^"]*"|\S+/g)??[]).map(part=>
+    part.startsWith('"')&&part.endsWith('"')?part.slice(1,-1):part);
+}
 const commandNames=Object.keys(SOURCE_CMD_HELP).sort((a,b)=>a.localeCompare(b));
 
 
@@ -58,7 +74,8 @@ export function sourceCmdUnglue(input:string):string{
   const match=/^([a-z]+)(\.\.?|\/.*)$/i.exec(first[2]);
   if(!match)return input;
   const command=match[1].toLowerCase();
-  if(!SOURCE_CMD_HELP[command]&&command!=="chdir"&&command!=="mkdir")return input;
+  if(!SOURCE_CMD_HELP[command]&&command!=="chdir"&&
+    !Object.prototype.hasOwnProperty.call(SOURCE_CMD_ALIASES,command))return input;
   return first[1]+match[1]+" "+match[2]+first[3];
 }
 
@@ -90,7 +107,7 @@ export class SourceCmdSession {
     const prompt=this.prompt;
     const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(sourceCmdUnglue(input));
     const sourceName=(match?.[1]??"").toLowerCase();
-    const name=sourceName==="mkdir"?"md":sourceName;
+    const name=SOURCE_CMD_ALIASES[sourceName]??sourceName;
     const rest=match?.[2]??"";
     const args=rest.trim();
     let errorlevel=0;
@@ -176,6 +193,83 @@ export class SourceCmdSession {
           }else{
             try{await this.fs.mkdir(dest.uri);}
             catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+          }
+        }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="ren"){
+      const tokens=sourceCmdArguments(args);
+      const [fromName,toName]=tokens;
+      if(tokens.length!==2||!fromName||!toName||
+        /[\\/:*?"<>|]/.test(toName)||toName==="."||toName===".."){
+        output=[INVALID_SYNTAX];errorlevel=1;
+      }else{
+        try{
+          const source=this.resolve(fromName);
+          if(!source.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          else if(!await this.fs.stat(source.uri)){
+            output=[FILE_NOT_FOUND];errorlevel=1;
+          }else{
+            const dest=getParentDirectory(source.uri)+"/"+toName;
+            if(await this.fs.stat(dest)){output=[FILE_EXISTS];errorlevel=1;}
+            else{
+              try{await this.fs.move(source.uri,dest);}
+              catch{output=[ACCESS_DENIED];errorlevel=1;}
+            }
+          }
+        }catch{output=[FILE_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="rd"){
+      const tokens=sourceCmdArguments(args);
+      // Original RD /S confirms removal of non-empty subtrees. Until
+      // source host.waitForKey is ported, never delete those without consent.
+      const recursive=tokens.some(token=>/^\/s$/i.test(token));
+      const target=tokens.find(token=>!/^\/s$/i.test(token));
+      if(!target||tokens.length!==(recursive?2:1)){
+        output=[INVALID_SYNTAX];errorlevel=1;
+      }else if(recursive){
+        output=["RD /S confirmation is not yet available in this migration."];
+        errorlevel=1;
+      }else{
+        try{
+          const dest=this.resolve(target);
+          if(!dest.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          else{
+            const entry=await this.fs.stat(dest.uri);
+            if(!entry){output=[PATH_NOT_FOUND];errorlevel=1;}
+            else if(entry.type!=="directory"){
+              output=[NOT_DIRECTORY];errorlevel=1;
+            }else if((await this.fs.list(dest.uri)).length){
+              output=[DIR_NOT_EMPTY];errorlevel=1;
+            }else{
+              try{await this.fs.remove(dest.uri);}
+              catch{output=[ACCESS_DENIED];errorlevel=1;}
+            }
+          }
+        }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="del"){
+      const tokens=sourceCmdArguments(args);
+      if(tokens.length!==1||!tokens[0]){
+        output=[INVALID_SYNTAX];errorlevel=1;
+      }else if(/[*?]/.test(tokens[0])){
+        // Source DEL confirms wildcard/all-file operations. Reject until
+        // source waitForKey confirmation behavior is implemented.
+        output=["DEL wildcard confirmation is not yet available in this migration."];
+        errorlevel=1;
+      }else{
+        try{
+          const dest=this.resolve(tokens[0]);
+          if(!dest.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          else{
+            const entry=await this.fs.stat(dest.uri);
+            if(!entry){output=["Could Not Find "+dest.win];errorlevel=1;}
+            else if(entry.type==="directory"){
+              output=["DEL directory confirmation is not yet available in this migration."];
+              errorlevel=1;
+            }else{
+              try{await this.fs.remove(dest.uri);}
+              catch{output=[ACCESS_DENIED];errorlevel=1;}
+            }
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
       }

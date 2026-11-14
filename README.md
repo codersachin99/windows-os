@@ -1,3 +1,7 @@
+## Source CMD file management — 15 November 2026
+
+Command Prompt now includes `REN`/`RENAME`, empty-directory `RD`/`RMDIR`, and named-file `DEL`/`ERASE` on the actual Guest virtual filesystem, with tests covering safe no-overwrite and non-destructive error paths. Recursive/wildcard operations requiring the original confirmation prompt are not yet migrated. See [CMD source trace](migration/CMD-SOURCE.md).
+
 ## CMD source commands and acceptance repair — 15 November 2026
 
 Original Command Prompt now supports file inspection `TYPE`, directory creation `MD`/`MKDIR`, and `PUSHD`/`POPD` working-directory stack on the real Guest filesystem. A stale desktop/mobile browser assertion expecting the newly launched CMD to be unavailable has been corrected, while the unported WordPad negative test is preserved. [Original CMD CI #43641366954](https://github.com/codersachin99/windows-os/actions/runs/43641366954) failed 2 browser cases before this correction; this combined fix/new command slice requests explicit CI. See [CMD trace](migration/CMD-SOURCE.md).

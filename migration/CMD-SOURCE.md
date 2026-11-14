@@ -36,3 +36,11 @@ Original `src/modules/apps/cmd.js` Te list (source blob `d3e991b9604d8b098667638
 
 ### Regression from first CMD browser run
 [CI #43641366954](https://github.com/codersachin99/windows-os/actions/runs/43641366954) **FAILED exactly 2 Playwright cases**, desktop and mobile, because the prior `source-programs.spec.ts` still asserted that opening `Command Prompt.lnk` should display a not-migrated alert. The actual CMD app now launches. Updated that assertion to verify the CMD input becomes visible; the negative association test now uses `WordPad.lnk` (genuinely unported) and checks the no-execution alert. All earlier TypeScript, unit, source audits, Vite build passed. Original CMD remains in progress; pipes/redirection/batches, full CMD command set, original icon/WebP and source screenshot parity remain pending.
+
+## Source CMD Te REN/RD/DEL aliases and safe destructive operations — 15 November 2026
+
+Pinned `src/modules/apps/cmd.js` Te commands `ren`, `rd`, `del` and alias table `at` (`rename`/`rmdir`/`erase`) use the shared filesystem. This slice extends `SourceCmdSession` with `VirtualFileStore.move`, `remove`, `getParentDirectory` and existing source drive mapping. `REN` restricts the replacement to a single filename in the same directory and refuses collisions; `RD` removes only empty directories and retains source errors `DirNotEmpty` and `NotDirectory`; `DEL` removes a single explicitly named file. All operations affect **only Guest VFS**, never the host OS.
+
+The original `RD /S`, wildcard/whole-directory `DEL` require interactive source `host.waitForKey` confirmation, not yet ported. They **return a visible unsupported warning without deleting anything**. The original CMD module remains in-progress; this is not equivalence for every variation of command grammar. Unit tests validate rename collisions, exact file deletion, preserved nonempty directories and blocked recursive/wildcard removal. Browser test verifies create -> rename -> list -> remove against live Guest filesystem.
+
+Previous opt-in [CI #43642780902](https://github.com/codersachin99/windows-os/actions/runs/43642780902) remained running Chromium at the start of this slice. This commit intentionally does not contain `[run-ci]`; next source acceptance verification should be batched once the earlier run completes.

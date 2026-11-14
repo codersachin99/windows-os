@@ -136,6 +136,18 @@ test("original Command Prompt first source shell slice uses live Guest directory
   await input.fill("popd");
   await input.press("Enter");
   await expect(window.locator(".cmd__prompt")).toHaveText("C:\\Users\\Guest\\Documents>");
+  await input.fill("md RemoveMe");
+  await input.press("Enter");
+  await input.fill("ren RemoveMe RenamedMe");
+  await input.press("Enter");
+  await input.fill("dir /b");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).toContainText("RenamedMe");
+  await input.fill("rd RenamedMe");
+  await input.press("Enter");
+  await input.fill("dir /b");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).not.toContainText("RenamedMe");
   await input.fill("exit");
   await input.press("Enter");
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
