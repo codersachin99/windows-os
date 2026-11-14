@@ -1,3 +1,9 @@
+## CMD original SET PATH COLOR source slice — 2026-11-15 (CI deferred)
+
+- Ported pinned original cmd.js `bt` case-insensitive environment map, `Dt` known Guest variables, `SET`/prefix filtering/removal, `PATH` query/update/clear, `COLOR` original sixteen-hex Win7 palette. Colors are wired to actual CMD component CSS. Host-specific source env (hostname etc.) are intentionally not invented.
+- New Vitest and Playwright source contracts cover case-insensitive variables and COLOR styling/reset. Commit intentionally has **no `[run-ci]`**; previous CMD acceptance run #43643944920 was still in browser checks at last inspection. Request one on-demand CI after meaningful batch.
+- CMD remains in-progress; original batch processing, redirection, other commands, icon asset and screenshot pixel parity remain incomplete. PR #1 draft, main untouched, no release.
+
 ## Source CMD COPY/MOVE exact-file slice — 2026-11-15 (CI not triggered)
 
 - Traced original `cmd.js Pe` and added single-file Guest VFS `COPY`/`MOVE` (target directory or filename; binary fidelity; original nine-position success messages) plus pure tests for source retention/move, unsupported wildcard/no-overwrite/missing mount. No native host filesystem calls; wildcard/multi-file source behavior pending.

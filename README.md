@@ -1,3 +1,7 @@
+## CMD source environment and console colors — 15 November 2026
+
+Pinned Win7 `SET`, `PATH` and `COLOR` command behavior now works in Command Prompt. Case-insensitive variables are session-local and seeded only from the mounted source Guest profile; hexadecimal console colors use the original palette and render in the React window. Includes unit and browser regression coverage. Full source CMD parity remains in-progress. See [CMD source trace](migration/CMD-SOURCE.md).
+
 ## Win7 CMD file transfers — 15 November 2026
 
 Command Prompt now supports the original `COPY`/`MOVE` single-file behavior, with actual Guest filesystem contents and binary bytes preserved. Multisource wildcard transfers and overwrite/confirmation behavior are tracked as pending rather than simulated. See [CMD source trace](migration/CMD-SOURCE.md).

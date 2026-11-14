@@ -216,3 +216,55 @@ describe("original cmd.js Pe COPY/MOVE exact source file transfer",()=>{
     expect(await fs.read(base+"/Documents/one.txt")).toBe("safe");
   });
 });
+
+describe("source cmd.js environment and console COLOR/SET/PATH",()=>{
+  it("seeds source Dt variables from mounted Guest C: without exposing host env",async()=>{
+    const {session}=await createShell();
+    expect(session.environmentVariables).toContainEqual({
+      name:"USERPROFILE",value:"C:\\Users\\Guest"
+    });
+    expect(session.environmentVariables).toContainEqual({name:"OS",value:"Windows_NT"});
+    expect(session.environmentVariables.some(item=>item.name==="COMPUTERNAME"))
+      .toBe(false);
+    expect((await session.run("set userprofile")).output).toEqual([
+      "USERPROFILE=C:\\Users\\Guest"
+    ]);
+  });
+  it("SET stores case-insensitive variable keys, preserves original casing and removes empty values",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("set project=Test = Valid")).errorlevel).toBe(0);
+    expect((await session.run("set PROJ")).output).toEqual(["project=Test = Valid"]);
+    await session.run("set PROJECT=Updated");
+    expect((await session.run("set project")).output).toEqual(["project=Updated"]);
+    await session.run("set Project=");
+    expect((await session.run("set project")).output).toEqual([
+      "Environment variable project not defined"
+    ]);
+    expect((await session.run("set =bad")).output).toEqual([
+      "The syntax of the command is incorrect."
+    ]);
+    expect((await session.run("set")).output.some(line=>line.startsWith("USERPROFILE=")))
+      .toBe(true);
+  });
+  it("PATH reads, clears and sets simulated source Windows search path, never real shell PATH",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("path")).output).toContain(
+      "PATH=C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem"
+    );
+    await session.run("path ;");
+    expect((await session.run("path")).output).toEqual(["PATH=(null)"]);
+    await session.run("path C:\\Tools;C:\\Bin");
+    expect((await session.run("set path")).output).toEqual(["Path=C:\\Tools;C:\\Bin"]);
+  });
+  it("COLOR uses pinned F color palette and rejects identical background/foreground",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("color fc")).style).toEqual({
+      backgroundColor:"#f2f2f2",color:"#e74856"
+    });
+    const invalid=await session.run("color ff");
+    expect(invalid.errorlevel).toBe(1);
+    expect(invalid.style).toBeUndefined();
+    expect((await session.run("color zz")).output).toContain("COLOR [attr]");
+    expect((await session.run("color")).style).toBeNull();
+  });
+});

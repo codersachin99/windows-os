@@ -18,6 +18,12 @@ export interface SourceCmdResult {
   title?:string;
   echo:boolean;
   errorlevel:number;
+  /** Original COLOR host.setStyle: undefined means unchanged; null resets. */
+  style?:SourceCmdColorStyle|null;
+}
+export interface SourceCmdColorStyle{
+  backgroundColor:string;
+  color:string;
 }
 type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move"|"copy">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath">;
@@ -29,6 +35,7 @@ export const SOURCE_CMD_BANNER=[
 
 export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   cd:"Displays the name of or changes the current directory.",
+  color:"Sets the default console foreground and background colors.",
   copy:"Copies one or more files to another location.",
   move:"Moves one or more files from one directory to another directory.",
   cls:"Clears the screen.",
@@ -42,6 +49,8 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   md:"Creates a directory.",
   popd:"Changes to the directory stored by PUSHD.",
   pushd:"Saves the current directory then changes it.",
+  set:"Displays, sets, or removes environment variables.",
+  path:"Displays or sets a search path for executable files.",
   type:"Displays the contents of a text file.",
   title:"Sets the window title for a CMD.EXE session.",
   ver:"Displays the Windows version."
@@ -64,6 +73,50 @@ function sourceCmdArguments(value:string):string[]{
   return (value.match(/"[^"]*"|\S+/g)??[]).map(part=>
     part.startsWith('"')&&part.endsWith('"')?part.slice(1,-1):part);
 }
+
+/** Original cmd.js F / L Win7 console hexadecimal palette, including
+ * the source default rather than contemporary Windows Terminal colors. */
+export const SOURCE_CMD_COLORS:Readonly<Record<string,string>>={
+  "0":"#0c0c0c","1":"#0037da","2":"#13a10e","3":"#3a96dd",
+  "4":"#c50f1f","5":"#881798","6":"#c19c00","7":"#cccccc",
+  "8":"#767676","9":"#3b78ff","a":"#16c60c","b":"#61d6d6",
+  "c":"#e74856","d":"#b4009e","e":"#f9f1a5","f":"#f2f2f2"
+};
+/** Original Dt source template seeded from this session's mounted Guest
+ * profile. Host/computer-specific values are deliberately not fabricated. */
+export function sourceCmdInitialEnvironment(home:string):readonly [string,string][]{
+  const drive=home.slice(0,2);
+  const windows=drive+"\\Windows";
+  const files=drive+"\\Program Files";
+  const local=home+"\\AppData\\Local";
+  return [
+    ["ALLUSERSPROFILE",drive+"\\ProgramData"],
+    ["APPDATA",home+"\\AppData\\Roaming"],
+    ["CommonProgramFiles",files+"\\Common Files"],
+    ["ComSpec",windows+"\\system32\\cmd.exe"],
+    ["HOMEDRIVE",drive],["HOMEPATH",home.slice(drive.length)],
+    ["LOCALAPPDATA",local],["OS","Windows_NT"],
+    ["Path",[windows+"\\system32",windows,windows+"\\System32\\Wbem"].join(";")],
+    ["PATHEXT",".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"],
+    ["ProgramData",drive+"\\ProgramData"],["ProgramFiles",files],
+    ["PROMPT","$P$G"],["PUBLIC",drive+"\\Users\\Public"],
+    ["SystemDrive",drive],["SystemRoot",windows],
+    ["TEMP",local+"\\Temp"],["TMP",local+"\\Temp"],
+    ["USERNAME",home.split("\\").at(-1)??"Guest"],
+    ["USERPROFILE",home],["windir",windows]
+  ];
+}
+const SOURCE_CMD_COLOR_HELP=[
+  "Sets the default console foreground and background colors.","","COLOR [attr]","",
+  "  attr        Specifies color attribute of console output","",
+  "Color attributes are specified by TWO hex digits -- the first",
+  "corresponds to the background; the second the foreground.  Each digit",
+  "can be any of the following values:","",
+  ...Object.keys(SOURCE_CMD_COLORS).map(key=>"    "+key.toUpperCase()),
+  "","If no argument is given, this command restores the color to what it",
+  "was when CMD.EXE started."
+];
+
 const commandNames=Object.keys(SOURCE_CMD_HELP).sort((a,b)=>a.localeCompare(b));
 
 
@@ -86,6 +139,7 @@ export class SourceCmdSession {
   private echo=true;
   private lastErrorLevel=0;
   private readonly directoryStack:string[]=[];
+  private readonly environment=new Map<string,{name:string;value:string}>();
   constructor(
     private readonly fs:CmdFilesystem,
     private readonly volume:CmdVolume,
@@ -94,11 +148,25 @@ export class SourceCmdSession {
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
     this.cwd=initial;
+    for(const [name,value] of sourceCmdInitialEnvironment(initial)){
+      this.setEnvironment(name,value);
+    }
+  }
+  private setEnvironment(name:string,value:string):void{
+    const key=name.toUpperCase();
+    this.environment.set(key,{name:this.environment.get(key)?.name??name,value});
+  }
+  private listEnvironment():{name:string;value:string}[]{
+    return [...this.environment.values()].sort((a,b)=>
+      a.name.localeCompare(b.name,undefined,{sensitivity:"base"}));
   }
   get prompt():string{return this.cwd+">";}
   get currentDirectory():string{return this.cwd;}
   get echoEnabled():boolean{return this.echo;}
   get errorlevel():number{return this.lastErrorLevel;}
+  get environmentVariables():ReadonlyArray<{name:string;value:string}>{
+    return this.listEnvironment();
+  }
 
   private resolve(argument:string):{win:string;uri:string|null}{
     const win=resolveWindowsPath(argument,{cwd:this.cwd});
@@ -117,9 +185,40 @@ export class SourceCmdSession {
     let clear=false;
     let exit=false;
     let title:string|undefined;
+    let style:SourceCmdColorStyle|null|undefined;
 
     if(name==="cls"){
       clear=true;
+    }else if(name==="color"){
+      if(!args)style=null;
+      else if(/^[0-9a-f]{2}$/i.test(args)){
+        const bg=SOURCE_CMD_COLORS[args[0].toLowerCase()];
+        const fg=SOURCE_CMD_COLORS[args[1].toLowerCase()];
+        if(bg===fg)errorlevel=1;
+        else style={backgroundColor:bg,color:fg};
+      }else output=[...SOURCE_CMD_COLOR_HELP];
+    }else if(name==="set"){
+      if(!args){
+        output=this.listEnvironment().map(item=>item.name+"="+item.value);
+      }else{
+        const eq=args.indexOf("=");
+        if(eq<0){
+          const entries=this.listEnvironment().filter(item=>
+            item.name.toUpperCase().startsWith(args.toUpperCase()));
+          if(entries.length)output=entries.map(item=>item.name+"="+item.value);
+          else{output=["Environment variable "+args+" not defined"];errorlevel=1;}
+        }else{
+          const key=args.slice(0,eq).trim();
+          const value=args.slice(eq+1);
+          if(!key){output=[INVALID_SYNTAX];errorlevel=1;}
+          else if(!value)this.environment.delete(key.toUpperCase());
+          else this.setEnvironment(key,value);
+        }
+      }
+    }else if(name==="path"){
+      if(!args)output=["PATH="+(this.environment.get("PATH")?.value||"(null)")];
+      else if(args===";")this.environment.delete("PATH");
+      else this.setEnvironment("PATH",args);
     }else if(name==="echo"){
       if(!args)output=["ECHO is "+(this.echo?"on":"off")];
       else if(/^(on|off)$/i.test(args))this.echo=args.toLowerCase()==="on";
@@ -382,6 +481,6 @@ export class SourceCmdSession {
       errorlevel=9009;
     }
     this.lastErrorLevel=errorlevel;
-    return {prompt,input,output,clear,exit,title,echo:this.echo,errorlevel};
+    return {prompt,input,output,clear,exit,title,echo:this.echo,errorlevel,style};
   }
 }

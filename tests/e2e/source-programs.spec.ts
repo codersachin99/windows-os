@@ -155,6 +155,21 @@ test("original Command Prompt first source shell slice uses live Guest directory
   await input.fill("dir /b");
   await input.press("Enter");
   await expect(window.locator('[data-test-cmd-output]').last()).not.toContainText("RenamedMe");
+  await input.fill("set source=test");
+  await input.press("Enter");
+  await input.fill("set SOURCE");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).toHaveText("source=test");
+  await input.fill("color fc");
+  await input.press("Enter");
+  await expect(window.locator("[data-test-cmd-container]"))
+    .toHaveCSS("background-color","rgb(242, 242, 242)");
+  await expect(window.locator("[data-test-cmd-container]"))
+    .toHaveCSS("color","rgb(231, 72, 86)");
+  await input.fill("color");
+  await input.press("Enter");
+  await expect(window.locator("[data-test-cmd-container]"))
+    .toHaveCSS("background-color","rgb(0, 0, 0)");
   await input.fill("exit");
   await input.press("Enter");
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);

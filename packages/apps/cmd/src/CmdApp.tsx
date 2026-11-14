@@ -1,6 +1,7 @@
 import {useEffect,useMemo,useRef,useState,type KeyboardEvent} from "react";
 import {fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
-import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult} from "./model";
+import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult,
+  type SourceCmdColorStyle} from "./model";
 import "./source.css";
 import "./CmdApp.css";
 
@@ -27,6 +28,7 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
   const [entries,setEntries]=useState<SourceCmdResult[]>([]);
   const [showBanner,setShowBanner]=useState(true);
   const [echo,setEcho]=useState(true);
+  const [consoleStyle,setConsoleStyle]=useState<SourceCmdColorStyle|null>(null);
   const [prompt,setPrompt]=useState(shell?.prompt??"");
   const [busy,setBusy]=useState(false);
   const history=useRef<string[]>([]);
@@ -57,6 +59,7 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       setEntries(current=>result.clear?[]:[...current,result]);
       if(result.clear)setShowBanner(false);
       if(result.title!==undefined)onTitleChange(result.title||"Command Prompt");
+      if(result.style!==undefined)setConsoleStyle(result.style);
       setPrompt(shell.prompt);
       setEcho(result.echo);
       if(result.exit){onClose();return;}
@@ -86,7 +89,7 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     }
   };
   return <div className="cmd__body" data-test-cmd-container=""
-    onClick={()=>inputRef.current?.focus()} ref={scroll}>
+    style={consoleStyle??undefined} onClick={()=>inputRef.current?.focus()} ref={scroll}>
     {showBanner&&<div className="cmd__banner">{SOURCE_CMD_BANNER.join("\n")}</div>}
     {entries.map((entry,i)=><div key={i} className="cmd__entry" data-test-cmd-entry="">
       <div className="cmd__line" data-test-cmd-line="">{entry.prompt+entry.input}</div>
