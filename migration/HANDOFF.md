@@ -1,3 +1,7 @@
+## a321 source width CI parser fix — 2026-11-14
+
+- Initial opt-in run [#43602081330](https://github.com/codersachin99/windows-os/actions/runs/43602081330) failed only during TypeScript parse: JSX in packages/ui/src/sourceListView.test.ts requires the .tsx extension. The new source code and browser cases were not executed in this run. Renamed the unit file to .test.tsx; new full CI required. No feature pass is claimed from the failed run.
+
 ## Original a321 listview width and header — 2026-11-14 (CI pending)
 
 - Discovered exact original a321 source in shared webpack chunk with blob ed3b984138eed7c830b5fbe4a8be08d58328cb35. normalizeWidth(width,count,details) is width ? (typeof width === "number" ? width+"px" : width.toString()) : 100/(count+(details?1:0))+"%"; isFixedWidth(width) uses typeof "number" even if width is 0. Details reserves one additional label column.

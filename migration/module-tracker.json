@@ -169,12 +169,12 @@
       "status": "in-progress",
       "evidence": [
         "packages/ui/src/sourceListView.tsx",
-        "packages/ui/src/sourceListView.test.ts",
+        "packages/ui/src/sourceListView.test.tsx",
         "packages/apps/explorer/src/ExplorerApp.tsx",
         "tests/e2e/listview-source-details-tiles.spec.ts",
         "migration/LISTVIEW-SOURCE.md"
       ],
-      "verification": "CI #43589707509 PASS (305 unit, 318 Chromium, 53 art). Original a321.normalizeWidth source-exact pure helper and header markup now ported, new CI pending; original screenshot pixel/other theme parity remains unverified."
+      "verification": "Source-exact a321.normalizeWidth and header code committed; initial CI #43602081330 TypeScript failed due JSX test .ts extension (fixed to .tsx); rerun pending, source window pixel parity still unverified."
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
@@ -188,7 +188,7 @@
         "tests/e2e/listview-source-details-tiles.spec.ts",
         "migration/LISTVIEW-SOURCE.md"
       ],
-      "verification": "CI #43589707509 PASS (305 unit, 318 Chromium, 53 art). Original a321.normalizeWidth source-exact pure helper and header markup now ported, new CI pending; original screenshot pixel/other theme parity remains unverified."
+      "verification": "Source-exact a321.normalizeWidth and header code committed; initial CI #43602081330 TypeScript failed due JSX test .ts extension (fixed to .tsx); rerun pending, source window pixel parity still unverified."
     },
     {
       "source": "src/modules/apps/magnifier.js",
