@@ -21,7 +21,10 @@ import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } fro
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
-import { sourceComputerItemExtras } from "./sourceComputerExtras";
+import {
+  sourceComputerDetailsLabelWidth,sourceComputerItemExtras,
+  SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH
+} from "./sourceComputerExtras";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -497,6 +500,7 @@ export function ExplorerApp({
     }
   };
 
+  const detailsSourceWidth=theme==="win7"?SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH:undefined;
   return <div className={"windows-explorer explorer-stage"+(theme==="win7"?" is-source-win7":"")} data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
       {theme === "win7"
@@ -669,12 +673,12 @@ export function ExplorerApp({
           }
         }}>
         {state.viewMode === "details" && <SourceListViewHeader
-          className="explorer-columns" useSourceWidths={false}
+          className="explorer-columns" useSourceWidths={theme==="win7"}
           columns={[
-            {key:"name",label:"Name"},
-            {key:"date",label:"Date modified"},
-            {key:"type",label:"Type"},
-            {key:"size",label:"Size"}
+            {key:"name",label:"Name",width:detailsSourceWidth},
+            {key:"date",label:"Date modified",width:detailsSourceWidth},
+            {key:"type",label:"Type",width:detailsSourceWidth},
+            {key:"size",label:"Size",width:detailsSourceWidth}
           ]} />}
         <SourceListView
           variant={state.viewMode === "details" ? "details" :
@@ -724,6 +728,22 @@ export function ExplorerApp({
                   {sourceComputerItemExtras(item, "content", found !== null, volume).map((value,index) =>
                     <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
                 </span>
+              : state.viewMode === "details" && theme === "win7"
+              ? <span className="listview__item-info" data-test-source-details-info="">
+                  {renamingUri === item.uri
+                    ? <SourceListItemRename originalName={item.name}
+                        onCommit={value => commitInlineRename(item.uri, value)}
+                        onCancel={() => setRenamingUri(null)}/>
+                    : <span className="listview__item-label" title={item.uri}
+                        style={{width:sourceComputerDetailsLabelWidth(showSourceCheckboxes)}}>
+                        {isBin && item.originalPath ? item.originalPath.split("/").pop()
+                          : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
+                      </span>}
+                  {sourceComputerItemExtras(item,"details").map((value,index,extras) =>
+                    <SourceListViewExtra key={index}
+                      width={SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH}
+                      count={extras.length} details>{value}</SourceListViewExtra>)}
+                </span>
               : state.viewMode === "tiles" && theme === "win7"
               ? <span className="listview__item-info" data-test-source-tiles-info="">
                   {renamingUri === item.uri
@@ -745,7 +765,8 @@ export function ExplorerApp({
                   {isBin && item.originalPath ? item.originalPath.split("/").pop()
                     : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
                 </span>}
-            {(state.viewMode === "details" || (state.viewMode === "tiles" && theme !== "win7")) &&
+            {((state.viewMode === "details" && theme !== "win7") ||
+                (state.viewMode === "tiles" && theme !== "win7")) &&
               sourceComputerItemExtras(item, state.viewMode).map((value,index) =>
                 <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
           </SourceListViewItem>)}

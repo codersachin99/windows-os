@@ -1,3 +1,10 @@
+## Pinned original Computer Details column layout — 2026-11-14 (CI pending)
+
+- Pinned `computer.js` source constants `se=16, ae=220, ne=204, re=24` and `src/styles/shell/listview-details.css` blob `2aedda59802d5a36ea0e106ddcdf4a16be4aca52`. Implemented original Win7 Details fixed 220px source header cells and VFS item extras within shared `0616` info wrapper, 16px icon, 204px regular or 180px touch-checkbox label width, and source 2px row/4px text padding. Other themes unaffected; narrow mobile uses a documented two-visible-column adaptation.
+- Added Vitest measurements and desktop/mobile browser computed-geometry, horizontal alignment, selection and source extra contracts. Current commit opts into full `[run-ci]` once. **Verification pending; do not claim success before checking Actions.**
+- Prior [Actions #43617699223](https://github.com/codersachin99/windows-os/actions/runs/43617699223) **SUCCESS** for the last search, List/Content and Tiles batch; earlier #43611997970 also succeeded.
+- Tracker unchanged: original 290 modules = 255 pending, 27 in progress, 8 implemented, 0 fully original pixel-parity verified. Draft PR #1, `main` untouched, no release.
+
 ## Combined source fidelity acceptance — 2026-11-14 (CI requested)
 
 - Feature source commits `5ee37c0`, `83efb94` and `881a205`: mounted-drive C: Content search locations; pinned original Win7 List/Content styling; and original Tiles `0616` item-info + 48px / 256px geometry. All have unit and/or desktop/mobile browser assertions but prior pushes intentionally skipped CI.

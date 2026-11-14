@@ -84,3 +84,49 @@ test("pinned source Tiles icon and stacked metadata are rendered from Guest rows
   }
   await expect(info.locator(".listview__item-extra")).toHaveCount(1);
 });
+
+test("pinned source Win7 Details header and 0616 item widths align to four 220px columns",async({page})=>{
+  const win=await openComputer(page);
+  await win.getByRole("button",{name:"New folder"}).click();
+  const create=win.getByRole("dialog",{name:"New folder"});
+  await create.getByRole("textbox",{name:"New folder name"}).fill("SourceDetailsGeometry");
+  await create.getByRole("button",{name:"OK"}).click();
+  await setView(win,"Details");
+  const row=win.locator('[data-test-explorer-item="SourceDetailsGeometry"]');
+  const info=row.locator('[data-test-source-details-info]');
+  await expect(info).toBeVisible();
+  await expect(info.locator(".listview__item-extra")).toHaveCount(3);
+  await expect(info.locator(".listview__item-extra").nth(1)).toHaveText("File folder");
+  expect(await info.evaluate(el=>getComputedStyle(el).display)).toBe("flex");
+  expect(await row.locator(".listview__item-iconbox")
+    .evaluate(el=>getComputedStyle(el).width)).toBe("16px");
+  const columns=win.locator('[data-test-listview-columnheader] .listview__header-column');
+  await expect(columns).toHaveCount(4);
+  if((await page.viewportSize())!.width>580){
+    for(const button of await columns.all()){
+      expect(await button.evaluate(el=>el.getBoundingClientRect().width)).toBe(220);
+    }
+    expect(await info.locator(".listview__item-label")
+      .evaluate(el=>el.getBoundingClientRect().width)).toBe(204);
+    for(const extra of await info.locator(".listview__item-extra").all()){
+      expect(await extra.evaluate(el=>el.getBoundingClientRect().width)).toBe(220);
+    }
+    const layout=await row.evaluate(el=>{
+      const header=el.closest(".explorer-content")!.querySelector(
+        '[data-test-listview-columnheader] .listview__header-column');
+      const firstExtra=el.querySelector(".listview__item-extra");
+      return {header:header!.getBoundingClientRect().left,
+        firstExtra:firstExtra!.getBoundingClientRect().left};
+    });
+    expect(Math.abs(layout.firstExtra-layout.header-220)).toBeLessThanOrEqual(2);
+  }else{
+    await expect(columns.nth(1)).toBeHidden();
+    await expect(columns.nth(2)).toBeHidden();
+    await expect(columns.nth(3)).toBeVisible();
+    await expect(info.locator(".listview__item-extra").nth(0)).toBeHidden();
+    await expect(info.locator(".listview__item-extra").nth(1)).toBeHidden();
+    await expect(info.locator(".listview__item-extra").nth(2)).toBeVisible();
+  }
+  await row.click();
+  await expect(row).toHaveClass(/is-selected/);
+});

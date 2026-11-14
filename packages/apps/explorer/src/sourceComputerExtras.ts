@@ -9,6 +9,18 @@ import type { ExplorerViewMode } from "./model";
  */
 type ComputerFile = Pick<FileEntry,"name"|"type"|"mtime"|"size"|"uri">;
 
+/** Pinned computer.js constants se=16, ae=220, ne=ae-se, re=24.
+ * Source item labelWidth loses exactly the checkbox width when touch
+ * selection exposes item.toggle. Keep source widths in one source adapter.
+ */
+export const SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH=220;
+export const SOURCE_COMPUTER_DETAILS_ICON_WIDTH=16;
+export const SOURCE_COMPUTER_DETAILS_CHECKBOX_WIDTH=24;
+export function sourceComputerDetailsLabelWidth(showCheckboxes:boolean):number{
+  return SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH-SOURCE_COMPUTER_DETAILS_ICON_WIDTH-
+    (showCheckboxes?SOURCE_COMPUTER_DETAILS_CHECKBOX_WIDTH:0);
+}
+
 export function sourceComputerFileType(entry:Pick<ComputerFile,"name"|"type">):string{
   const ext=entry.type==="directory"?"":sourceRenameParts(entry.name).ext;
   // The original source even labels extensionless regular files this way.
@@ -16,8 +28,7 @@ export function sourceComputerFileType(entry:Pick<ComputerFile,"name"|"type">):s
 }
 
 /** Date/type/size selection follows original computer.js contentItems().
- * Byte display is currently the Guest VFS's simple 'B' representation;
- * legacy 4cca.getSizeFrom formatting is a separately tracked parity gap.
+ * Size is formatted by the exact reusable 4cca.getSizeFrom helper.
  */
 export function sourceComputerItemExtras(
   entry:ComputerFile,view:ExplorerViewMode,isSearch=false,volume:LegacyVolumeSession|null=null

@@ -1,3 +1,7 @@
+## Source-faithful Windows 7 Details geometry — 14 November 2026
+
+The original Computer Details layout now renders through the shared `0616` item-info wrapper and source `a321` header: 220px columns, 16px icons, 204px filename widths (or 180px with touch selection). The 580px responsive layout shows Name and Size while retaining all source metadata. Pure and browser contracts added, with full verification requested via `[run-ci]`. Last combined List/Content/Tiles [CI #43617699223](https://github.com/codersachin99/windows-os/actions/runs/43617699223) passed. Source screenshot equivalence remains outstanding. See [Details source trace](migration/LISTVIEW-SOURCE.md).
+
 ## Original Win7 Tiles row hierarchy — 14 November 2026
 
 Tiles now shows a source-faithful 48px icon next to vertically stacked filename and metadata, inside the shared item-info element, with original 256px minimum width and 2px gap. The change is Win7-scoped; mobile adapts to the viewport, and existing file operations stay wired. Browser assertions added; newest slice awaits combined verification. See [Listview trace](migration/LISTVIEW-SOURCE.md).

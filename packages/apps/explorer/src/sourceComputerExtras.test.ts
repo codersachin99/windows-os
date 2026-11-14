@@ -1,5 +1,7 @@
 import {describe,expect,it} from "vitest";
-import {sourceComputerFileType,sourceComputerItemExtras} from "./sourceComputerExtras";
+import {sourceComputerDetailsLabelWidth,sourceComputerFileType,sourceComputerItemExtras,
+  SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH,SOURCE_COMPUTER_DETAILS_ICON_WIDTH,
+  SOURCE_COMPUTER_DETAILS_CHECKBOX_WIDTH} from "./sourceComputerExtras";
 import {LegacyVolumeSession,VirtualFileStore,sourceGuestMounts,SOURCE_SYSTEM_DISK} from "@windows-os/filesystem";
 
 const file={
@@ -15,6 +17,13 @@ const directory={
 const date=new Date(file.mtime).toLocaleString();
 
 describe("pinned computer.js contentItems and getFileType",()=>{
+  it("uses exact source Details widths including 24px touch-checkbox subtraction",()=>{
+    expect(SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH).toBe(220);
+    expect(SOURCE_COMPUTER_DETAILS_ICON_WIDTH).toBe(16);
+    expect(SOURCE_COMPUTER_DETAILS_CHECKBOX_WIDTH).toBe(24);
+    expect(sourceComputerDetailsLabelWidth(false)).toBe(204);
+    expect(sourceComputerDetailsLabelWidth(true)).toBe(180);
+  });
   it("uses last-dot source extensions rather than invented Windows labels",()=>{
     expect(sourceComputerFileType(file)).toBe("TXT File");
     expect(sourceComputerFileType({...file,name:"archive.tar.gz"})).toBe("GZ File");

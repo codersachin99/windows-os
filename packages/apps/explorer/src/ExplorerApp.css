@@ -493,3 +493,72 @@
     width:100%;min-width:0;
   }
 }
+
+/* Pinned src/styles/shell/listview-details.css (Git blob
+ * 2aedda59802d5a36ea0e106ddcdf4a16be4aca52) and original computer.js:
+ * source columns ae=220, icon se=16 and label ne=204 (-24 when
+ * touch-only checkboxes appear). The 32cd extra widths are inline 220px. */
+.explorer-stage.is-source-win7 .explorer-columns{
+  display:flex;width:max-content;min-width:880px;
+}
+.explorer-stage.is-source-win7 .explorer-columns .listview__header-column{
+  box-sizing:border-box;flex:0 0 220px;min-width:220px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details{
+  display:flex;flex-wrap:wrap;min-width:fit-content;padding:0;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .explorer-item{
+  display:flex;align-items:center;width:100%;min-width:880px;
+  padding:2px 0;text-align:left;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-iconbox{
+  width:16px;height:16px;flex:0 0 16px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info{
+  display:flex;min-width:0;width:100%;overflow:visible;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-label,
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-extra{
+  box-sizing:border-box;min-width:0;padding:0 4px;
+  border-left:1px solid transparent;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-label{
+  grid-column:auto;grid-row:auto;padding-left:4px;flex:0 0 auto;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-extra{
+  flex:0 0 220px;overflow:hidden;
+}
+@media(max-width:580px){
+  /* Viewport-adaptive name+size columns, retaining the source semantics
+   * and preserving all three real extras in the DOM. */
+  .explorer-stage.is-source-win7 .explorer-columns{
+    display:grid;grid-template-columns:minmax(0,1fr) 88px;
+    min-width:0;width:100%;
+  }
+  .explorer-stage.is-source-win7 .explorer-columns .listview__header-column{
+    flex:initial;min-width:0;width:auto!important;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .explorer-item{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-label{
+    width:0!important;flex:1 1 0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info
+  > .listview__item-extra:nth-child(2),
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info
+  > .listview__item-extra:nth-child(3){
+    display:none;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info
+  > .listview__item-extra:last-child{
+    width:88px!important;flex:0 0 88px;
+  }
+}
