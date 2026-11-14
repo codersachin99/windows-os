@@ -67,6 +67,13 @@ const builtinApps: AppDefinition[] = [
     kind: "utility", desktop: false, showInStart: true,
     window: { width: 620, height: 440 }
   },
+  {
+    id: "photo", label: "Windows Photo Viewer", icon: legacyArt.photo,
+    kind: "media", desktop: false, showInStart: false,
+    // Source photo.js inherits a resizable standard WindowMain; exact opening
+    // geometry and Win7 icon variant await side-by-side original screenshots.
+    window: { width: 690, height: 520 }
+  },
   ...sourceShortcuts.map(shortcut => ({
     id: shortcut.key, label: shortcut.lbl, icon: shortcut.icon,
     kind: "web" as const, desktop: true, showInStart: true,

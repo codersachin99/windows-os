@@ -1,0 +1,57 @@
+.source-photo{
+  height:100%;min-height:0;display:flex;flex-direction:column;
+  background:#f4f4f4;color:#151515;font:12px "Segoe UI",Tahoma,Arial,sans-serif;
+}
+.source-photo__menu{
+  display:flex;flex:0 0 27px;align-items:center;gap:0;padding:0 5px;
+  border-bottom:1px solid #d4d4d4;background:linear-gradient(#fff,#e9e9e9);
+}
+.source-photo__menu button{
+  border:0;background:transparent;color:#757575;font:12px inherit;
+  padding:5px 10px;opacity:.67;cursor:default;
+}
+.source-photo__viewport{
+  position:relative;flex:1 1 auto;min-height:0;overflow:auto;
+  display:flex;align-items:center;justify-content:center;
+  background:#f6f6f6;
+}
+.source-photo__viewport.is-slideshow{background:#000}
+.source-photo__viewport:fullscreen{width:100vw;height:100vh}
+.source-photo__canvas{
+  position:relative;min-height:0;min-width:0;max-width:100%;max-height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+.source-photo__canvas.is-actual{
+  max-width:none;max-height:none;min-width:max-content;min-height:max-content;
+  margin:auto;
+}
+.source-photo__canvas img{display:block;object-fit:contain}
+.source-photo__canvas.is-fit img{max-width:100%;max-height:100%}
+.source-photo__message{margin:auto;padding:16px;color:#666;font-style:italic;text-align:center}
+.source-photo__footer{
+  flex:0 0 45px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(#fff,#e4e4e4);border-top:1px solid #bdbdbd;
+}
+.source-photo__controls{
+  display:flex;align-items:center;gap:5px;height:32px;margin:0;
+  padding:0 9px;border:1px solid #b8b8b8;border-radius:19px;
+  background:linear-gradient(#fafafa,#dcdcdc);
+}
+.source-photo__controls button{
+  width:27px;height:27px;border:1px solid transparent;border-radius:3px;
+  font-size:17px;color:#464646;background:transparent;padding:1px;
+}
+.source-photo__controls button:hover:not(:disabled){background:#c5dffd;border-color:#7bb8e5}
+.source-photo__controls button:disabled{opacity:.37;cursor:default}
+.source-photo__zoom{display:flex;gap:4px;align-items:center;font-size:18px}
+.source-photo__zoom input{width:88px;accent-color:#2786ce}
+.source-photo__error{
+  flex:0 0 auto;background:#fff1f1;color:#9a2020;padding:5px 10px;
+  font-size:12px;
+}
+@media(max-width:530px){
+  .source-photo__menu button{padding:5px}
+  .source-photo__controls{gap:1px;padding:0 4px}
+  .source-photo__zoom input{width:40px}
+  .source-photo__controls button{width:22px}
+}

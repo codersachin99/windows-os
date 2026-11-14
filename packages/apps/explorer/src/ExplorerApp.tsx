@@ -7,7 +7,7 @@ import {
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
-  type FileEntry, type SourceSearchHighlight
+  matchesSourceKind, type FileEntry, type SourceSearchHighlight
 } from "@windows-os/filesystem";
 import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
@@ -28,6 +28,7 @@ import "./ExplorerApp.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
+  onOpenPhotoFile?(path: string): void;
   onLaunchSourceProgram?(programId: string): boolean;
   initialPath?: string;
   recycleBinPath?: string;
@@ -66,7 +67,7 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * and trash semantics are still pending and intentionally not fabricated.
  */
 export function ExplorerApp({
-  onOpenTextFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind,
+  onOpenTextFile, onOpenPhotoFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind,
   onClose, theme = "win7"
 }: ExplorerAppProps) {
   const classicSearchStyle = sourceExplorerSearchStyle(theme);
@@ -179,6 +180,11 @@ export function ExplorerApp({
       setMessage("Restore this item from the Recycle Bin before opening it.");
     } else if (/\.txt$/i.test(path)) {
       onOpenTextFile(path);
+    } else if (matchesSourceKind({
+      uri:path,name:path.split("/").pop() ?? path,type:"file",size:0,mtime:0
+    },"picture")) {
+      if(onOpenPhotoFile) onOpenPhotoFile(path);
+      else setMessage("Windows Photo Viewer is unavailable.");
     } else if (/\.lnk$/i.test(path)) {
       void execute(async () => {
         const data = parseSourceShortcut(await fileStore.read(path));

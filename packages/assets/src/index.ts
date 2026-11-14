@@ -33,6 +33,9 @@ export const legacyArt = {
   file: "/assets/images/file.73b2d097.webp",
   shortcut: "/assets/images/shortcut.e8c69673.webp",
   paint: "/assets/images/paint.37480453.webp",
+  // Exact source base-theme photo icon; Win7-specific photo.db6c5f81.webp
+  // remains a tracked art import gap until binary source transport is available.
+  photo: "/assets/images/photo-base.b5f2d859.svg",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
   viewModeIcon: {

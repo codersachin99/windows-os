@@ -188,8 +188,17 @@
       "source": "src/modules/apps/photo.js",
       "sha": "9df699034854fb6bcda027c0c2d8ab61ac6a01b2",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/photo/src/PhotoApp.tsx",
+        "packages/apps/photo/src/PhotoApp.css",
+        "packages/apps/photo/src/model.ts",
+        "packages/apps/photo/src/model.test.ts",
+        "tests/e2e/photo.spec.ts",
+        "apps/web/public/assets/images/photo-base.b5f2d859.svg",
+        "migration/PHOTO-SOURCE.md"
+      ],
+      "verification": "code-wired-and-tests-added; CI pending; original Win7 icon, slideshow/fullscreen, exhaustive format behavior and original-vs-React screenshot parity pending"
     },
     {
       "source": "src/modules/apps/player.js",

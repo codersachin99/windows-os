@@ -1,3 +1,11 @@
+## Windows Photo Viewer source migration — 2026-11-14 (INTEGRATED CI PENDING)
+
+- **Pinned origin**: `legacy-win7@4e63290/src/modules/apps/photo.js` (`9df69903`) renders hidden photo viewer with disabled File/Print/E-mail/Burn/Open actions, source picture-kind sibling listing, wrapped Prev/Next, fit/actual size, zoom (100–800 × 20), 90° rotation, save-before-navigation/close, and 3-second slideshow.
+- **React implementation**: new modular `packages/apps/photo/src` viewer/controller and source-backed pure model. It reads real binary files from the shared VFS, creates/revokes local object URLs, uses only the existing shell/window lifecycle, saves supported PNG/JPEG/WebP rotations safely to the original virtual file, and shows errors rather than silently corrupting unsupported formats.
+- **Integration**: hidden source `photo` registry entry and window, Explorer source `picture` double-click association, real uploaded-picture browser test covering PNG dimensions, wrap/navigation, rotation save, zoom, disabled source menu and close. `apps/web/public/assets/images/photo-base.b5f2d859.svg` copied **byte-identically** from original source (source Git SHA `0567f7ac...`). **Win7-specific WebP icon remains missing**, so appearance parity is not claimed. [Source trace](PHOTO-SOURCE.md).
+- **Inventory**: `photo.js` changes from pending to **in-progress**, with concrete implementation/test links. **270 pending / 12 in-progress / 8 implemented / 0 fully verified** of 290 original modules. Original legacy source and React have not been screenshot-compared.
+- **Verification next**: this change contains `[run-ci]` to deliberately run full TypeScript, unit, browser and art-source audit once; fix issues if needed. Draft PR #1, `main` unchanged, no release.
+
 ## Module inventory corrected to reflect implemented React slices — 2026-11-14 (METADATA ONLY)
 
 - **Source reference unchanged**: pinned `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`, all 290 tracked original `src/modules/` paths retained with exact original Git SHAs.

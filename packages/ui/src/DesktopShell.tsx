@@ -9,6 +9,7 @@ import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { AboutApp } from "@windows-os/apps/about";
+import { PhotoApp } from "@windows-os/apps/photo";
 import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
@@ -66,6 +67,10 @@ function ApplicationContent({
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
+  if (appId === "photo") return <PhotoApp initialFilePath={filePath}
+    onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
+    onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
+    onRegisterClose={handler => registerClose(windowId, handler)} />;
 
   if (appId === "web_contacts") {
     return <ContactsApp />;
@@ -80,6 +85,10 @@ function ApplicationContent({
     }}
     onOpenTextFile={path => {
       const app = appRegistry.get("notepad");
+      if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
+    }}
+    onOpenPhotoFile={path => {
+      const app = appRegistry.get("photo");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
     }}
     onLaunchSourceProgram={programId => {
