@@ -255,7 +255,12 @@ describe("source cmd.js environment and console COLOR/SET/PATH",()=>{
     await session.run("path ;");
     expect((await session.run("path")).output).toEqual(["PATH=(null)"]);
     await session.run("path C:\\Tools;C:\\Bin");
-    expect((await session.run("set path")).output).toEqual(["Path=C:\\Tools;C:\\Bin"]);
+    // Original bt stores new spelling PATH after PATH ; clears the old Path;
+    // SET prefix listing must also include the separately seeded PATHEXT.
+    expect((await session.run("set path")).output).toEqual([
+      "PATH=C:\\Tools;C:\\Bin",
+      "PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+    ]);
   });
   it("COLOR uses pinned F color palette and rejects identical background/foreground",async()=>{
     const {session}=await createShell();
