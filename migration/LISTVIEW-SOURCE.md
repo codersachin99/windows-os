@@ -20,7 +20,7 @@
 - Browser cases (Chromium desktop and Pixel 7) create a real source folder, assert Tiles extras, change to Details via the source View menu, assert all three Details fields, maintain row selection, switch to Tiles again, double-click folder and cancel source Delete confirmation.
 - Full rich listview slots and alternate themes, other migrated apps that use source listviews and source-versus-React pixel equivalence are not fully migrated.
 
-Implemented-slice [full CI #43589707509](https://github.com/codersachin99/windows-os/actions/runs/43589707509) **SUCCESS** at commit 8d23db2: 305/305 unit tests in 62 files, 318/318 desktop/mobile Chromium E2E cases, 53 exact original-art audits, TypeScript and Vite build. The original a321 width normalization is now source-exact, but source-vs-React screenshot/pixel parity remains pending. Both modules still **in-progress**, PR #1 draft, main untouched, no release.
+Implemented-slice [full CI #43589707509](https://github.com/codersachin99/windows-os/actions/runs/43589707509) **SUCCESS** at commit 8d23db2: 305/305 unit tests in 62 files, 318/318 desktop/mobile Chromium E2E cases, 53 exact original-art audits, TypeScript and Vite build. The original a321 width normalization is source-exact; full source/React screenshot pixel parity remains pending. Both modules still **in-progress**, PR #1 draft, main untouched, no release.
 
 ## Exact original a321 header and width contract — 14 November 2026
 
@@ -36,4 +36,17 @@ Found webpack module a321 inside the immutable source chunk:
 - Reusable SourceListViewHeader renders original source column buttons. Explorer replaces its four inert detail-column spans with the shared header while its responsive CSS grid remains responsible for visual sizing. Generic SourceListViewHeader can still opt into source inline widths. The bounded SourceListViewExtra style adapter accepts only safe CSS widths from callers; the pure helper retains exact source coercion.
 - New unit cases validate original a321 truthiness, numeric and CSS-string widths, Details offset and source header markup. Desktop/mobile E2E now verifies source a321 header button shape in the real Guest Explorer.
 - Exact original theme CSS and screenshot pixel parity remain unverified. This is a source-verified utility algorithm, not a claim that the full listview modules or windows are pixel-parity complete.
+
+
+## Original 0616 listview-item and exact 400ms double-click helper — 14 November 2026
+
+The pinned shared webpack chunk 49e2ebd6.js (Git blob ed3b984138eed7c830b5fbe4a8be08d58328cb35) defines module 0616. Its root button has class listview__item, conditional is-active, data-key, data-test-listview-item, title, native click and contextmenu, plus v-tap:400 and v-clickout. Labels have alternating marked and unmarked text from item.highlights.
+
+The original src/modules/runtime/vue-click-helper.js (Git blob 71db7989b3f01b4a6841c5346d6d88ede6cc5169) provides the helper behind the click gesture: it increments a click count on each captured click, invokes the callback with false after a 400ms single-click timeout, and invokes the callback with true on the second click inside the window, clearing the timer. Source 0616 only invokes item.dblclick if the callback receives true.
+
+- packages/ui/src/sourceListViewItem.tsx implements SourceListViewItem using original root class, data-key, data-test-listview-item and title, is-active selection and source click-helper second-click semantics with a 400ms timer. The consumer's onClick still selects immediately. The source onDoubleClick callback is invoked once on second click, avoiding a duplicated native dblclick listener. The 400ms comparison is isolated in pure sourceListItemIsDoubleTap.
+- The shared sourceListItemHighlightParts follows original 0616 labelParts for sorted highlight ranges, with extra bounds checks. Explorer's safe sourceMarkedName uses this helper, rendering the source listview__item-highlight class along with the existing explorer-search-mark style.
+- Computer and Recycle Bin now render actual VFS items with SourceListViewItem, retaining original Explorer file handlers, drag/drop, context menu, file shortcuts and the data-test-explorer-item selector used by existing tests.
+- Unit tests verify source button attributes, 400ms threshold and filename highlights. New desktop/mobile browser tests verify a real Guest folder, item selection, source class and attributes, search-highlight rendering, native dblclick navigation and two rapid click events causing one opening.
+- Still outstanding: v-clickout source popup exclusions, item.toggle checkbox, inline filename rename mode/30-character limit, CSS --shortcut theme styling and complete alternate-theme/pixel screenshot parity. The source shared chunk contains many unrelated modules and must not be marked fully implemented.
 

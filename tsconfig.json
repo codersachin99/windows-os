@@ -37,6 +37,9 @@
       "@windows-os/ui/message": [
         "packages/ui/src/sourceMessage.tsx"
       ],
+      "@windows-os/ui/listitem": [
+        "packages/ui/src/sourceListViewItem.tsx"
+      ],
       "@windows-os/ui/listview": [
         "packages/ui/src/sourceListView.tsx"
       ],

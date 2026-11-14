@@ -1,3 +1,11 @@
+## Original listview-item 0616 / 400ms click-helper — 2026-11-14 (CI pending)
+
+- Source source chunk 49e2ebd6.js blob ed3b984138eed7c830b5fbe4a8be08d58328cb35 contains webpack 0616. Exact vue-click-helper.js blob 71db7989b3f01b4a6841c5346d6d88ede6cc5169 defines v-tap:400 second click detection.
+- Extracted shared SourceListViewItem with root source button class and source data attributes, is-active, and explicit double-click 400ms adapter. This keeps Explorer click/selection, drag/drop, context menu and source-highlight search while working with real Guest VFS.
+- Browser tests listview-source-item.spec.ts and listview-source-tap.spec.ts cover source classes, highlighted names, selected rows, native dblclick and two rapid synthetic clicks. Pure source unit tests cover button and exact 400ms threshold; intended desktop and mobile. Full CI for this new increment pending.
+- Earlier source a321 width/column-header [CI #43602218473](https://github.com/codersachin99/windows-os/actions/runs/43602218473) **SUCCESS** after .tsx suffix repair: **310 unit** in 63 files, **322 Chromium browser**, **55 byte-exact source-art audits**, TS/build. The initial failed [#43602081330](https://github.com/codersachin99/windows-os/actions/runs/43602081330) was TypeScript JSX-in-.ts only.
+- Tracker: 290 total, 259 pending / 23 in-progress / 8 implemented / 0 complete source parity. Original clickout, checkbox, inline rename, source screenshot comparison are still incomplete. Draft PR #1 unmerged, main unchanged, no release.
+
 ## a321 source width CI parser fix — 2026-11-14
 
 - Initial opt-in run [#43602081330](https://github.com/codersachin99/windows-os/actions/runs/43602081330) failed only during TypeScript parse: JSX in packages/ui/src/sourceListView.test.ts requires the .tsx extension. The new source code and browser cases were not executed in this run. Renamed the unit file to .test.tsx; new full CI required. No feature pass is claimed from the failed run.

@@ -172,9 +172,13 @@
         "packages/ui/src/sourceListView.test.tsx",
         "packages/apps/explorer/src/ExplorerApp.tsx",
         "tests/e2e/listview-source-details-tiles.spec.ts",
-        "migration/LISTVIEW-SOURCE.md"
+        "migration/LISTVIEW-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListViewItem.test.tsx",
+        "tests/e2e/listview-source-item.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts"
       ],
-      "verification": "Source-exact a321.normalizeWidth and header code committed; initial CI #43602081330 TypeScript failed due JSX test .ts extension (fixed to .tsx); rerun pending, source window pixel parity still unverified."
+      "verification": "Exact original a321 width/header CI #43602218473 PASS (310 Vitest, 322 browser, 55 art). Source 0616 list item and 400ms click-helper ported, new CI pending; full clickout/rename/checkbox and original pixel parity remain unverified."
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
@@ -186,9 +190,13 @@
         "packages/ui/src/sourceListView.css",
         "packages/apps/explorer/src/ExplorerApp.tsx",
         "tests/e2e/listview-source-details-tiles.spec.ts",
-        "migration/LISTVIEW-SOURCE.md"
+        "migration/LISTVIEW-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListViewItem.test.tsx",
+        "tests/e2e/listview-source-item.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts"
       ],
-      "verification": "Source-exact a321.normalizeWidth and header code committed; initial CI #43602081330 TypeScript failed due JSX test .ts extension (fixed to .tsx); rerun pending, source window pixel parity still unverified."
+      "verification": "Exact original a321 width/header CI #43602218473 PASS (310 Vitest, 322 browser, 55 art). Source 0616 list item and 400ms click-helper ported, new CI pending; full clickout/rename/checkbox and original pixel parity remain unverified."
     },
     {
       "source": "src/modules/apps/magnifier.js",

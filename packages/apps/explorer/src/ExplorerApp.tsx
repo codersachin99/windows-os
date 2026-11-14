@@ -22,6 +22,7 @@ import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganiz
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
+import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceMessageDialog } from "@windows-os/ui/message";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
@@ -42,16 +43,13 @@ interface ExplorerAppProps {
 /** Source 2e2c.w merge offsets; never interpolate filename text as HTML. */
 function sourceMarkedName(name: string, ranges: readonly SourceSearchHighlight[] | undefined): ReactNode {
   if (!ranges?.length) return name;
-  const parts: ReactNode[] = [];
-  let from = 0;
-  for (const { start, end } of ranges) {
-    if (start < from || end > name.length || start >= end) continue;
-    if (start > from) parts.push(name.slice(from, start));
-    parts.push(<mark key={start} className="explorer-search-mark">{name.slice(start, end)}</mark>);
-    from = end;
-  }
-  if (from < name.length) parts.push(name.slice(from));
-  return parts;
+  // Original webpack 0616 labelParts emits alternating plain/marked spans.
+  // Preserve the existing search highlight and safe text rendering.
+  const parts = sourceListItemHighlightParts(name,
+    ranges.map(({start,end})=>[start,end] as const));
+  return parts.map((part,index)=>part.marked
+    ? <mark key={index} className="listview__item-highlight explorer-search-mark">{part.text}</mark>
+    : part.text);
 }
 
 const viewOptions: { value: ExplorerViewMode; label: string }[] = [
@@ -653,7 +651,9 @@ export function ExplorerApp({
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] :
           state.viewMode === "tiles" || state.viewMode === "details" ? "" :
           state.viewMode === "content" ? "has-content" : "has-" + state.viewMode)}>
-          {visible.map(item => <button key={item.uri} type="button"
+          {visible.map(item => <SourceListViewItem key={item.uri}
+            itemKey={item.uri} itemType={item.type} itemLabel={item.name}
+            active={state.selected.includes(item.uri)}
             draggable={!isBin}
             onDragStart={event => startDrag(event, item.uri)}
             onDragEnd={endDrag}
@@ -662,7 +662,7 @@ export function ExplorerApp({
             onDragLeave={item.type === "directory" ? () => setDropTarget(null) : undefined}
             onDrop={item.type === "directory" && !isBin
               ? event => dropFiles(event, item.uri) : undefined}
-            className={"listview__item explorer-item " +
+            className={"explorer-item " +
               (state.selected.includes(item.uri) ? "is-selected " : "") +
               (dropTarget === item.uri ? "is-drop-target" : "")}
             data-test-explorer-item={item.name}
@@ -696,7 +696,7 @@ export function ExplorerApp({
                 : /\.txt$/i.test(item.name) ? "Text Document" : "File"}</SourceListViewExtra>
               {item.type !== "directory" && <SourceListViewExtra>{item.size} B</SourceListViewExtra>}
             </>}
-          </button>)}
+          </SourceListViewItem>)}
           {!state.busy && !searchBusy && !visible.length && <p className="explorer-empty">
             {state.search ? "No items match your search." : "This folder is empty."}
           </p>}

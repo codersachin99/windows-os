@@ -1,3 +1,7 @@
+## Source listview-item and native 400ms double activation — 14 November 2026
+
+The source 0616 list-item button and original vue-click-helper 400ms second-click behavior have been reconstructed in shared packages/ui/sourceListViewItem.tsx. Real Explorer/Recycle Bin rows now carry the original item class, selection, key/type markers, and source filename highlight segmentation while retaining VFS operations. Pure and desktop/mobile browser tests added. Full CI for this increment pending, with original clickout, inline rename, checkbox and screenshot parity still open. The preceding a321 width/header slice passed [CI #43602218473](https://github.com/codersachin99/windows-os/actions/runs/43602218473): 310 unit, 322 browser, 55 original-art audits. See [source trace](migration/LISTVIEW-SOURCE.md).
+
 ## Source-exact listview widths and original column headers — 14 November 2026
 
 Located original webpack a321.normalizeWidth in the pinned legacy shared source chunk and ported its exact rule (Details reserves one extra label column). Computer/Recycle Bin Details headers now render original listview__header column buttons through the shared packages/ui component, with responsive grid sizes retained. Unit and browser assertions added. Screenshot fidelity remains unverified; see [source trace](migration/LISTVIEW-SOURCE.md). Full CI pending for this new increment.
