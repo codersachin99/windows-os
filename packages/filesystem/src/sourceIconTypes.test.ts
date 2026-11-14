@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest";
-import {sourceFileIconType} from "./sourceIconTypes";
+import {sourceFileIconType,sourceIsShortcutEntry} from "./sourceIconTypes";
 import type { FileEntry } from "./index";
 const icon=(name:string,type:FileEntry["type"]="file")=>sourceFileIconType({name,type});
 
@@ -31,5 +31,16 @@ describe("pinned 4cca.getIconType / 0e9a / 8c25 icon selection",()=>{
     expect(icon("unknown.exe")).toBe("executable");
     expect(icon("installer.msi")).toBe("executable");
     expect(icon("main.cpl")).toBe("file"); // not an 0e9a executable
+  });
+});
+
+describe("source 0e9a.m shortcut suffix",()=>{
+  it("detects source lnk suffixes without confusing the underlying VFS type",()=>{
+    expect(sourceIsShortcutEntry({name:"Notepad.lnk",type:"file"})).toBe(true);
+    expect(sourceIsShortcutEntry({name:"Notepad.LNK",type:"file"})).toBe(true);
+    expect(sourceIsShortcutEntry({name:"Note.customlnk",type:"file"})).toBe(true);
+    expect(sourceIsShortcutEntry({name:"Note.lnk.bak",type:"file"})).toBe(false);
+    expect(sourceIsShortcutEntry({name:"Folder.lnk",type:"directory"})).toBe(false);
+    expect(icon("Notepad.lnk")).toBe("file");
   });
 });

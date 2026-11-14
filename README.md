@@ -1,3 +1,7 @@
+## Original Guest shortcuts show their own icon — 15 November 2026
+
+Win7 Explorer now reads each .lnk JSON icon from the real Guest filesystem independently of its executable launch target; missing/broken icons keep the original generic fallback. Source-level pure and browser tests cover this behavior. Last [icon CI #43626932843](https://github.com/codersachin99/windows-os/actions/runs/43626932843) is green. This new slice needs an opt-in check.
+
 ## Matcher accepts complete VFS literals and source icon inputs — 14 November 2026
 
 The second icon [CI #43626775200](https://github.com/codersachin99/windows-os/actions/runs/43626775200) caught TypeScript excess-property checks on existing full-file literals. A constrained generic now permits both those literals and the new minimal filename/type icon input without changing behavior. Another explicit `[run-ci]` check is requested. The last full green checkpoint is [#43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917).

@@ -21,7 +21,10 @@ const importedSourceArt:Readonly<Record<string,string>>={
   recorder:legacyArt.recorder,
   magnifier:legacyArt.magnifier,
   snipping:legacyArt.snipping,
-  taskmgr:legacyArt.taskmgr
+  taskmgr:legacyArt.taskmgr,
+  sticky:legacyArt.sticky,
+  run:legacyArt.run,
+  computer:legacyArt.computer
 };
 
 export interface SourceComputerIconArtwork {
@@ -29,14 +32,24 @@ export interface SourceComputerIconArtwork {
   src:string;
   exactSourceArtwork:boolean;
 }
+/** Original 0f35.c resolves either a theme icon ID or a full URL.
+ * Restrict data URLs to images, never executable or HTML schemes.
+ */
+export function sourceShortcutCustomIconURL(icon:string):string|null{
+  if(/^https?:\/\//i.test(icon))return icon;
+  if(/^data:image\/(?:png|jpeg|gif|webp|bmp|svg\+xml|avif);base64,[a-z0-9+/]+={0,2}$/i.test(icon))
+    return icon;
+  return null;
+}
 export function sourceComputerIconArtwork(
-  entry:Pick<FileEntry,"name"|"type">
+  entry:Pick<FileEntry,"name"|"type">,
+  shortcutIcon?:string|null
 ):SourceComputerIconArtwork{
   const sourceType=sourceFileIconType(entry);
-  const imported=importedSourceArt[sourceType];
-  return {
-    sourceType,
-    src:imported??legacyArt.file,
-    exactSourceArtwork:imported!==undefined
-  };
+  const custom=shortcutIcon?sourceShortcutCustomIconURL(shortcutIcon):null;
+  if(custom)return {sourceType,src:custom,exactSourceArtwork:false};
+  const key=shortcutIcon??sourceType;
+  const imported=Object.prototype.hasOwnProperty.call(importedSourceArt,key)
+    ?importedSourceArt[key]:undefined;
+  return {sourceType,src:imported??legacyArt.file,exactSourceArtwork:imported!==undefined};
 }

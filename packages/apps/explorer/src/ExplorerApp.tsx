@@ -3,7 +3,7 @@ import { legacyArt } from "@windows-os/assets";
 import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
-  parseSourceShortcut, sourcePrograms,
+  parseSourceShortcut, sourcePrograms, sourceIsShortcutEntry, sourceShortcutIconValue,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
@@ -127,6 +127,7 @@ export function ExplorerApp({
   const fileInput = useRef<HTMLInputElement | null>(null);
   const dragToken = useRef<string | null>(null);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
+  const [shortcutIcons,setShortcutIcons] = useState<Record<string,string>>({});
   useEffect(() => {
     const unsubscribe = session.subscribe(setState);
     const disconnect = session.connect();
@@ -164,6 +165,35 @@ export function ExplorerApp({
   const classicSourceSearch = Boolean(initialFind || (initialSourceSearch &&
     initialSourceSearch.namePattern !== null));
   const visible = found ?? session.visible();
+  // Stable data signature: icon-map renders do not cause filesystem read loops.
+  const sourceShortcutEntries=visible.filter(sourceIsShortcutEntry);
+  const sourceShortcutSignature=sourceShortcutEntries.map(item=>
+    JSON.stringify([item.uri,item.mtime,item.size])).join("|");
+  useEffect(()=>{
+    let active=true;
+    if(theme!=="win7"||!sourceShortcutEntries.length){
+      setShortcutIcons(current=>Object.keys(current).length?{}:current);
+      return;
+    }
+    void Promise.all(sourceShortcutEntries.map(async item=>{
+      try{
+        const icon=sourceShortcutIconValue(await fileStore.read(item.uri));
+        return [item.uri,icon] as const;
+      }catch{
+        return [item.uri,"file"] as const;
+      }
+    })).then(entries=>{
+      if(!active)return;
+      const next:Record<string,string>={};
+      for(const [path,icon] of entries)if(icon!==null)next[path]=icon;
+      setShortcutIcons(current=>{
+        const oldKeys=Object.keys(current),newKeys=Object.keys(next);
+        return oldKeys.length===newKeys.length&&
+          newKeys.every(key=>current[key]===next[key])?current:next;
+      });
+    });
+    return ()=>{active=false;};
+  },[theme,sourceShortcutSignature]);
   // The pinned Computer source only displays item.toggle checkboxes on
   // a touch device after one or more items are selected.
   const sourceIsTouch = typeof window !== "undefined" && (
@@ -689,9 +719,11 @@ export function ExplorerApp({
           className={"explorer-list " +
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] : "")}>
           {visible.map(item => {
-            const icon=theme==="win7"?sourceComputerIconArtwork(item):null;
+            const icon=theme==="win7"?sourceComputerIconArtwork(item,shortcutIcons[item.uri]):null;
             return <SourceListViewItem key={item.uri}
-            itemKey={item.uri} itemType={item.type} itemLabel={item.name}
+            itemKey={item.uri}
+            itemType={theme==="win7"&&sourceIsShortcutEntry(item)?"shortcut":item.type}
+            itemLabel={item.name}
             active={state.selected.includes(item.uri)}
             toggle={showSourceCheckboxes ? () => session.select(item.uri,true) : undefined}
             draggable={!isBin}
@@ -707,7 +739,10 @@ export function ExplorerApp({
               (dropTarget === item.uri ? "is-drop-target" : "")}
             data-test-explorer-item={item.name}
             data-source-icon-type={icon?.sourceType}
-            data-source-icon-artwork={icon?(icon.exactSourceArtwork?"original":"fallback"):undefined}
+            data-source-icon-override={theme==="win7"&&sourceIsShortcutEntry(item)
+              ?shortcutIcons[item.uri]:undefined}
+            data-source-icon-artwork={icon?(icon.exactSourceArtwork?"original":
+              icon.src===legacyArt.file?"fallback":"custom"):undefined}
             data-windows-os-drop-directory={!isBin && item.type === "directory" ? item.uri : undefined}
             aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}

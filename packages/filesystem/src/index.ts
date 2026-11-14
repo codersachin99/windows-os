@@ -550,5 +550,7 @@ export { FileDragSession, SHELL_DRAG_TYPE, importDroppedFiles } from "./drag";
 export { sourceSizeFromBytes } from "./sourceSize";
 
 // Pinned 4cca.getIconType and 0e9a extension/8c25 installed-executable rules.
-export { sourceFileIconType } from "./sourceIconTypes";
+export { sourceFileIconType, sourceIsShortcutEntry } from "./sourceIconTypes";
 export type { SourceFileIconKey } from "./sourceIconTypes";
+
+export { sourceShortcutIconValue } from "./sourceShortcutIcons";

@@ -15,6 +15,10 @@ import { sourcePrograms } from "./sourcePrograms";
 export type SourceFileIconKey =
   | "folder" | "photo" | "media" | "wpl" | "richtext"
   | "text" | "executable" | "zip" | "file" | string;
+/** Original 0e9a.m matches any final extension ending in lnk. */
+export function sourceIsShortcutEntry(entry:Pick<FileEntry,"name"|"type">):boolean{
+  return entry.type==="file" && /\.[^.]*lnk$/i.test(entry.name);
+}
 export function sourceFileIconType(entry: Pick<FileEntry,"name"|"type">):SourceFileIconKey {
   if(entry.type==="directory")return "folder";
   if(matchesSourceKind(entry,"picture"))return "photo";

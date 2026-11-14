@@ -1,3 +1,10 @@
+## Pinned Computer shortcut icon JSON — 15 November 2026 (CI pending)
+
+- Original computer.js.describe detects 0e9a.m shortcut extension suffix and asynchronously parses the actual .lnk file JSON; its icon property controls artwork independent of exe, and the source list item has type shortcut. Malformed JSON falls back to icon=file. The original iconType from 4cca is retained separately.
+- Implemented sourceIsShortcutEntry and sourceShortcutIconValue in reusable filesystem helpers, then connected Win7 Explorer to real Guest VFS shortcut reads. A stable URI/mtime/size signature plus effect cleanup prevents stale async icon reads. Source data-test-listview-item="shortcut" and icon override attributes are preserved; existing strict parseSourceShortcut launcher remains unchanged.
+- Added source verified artwork/icon resolution, HTTP(S) and image data URL overrides (script schemes blocked), unit tests and live Guest shortcut upload tests across Tiles/List/Content. Missing exact file-type images still explicitly use the original generic file artwork.
+- Last full green [file icons #43626932843](https://github.com/codersachin99/windows-os/actions/runs/43626932843). New shortcut behavior not yet verified. Draft PR #1, main untouched, no release. Original inventory 290 total, 255 pending / 27 in progress / 8 implemented / 0 full pixel parity verified.
+
 ## Original icon matcher excess-property TypeScript repair — 2026-11-14 (CI requested)
 
 - [Follow-up icon CI #43626775200](https://github.com/codersachin99/windows-os/actions/runs/43626775200) **FAILED TypeScript** (unit/browser not run): four existing callers pass fresh complete `FileEntry` literals containing `uri`, which TypeScript rejects when the matcher signature names only `Pick<FileEntry,"name"|"type">` due to excess-property checks.

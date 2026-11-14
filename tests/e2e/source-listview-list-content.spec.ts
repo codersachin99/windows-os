@@ -131,3 +131,32 @@ test("pinned 4cca icon type and verified original artwork follow uploaded VFS ex
   await setSourceView(win,"Content");
   await expect(image).toHaveAttribute("data-source-icon-type","photo");
 });
+
+test("pinned .lnk JSON icon overrides file icon independently of launch target",async({page})=>{
+  const win=await openComputer(page);
+  await win.locator('input[aria-label="Upload files"]').setInputFiles([
+    {name:"SourceIconOverride.lnk",mimeType:"application/json",
+      buffer:Buffer.from('{"exe":"notepad","icon":"calc"}')},
+    {name:"SourceIconUnknown.lnk",mimeType:"application/json",
+      buffer:Buffer.from('{"exe":"notepad","icon":"not-imported"}')},
+    {name:"SourceIconBroken.lnk",mimeType:"application/json",buffer:Buffer.from("{bad")}
+  ]);
+  const override=win.locator('[data-test-explorer-item="SourceIconOverride.lnk"]');
+  const unknown=win.locator('[data-test-explorer-item="SourceIconUnknown.lnk"]');
+  const broken=win.locator('[data-test-explorer-item="SourceIconBroken.lnk"]');
+  await expect(override).toHaveAttribute("data-test-listview-item","shortcut");
+  await expect(override).toHaveAttribute("data-source-icon-type","file");
+  await expect(override).toHaveAttribute("data-source-icon-override","calc");
+  await expect(override).toHaveAttribute("data-source-icon-artwork","original");
+  await expect(override.locator(".listview__item-iconbox img"))
+    .toHaveAttribute("src",/\/calc\.1733a9a0\.webp$/);
+  await expect(unknown).toHaveAttribute("data-source-icon-override","not-imported");
+  await expect(unknown).toHaveAttribute("data-source-icon-artwork","fallback");
+  await expect(broken).toHaveAttribute("data-source-icon-override","file");
+  await expect(broken).toHaveAttribute("data-source-icon-artwork","original");
+  await setSourceView(win,"List");
+  await expect(override).toHaveAttribute("data-source-icon-override","calc");
+  await setSourceView(win,"Content");
+  await expect(override.locator(".listview__item-iconbox img"))
+    .toHaveAttribute("src",/\/calc\.1733a9a0\.webp$/);
+});
