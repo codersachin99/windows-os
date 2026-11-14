@@ -1,3 +1,10 @@
+## Shared original shortcut icon art in Start Menu — 2026-11-15 (CI requested)
+
+- All Programs now resolves installed .lnk JSON `icon` through the same byte-imported original Win7 artwork as Explorer and Desktop; it no longer assumes the executable target's registry icon is identical. A shortcut with `{"exe":"notepad","icon":"calc"}` shows Calculator artwork but still launches Notepad. Unported executables remain disabled.
+- The new source shortcut reader `readSourceShortcutText` handles both text-backed installer shortcuts and binary-backed browser imports. Metadata attributes expose source icon key and original/custom/fallback art explicitly. Added a desktop/mobile browser case uploading a real .lnk into Accessories and validating All Programs icon and launch behavior.
+- [Prior browser run #43638958982](https://github.com/codersachin99/windows-os/actions/runs/43638958982) had 2 failing binary .lnk icon tests; this batch includes their repair, the Desktop icon integration b258d11 and this Start Menu source icon change.
+- **One opt-in full CI [run-ci] requested** on this commit; do not claim the new batch green until run conclusion is checked. PR #1 draft, main untouched, no release. Original 290 modules = 255 pending / 27 in progress / 8 implemented / 0 fully screenshot parity verified.
+
 ## Fixed binary-uploaded .lnk icon decoding — 2026-11-15 (CI batched)
 
 - [Explorer shortcut icon CI #43638958982](https://github.com/codersachin99/windows-os/actions/runs/43638958982) **failed desktop+mobile browser cases**: original .lnk JSON `icon="calc"` rendered as `file` for browser-imported binary VFS uploads, because Explorer called text-only `fileStore.read`. All TypeScript, units, source audits, and production build passed.

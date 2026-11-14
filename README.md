@@ -1,3 +1,7 @@
+## Shared source .lnk icons: Explorer, Desktop, Start Menu — 15 November 2026
+
+All three Win7 shell surfaces now resolve original `.lnk` JSON artwork independently of executable targets. The shared filesystem reader supports text-backed installer entries and UTF-8 binary-backed browser uploads. Unimported source image assets use the exact generic file artwork as a clearly tracked fallback. New real Guest browser contracts cover custom Calculator art on a Notepad shortcut and separate launch behavior. The previous icon [CI #43638958982](https://github.com/codersachin99/windows-os/actions/runs/43638958982) failed 2 browser cases before the binary reader fix; follow-up opt-in full CI requested. Original screenshot pixel equivalence remains unverified.
+
 ## Original Guest shortcuts show their own icon — 15 November 2026
 
 Win7 Explorer now reads each .lnk JSON icon from the real Guest filesystem independently of its executable launch target; missing/broken icons keep the original generic fallback. Source-level pure and browser tests cover this behavior. Last [icon CI #43626932843](https://github.com/codersachin99/windows-os/actions/runs/43626932843) is green. This new slice needs an opt-in check.

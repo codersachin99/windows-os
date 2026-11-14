@@ -71,3 +71,26 @@ test("original MZ binary and shortcut contents persist through Guest reload", as
     lnk: initial.shortcut
   });
 });
+
+test("All Programs source .lnk JSON icon overrides executable artwork with binary Guest imports",async({page})=>{
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]');
+  await explorer.getByRole("button",{name:"Programs"}).click();
+  await explorer.locator('[data-test-explorer-item="Accessories"]').dblclick();
+  await explorer.locator('input[aria-label="Upload files"]').setInputFiles({
+    name:"Customized Notepad.lnk",mimeType:"application/octet-stream",
+    buffer:Buffer.from('{"exe":"notepad","icon":"calc"}')
+  });
+  await expect(explorer.locator('[data-test-explorer-item="Customized Notepad.lnk"]'))
+    .toBeVisible();
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  const start=page.locator('[data-test-start-menu]');
+  await start.locator('[data-test-all-programs]').click();
+  await start.locator('[data-test-source-program-folder="Accessories"]').click();
+  const link=start.locator('[data-source-shortcut-path$="/Customized Notepad.lnk"]');
+  await expect(link).toHaveAttribute("data-source-program-icon-key","calc");
+  await expect(link).toHaveAttribute("data-source-program-artwork","original");
+  await expect(link.locator("img")).toHaveAttribute("src",/\/calc\.1733a9a0\.webp$/);
+  await link.click();
+  await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
+});

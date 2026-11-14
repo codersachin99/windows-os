@@ -1,8 +1,8 @@
 import { useEffect, useState, type Dispatch } from "react";
 import type { DesktopAction } from "@windows-os/contracts";
-import { legacyArt } from "@windows-os/assets";
+import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL} from "@windows-os/assets";
 import {
-  parseSourceShortcut, SOURCE_START_MENU_PROGRAMS,
+  parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
   sourceProgramsById, type FileEntry
 } from "@windows-os/filesystem";
 import { appRegistry, fileStore } from "@windows-os/sdk";
@@ -14,16 +14,24 @@ interface InstalledShortcut {
   path: string;
   programId: string;
   name: string;
+  icon: string;
+  iconKey: string;
+  artwork: "original" | "fallback" | "custom";
 }
 async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]> {
   const files = entries.filter(entry => entry.type === "file" && /\.lnk$/i.test(entry.name));
   const shortcuts = await Promise.all(files.map(async entry => {
     try {
-      const data = parseSourceShortcut(await fileStore.read(entry.uri));
-      const source = data && sourceProgramsById.get(data.exe);
-      return data && source
-        ? { path: entry.uri, programId: data.exe, name: source.name }
-        : null;
+      const data=parseSourceShortcut(await readSourceShortcutText(fileStore,entry.uri));
+      const source=data&&sourceProgramsById.get(data.exe);
+      if(!data||!source)return null;
+      const artwork=legacySourceIconArtwork(data.icon);
+      return {
+        path:entry.uri,programId:data.exe,name:source.name,
+        iconKey:data.icon,icon:artwork.src,
+        artwork:artwork.exactSourceArtwork?"original":
+          legacySourceCustomIconURL(data.icon)?"custom":"fallback"
+      };
     } catch { return null; }
   }));
   return shortcuts.filter((x): x is InstalledShortcut => x !== null);
@@ -91,11 +99,14 @@ export function StartMenu({ dispatch }: StartMenuProps) {
               const app = appRegistry.get(shortcut.programId);
               return <button type="button" key={shortcut.path}
                 data-test-source-program={shortcut.programId}
+                data-source-shortcut-path={shortcut.path}
+                data-source-program-icon-key={shortcut.iconKey}
+                data-source-program-artwork={shortcut.artwork}
                 className="windows-startmenu__program"
                 disabled={!app}
                 title={app ? shortcut.name : shortcut.name + " — migration pending"}
                 onClick={() => openApp(shortcut.programId)}>
-                <img src={app?.icon ?? legacyArt.file} width={30} height={30} alt="" />
+                <img src={shortcut.icon} width={30} height={30} alt="" />
                 <span>{shortcut.name}</span>
               </button>;
             })}
