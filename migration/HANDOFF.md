@@ -1,3 +1,9 @@
+## Pinned source 7662 Win7 Tiles markup and CSS — 2026-11-14 (CI pending)
+
+- Source `listview-tiles.css` blob `792221cf9f42cfe1579f5860fec0332e727f5381` and modules 7662/0616: restored Win7 Tiles' 48px icon, 256px min row, flex icon+info hierarchy and 2px stacked info gap. Extra fields now live in `.listview__item-info`, preserving existing VFS interactions and other themes.
+- New desktop/mobile Playwright computed-style acceptance. This Tiles change and prior search-location + List/Content CSS changes still need a combined opt-in `[run-ci]` run; source formatter [#43611997970](https://github.com/codersachin99/windows-os/actions/runs/43611997970) succeeded.
+- Status 290 original: 255 pending, 27 in progress, 8 implemented, 0 fully source/pixel parity verified. Draft PR #1, untouched main, no release.
+
 ## Win7 source List/Content CSS geometry — 2026-11-14 (CI pending)
 
 - Imported the original **rules** from pinned source `src/styles/shell/listview-list.css` (blob `4a7dc019cc68fbca6b7429d2dafca100dfffd1c9`) and `listview-content.css` (blob `08151a47ee1c05bff6db72c0c38016b91eb88deb`) as Win7-only selectors in `ExplorerApp.css`. List items now have 300px minimum, 25% preferred width and 16px icons; Content uses the original 6px metadata gap, two-column auto flow and 48px icons. Narrow browsers have an explicit one-column responsive fallback.

@@ -54,3 +54,9 @@ The original src/modules/runtime/vue-click-helper.js (Git blob 71db7989b3f01b4a6
 ## Source item, rename and clickout continuation
 
 The exact 0616 inline rename, plugin-clickout and vue-click-helper source behaviors are traced in [LISTITEM-INTERACTIONS-SOURCE.md](LISTITEM-INTERACTIONS-SOURCE.md). Win7 Explorer now uses the shared 30-character rename input and source item-context outside click, with a focus-change reset to prevent false double-clicks across modal dialogs. Combined CI pending; original pixel-parity and optional checkbox not complete.
+
+## Original Win7 Tiles markup and geometry — 14 November 2026
+
+- Source `src/styles/shell/listview-tiles.css` blob `792221cf9f42cfe1579f5860fec0332e727f5381`: tile is flex row, gap 8px, minimum 256px, width `calc(20% - 8px)`, padding 4px and 48px iconbox; `.listview__item-info` flexes in column with 2px gap. Webpack 7662 passes the source extras through shared 0616's info-wrapper slot.
+- React Win7 Tiles now renders a real info wrapper containing label / inline rename and source type/size extras. Existing VFS click, drag, search, cut/copy, touch checkbox and selection handlers remain on `SourceListViewItem`. The old 32px three-row grid no longer applies to Win7. Other themes retain their existing markup, and a bounded 580px mobile fallback avoids horizontal overflow.
+- One desktop/mobile Playwright scenario checks the real Guest row's 48px icon, source 2px info gap, source flex-column, minimum width and actual folder extra. Exact Details flex/header width and original source screenshots remain outstanding. New slice awaits opt-in full CI.

@@ -58,3 +58,29 @@ test("source Details and Tiles share extra component while preserving selection 
   await confirm.getByRole("button",{name:"No",exact:true}).click();
   await expect(row).toBeVisible();
 });
+
+test("pinned source Tiles icon and stacked metadata are rendered from Guest rows",async({page})=>{
+  const win=await openComputer(page);
+  await expect(win.locator('[data-test-source-listview="tiles"]')).toBeVisible();
+  const item=win.locator(".explorer-item").first();
+  await expect(item).toBeVisible();
+  const info=item.locator('[data-test-source-tiles-info]');
+  await expect(info).toBeVisible();
+  expect(await info.evaluate(element=>({
+    direction:getComputedStyle(element).flexDirection,
+    gap:getComputedStyle(element).gap
+  }))).toEqual({direction:"column",gap:"2px"});
+  expect(await item.locator(".listview__item-iconbox")
+    .evaluate(element=>getComputedStyle(element).width)).toBe("48px");
+  const dims=await item.evaluate(element=>({
+    minWidth:getComputedStyle(element).minWidth,
+    width:element.getBoundingClientRect().width
+  }));
+  if((await page.viewportSize())!.width<=580){
+    expect(dims.minWidth).toBe("0px");
+  }else{
+    expect(dims.minWidth).toBe("256px");
+    expect(dims.width).toBeGreaterThanOrEqual(256);
+  }
+  await expect(info.locator(".listview__item-extra")).toHaveCount(1);
+});

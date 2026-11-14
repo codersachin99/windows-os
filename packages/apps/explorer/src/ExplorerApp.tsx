@@ -724,6 +724,19 @@ export function ExplorerApp({
                   {sourceComputerItemExtras(item, "content", found !== null, volume).map((value,index) =>
                     <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
                 </span>
+              : state.viewMode === "tiles" && theme === "win7"
+              ? <span className="listview__item-info" data-test-source-tiles-info="">
+                  {renamingUri === item.uri
+                    ? <SourceListItemRename originalName={item.name}
+                        onCommit={value => commitInlineRename(item.uri, value)}
+                        onCancel={() => setRenamingUri(null)}/>
+                    : <span className="listview__item-label" title={item.uri}>
+                        {isBin && item.originalPath ? item.originalPath.split("/").pop()
+                          : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
+                      </span>}
+                  {sourceComputerItemExtras(item, "tiles").map((value,index) =>
+                    <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
+                </span>
               : renamingUri === item.uri
               ? <SourceListItemRename originalName={item.name}
                   onCommit={value => commitInlineRename(item.uri, value)}
@@ -732,7 +745,7 @@ export function ExplorerApp({
                   {isBin && item.originalPath ? item.originalPath.split("/").pop()
                     : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
                 </span>}
-            {(state.viewMode === "details" || state.viewMode === "tiles") &&
+            {(state.viewMode === "details" || (state.viewMode === "tiles" && theme !== "win7")) &&
               sourceComputerItemExtras(item, state.viewMode).map((value,index) =>
                 <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
           </SourceListViewItem>)}

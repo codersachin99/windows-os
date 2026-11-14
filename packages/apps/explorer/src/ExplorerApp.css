@@ -472,3 +472,24 @@
     grid-template-columns:minmax(0,1fr);
   }
 }
+
+/* Pinned source Win7 Tiles css, blob 792221cf9f42cfe1579f5860fec0332e727f5381;
+ * original 0616 item-info contains label and the 7662 extra slot. */
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .explorer-item{
+  display:flex;align-items:center;gap:8px;
+  min-width:256px;width:calc(20% - 8px);min-height:0;padding:4px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .listview__item-iconbox{
+  width:48px;height:48px;flex:0 0 48px;align-self:center;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .listview__item-info{
+  display:flex;flex-direction:column;gap:2px;min-width:0;width:100%;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .listview__item-label{
+  min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media(max-width:580px){
+  .explorer-stage.is-source-win7 .explorer-list.has-tiles .explorer-item{
+    width:100%;min-width:0;
+  }
+}

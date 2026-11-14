@@ -1,3 +1,7 @@
+## Original Win7 Tiles row hierarchy — 14 November 2026
+
+Tiles now shows a source-faithful 48px icon next to vertically stacked filename and metadata, inside the shared item-info element, with original 256px minimum width and 2px gap. The change is Win7-scoped; mobile adapts to the viewport, and existing file operations stay wired. Browser assertions added; newest slice awaits combined verification. See [Listview trace](migration/LISTVIEW-SOURCE.md).
+
 ## Win7 source List/Content CSS geometry — 14 November 2026
 
 The original List/Content stylesheet geometry is now scoped to the Win7 Explorer theme: List row minimum 300px and icons 16px; Content icons 48px, metadata grid with source 6px gaps and natural column flow. Narrow screens receive a single-column adaptation and WinXP/Win31 styles stay unchanged. Desktop/mobile browser assertions are added; source screenshot/pixel parity remains unassessed. See [List/Content source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
