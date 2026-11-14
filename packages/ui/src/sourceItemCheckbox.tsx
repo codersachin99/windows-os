@@ -20,7 +20,7 @@ export function SourceItemCheckbox({checked,label,onToggle}:SourceItemCheckboxPr
     onToggle();
   };
   return <span role="checkbox" tabIndex={0}
-    aria-checked={String(checked)} aria-label={label}
+    aria-checked={checked} aria-label={label}
     data-test-item-checkbox=""
     className="inline-flex justify-center items-center py-1.5 w-6 shrink-0 winui-checkbox item-checkbox"
     onPointerDown={stop} onMouseDown={stop} onTouchStart={stop}

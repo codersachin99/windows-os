@@ -1,3 +1,7 @@
+## Original Win7 filename extensions preserved during inline Rename — 14 November 2026
+
+Original webpack 0e9a filename splitting has been ported: Win7 Explorer F2 edits a file stem while retaining its extension on save. A desktop/mobile test renames Before.txt to After.txt and opens its unchanged content in Notepad. The source checkbox ARIA TypeScript mismatch is also corrected. The next gated CI must verify both; complete source screenshot parity remains incomplete.
+
 ## Original touch-only Explorer selection checkboxes — 14 November 2026
 
 Source `fa65` checkbox rendering is now shared in packages/ui and connected to the Win7 Explorer/Recycle Bin multi-selection model. The original Computer only displays checkboxes on touch devices after a selection starts; the migrated component follows that rule and preserves source ARIA attributes and pointer-event isolation. Pure and desktop/mobile browser tests added; original pixel parity remains pending. See [source trace](migration/LISTITEM-INTERACTIONS-SOURCE.md).

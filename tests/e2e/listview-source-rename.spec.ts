@@ -66,3 +66,29 @@ test("Win7 source context Rename, Escape, blur commit, and original popup clicko
   await folderDialog.getByRole("button",{name:"Cancel"}).click();
   await expect(folderDialog).toHaveCount(0);
 });
+
+
+test("source 0e9a inline rename edits only a file stem and preserves its extension and bytes",async({page})=>{
+  const win=await openComputer(page);
+  await win.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"Before.txt",mimeType:"text/plain",
+    buffer:Buffer.from("Source filename extension must survive the rename")
+  });
+  const before=win.locator('[data-test-explorer-item="Before.txt"]');
+  await expect(before).toBeVisible();
+  await before.click();
+  await page.keyboard.press("F2");
+  const rename=win.locator('[data-test-source-listview-rename]');
+  await expect(rename).toBeVisible();
+  await expect(rename).toHaveValue("Before");
+  await expect(rename).toHaveAttribute("maxlength","30");
+  await rename.fill("After");
+  await rename.press("Enter");
+  await expect(rename).toHaveCount(0);
+  await expect(before).toHaveCount(0);
+  const after=win.locator('[data-test-explorer-item="After.txt"]');
+  await expect(after).toBeVisible();
+  await after.dblclick();
+  await expect(page.locator('[data-test-window="notepad"] .cm-content'))
+    .toContainText("Source filename extension must survive the rename");
+});

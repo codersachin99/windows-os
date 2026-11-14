@@ -5,6 +5,21 @@ import {useEffect,useRef,useState} from "react";
  * and blur calls item.rename(newFullName). The caller owns the VFS change.
  */
 export const SOURCE_LIST_RENAME_LIMIT=30;
+
+/** Pinned webpack 0e9a.O parses the filename as greedy stem + last-dot
+ * extension, and original Computer.rename() reattaches that ext on save.
+ * The input edits only the stem. Unlike original double decodeURIComponent,
+ * filenames are already decoded in the Guest VFS and are not decoded again.
+ */
+export interface SourceRenameParts{name:string;ext:string|null}
+export function sourceRenameParts(filename:string):SourceRenameParts{
+  const match=filename.match(/(.*)\.(.*)$/);
+  if(!match||!(match[1]||match[2]))return {name:filename,ext:null};
+  return {name:match[1],ext:match[2]};
+}
+export function sourceRenameFileName(parts:SourceRenameParts,nextStem:string):string{
+  return parts.ext ? nextStem+"."+parts.ext : nextStem;
+}
 export interface SourceListItemRenameProps{
   originalName:string;
   onCommit(name:string):void;
@@ -13,7 +28,8 @@ export interface SourceListItemRenameProps{
 export function SourceListItemRename({
   originalName,onCommit,onCancel
 }:SourceListItemRenameProps){
-  const [draft,setDraft]=useState(originalName);
+  const [originalParts]=useState(()=>sourceRenameParts(originalName));
+  const [draft,setDraft]=useState(originalParts.name);
   const input=useRef<HTMLInputElement>(null);
   const finished=useRef(false);
   useEffect(()=>{
@@ -24,7 +40,7 @@ export function SourceListItemRename({
   const finish=(save:boolean)=>{
     if(finished.current)return;
     finished.current=true;
-    if(save)onCommit(draft);
+    if(save)onCommit(sourceRenameFileName(originalParts,draft));
     else onCancel();
   };
   return <input type="text" ref={input}

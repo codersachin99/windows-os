@@ -113,8 +113,12 @@
         "packages/ui/src/sourceItemCheckbox.css",
         "packages/ui/src/sourceItemCheckbox.test.tsx",
         "tests/e2e/listview-source-checkbox.spec.ts",
-        "migration/LISTITEM-INTERACTIONS-SOURCE.md"
-      ]
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "tests/e2e/listview-source-rename.spec.ts"
+      ],
+      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
     },
     {
       "source": "src/modules/apps/cpanel.js",
@@ -191,7 +195,7 @@
         "packages/ui/src/sourceItemCheckbox.test.tsx",
         "tests/e2e/listview-source-checkbox.spec.ts"
       ],
-      "verification": "Initial source list-item CI #43603371340 failed 2 message E2E, repaired via focus-loss reset. Follow-up rename/clickout CI #43604884502 passed 315/315 unit, 55 art, TS/build, but 4 legacy E2E expected retired Rename modal; test contracts updated to source inline 0616 rename. Combined touch checkbox + corrected E2E CI pending. Full legacy plugin/pixel parity incomplete."
+      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
@@ -217,7 +221,7 @@
         "packages/ui/src/sourceItemCheckbox.test.tsx",
         "tests/e2e/listview-source-checkbox.spec.ts"
       ],
-      "verification": "Initial source list-item CI #43603371340 failed 2 message E2E, repaired via focus-loss reset. Follow-up rename/clickout CI #43604884502 passed 315/315 unit, 55 art, TS/build, but 4 legacy E2E expected retired Rename modal; test contracts updated to source inline 0616 rename. Combined touch checkbox + corrected E2E CI pending. Full legacy plugin/pixel parity incomplete."
+      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
     },
     {
       "source": "src/modules/apps/magnifier.js",

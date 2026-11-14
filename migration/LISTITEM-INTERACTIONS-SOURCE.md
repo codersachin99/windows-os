@@ -39,3 +39,11 @@
 - The source fa65 touch-only multi-select checkboxes were committed on 89d659c without [run-ci] specifically to avoid overlapping CI. This next combined [run-ci] commit verifies both updated rename integration and touch checkbox source contract on desktop/mobile, including the prior source-message modal focus regression.
 - Inventory remains 257 pending, 25 in-progress, 8 implemented, 0 complete source parity / 290. Keep PR #1 draft, main unchanged, no release.
 
+
+## Source 0e9a filename extension and checkbox TypeScript repair — 2026-11-14 (CI pending)
+
+- [Combined run #43606204510](https://github.com/codersachin99/windows-os/actions/runs/43606204510) failed **before unit/browser tests** at TypeScript: packages/ui/src/sourceItemCheckbox.tsx supplied String(checked) to React's typed aria-checked. Replaced with boolean checked, retaining rendered true/false source semantics. This run must not be counted as a pass.
+- Pinned webpack 0e9a in original src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js, blob a3edd490a0f4e23052f2a3a74a694c8991911c56, exports O to split a filename into greedy stem + last extension. Original computer.js (blob 47aa521237c10f5e6763df37a1d8dcd73330f84f) reattaches the extension on FileRename. Added sourceRenameParts/sourceRenameFileName so F2 on Before.txt edits Before and saving as After writes After.txt, retaining Guest VFS contents.
+- Original filename splitting for multi-dot names, dotfiles and empty ext is unit tested; E2E uploads a real Before.txt, renames it via source inline field and reopens it in Notepad to verify contents. The original second URI decode is intentionally omitted because Guest VFS entries are already decoded and a second decode could fail on user-provided filename percent characters.
+- Next single [run-ci] commit combines checkbox TypeScript fix, updated old Rename browser expectations, source touch checkboxes and extension-preserving rename. Modules remain in progress; no main merge or release.
+
