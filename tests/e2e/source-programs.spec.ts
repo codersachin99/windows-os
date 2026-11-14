@@ -11,7 +11,7 @@ test("All Programs is populated from original installed .lnk shortcuts", async (
   await start.locator('[data-test-all-programs]').click();
   await expect(start.locator('[data-test-source-program-folder="Accessories"]')).toBeVisible();
   await expect(start.locator('[data-test-source-program-folder="Games"]')).toBeVisible();
-  await expect(start.locator('[data-test-source-program="chrome"]')).toBeDisabled();
+  await expect(start.locator('[data-test-source-program="chrome"]')).toBeEnabled();
   await start.locator('[data-test-source-program-folder="Accessories"]').click();
   await expect(start.locator('[data-test-source-program="notepad"]')).toBeEnabled();
   await expect(start.locator('[data-test-source-program="calc"]')).toBeEnabled();

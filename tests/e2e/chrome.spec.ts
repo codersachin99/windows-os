@@ -14,7 +14,7 @@ test("Chrome begins on original Google new tab; close last exits",async({page})=
   await expect(browser.locator('[data-test-chrome-tab]')).toHaveCount(1);
   await expect(browser.locator('.source-chrome__google'))
     .toHaveAttribute("src","/assets/images/google.d3503fb1.svg");
-  await browser.getByRole("button",{name:"New tab"}).click();
+  await browser.locator('[data-test-chrome-add-tab]').click();
   await expect(browser.locator('[data-test-chrome-tab]')).toHaveCount(2);
   await browser.getByRole("button",{name:"Close tab 2"}).click();
   await expect(browser.locator('[data-test-chrome-tab]')).toHaveCount(1);
@@ -47,7 +47,7 @@ test("Chrome source settings save search provider for next launch",async({page})
   const searchEngine=b.getByRole("combobox",{name:"Search engine"});
   await expect(searchEngine).toHaveValue("google");
   await searchEngine.selectOption("duckduckgo");
-  await b.getByRole("button",{name:"New tab"}).click();
+  await b.locator('[data-test-chrome-add-tab]').click();
   await b.getByRole("searchbox",{name:"Search Google"}).fill("windows xp");
   await b.getByRole("button",{name:"Submit search"}).click();
   await expect(b.locator('[data-test-web-iframe]')).toHaveAttribute("src",
