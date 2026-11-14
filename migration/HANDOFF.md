@@ -1,3 +1,9 @@
+## Combined source fidelity acceptance — 2026-11-14 (CI requested)
+
+- Feature source commits `5ee37c0`, `83efb94` and `881a205`: mounted-drive C: Content search locations; pinned original Win7 List/Content styling; and original Tiles `0616` item-info + 48px / 256px geometry. All have unit and/or desktop/mobile browser assertions but prior pushes intentionally skipped CI.
+- The immediately preceding source formatter `6ce1129` passed full [Actions #43611997970](https://github.com/codersachin99/windows-os/actions/runs/43611997970). This *documentation-only commit* includes `[run-ci]` to opt in **once** to the combined TypeScript, unit, source audit, build and Chromium E2E suite on the feature branch. Do not claim success until the run completes.
+- Original 290-module tracking remains: 255 pending, 27 in progress, 8 implemented and none fully original pixel-parity verified. Maintain draft PR #1; do not merge `main` or publish a release.
+
 ## Pinned source 7662 Win7 Tiles markup and CSS — 2026-11-14 (CI pending)
 
 - Source `listview-tiles.css` blob `792221cf9f42cfe1579f5860fec0332e727f5381` and modules 7662/0616: restored Win7 Tiles' 48px icon, 256px min row, flex icon+info hierarchy and 2px stacked info gap. Extra fields now live in `.listview__item-info`, preserving existing VFS interactions and other themes.
