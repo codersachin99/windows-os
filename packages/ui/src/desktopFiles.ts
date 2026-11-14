@@ -1,5 +1,5 @@
 import {
-  parseSourceShortcut, sourceShortcutIconValue, sourceFileIconType,
+  parseSourceShortcut, sourceShortcutIconValue, readSourceShortcutText, sourceFileIconType,
   sourceIsShortcutEntry, type FileEntry, type VirtualFileStore
 } from "@windows-os/filesystem";
 import { legacySourceIconArtwork, legacySourceCustomIconURL } from "@windows-os/assets";
@@ -16,17 +16,6 @@ export interface SourceDesktopFile {
   artwork: "original" | "fallback" | "custom";
 }
 
-async function sourceLinkText(
-  store: Pick<VirtualFileStore, "read" | "readBytes">,
-  path: string
-): Promise<string> {
-  try { return await store.read(path); }
-  catch {
-    // Host-uploaded JSON .lnk is stored as binary by the original File parser.
-    // Decode only to inspect the source exe/icon JSON; never execute its data.
-    return new TextDecoder("utf-8", { fatal: true }).decode(await store.readBytes(path));
-  }
-}
 /**
  * Source main.js 6271: items combines defaultShortcuts with the per-user
  * shortcuts array; a file-backed shortcut path is read at openItem().
@@ -47,7 +36,7 @@ export async function listSourceDesktopFiles(
     let iconOverride:string|null=null;
     if(isLink){
       try{
-        const text=await sourceLinkText(store,entry.uri);
+        const text=await readSourceShortcutText(store,entry.uri);
         programId=parseSourceShortcut(text)?.exe??null;
         iconOverride=sourceShortcutIconValue(text);
       }catch{

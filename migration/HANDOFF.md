@@ -1,3 +1,9 @@
+## Fixed binary-uploaded .lnk icon decoding — 2026-11-15 (CI batched)
+
+- [Explorer shortcut icon CI #43638958982](https://github.com/codersachin99/windows-os/actions/runs/43638958982) **failed desktop+mobile browser cases**: original .lnk JSON `icon="calc"` rendered as `file` for browser-imported binary VFS uploads, because Explorer called text-only `fileStore.read`. All TypeScript, units, source audits, and production build passed.
+- Added pure shared `readSourceShortcutText`: read original text-backed files normally, or decode UTF-8 bytes from uploaded binary-backed files with fatal TextDecoder. Both Explorer and Desktop use the same helper and preserve strict `parseSourceShortcut` executable validation. New units cover both formats and invalid binary rejection.
+- This commit intentionally avoids `[run-ci]`; combined on-demand CI will run after remaining All Programs icon update. Current feature branch is not yet browser green. Keep draft PR #1, main untouched and no release.
+
 ## Shared source icon artwork: desktop file-backed rows — 15 November 2026
 
 - Original Win7 icon key resolution 4cca + 0f35 has one shared safe, byte-imported art lookup in `@windows-os/assets`: `legacySourceIconArtwork`. Explorer now delegates to it instead of maintaining a second independent map.

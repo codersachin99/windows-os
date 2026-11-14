@@ -4,6 +4,7 @@ import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
   parseSourceShortcut, sourcePrograms, sourceIsShortcutEntry, sourceShortcutIconValue,
+  readSourceShortcutText,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
@@ -177,7 +178,7 @@ export function ExplorerApp({
     }
     void Promise.all(sourceShortcutEntries.map(async item=>{
       try{
-        const icon=sourceShortcutIconValue(await fileStore.read(item.uri));
+        const icon=sourceShortcutIconValue(await readSourceShortcutText(fileStore,item.uri));
         return [item.uri,icon] as const;
       }catch{
         return [item.uri,"file"] as const;

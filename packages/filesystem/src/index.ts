@@ -553,4 +553,4 @@ export { sourceSizeFromBytes } from "./sourceSize";
 export { sourceFileIconType, sourceIsShortcutEntry } from "./sourceIconTypes";
 export type { SourceFileIconKey } from "./sourceIconTypes";
 
-export { sourceShortcutIconValue } from "./sourceShortcutIcons";
+export { sourceShortcutIconValue, readSourceShortcutText } from "./sourceShortcutIcons";
