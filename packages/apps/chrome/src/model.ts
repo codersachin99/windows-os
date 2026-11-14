@@ -68,6 +68,14 @@ export function resolveChromeInput(raw:string,engine:ChromeSearchEngine):string|
   if(lower==="chrome://chrome/settings"||lower==="chrome://chrome")return lower;
   if(original.startsWith("//"))return null;
   if(/^[a-z][a-z0-9+.-]*:/i.test(original)&&!/^https?:\/\//i.test(original))return null;
+  // Fully-qualified URL credentials must be rejected *before* search fallback.
+  // Otherwise https://user:pass@host is mistaken for a search string.
+  if(/^https?:\/\//i.test(original)){
+    try{
+      const supplied=new URL(original);
+      if(supplied.username||supplied.password||!supplied.hostname)return null;
+    }catch{return null;}
+  }
   const host=/^(?:https?:\/\/)?(?:localhost|(?:[\w-]+\.)+[\w-]{2,}|(?:\d{1,3}\.){3}\d{1,3})(?::\d+)?(?:[/?#]|$)/i.test(original);
   const provider=CHROME_SEARCH_ENGINES.find(x=>x.value===engine)??CHROME_SEARCH_ENGINES[0];
   const path=host?original:provider.url+lower.replace(/ /g,"+");
