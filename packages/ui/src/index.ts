@@ -12,3 +12,6 @@ export type { SourceMessage, SourceMessageDialogProps } from "./sourceMessage";
 
 export { SourceListViewItem, sourceListItemHighlightParts, sourceListItemIsDoubleTap, SOURCE_LIST_ITEM_DOUBLE_TAP_MS } from "./sourceListViewItem";
 export type { SourceListViewItemProps, SourceListItemHighlightPart } from "./sourceListViewItem";
+
+export {SourceListItemRename,SOURCE_LIST_RENAME_LIMIT} from "./sourceListItemRename";
+export type {SourceListItemRenameProps} from "./sourceListItemRename";

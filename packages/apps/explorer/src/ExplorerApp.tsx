@@ -23,6 +23,7 @@ import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
+import { SourceListItemRename } from "@windows-os/ui/rename";
 import { SourceMessageDialog } from "@windows-os/ui/message";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
@@ -91,6 +92,7 @@ export function ExplorerApp({
   const trashPath = recycleBinPath ?? volume?.trashPath ?? null;
   const [state, setState] = useState(() => session.snapshot());
   const [prompt, setPrompt] = useState<"folder" | "rename" | null>(null);
+  const [renamingUri, setRenamingUri] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [confirm, setConfirm] = useState<"recycle" | "permanent" | "empty" | null>(null);
@@ -301,6 +303,11 @@ export function ExplorerApp({
   const handleKeys = (event: import("react").KeyboardEvent<HTMLDivElement>) => {
     const focused = event.target as HTMLElement;
     if (focused.closest("input,textarea,select,[contenteditable=true],[role=menu]")) return;
+    if (event.key === "F2" && !isBin && state.selected.length === 1) {
+      event.preventDefault();
+      requestRename();
+      return;
+    }
     if (event.key === "Delete" && !event.ctrlKey && !event.altKey && !event.metaKey) {
       event.preventDefault();
       requestDelete();
@@ -404,7 +411,9 @@ export function ExplorerApp({
   useEffect(() => {
     if (!context) return;
     const dismiss = (event: PointerEvent) => {
-      if (!(event.target instanceof Element
+      // The original 252b plugin handles item-context clickout per row.
+      // Background context menus retain the existing shared dismissal.
+      if (context.kind === "background" && !(event.target instanceof Element
         && event.target.closest("[data-test-explorer-context]"))) setContext(null);
     };
     const escape = (event: KeyboardEvent) => {
@@ -437,9 +446,24 @@ export function ExplorerApp({
     action();
   };
   const requestRename = () => {
-    if (!selected) return;
-    setName(selected.name);
-    setPrompt("rename");
+    if (!selected || isBin) return;
+    if (theme === "win7") {
+      setRenamingUri(selected.uri);
+    } else {
+      setName(selected.name);
+      setPrompt("rename");
+    }
+  };
+  const commitInlineRename = (uri: string, value: string) => {
+    setRenamingUri(null);
+    const nextName = value.trim();
+    if (!nextName) {
+      setMessage("File name cannot be empty.");
+      return;
+    }
+    const item = visible.find(entry => entry.uri === uri);
+    if (item?.name === nextName) return;
+    void execute(() => session.rename(uri, nextName));
   };
 
   const protectedRoots = [
@@ -670,15 +694,22 @@ export function ExplorerApp({
             aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}
             onContextMenu={event => showContext(event, "item", item.uri)}
+            onClickOutside={context?.kind === "item" && context.uri === item.uri
+              ? () => setContext(null) : undefined}
+            popupSelector="[data-test-explorer-context]"
             onDoubleClick={() => openEntry(item.uri, item.type)}
             onKeyDown={event => { if (event.key === "Enter") openEntry(item.uri, item.type); }}>
             <span className="listview__item-iconbox">
               <img src={item.type === "directory" ? legacyArt.folder : legacyArt.file} alt="" draggable={false} />
             </span>
-            <span className="listview__item-label" title={item.uri}>
-              {isBin && item.originalPath ? item.originalPath.split("/").pop()
-                : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
-            </span>
+            {renamingUri === item.uri
+              ? <SourceListItemRename originalName={item.name}
+                  onCommit={value => commitInlineRename(item.uri, value)}
+                  onCancel={() => setRenamingUri(null)}/>
+              : <span className="listview__item-label" title={item.uri}>
+                  {isBin && item.originalPath ? item.originalPath.split("/").pop()
+                    : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
+                </span>}
             {state.viewMode === "details" && <>
               <SourceListViewExtra>{new Date(item.mtime).toLocaleString()}</SourceListViewExtra>
               <SourceListViewExtra>{item.type === "directory" ? "File folder"

@@ -176,9 +176,13 @@
         "packages/ui/src/sourceListViewItem.tsx",
         "packages/ui/src/sourceListViewItem.test.tsx",
         "tests/e2e/listview-source-item.spec.ts",
-        "tests/e2e/listview-source-tap.spec.ts"
+        "tests/e2e/listview-source-tap.spec.ts",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md"
       ],
-      "verification": "Exact original a321 width/header CI #43602218473 PASS (310 Vitest, 322 browser, 55 art). Source 0616 list item and 400ms click-helper ported, new CI pending; full clickout/rename/checkbox and original pixel parity remain unverified."
+      "verification": "CI #43603371340: 313 unit passed and 324/326 browser passed, 2 message-confirm cases failed because pending double-click leaked across modal focus. Focus-loss reset added; new CI pending. Original source inline 30-char rename and clickout plugin integrated in Win7 Explorer; full screenshot parity and optional checkbox still incomplete."
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
@@ -194,9 +198,13 @@
         "packages/ui/src/sourceListViewItem.tsx",
         "packages/ui/src/sourceListViewItem.test.tsx",
         "tests/e2e/listview-source-item.spec.ts",
-        "tests/e2e/listview-source-tap.spec.ts"
+        "tests/e2e/listview-source-tap.spec.ts",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md"
       ],
-      "verification": "Exact original a321 width/header CI #43602218473 PASS (310 Vitest, 322 browser, 55 art). Source 0616 list item and 400ms click-helper ported, new CI pending; full clickout/rename/checkbox and original pixel parity remain unverified."
+      "verification": "CI #43603371340: 313 unit passed and 324/326 browser passed, 2 message-confirm cases failed because pending double-click leaked across modal focus. Focus-loss reset added; new CI pending. Original source inline 30-char rename and clickout plugin integrated in Win7 Explorer; full screenshot parity and optional checkbox still incomplete."
     },
     {
       "source": "src/modules/apps/magnifier.js",
@@ -1166,8 +1174,18 @@
       "source": "src/modules/plugins/plugin-clickout.js",
       "sha": "7f8f5c392c71ca622bcc59883e24ef5866eae9e9",
       "area": "plugins",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.test.tsx"
+      ],
+      "verification": "Original 252b clickout popup exclusion, host containment and pointer outside detection partially ported in SourceListViewItem; full Vue directive/global popups not ported. New CI pending."
     },
     {
       "source": "src/modules/plugins/plugin-codemirror.js",
@@ -1376,8 +1394,18 @@
       "source": "src/modules/runtime/vue-click-helper.js",
       "sha": "71db7989b3f01b4a6841c5346d6d88ede6cc5169",
       "area": "runtime",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListViewItem.tsx",
+        "packages/ui/src/sourceListItemRename.tsx",
+        "packages/ui/src/sourceListItemRename.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-rename.spec.ts",
+        "tests/e2e/listview-source-tap.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceListViewItem.test.tsx"
+      ],
+      "verification": "Original 82f9 400ms item second-click semantics partially ported in SourceListViewItem, plus focus-loss safety reset; general Vue directive and all callbacks not ported. New CI pending."
     },
     {
       "source": "src/modules/runtime/vue-frag.js",

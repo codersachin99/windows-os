@@ -18,15 +18,44 @@ export interface SourceListViewItemProps
   itemType:string;
   itemLabel:string;
   active?:boolean;
+  onClickOutside?:(event:PointerEvent)=>void;
+  popupSelector?:string;
   children:ReactNode;
 }
 export function SourceListViewItem({
   itemKey,itemType,itemLabel,active=false,className="",title,
-  children,onClick,onDoubleClick,...buttonProps
+  children,onClick,onDoubleClick,onBlur,onClickOutside,popupSelector,...buttonProps
 }:SourceListViewItemProps){
+  const itemRef=useRef<HTMLButtonElement>(null);
   const previousClick=useRef<number|null>(null);
   const timeout=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const resetDoubleTap=()=>{
+    previousClick.current=null;
+    if(timeout.current!==null){
+      clearTimeout(timeout.current);
+      timeout.current=null;
+    }
+  };
   useEffect(()=>()=>{if(timeout.current!==null)clearTimeout(timeout.current);},[]);
+  // Original plugin-clickout.js (252b) excludes the host item and popup
+  // elements from its outside-click callback. Pointerdown unifies mouse/touch.
+  useEffect(()=>{
+    if(!onClickOutside)return;
+    const handle=(event:PointerEvent)=>{
+      const root=itemRef.current;
+      const target=event.target;
+      if(!root||!(target instanceof Node)||root.contains(target))return;
+      if(popupSelector){
+        const path=event.composedPath?.()??[];
+        if(path.some(node=>node instanceof Element&&node.matches(popupSelector)))
+          return;
+        if(target instanceof Element&&target.closest(popupSelector))return;
+      }
+      onClickOutside(event);
+    };
+    document.addEventListener("pointerdown",handle);
+    return()=>document.removeEventListener("pointerdown",handle);
+  },[onClickOutside,popupSelector]);
   const activate=(event:ReactMouseEvent<HTMLButtonElement>)=>{
     onClick?.(event);
     if(event.defaultPrevented)return;
@@ -48,7 +77,15 @@ export function SourceListViewItem({
         SOURCE_LIST_ITEM_DOUBLE_TAP_MS);
     }
   };
-  return <button {...buttonProps} type="button"
+  return <button {...buttonProps} type="button" ref={itemRef}
+    onBlur={event=>{
+      onBlur?.(event);
+      // A modal/menu or another control between clicks is not a double-tap.
+      // Without this reset, confirming No then clicking the same row quickly
+      // re-opens its folder and disables the Delete command.
+      if(!event.relatedTarget||!event.currentTarget.contains(event.relatedTarget))
+        resetDoubleTap();
+    }}
     title={title??itemLabel}
     data-key={itemKey}
     data-test-listview-item={itemType}

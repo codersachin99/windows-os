@@ -50,3 +50,7 @@ The original src/modules/runtime/vue-click-helper.js (Git blob 71db7989b3f01b4a6
 - Unit tests verify source button attributes, 400ms threshold and filename highlights. New desktop/mobile browser tests verify a real Guest folder, item selection, source class and attributes, search-highlight rendering, native dblclick navigation and two rapid click events causing one opening.
 - Still outstanding: v-clickout source popup exclusions, item.toggle checkbox, inline filename rename mode/30-character limit, CSS --shortcut theme styling and complete alternate-theme/pixel screenshot parity. The source shared chunk contains many unrelated modules and must not be marked fully implemented.
 
+
+## Source item, rename and clickout continuation
+
+The exact 0616 inline rename, plugin-clickout and vue-click-helper source behaviors are traced in [LISTITEM-INTERACTIONS-SOURCE.md](LISTITEM-INTERACTIONS-SOURCE.md). Win7 Explorer now uses the shared 30-character rename input and source item-context outside click, with a focus-change reset to prevent false double-clicks across modal dialogs. Combined CI pending; original pixel-parity and optional checkbox not complete.

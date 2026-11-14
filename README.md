@@ -1,3 +1,7 @@
+## Win7 Explorer source inline rename and item clickout — 14 November 2026
+
+The pinned original 0616 list-item now supports 30-character inline F2/toolbar/context Rename with Enter or blur commit, and Escape cancellation. Original source 252b item clickout excludes the active popup. A double-click focus-loss reset prevents opening a folder after dismissing a Delete confirmation. Virtual filesystem writes use the existing Guest store, not the host. The preceding 0616 CI identified two such interaction regressions; the combined fix has new unit and desktop/mobile E2E tests and awaits verification. See [source trace](migration/LISTITEM-INTERACTIONS-SOURCE.md). Full original UI parity remains pending.
+
 ## Source listview-item and native 400ms double activation — 14 November 2026
 
 The source 0616 list-item button and original vue-click-helper 400ms second-click behavior have been reconstructed in shared packages/ui/sourceListViewItem.tsx. Real Explorer/Recycle Bin rows now carry the original item class, selection, key/type markers, and source filename highlight segmentation while retaining VFS operations. Pure and desktop/mobile browser tests added. Full CI for this increment pending, with original clickout, inline rename, checkbox and screenshot parity still open. The preceding a321 width/header slice passed [CI #43602218473](https://github.com/codersachin99/windows-os/actions/runs/43602218473): 310 unit, 322 browser, 55 original-art audits. See [source trace](migration/LISTVIEW-SOURCE.md).

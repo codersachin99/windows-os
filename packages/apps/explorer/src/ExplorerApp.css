@@ -364,3 +364,10 @@
   .explorer-view { margin-left:auto; }
   .explorer-command .explorer-view__trigger { padding:2px 6px; }
 }
+
+/* Original 0616 inline list-item rename input, only in the Win7 source view. */
+.explorer-item .listview__item-label.is-input {
+  min-width:0;max-width:100%;box-sizing:border-box;
+  padding:0 2px;background:#fff;color:#152535;border:1px solid #699ccd;
+  font:inherit;line-height:20px;text-align:left;
+}

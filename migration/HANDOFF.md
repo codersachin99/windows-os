@@ -1,3 +1,11 @@
+## Source 0616 inline rename / clickout and modal safety repair — 2026-11-14 (combined CI pending)
+
+- Previous [CI #43603371340](https://github.com/codersachin99/windows-os/actions/runs/43603371340) **FAILURE** limited to two source-message desktop/mobile E2E cases: 313/313 unit tests passed, 324/326 browser cases passed. On quick re-click after No, the item double-click timer erroneously carried across the Delete modal and opened the folder, disabling Delete.
+- Repaired SourceListViewItem by resetting pending double-tap state when focus leaves the item. Retained 400ms consecutive-click semantics. Added optional source 252b clickout/registered popup exclusions for Explorer's item context menus; background menu behavior unchanged.
+- Ported original 0616 inline rename (maxLength 30, input is-input, autofocus+select, Enter/blur commit) into SourceListItemRename. Win7 Explorer uses it for F2, toolbar and context Rename, committing through the existing Guest VFS. Escape safely cancels; other themes retain their previous modal fallback.
+- New unit tests and desktop/mobile Playwright cases cover F2, rename/commit/cancel, real filesystem update, clickout menu exclusions. Source src/modules/plugins/plugin-clickout.js and runtime/vue-click-helper.js moved Pending to In Progress because their core relevant item behavior is now represented but general directives are not completely ported.
+- Source counts **290 total: 257 pending, 25 in-progress, 8 implemented, 0 fully source-parity verified**. Exact source and remaining feature gaps documented in migration/LISTITEM-INTERACTIONS-SOURCE.md. Run CI only with explicit [run-ci]. Draft PR #1 unmerged, main unchanged, no release.
+
 ## Original listview-item 0616 / 400ms click-helper — 2026-11-14 (CI pending)
 
 - Source source chunk 49e2ebd6.js blob ed3b984138eed7c830b5fbe4a8be08d58328cb35 contains webpack 0616. Exact vue-click-helper.js blob 71db7989b3f01b4a6841c5346d6d88ede6cc5169 defines v-tap:400 second click detection.
