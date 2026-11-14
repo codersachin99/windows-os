@@ -1,3 +1,8 @@
+## CMD package build path and scope clarification — 2026-11-15
+
+- Follow-up to CMD first source slice: added `@windows-os/apps/cmd` to **both** TypeScript and Vite aliases (required by `DesktopShell`). Explicitly documented that no-space `ECHO.` source parser is not yet implemented (spaced `ECHO .` works), avoiding an overstated parity claim.
+- Still no CI opt-in on CMD; the last shell-art batch [#43640201034](https://github.com/codersachin99/windows-os/actions/runs/43640201034) was executing browser acceptance at prior check. Next verification should include new Command Prompt command model and Start Menu browser test once scheduled as on-demand.
+
 ## CMD first source command-engine/UI slice — 2026-11-15 (CI not yet requested)
 
 - Implemented actual original Command Prompt startup, Windows-mounted Guest CWD, source black monospace shell/banner/history/input, source `CLS`, `ECHO`, `TITLE`, `CD`, `DIR`/`B`, `VER`, `HELP`, `EXIT` against live Guest VFS. Registered `cmd` program and enabled its installed Accessories .lnk with real application launch.

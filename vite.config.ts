@@ -23,6 +23,7 @@ export default defineConfig({
       "@windows-os/apps/contacts": app("./packages/apps/contacts/src/index.ts"),
       "@windows-os/apps/notepad": app("./packages/apps/notepad/src/index.ts"),
       "@windows-os/apps/calculator": app("./packages/apps/calculator/src/index.ts"),
+      "@windows-os/apps/cmd": app("./packages/apps/cmd/src/index.ts"),
       "@windows-os/apps/run": app("./packages/apps/run/src/index.ts"),
       "@windows-os/apps/sticky": app("./packages/apps/sticky/src/index.ts"),
       "@windows-os/apps/magnifier": app("./packages/apps/magnifier/src/index.ts"),

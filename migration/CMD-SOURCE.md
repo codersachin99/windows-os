@@ -13,3 +13,7 @@ Pinned original: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c
 ## Verification
 
 Commit is deliberately without CI opt-in while the previous combined icon regression CI remains in progress. Trigger `[run-ci]` only when an acceptance batch is needed. Tracker changes **one** original source module from pending to in-progress: 290 total, 254 pending / 28 in progress / 8 implemented / 0 fully verified.
+
+## Module resolution
+
+The new `@windows-os/apps/cmd` package is registered in both `tsconfig.json` and `vite.config.ts` aliases, matching the existing per-app package architecture. This follow-up is intentionally without `[run-ci]`; batch with next opt-in CI once the earlier icon run conclusion is known. The initial first-run CMD slice does **not** yet implement the special unspaced `ECHO.` syntax: only spaced `ECHO .` returns the empty line until a later source parser port.

@@ -73,6 +73,9 @@
       "@windows-os/apps/calculator": [
         "packages/apps/calculator/src/index.ts"
       ],
+      "@windows-os/apps/cmd": [
+        "packages/apps/cmd/src/index.ts"
+      ],
       "@windows-os/apps/run": [
         "packages/apps/run/src/index.ts"
       ],
