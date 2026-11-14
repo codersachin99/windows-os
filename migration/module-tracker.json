@@ -59,7 +59,7 @@
         "apps/web/public/assets/images/camera-base.3c876d62.svg",
         "migration/CAMERA-SOURCE.md"
       ],
-      "verification": "implementation-and-automated-video-stream-browser-test-added; integrated CI pending; real hardware, source Win7 artwork, source image conversion and pixel parity unverified"
+      "verification": "CI 43571392317 passed: 280 unit/280 Chromium browser with simulated camera stream, true JPEG VFS save and 39 source-art checks; live hardware/Win7 icon/original pixel parity pending"
     },
     {
       "source": "src/modules/apps/chrome.js",

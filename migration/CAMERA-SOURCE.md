@@ -30,6 +30,13 @@ The React window currently uses a shared `760×540` resizable `WindowFrame` as a
 - The simulated video stream is *not* live camera-hardware acceptance. The original source's `0fbc.j` JPEG converter, browser/device-specific facing selection, all themes, source static help window and actual screenshot parity require review against the pinned executable.
 - The Camera entry stays **in-progress** until full original functional/visual equivalence is demonstrated. No main merge or release.
 
+## Verified full opt-in CI — 14 November 2026
+
+- **[Initial implementation e94d616](https://github.com/codersachin99/windows-os/commit/e94d6169eea52651377992dc5b413b5a0b9f3e3f)** ported camera preview, source constraints, JPEG Save As and camera cleanup. [Initial full run #43570514062](https://github.com/codersachin99/windows-os/actions/runs/43570514062) passed TypeScript, 280 unit tests, source audit and build; two browser cases failed on **three rather than two camera hardware requests** after facing switch due to React's development StrictMode effect replay.
+- **[Fix cda8932](https://github.com/codersachin99/windows-os/commit/cda8932896850ce412d005262be2e22150f84c63)** schedules the initial camera request at the next task, canceling the disposable StrictMode mount before it can invoke `getUserMedia`. This also prevents an unnecessary second camera permission request in development.
+- **[Full opt-in CI #43571392317 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43571392317)**: **280 Vitest unit tests in 55 files, 280 desktop/mobile Chromium cases**, TypeScript, source inventory audit, original Contacts checks, Vite build and **39 exact Git-blob image checks**. The Camera browser cases verify requested constraints, settings, facing switch, stopping old tracks, **real browser JPEG encoder output**, saved VFS JPEG bytes, Photo Viewer reopening and denied camera permissions.
+- **Acceptance boundary**: a synthetic canvas video track is used in automated Chromium. Physical camera hardware, exact original `0fbc.j` encoder equivalence, original Windows 7 WebP art, dialog/window geometry and source screenshot parity are not verified; `camera.js` correctly remains in-progress.
+
 ## Verification command gate
 
-Executable code changes warrant one `[run-ci]` commit to run TypeScript, Vitest, byte-exact source-art audit, Contacts contracts, Vite build and Playwright desktop/mobile. Documentation commits must not trigger full CI.
+The executable Camera slice passed the full opt-in `[run-ci]` workflow above. Documentation-only pushes keep full CI skipped; PR stays draft, `main` unchanged.
