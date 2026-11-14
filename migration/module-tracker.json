@@ -229,7 +229,7 @@
         "apps/web/public/assets/images/recorder-onebit.110a9439.svg",
         "migration/RECORDER-SOURCE.md"
       ],
-      "verification": "implementation-and-mocked-microphone-WAV-browser-tests-submitted; integrated-CI-pending; real microphone and source visual parity unverified"
+      "verification": "CI 43567671473 success: 277 unit/276 browser, real WebAudio WAV conversion with mocked microphone, 38 image audits; physical microphone and pinned original source visual parity not verified"
     },
     {
       "source": "src/modules/apps/run.js",

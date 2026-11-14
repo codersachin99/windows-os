@@ -26,6 +26,12 @@ The pinned original has `WindowMain` with `w=480`, `h=90`, centered, non-resizab
 - Source audio-duration formatting (`a146.b`) and one-row window height require original browser visual acceptance.
 - Do **not** mark `recorder.js` fully source-verified until exact original behavior, real permissions, themes, and screenshot pairs are checked.
 
-## CI requirement
+## Verified opt-in CI — 14 November 2026
 
-This is executable source code, so use **one** opt-in `[run-ci]` commit to run TypeScript, Vitest, Vite build, original source-art byte audit, and the desktop/mobile Playwright suites. Keep `main` untouched and PR #1 draft.
+- Original code landed in [feature commit `7247476`](https://github.com/codersachin99/windows-os/commit/7247476ea8402714ecf78d977d9d5986504f1e7f). Initial [CI #43567599509](https://github.com/codersachin99/windows-os/actions/runs/43567599509) caught a single TypeScript Blob constructor mismatch; [fix `2d91d7a`](https://github.com/codersachin99/windows-os/commit/2d91d7a79b9c35f9059472552dd6850d96ba656c) copied readonly chunks into a mutable array without changing their audio bytes.
+- **[CI #43567671473 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43567671473)**: 277 passing unit tests across 54 files, 276 Chromium desktop/mobile tests, TypeScript, production build, original Contacts checks and 38/38 exact source artwork hashes passed. The new Recorder browser spec exercises real browser WAV conversion and VFS bytes using a deterministic mocked MediaRecorder; a separate test verifies denied microphone permission.
+- A green browser result is **not** proof that actual microphone hardware or the original source UI were tested. Record hardware, supported MIME variants, sound fidelity and original screenshots before full source-parity acceptance.
+
+
+
+This code has passed the complete `[run-ci]` workflow above. Subsequent documentation-only pushes must keep CI skipped. `main` stays untouched and PR #1 draft.
