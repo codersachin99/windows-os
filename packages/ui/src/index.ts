@@ -3,3 +3,6 @@ export { LogonScreen } from "./LogonScreen";
 export { DesktopShell } from "./DesktopShell";
 export { WindowFrame } from "./WindowFrame";
 export { StartMenu } from "./StartMenu";
+
+export { SourceListView, SourceListViewExtra, sourceListViewExtraWidth } from "./sourceListView";
+export type { SourceListViewVariant } from "./sourceListView";

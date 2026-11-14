@@ -1,3 +1,7 @@
+## Source Webapp/Embed green CI checkpoint — 14 November 2026
+
+The original webapp.js and plugin-embed.js have migrated React modules in packages/apps/webapp, packages/sdk/src/embed.ts and packages/ui/src/SourceEmbedBridge.tsx. The secure parent-origin bridge is disabled by default and preserves the original 4.8.0 event protocol. [CI #43586350903](https://github.com/codersachin99/windows-os/actions/runs/43586350903) passed 303 unit, 314 desktop/mobile browser cases and 53 source-art checks; complete original iframe behavior and visual parity are still pending. See [source trace](migration/WEBAPP-EMBED-SOURCE.md).
+
 # WindowsOS — source-faithful React conversion
 
 This is the new **React + TypeScript + Vite** home for the existing WindowsOS product. The design and functional specification is the private [legacy-win7 repository](https://github.com/codersachin99/legacy-win7) at the pinned commit `4e63290d783009e1293433c6ccf252abba9c1187`. It is a **port, not a redesign**.

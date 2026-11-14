@@ -12,6 +12,7 @@ export default defineConfig({
       "@windows-os/contracts": app("./packages/contracts/src/index.ts"),
       "@windows-os/assets": app("./packages/assets/src/index.ts"),
       "@windows-os/engine": app("./packages/engine/src/index.ts"),
+      "@windows-os/ui/listview": app("./packages/ui/src/sourceListView.tsx"),
       "@windows-os/ui": app("./packages/ui/src/index.ts"),
       "@windows-os/sdk": app("./packages/sdk/src/index.ts"),
       "@windows-os/filesystem": app("./packages/filesystem/src/index.ts"),

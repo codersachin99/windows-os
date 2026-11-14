@@ -18,4 +18,4 @@
 
 The original source URL regex and iframe permit more behaviors. React rejects credentials and executable schemes; close commands may only close web_ windows, not arbitrary system windows. The iframe is sandboxed without allow-same-origin. External site CSP, X-Frame-Options and these security differences can inhibit site loading. The original URL slug utility 4caf, multiple window behavior, dynamic geometry, native online probe, localization and pixel-level Win7 screenshot comparison are still pending. Original first-party Contacts remains its specialized React UI.
 
-**CI pending. Both source files in-progress, PR #1 draft, main untouched, no release.**
+**Implemented-slice CI PASS**: [run #43586350903](https://github.com/codersachin99/windows-os/actions/runs/43586350903), 303 unit cases (61 files), 314 browser cases, 53 byte-exact source art audits, TypeScript and Vite build. Complete source and pixel parity still unverified; two modules in-progress, PR #1 draft, main untouched, no release.

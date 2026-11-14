@@ -1,3 +1,8 @@
+## Webapp/Embed successful CI; source inventory correction — 2026-11-14
+
+- [Full CI #43586350903](https://github.com/codersachin99/windows-os/actions/runs/43586350903) **SUCCESS**: 303 unit tests (61 files), 314 desktop/mobile Chromium, 53 byte-exact image audits, TypeScript and Vite build. Original parent-origin message flow now CI-tested. Webapp and Embed source tracker entries had erroneously stayed Pending in older status despite code/CI; now set In Progress.
+- New Details and Tiles shared UI source modules are also in progress, CI pending. Source inventory now **290 total: 260 pending, 22 in-progress, 8 implemented, 0 fully parity-verified**; prior 262/20 handoff count was premature. PR #1 remains draft, main untouched, no release.
+
 ## Desktop/mobile visual evidence — 2026-11-14
 
 - [Visual workflow #43586693913](https://github.com/codersachin99/windows-os/actions/runs/43586693913) **SUCCESS**: 34/34 React target screenshots (17 scenes × desktop/mobile), 0 capture errors. Manifest: sourceConfigured:false, sourceCaptured:0, targetOnlyCaptured:24, parityStatus:not-assessed. Exact source read-token not configured; no paired original screenshots. Artifact [14110837735](https://github.com/codersachin99/windows-os/actions/runs/43586693913/artifacts/14110837735). Do NOT mark source parity verified. Explicit app source fixture comparison remains next visual prerequisite.

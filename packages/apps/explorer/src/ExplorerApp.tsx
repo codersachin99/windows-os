@@ -21,6 +21,7 @@ import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } fro
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
+import { SourceListView, SourceListViewExtra } from "@windows-os/ui/listview";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -639,9 +640,12 @@ export function ExplorerApp({
         {state.viewMode === "details" && <div className="explorer-columns" aria-hidden="true">
           <span>Name</span><span>Date modified</span><span>Type</span><span>Size</span>
         </div>}
-        <div className={"listview__view explorer-list " +
+        <SourceListView
+          variant={state.viewMode === "details" ? "details" :
+            state.viewMode === "tiles" ? "tiles" : "plain"}
+          className={"explorer-list " +
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] :
-          state.viewMode === "tiles" ? "has-tiles" :
+          state.viewMode === "tiles" || state.viewMode === "details" ? "" :
           state.viewMode === "content" ? "has-content" : "has-" + state.viewMode)}>
           {visible.map(item => <button key={item.uri} type="button"
             draggable={!isBin}
@@ -670,20 +674,27 @@ export function ExplorerApp({
                 : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
             </span>
             {state.viewMode === "details" && <>
-              <span>{new Date(item.mtime).toLocaleString()}</span>
-              <span>{item.type === "directory" ? "File folder"
+              <SourceListViewExtra>{new Date(item.mtime).toLocaleString()}</SourceListViewExtra>
+              <SourceListViewExtra>{item.type === "directory" ? "File folder"
                 : /\.lnk$/i.test(item.name) ? "Shortcut"
                 : /\.exe$/i.test(item.name) ? "Application"
                 : /\.cpl$/i.test(item.name) ? "Control Panel Item"
                 : /\.txt$/i.test(item.name) ? "Text Document"
-                : "File"}</span>
-              <span>{item.type === "directory" ? "" : item.size + " B"}</span>
+                : "File"}</SourceListViewExtra>
+              <SourceListViewExtra>{item.type === "directory" ? "" : item.size + " B"}</SourceListViewExtra>
+            </>}
+            {state.viewMode === "tiles" && <>
+              <SourceListViewExtra>{item.type === "directory" ? "File folder"
+                : /\.lnk$/i.test(item.name) ? "Shortcut"
+                : /\.exe$/i.test(item.name) ? "Application"
+                : /\.txt$/i.test(item.name) ? "Text Document" : "File"}</SourceListViewExtra>
+              {item.type !== "directory" && <SourceListViewExtra>{item.size} B</SourceListViewExtra>}
             </>}
           </button>)}
           {!state.busy && !searchBusy && !visible.length && <p className="explorer-empty">
             {state.search ? "No items match your search." : "This folder is empty."}
           </p>}
-        </div>
+        </SourceListView>
         {state.busy && <p className="explorer-empty">Loading...</p>}
       </section>
     </div>

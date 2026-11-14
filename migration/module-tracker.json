@@ -166,15 +166,29 @@
       "source": "src/modules/apps/listview-details.js",
       "sha": "17a7e3d60e15a11c9b364ac78a37e2da257c605d",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.test.ts",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-details-tiles.spec.ts",
+        "migration/LISTVIEW-SOURCE.md"
+      ],
+      "verification": "CI pending: reusable Details view/extra component and Explorer fields; original a321 width and screenshot parity pending"
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
       "sha": "9b7d039e3f7c628c74dcdbe21e7aa2a59d5db11b",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.css",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/listview-source-details-tiles.spec.ts",
+        "migration/LISTVIEW-SOURCE.md"
+      ],
+      "verification": "CI pending: source Tiles and shared extra fields from Guest VFS; full original parity pending"
     },
     {
       "source": "src/modules/apps/magnifier.js",
@@ -254,8 +268,15 @@
       "source": "src/modules/apps/plugin-embed.js",
       "sha": "0cf1d9501703b3d8cf527144fef2a3c5ab51fd26",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/sdk/src/embed.ts",
+        "packages/sdk/src/embed.test.ts",
+        "packages/ui/src/SourceEmbedBridge.tsx",
+        "tests/e2e/embed.spec.ts",
+        "migration/WEBAPP-EMBED-SOURCE.md"
+      ],
+      "verification": "CI #43586350903 PASSED: original ready/opened/closed 4.8.0 and guarded parent; full original slug/iframe/pixel parity pending"
     },
     {
       "source": "src/modules/apps/recorder.js",
@@ -374,8 +395,15 @@
       "source": "src/modules/apps/webapp.js",
       "sha": "3cda3df47565e774bc07eb5ef04b3d3d2e8280f8",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/webapp/src/WebAppViewer.tsx",
+        "packages/apps/webapp/src/WebAppViewer.css",
+        "packages/ui/src/SourceEmbedBridge.tsx",
+        "tests/e2e/embed.spec.ts",
+        "migration/WEBAPP-EMBED-SOURCE.md"
+      ],
+      "verification": "CI #43586350903 PASSED: 303 Vitest, 314 Chromium, 53 original image audits; original iframe behavior and screenshot parity pending"
     },
     {
       "source": "src/modules/apps/wordpad.js",

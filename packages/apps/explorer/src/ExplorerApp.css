@@ -68,7 +68,20 @@
 .explorer-list.has-icons.is-extra .explorer-item .listview__item-iconbox {
   width:160px; height:160px; flex-basis:160px;
 }
-.explorer-list.has-tiles .explorer-item { width:230px; min-height:50px; }
+.explorer-list.has-tiles .explorer-item {
+  display:grid;grid-template-columns:36px minmax(0,1fr);
+  grid-template-rows:auto auto auto;align-content:center;column-gap:5px;
+  width:230px;min-height:55px;padding:4px 5px;
+}
+.explorer-list.has-tiles .explorer-item .listview__item-iconbox {
+  grid-column:1;grid-row:1 / span 3;width:32px;height:32px;
+  align-self:center;
+}
+.explorer-list.has-tiles .explorer-item .listview__item-label {
+  grid-column:2;grid-row:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.explorer-list.has-tiles .explorer-item .listview__item-extra:nth-child(3){grid-column:2;grid-row:2;}
+.explorer-list.has-tiles .explorer-item .listview__item-extra:nth-child(4){grid-column:2;grid-row:3;}
 .explorer-list.has-content .explorer-item { width:100%; min-height:50px; }
 .explorer-empty { flex:1; text-align:center; color:#62788a; padding:24px; }
 .explorer-status { flex:0 0 24px; border-top:1px solid #bfcfdd; padding:3px 9px; background:#edf5fb; color:#46647c; }

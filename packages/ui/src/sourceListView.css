@@ -1,0 +1,6 @@
+/* Shared source listview-extra (c162), used by original details and tiles. */
+.listview__item-extra{
+  display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;opacity:.7;font-size:12px;line-height:20px;
+}
+.listview__view.has-tiles{column-gap:8px;}
