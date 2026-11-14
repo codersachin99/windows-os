@@ -1,13 +1,19 @@
 {
   "referenceSha": "4e63290d783009e1293433c6ccf252abba9c1187",
-  "note": "Tracking a file never means its original functionality is already reimplemented.",
+  "note": "A tracked source file is not proof of parity. 'implemented' means a React module with code/test evidence exists; 'verified' is reserved for full accepted original-source functional and visual parity.",
   "modules": [
     {
       "source": "src/modules/apps/about.js",
       "sha": "bad9a14576e16a55b14cb0b6ecf11fc2214c9fb8",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/about/src/AboutApp.tsx",
+        "packages/apps/about/src/model.test.ts",
+        "tests/e2e/about.spec.ts",
+        "migration/ABOUT-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/bin.js",
@@ -94,8 +100,14 @@
       "source": "src/modules/apps/find.js",
       "sha": "f0814bd36842ec0ea0af7b503c4128fb999af17c",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/find/src/FindApp.tsx",
+        "packages/apps/find/src/FindApp.test.ts",
+        "tests/e2e/find.spec.ts",
+        "migration/FIND-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/games.js",
@@ -136,8 +148,14 @@
       "source": "src/modules/apps/magnifier.js",
       "sha": "11509a605057b007778e9241b0b9d8c4e9384432",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/magnifier/src/MagnifierApp.tsx",
+        "packages/apps/magnifier/src/model.test.ts",
+        "tests/e2e/magnifier.spec.ts",
+        "migration/MAGNIFIER-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/messages.js",
@@ -198,8 +216,14 @@
       "source": "src/modules/apps/run.js",
       "sha": "78cf59db4949a006f50d81e927d5120b6ceeb503",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/run/src/RunApp.tsx",
+        "packages/apps/run/src/model.test.ts",
+        "tests/e2e/run.spec.ts",
+        "migration/RUN-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/sandbox.js",
@@ -212,15 +236,25 @@
       "source": "src/modules/apps/search-companion.js",
       "sha": "3b8e868f7f3c694c0466889cb2d0ba0b029ee07f",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/search-companion/src/SearchCompanion.tsx",
+        "packages/apps/search-companion/src/model.test.ts",
+        "tests/e2e/search-surfaces.spec.ts"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/search-dialog.js",
       "sha": "7a5e24e65f48f839b44bb88b65529a71c59e8125",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/search-dialog/src/SearchDialog.tsx",
+        "packages/apps/search-dialog/src/model.test.ts",
+        "tests/e2e/search-surfaces.spec.ts"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/snipping.js",
@@ -233,15 +267,27 @@
       "source": "src/modules/apps/stickynotes.js",
       "sha": "2a4ad3cd5cbb927858d60c4cc1358239984a4e5c",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/sticky/src/StickyNotesApp.tsx",
+        "packages/apps/sticky/src/model.test.ts",
+        "tests/e2e/sticky-notes.spec.ts",
+        "migration/STICKY-NOTES-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/taskmgr.js",
       "sha": "a91ca8347299b4b4432252726d864689e734ffb0",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "packages/apps/taskmgr/src/TaskManagerApp.tsx",
+        "packages/apps/taskmgr/src/model.test.ts",
+        "tests/e2e/taskmgr.spec.ts",
+        "migration/TASKMGR-SOURCE.md"
+      ],
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
     },
     {
       "source": "src/modules/apps/testbox.js",
@@ -2101,7 +2147,7 @@
       "source": "apps/contacts/index.html",
       "sha": "9079378b7349c3ba255e40c40f117d73a6040f32",
       "status": "implemented",
-      "verification": "pending",
+      "verification": "browser-CRUD-and-contract-tests-passed; original-live-backend-and-visual-parity-pending",
       "mode": "native-react",
       "evidence": [
         "packages/apps/contacts/src/ContactsApp.tsx",
@@ -2110,7 +2156,7 @@
         "packages/apps/contacts/src/api.test.ts",
         "tests/e2e/contacts.spec.ts"
       ],
-      "note": "Original standalone Contacts UI rebuilt as React. Exact source CSS preserved in Shadow DOM, same 5 fields and CRUD paths. Integration/browser tests have not been run."
+      "note": "Original standalone Contacts UI rebuilt as React with original isolated stylesheet, five source form fields and CRUD routes. Browser mock/error and contract checks passed in integrated CI 43484632290; full live Python backend integration and original screenshot parity remain pending."
     },
     {
       "source": "apps/illustrator/index.html",

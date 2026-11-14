@@ -56,7 +56,7 @@ Capture with *deterministic file names and folder fixtures* in both applications
 
 **No original screenshots were captured.** The runner had no `LEGACY_SOURCE_READ_TOKEN`; `manifest.json` reports `sourceConfigured:false`, `sourceCaptured:0`, and `parityStatus:"not-assessed"`. This proves the React capture workflow and upload work, not pixel-level parity. The original source checkout, Python server, source selectors, paired image diff and full acceptance review remain unverified. Source access should be supplied through a GitHub Actions repository secret with only read-only access to the original repository, never in chat, committed code or workflow logs.
 
-### Extended React capture matrix — 2026-11-14 (verification pending)
+### Extended React capture matrix — 2026-11-14 (TARGET-ONLY CI VERIFIED)
 
 The first [visual run #43490774615](https://github.com/codersachin99/windows-os/actions/runs/43490774615) captured the shared five scenes for both desktop and mobile. The capture script now adds **five more React-only scenarios**, using the same functionality already exercised by the repository's passing Explorer/Bin Chromium regression tests:
 
@@ -70,7 +70,7 @@ The first [visual run #43490774615](https://github.com/codersachin99/windows-os/
 
 Every scene begins in a fresh browser context, so added fixtures do not leak across screenshots. The first five scenes remain **source-comparison eligible**. The five new scenes are `targetOnlySceneNames`, and their screenshot records explicitly set `sourceComparisonEligible:false`. The Python difference report lists these as `targetOnlyNotCompared`; it never claims to have measured source screenshots that do not exist. When a pinned source runner becomes available, its equivalent fixture procedures must be independently implemented and verified rather than assumed.
 
-The expected new **target** capture count is 20 (10 scenes × 2 profiles); the existing normal functional browser suite remains untouched and gated with `[run-ci]`. Screenshot execution requires `[capture-visual]` and its own CI result before marking this checkpoint verified.
+**Verified**: [opt-in GitHub Actions #43556921716 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43556921716) at code commit `8189d5718bacc4b8b2ea1d668b25174c93ca0b58` captured **20/20 target PNGs** (10 scenes × two profiles, including `targetOnlyCaptured:10`), with **zero capture errors**; the source-image audit passed **36/36**. Its artifact `visual-parity-8189d5718bacc4b8b2ea1d668b25174c93ca0b58` (ID `14097794398`, ~10 MB) includes the screenshot manifest. Browser/contract CI was correctly skipped by `[capture-visual]`. The runner still had no source read token: `sourceConfigured:false`, `sourceCaptured:0`, `parityStatus:"not-assessed"`; there is **no** original pixel-difference report yet.
 
 ## Important known differences
 
