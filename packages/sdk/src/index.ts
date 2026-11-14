@@ -90,6 +90,12 @@ const builtinApps: AppDefinition[] = [
     window: { width: 690, height: 520 }
   },
   {
+    id: "player", label: "Windows Media Player", icon: legacyArt.player,
+    kind: "media", desktop: false, showInStart: true,
+    // Source player.js default WindowMain dimensions (interim).
+    window: { width: 740, height: 510 }
+  },
+  {
     id: "snipping", label: "Snipping Tool", icon: legacyArt.snipping,
     kind: "utility", desktop: false, showInStart: true,
     // Original source h:auto before capture and h:300 after; shared interim.

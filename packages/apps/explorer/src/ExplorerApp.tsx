@@ -29,6 +29,7 @@ import "./ExplorerApp.css";
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
   onOpenPhotoFile?(path: string): void;
+  onOpenMediaFile?(path: string): void;
   onLaunchSourceProgram?(programId: string): boolean;
   initialPath?: string;
   recycleBinPath?: string;
@@ -67,7 +68,7 @@ const viewOptions: { value: ExplorerViewMode; label: string }[] = [
  * and trash semantics are still pending and intentionally not fabricated.
  */
 export function ExplorerApp({
-  onOpenTextFile, onOpenPhotoFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind,
+  onOpenTextFile, onOpenPhotoFile, onOpenMediaFile, onLaunchSourceProgram, initialPath, recycleBinPath, onOpenFind,
   onClose, theme = "win7"
 }: ExplorerAppProps) {
   const classicSearchStyle = sourceExplorerSearchStyle(theme);
@@ -185,6 +186,9 @@ export function ExplorerApp({
     },"picture")) {
       if(onOpenPhotoFile) onOpenPhotoFile(path);
       else setMessage("Windows Photo Viewer is unavailable.");
+    } else if (/\.(?:mp3|wav|ogg|oga|m4a|aac|flac|mp4|webm|ogv|mov|m4v|avi)$/i.test(path)) {
+      if(onOpenMediaFile) onOpenMediaFile(path);
+      else setMessage("Windows Media Player is unavailable.");
     } else if (/\.lnk$/i.test(path)) {
       void execute(async () => {
         const data = parseSourceShortcut(await fileStore.read(path));

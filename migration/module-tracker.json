@@ -233,8 +233,17 @@
       "source": "src/modules/apps/player.js",
       "sha": "bea751030d06d2fa11558b6487d99a8ae2383c33",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/player/src/model.ts",
+        "packages/apps/player/src/model.test.ts",
+        "packages/apps/player/src/PlayerApp.tsx",
+        "packages/apps/player/src/PlayerApp.css",
+        "tests/e2e/player.spec.ts",
+        "migration/PLAYER-SOURCE.md",
+        "apps/web/public/assets/images/player-base.3e5b35e3.svg"
+      ],
+      "verification": "CI pending; VFS file read, browser playback, source shell and image rendering under tests; original Win7 art, metadata filters, playlist and visual parity pending"
     },
     {
       "source": "src/modules/apps/plugin-embed.js",

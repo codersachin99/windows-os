@@ -15,6 +15,7 @@ import { CameraApp } from "@windows-os/apps/camera";
 import { InternetExplorerApp } from "@windows-os/apps/ie";
 import { ChromeApp } from "@windows-os/apps/chrome";
 import { SnippingApp } from "@windows-os/apps/snipping";
+import { PlayerApp } from "@windows-os/apps/player";
 import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
@@ -74,6 +75,9 @@ function ApplicationContent({
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "ie") return <InternetExplorerApp />;
   if (appId === "chrome") return <ChromeApp onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})} />;
+  if (appId === "player") return <PlayerApp initialFilePath={filePath}
+    onClose={() => dispatch({ type:"CLOSE_WINDOW", id:windowId })}
+    onRegisterClose={handler => registerClose(windowId,handler)} />;
   if (appId === "snipping") return <SnippingApp
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onRegisterClose={handler => registerClose(windowId,handler)} />;
@@ -105,6 +109,10 @@ function ApplicationContent({
     }}
     onOpenPhotoFile={path => {
       const app = appRegistry.get("photo");
+      if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
+    }}
+    onOpenMediaFile={path => {
+      const app = appRegistry.get("player");
       if (app) dispatch({ type: "OPEN_APP", app, file: { path } });
     }}
     onLaunchSourceProgram={programId => {

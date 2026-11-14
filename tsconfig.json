@@ -99,6 +99,9 @@
       ],
       "@windows-os/apps/snipping": [
         "packages/apps/snipping/src/index.ts"
+      ],
+      "@windows-os/apps/player": [
+        "packages/apps/player/src/index.ts"
       ]
     }
   },
