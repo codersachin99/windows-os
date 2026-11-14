@@ -81,6 +81,9 @@
       ],
       "@windows-os/apps/search-companion": [
         "packages/apps/search-companion/src/index.ts"
+      ],
+      "@windows-os/apps/photo": [
+        "packages/apps/photo/src/index.ts"
       ]
     }
   },
