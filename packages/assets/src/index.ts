@@ -42,6 +42,8 @@ export const legacyArt = {
   // Exact pinned base-theme fallback; source Win7 camera.5e0b513d.webp
   // not yet transferable through the current UTF-8-only source connector.
   camera: "/assets/images/camera-base.3c876d62.svg",
+  // Original onebit fallback; Win7-specific ie.66b8418d.webp still pending.
+  ie: "/assets/images/ie-onebit.37a664e0.svg",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
   viewModeIcon: {

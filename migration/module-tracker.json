@@ -129,8 +129,17 @@
       "source": "src/modules/apps/ie.js",
       "sha": "9cf202d89e270465e75467b0c127f87c296ff07b",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/ie/src/InternetExplorerApp.tsx",
+        "packages/apps/ie/src/InternetExplorerApp.css",
+        "packages/apps/ie/src/model.ts",
+        "packages/apps/ie/src/model.test.ts",
+        "tests/e2e/ie.spec.ts",
+        "apps/web/public/assets/images/ie-onebit.37a664e0.svg",
+        "migration/IE-SOURCE.md"
+      ],
+      "verification": "CI pending; source screenshot, external iframe, exact Win7 icon and full visual parity unverified"
     },
     {
       "source": "src/modules/apps/index.js",

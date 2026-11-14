@@ -1,3 +1,9 @@
+## Source Internet Explorer migration — 2026-11-14 (CI pending)
+
+- Original legacy-win7/src/modules/apps/ie.js (Git blob 9cf202d89...) is rebuilt in modular packages/apps/ie. The pinned app.config.json supplies MSN home and Bing search. Source IE ID, iframe, address entry, Back/Next history, disabled Favorites/Bookmarks, 500ms progress, Internet status and exact onebit fallback SVG are mapped.
+- Unit and browser tests cover source endpoints, navigation, history and blocked unsafe URL schemes. Window geometry, true source URL helper equivalence, browser warning, external website embedding and Win7-specific WebP icon remain unverified. Full opt-in CI not yet verified.
+- Tracker: 267 pending, 15 in-progress, 8 implemented, 0 fully verified of 290. PR #1 draft, main unchanged, no release. Full CI only via [run-ci].
+
 ## Source Camera migration — 2026-11-14 (INTEGRATED CI VERIFIED)
 
 - **Pinned original**: `src/modules/apps/camera.js` (Git blob `c87c1df95...`) requests front camera on mount (`1280×720`), switches to rear via `facingMode:environment`, captures track-resolution JPEG at 100% quality and opens JPEG-only Save As. Information modal shows fixed source resolution/format/quality.

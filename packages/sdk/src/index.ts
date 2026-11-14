@@ -89,6 +89,12 @@ const builtinApps: AppDefinition[] = [
     // geometry and Win7 icon variant await side-by-side original screenshots.
     window: { width: 690, height: 520 }
   },
+  {
+    id: "ie", label: "Internet Explorer", icon: legacyArt.ie,
+    kind: "web", desktop: false, showInStart: true,
+    // Source IE inherits window geometry; interim size pending screenshots.
+    window: { width: 760, height: 520 }
+  },
   ...sourceShortcuts.map(shortcut => ({
     id: shortcut.key, label: shortcut.lbl, icon: shortcut.icon,
     kind: "web" as const, desktop: true, showInStart: true,

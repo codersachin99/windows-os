@@ -25,6 +25,7 @@ export default defineConfig({
       "@windows-os/apps/photo": app("./packages/apps/photo/src/index.ts"),
       "@windows-os/apps/recorder": app("./packages/apps/recorder/src/index.ts"),
       "@windows-os/apps/camera": app("./packages/apps/camera/src/index.ts"),
+      "@windows-os/apps/ie": app("./packages/apps/ie/src/index.ts"),
       "@windows-os/apps/taskmgr": app("./packages/apps/taskmgr/src/index.ts"),
       "@windows-os/apps/find": app("./packages/apps/find/src/index.ts"),
       "@windows-os/apps/search-dialog": app("./packages/apps/search-dialog/src/index.ts"),

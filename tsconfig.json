@@ -90,6 +90,9 @@
       ],
       "@windows-os/apps/camera": [
         "packages/apps/camera/src/index.ts"
+      ],
+      "@windows-os/apps/ie": [
+        "packages/apps/ie/src/index.ts"
       ]
     }
   },
