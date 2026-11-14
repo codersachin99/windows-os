@@ -1,0 +1,63 @@
+import {expect,test,type Locator,type Page} from "@playwright/test";
+
+/** Guest source executable/shortcut installations are the real shared VFS,
+ * not a mocked second CMD directory tree or an actual host filesystem.
+ */
+async function launchSourceCommandPrompt(page:Page):Promise<{
+  cmd:Locator;input:Locator;output:Locator
+}>{
+  await page.goto("/");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  const start=page.locator('[data-test-start-menu]');
+  await start.locator('[data-test-all-programs]').click();
+  await start.locator('[data-test-source-program-folder="Accessories"]').click();
+  await start.locator('[data-test-source-program="cmd"]').click();
+  const cmd=page.locator('[data-test-window="cmd"]');
+  const input=cmd.locator('[data-test-cmd-input]');
+  await expect(input).toBeVisible();
+  return {cmd,input,output:cmd.locator('[data-test-cmd-output]').last()};
+}
+async function execute(input:Locator,command:string):Promise<void>{
+  await input.fill(command);
+  await input.press("Enter");
+}
+
+test("source CMD COPY MOVE TYPE TREE and simulated volume use the same installed Guest files",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  const source="AppData\\Roaming\\WindowsOS\\Windows\\Start Menu\\Programs\\Accessories\\Notepad.lnk";
+  await execute(input,'copy "'+source+'" Desktop');
+  await expect(output).toHaveText("        1 file(s) copied.");
+  await execute(input,"move Desktop\\Notepad.lnk Documents\\CopiedShortcut.lnk");
+  await expect(output).toHaveText("        1 file(s) moved.");
+  await execute(input,"type Documents\\CopiedShortcut.lnk");
+  await expect(output).toHaveText('{"exe":"notepad","icon":"notepad"}');
+  await execute(input,"tree Documents /f");
+  await expect(output).toContainText("CopiedShortcut.lnk");
+  await expect(output).toContainText("Volume Serial Number is ");
+  await execute(input,"vol");
+  await expect(output).toContainText("Volume in drive C is System");
+  await execute(input,"tree Desktop /f");
+  await expect(output).toContainText("No subfolders exist");
+  await execute(input,"dir /b Documents");
+  await expect(output).toContainText("CopiedShortcut.lnk");
+  await execute(input,"exit");
+  await expect(cmd).toHaveCount(0);
+});
+
+test("source CMD DATE TIME and hexadecimal COLOR are visible without altering host settings",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"date /t");
+  await expect(output).toHaveText(/^(Sun|Mon|Tue|Wed|Thu|Fri|Sat) \d\d\/\d\d\/\d{4}$/);
+  await execute(input,"time /t");
+  await expect(output).toHaveText(/^\d\d:\d\d:\d\d\.\d\d$/);
+  await execute(input,"color 0a");
+  await expect(cmd.locator('[data-test-cmd-container]')).toHaveCSS(
+    "color","rgb(22, 198, 12)");
+  await execute(input,"color 00");
+  await execute(input,"echo %ERRORLEVEL%");
+  await expect(output).toHaveText("1");
+  await execute(input,"color");
+  await expect(cmd.locator('[data-test-cmd-container]')).toHaveCSS(
+    "background-color","rgb(0, 0, 0)");
+});
