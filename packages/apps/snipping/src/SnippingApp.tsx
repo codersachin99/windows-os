@@ -143,7 +143,7 @@ export function SnippingApp({onClose,onRegisterClose}:Props){
       </div>}
     </div>
     <button type="button" data-test-snipping-cancel="" onClick={cancel}>✕ Cancel</button>
-    {preview&&<button type="button" data-test-snipping-save=""
+    {preview&&<button type="button" aria-label="Save" data-test-snipping-save=""
       onClick={()=>setSaveOpen(true)}>▣ Save</button>}
   </div>;
   return <div className="source-snipping" ref={appRef} data-test-snipping="">
