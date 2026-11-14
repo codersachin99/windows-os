@@ -42,6 +42,8 @@ export const legacyArt = {
   // Exact pinned base-theme fallback; source Win7 camera.5e0b513d.webp
   // not yet transferable through the current UTF-8-only source connector.
   camera: "/assets/images/camera-base.3c876d62.svg",
+  // Exact original base Snipping SVG; Win7 snipping.2c25345c.webp pending.
+  snipping: "/assets/images/snipping-base.9d1d8a3f.svg",
   // Source-exact Chrome base artwork; original Win7 WebP is still pending.
   chrome: "/assets/images/chrome-base.d802dcaf.svg",
   // Original onebit fallback; Win7-specific ie.66b8418d.webp still pending.

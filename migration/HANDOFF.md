@@ -1,3 +1,13 @@
+## Source Snipping Tool migration — 2026-11-14 (full CI pending)
+
+- From pinned `src/modules/apps/snipping.js` webpack `331a`, added modular `packages/apps/snipping` with original New mode dropdown (Free-form remains disabled), Cancel, rectangle drag with source min 5px retry, Window hover/click, Full-screen capture, result stage, and PNG/JPG Save As via shared `VirtualFileDialog` and Guest `fileStore` binary bytes. The DOM screenshot is locally rasterized using SVG `foreignObject` with computed CSS and inlined same-origin image resources (no external service, host disk, or unauthenticated screen capture). This is similar to source `domToImage`, but actual canvas/iframes/media may differ; failures must be surfaced rather than producing fake images.
+- Source module tracker `snipping` is in-progress. Snipping supports Esc cancel and capture cleanup, and requestClose guard while Save As is visible. Source base theme icon is a byte-exact SVG; Win7-specific art still missing. New 4 pure contract tests and desktop/mobile browser tests exercise captured PNG/JPG bytes, rectangles, modes, cancel and virtual-file save. Full opt-in CI needs verification. No merge or release.
+- Pinned source total 290: 265 pending, 17 in-progress, 8 implemented, 0 fully source-parity-verified.
+
+## Chrome final integrated CI — 2026-11-14
+
+- [Run #43577115840](https://github.com/codersachin99/windows-os/actions/runs/43577115840) **SUCCESS** at `ac1bc402`: 289/289 unit cases (57 files), 294/294 desktop/mobile Chromium cases, 43 source art audits, Contacts/source tests, TypeScript and production build. The prior `288 passed / 6 failed` run was resolved by source-program expectation and precise New Tab selectors. Chrome still in-progress for original dinosaur, local file preview, plugin integration, source Win7 art and screenshot parity.
+
 ## Chrome browser regression repair — 2026-11-14 (final CI running)
 
 - Source-backed Chrome code commit [c609b78](https://github.com/codersachin99/windows-os/commit/c609b78d0c98a769ae1258ae4150760838ccb5a5) added 5 model tests and 8 desktop/mobile browser cases. Initial [CI #43576157230](https://github.com/codersachin99/windows-os/actions/runs/43576157230) passed TypeScript but found a URL-credential fallback bug in one unit assertion. [Fix 11b5067](https://github.com/codersachin99/windows-os/commit/11b50673b84b897c3136f8e9e07de4223f696795) rejects credentialed HTTP(S) URLs before they can be interpreted as search text.

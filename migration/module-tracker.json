@@ -308,8 +308,18 @@
       "source": "src/modules/apps/snipping.js",
       "sha": "81e4259f5f5188ac303c16e71fc7d1ef073bf601",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/snipping/src/SnippingApp.tsx",
+        "packages/apps/snipping/src/SnippingApp.css",
+        "packages/apps/snipping/src/captureDesktop.ts",
+        "packages/apps/snipping/src/model.ts",
+        "packages/apps/snipping/src/model.test.ts",
+        "tests/e2e/snipping.spec.ts",
+        "apps/web/public/assets/images/snipping-base.9d1d8a3f.svg",
+        "migration/SNIPPING-SOURCE.md"
+      ],
+      "verification": "CI pending; source DOM canvas selection and guest VFS save under test; screenshot rasterization and Win7 icon/full parity not verified"
     },
     {
       "source": "src/modules/apps/stickynotes.js",

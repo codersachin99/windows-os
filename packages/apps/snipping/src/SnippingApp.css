@@ -1,0 +1,28 @@
+.source-snipping{display:flex;flex-direction:column;min-height:0;height:100%;
+  background:#f0f0f0;color:#222;font:12px "Segoe UI",Tahoma,sans-serif}
+.source-snipping__toolbar{display:flex;gap:6px;align-items:center;min-height:34px;
+  background:linear-gradient(#fafafa,#e8e8e8);padding:3px 5px}
+.source-snipping__toolbar button{padding:5px 9px;border:1px solid transparent;
+  border-radius:3px;background:transparent;color:#252525;white-space:nowrap}
+.source-snipping__toolbar button:hover{border-color:#9ab3c8;background:#dfeef9}
+.source-snipping__new-host{position:relative}
+.source-snipping__modes{position:absolute;left:0;top:100%;display:flex;flex-direction:column;
+  width:170px;padding:5px 0;background:white;border:1px solid #9fa9b1;z-index:10;
+  box-shadow:0 4px 10px #0003}
+.source-snipping__modes button{text-align:left;border:0!important;border-radius:0!important}
+.source-snipping__modes button:hover:not(:disabled){background:#deedfa}
+.source-snipping__modes button:disabled{opacity:.45;cursor:default}
+.source-snipping__result{background:white;flex:1;min-height:0;display:flex;
+  justify-content:center;align-items:center;overflow:auto;padding:7px;text-align:center}
+.source-snipping__result img{max-width:100%;max-height:100%;object-fit:contain}
+.source-snipping__error{color:#9d1717;background:#fff0f0;padding:5px 8px}
+.source-snipping__overlay{position:fixed;inset:0;z-index:2147483646;cursor:crosshair;
+  touch-action:none;user-select:none;overflow:hidden}
+.source-snipping__veil{position:absolute;inset:0;background:rgba(255,255,255,.7);
+  pointer-events:none}
+.source-snipping__highlight{position:absolute;border:1px solid red;box-sizing:border-box;
+  box-shadow:0 0 0 9999px rgba(255,255,255,.7);pointer-events:none}
+.source-snipping__hint{position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  border:1px solid #969696;background:#fff;color:#222;padding:6px 12px;pointer-events:none;
+  box-shadow:0 2px 6px #0003}
+.source-snipping__dialog-host{position:fixed;inset:0;z-index:2147483647}

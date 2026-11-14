@@ -28,4 +28,4 @@
 - Source URL helpers and Google search patch have been reconstructed, but their exact compiled runtime helper semantics remain to compare.
 - Source local virtual PDF/HTML browser, fullscreen/browser-native integration, plugin `xframe` events, the offline T-Rex JavaScript game, exact website embedding behavior, complete error page, all themes and true pixel parity remain unimplemented or unverified.
 - This is not a native Chrome installation. Browser iframe CSP and `X-Frame-Options` can prohibit remote website display. No bypass is attempted.
-- **CI not yet confirmed**; PR #1 remains draft, `main` unchanged, no product release.
+- **Full opt-in CI #43577115840 SUCCESS** at commit `ac1bc402`: 289/289 Vitest across 57 files, 294/294 desktop/mobile Playwright, 43/43 source-art audits, TypeScript, Contacts and Vite production build. This verifies implemented Chrome features, **not** complete original feature/pixel parity. Draft PR #1 remains unmerged, `main` unchanged, no product release.

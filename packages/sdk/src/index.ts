@@ -90,6 +90,12 @@ const builtinApps: AppDefinition[] = [
     window: { width: 690, height: 520 }
   },
   {
+    id: "snipping", label: "Snipping Tool", icon: legacyArt.snipping,
+    kind: "utility", desktop: false, showInStart: true,
+    // Original source h:auto before capture and h:300 after; shared interim.
+    window: { width: 370, height: 185, resizable: false, minimizable: true }
+  },
+  {
     id: "chrome", label: "Chrome", icon: legacyArt.chrome,
     kind: "web", desktop: false, showInStart: true,
     // Original WindowMain inherits default size. Interim until source screenshot parity.

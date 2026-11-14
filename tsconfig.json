@@ -96,6 +96,9 @@
       ],
       "@windows-os/apps/chrome": [
         "packages/apps/chrome/src/index.ts"
+      ],
+      "@windows-os/apps/snipping": [
+        "packages/apps/snipping/src/index.ts"
       ]
     }
   },
