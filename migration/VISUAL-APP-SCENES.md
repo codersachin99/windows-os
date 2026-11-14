@@ -15,3 +15,12 @@ The source application selectors have not yet been validated inside the original
 - Screenshots are attached as workflow artifacts for visual inspection and iteration, not committed as proof of equality. Reusable program code continues to be verified with the separate [run-ci] workflow.
 
 The original Chrome T-Rex, native browser restrictions, real microphone/camera hardware, source dimensions and every missing application still need true source-backed behavior and paired screenshot coverage.
+
+## Actual capture results — 2026-11-14
+
+- [Opt-in visual workflow #43586693913](https://github.com/codersachin99/windows-os/actions/runs/43586693913) **SUCCESS** on commit 1694520.
+- 34/34 React screenshots created: 17 Win7 desktop scenes and 17 Pixel 7 mobile scenes, including all seven new application baselines. 0 capture errors.
+- Source captured: 0. The workflow explicitly reported NO legacy read token, so sourceConfigured:false, targetOnlyCaptured:24, parityStatus:not-assessed. Five existing common scenes per profile are source-comparison-eligible, but cannot be compared without actual original source captures.
+- [Screenshot artifact 14110837735](https://github.com/codersachin99/windows-os/actions/runs/43586693913/artifacts/14110837735) contains the generated images and manifest; it is not a claim of visual parity.
+- Do not mark any app or source module as source-verified based on these images. Explicit source evidence and pixel comparison remain blocked by read access to the immutable original application in the visual workflow.
+

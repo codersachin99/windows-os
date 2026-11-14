@@ -1,3 +1,7 @@
+## Desktop/mobile visual evidence — 2026-11-14
+
+- [Visual workflow #43586693913](https://github.com/codersachin99/windows-os/actions/runs/43586693913) **SUCCESS**: 34/34 React target screenshots (17 scenes × desktop/mobile), 0 capture errors. Manifest: sourceConfigured:false, sourceCaptured:0, targetOnlyCaptured:24, parityStatus:not-assessed. Exact source read-token not configured; no paired original screenshots. Artifact [14110837735](https://github.com/codersachin99/windows-os/actions/runs/43586693913/artifacts/14110837735). Do NOT mark source parity verified. Explicit app source fixture comparison remains next visual prerequisite.
+
 ## Target-only visual baselines for seven migrated apps — 2026-11-14
 
 - scripts/capture-visual-parity.mjs extended with seven React-only stable initial-window scenes: calc-initial, notepad-initial, chrome-new-tab, ie-home, player-initial, snipping-initial, recorder-initial. Captures use both desktop 1920x1080 and Pixel 7 browser profiles, a fixed 2026-11-11 clock and the actual WindowsOS Start Menu. This produces 14 additional React baseline screenshots on top of 20 prior target scenes.
