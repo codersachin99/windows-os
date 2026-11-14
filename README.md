@@ -1,3 +1,7 @@
+## Matcher accepts complete VFS literals and source icon inputs — 14 November 2026
+
+The second icon [CI #43626775200](https://github.com/codersachin99/windows-os/actions/runs/43626775200) caught TypeScript excess-property checks on existing full-file literals. A constrained generic now permits both those literals and the new minimal filename/type icon input without changing behavior. Another explicit `[run-ci]` check is requested. The last full green checkpoint is [#43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917).
+
 ## Source file-icon matcher typing fix — 14 November 2026
 
 First icon classification [CI #43626662452](https://github.com/codersachin99/windows-os/actions/runs/43626662452) failed TypeScript before tests because the shared file-kind predicate required the full VFS entry despite using only filename and entry type. Its typed parameter now reflects the original source inputs without changing matching behavior. Follow-up full opt-in CI requested; do not count previous run as a pass.

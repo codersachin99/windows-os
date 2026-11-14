@@ -92,10 +92,13 @@ const ORIGINAL_SOURCE_EXTENSIONS = {
   webpage: ["html", "htm"]
 } as const;
 
-/** Source 0e9a kind checks only the name and directory/file type.
- * Accept those two real dependencies rather than requiring metadata that
- * neither icon classification nor original extension matching uses. */
-export function matchesSourceKind(entry: Pick<FileEntry,"name"|"type">, kind: NonNullable<FileSearchRequest["kind"]>): boolean {
+/** Source 0e9a kind checks only name and file/directory type.
+ * A generic bound accepts both minimalist icon references and full literal
+ * VFS file entries with extra fields (the latter otherwise fail TS excess-
+ * property checks). The implementation still reads only name and type. */
+export function matchesSourceKind<T extends Pick<FileEntry,"name"|"type">>(
+  entry: T,kind: NonNullable<FileSearchRequest["kind"]>
+):boolean {
   if (kind === "folder") return entry.type === "directory";
   if (entry.type !== "file") return false;
   const dot = entry.name.lastIndexOf(".");

@@ -1,3 +1,10 @@
+## Original icon matcher excess-property TypeScript repair — 2026-11-14 (CI requested)
+
+- [Follow-up icon CI #43626775200](https://github.com/codersachin99/windows-os/actions/runs/43626775200) **FAILED TypeScript** (unit/browser not run): four existing callers pass fresh complete `FileEntry` literals containing `uri`, which TypeScript rejects when the matcher signature names only `Pick<FileEntry,"name"|"type">` due to excess-property checks.
+- Changed `matchesSourceKind` to the constrained generic `<T extends Pick<FileEntry,"name"|"type">>`. It still reads exactly source `name`/`type` and accepts minimal classifiers **and** complete file literal objects without casts, duplicate overloads or runtime changes. Source icon input/precedence unchanged.
+- This commit triggers the next **single opt-in [run-ci]** to verify both existing search contracts and the new icon cases. Neither icon CI #43626662452 nor #43626775200 is a pass. Last full green is [Details #43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917).
+- PR #1 stays draft, main untouched, no release. Original inventory: 290 = 255 pending / 27 in progress / 8 implemented / 0 full pixel-parity.
+
 ## Source icon CI type-contract repair — 2026-11-14 (retest requested)
 
 - Original icon selection [CI #43626662452](https://github.com/codersachin99/windows-os/actions/runs/43626662452) **failed in TypeScript**, before units/browser: six TS2345 mismatches because `sourceFileIconType` passes exactly `{name,type}` to `matchesSourceKind`, whose declared parameter unnecessarily required the whole `FileEntry`. The original 0e9a name/type predicate and the existing implementation access only these two properties.
