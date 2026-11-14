@@ -5,6 +5,7 @@ import { appRegistry } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
+import { CmdApp } from "@windows-os/apps/cmd";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
@@ -49,6 +50,9 @@ function ApplicationContent({
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
+  if (appId === "cmd") return <CmdApp
+    onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
+    onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })} />;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

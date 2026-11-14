@@ -1,3 +1,7 @@
+## Command Prompt source-backed first runnable slice — 15 November 2026
+
+Original `cmd.js` now has a modular React command window and a typed Windows drive path command engine reading the real Guest filesystem. Supports CD, DIR (including bare listing), ECHO, CLS, TITLE, VER, HELP and EXIT with original prompt/banner and keyboard history. Unmigrated commands, batch processing, pipes, colors, original icon bytes and screenshot parity remain explicitly pending; see [CMD source trace](migration/CMD-SOURCE.md). Tracker: 290 original modules, 254 pending, 28 in progress, 8 implemented, 0 full source parity. No auto-run CI; see [HANDOFF](migration/HANDOFF.md).
+
 ## Shared source .lnk icons: Explorer, Desktop, Start Menu — 15 November 2026
 
 All three Win7 shell surfaces now resolve original `.lnk` JSON artwork independently of executable targets. The shared filesystem reader supports text-backed installer entries and UTF-8 binary-backed browser uploads. Unimported source image assets use the exact generic file artwork as a clearly tracked fallback. New real Guest browser contracts cover custom Calculator art on a Notepad shortcut and separate launch behavior. The previous icon [CI #43638958982](https://github.com/codersachin99/windows-os/actions/runs/43638958982) failed 2 browser cases before the binary reader fix; follow-up opt-in full CI requested. Original screenshot pixel equivalence remains unverified.

@@ -1,5 +1,5 @@
 import type { AppDefinition } from "@windows-os/contracts";
-import { legacyArt } from "@windows-os/assets";
+import { legacyArt, legacySourceIconArtwork } from "@windows-os/assets";
 import sourceShortcuts from "./legacy-shortcuts.json";
 
 // Public, reusable app-registration contract. App implementations live separately
@@ -19,6 +19,12 @@ const builtinApps: AppDefinition[] = [
     id: "shortcut", label: "Shortcut", icon: legacyArt.shortcut,
     kind: "system", desktop: false, showInStart: false,
     window: { width: 550, height: 400, resizable: false, centered: true }
+  },
+  {
+    id: "cmd", label: "Command Prompt", icon: legacySourceIconArtwork("cmd").src,
+    kind: "utility", desktop: false, showInStart: true,
+    // Source cmd.js Ft=300 minimum height; interim width pending screenshot parity.
+    window: { width: 660, height: 420 }
   },
   {
     id: "calc", label: "Calculator", icon: legacyArt.calculator,

@@ -15,7 +15,7 @@ test("All Programs is populated from original installed .lnk shortcuts", async (
   await start.locator('[data-test-source-program-folder="Accessories"]').click();
   await expect(start.locator('[data-test-source-program="notepad"]')).toBeEnabled();
   await expect(start.locator('[data-test-source-program="calc"]')).toBeEnabled();
-  await expect(start.locator('[data-test-source-program="cmd"]')).toBeDisabled();
+  await expect(start.locator('[data-test-source-program="cmd"]')).toBeEnabled();
   await start.locator('[data-test-source-program="notepad"]').click();
   await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
 });
@@ -93,4 +93,36 @@ test("All Programs source .lnk JSON icon overrides executable artwork with binar
   await expect(link.locator("img")).toHaveAttribute("src",/\/calc\.1733a9a0\.webp$/);
   await link.click();
   await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
+});
+
+test("original Command Prompt first source shell slice uses live Guest directory",async({page})=>{
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  const start=page.locator('[data-test-start-menu]');
+  await start.locator('[data-test-all-programs]').click();
+  await start.locator('[data-test-source-program-folder="Accessories"]').click();
+  await start.locator('[data-test-source-program="cmd"]').click();
+  const window=page.locator('[data-test-window="cmd"]');
+  await expect(window.locator('[data-test-cmd-container]')).toContainText(
+    "Microsoft Windows [Version 6.1.7600]");
+  const input=window.locator('[data-test-cmd-input]');
+  await expect(window.locator(".cmd__prompt")).toHaveText("C:\\Users\\Guest>");
+  await input.fill("echo Hello Guest");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).toHaveText("Hello Guest");
+  await input.fill("dir /b");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).toContainText("Documents");
+  await input.fill("cd Documents");
+  await input.press("Enter");
+  await expect(window.locator(".cmd__prompt")).toHaveText("C:\\Users\\Guest\\Documents>");
+  await input.fill("title My CMD Session");
+  await input.press("Enter");
+  await expect(window.locator(".windows-window__title")).toHaveText("My CMD Session");
+  await input.fill("cls");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-entry]')).toHaveCount(0);
+  await expect(window.locator(".cmd__banner")).toHaveCount(0);
+  await input.fill("exit");
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
 });

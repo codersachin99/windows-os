@@ -85,8 +85,16 @@
       "source": "src/modules/apps/cmd.js",
       "sha": "d3e991b9604d8b0986676381de532f09b83ab958",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/cmd/src/model.ts",
+        "packages/apps/cmd/src/model.test.ts",
+        "packages/apps/cmd/src/CmdApp.tsx",
+        "packages/apps/cmd/src/CmdApp.css",
+        "tests/e2e/source-programs.spec.ts",
+        "migration/CMD-SOURCE.md"
+      ],
+      "verification": "first original CMD source command and Guest VFS slice; other commands, full batch parser, exact icon and visual parity pending"
     },
     {
       "source": "src/modules/apps/computer.js",

@@ -1,3 +1,11 @@
+## CMD first source command-engine/UI slice — 2026-11-15 (CI not yet requested)
+
+- Implemented actual original Command Prompt startup, Windows-mounted Guest CWD, source black monospace shell/banner/history/input, source `CLS`, `ECHO`, `TITLE`, `CD`, `DIR`/`B`, `VER`, `HELP`, `EXIT` against live Guest VFS. Registered `cmd` program and enabled its installed Accessories .lnk with real application launch.
+- Original CMD source `cmd.js` (blob d3e991b9604d8b0986676381de532f09b83ab958) and CSS (53f680686fbd147330ef15e8eb309b5508b3253b) are documented in `migration/CMD-SOURCE.md`. Detailed pure unit and browser acceptance added. Does not run host commands. Unsupported original commands remain explicitly pending; exact CMD art bytes and screenshots missing.
+- Tracker modified **cmd** from pending to in-progress; count 290 = 254 pending / 28 in-progress / 8 implemented / 0 fully source-parity verified.
+- Earlier combined shell icon [CI #43640201034](https://github.com/codersachin99/windows-os/actions/runs/43640201034) was still **in progress** when CMD branch work started; no inference of green. This CMD commit is without `[run-ci]`, respecting requested on-demand batch behavior. Review CI before next opt-in test.
+- Keep draft PR #1, main untouched and no release.
+
 ## Shared original shortcut icon art in Start Menu — 2026-11-15 (CI requested)
 
 - All Programs now resolves installed .lnk JSON `icon` through the same byte-imported original Win7 artwork as Explorer and Desktop; it no longer assumes the executable target's registry icon is identical. A shortcut with `{"exe":"notepad","icon":"calc"}` shows Calculator artwork but still launches Notepad. Unported executables remain disabled.
