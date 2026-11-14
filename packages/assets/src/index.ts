@@ -33,23 +33,20 @@ export const legacyArt = {
   file: "/assets/images/file.73b2d097.webp",
   shortcut: "/assets/images/shortcut.e8c69673.webp",
   paint: "/assets/images/paint.37480453.webp",
-  // Exact source base-theme photo icon; Win7-specific photo.db6c5f81.webp
-  // remains a tracked art import gap until binary source transport is available.
-  photo: "/assets/images/photo-base.b5f2d859.svg",
-  // Exact original recorder-onebit artwork fallback; the original Win7
-  // recorder.519283f8.webp still needs binary source transport.
-  recorder: "/assets/images/recorder-onebit.110a9439.svg",
-  // Exact pinned base-theme fallback; source Win7 camera.5e0b513d.webp
-  // not yet transferable through the current UTF-8-only source connector.
-  camera: "/assets/images/camera-base.3c876d62.svg",
-  // Original source base player icon; Win7 player.d45d301d.webp pending.
-  player: "/assets/images/player-base.3e5b35e3.svg",
-  // Exact original base Snipping SVG; Win7 snipping.2c25345c.webp pending.
-  snipping: "/assets/images/snipping-base.9d1d8a3f.svg",
-  // Source-exact Chrome base artwork; original Win7 WebP is still pending.
-  chrome: "/assets/images/chrome-base.d802dcaf.svg",
-  // Original onebit fallback; Win7-specific ie.66b8418d.webp still pending.
-  ie: "/assets/images/ie-onebit.37a664e0.svg",
+  // Byte-identical original Windows 7 Photo Viewer icon (imported via Base64).
+  photo: "/assets/images/photo.db6c5f81.webp",
+  // Byte-identical original Windows 7 Sound Recorder icon.
+  recorder: "/assets/images/recorder.519283f8.webp",
+  // Byte-identical original Windows 7 Camera icon.
+  camera: "/assets/images/camera.5e0b513d.webp",
+  // Byte-identical original Windows 7 Media Player icon.
+  player: "/assets/images/player.d45d301d.webp",
+  // Byte-identical original Windows 7 Snipping Tool icon.
+  snipping: "/assets/images/snipping.2c25345c.webp",
+  // Byte-identical original Windows 7 Chrome icon.
+  chrome: "/assets/images/chrome.0eddc17a.webp",
+  // Byte-identical original Windows 7 Internet Explorer icon.
+  ie: "/assets/images/ie.66b8418d.webp",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
   viewModeIcon: {

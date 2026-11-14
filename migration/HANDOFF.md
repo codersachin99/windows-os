@@ -1,3 +1,9 @@
+## Exact Windows 7 application artwork recovery — 2026-11-14
+
+- The GitHub connector supports `fetch_file({encoding:"base64"})` for binary original assets. Each Base64 payload was used in `create_blob({encoding:"base64"})`, and the resulting target Git blob SHA **exactly equaled** the pinned original SHA. Seven original Windows 7 WebP icons are now staged as immutable native Git blobs, not manually reconstructed artwork: `player.d45d301d.webp`, `snipping.2c25345c.webp`, `chrome.0eddc17a.webp`, `ie.66b8418d.webp`, `camera.5e0b513d.webp`, `recorder.519283f8.webp`, `photo.db6c5f81.webp`.
+- The shared `legacyArt` registry now selects the original Win7 WebP paths for those seven apps; their source base-theme SVG files remain available. Original exact SHA checks must be repeated in the full opt-in CI source-art audit after commit. **This restores original icon bytes but does not imply pixel parity for entire app windows or all original themes.**
+- Prior notes claiming binary asset transfer was impossible are superseded by this discovery. Source tracker evidence and each app source trace updated. Player source CI #43584290348 (on pre-art commit `0eda86c`) remains a separate check; only a new art commit can verify these seven source WebPs.
+
 ## Snipping Tool completed CI checkpoint — 2026-11-14
 
 - [Run #43583547737](https://github.com/codersachin99/windows-os/actions/runs/43583547737) **SUCCESS** on commit `5c1de35`: 293/293 unit tests (58 files), 300/300 Chromium desktop/mobile E2E cases, 44 byte-identical original image audits, TypeScript and production Vite build. Full-screen and rectangular capture previews and real PNG/JPEG save flow passed; advanced original source pixel/window parity still pending.

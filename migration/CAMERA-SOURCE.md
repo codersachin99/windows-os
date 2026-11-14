@@ -5,8 +5,8 @@
 - Reference: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`
 - Original: `src/modules/apps/camera.js`, Git blob `c87c1df95b581d8dedc8eb3ce490516f5901d995`, webpack `2164`.
 - Source manifest: `camera`, **Camera**, Accessories, `Program Files/WindowsOS/Camera/camera.exe`.
-- Original Win7 image: `assets/images/camera.5e0b513d.webp`, Git blob `db662ea103b74fd7d903f7910383c07d93b824ae`. The current GitHub text-only connector cannot retrieve this WebP; do not claim its visual fidelity.
-- Original base-theme icon: `assets/images/camera-base.3c876d62.svg` (Git blob `23ce3c1e95d9a0dcf9a7f3a9f2655d07c90b4c9f`), imported **byte-identically** under its original path as a documented interim icon.
+- Original Win7 image: `assets/images/camera.5e0b513d.webp`, Git blob `db662ea103b74fd7d903f7910383c07d93b824ae`. Imported byte-identically through GitHub Base64 source/target blobs and registered as the Windows 7 icon; rendered screenshot pixel fidelity is still unverified.
+- Original base-theme icon: `assets/images/camera-base.3c876d62.svg` (Git blob `23ce3c1e95d9a0dcf9a7f3a9f2655d07c90b4c9f`), imported **byte-identically** under its original path as an alternative base-theme icon.
 
 ## Original behavior mapped to React
 
@@ -35,7 +35,7 @@ The React window currently uses a shared `760×540` resizable `WindowFrame` as a
 - **[Initial implementation e94d616](https://github.com/codersachin99/windows-os/commit/e94d6169eea52651377992dc5b413b5a0b9f3e3f)** ported camera preview, source constraints, JPEG Save As and camera cleanup. [Initial full run #43570514062](https://github.com/codersachin99/windows-os/actions/runs/43570514062) passed TypeScript, 280 unit tests, source audit and build; two browser cases failed on **three rather than two camera hardware requests** after facing switch due to React's development StrictMode effect replay.
 - **[Fix cda8932](https://github.com/codersachin99/windows-os/commit/cda8932896850ce412d005262be2e22150f84c63)** schedules the initial camera request at the next task, canceling the disposable StrictMode mount before it can invoke `getUserMedia`. This also prevents an unnecessary second camera permission request in development.
 - **[Full opt-in CI #43571392317 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43571392317)**: **280 Vitest unit tests in 55 files, 280 desktop/mobile Chromium cases**, TypeScript, source inventory audit, original Contacts checks, Vite build and **39 exact Git-blob image checks**. The Camera browser cases verify requested constraints, settings, facing switch, stopping old tracks, **real browser JPEG encoder output**, saved VFS JPEG bytes, Photo Viewer reopening and denied camera permissions.
-- **Acceptance boundary**: a synthetic canvas video track is used in automated Chromium. Physical camera hardware, exact original `0fbc.j` encoder equivalence, original Windows 7 WebP art, dialog/window geometry and source screenshot parity are not verified; `camera.js` correctly remains in-progress.
+- **Acceptance boundary**: a synthetic canvas video track is used in automated Chromium. Physical camera hardware, exact original `0fbc.j` encoder equivalence, dialog/window geometry and source screenshot parity are not verified, even with the exact original Windows 7 WebP icon; `camera.js` correctly remains in-progress.
 
 ## Verification command gate
 

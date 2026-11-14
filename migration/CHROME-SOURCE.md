@@ -5,7 +5,7 @@
 - `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`, original `src/modules/apps/chrome.js` (webpack main `7839a`, settings module `90b3`).
 - Source manifest program `chrome`: Chrome, Internet, installed executable `Program Files/Google/Chrome/Application/chrome.exe`.
 - Imported original source art byte-identically: `chrome-base.d802dcaf.svg` Git blob `aa8a432ff68e4a2d7f1953b6e44222230fcdb206`, `google.d3503fb1.svg` Git blob `a971e1d7a9dbfc34674b15dadd401769d6dffd97`, and `google-mic.2a2ca1d4.svg` Git blob `05068f863ff6234e467561c0fdb5c6163439a7e6`.
-- Original Win7-specific icon `chrome.0eddc17a.webp` Git blob `6134df93f5f9037bc2ed99e3fb0ee78ebf79e145` is not yet copied through available text-only source connector.
+- Original Win7-specific icon `chrome.0eddc17a.webp` Git blob `6134df93f5f9037bc2ed99e3fb0ee78ebf79e145` is now imported byte-identically via source Base64 and selected by the app registry.
 
 ## Implementation
 

@@ -57,9 +57,10 @@
         "packages/apps/camera/src/model.test.ts",
         "tests/e2e/camera.spec.ts",
         "apps/web/public/assets/images/camera-base.3c876d62.svg",
-        "migration/CAMERA-SOURCE.md"
+        "migration/CAMERA-SOURCE.md",
+        "apps/web/public/assets/images/camera.5e0b513d.webp"
       ],
-      "verification": "CI 43571392317 passed: 280 unit/280 Chromium browser with simulated camera stream, true JPEG VFS save and 39 source-art checks; live hardware/Win7 icon/original pixel parity pending"
+      "verification": "CI #43571392317 PASSED for implemented camera scope (280 unit/280 browser, real JPEG); original Win7 WebP imported byte-exact. Real camera hardware and full source screenshot parity pending."
     },
     {
       "source": "src/modules/apps/chrome.js",
@@ -75,9 +76,10 @@
         "apps/web/public/assets/images/chrome-base.d802dcaf.svg",
         "apps/web/public/assets/images/google.d3503fb1.svg",
         "apps/web/public/assets/images/google-mic.2a2ca1d4.svg",
-        "migration/CHROME-SOURCE.md"
+        "migration/CHROME-SOURCE.md",
+        "apps/web/public/assets/images/chrome.0eddc17a.webp"
       ],
-      "verification": "CI pending; original T-Rex, local PDF/HTML, xframe events, Win7 icon and screenshot parity remain unported"
+      "verification": "CI #43577115840 PASSED (289 unit/294 browser); original Win7 WebP imported byte-exact. T-Rex engine, local PDF/HTML, frame plugin integration and full source screenshot parity pending."
     },
     {
       "source": "src/modules/apps/cmd.js",
@@ -148,9 +150,10 @@
         "packages/apps/ie/src/model.test.ts",
         "tests/e2e/ie.spec.ts",
         "apps/web/public/assets/images/ie-onebit.37a664e0.svg",
-        "migration/IE-SOURCE.md"
+        "migration/IE-SOURCE.md",
+        "apps/web/public/assets/images/ie.66b8418d.webp"
       ],
-      "verification": "CI pending; source screenshot, external iframe, exact Win7 icon and full visual parity unverified"
+      "verification": "CI #43574037011 PASSED (284 unit/286 browser); original Win7 WebP imported byte-exact. Runtime URL helper, remote iframe behavior, source window geometry and full screenshot parity pending."
     },
     {
       "source": "src/modules/apps/index.js",
@@ -225,9 +228,10 @@
         "packages/apps/photo/src/model.test.ts",
         "tests/e2e/photo.spec.ts",
         "apps/web/public/assets/images/photo-base.b5f2d859.svg",
-        "migration/PHOTO-SOURCE.md"
+        "migration/PHOTO-SOURCE.md",
+        "apps/web/public/assets/images/photo.db6c5f81.webp"
       ],
-      "verification": "CI 43560941513 passed: Photo unit/browser slice plus TypeScript/37 image audit; source Win7 icon, advanced formats and original-vs-React visual parity pending"
+      "verification": "CI #43560941513 PASSED for Photo Viewer slice; original Win7 WebP imported byte-exact. Unsupported format writes and original-vs-React screenshot parity pending."
     },
     {
       "source": "src/modules/apps/player.js",
@@ -241,9 +245,10 @@
         "packages/apps/player/src/PlayerApp.css",
         "tests/e2e/player.spec.ts",
         "migration/PLAYER-SOURCE.md",
-        "apps/web/public/assets/images/player-base.3e5b35e3.svg"
+        "apps/web/public/assets/images/player-base.3e5b35e3.svg",
+        "apps/web/public/assets/images/player.d45d301d.webp"
       ],
-      "verification": "CI pending; VFS file read, browser playback, source shell and image rendering under tests; original Win7 art, metadata filters, playlist and visual parity pending"
+      "verification": "CI #43584290348 pending for initial Media Player slice; original Win7 WebP imported byte-exact. Source metadata, multi-file playlist and pixel parity pending."
     },
     {
       "source": "src/modules/apps/plugin-embed.js",
@@ -265,9 +270,10 @@
         "packages/apps/shared/src/VirtualFileDialog.tsx",
         "tests/e2e/recorder.spec.ts",
         "apps/web/public/assets/images/recorder-onebit.110a9439.svg",
-        "migration/RECORDER-SOURCE.md"
+        "migration/RECORDER-SOURCE.md",
+        "apps/web/public/assets/images/recorder.519283f8.webp"
       ],
-      "verification": "CI 43567671473 success: 277 unit/276 browser, real WebAudio WAV conversion with mocked microphone, 38 image audits; physical microphone and pinned original source visual parity not verified"
+      "verification": "CI #43567671473 PASSED for Sound Recorder slice; original Win7 WebP imported byte-exact. Physical microphone and source window/widget pixel parity pending."
     },
     {
       "source": "src/modules/apps/run.js",
@@ -326,9 +332,10 @@
         "packages/apps/snipping/src/model.test.ts",
         "tests/e2e/snipping.spec.ts",
         "apps/web/public/assets/images/snipping-base.9d1d8a3f.svg",
-        "migration/SNIPPING-SOURCE.md"
+        "migration/SNIPPING-SOURCE.md",
+        "apps/web/public/assets/images/snipping.2c25345c.webp"
       ],
-      "verification": "Integrated CI #43583547737 PASS on 5c1de35: 293/293 unit tests, 300/300 desktop/mobile Chromium, 44 source-art audits, TS + Vite build. Not full source parity: Win7 icon, window-mode screenshot and original domToImage remain unverified."
+      "verification": "CI #43583547737 PASSED (293 unit/300 browser), including real PNG/JPG save; original Win7 WebP imported byte-exact. Source domToImage, window-selection screenshot parity and exact geometry pending."
     },
     {
       "source": "src/modules/apps/stickynotes.js",

@@ -5,7 +5,7 @@
 - Original repository: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
 - Source file: `src/modules/apps/photo.js` (Git blob `9df699034854fb6bcda027c0c2d8ab61ac6a01b2`), webpack component `273a`.
 - Original icon sources: `assets/images/photo.db6c5f81.webp` (Windows 7) and `assets/images/photo-base.b5f2d859.svg` (base-theme fallback).
-- The initial React implementation uses the **exact source SVG fallback** (Git blob `0567f7ac8f8483e8e0857dda99bf2685d97acd4e`); the Win7-specific WebP has **not** yet been transported. This is an explicit visual-fidelity gap rather than a reconstructed or fabricated icon.
+- The initial React implementation uses the **exact source SVG fallback** (Git blob `0567f7ac8f8483e8e0857dda99bf2685d97acd4e`); the exact Win7-specific WebP has now been imported via Base64 and selected by the registry. Its layout/pixel screenshot parity remains unverified, rather than a reconstructed or fabricated icon.
 
 ## Source behavior and React mapping
 
@@ -37,4 +37,4 @@ The original `photo.js#save()` attempts `image/<extension>` encoding for all sou
 
 ## Acceptance boundary
 
-This is a **working source-backed functional slice**; it is not full legacy equivalence. The Windows 7 icon variant, source window geometry and media-control glyphs, image-save behavior for other formats, source original slideshow placement, all theme variants, and original-versus-React screenshot parity remain unverified. The newly implemented functional slice is CI-verified as recorded above; original visual/format parity is not. PR stays draft and `main` is unchanged.
+This is a **working source-backed functional slice**; it is not full legacy equivalence. Source window geometry and media-control glyphs, image-save behavior for other formats, source original slideshow placement, all theme variants, and original-versus-React screenshot parity remain unverified. The newly implemented functional slice is CI-verified as recorded above; original visual/format parity is not. PR stays draft and `main` is unchanged.

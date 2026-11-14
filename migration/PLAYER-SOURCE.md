@@ -5,7 +5,7 @@
 - `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187/src/modules/apps/player.js` Git blob `bea751030d06d2fa11558b6487d99a8ae2383c33`, webpack main `9b15`.
 - Source installation manifest: `player`, Windows Media Player, `Program Files/Windows Media Player/wmplayer.exe`, alias `wmplayer`.
 - Exact source base icon `player-base.3e5b35e3.svg` Git blob `b78f94a72bb7191c63fb4080a9965fd18eaec4fa` byte-for-byte copied to public assets.
-- Original Windows 7 WebP `player.d45d301d.webp` Git blob `3355030754e1019e19b0169f16070f45752e45c7` still unavailable through UTF-8-only source connector.
+- Original Windows 7 WebP `player.d45d301d.webp` Git blob `3355030754e1019e19b0169f16070f45752e45c7` imported byte-identically via the GitHub Base64 source/target blob channel; WindowsOS now uses the original Win7 icon.
 
 ## Behavior mapping
 
@@ -23,7 +23,7 @@
 
 ## Verification boundary
 
-The currently implemented slice opens a single real file at a time. Source media type filter `7f29` (not yet fully ported), full playlist/metadata scanning, disabled/unsupported codecs, original in-feed ad widget, OS system volume, local library persistence, source title chrome and theme screenshots remain unimplemented or unverified.
+The exact original Win7 icon is now imported and registered. The currently implemented slice opens a single real file at a time. Source media type filter `7f29` (not yet fully ported), full playlist/metadata scanning, disabled/unsupported codecs, original in-feed ad widget, OS system volume, local library persistence, source title chrome and theme screenshots remain unimplemented or unverified.
 
 Browser HTMLMediaElement codec support and playback/autoplay policy determine whether a file can actually play; no fake playback success is shown. Guest VirtualFileStore is used, never the host disk. The virtual Open dialog is generic and does not yet match original filter/layout exactly. Source File Explorer still opens pictures in Photo Viewer; music/video is newly associated with Media Player.
 
