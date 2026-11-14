@@ -13,6 +13,7 @@ import { PhotoApp } from "@windows-os/apps/photo";
 import { RecorderApp } from "@windows-os/apps/recorder";
 import { CameraApp } from "@windows-os/apps/camera";
 import { InternetExplorerApp } from "@windows-os/apps/ie";
+import { ChromeApp } from "@windows-os/apps/chrome";
 import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
@@ -71,6 +72,7 @@ function ApplicationContent({
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "ie") return <InternetExplorerApp />;
+  if (appId === "chrome") return <ChromeApp onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})} />;
   if (appId === "camera") return <CameraApp
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;

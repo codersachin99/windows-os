@@ -1,0 +1,61 @@
+/* Pinned Chrome: tabs, location bar, menu, Google new-tab, internal settings. */
+.source-chrome{height:100%;width:100%;min-height:0;display:flex;flex-direction:column;
+  background:#eef3f7;color:#202124;font:12px "Segoe UI",Tahoma,Arial,sans-serif}
+.source-chrome button{color:inherit}
+.source-chrome__tabs{display:flex;flex:0 0 31px;align-items:flex-end;gap:2px;
+  padding:3px 6px 0;background:linear-gradient(#cadfec,#a1bdd0);overflow-x:auto}
+.source-chrome__tab{display:flex;align-items:center;flex:0 1 160px;min-width:55px;
+  height:27px;padding:0 3px;border-radius:8px 8px 0 0;
+  background:#a4bacb;border:1px solid #99acbc;overflow:hidden}
+.source-chrome__tab.selected{background:#eef3f7;border-bottom-color:#eef3f7}
+.source-chrome__tab-select{display:flex;min-width:0;gap:6px;align-items:center;
+  flex:1;text-align:left;border:0;background:transparent;height:100%}
+.source-chrome__tab-select span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source-chrome__tab>button:last-child{border:0;background:transparent;font-size:18px;padding:2px}
+.source-chrome__add{height:24px;min-width:27px;border:0;border-radius:5px 5px 0 0;background:#c6dae9;font-size:18px}
+.source-chrome__addressbar{display:flex;align-items:center;gap:4px;flex:0 0 38px;
+  padding:4px 6px;background:linear-gradient(#f6fafd,#e4edf4);border-bottom:1px solid #b5c6d1}
+.source-chrome__addressbar>button,.source-chrome__menu-host>button{height:27px;min-width:28px;
+  border:0;border-radius:4px;background:transparent;font-size:21px}
+.source-chrome__addressbar button:hover:not(:disabled){background:#d1e3f0}
+.source-chrome__addressbar button:disabled{opacity:.35;cursor:default}
+.source-chrome__location{flex:1;min-width:45px}
+.source-chrome__location input{width:100%;height:28px;padding:0 7px;color:#111;
+  font:13px "Segoe UI",Tahoma,sans-serif;border:1px solid #b2c4d1;background:white;border-radius:3px}
+.source-chrome__menu-host{position:relative}
+.source-chrome__menu{position:absolute;right:0;top:100%;width:205px;z-index:9;
+  display:flex;flex-direction:column;padding:5px 0;background:white;
+  border:1px solid #9baebd;box-shadow:0 4px 12px #0006}
+.source-chrome__menu button{text-align:left;width:100%;padding:6px 12px;border:0;background:transparent}
+.source-chrome__menu button:hover:not(:disabled){background:#dbeefb}
+.source-chrome__menu button:disabled{opacity:.48;cursor:default}
+.source-chrome__body{background:white;flex:1;min-height:0;overflow:auto}
+.source-chrome__body>iframe{width:100%;height:100%;display:block;border:0}
+.source-chrome__blank{height:100%;display:flex;justify-content:center;align-items:center;
+  flex-direction:column;gap:22px;padding:20px 10px;background:white}
+.source-chrome__google{width:min(270px,65%);height:auto}
+.source-chrome__blank-search{display:flex;max-width:520px;width:100%;height:39px;border:1px solid #c5c5c5}
+.source-chrome__blank-search input{flex:1;min-width:0;padding:4px 12px;font-size:16px;
+  color:#222;border:0;outline:0;background:white}
+.source-chrome__blank-search button{border:0;padding:4px 10px;background:white}
+.source-chrome__blank-search img{width:18px;height:22px}
+.source-chrome__internal{display:flex;height:100%;overflow:auto}
+.source-chrome__internal aside{background:#f6f7f9;min-width:150px;padding:14px 22px}
+.source-chrome__internal h2{font-size:20px;font-weight:400}
+.source-chrome__internal nav{display:flex;flex-direction:column;gap:5px}
+.source-chrome__internal nav button,.source-chrome__internal nav a{
+  border:0;text-decoration:none;text-align:left;background:transparent;color:#333;padding:6px}
+.source-chrome__internal nav button.selected{color:#1674ae;font-weight:bold}
+.source-chrome__internal-main{flex:1;padding:15px 22px;overflow:auto}
+.source-chrome__internal-main h2{font-size:22px;font-weight:400}
+.source-chrome__internal-main h3{font-size:16px;font-weight:400}
+.source-chrome__internal-main section{margin-bottom:25px}
+.source-chrome__internal-main label{display:block;margin:9px 0}
+.source-chrome__internal-main input,.source-chrome__internal-main select{vertical-align:middle}
+.source-chrome__internal-main button{padding:5px 8px}
+.source-chrome__unported{padding:28px;max-width:650px;color:#555}
+.source-chrome__error{padding:5px 12px;margin:0;color:#991b1b;background:#fff0ed}
+@media(max-width:550px){.source-chrome__addressbar{gap:1px;padding:3px}
+  .source-chrome__addressbar>button{min-width:23px;font-size:18px}
+  .source-chrome__internal aside{min-width:92px;padding:8px}
+  .source-chrome__internal-main{padding:9px}.source-chrome__tab{flex-basis:110px}}

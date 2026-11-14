@@ -1,3 +1,13 @@
+## Chrome source-backed migration — 2026-11-14 (CI pending)
+
+- Pinned original Chrome main `7839a`, tab code and settings `90b3` migrated to independent `packages/apps/chrome`. Source one-blank-tab lifecycle, tab controls, per-tab navigation, original six search engines and menu options, new tab Google branding and Settings UI are present. User search engine choice saved per Guest browser storage.
+- Four desktop/mobile browser regressions plus pure model tests added; exact original Chrome base SVG/Google logo/mic imported. Tests, source audit, TypeScript, build and Chrome browser scenarios need deliberate full `[run-ci]` confirmation. Chrome is **in-progress** until actual source visual/functional parity.
+- Outstanding source behaviors: local PDF/HTML viewer, original T-Rex game, native browser plugin xframe errors, full error page, browser shortcuts beyond scoped Alt+T, exact Win7 WebP and side-by-side screenshots. No merge/release; draft PR stays open. Inventory 266 pending / 16 in-progress / 8 implemented / 0 source-verified of 290.
+
+## Internet Explorer integrated CI — 2026-11-14
+
+- [Opt-in CI #43574037011](https://github.com/codersachin99/windows-os/actions/runs/43574037011) PASSED at `8eaf3fa`: 284 Vitest cases (56 files), 286 desktop/mobile browser cases, source assets (40/40 exact blobs), Contacts audit, TypeScript and production build. Source IE remains **in-progress** pending actual original iframe/URL-helper/Win7 art and screenshot comparison.
+
 ## Source Internet Explorer migration — 2026-11-14 (CI pending)
 
 - Original legacy-win7/src/modules/apps/ie.js (Git blob 9cf202d89...) is rebuilt in modular packages/apps/ie. The pinned app.config.json supplies MSN home and Bing search. Source IE ID, iframe, address entry, Back/Next history, disabled Favorites/Bookmarks, 500ms progress, Internet status and exact onebit fallback SVG are mapped.

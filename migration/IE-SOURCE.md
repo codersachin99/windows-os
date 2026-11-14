@@ -21,4 +21,4 @@
 - Browser tests assert app launch, iframe URL attributes, menus, Back/Forward, search and rejected dangerous schemes. They never assert external site contents.
 - Websites such as MSN and Bing can refuse iframe embedding because of server frame policies. The port is not a native browser engine.
 - Precise source 0f35 and 617a URL helper semantics, message-browser component, exact Win7 window geometry, icon and multi-theme screenshot parity remain pending.
-- CI pending; do not mark original IE parity verified. Draft PR #1 unmerged, main unchanged.
+- [CI #43574037011 SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43574037011): 284 unit tests across 56 files, 286 browser cases, 40 source-art audits, TypeScript and build. Source IE remains in-progress until exact original pixel/functional parity. Draft PR #1 unmerged, main unchanged.

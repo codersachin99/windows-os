@@ -65,8 +65,19 @@
       "source": "src/modules/apps/chrome.js",
       "sha": "1e717f044c7c96688ef56cb37b36fdb89566e03a",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/chrome/src/ChromeApp.tsx",
+        "packages/apps/chrome/src/ChromeApp.css",
+        "packages/apps/chrome/src/model.ts",
+        "packages/apps/chrome/src/model.test.ts",
+        "tests/e2e/chrome.spec.ts",
+        "apps/web/public/assets/images/chrome-base.d802dcaf.svg",
+        "apps/web/public/assets/images/google.d3503fb1.svg",
+        "apps/web/public/assets/images/google-mic.2a2ca1d4.svg",
+        "migration/CHROME-SOURCE.md"
+      ],
+      "verification": "CI pending; original T-Rex, local PDF/HTML, xframe events, Win7 icon and screenshot parity remain unported"
     },
     {
       "source": "src/modules/apps/cmd.js",

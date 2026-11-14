@@ -90,6 +90,12 @@ const builtinApps: AppDefinition[] = [
     window: { width: 690, height: 520 }
   },
   {
+    id: "chrome", label: "Chrome", icon: legacyArt.chrome,
+    kind: "web", desktop: false, showInStart: true,
+    // Original WindowMain inherits default size. Interim until source screenshot parity.
+    window: { width: 850, height: 560 }
+  },
+  {
     id: "ie", label: "Internet Explorer", icon: legacyArt.ie,
     kind: "web", desktop: false, showInStart: true,
     // Source IE inherits window geometry; interim size pending screenshots.

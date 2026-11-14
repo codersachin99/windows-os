@@ -93,6 +93,9 @@
       ],
       "@windows-os/apps/ie": [
         "packages/apps/ie/src/index.ts"
+      ],
+      "@windows-os/apps/chrome": [
+        "packages/apps/chrome/src/index.ts"
       ]
     }
   },

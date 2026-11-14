@@ -4,6 +4,10 @@ This is the new **React + TypeScript + Vite** home for the existing WindowsOS pr
 
 **Current status: conversion underway, not complete.** This first slice provides the source-art-backed Windows 7 login and Guest desktop, boot/session transitions, Start menu, taskbar, desktop shortcuts, a shared window manager, and a modular app registry. **Contacts has now been rebuilt as a native React application**, preserving its original source stylesheet through an isolated Shadow DOM and using the same Python CRUD endpoints (`/api/contacts`, `/api/contacts/save`, `/api/contacts/delete`). It supports New/Edit/Delete, refresh, search across name/email/phone/company, details, original form fields and status messages. Contacts browser CRUD/error tests have passed against mock responses; complete live backend integration and production security hardening remain pending. The full legacy apps/games/gadgets/themes still require migration. The app must not be called fully equivalent until every original behavior is verified.
 
+## Source-backed Google Chrome — 14 November 2026
+
+The pinned legacy Chrome tabbed browser now has a modular React implementation in `packages/apps/chrome`: Google-branded blank new tab, tab create/close/switch, Back/Forward history, URL/search, reload/home, 6 original search engines, browser Settings and source menu states. Three source SVG assets are imported byte-exactly, including its base-theme Chrome icon. Full opt-in CI is pending. Original T-Rex game, local file preview, frame plugin/error integration, exact Win7 WebP and pixel parity remain unported. See [Chrome source trace](migration/CHROME-SOURCE.md).
+
 ## Source-backed Internet Explorer — 14 November 2026
 
 Pinned legacy IE source is now ported into packages/apps/ie: MSN home, Bing search, address navigation, Back/Forward, disabled Favorites/Bookmarks, iframe and progress/status UI. Exact original onebit SVG is imported; the Windows 7-specific WebP remains unavailable. Websites may block framing. Unit and browser tests added, CI and screenshot parity pending. See migration/IE-SOURCE.md. PR #1 remains a draft.
