@@ -21,6 +21,7 @@ import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } fro
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
+import { sourceComputerItemExtras } from "./sourceComputerExtras";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -720,10 +721,8 @@ export function ExplorerApp({
                         {isBin && item.originalPath ? item.originalPath.split("/").pop()
                           : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
                       </span>}
-                  <SourceListViewExtra>{item.type === "directory" ? "File folder" :
-                    /\.txt$/i.test(item.name) ? "Text Document" : "File"}</SourceListViewExtra>
-                  <SourceListViewExtra>{new Date(item.mtime).toLocaleString()}</SourceListViewExtra>
-                  <SourceListViewExtra>{item.type === "directory" ? "" : item.size + " B"}</SourceListViewExtra>
+                  {sourceComputerItemExtras(item, "content", found !== null).map((value,index) =>
+                    <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
                 </span>
               : renamingUri === item.uri
               ? <SourceListItemRename originalName={item.name}
@@ -733,23 +732,9 @@ export function ExplorerApp({
                   {isBin && item.originalPath ? item.originalPath.split("/").pop()
                     : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
                 </span>}
-            {state.viewMode === "details" && <>
-              <SourceListViewExtra>{new Date(item.mtime).toLocaleString()}</SourceListViewExtra>
-              <SourceListViewExtra>{item.type === "directory" ? "File folder"
-                : /\.lnk$/i.test(item.name) ? "Shortcut"
-                : /\.exe$/i.test(item.name) ? "Application"
-                : /\.cpl$/i.test(item.name) ? "Control Panel Item"
-                : /\.txt$/i.test(item.name) ? "Text Document"
-                : "File"}</SourceListViewExtra>
-              <SourceListViewExtra>{item.type === "directory" ? "" : item.size + " B"}</SourceListViewExtra>
-            </>}
-            {state.viewMode === "tiles" && <>
-              <SourceListViewExtra>{item.type === "directory" ? "File folder"
-                : /\.lnk$/i.test(item.name) ? "Shortcut"
-                : /\.exe$/i.test(item.name) ? "Application"
-                : /\.txt$/i.test(item.name) ? "Text Document" : "File"}</SourceListViewExtra>
-              {item.type !== "directory" && <SourceListViewExtra>{item.size} B</SourceListViewExtra>}
-            </>}
+            {(state.viewMode === "details" || state.viewMode === "tiles") &&
+              sourceComputerItemExtras(item, state.viewMode).map((value,index) =>
+                <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
           </SourceListViewItem>)}
           {!state.busy && !searchBusy && !visible.length && <p className="explorer-empty">
             {state.search ? "No items match your search." : "This folder is empty."}

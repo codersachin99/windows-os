@@ -1,3 +1,7 @@
+## Original Computer metadata across List/Details/Tiles/Content — 14 November 2026
+
+The pinned source Computer `contentItems` metadata selection is now shared across Explorer and Recycle Bin: Content folders show only their modified date, Content files show modified date → extension-derived type → size, and Tiles/Details use the original per-mode slicing. Source Content search metadata also displays modified date and containing path, plus file size. Pure and desktop/mobile browser acceptance was added; full combined CI and pixel parity remain pending. See [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
 ## Source List and Content Explorer view components — 14 November 2026
 
 Original 00d7 List and 27b9 Content source view layouts now have reusable packages/ui variants. Explorer and Recycle Bin use those components; Content displays actual file type, modification date and size from the Guest filesystem, while List retains its original item-only view. Unit and desktop/mobile browser tests added. CI and original screenshot parity remain pending; see [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).

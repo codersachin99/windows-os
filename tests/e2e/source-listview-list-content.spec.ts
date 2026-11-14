@@ -30,9 +30,27 @@ test("pinned source 00d7 List and 27b9 Content use shared layouts and live VFS e
   await expect(win.locator('[data-test-source-listview="content"]')).toHaveClass(/has-content/);
   const info=item.locator('[data-test-source-content-extras]');
   await expect(info).toBeVisible();
-  await expect(info.locator(".listview__item-extra")).toHaveCount(3);
-  await expect(info.locator(".listview__item-extra").first()).toHaveText("File folder");
+  // Original computer.js shows only the modified date for a Content folder.
+  await expect(info.locator(".listview__item-extra")).toHaveCount(1);
+  await expect(info.locator(".listview__item-extra").first()).toContainText("/");
   await expect(item).toHaveClass(/is-selected/);
   await item.dblclick();
   await expect(win.getByRole("textbox",{name:"Folder address"})).toHaveValue("/SourceContentProbe");
+});
+
+test("pinned Computer Content file extras use source date/type/size order",async({page})=>{
+  const win=await openComputer(page);
+  await win.locator('input[aria-label="Upload files"]').setInputFiles({
+    name:"SourceContent.TXT",mimeType:"text/plain",buffer:Buffer.from("Win7 data")
+  });
+  const file=win.locator('[data-test-explorer-item="SourceContent.TXT"]');
+  await expect(file).toBeVisible();
+  await setSourceView(win,"Content");
+  const extras=file.locator('[data-test-source-content-extras] .listview__item-extra');
+  await expect(extras).toHaveCount(3);
+  await expect(extras.nth(0)).not.toHaveText("TXT File");
+  await expect(extras.nth(1)).toHaveText("TXT File");
+  await expect(extras.nth(2)).toHaveText("9 B");
+  await file.click();
+  await expect(file).toHaveClass(/is-selected/);
 });

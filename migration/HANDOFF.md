@@ -1,3 +1,9 @@
+## Computer contentItems shared source-metadata correction — 2026-11-14 (CI pending)
+
+- Ported source Computer `contentItems` variant selection and last-extension `getFileType` into `packages/apps/explorer/src/sourceComputerExtras.ts`. Corrected Content (folder date-only, files Date → Type → Size), Tiles and Details ordering and original extension-derived labels; Content search gets date/location/size source-specific extras.
+- Four pure contract cases and a desktop/mobile real TXT upload case added; earlier Content folder assertion updated. Existing List/Content source module change at 02aca4c was not CI-verified. This **one combined** `[run-ci]` commit tests both; do not claim success before Actions result.
+- 290 original modules: 255 pending / 27 in-progress / 8 implemented / 0 fully parity verified. Original source byte-size formatter and exact screenshots remain gaps. PR #1 stays draft, main unchanged, no release.
+
 ## Source shell 00d7 List and 27b9 Content views — 2026-11-14 (CI pending)
 
 - Ported src/modules/shell/listview-list.js (SHA 7218186c4db75d10802a6b5e61cb6210f80250d3) and listview-content.js (SHA 6a0b4416a2b8cca5dce9a31046920828ea955c34) into reusable SourceListView variants plus original CSS. Both source modules marked In Progress.
