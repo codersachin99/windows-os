@@ -1,3 +1,7 @@
+## CMD first source slice verification — 15 November 2026
+
+The previous shared Explorer/Desktop/Start Menu icon [CI #43640201034](https://github.com/codersachin99/windows-os/actions/runs/43640201034) is green. The newly added modular Command Prompt app and source DOS syntax have been batched for one explicit `[run-ci]` verification. The CMD module is **in progress**, not source-parity-complete. See [CMD source trace](migration/CMD-SOURCE.md).
+
 ## Command Prompt source-backed first runnable slice — 15 November 2026
 
 Original `cmd.js` now has a modular React command window and a typed Windows drive path command engine reading the real Guest filesystem. Supports CD, DIR (including bare listing), ECHO, CLS, TITLE, VER, HELP and EXIT with original prompt/banner and keyboard history. Unmigrated commands, batch processing, pipes, colors, original icon bytes and screenshot parity remain explicitly pending; see [CMD source trace](migration/CMD-SOURCE.md). Tracker: 290 original modules, 254 pending, 28 in progress, 8 implemented, 0 full source parity. No auto-run CI; see [HANDOFF](migration/HANDOFF.md).
