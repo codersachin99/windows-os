@@ -1,0 +1,43 @@
+.source-message__backdrop{
+  position:absolute;inset:0;z-index:35;
+  display:grid;place-items:center;padding:8px;background:rgba(25,50,77,.24);
+}
+.source-message{
+  display:flex;flex-direction:column;width:min(370px,100%);
+  min-width:0;background:linear-gradient(#fff,#f4f8fc);
+  border:1px solid #6094bf;border-radius:4px;
+  box-shadow:0 4px 17px #0005;font:13px "Segoe UI",Tahoma,Arial,sans-serif;color:#28394b;
+}
+.source-message__header{
+  display:flex;justify-content:space-between;align-items:center;min-height:30px;
+  padding:5px 10px;background:linear-gradient(#edf6fe,#c6ddf0);
+  border-bottom:1px solid #8eb5d0;
+}
+.source-message__header strong{font-weight:600;}
+.source-message__header button{
+  background:transparent;border:0;color:#35495e;font-size:20px;cursor:pointer;
+}
+.source-message__body{display:flex;gap:14px;align-items:center;padding:20px 15px;min-height:80px;}
+.source-message__text{flex:1;min-width:0;overflow-wrap:anywhere;}
+.source-message__text p{margin:0;white-space:pre-wrap;}
+.source-message__icon{
+  display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;
+  border-radius:50%;border:2px solid;font-size:24px;font-weight:700;
+}
+.source-message__icon.is-error{color:#c12525;border-color:#c12525;}
+.source-message__icon.is-warning{color:#d49708;border-color:#d49708;}
+.source-message__footer{
+  display:flex;align-items:center;justify-content:flex-end;gap:8px;
+  padding:8px 12px 12px;
+}
+.source-message__footer button{
+  min-width:75px;min-height:25px;padding:4px 12px;border-radius:3px;
+  border:1px solid #8ea9c2;background:linear-gradient(#fff,#d9e7f3);
+  color:#21394c;cursor:pointer;
+}
+.source-message__footer button.default{
+  outline:1px solid rgba(50,128,199,.35);outline-offset:1px;
+}
+.source-message__footer button:disabled{opacity:.6;cursor:default;}
+.source-message__progress-header{font-size:16px;margin-bottom:10px;}
+.source-message__progress{display:block;width:100%;margin-top:14px;}

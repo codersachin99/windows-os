@@ -22,6 +22,7 @@ import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganiz
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
 import { SourceListView, SourceListViewExtra } from "@windows-os/ui/listview";
+import { SourceMessageDialog } from "@windows-os/ui/message";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
@@ -748,17 +749,16 @@ export function ExplorerApp({
     </div>}
     {showSearchDialog && !isBin && <SearchDialog initialScope={state.path}
       onSearch={searchInComputer} onClose={() => setShowSearchDialog(false)} />}
-    {confirm && <div className="explorer-prompt__backdrop">
-      <section className="explorer-prompt" role="alertdialog" aria-label="Confirm file operation" aria-modal="true">
-        <p>{confirm === "empty" ? "Permanently delete every item in the Recycle Bin?" :
+    {confirm && <SourceMessageDialog
+      label="Confirm file operation"
+      data={{type:"confirm",header:"Confirm file operation",
+        message:confirm === "empty" ? "Permanently delete every item in the Recycle Bin?" :
           confirm === "permanent" ? "Permanently delete the selected items?" :
-          "Move the selected items to the Recycle Bin?"}</p>
-        <div>
-          <button type="button" onClick={executeDelete}>Yes</button>
-          <button type="button" onClick={() => setConfirm(null)}>No</button>
-        </div>
-      </section>
-    </div>}
+          "Move the selected items to the Recycle Bin?"}}
+      onAnswer={accepted => {
+        if(accepted) void executeDelete();
+        else setConfirm(null);
+      }} />}
     {prompt && <div className="explorer-prompt__backdrop">
       <form className="explorer-prompt" role="dialog" aria-label={prompt === "folder" ? "New folder" : "Rename"}
         onSubmit={submitPrompt}>

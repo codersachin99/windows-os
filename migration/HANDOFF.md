@@ -1,3 +1,9 @@
+## Source messages.js reusable UI — 2026-11-14 (CI pending)
+
+- Pinned source messages.js (Git blob e5150261d7868071ed3c02aa9ab31ea82fe50b9e) provides error, confirm, progress via webpack 7680. Built shared SourceMessageDialog with original Yes/No data-test-confirm-answer attributes, default No focus, Escape cancellation, Progress disabled Stop and safe escaped text. Explorer/Recycle Bin Delete confirmation now reuses the component, retaining real VFS effects, existing alertdialog accessible label and shared CSS.
+- Added server-side markup unit tests and desktop/mobile Playwright source-message.spec.ts to prove real new-folder, No, Escape, Yes and Recycle Bin entry. Original Vue messages Vuex registry, Asterisk sound, parseInline rich HTML and screenshot parity not implemented; this remains in-progress pending CI. The direct ui/message alias is prioritized before ui root to prevent circular shell imports.
+- Correct inventory after this slice: 290 total = 259 pending / 23 in-progress / 8 implemented / 0 fully source-parity-verified. Draft PR #1 unmerged, main unchanged, no release.
+
 ## Webapp/Embed successful CI; source inventory correction — 2026-11-14
 
 - [Full CI #43586350903](https://github.com/codersachin99/windows-os/actions/runs/43586350903) **SUCCESS**: 303 unit tests (61 files), 314 desktop/mobile Chromium, 53 byte-exact image audits, TypeScript and Vite build. Original parent-origin message flow now CI-tested. Webapp and Embed source tracker entries had erroneously stayed Pending in older status despite code/CI; now set In Progress.

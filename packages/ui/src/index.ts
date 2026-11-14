@@ -6,3 +6,6 @@ export { StartMenu } from "./StartMenu";
 
 export { SourceListView, SourceListViewExtra, sourceListViewExtraWidth } from "./sourceListView";
 export type { SourceListViewVariant } from "./sourceListView";
+
+export { SourceMessageDialog, sourceMessageProgressPercent, SOURCE_MESSAGE_TYPES } from "./sourceMessage";
+export type { SourceMessage, SourceMessageDialogProps } from "./sourceMessage";

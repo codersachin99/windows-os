@@ -34,6 +34,9 @@
       "@windows-os/engine": [
         "packages/engine/src/index.ts"
       ],
+      "@windows-os/ui/message": [
+        "packages/ui/src/sourceMessage.tsx"
+      ],
       "@windows-os/ui/listview": [
         "packages/ui/src/sourceListView.tsx"
       ],

@@ -207,8 +207,16 @@
       "source": "src/modules/apps/messages.js",
       "sha": "e5150261d7868071ed3c02aa9ab31ea82fe50b9e",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceMessage.tsx",
+        "packages/ui/src/sourceMessage.css",
+        "packages/ui/src/sourceMessage.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-message.spec.ts",
+        "migration/MESSAGES-SOURCE.md"
+      ],
+      "verification": "CI pending: source error/confirm/progress variants, Explorer Delete confirmation and VFS success, disabled Stop, safe text; original message registry, original Asterisk sound and pixel parity pending."
     },
     {
       "source": "src/modules/apps/notepad.js",

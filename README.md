@@ -1,3 +1,7 @@
+## Source-backed Windows message and confirmation UI — 14 November 2026
+
+The original messages.js error/confirm/progress variants are being rebuilt as a reusable shared SourceMessageDialog in packages/ui. Explorer and Recycle Bin now use its source-accurate Yes/No confirmation events; tests exercise focus, Escape, actual virtual-file deletion and safe progress/error rendering. The original global messages window bus, alert sound and pixel-level original Win7 styling remain unported. See [message source trace](migration/MESSAGES-SOURCE.md). CI pending.
+
 ## Source Webapp/Embed green CI checkpoint — 14 November 2026
 
 The original webapp.js and plugin-embed.js have migrated React modules in packages/apps/webapp, packages/sdk/src/embed.ts and packages/ui/src/SourceEmbedBridge.tsx. The secure parent-origin bridge is disabled by default and preserves the original 4.8.0 event protocol. [CI #43586350903](https://github.com/codersachin99/windows-os/actions/runs/43586350903) passed 303 unit, 314 desktop/mobile browser cases and 53 source-art checks; complete original iframe behavior and visual parity are still pending. See [source trace](migration/WEBAPP-EMBED-SOURCE.md).
