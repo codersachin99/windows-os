@@ -96,7 +96,7 @@ export function RecorderApp({ onClose, onRegisterClose }: RecorderAppProps) {
   const processCapture=async(blobs:readonly Blob[])=>{
     try{
       if(blobs.length===0)throw new Error("The microphone returned no audio.");
-      const encoded=new Blob(blobs,{type:blobs[0].type||"audio/webm"});
+      const encoded=new Blob([...blobs],{type:blobs[0].type||"audio/webm"});
       const context=new AudioContext();
       let decoded:AudioBuffer;
       try{
