@@ -4,7 +4,7 @@ import "./sourceListView.css";
 /** Original listview-details.js (32cd), listview-tiles.js (7662),
  * listview-extra (c162), listview header and width util (a321).
  */
-export type SourceListViewVariant="details"|"tiles"|"plain";
+export type SourceListViewVariant="details"|"tiles"|"list"|"content"|"plain";
 export interface SourceListViewProps {
   variant:SourceListViewVariant;className?:string;children:ReactNode;testId?:string;
 }

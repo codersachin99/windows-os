@@ -1,3 +1,10 @@
+## Source shell 00d7 List and 27b9 Content views — 2026-11-14 (CI pending)
+
+- Ported src/modules/shell/listview-list.js (SHA 7218186c4db75d10802a6b5e61cb6210f80250d3) and listview-content.js (SHA 6a0b4416a2b8cca5dce9a31046920828ea955c34) into reusable SourceListView variants plus original CSS. Both source modules marked In Progress.
+- Computer and Recycle Bin now delegate List/Content source view classes and real Content metadata to shared UI components, retaining all VFS interactions. Source list displays no extras; Content displays type/date/size via c162.
+- Added one Playwright scenario per desktop/mobile for View transitions, source metadata, selected state and folder navigation, plus shared UI unit assertions. The preceding source rename/checkbox [CI #43606684920](https://github.com/codersachin99/windows-os/actions/runs/43606684920) remains under verification; this new List/Content slice has not yet run CI.
+- Source inventory now 290 = 255 Pending / 27 In Progress / 8 Implemented / 0 completely source parity verified. Draft PR #1 unmerged, main unchanged and no release.
+
 ## Source 0e9a filename extension and checkbox TypeScript repair — 2026-11-14 (CI pending)
 
 - [Combined run #43606204510](https://github.com/codersachin99/windows-os/actions/runs/43606204510) failed **before unit/browser tests** at TypeScript: packages/ui/src/sourceItemCheckbox.tsx supplied String(checked) to React's typed aria-checked. Replaced with boolean checked, retaining rendered true/false source semantics. This run must not be counted as a pass.

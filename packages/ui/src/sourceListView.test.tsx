@@ -1,7 +1,7 @@
 import {describe,it,expect} from "vitest";
 import {renderToStaticMarkup} from "react-dom/server";
 import {
- SourceListViewExtra,SourceListViewHeader,
+ SourceListView,SourceListViewExtra,SourceListViewHeader,
  sourceNormalizeListWidth,sourceListColumnIsFixedWidth,sourceListViewExtraWidth
 } from "./sourceListView";
 
@@ -44,5 +44,16 @@ describe("pinned source listview a321 contracts",()=>{
     expect(sourceListViewExtraWidth(Infinity,2,true)).toBeUndefined();
     expect(sourceListViewExtraWidth(undefined,0,true)).toBeUndefined();
     expect(sourceListViewExtraWidth("auto",3,true)).toBe("auto");
+  });
+});
+
+describe("source shell listview-list 00d7 and listview-content 27b9",()=>{
+  it("keeps the original structural list and content class contracts",()=>{
+    const list=renderToStaticMarkup(<SourceListView variant="list"><button>File A</button></SourceListView>);
+    const content=renderToStaticMarkup(<SourceListView variant="content"><button>File B</button></SourceListView>);
+    expect(list).toContain('data-test-source-listview="list"');
+    expect(list).toContain("listview__view has-list");
+    expect(content).toContain('data-test-source-listview="content"');
+    expect(content).toContain("listview__view has-content");
   });
 });

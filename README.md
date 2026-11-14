@@ -1,3 +1,7 @@
+## Source List and Content Explorer view components — 14 November 2026
+
+Original 00d7 List and 27b9 Content source view layouts now have reusable packages/ui variants. Explorer and Recycle Bin use those components; Content displays actual file type, modification date and size from the Guest filesystem, while List retains its original item-only view. Unit and desktop/mobile browser tests added. CI and original screenshot parity remain pending; see [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
 ## Original Win7 filename extensions preserved during inline Rename — 14 November 2026
 
 Original webpack 0e9a filename splitting has been ported: Win7 Explorer F2 edits a file stem while retaining its extension on save. A desktop/mobile test renames Before.txt to After.txt and opens its unchanged content in Notepad. The source checkbox ARIA TypeScript mismatch is also corrected. The next gated CI must verify both; complete source screenshot parity remains incomplete.

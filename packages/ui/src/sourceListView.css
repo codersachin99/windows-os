@@ -11,3 +11,13 @@
   flex:0 0 auto;padding:4px;border:1px solid #0003;
   text-align:left;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
+
+/* Pinned shell/listview-list.js (00d7): column wrapping, gap-1 and h-full. */
+.listview__view.has-list {
+  display:flex; flex-direction:column;flex-wrap:wrap;align-content:flex-start;
+  gap:4px;height:100%;
+}
+/* Pinned shell/listview-content.js (27b9): flex-col w-full, every item extra. */
+.listview__view.has-content {
+  display:flex;flex-direction:column;flex-wrap:nowrap;width:100%;
+}

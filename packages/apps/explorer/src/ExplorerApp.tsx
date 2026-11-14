@@ -677,11 +677,11 @@ export function ExplorerApp({
           ]} />}
         <SourceListView
           variant={state.viewMode === "details" ? "details" :
-            state.viewMode === "tiles" ? "tiles" : "plain"}
+            state.viewMode === "tiles" ? "tiles" :
+            state.viewMode === "list" ? "list" :
+            state.viewMode === "content" ? "content" : "plain"}
           className={"explorer-list " +
-          (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] :
-          state.viewMode === "tiles" || state.viewMode === "details" ? "" :
-          state.viewMode === "content" ? "has-content" : "has-" + state.viewMode)}>
+          (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] : "")}>
           {visible.map(item => <SourceListViewItem key={item.uri}
             itemKey={item.uri} itemType={item.type} itemLabel={item.name}
             active={state.selected.includes(item.uri)}
@@ -710,7 +710,22 @@ export function ExplorerApp({
             <span className="listview__item-iconbox">
               <img src={item.type === "directory" ? legacyArt.folder : legacyArt.file} alt="" draggable={false} />
             </span>
-            {renamingUri === item.uri
+            {state.viewMode === "content"
+              ? <span className="listview__item-info" data-test-source-content-extras="">
+                  {renamingUri === item.uri
+                    ? <SourceListItemRename originalName={item.name}
+                        onCommit={value => commitInlineRename(item.uri, value)}
+                        onCancel={() => setRenamingUri(null)}/>
+                    : <span className="listview__item-label" title={item.uri}>
+                        {isBin && item.originalPath ? item.originalPath.split("/").pop()
+                          : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
+                      </span>}
+                  <SourceListViewExtra>{item.type === "directory" ? "File folder" :
+                    /\.txt$/i.test(item.name) ? "Text Document" : "File"}</SourceListViewExtra>
+                  <SourceListViewExtra>{new Date(item.mtime).toLocaleString()}</SourceListViewExtra>
+                  <SourceListViewExtra>{item.type === "directory" ? "" : item.size + " B"}</SourceListViewExtra>
+                </span>
+              : renamingUri === item.uri
               ? <SourceListItemRename originalName={item.name}
                   onCommit={value => commitInlineRename(item.uri, value)}
                   onCancel={() => setRenamingUri(null)}/>

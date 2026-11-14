@@ -1505,15 +1505,31 @@
       "source": "src/modules/shell/listview-content.js",
       "sha": "6a0b4416a2b8cca5dce9a31046920828ea955c34",
       "area": "shell",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.css",
+        "packages/ui/src/sourceListView.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-listview-list-content.spec.ts",
+        "migration/LISTVIEW-LIST-CONTENT-SOURCE.md"
+      ],
+      "verification": "Original 00d7/27b9 shared wrappers, CSS and real Explorer view switches with Content metadata staged. Full CI pending; original cross-theme/pixel parity, full item slots and all source data fields remain incomplete."
     },
     {
       "source": "src/modules/shell/listview-list.js",
       "sha": "7218186c4db75d10802a6b5e61cb6210f80250d3",
       "area": "shell",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceListView.tsx",
+        "packages/ui/src/sourceListView.css",
+        "packages/ui/src/sourceListView.test.tsx",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-listview-list-content.spec.ts",
+        "migration/LISTVIEW-LIST-CONTENT-SOURCE.md"
+      ],
+      "verification": "Original 00d7/27b9 shared wrappers, CSS and real Explorer view switches with Content metadata staged. Full CI pending; original cross-theme/pixel parity, full item slots and all source data fields remain incomplete."
     },
     {
       "source": "src/modules/shell/logon-base.js",
