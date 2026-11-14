@@ -1,3 +1,9 @@
+## Source CMD COPY/MOVE exact-file slice — 2026-11-15 (CI not triggered)
+
+- Traced original `cmd.js Pe` and added single-file Guest VFS `COPY`/`MOVE` (target directory or filename; binary fidelity; original nine-position success messages) plus pure tests for source retention/move, unsupported wildcard/no-overwrite/missing mount. No native host filesystem calls; wildcard/multi-file source behavior pending.
+- Previous [CMD on-demand CI #43643944920](https://github.com/codersachin99/windows-os/actions/runs/43643944920) was still in Chromium when this additional command slice was built. This commit does **not** request CI; next batch can opt in via `[run-ci]`.
+- Draft PR #1, main untouched, no release; 290=254 pending / 28 in-progress / 8 implemented / 0 full source-visual verified.
+
 ## Browser CMD overlay regression diagnosis — 2026-11-15
 
 - Source CMD [CI #43642780902](https://github.com/codersachin99/windows-os/actions/runs/43642780902) **FAILED 2 Playwright cases** (desktop/mobile) only in the Explorer open-shortcuts test: `locator.dblclick` timed out after CMD was successfully launched. The running CMD window overlaps Explorer, so the next `WordPad.lnk` row isn't clickable until the CMD window is closed.

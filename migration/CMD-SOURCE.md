@@ -52,3 +52,9 @@ Previous opt-in [CI #43642780902](https://github.com/codersachin99/windows-os/ac
 - Prior [CI #43642780902](https://github.com/codersachin99/windows-os/actions/runs/43642780902) passed TS, unit, source audits and production build. Recent [source command commit 7b0f6c8](https://github.com/codersachin99/windows-os/commit/7b0f6c87123130b2a628c00f0622911cd714ca4f) adds Guest VFS REN/RD/exact DEL with non-destructive confirmation-required paths. This commit opts in **once** with `[run-ci]` to verify both the browser focus fix and these source commands.
 - Draft PR #1, main untouched, no release. CMD in progress, full screenshot parity not verified.
 
+
+## Original cmd.js Pe COPY/MOVE exact-file source transfer — 2026-11-15
+
+Source `src/modules/apps/cmd.js` original `Pe(e,t)` handles `COPY` and `MOVE`: it resolves a source path to files (excluding directories), resolves the target directory/filename, calls source filesystem copy/rename and prints a nine-column right-aligned count such as `        1 file(s) copied.`. New React `SourceCmdSession` ports this exact **single concrete-file subset** through `VirtualFileStore.copy`/`move`, preserving uploaded binary content and the original file-versus-directory distinctions. Tests prove original remains after COPY, source removed after MOVE, destination collisions refused, bad/unmounted source rejected, and wildcard attempts non-destructive.
+
+This is not a full port of `Pe`: original wildcard/multiple-file transfer behavior and source confirmation/overwrite semantics are explicitly deferred rather than approximated. This commit carries **no `[run-ci]`**, preserving the user's on-demand-only CI rule while the previous CMD browser run #43643944920 completes. Source tracker unchanged: CMD in progress, full original screenshot parity still unverified.

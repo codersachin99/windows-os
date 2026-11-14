@@ -1,5 +1,5 @@
 import {
-  resolveWindowsPath,matchFilePattern,getParentDirectory,
+  resolveWindowsPath,matchFilePattern,getParentDirectory,getFileName,
   type FileEntry,type LegacyVolumeSession,type VirtualFileStore
 } from "@windows-os/filesystem";
 
@@ -19,7 +19,7 @@ export interface SourceCmdResult {
   echo:boolean;
   errorlevel:number;
 }
-type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move">;
+type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move"|"copy">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath">;
 
 export const SOURCE_CMD_BANNER=[
@@ -29,6 +29,8 @@ export const SOURCE_CMD_BANNER=[
 
 export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   cd:"Displays the name of or changes the current directory.",
+  copy:"Copies one or more files to another location.",
+  move:"Moves one or more files from one directory to another directory.",
   cls:"Clears the screen.",
   dir:"Displays a list of files and subdirectories in a directory.",
   del:"Deletes one or more files.",
@@ -269,6 +271,44 @@ export class SourceCmdSession {
             }else{
               try{await this.fs.remove(dest.uri);}
               catch{output=[ACCESS_DENIED];errorlevel=1;}
+            }
+          }
+        }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="copy"||name==="move"){
+      // Source Pe() filters source directories; a single concrete file can
+      // target a directory or an explicit new filename. VFS transfer remains
+      // atomic and preserves binary bytes, without touching the host OS.
+      const tokens=sourceCmdArguments(args);
+      const [sourceName,targetName]=tokens;
+      if(!sourceName||tokens.length>2){
+        output=[INVALID_SYNTAX];errorlevel=1;
+      }else if(/[*?]/.test(sourceName)||targetName&&/[*?]/.test(targetName)){
+        // Multiple transfers / overwrite confirmation are not implemented
+        // as a fake bulk operation. Nothing is modified.
+        output=["COPY/MOVE wildcard transfers are not yet available in this migration."];
+        errorlevel=1;
+      }else{
+        try{
+          const source=this.resolve(sourceName);
+          const target=this.resolve(targetName??".");
+          if(!source.uri||!target.uri){
+            output=[DRIVE_NOT_FOUND];errorlevel=1;
+          }else{
+            const sourceEntry=await this.fs.stat(source.uri);
+            if(sourceEntry?.type!=="file"){
+              output=[FILE_NOT_FOUND];errorlevel=1;
+            }else{
+              const destinationEntry=await this.fs.stat(target.uri);
+              const destination=destinationEntry?.type==="directory"
+                ?target.uri+"/"+getFileName(source.uri):target.uri;
+              try{
+                if(name==="copy")await this.fs.copy(source.uri,destination);
+                else await this.fs.move(source.uri,destination);
+                output=[String(1).padStart(9)+" file(s) "+(name==="copy"?"copied.":"moved.")];
+              }catch{
+                output=[ACCESS_DENIED];errorlevel=1;
+              }
             }
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}

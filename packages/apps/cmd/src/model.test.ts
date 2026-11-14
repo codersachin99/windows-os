@@ -178,3 +178,41 @@ describe("original cmd.js Te DEL and ERASE without unchecked wildcard removal",(
     ]);
   });
 });
+
+describe("original cmd.js Pe COPY/MOVE exact source file transfer",()=>{
+  it("COPY leaves the original intact and uses byte-preserving Guest VFS storage",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest";
+    await fs.writeBytes(new Uint8Array([0,7,255,80]),base+"/Documents/binary.dat");
+    expect((await session.run("copy Documents\\binary.dat Desktop")).output)
+      .toEqual(["        1 file(s) copied."]);
+    expect(Array.from(await fs.readBytes(base+"/Desktop/binary.dat"))).toEqual([0,7,255,80]);
+    expect(Array.from(await fs.readBytes(base+"/Documents/binary.dat"))).toEqual([0,7,255,80]);
+    expect((await session.run("copy Documents\\binary.dat Desktop")).output)
+      .toEqual(["Access is denied."]);
+  });
+  it("MOVE accepts source concrete filename and explicit destination, without host access",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest";
+    await fs.write("keep content",base+"/Documents/current.txt");
+    expect((await session.run("move Documents\\current.txt Documents\\moved.txt")).output)
+      .toEqual(["        1 file(s) moved."]);
+    expect(await fs.stat(base+"/Documents/current.txt")).toBeNull();
+    expect(await fs.read(base+"/Documents/moved.txt")).toBe("keep content");
+    expect((await session.run("copy Documents\\missing.txt Desktop")).output)
+      .toEqual(["The system cannot find the file specified."]);
+    expect((await session.run("copy Documents Desktop")).errorlevel).toBe(1);
+  });
+  it("does not invent unsafe wildcard/multiple source transfer behavior",async()=>{
+    const {fs,session}=await createShell();
+    const base="/EXTERNAL/computer/drive0/Users/Guest";
+    await fs.write("safe",base+"/Documents/one.txt");
+    expect((await session.run("move Documents\\*.txt Desktop")).errorlevel).toBe(1);
+    expect(await fs.read(base+"/Documents/one.txt")).toBe("safe");
+    expect((await session.run("copy")).output).toEqual([
+      "The syntax of the command is incorrect."
+    ]);
+    expect((await session.run("move Documents\\one.txt Q:\\NoDisk")).errorlevel).toBe(1);
+    expect(await fs.read(base+"/Documents/one.txt")).toBe("safe");
+  });
+});

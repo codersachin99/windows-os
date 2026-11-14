@@ -1,3 +1,7 @@
+## Win7 CMD file transfers — 15 November 2026
+
+Command Prompt now supports the original `COPY`/`MOVE` single-file behavior, with actual Guest filesystem contents and binary bytes preserved. Multisource wildcard transfers and overwrite/confirmation behavior are tracked as pending rather than simulated. See [CMD source trace](migration/CMD-SOURCE.md).
+
 ## Source CMD file management — 15 November 2026
 
 Command Prompt now includes `REN`/`RENAME`, empty-directory `RD`/`RMDIR`, and named-file `DEL`/`ERASE` on the actual Guest virtual filesystem, with tests covering safe no-overwrite and non-destructive error paths. Recursive/wildcard operations requiring the original confirmation prompt are not yet migrated. See [CMD source trace](migration/CMD-SOURCE.md).
