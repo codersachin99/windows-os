@@ -39,7 +39,8 @@ export function sourceEmbedUrl(raw:string):string|null{
 
 /** Source 4caf.c strips extension and slugifies original title, then prefixes web_. */
 export function sourceEmbedAppId(label:string):string{
-  const stem=label.replace(/\.[a-z0-9]+$/i,"");
+  // Remove known file-like suffixes, but NEVER strip URL host TLDs (.org/.com).
+  const stem=label.replace(/\.(?:html?|url|lnk|exe)$/i,"");
   const safe=stem.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,80);
   return SOURCE_EMBED_PREFIX+(safe||"untitled");
 }
