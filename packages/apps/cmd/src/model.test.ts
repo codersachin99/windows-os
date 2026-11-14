@@ -78,3 +78,48 @@ describe("pinned cmd.js unglue(source Tt.kt) aliases",()=>{
     expect((await session.run("DIR/B")).output).toContain("Documents");
   });
 });
+
+describe("pinned Te TYPE MD and directory stack PUSHD POPD commands",()=>{
+  it("MD/MKDIR changes the real Guest filesystem without overwriting existing directories",async()=>{
+    const {fs,session}=await createShell();
+    expect((await session.run("md")).output).toEqual([
+      "The syntax of the command is incorrect."
+    ]);
+    expect((await session.run('md "New Folder"')).errorlevel).toBe(0);
+    expect(await fs.stat("/EXTERNAL/computer/drive0/Users/Guest/New Folder"))
+      .toMatchObject({name:"New Folder",type:"directory"});
+    expect((await session.run("mkdir Second")).errorlevel).toBe(0);
+    expect((await session.run('md "New Folder"')).output).toEqual([
+      "A subdirectory or file New Folder already exists."
+    ]);
+    expect((await session.run("md Q:\\NoDrive")).errorlevel).toBe(1);
+    expect((await session.run("dir /b")).output).toContain("Second");
+  });
+  it("TYPE reads source text files but not directory or invalid UTF-8 binary payloads",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest";
+    await fs.write("Line A\r\nLine B",root+"/Documents/report.txt");
+    await fs.writeBytes(new Uint8Array([255,0,1]),root+"/Documents/binary.dat");
+    expect((await session.run("type Documents\\report.txt")).output)
+      .toEqual(["Line A","Line B"]);
+    expect((await session.run("type Documents")).output).toEqual(["Access is denied."]);
+    expect((await session.run("type Documents\\missing.txt")).output).toEqual([
+      "The system cannot find the file specified."
+    ]);
+    expect((await session.run("type Documents\\binary.dat")).errorlevel).toBe(1);
+    expect((await session.run("type")).output).toEqual([
+      "The syntax of the command is incorrect."
+    ]);
+  });
+  it("PUSHD and POPD restore the previous real mounted CWD; failed push does not change stack",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("pushd Documents")).errorlevel).toBe(0);
+    expect(session.prompt).toBe("C:\\Users\\Guest\\Documents>");
+    expect((await session.run("pushd Missing")).errorlevel).toBe(1);
+    expect(session.prompt).toBe("C:\\Users\\Guest\\Documents>");
+    expect((await session.run("popd")).errorlevel).toBe(0);
+    expect(session.prompt).toBe("C:\\Users\\Guest>");
+    expect((await session.run("popd")).errorlevel).toBe(0);
+    expect(session.prompt).toBe("C:\\Users\\Guest>");
+  });
+});

@@ -1,3 +1,7 @@
+## CMD source commands and acceptance repair — 15 November 2026
+
+Original Command Prompt now supports file inspection `TYPE`, directory creation `MD`/`MKDIR`, and `PUSHD`/`POPD` working-directory stack on the real Guest filesystem. A stale desktop/mobile browser assertion expecting the newly launched CMD to be unavailable has been corrected, while the unported WordPad negative test is preserved. [Original CMD CI #43641366954](https://github.com/codersachin99/windows-os/actions/runs/43641366954) failed 2 browser cases before this correction; this combined fix/new command slice requests explicit CI. See [CMD trace](migration/CMD-SOURCE.md).
+
 ## CMD first source slice verification — 15 November 2026
 
 The previous shared Explorer/Desktop/Start Menu icon [CI #43640201034](https://github.com/codersachin99/windows-os/actions/runs/43640201034) is green. The newly added modular Command Prompt app and source DOS syntax have been batched for one explicit `[run-ci]` verification. The CMD module is **in progress**, not source-parity-complete. See [CMD source trace](migration/CMD-SOURCE.md).

@@ -20,7 +20,7 @@ test("All Programs is populated from original installed .lnk shortcuts", async (
   await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
 });
 
-test("Explorer opens original Notepad .lnk and keeps nonported programs nonexecuting", async ({ page }) => {
+test("Explorer opens migrated CMD/Notepad shortcuts and rejects genuinely nonported WordPad", async ({ page }) => {
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
   const explorer = page.locator('[data-test-window="computer"]');
   await explorer.getByRole("button", { name: "Programs" }).click();
@@ -28,8 +28,10 @@ test("Explorer opens original Notepad .lnk and keeps nonported programs nonexecu
   await expect(explorer.locator('[data-test-explorer-item="Notepad.lnk"]')).toBeVisible();
 
   await explorer.locator('[data-test-explorer-item="Command Prompt.lnk"]').dblclick();
-  await expect(explorer.getByRole("alert")).toContainText("Command Prompt application has not been migrated yet");
-  await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
+  await expect(page.locator('[data-test-window="cmd"] [data-test-cmd-input]')).toBeVisible();
+  await explorer.locator('[data-test-explorer-item="WordPad.lnk"]').dblclick();
+  await expect(explorer.getByRole("alert")).toContainText("WordPad application has not been migrated yet");
+  await expect(page.locator('[data-test-window="wordpad"]')).toHaveCount(0);
 
   await explorer.locator('[data-test-explorer-item="Notepad.lnk"]').dblclick();
   await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
@@ -122,6 +124,18 @@ test("original Command Prompt first source shell slice uses live Guest directory
   await input.press("Enter");
   await expect(window.locator('[data-test-cmd-entry]')).toHaveCount(0);
   await expect(window.locator(".cmd__banner")).toHaveCount(0);
+  await input.fill("md SourceCmdProjects");
+  await input.press("Enter");
+  await input.fill("dir /b");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).toContainText("SourceCmdProjects");
+  await input.fill("pushd SourceCmdProjects");
+  await input.press("Enter");
+  await expect(window.locator(".cmd__prompt")).toHaveText(
+    "C:\\Users\\Guest\\Documents\\SourceCmdProjects>");
+  await input.fill("popd");
+  await input.press("Enter");
+  await expect(window.locator(".cmd__prompt")).toHaveText("C:\\Users\\Guest\\Documents>");
   await input.fill("exit");
   await input.press("Enter");
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);

@@ -1,3 +1,10 @@
+## CMD source regression fix and Te commands — 2026-11-15 (on-demand CI requested)
+
+- [Original CMD CI #43641366954](https://github.com/codersachin99/windows-os/actions/runs/43641366954) **FAILED 2 browser cases** desktop/mobile solely from stale existing browser assertion `Command Prompt.lnk` must be unimplemented, while the app was now correctly running. Source TypeScript, unit tests, migration audit, Contacts, Vite build all succeeded.
+- Updated Explorer shortcut regression to assert actual CMD window launches, then use genuinely unported `WordPad.lnk` for negative unported-program validation. Kept Notepad .lnk launch contract.
+- Ported original CMD Te `TYPE`, `MD`/`MKDIR`, `PUSHD`, `POPD` backed by mounted Guest C: filesystem and source error strings. New units and live browser tests verify real virtual folder creation, directory listing and navigation stack. `TYPE` is read-only text and will not coerce corrupt binary to text. No native shell commands.
+- **Single opt-in [run-ci]** requested on this commit for repair + next source command slice. Don't mark accepted until browser suite finishes. Inventory unchanged: 290 total / 254 pending / 28 in progress / 8 implemented / 0 full source screenshot parity. PR #1 draft, main untouched, no release.
+
 ## CMD first runnable source slice opt-in CI — 2026-11-15 (running once)
 
 - [Previous shared icon CI #43640201034](https://github.com/codersachin99/windows-os/actions/runs/43640201034) **SUCCESS**: TypeScript, units, source inventory/Contacts audits, Vite build, complete Playwright browser suite. This covers Explorer/Desktop/Start Menu source shortcut icon JSON and shared binary reader at commit 715be7375.

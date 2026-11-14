@@ -29,3 +29,10 @@ Original `cmd.js` uses `kt=/^([a-z]+)(\.\.?|\/.*)$/i` and `unglue` to normalize 
 - This docs/handoff commit opts in once with **[run-ci]** to validate the new app/test suite. Do not claim the CMD slice passes until workflow completion; missing CMD commands, original icon asset and side-by-side pixel parity remain explicit.
 - Source migration tracker: 290 original source modules, 254 pending, 28 in progress, 8 implemented, 0 full accepted source pixel parity. Draft PR #1, main untouched, no release.
 
+
+## Source Te file inspection, directory creation, directory stack — 15 November 2026
+
+Original `src/modules/apps/cmd.js` Te list (source blob `d3e991b9604d8b0986676381de532f09b83ab958`) supplies `TYPE`, `MD`/`MKDIR` alias, `PUSHD` and `POPD`. Extended `SourceCmdSession` by only `VirtualFileStore.read` and `mkdir` in addition to existing stat/list, using mounted drive mapping and source error message texts. `TYPE` splits text on CRLF and reports `Access is denied.` for binary-only or directory entries; `MD` validates existing paths and creates the actual Guest VFS folder; `PUSHD`/`POPD` preserve source working-directory stack and reject invalid targets without stacking. New unit contracts cover missing drive/folder, quote paths, duplicate folders, file read, binary access, and working-directory stack. Browser verifies `MD`, `DIR/B`, `PUSHD`, `POPD` in a mounted Guest directory.
+
+### Regression from first CMD browser run
+[CI #43641366954](https://github.com/codersachin99/windows-os/actions/runs/43641366954) **FAILED exactly 2 Playwright cases**, desktop and mobile, because the prior `source-programs.spec.ts` still asserted that opening `Command Prompt.lnk` should display a not-migrated alert. The actual CMD app now launches. Updated that assertion to verify the CMD input becomes visible; the negative association test now uses `WordPad.lnk` (genuinely unported) and checks the no-execution alert. All earlier TypeScript, unit, source audits, Vite build passed. Original CMD remains in progress; pipes/redirection/batches, full CMD command set, original icon/WebP and source screenshot parity remain pending.

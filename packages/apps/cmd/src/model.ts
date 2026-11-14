@@ -19,7 +19,7 @@ export interface SourceCmdResult {
   echo:boolean;
   errorlevel:number;
 }
-type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list">;
+type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath">;
 
 export const SOURCE_CMD_BANNER=[
@@ -34,11 +34,18 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   echo:"Displays messages, or turns command echoing on or off.",
   exit:"Quits the CMD.EXE program (command interpreter).",
   help:"Provides Help information for Windows commands.",
+  md:"Creates a directory.",
+  popd:"Changes to the directory stored by PUSHD.",
+  pushd:"Saves the current directory then changes it.",
+  type:"Displays the contents of a text file.",
   title:"Sets the window title for a CMD.EXE session.",
   ver:"Displays the Windows version."
 };
 const DRIVE_NOT_FOUND="The system cannot find the drive specified.";
 const PATH_NOT_FOUND="The system cannot find the path specified.";
+const FILE_NOT_FOUND="The system cannot find the file specified.";
+const ACCESS_DENIED="Access is denied.";
+const INVALID_SYNTAX="The syntax of the command is incorrect.";
 const commandNames=Object.keys(SOURCE_CMD_HELP).sort((a,b)=>a.localeCompare(b));
 
 
@@ -51,7 +58,7 @@ export function sourceCmdUnglue(input:string):string{
   const match=/^([a-z]+)(\.\.?|\/.*)$/i.exec(first[2]);
   if(!match)return input;
   const command=match[1].toLowerCase();
-  if(!SOURCE_CMD_HELP[command]&&command!=="chdir")return input;
+  if(!SOURCE_CMD_HELP[command]&&command!=="chdir"&&command!=="mkdir")return input;
   return first[1]+match[1]+" "+match[2]+first[3];
 }
 
@@ -59,6 +66,7 @@ export class SourceCmdSession {
   private cwd:string;
   private echo=true;
   private lastErrorLevel=0;
+  private readonly directoryStack:string[]=[];
   constructor(
     private readonly fs:CmdFilesystem,
     private readonly volume:CmdVolume,
@@ -81,7 +89,8 @@ export class SourceCmdSession {
     const input=String(raw);
     const prompt=this.prompt;
     const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(sourceCmdUnglue(input));
-    const name=(match?.[1]??"").toLowerCase();
+    const sourceName=(match?.[1]??"").toLowerCase();
+    const name=sourceName==="mkdir"?"md":sourceName;
     const rest=match?.[2]??"";
     const args=rest.trim();
     let errorlevel=0;
@@ -133,6 +142,59 @@ export class SourceCmdSession {
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
       }
+    }else if(name==="type"){
+      // Original cmd.js Te.type reads a single VFS text path. Byte-backed
+      // uploads and folders remain AccessDenied instead of being coerced.
+      const target=args.startsWith('"')&&args.endsWith('"')?args.slice(1,-1):args;
+      if(!target){output=[INVALID_SYNTAX];errorlevel=1;}
+      else{
+        try{
+          const dest=this.resolve(target);
+          if(!dest.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          else{
+            const entry=await this.fs.stat(dest.uri);
+            if(!entry){output=[FILE_NOT_FOUND];errorlevel=1;}
+            else if(entry.type==="directory"){output=[ACCESS_DENIED];errorlevel=1;}
+            else{
+              try{output=(await this.fs.read(dest.uri)).split(/\r?\n/);}
+              catch{output=[ACCESS_DENIED];errorlevel=1;}
+            }
+          }
+        }catch{output=[FILE_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="md"){
+      // Original Te.md does not replace or overwrite existing source files.
+      const target=args.startsWith('"')&&args.endsWith('"')?args.slice(1,-1):args;
+      if(!target){output=[INVALID_SYNTAX];errorlevel=1;}
+      else{
+        try{
+          const dest=this.resolve(target);
+          if(!dest.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          else if(await this.fs.stat(dest.uri)){
+            output=["A subdirectory or file "+target+" already exists."];
+            errorlevel=1;
+          }else{
+            try{await this.fs.mkdir(dest.uri);}
+            catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+          }
+        }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="pushd"){
+      const target=args.startsWith('"')&&args.endsWith('"')?args.slice(1,-1):args;
+      if(!target)this.directoryStack.push(this.cwd);
+      else{
+        try{
+          const dest=this.resolve(target);
+          const stat=dest.uri?await this.fs.stat(dest.uri):null;
+          if(stat?.type==="directory"){
+            this.directoryStack.push(this.cwd);
+            this.cwd=dest.win;
+          }else{output=[dest.uri?PATH_NOT_FOUND:DRIVE_NOT_FOUND];errorlevel=1;}
+        }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="popd"){
+      const previous=this.directoryStack.pop();
+      if(previous)this.cwd=previous;
     }else if(name==="dir"){
       const parts=(args.match(/"[^"]*"|\S+/g)??[]).map(t=>
         t.startsWith('"')&&t.endsWith('"')?t.slice(1,-1):t);
