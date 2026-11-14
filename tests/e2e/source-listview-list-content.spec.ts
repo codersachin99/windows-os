@@ -76,3 +76,36 @@ test("source search Content location resolves actual mounted C: rather than inte
   await expect(extras.nth(1)).toHaveText("C:\\");
   await expect(extras.nth(2)).toHaveText("Size: 8 bytes");
 });
+
+test("pinned source List/Content CSS geometry applies to Win7 and adapts to mobile",async({page},testInfo)=>{
+  const win=await openComputer(page);
+  await win.getByRole("button",{name:"New folder"}).click();
+  const prompt=win.getByRole("dialog",{name:"New folder"});
+  await prompt.getByRole("textbox",{name:"New folder name"}).fill("SourceGeometry");
+  await prompt.getByRole("button",{name:"OK"}).click();
+  await setSourceView(win,"List");
+  const list=win.locator('[data-test-source-listview="list"]');
+  const item=list.locator('[data-test-explorer-item="SourceGeometry"]');
+  await expect(item).toBeVisible();
+  const listSizes=await item.evaluate(element=>{
+    const row=getComputedStyle(element);
+    const icon=getComputedStyle(element.querySelector(".listview__item-iconbox")!);
+    return {width:element.getBoundingClientRect().width,minWidth:row.minWidth,iconWidth:icon.width};
+  });
+  await expect.poll(async()=>list.locator(".explorer-item").count()).toBeGreaterThan(0);
+  expect(listSizes.iconWidth).toBe("16px");
+  if(testInfo.project.name.toLowerCase().includes("mobile") ||
+     (await page.viewportSize())!.width<=580){
+    expect(listSizes.minWidth).toBe("0px");
+  }else{
+    expect(listSizes.minWidth).toBe("300px");
+    expect(listSizes.width).toBeGreaterThanOrEqual(300);
+  }
+  await setSourceView(win,"Content");
+  const content=win.locator('[data-test-source-listview="content"]');
+  const info=content.locator('[data-test-explorer-item="SourceGeometry"] .listview__item-info');
+  await expect(info).toBeVisible();
+  expect(await info.evaluate(element=>getComputedStyle(element).gap)).toBe("6px");
+  expect(await content.locator(".listview__item-iconbox").first()
+    .evaluate(element=>getComputedStyle(element).width)).toBe("48px");
+});

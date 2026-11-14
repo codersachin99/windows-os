@@ -1,3 +1,9 @@
+## Win7 source List/Content CSS geometry — 2026-11-14 (CI pending)
+
+- Imported the original **rules** from pinned source `src/styles/shell/listview-list.css` (blob `4a7dc019cc68fbca6b7429d2dafca100dfffd1c9`) and `listview-content.css` (blob `08151a47ee1c05bff6db72c0c38016b91eb88deb`) as Win7-only selectors in `ExplorerApp.css`. List items now have 300px minimum, 25% preferred width and 16px icons; Content uses the original 6px metadata gap, two-column auto flow and 48px icons. Narrow browsers have an explicit one-column responsive fallback.
+- One new desktop/mobile browser scenario checks computed List/Content geometry. Both original modules remain **in progress**: user gestures, CSS and the source snapshots are not fully proved equivalent. Staged without CI while #43611997970 is executing. No claim of test pass for this new feature.
+- Keep existing architecture, VFS and other themes intact. 290 original modules = 255 pending, 27 in progress, 8 implemented, 0 fully parity verified. Draft PR #1 stays unmerged; main unchanged; no release.
+
 ## Source mounted C: path in Content search results — 2026-11-14 (CI pending)
 
 - Added pure `sourceComputerSearchLocation` to shared filesystem search locations: original pinned `computer.js.getSearchExtras` + `4cca.getPathFromDisk` shows the parent as a Windows drive path when backed by runtime mounted disks, else the source raw parent URI. Used existing validated `LegacyVolumeSession.toWindowsPath` to avoid matching unrelated `drive01` and other unmounted paths.

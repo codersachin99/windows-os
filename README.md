@@ -1,3 +1,7 @@
+## Win7 source List/Content CSS geometry — 14 November 2026
+
+The original List/Content stylesheet geometry is now scoped to the Win7 Explorer theme: List row minimum 300px and icons 16px; Content icons 48px, metadata grid with source 6px gaps and natural column flow. Narrow screens receive a single-column adaptation and WinXP/Win31 styles stay unchanged. Desktop/mobile browser assertions are added; source screenshot/pixel parity remains unassessed. See [List/Content source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
 ## Original Content-search mounted-drive paths — 14 November 2026
 
 Win7 Explorer Content search now converts source-mounted Guest file locations into validated Windows drive-letter paths (for example, `C:\\Users\\Guest\\Documents`) and retains the original raw-parent fallback outside mounted disks. The adapter is reusable under the filesystem package, with unit contracts and a new desktop/mobile real-file search case. The change is staged without CI until the preceding formatter run is resolved; see [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).

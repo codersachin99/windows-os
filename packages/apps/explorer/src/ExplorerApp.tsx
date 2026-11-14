@@ -497,7 +497,7 @@ export function ExplorerApp({
     }
   };
 
-  return <div className="windows-explorer explorer-stage" data-test-explorer="" onKeyDown={handleKeys}>
+  return <div className={"windows-explorer explorer-stage"+(theme==="win7"?" is-source-win7":"")} data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
       {theme === "win7"
         ? <SourceWin7Navigation

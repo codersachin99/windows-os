@@ -428,3 +428,47 @@
    grid-column:1;
  }
 }
+
+/* Exact pinned legacy src/styles/shell/listview-list.css (blob
+ * 4a7dc019cc68fbca6b7429d2dafca100dfffd1c9), scoped to Win7.
+ * Do not force unfinished WinXP/Win31 themes to adopt its geometry. */
+.explorer-stage.is-source-win7 .explorer-list.has-list .explorer-item{
+  display:flex;align-items:center;min-width:300px;width:25%;padding:2px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-list .listview__item-iconbox{
+  width:16px;height:16px;flex:0 0 16px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-list .listview__item-info{
+  padding:0 2px;
+}
+
+/* Pinned legacy src/styles/shell/listview-content.css (blob
+ * 08151a47ee1c05bff6db72c0c38016b91eb88deb).
+ * Label and three source extras naturally occupy the two-column grid;
+ * the prior full-row label and forced last-column overrides were not source. */
+.explorer-stage.is-source-win7 .explorer-list.has-content{
+  min-width:fit-content;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-content .explorer-item{
+  display:flex;align-items:center;gap:8px;width:100%;padding:4px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-info{
+  display:grid;gap:6px;grid-template-columns:minmax(144px,1fr) minmax(144px,1fr);
+  width:100%;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-label,
+.explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-extra:last-child{
+  grid-column:auto;
+}
+@media(max-width:580px){
+  /* Responsive adaptation for an actual narrow browser window. */
+  .explorer-stage.is-source-win7 .explorer-list.has-list .explorer-item{
+    width:100%;min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-content{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-info{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
