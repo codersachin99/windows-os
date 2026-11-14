@@ -1,3 +1,7 @@
+## Source 4cca file-icon classification — 14 November 2026
+
+Explorer now selects icon types by original extension and installed-executable rules, not a blanket generic file type. The original PNG/photo and available original program images are used where already byte-imported; other original file-type icon images remain explicitly marked as **fallback** until their source assets are copied byte-for-byte. Unit and live Guest filesystem browser coverage is added. See [source listview trace](migration/LISTVIEW-SOURCE.md). The previous [Details fix CI #43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917) is green.
+
 ## Win7 Details source-column alignment repair — 14 November 2026
 
 First full Details [CI #43619748436](https://github.com/codersachin99/windows-os/actions/runs/43619748436) found one desktop Playwright alignment mismatch (345/346 browser cases passed; all TypeScript, unit and build checks passed): the generic 5px Explorer item gap displaced the first metadata column by 6px including its border. The pinned Win7 Details source has no row gap. Corrected in Win7-scoped CSS and added a strict zero-gap browser assertion; follow-up opt-in CI requested. See [source trace](migration/LISTVIEW-SOURCE.md).

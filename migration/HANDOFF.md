@@ -1,3 +1,10 @@
+## Source 4cca Explorer icon selection — 2026-11-14 (CI pending)
+
+- Pinned source `computer.js.describe()` -> webpack 4cca.getIconType / 0e9a / 8c25. Added pure reusable `sourceFileIconType` to shared filesystem with exact extension precedence, including installed 8c25 executable names from already-pinned c170 manifest. Added Win7-only Explorer adapter with exact photo/folder/file and available installed-program image URLs, preserving source icon type and visibly marking missing original artwork as generic fallback.
+- Added filesystem / Explorer Vitest and live Guest PNG/TXT desktop/mobile Playwright assertions, including stable icon selection across Tiles/List/Content. Original missing image bytes (media, text, richtext, zip, wpl, executable) still need byte-exact import; source .lnk JSON icon override is not yet in this slice. No invented artwork or external runtime dependency.
+- Previous [Details alignment CI #43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917) **SUCCESS** (fixed 6px inherited gap). This newest icon slice is **not yet CI verified**; use one opt-in `[run-ci]` when needed. Tracker unchanged 290 original = 255 pending / 27 in progress / 8 implemented / 0 fully original parity verified.
+- Draft PR #1 stays unmerged; main untouched; no release.
+
 ## Details source alignment regression repair — 2026-11-14 (retest pending)
 
 - [Run #43619748436](https://github.com/codersachin99/windows-os/actions/runs/43619748436) **FAILED** after 345 of 346 browser tests passed. One desktop Details geometry check measured first-extra/header position offset 6px vs <=2px; TypeScript, units, source audit, Contacts contracts and Vite build passed.

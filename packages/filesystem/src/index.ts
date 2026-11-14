@@ -548,3 +548,7 @@ export { FileDragSession, SHELL_DRAG_TYPE, importDroppedFiles } from "./drag";
 
 // Original shared webpack 4cca byte-format contract (Computer + other apps).
 export { sourceSizeFromBytes } from "./sourceSize";
+
+// Pinned 4cca.getIconType and 0e9a extension/8c25 installed-executable rules.
+export { sourceFileIconType } from "./sourceIconTypes";
+export type { SourceFileIconKey } from "./sourceIconTypes";

@@ -25,6 +25,7 @@ import {
   sourceComputerDetailsLabelWidth,sourceComputerItemExtras,
   SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH
 } from "./sourceComputerExtras";
+import {sourceComputerIconArtwork} from "./sourceComputerIcons";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -687,7 +688,9 @@ export function ExplorerApp({
             state.viewMode === "content" ? "content" : "plain"}
           className={"explorer-list " +
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] : "")}>
-          {visible.map(item => <SourceListViewItem key={item.uri}
+          {visible.map(item => {
+            const icon=theme==="win7"?sourceComputerIconArtwork(item):null;
+            return <SourceListViewItem key={item.uri}
             itemKey={item.uri} itemType={item.type} itemLabel={item.name}
             active={state.selected.includes(item.uri)}
             toggle={showSourceCheckboxes ? () => session.select(item.uri,true) : undefined}
@@ -703,6 +706,8 @@ export function ExplorerApp({
               (state.selected.includes(item.uri) ? "is-selected " : "") +
               (dropTarget === item.uri ? "is-drop-target" : "")}
             data-test-explorer-item={item.name}
+            data-source-icon-type={icon?.sourceType}
+            data-source-icon-artwork={icon?(icon.exactSourceArtwork?"original":"fallback"):undefined}
             data-windows-os-drop-directory={!isBin && item.type === "directory" ? item.uri : undefined}
             aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}
@@ -713,7 +718,8 @@ export function ExplorerApp({
             onDoubleClick={() => openEntry(item.uri, item.type)}
             onKeyDown={event => { if (event.key === "Enter") openEntry(item.uri, item.type); }}>
             <span className="listview__item-iconbox">
-              <img src={item.type === "directory" ? legacyArt.folder : legacyArt.file} alt="" draggable={false} />
+              <img src={icon?.src ?? (item.type === "directory" ? legacyArt.folder : legacyArt.file)}
+                alt="" draggable={false} />
             </span>
             {state.viewMode === "content"
               ? <span className="listview__item-info" data-test-source-content-extras="">
@@ -769,7 +775,8 @@ export function ExplorerApp({
                 (state.viewMode === "tiles" && theme !== "win7")) &&
               sourceComputerItemExtras(item, state.viewMode).map((value,index) =>
                 <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
-          </SourceListViewItem>)}
+          </SourceListViewItem>;
+          })}
           {!state.busy && !searchBusy && !visible.length && <p className="explorer-empty">
             {state.search ? "No items match your search." : "This folder is empty."}
           </p>}

@@ -109,3 +109,25 @@ test("pinned source List/Content CSS geometry applies to Win7 and adapts to mobi
   expect(await content.locator(".listview__item-iconbox").first()
     .evaluate(element=>getComputedStyle(element).width)).toBe("48px");
 });
+
+test("pinned 4cca icon type and verified original artwork follow uploaded VFS extensions",async({page})=>{
+  const win=await openComputer(page);
+  await win.locator('input[aria-label="Upload files"]').setInputFiles([
+    {name:"SourceIconPhoto.PNG",mimeType:"image/png",buffer:Buffer.from([0x89,0x50,0x4e,0x47])},
+    {name:"SourceIconNotes.txt",mimeType:"text/plain",buffer:Buffer.from("file icon")}
+  ]);
+  const image=win.locator('[data-test-explorer-item="SourceIconPhoto.PNG"]');
+  const text=win.locator('[data-test-explorer-item="SourceIconNotes.txt"]');
+  await expect(image).toHaveAttribute("data-source-icon-type","photo");
+  await expect(image).toHaveAttribute("data-source-icon-artwork","original");
+  await expect(image.locator(".listview__item-iconbox img"))
+    .toHaveAttribute("src",/\/photo\.db6c5f81\.webp$/);
+  await expect(text).toHaveAttribute("data-source-icon-type","text");
+  await expect(text).toHaveAttribute("data-source-icon-artwork","fallback");
+  await expect(text.locator(".listview__item-iconbox img"))
+    .toHaveAttribute("src",/\/file\.73b2d097\.webp$/);
+  await setSourceView(win,"List");
+  await expect(image).toHaveAttribute("data-source-icon-type","photo");
+  await setSourceView(win,"Content");
+  await expect(image).toHaveAttribute("data-source-icon-type","photo");
+});
