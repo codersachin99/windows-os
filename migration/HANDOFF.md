@@ -1,3 +1,11 @@
+## Shared source icon artwork: desktop file-backed rows — 15 November 2026
+
+- Original Win7 icon key resolution 4cca + 0f35 has one shared safe, byte-imported art lookup in `@windows-os/assets`: `legacySourceIconArtwork`. Explorer now delegates to it instead of maintaining a second independent map.
+- Desktop file icons use original source extension types, actual Guest .lnk JSON icon overrides and original imported images. Existing `DesktopIcons` previously overrode the JSON icon with the app target icon; this migration removes that override. Shortcut exe permission and launch remain separately checked through `parseSourceShortcut`.
+- Added per-file icon type, icon override and original/custom/fallback test attributes, pure VFS tests and real desktop/browser case verifying PNG/photo and shortcut with calc icon launching Notepad. Images not present in the source byte-import inventory explicitly fall back to byte-exact generic file icon; no invented source art.
+- This feature commit is intentionally **without [run-ci]** while the previous Explorer shortcut run #43638958982 remains in progress. After other related source icon changes, trigger only one opt-in acceptance batch. Last fully verified source icon classifier [CI #43626932843](https://github.com/codersachin99/windows-os/actions/runs/43626932843) succeeded.
+- PR #1 draft, main untouched, no release. Original tracker 290 modules: 255 pending, 27 in progress, 8 implemented, 0 full visual parity.
+
 ## Pinned Computer shortcut icon JSON — 15 November 2026 (CI pending)
 
 - Original computer.js.describe detects 0e9a.m shortcut extension suffix and asynchronously parses the actual .lnk file JSON; its icon property controls artwork independent of exe, and the source list item has type shortcut. Malformed JSON falls back to icon=file. The original iconType from 4cca is retained separately.

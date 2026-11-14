@@ -96,3 +96,23 @@ test("malformed host .lnk is displayed but never executed as an arbitrary progra
     .toContainText("No original application association");
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
 });
+
+test("Guest Desktop uses pinned 4cca photo art and .lnk JSON icon rather than target app",async({page})=>{
+  const explorer=await startGuest(page);
+  await explorer.locator('input[aria-label="Upload files"]').setInputFiles([
+    {name:"Desktop Icon.png",mimeType:"image/png",buffer:Buffer.from([0x89,0x50])},
+    {name:"Desktop Icon.lnk",mimeType:"application/json",
+      buffer:Buffer.from('{"exe":"notepad","icon":"calc"}')}
+  ]);
+  const photo=page.locator('[data-test-desktop-file="'+DESKTOP+'/Desktop Icon.png"]');
+  const link=page.locator('[data-test-desktop-file="'+DESKTOP+'/Desktop Icon.lnk"]');
+  await expect(photo).toHaveAttribute("data-source-desktop-icon-type","photo");
+  await expect(photo).toHaveAttribute("data-source-desktop-artwork","original");
+  await expect(photo.locator(".desktop__icon-box img").first())
+    .toHaveAttribute("src",/\/photo\.db6c5f81\.webp$/);
+  await expect(link).toHaveAttribute("data-source-desktop-icon-override","calc");
+  await expect(link.locator(".desktop__icon-box img").first())
+    .toHaveAttribute("src",/\/calc\.1733a9a0\.webp$/);
+  await link.dblclick();
+  await expect(page.locator('[data-test-window="notepad"] .cm-content')).toBeVisible();
+});

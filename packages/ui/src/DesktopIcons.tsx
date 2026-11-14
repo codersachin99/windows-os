@@ -69,7 +69,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     })),
     ...guestFiles.map(file => ({
       id: file.id, label: file.label,
-      icon: file.programId ? appRegistry.get(file.programId)?.icon ?? file.icon : file.icon,
+      icon: file.icon,
       file
     }))
   ], [apps, guestFiles]);
@@ -734,6 +734,9 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       const offset = drag?.keys.includes(app.id) ? drag.offset : null;
       return <button type="button" key={app.id} data-test-desktop-icon={app.id}
         data-test-desktop-file={app.file?.entry.uri}
+        data-source-desktop-icon-type={app.file?.iconType}
+        data-source-desktop-icon-override={app.file?.iconOverride??undefined}
+        data-source-desktop-artwork={app.file?.artwork}
         data-test-desktop-x={position.x} data-test-desktop-y={position.y}
         data-test-desktop-selected={selected.includes(app.id)}
         className={"desktop__icon-item windows-desktop__shortcut" +

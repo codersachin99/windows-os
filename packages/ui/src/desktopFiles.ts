@@ -1,7 +1,8 @@
 import {
-  parseSourceShortcut, type FileEntry, type VirtualFileStore
+  parseSourceShortcut, sourceShortcutIconValue, sourceFileIconType,
+  sourceIsShortcutEntry, type FileEntry, type VirtualFileStore
 } from "@windows-os/filesystem";
-import { legacyArt } from "@windows-os/assets";
+import { legacySourceIconArtwork, legacySourceCustomIconURL } from "@windows-os/assets";
 
 export interface SourceDesktopFile {
   id: string;
@@ -10,6 +11,9 @@ export interface SourceDesktopFile {
   entry: FileEntry;
   /** Existing source .lnk exe ID only; never arbitrary file execution. */
   programId: string | null;
+  iconType: string;
+  iconOverride: string | null;
+  artwork: "original" | "fallback" | "custom";
 }
 
 async function sourceLinkText(
@@ -37,21 +41,29 @@ export async function listSourceDesktopFiles(
 ): Promise<SourceDesktopFile[]> {
   const children = await store.list(desktopPath);
   return Promise.all(children.map(async entry => {
-    const isLink = entry.type === "file" && /\.lnk$/i.test(entry.name);
-    let programId: string | null = null;
-    if (isLink) {
-      try {
-        programId = parseSourceShortcut(await sourceLinkText(store, entry.uri))?.exe ?? null;
-      } catch { /* unsupported host .lnk is displayed as an unassociated file */ }
+    const isLink=sourceIsShortcutEntry(entry);
+    const iconType=sourceFileIconType(entry);
+    let programId:string|null=null;
+    let iconOverride:string|null=null;
+    if(isLink){
+      try{
+        const text=await sourceLinkText(store,entry.uri);
+        programId=parseSourceShortcut(text)?.exe??null;
+        iconOverride=sourceShortcutIconValue(text);
+      }catch{
+        // Corrupt host binary: show the source's generic file icon,
+        // without granting executable launch permission.
+        iconOverride="file";
+      }
     }
-    const label = isLink ? entry.name.slice(0, -4) : entry.name;
+    const iconKey=iconOverride??iconType;
+    const resolved=legacySourceIconArtwork(iconKey);
+    const label=isLink&&/\.lnk$/i.test(entry.name)?entry.name.slice(0,-4):entry.name;
     return {
-      id: "file:" + entry.uri,
-      label,
-      icon: entry.type === "directory" ? legacyArt.folder
-        : programId === "paint" ? legacyArt.paint : legacyArt.file,
-      entry,
-      programId
+      id:"file:"+entry.uri,label,icon:resolved.src,entry,programId,
+      iconType,iconOverride,
+      artwork:resolved.exactSourceArtwork?"original":
+        legacySourceCustomIconURL(iconKey)?"custom":"fallback"
     };
   }));
 }

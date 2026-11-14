@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { VirtualFileStore } from "@windows-os/filesystem";
+import { legacyArt } from "@windows-os/assets";
 import { listSourceDesktopFiles } from "./desktopFiles";
 
 describe("legacy main.js file-backed Guest desktop shortcuts",()=>{
@@ -45,6 +46,45 @@ describe("legacy main.js file-backed Guest desktop shortcuts",()=>{
     expect(await listSourceDesktopFiles(fs,"/Mounted")).toEqual([]);
     await expect(listSourceDesktopFiles(fs,"/Unknown")).rejects.toMatchObject({
       code:"ENOENT"
+    });
+  });
+});
+
+describe("pinned desktop source 4cca filename and 0f35 shortcut display icons",()=>{
+  it("classifies real file/folder entries using the original imported artwork",async()=>{
+    const fs=new VirtualFileStore();await fs.mkdir("/Desktop");
+    await fs.write("hi","/Desktop/readme.txt");
+    await fs.writeBytes(new Uint8Array([0x89,0x50]),"/Desktop/photo.png");
+    await fs.mkdir("/Desktop/Folder");
+    const files=await listSourceDesktopFiles(fs,"/Desktop");
+    const byName=new Map(files.map(file=>[file.label,file]));
+    expect(byName.get("readme.txt")).toMatchObject({
+      iconType:"text",icon:legacyArt.file,artwork:"fallback"
+    });
+    expect(byName.get("photo.png")).toMatchObject({
+      iconType:"photo",icon:legacyArt.photo,artwork:"original"
+    });
+    expect(byName.get("Folder")).toMatchObject({
+      iconType:"folder",icon:legacyArt.folder,artwork:"original"
+    });
+  });
+  it("preserves custom shortcut icons independently of source executable",async()=>{
+    const fs=new VirtualFileStore();await fs.mkdir("/Desktop");
+    await fs.write('{"exe":"notepad","icon":"calc"}',"/Desktop/Calculator Look.lnk");
+    await fs.write('{"exe":"unknown","icon":"notepad"}',"/Desktop/Unsafe.lnk");
+    await fs.write("{invalid","/Desktop/Broken.lnk");
+    const files=await listSourceDesktopFiles(fs,"/Desktop");
+    const byName=new Map(files.map(file=>[file.label,file]));
+    expect(byName.get("Calculator Look")).toMatchObject({
+      programId:"notepad",iconType:"file",iconOverride:"calc",
+      icon:legacyArt.calculator,artwork:"original"
+    });
+    expect(byName.get("Unsafe")).toMatchObject({
+      programId:null,iconOverride:"notepad",icon:legacyArt.notepad,
+      artwork:"original"
+    });
+    expect(byName.get("Broken")).toMatchObject({
+      programId:null,iconOverride:"file",icon:legacyArt.file,artwork:"original"
     });
   });
 });

@@ -28,3 +28,12 @@ Source `c5f4` binds a 30-character inline editor to `FileRename` and keeps file 
 ## Verified source desktop file rename milestone
 
 [CI 43191657508](https://github.com/codersachin99/windows-os/actions/runs/43191657508) passed all automated checks (110 unit tests and 92 Chromium tests) after F2 and context Rename were integrated. This covers only bounded FileRename semantics, not original shortcut editor/wizard or full desktop parity. See [DESKTOP-RENAME.md](DESKTOP-RENAME.md).
+
+## Shared source icon artwork: desktop file-backed rows — 15 November 2026
+
+- Original Win7 icon key resolution 4cca + 0f35 has one shared safe, byte-imported art lookup in `@windows-os/assets`: `legacySourceIconArtwork`. Explorer now delegates to it instead of maintaining a second independent map.
+- Desktop file icons use original source extension types, actual Guest .lnk JSON icon overrides and original imported images. Existing `DesktopIcons` previously overrode the JSON icon with the app target icon; this migration removes that override. Shortcut exe permission and launch remain separately checked through `parseSourceShortcut`.
+- Added per-file icon type, icon override and original/custom/fallback test attributes, pure VFS tests and real desktop/browser case verifying PNG/photo and shortcut with calc icon launching Notepad. Images not present in the source byte-import inventory explicitly fall back to byte-exact generic file icon; no invented source art.
+- This feature commit is intentionally **without [run-ci]** while the previous Explorer shortcut run #43638958982 remains in progress. After other related source icon changes, trigger only one opt-in acceptance batch. Last fully verified source icon classifier [CI #43626932843](https://github.com/codersachin99/windows-os/actions/runs/43626932843) succeeded.
+- PR #1 draft, main untouched, no release. Original tracker 290 modules: 255 pending, 27 in progress, 8 implemented, 0 full visual parity.
+

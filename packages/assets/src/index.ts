@@ -66,3 +66,34 @@ export const legacyArt = {
   },
   contacts: "/apps/contacts/icon.webp"
 } as const;
+
+/** Pinned source 4cca and 0f35 theme icon keys. Only byte-imported original
+ * Win7 assets appear here. Other types retain original generic file fallback.
+ */
+const sourceLegacyIconMap:Readonly<Record<string,string>>={
+  folder:legacyArt.folder,file:legacyArt.file,photo:legacyArt.photo,
+  notepad:legacyArt.notepad,calc:legacyArt.calculator,chrome:legacyArt.chrome,
+  ie:legacyArt.ie,paint:legacyArt.paint,camera:legacyArt.camera,
+  player:legacyArt.player,recorder:legacyArt.recorder,
+  magnifier:legacyArt.magnifier,snipping:legacyArt.snipping,
+  taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
+  run:legacyArt.run,computer:legacyArt.computer
+};
+export interface LegacySourceIconArtwork{
+  src:string;
+  exactSourceArtwork:boolean;
+}
+/** Original 0f35.c supports remote and data URLs. Block script schemes. */
+export function legacySourceCustomIconURL(icon:string):string|null{
+  if(/^https?:\/\//i.test(icon))return icon;
+  if(/^data:image\/(?:png|jpeg|gif|webp|bmp|svg\+xml|avif);base64,[a-z0-9+/]+={0,2}$/i.test(icon))
+    return icon;
+  return null;
+}
+export function legacySourceIconArtwork(iconKey:string):LegacySourceIconArtwork{
+  const custom=legacySourceCustomIconURL(iconKey);
+  if(custom)return {src:custom,exactSourceArtwork:false};
+  const imported=Object.prototype.hasOwnProperty.call(sourceLegacyIconMap,iconKey)
+    ?sourceLegacyIconMap[iconKey]:undefined;
+  return {src:imported??legacyArt.file,exactSourceArtwork:imported!==undefined};
+}
