@@ -1,3 +1,11 @@
+## Chrome browser regression repair — 2026-11-14 (final CI running)
+
+- Source-backed Chrome code commit [c609b78](https://github.com/codersachin99/windows-os/commit/c609b78d0c98a769ae1258ae4150760838ccb5a5) added 5 model tests and 8 desktop/mobile browser cases. Initial [CI #43576157230](https://github.com/codersachin99/windows-os/actions/runs/43576157230) passed TypeScript but found a URL-credential fallback bug in one unit assertion. [Fix 11b5067](https://github.com/codersachin99/windows-os/commit/11b50673b84b897c3136f8e9e07de4223f696795) rejects credentialed HTTP(S) URLs before they can be interpreted as search text.
+- [CI #43576242002](https://github.com/codersachin99/windows-os/actions/runs/43576242002) then passed **289/289 unit tests** in 57 files, source assets, Contacts audit, TypeScript and Vite build. The Chromium suite finished **288 passed / 6 failed** out of 294. Failures were solely outdated tests: four Chrome cases located both the current tab label and Add Tab button by non-exact "New tab" name, and two old installed-program cases still expected original Chrome to be unavailable.
+- [Repair ac1bc40](https://github.com/codersachin99/windows-os/commit/ac1bc4023cbf3719436d7c84a963acaa734cad32) switches to explicit Add Tab data locator and updates the original installed .lnk regression to expect the now-migrated Chrome program to be enabled. No application behavior was weakened to make the test pass.
+- New [full CI #43577115840](https://github.com/codersachin99/windows-os/actions/runs/43577115840) is running. Its outcome must be checked before changing status to "integrated CI verified"; no claim of a final green run yet. Ordinary docs-only commits correctly skip both heavy CI and capture.
+- Original source Chrome remains in-progress pending T-Rex, local file preview, browser plugin, Win7-specific WebP icon and original-vs-React paired screenshots. Draft PR #1 remains unmerged, main unchanged, no release.
+
 ## Chrome source-backed migration — 2026-11-14 (CI pending)
 
 - Pinned original Chrome main `7839a`, tab code and settings `90b3` migrated to independent `packages/apps/chrome`. Source one-blank-tab lifecycle, tab controls, per-tab navigation, original six search engines and menu options, new tab Google branding and Settings UI are present. User search engine choice saved per Guest browser storage.
