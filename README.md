@@ -1,3 +1,7 @@
+## Source-exact listview widths and original column headers — 14 November 2026
+
+Located original webpack a321.normalizeWidth in the pinned legacy shared source chunk and ported its exact rule (Details reserves one extra label column). Computer/Recycle Bin Details headers now render original listview__header column buttons through the shared packages/ui component, with responsive grid sizes retained. Unit and browser assertions added. Screenshot fidelity remains unverified; see [source trace](migration/LISTVIEW-SOURCE.md). Full CI pending for this new increment.
+
 ## Expanded source UI screenshots captured — 14 November 2026
 
 The dedicated visual workflow captured **40 target-only screenshots** across desktop and mobile, including new Details, Tiles and confirmation states, with zero capture errors. [Visual artifact 14112935185](https://github.com/codersachin99/windows-os/actions/runs/43591033519/artifacts/14112935185). No original-source screenshot was captured because the optional read token was absent; pixel parity is therefore not assessed.

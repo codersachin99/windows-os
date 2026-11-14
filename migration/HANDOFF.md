@@ -1,3 +1,10 @@
+## Original a321 listview width and header — 2026-11-14 (CI pending)
+
+- Discovered exact original a321 source in shared webpack chunk with blob ed3b984138eed7c830b5fbe4a8be08d58328cb35. normalizeWidth(width,count,details) is width ? (typeof width === "number" ? width+"px" : width.toString()) : 100/(count+(details?1:0))+"%"; isFixedWidth(width) uses typeof "number" even if width is 0. Details reserves one additional label column.
+- Ported pure sourceNormalizeListWidth and sourceListColumnIsFixedWidth with unit tests for zero width, negative/positive widths, string CSS and Details offset. Added original listview__header button implementation SourceListViewHeader in packages/ui; Explorer Details header delegates to it, retaining existing responsive CSS grid, selection and VFS.
+- Existing combined CI #43591033519 **SUCCESS**: 308 Vitest (63 files), 322 Chromium browser, 55 exact source images and 40 target-only screenshots. No original read token; parityStatus:not-assessed. New a321 work has not yet run CI and remains unverified until next opt-in run.
+- Keep the original chunk's full 49e2ebd6 module tracker entry Pending (many unrelated shared modules), but source listview-details.js and listview-tiles.js remain In Progress with a321 trace. No merge/release; draft PR #1 and main unchanged.
+
 ## Expanded target-only visual capture SUCCESS — 2026-11-14
 
 - [Run #43591033519 visual-capture job](https://github.com/codersachin99/windows-os/actions/runs/43591033519) **SUCCESS** at e1697bb: **40/40 target screenshots** (20 desktop + 20 mobile), including source shared Details metadata, Tiles metadata and Message Confirm. 0 screenshot errors. Artifact [14112935185](https://github.com/codersachin99/windows-os/actions/runs/43591033519/artifacts/14112935185).

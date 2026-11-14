@@ -174,7 +174,7 @@
         "tests/e2e/listview-source-details-tiles.spec.ts",
         "migration/LISTVIEW-SOURCE.md"
       ],
-      "verification": "CI pending: reusable Details view/extra component and Explorer fields; original a321 width and screenshot parity pending"
+      "verification": "CI #43589707509 PASS (305 unit, 318 Chromium, 53 art). Original a321.normalizeWidth source-exact pure helper and header markup now ported, new CI pending; original screenshot pixel/other theme parity remains unverified."
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
@@ -188,7 +188,7 @@
         "tests/e2e/listview-source-details-tiles.spec.ts",
         "migration/LISTVIEW-SOURCE.md"
       ],
-      "verification": "CI pending: source Tiles and shared extra fields from Guest VFS; full original parity pending"
+      "verification": "CI #43589707509 PASS (305 unit, 318 Chromium, 53 art). Original a321.normalizeWidth source-exact pure helper and header markup now ported, new CI pending; original screenshot pixel/other theme parity remains unverified."
     },
     {
       "source": "src/modules/apps/magnifier.js",

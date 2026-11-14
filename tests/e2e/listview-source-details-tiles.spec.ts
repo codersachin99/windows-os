@@ -37,6 +37,12 @@ test("source Details and Tiles share extra component while preserving selection 
   await create.getByRole("button",{name:"OK"}).click();
   await setView(win,"Details");
   await expect(win.locator('[data-test-source-listview="details"]')).toHaveClass(/has-details/);
+  // Source a321 exposes its column header as buttons, not inert spans.
+  const header=win.locator('[data-test-listview-columnheader]');
+  await expect(header).toBeVisible();
+  await expect(header.locator(".listview__header-column"))
+    .toHaveText(["Name","Date modified","Type","Size"]);
+  await expect(header.locator("button")).toHaveCount(4);
   const row=win.locator('[data-test-explorer-item="DetailsLegacy"]');
   await expect(row.locator(".listview__item-extra")).toHaveCount(3);
   await expect(row.locator(".listview__item-extra").nth(1)).toHaveText("File folder");

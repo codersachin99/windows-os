@@ -21,7 +21,7 @@ import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } fro
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
-import { SourceListView, SourceListViewExtra } from "@windows-os/ui/listview";
+import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceMessageDialog } from "@windows-os/ui/message";
 import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
@@ -638,9 +638,14 @@ export function ExplorerApp({
             showContext(event, "background");
           }
         }}>
-        {state.viewMode === "details" && <div className="explorer-columns" aria-hidden="true">
-          <span>Name</span><span>Date modified</span><span>Type</span><span>Size</span>
-        </div>}
+        {state.viewMode === "details" && <SourceListViewHeader
+          className="explorer-columns" useSourceWidths={false}
+          columns={[
+            {key:"name",label:"Name"},
+            {key:"date",label:"Date modified"},
+            {key:"type",label:"Type"},
+            {key:"size",label:"Size"}
+          ]} />}
         <SourceListView
           variant={state.viewMode === "details" ? "details" :
             state.viewMode === "tiles" ? "tiles" : "plain"}
