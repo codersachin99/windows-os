@@ -102,6 +102,9 @@
       ],
       "@windows-os/apps/player": [
         "packages/apps/player/src/index.ts"
+      ],
+      "@windows-os/apps/webapp": [
+        "packages/apps/webapp/src/index.ts"
       ]
     }
   },

@@ -43,6 +43,8 @@ export const legacyArt = {
   player: "/assets/images/player.d45d301d.webp",
   // Byte-identical original Windows 7 Snipping Tool icon.
   snipping: "/assets/images/snipping.2c25345c.webp",
+  // Exact original Win7 web application viewer artwork.
+  internet: "/assets/images/internet.b27ef7d7.webp",
   // Byte-identical original Windows 7 Chrome icon.
   chrome: "/assets/images/chrome.0eddc17a.webp",
   // Byte-identical original Windows 7 Internet Explorer icon.

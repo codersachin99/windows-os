@@ -16,6 +16,8 @@ import { InternetExplorerApp } from "@windows-os/apps/ie";
 import { ChromeApp } from "@windows-os/apps/chrome";
 import { SnippingApp } from "@windows-os/apps/snipping";
 import { PlayerApp } from "@windows-os/apps/player";
+import { WebAppViewer } from "@windows-os/apps/webapp";
+import { SourceEmbedBridge } from "./SourceEmbedBridge";
 import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
@@ -92,6 +94,8 @@ function ApplicationContent({
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
 
+  if (appId.startsWith("web_") && appId !== "web_contacts") return <WebAppViewer
+    url={filePath} onClose={() => dispatch({ type:"CLOSE_WINDOW", id:windowId })}/>;
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
@@ -197,6 +201,7 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
 
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}>
+      <SourceEmbedBridge windows={state.windows} dispatch={dispatch}/>
       {/* In the legacy build the magnifier transforms the desktop container.
           Keep taskbar and Magnifier toolbar outside the scaled canvas so they
           stay accessible at the original source maximum of 16x. */}

@@ -141,3 +141,5 @@ export const appRegistry = new AppRegistry(builtinApps);
 export { browserStorage, fileStore, fileClipboard, fileDragSession } from "./files";
 
 export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";
+
+export { SOURCE_EMBED_VERSION,SOURCE_EMBED_PREFIX,sourceEmbedOrigins,sourceEmbedUrl,sourceEmbedAppId,sourceEmbedCommand,sourceWebAppWindow } from "./embed";

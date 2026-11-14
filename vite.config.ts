@@ -29,6 +29,7 @@ export default defineConfig({
       "@windows-os/apps/chrome": app("./packages/apps/chrome/src/index.ts"),
       "@windows-os/apps/snipping": app("./packages/apps/snipping/src/index.ts"),
       "@windows-os/apps/player": app("./packages/apps/player/src/index.ts"),
+      "@windows-os/apps/webapp": app("./packages/apps/webapp/src/index.ts"),
       "@windows-os/apps/taskmgr": app("./packages/apps/taskmgr/src/index.ts"),
       "@windows-os/apps/find": app("./packages/apps/find/src/index.ts"),
       "@windows-os/apps/search-dialog": app("./packages/apps/search-dialog/src/index.ts"),

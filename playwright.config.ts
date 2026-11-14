@@ -16,6 +16,8 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run dev",
+    // Only the Playwright server opts in a known parent origin for embed tests.
+    env: { VITE_EMBED_ORIGINS: "http://127.0.0.1:1420" },
     url: "http://127.0.0.1:1420",
     reuseExistingServer: !process.env.CI,
     timeout: 60000

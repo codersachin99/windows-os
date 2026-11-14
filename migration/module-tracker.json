@@ -248,7 +248,7 @@
         "apps/web/public/assets/images/player-base.3e5b35e3.svg",
         "apps/web/public/assets/images/player.d45d301d.webp"
       ],
-      "verification": "CI #43584290348 passed 297 unit/300 browser; six browser test failures due ambiguous Play name and mobile hidden source volume slider; corrected in next opt-in run. Exact original Win7 icon imported; full player source/pixel parity pending."
+      "verification": "Full opt-in CI #43585262479 PASSED: 298 unit, 308 desktop/mobile Chromium, 52 exact source assets, TS/Vite; real Guest PNG/WAV decoding. Complete source multi-entry playlist, original codec filters and screenshot pixel parity still pending."
     },
     {
       "source": "src/modules/apps/plugin-embed.js",

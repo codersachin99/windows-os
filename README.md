@@ -6,7 +6,7 @@ This is the new **React + TypeScript + Vite** home for the existing WindowsOS pr
 
 ## Source-backed Windows Media Player — 14 November 2026
 
-The pinned `player.js` source is being migrated to independent `packages/apps/player`: source Music/Videos/Pictures libraries, real virtual-file audio/video/picture rendering through browser media elements, original stop/play/pause/next/prev/mute/volume/seek and random/repeat UI, a source-style library playlist, source Open dialog, Explorer media double-click association and source-exact original Win7 WebP icon art. Full opt-in CI and original screenshot comparison are pending; codecs, exact media filters, ads, source system volume and original theme graphics remain limitations. See [Media Player source trace](migration/PLAYER-SOURCE.md).
+The pinned `player.js` source is being migrated to independent `packages/apps/player`: source Music/Videos/Pictures libraries, real virtual-file audio/video/picture rendering through browser media elements, original stop/play/pause/next/prev/mute/volume/seek and random/repeat UI, a source-style library playlist, source Open dialog, Explorer media double-click association and source-exact original Win7 WebP icon art. Implemented-slice [CI #43585262479](https://github.com/codersachin99/windows-os/actions/runs/43585262479) passed 298 unit/308 desktop-mobile browser/52 source-art tests; original screenshot comparison, codecs, exact media filters, ads, source system volume and original theme graphics remain limitations. See [Media Player source trace](migration/PLAYER-SOURCE.md).
 
 ## Source-backed Snipping Tool — 14 November 2026
 

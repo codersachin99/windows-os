@@ -1,3 +1,9 @@
+## Original Media Player & Windows 7 WebP verification — 2026-11-14
+
+- [Combined full opt-in CI #43585262479](https://github.com/codersachin99/windows-os/actions/runs/43585262479) **SUCCESS** on commit 08a5e8e: 298/298 Vitest across 60 files, 308/308 desktop/mobile Chromium cases, 52 original byte-exact asset checks, TypeScript, Contacts audit and Vite production build. The Media Player initial E2E name/slider selectors were fixed before this run. Source Player remains **in-progress**, because the single-file view, source playlist, media filters and original pixel-parity are not fully ported.
+- The seven Win7 WebP source icon blobs, including Media Player and Snipping Tool, are now browser-served and audited by their exact original Git hashes; source full application screenshots remain unverified.
+- The earlier source-art-only CI #43584985504 did not pass solely because it used Player's unrepaired E2E assertions. The combined later commit was green; no need for another rerun until implementation work changes.
+
 ## Media Player first CI regression repair — 2026-11-14
 
 - [Run #43584290348](https://github.com/codersachin99/windows-os/actions/runs/43584290348) **FAILURE** only in newly introduced Player Playwright expectations: 297/297 unit tests passed, 300/306 Chromium browser cases passed. Five failures were non-exact Play button selectors matching the containing Windows Media Player dialog/title and row; one mobile case incorrectly expected the source extended Volume slider that is intentionally hidden when source `showAllControls` sees a window width below 400px.
