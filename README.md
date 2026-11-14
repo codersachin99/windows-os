@@ -1,3 +1,7 @@
+## Source file-icon matcher typing fix — 14 November 2026
+
+First icon classification [CI #43626662452](https://github.com/codersachin99/windows-os/actions/runs/43626662452) failed TypeScript before tests because the shared file-kind predicate required the full VFS entry despite using only filename and entry type. Its typed parameter now reflects the original source inputs without changing matching behavior. Follow-up full opt-in CI requested; do not count previous run as a pass.
+
 ## Source 4cca file-icon classification — 14 November 2026
 
 Explorer now selects icon types by original extension and installed-executable rules, not a blanket generic file type. The original PNG/photo and available original program images are used where already byte-imported; other original file-type icon images remain explicitly marked as **fallback** until their source assets are copied byte-for-byte. Unit and live Guest filesystem browser coverage is added. See [source listview trace](migration/LISTVIEW-SOURCE.md). The previous [Details fix CI #43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917) is green.

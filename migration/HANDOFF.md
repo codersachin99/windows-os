@@ -1,3 +1,10 @@
+## Source icon CI type-contract repair — 2026-11-14 (retest requested)
+
+- Original icon selection [CI #43626662452](https://github.com/codersachin99/windows-os/actions/runs/43626662452) **failed in TypeScript**, before units/browser: six TS2345 mismatches because `sourceFileIconType` passes exactly `{name,type}` to `matchesSourceKind`, whose declared parameter unnecessarily required the whole `FileEntry`. The original 0e9a name/type predicate and the existing implementation access only these two properties.
+- Corrected the reusable matcher parameter to `Pick<FileEntry,"name"|"type">`, preserving every matching branch and compatibility with full `FileEntry` search callers. No unsafe casts and no invented metadata. This commit opts in once to full `[run-ci]` for the source icon slice.
+- Source picture artwork was already byte-imported; missing media/text/WPL/ZIP source artwork still falls back to original generic `file` image, with explicit source type and fallback metadata. `.lnk` content/icon overrides await a separately traced slice.
+- Last green overall checkpoint remains [Details #43624645917](https://github.com/codersachin99/windows-os/actions/runs/43624645917). Keep draft PR, unchanged main, no releases; 290 tracked original modules (255 pending / 27 in-progress / 8 implemented / 0 fully source parity).
+
 ## Source 4cca Explorer icon selection — 2026-11-14 (CI pending)
 
 - Pinned source `computer.js.describe()` -> webpack 4cca.getIconType / 0e9a / 8c25. Added pure reusable `sourceFileIconType` to shared filesystem with exact extension precedence, including installed 8c25 executable names from already-pinned c170 manifest. Added Win7-only Explorer adapter with exact photo/folder/file and available installed-program image URLs, preserving source icon type and visibly marking missing original artwork as generic fallback.
