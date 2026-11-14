@@ -37,6 +37,19 @@ test("rectangular snip captures real pixels and stores original PNG in Guest VFS
     await node.decode();return {width:node.naturalWidth,height:node.naturalHeight};
   });
   expect(size).toEqual({width:150,height:120});
+  // A valid image header alone is not enough: at least one live desktop pixel
+  // must have been painted into the screenshot (not a fabricated empty canvas).
+  const alpha=await image.evaluate((img:HTMLImageElement)=>{
+    const canvas=document.createElement("canvas");
+    canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
+    const ctx=canvas.getContext("2d");if(!ctx)return 0;
+    ctx.drawImage(img,0,0);
+    const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let visible=0;for(let i=3;i<data.length;i+=4)if(data[i]!==0)visible++;
+    return visible;
+  });
+  expect(alpha).toBeGreaterThan(100);
+
   await app.getByRole("button",{name:"Save",exact:true}).click();
   const dialog=page.locator('[data-test-snipping-save-dialog] [data-test-file-dialog="save"]');
   await expect(dialog).toBeVisible();

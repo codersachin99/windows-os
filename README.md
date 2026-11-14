@@ -6,7 +6,7 @@ This is the new **React + TypeScript + Vite** home for the existing WindowsOS pr
 
 ## Source-backed Snipping Tool — 14 November 2026
 
-Original `src/modules/apps/snipping.js` is being ported in `packages/apps/snipping`, with source toolbar/menu modes, interactive rectangle/window/full-screen desktop selection, local DOM-to-image canvas rendering, and original PNG/JPG Save As through Guest virtual files. Exact base-theme original Snipping Tool SVG is imported. Original source treats Free-form Snip as disabled; it remains disabled in React. Cross-origin/iframe/video capture differences, exact screenshot pixel parity and original Win7-specific WebP art remain tracked. See [Snipping Tool source trace](migration/SNIPPING-SOURCE.md). CI is pending.
+Original `src/modules/apps/snipping.js` is being ported in `packages/apps/snipping`, with source toolbar/menu modes, interactive rectangle/window/full-screen desktop selection, browser-safe direct Canvas2D DOM rendering, and original PNG/JPG Save As through Guest virtual files. Exact base-theme original Snipping Tool SVG is imported. Original source treats Free-form Snip as disabled; it remains disabled in React. Cross-origin/iframe/video capture differences, exact screenshot pixel parity and original Win7-specific WebP art remain tracked. See [Snipping Tool source trace](migration/SNIPPING-SOURCE.md). CI is pending.
 
 ## Source-backed Google Chrome — 14 November 2026
 

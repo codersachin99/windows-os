@@ -14,14 +14,14 @@
 | Rectangular Snip: crosshair, red selection, 5px min re-arm | Portal selection overlay, normalized/clamped rectangle with min 5px |
 | Window Snip: identify hovered window, highlight it, click | `document.elementsFromPoint` finds window, highlight and capture |
 | Full-screen Snip: capture root OS canvas | `captureDesktop(root)` captures `.windows-desktop` |
-| Source `domToImage(rootEl)`, crop and render canvas | Local computed CSS + same-origin embedded SVG foreignObject DOM rasterization, crop to actual HTMLCanvasElement |
+| Source `domToImage(rootEl)`, crop and render canvas | Direct Canvas2D DOM rasterization (computed colors/gradients, text ranges, same-origin images, visible canvases), crop to actual HTMLCanvasElement |
 | Cancel: clear preview/result and reset | Restores initial message and clears active capture state |
 | Result Toolbar Save: `dialog-save`, PNG/JPG, default Capture | Shared `VirtualFileDialog` and real binary Guest VFS PNG/JPEG |
 | Window lock during save modal | `onRegisterClose` guards closing while Save As visible |
 
 ## Acceptance and gaps
 
-The virtual screenshot captures the WindowsOS DOM. It cannot honestly promise pixels belonging to cross-origin iframes, DRM, video or disallowed SVG foreignObject renderers. Those unsupported parts are not silently converted to a screenshot claim; renderer errors are reported. The source `domToImage` implementation is separate and original screenshot pixel equivalence must be checked later.
+The virtual screenshot draws currently visible WindowsOS DOM into a local Canvas2D; it does not use the Chromium-tainted SVG foreignObject output (reproduced `SecurityError` during pre-verify testing). Live text, CSS colors/gradients, borders, same-origin wallpaper/icon assets and canvases can be painted, while cross-origin iframes, DRM/video, CSS pseudo-elements, filters and advanced transforms cannot be reconstructed at exact native pixels. The original `domToImage` renderer remains distinct, so screenshot pixel equivalence needs side-by-side source verification.
 
 Original source window grows from `h:auto` to `h:300` when showing a result; shared WindowFrame retains provisional `370×185` until dynamic sizing or verified paired screenshots are available. The exact source Win7 icon is outstanding; full source virtual save-dialog implementation, focus modes and thumbnail styling require visual parity work.
 
