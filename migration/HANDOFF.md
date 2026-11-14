@@ -1,3 +1,9 @@
+## Media Player first CI regression repair — 2026-11-14
+
+- [Run #43584290348](https://github.com/codersachin99/windows-os/actions/runs/43584290348) **FAILURE** only in newly introduced Player Playwright expectations: 297/297 unit tests passed, 300/306 Chromium browser cases passed. Five failures were non-exact Play button selectors matching the containing Windows Media Player dialog/title and row; one mobile case incorrectly expected the source extended Volume slider that is intentionally hidden when source `showAllControls` sees a window width below 400px.
+- Player `.png` loaded from Guest VFS and rendered 4×3 pixels, and real `.wav` source file loaded from the original Explorer file association. The corrected test matches the exact Play button accessible name and branches the slider assertion on the original 400px source threshold, retaining audio mute/play/pause/stop assertions across desktop/mobile.
+- Media Player remains **in-progress**. Full opt-in rerun needed before declaring this source slice CI-tested. Original seven Win7 icon recovery is separately in run #43584985504 and will be verified in the next combined run after the test repair. Draft PR #1 remains unmerged, main unchanged, no release.
+
 ## Exact Windows 7 application artwork recovery — 2026-11-14
 
 - The GitHub connector supports `fetch_file({encoding:"base64"})` for binary original assets. Each Base64 payload was used in `create_blob({encoding:"base64"})`, and the resulting target Git blob SHA **exactly equaled** the pinned original SHA. Seven original Windows 7 WebP icons are now staged as immutable native Git blobs, not manually reconstructed artwork: `player.d45d301d.webp`, `snipping.2c25345c.webp`, `chrome.0eddc17a.webp`, `ie.66b8418d.webp`, `camera.5e0b513d.webp`, `recorder.519283f8.webp`, `photo.db6c5f81.webp`.

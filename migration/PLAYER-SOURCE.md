@@ -27,4 +27,4 @@ The exact original Win7 icon is now imported and registered. The currently imple
 
 Browser HTMLMediaElement codec support and playback/autoplay policy determine whether a file can actually play; no fake playback success is shown. Guest VirtualFileStore is used, never the host disk. The virtual Open dialog is generic and does not yet match original filter/layout exactly. Source File Explorer still opens pictures in Photo Viewer; music/video is newly associated with Media Player.
 
-**CI pending**. Draft PR #1 remains open, `main` unchanged, no release.
+First opt-in [CI #43584290348](https://github.com/codersachin99/windows-os/actions/runs/43584290348): 297/297 unit tests (59 files), 300/306 browser tests passed; six browser failures were test-selector ambiguity for `Play` inside the named Windows Media Player window and a responsive slider hidden as the pinned original requires below 400px. No source player behavioral failure was identified in this run. The repaired assertions need the next full opt-in run; original source visual parity remains pending. Draft PR #1 remains open, `main` unchanged, no release.

@@ -62,7 +62,7 @@ test("source Media Player starts stopped with source libraries, menus and disabl
   await expect(player).toContainText("Library");
   await expect(player).toContainText("Music");
   await expect(player).toContainText("No items in this library");
-  await expect(player.getByRole("button",{name:"Play"})).toBeDisabled();
+  await expect(player.getByRole("button",{name:"Play",exact:true})).toBeDisabled();
   await expect(player.getByRole("button",{name:"Stop"})).toBeDisabled();
   await expect(player.getByRole("button",{name:"Stream"})).toBeDisabled();
   await player.getByRole("button",{name:"Organize"}).click();
@@ -91,7 +91,7 @@ test("source Player opens a real PNG from Guest VFS and displays its pixels",asy
   await expect(image).toHaveJSProperty("naturalWidth",4);
   await expect(image).toHaveJSProperty("naturalHeight",3);
   await expect(player.locator('[data-test-player-row]')).toContainText("PlayerCanvas.png");
-  await expect(player.getByRole("button",{name:"Play"})).toBeEnabled();
+  await expect(player.getByRole("button",{name:"Play",exact:true})).toBeEnabled();
 });
 
 test("source Explorer associates WAV with Media Player; real audio supports mute and volume",async({page})=>{
@@ -112,14 +112,22 @@ test("source Explorer associates WAV with Media Player; real audio supports mute
   await player.getByRole("button",{name:"Mute"}).click();
   await expect(audio).toHaveJSProperty("muted",true);
   const volume=player.getByRole("slider",{name:"Volume"});
-  await volume.focus();
-  await volume.press("Home");
-  await volume.press("ArrowRight");
-  await expect(audio).toHaveJSProperty("volume",0.01);
-  await player.getByRole("button",{name:"Play"}).click();
+  const playerWidth=await player.locator('[data-test-player]').evaluate(node=>node.clientWidth);
+  if(playerWidth>=400){
+    await expect(volume).toBeVisible();
+    await volume.focus();
+    await volume.press("Home");
+    await volume.press("ArrowRight");
+    await expect(audio).toHaveJSProperty("volume",0.01);
+  }else{
+    // The original player.js hides extended controls below 400px.
+    await expect(volume).toHaveCount(0);
+    await expect(audio).toHaveJSProperty("volume",1);
+  }
+  await player.getByRole("button",{name:"Play",exact:true}).click();
   await expect(player.getByRole("button",{name:"Pause"})).toBeVisible({timeout:10000});
   await player.getByRole("button",{name:"Pause"}).click();
-  await expect(player.getByRole("button",{name:"Play"})).toBeVisible();
+  await expect(player.getByRole("button",{name:"Play",exact:true})).toBeVisible();
   await player.getByRole("button",{name:"Stop"}).click();
   await expect(audio).toHaveJSProperty("currentTime",0);
 });
