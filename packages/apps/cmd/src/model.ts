@@ -117,6 +117,14 @@ const SOURCE_CMD_COLOR_HELP=[
   "was when CMD.EXE started."
 ];
 
+/** Pinned cmd.js Ct() substitution. Expansion is nonrecursive, replaces
+ * only existing case-insensitive values, and keeps unknown %NAME% verbatim.
+ * The original Tt.run() expands once before parsing command operators. */
+export function sourceCmdExpandVariables(
+  input:string, lookup:(name:string)=>string|undefined
+):string{
+  return input.replace(/%([^%\s]+)%/g,(match,name:string)=>lookup(name)??match);
+}
 const commandNames=Object.keys(SOURCE_CMD_HELP).sort((a,b)=>a.localeCompare(b));
 
 
@@ -175,7 +183,13 @@ export class SourceCmdSession {
   async run(raw:string):Promise<SourceCmdResult>{
     const input=String(raw);
     const prompt=this.prompt;
-    const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(sourceCmdUnglue(input));
+    const expanded=sourceCmdExpandVariables(input,name=>{
+      const key=name.toUpperCase();
+      if(key==="ERRORLEVEL")return String(this.lastErrorLevel);
+      if(key==="CD")return this.cwd;
+      return this.environment.get(key)?.value;
+    });
+    const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(sourceCmdUnglue(expanded));
     const sourceName=(match?.[1]??"").toLowerCase();
     const name=SOURCE_CMD_ALIASES[sourceName]??sourceName;
     const rest=match?.[2]??"";

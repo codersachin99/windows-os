@@ -66,3 +66,9 @@ Pinned `legacy-win7/src/modules/apps/cmd.js` source modules `te` and `re` implem
 `COLOR` ports the original 16-entry Win7 `F` palette, background/foreground two-hex-digit encoding, reset without argument, errorlevel 1 for same colors, and source help on malformed input. The React console renders these styles across the black monospace container and retains them between commands. Added pure unit contracts for source palette, case-insensitive SET/PATH and source-derived defaults, plus browser acceptance for simulated environment and real CSS color transitions.
 
 This is an additional in-progress **source CMD command slice**, not full CMD feature parity. This commit intentionally omits `[run-ci]` while previous browser run #43643944920 is unresolved; new commands require next on-demand acceptance.
+
+## Source CMD percent-variable parsing Ct() — 15 November 2026
+
+Original `legacy-win7/src/modules/apps/cmd.js` `Ct(e,t)` expands `%([^%\\s]+)%` using the case-insensitive source `bt` environment before source `Tt.run()` command dispatch. The original `getEnv()` clones user env and appends dynamic `ERRORLEVEL` and `CD`. The React `sourceCmdExpandVariables` now ports that exact nonrecursive known-variable-only expansion behavior; unknown/invalid tokens remain untouched, while prompt/history continue displaying the user's **raw** typed input. New Vitest covers nonrecursive expansion, unknown keys and dynamic CD/ERRORLEVEL; browser test performs `SET` then `ECHO %SOURCE% from %CD%`.
+
+Do not mistake this for full `Tt.run` pipeline/redirect/batch parity: only environment expansion of a *single command* is supported. This follow-up intentionally has no `[run-ci]` until the previous CMD browser result is checked. Scope stays in-progress.

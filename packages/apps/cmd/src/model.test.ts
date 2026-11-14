@@ -3,7 +3,7 @@ import {
   VirtualFileStore,LegacyVolumeSession,sourceGuestMounts,
   ensureSourceGuestDirectories,SOURCE_GUEST_PROFILE
 } from "@windows-os/filesystem";
-import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue} from "./model";
+import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -266,5 +266,30 @@ describe("source cmd.js environment and console COLOR/SET/PATH",()=>{
     expect(invalid.style).toBeUndefined();
     expect((await session.run("color zz")).output).toContain("COLOR [attr]");
     expect((await session.run("color")).style).toBeNull();
+  });
+});
+
+describe("pinned cmd.js Ct() percent variable expansion before command parsing",()=>{
+  it("substitutes only valid, defined %VAR% references once",()=>{
+    const env=new Map([["TEST","123"],["NEST","%TEST%"]]);
+    const lookup=(name:string)=>env.get(name.toUpperCase());
+    expect(sourceCmdExpandVariables("%test%/%missing%/%NEST%",lookup))
+      .toBe("123/%missing%/%TEST%");
+    expect(sourceCmdExpandVariables("%BAD NAME%",lookup)).toBe("%BAD NAME%");
+    expect(sourceCmdExpandVariables("%%",lookup)).toBe("%%");
+  });
+  it("integrates SET values and per-command CD and ERRORLEVEL source variables",async()=>{
+    const {session}=await createShell();
+    await session.run("set Person=Guest");
+    const echoed=await session.run("echo Welcome %PERSON%");
+    expect(echoed.input).toBe("echo Welcome %PERSON%");
+    expect(echoed.output).toEqual(["Welcome Guest"]);
+    expect((await session.run("echo %UNKNOWN%")).output).toEqual(["%UNKNOWN%"]);
+    await session.run("cd Documents");
+    expect((await session.run("echo %CD%")).output)
+      .toEqual(["C:\\Users\\Guest\\Documents"]);
+    await session.run("notacommand");
+    expect((await session.run("echo %errorlevel%")).output).toEqual(["9009"]);
+    expect((await session.run("echo %errorlevel%")).output).toEqual(["0"]);
   });
 });

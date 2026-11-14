@@ -1,3 +1,9 @@
+## CMD original Ct percent variable expansion — 2026-11-15 (CI deferred)
+
+- Source `Ct()` expands known `%NAME%` tokens nonrecursively before command parsing; `Tt.getEnv()` adds dynamic `%CD%`/`%ERRORLEVEL%`. Ported pure helper and session integration with case-insensitive source `bt` environment from prior slice. Unknown variables remain literal; raw prompt history preserved. Vitest and real Guest CMD Playwright tests added.
+- Do not claim pipelines, redirects, batch handling or other commands are implemented. Previous [browser CI #43643944920](https://github.com/codersachin99/windows-os/actions/runs/43643944920) remained in progress at check. This commit does not auto-run CI.
+- Draft PR #1, main untouched, no release; 290 tracked original modules = 254 pending / 28 in progress / 8 implemented / 0 full screenshot-verified.
+
 ## CMD original SET PATH COLOR source slice — 2026-11-15 (CI deferred)
 
 - Ported pinned original cmd.js `bt` case-insensitive environment map, `Dt` known Guest variables, `SET`/prefix filtering/removal, `PATH` query/update/clear, `COLOR` original sixteen-hex Win7 palette. Colors are wired to actual CMD component CSS. Host-specific source env (hostname etc.) are intentionally not invented.

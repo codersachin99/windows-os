@@ -160,6 +160,10 @@ test("original Command Prompt first source shell slice uses live Guest directory
   await input.fill("set SOURCE");
   await input.press("Enter");
   await expect(window.locator('[data-test-cmd-output]').last()).toHaveText("source=test");
+  await input.fill("echo %SOURCE% from %CD%");
+  await input.press("Enter");
+  await expect(window.locator('[data-test-cmd-output]').last()).toHaveText(
+    "test from C:\\Users\\Guest\\Documents");
   await input.fill("color fc");
   await input.press("Enter");
   await expect(window.locator("[data-test-cmd-container]"))
