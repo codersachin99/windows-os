@@ -328,7 +328,7 @@
         "apps/web/public/assets/images/snipping-base.9d1d8a3f.svg",
         "migration/SNIPPING-SOURCE.md"
       ],
-      "verification": "CI pending; source DOM canvas selection and guest VFS save under test; screenshot rasterization and Win7 icon/full parity not verified"
+      "verification": "Integrated CI #43583547737 PASS on 5c1de35: 293/293 unit tests, 300/300 desktop/mobile Chromium, 44 source-art audits, TS + Vite build. Not full source parity: Win7 icon, window-mode screenshot and original domToImage remain unverified."
     },
     {
       "source": "src/modules/apps/stickynotes.js",

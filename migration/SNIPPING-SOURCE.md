@@ -25,4 +25,4 @@ The virtual screenshot draws currently visible WindowsOS DOM into a local Canvas
 
 Original source window grows from `h:auto` to `h:300` when showing a result; shared WindowFrame retains provisional `370×185` until dynamic sizing or verified paired screenshots are available. The exact source Win7 icon is outstanding; full source virtual save-dialog implementation, focus modes and thumbnail styling require visual parity work.
 
-Snipping stays **in-progress** even when implemented core tests pass. Current CI pending, PR #1 draft, main untouched, no release.
+Snipping stays **in-progress** for original feature/pixel parity even though the implemented slice passed [full opt-in CI #43583547737](https://github.com/codersachin99/windows-os/actions/runs/43583547737): 293/293 unit tests (58 files), 300/300 browser cases, 44 exact source image audits, TypeScript and Vite build. Original pixel fidelity, source Win7 icon and native renderer are outstanding. PR #1 draft, main untouched, no release.
