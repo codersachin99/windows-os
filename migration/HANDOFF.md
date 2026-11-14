@@ -1,3 +1,8 @@
+## Expanded target-only visual capture SUCCESS — 2026-11-14
+
+- [Run #43591033519 visual-capture job](https://github.com/codersachin99/windows-os/actions/runs/43591033519) **SUCCESS** at e1697bb: **40/40 target screenshots** (20 desktop + 20 mobile), including source shared Details metadata, Tiles metadata and Message Confirm. 0 screenshot errors. Artifact [14112935185](https://github.com/codersachin99/windows-os/actions/runs/43591033519/artifacts/14112935185).
+- Manifest **sourceConfigured:false, sourceCaptured:0, targetOnlyCaptured:30, parityStatus:not-assessed**. No legacy source token. Actual paired original screenshot comparison remains blocked and no source module is fully parity verified. The other full CI job within this same run is separate and was still in progress at this checkpoint.
+
 ## Source messages.js green functional CI — 2026-11-14
 
 - [Run #43590165232](https://github.com/codersachin99/windows-os/actions/runs/43590165232) **SUCCESS** at commit 4d87b13: 308 unit tests (63 files), 322 desktop/mobile browser cases, 53 original-image audits, TypeScript and Vite build. Original confirm identifiers/default No/Escape and real VFS Delete/Recycle Bin behavior passed. Source messages.js remains In Progress because global Vuex messages registry, Asterisk audio, source window chrome and paired screenshot parity are not migrated.

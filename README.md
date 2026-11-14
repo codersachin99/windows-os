@@ -1,3 +1,7 @@
+## Expanded source UI screenshots captured — 14 November 2026
+
+The dedicated visual workflow captured **40 target-only screenshots** across desktop and mobile, including new Details, Tiles and confirmation states, with zero capture errors. [Visual artifact 14112935185](https://github.com/codersachin99/windows-os/actions/runs/43591033519/artifacts/14112935185). No original-source screenshot was captured because the optional read token was absent; pixel parity is therefore not assessed.
+
 ## Source message-dialog tested checkpoint — 14 November 2026
 
 [Full CI #43590165232](https://github.com/codersachin99/windows-os/actions/runs/43590165232) passed 308 unit/322 desktop-mobile browser/53 original-art checks for the source message error/confirm/progress UI and real Explorer/Recycle Bin deletion. The original warning/error WebP icons are separately imported byte-exact and are undergoing combined full CI and target-only visual baseline verification #43591033519. Complete original global message state and screenshot parity remain outstanding; see [source trace](migration/MESSAGES-SOURCE.md).

@@ -30,3 +30,10 @@ The original Chrome T-Rex, native browser restrictions, real microphone/camera h
 - Three target-only scenes have been authored in scripts/capture-visual-parity.mjs: computer-details-metadata, computer-tiles-metadata, computer-message-confirm. Each creates a real Guest VFS folder before capturing. Details selects original View menu, Tiles uses original default view, and Confirm opens the source-style modal.
 - These scenes will add six target screenshots (desktop/mobile) to the prior 34. This is planned evidence, **not yet an observed capture result**. They remain sourceComparisonEligible:false until original pinned Vue fixtures and source server are available.
 - Run only with the gated [capture-visual] workflow; do not treat these screenshots as original pixel-parity verification.
+
+## Actual expanded visual workflow result — 2026-11-14
+
+- [Visual job #43591033519](https://github.com/codersachin99/windows-os/actions/runs/43591033519) **SUCCESS** for [capture-visual] commit e1697bb. **40/40** target screenshots captured: 20 desktop + 20 mobile, including all three new source listview/message scenes. 0 capture errors.
+- Artifact [14112935185](https://github.com/codersachin99/windows-os/actions/runs/43591033519/artifacts/14112935185), approx. 19.7MB, contains the 40 scene PNGs and manifest.
+- Manifest reports sourceConfigured:false, sourceCaptured:0, targetOnlyCaptured:30, parityStatus:not-assessed. Original legacy read token was absent. No original/React pixel-diff evidence exists. Do not claim complete source parity.
+- The same run's independent browser-and-contracts CI job was still in progress at this documentation checkpoint. Its result must be checked separately.
