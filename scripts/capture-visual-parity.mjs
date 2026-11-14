@@ -17,7 +17,10 @@ const SHARED_SCENES = ["guest-desktop", "computer-root", "computer-organize", "c
 // pinned Vue runtime. Capture React evidence now, never fabricate source pairs.
 const TARGET_ONLY_SCENES = [
   "computer-system-drive", "computer-search-results", "computer-new-folder",
-  "recycle-bin-populated", "recycle-bin-search-results"
+  "recycle-bin-populated", "recycle-bin-search-results",
+  // React-only app baselines until original source runtime pairing is proven.
+  "calc-initial", "notepad-initial", "chrome-new-tab", "ie-home",
+  "player-initial", "snipping-initial", "recorder-initial"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -102,6 +105,23 @@ async function prepareScene(page, kind, scene) {
   // Source selectors and source filesystem mutations require an actual pinned
   // legacy run. Until tested, these additional fixtures are React-only.
   if (kind === "target" && TARGET_ONLY_SCENES.includes(scene)) {
+    const appScenes = {
+      "calc-initial": "calc",
+      "notepad-initial": "notepad",
+      "chrome-new-tab": "chrome",
+      "ie-home": "ie",
+      "player-initial": "player",
+      "snipping-initial": "snipping",
+      "recorder-initial": "recorder"
+    };
+    const appId = appScenes[scene];
+    if (appId) {
+      await page.getByRole("button", { name: "Open Start menu" }).click();
+      await page.locator('[data-test-program="' + appId + '"]').click();
+      await page.locator('[data-test-window="' + appId + '"]')
+        .waitFor({ state: "visible", timeout: 15000 });
+      return;
+    }
     if (scene === "recycle-bin-search-results") {
       const bin = await openWindow(page, kind, "bin");
       const search = bin.getByRole("searchbox", { name: "Search files" });

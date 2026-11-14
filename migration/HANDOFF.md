@@ -1,3 +1,9 @@
+## Target-only visual baselines for seven migrated apps — 2026-11-14
+
+- scripts/capture-visual-parity.mjs extended with seven React-only stable initial-window scenes: calc-initial, notepad-initial, chrome-new-tab, ie-home, player-initial, snipping-initial, recorder-initial. Captures use both desktop 1920x1080 and Pixel 7 browser profiles, a fixed 2026-11-11 clock and the actual WindowsOS Start Menu. This produces 14 additional React baseline screenshots on top of 20 prior target scenes.
+- The source/target comparable scenes are NOT expanded: source browser navigation for these seven apps has not been proven against the pinned original. Manifest marks these as targetOnly and sourceComparisonEligible:false, never a source-equivalence claim.
+- Intentionally run the gated visual-capture workflow using [capture-visual] only (not a full CI marker), preserving screenshot artifacts. GitHub Actions compares actual pinned original only if the existing optional LEGACY_SOURCE_READ_TOKEN is supplied; otherwise it reports target-only evidence with parityStatus:not-assessed.
+
 ## Original Media Player & Windows 7 WebP verification — 2026-11-14
 
 - [Combined full opt-in CI #43585262479](https://github.com/codersachin99/windows-os/actions/runs/43585262479) **SUCCESS** on commit 08a5e8e: 298/298 Vitest across 60 files, 308/308 desktop/mobile Chromium cases, 52 original byte-exact asset checks, TypeScript, Contacts audit and Vite production build. The Media Player initial E2E name/slider selectors were fixed before this run. Source Player remains **in-progress**, because the single-file view, source playlist, media filters and original pixel-parity are not fully ported.
