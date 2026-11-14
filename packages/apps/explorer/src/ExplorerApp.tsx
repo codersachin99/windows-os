@@ -159,6 +159,13 @@ export function ExplorerApp({
   const classicSourceSearch = Boolean(initialFind || (initialSourceSearch &&
     initialSourceSearch.namePattern !== null));
   const visible = found ?? session.visible();
+  // The pinned Computer source only displays item.toggle checkboxes on
+  // a touch device after one or more items are selected.
+  const sourceIsTouch = typeof window !== "undefined" && (
+    window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0
+  );
+  const showSourceCheckboxes = theme === "win7" &&
+    sourceIsTouch && state.selected.length > 0;
   const selected = state.items.find(item => item.uri === state.selected[0])
     ?? found?.find(item => item.uri === state.selected[0]);
   const sourceGuest = !isBin && volume?.pathConfig.root === SOURCE_COMPUTER_ROOT;
@@ -678,6 +685,7 @@ export function ExplorerApp({
           {visible.map(item => <SourceListViewItem key={item.uri}
             itemKey={item.uri} itemType={item.type} itemLabel={item.name}
             active={state.selected.includes(item.uri)}
+            toggle={showSourceCheckboxes ? () => session.select(item.uri,true) : undefined}
             draggable={!isBin}
             onDragStart={event => startDrag(event, item.uri)}
             onDragEnd={endDrag}

@@ -37,6 +37,9 @@
       "@windows-os/ui/message": [
         "packages/ui/src/sourceMessage.tsx"
       ],
+      "@windows-os/ui/checkbox": [
+        "packages/ui/src/sourceItemCheckbox.tsx"
+      ],
       "@windows-os/ui/rename": [
         "packages/ui/src/sourceListItemRename.tsx"
       ],

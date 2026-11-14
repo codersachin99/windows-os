@@ -1,3 +1,7 @@
+## Original touch-only Explorer selection checkboxes — 14 November 2026
+
+Source `fa65` checkbox rendering is now shared in packages/ui and connected to the Win7 Explorer/Recycle Bin multi-selection model. The original Computer only displays checkboxes on touch devices after a selection starts; the migrated component follows that rule and preserves source ARIA attributes and pointer-event isolation. Pure and desktop/mobile browser tests added; original pixel parity remains pending. See [source trace](migration/LISTITEM-INTERACTIONS-SOURCE.md).
+
 ## Win7 Explorer source inline rename and item clickout — 14 November 2026
 
 The pinned original 0616 list-item now supports 30-character inline F2/toolbar/context Rename with Enter or blur commit, and Escape cancellation. Original source 252b item clickout excludes the active popup. A double-click focus-loss reset prevents opening a folder after dismissing a Delete confirmation. Virtual filesystem writes use the existing Guest store, not the host. The preceding 0616 CI identified two such interaction regressions; the combined fix has new unit and desktop/mobile E2E tests and awaits verification. See [source trace](migration/LISTITEM-INTERACTIONS-SOURCE.md). Full original UI parity remains pending.

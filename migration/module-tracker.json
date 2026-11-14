@@ -108,7 +108,12 @@
         "packages/filesystem/src/transfer.ts",
         "packages/filesystem/src/drag.ts",
         "tests/e2e/explorer-drag.spec.ts",
-        "migration/EXPLORER-DRAGDROP.md"
+        "migration/EXPLORER-DRAGDROP.md",
+        "packages/ui/src/sourceItemCheckbox.tsx",
+        "packages/ui/src/sourceItemCheckbox.css",
+        "packages/ui/src/sourceItemCheckbox.test.tsx",
+        "tests/e2e/listview-source-checkbox.spec.ts",
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md"
       ]
     },
     {
@@ -180,9 +185,13 @@
         "packages/ui/src/sourceListItemRename.tsx",
         "packages/ui/src/sourceListItemRename.test.tsx",
         "tests/e2e/listview-source-rename.spec.ts",
-        "migration/LISTITEM-INTERACTIONS-SOURCE.md"
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceItemCheckbox.tsx",
+        "packages/ui/src/sourceItemCheckbox.css",
+        "packages/ui/src/sourceItemCheckbox.test.tsx",
+        "tests/e2e/listview-source-checkbox.spec.ts"
       ],
-      "verification": "CI #43603371340: 313 unit passed and 324/326 browser passed, 2 message-confirm cases failed because pending double-click leaked across modal focus. Focus-loss reset added; new CI pending. Original source inline 30-char rename and clickout plugin integrated in Win7 Explorer; full screenshot parity and optional checkbox still incomplete."
+      "verification": "Exact 0616 inline rename/clickout CI #43604884502 still running; source fa65 touch-only checkbox selection now staged for subsequent verification; optional listview item interactions and screenshot parity not fully verified."
     },
     {
       "source": "src/modules/apps/listview-tiles.js",
@@ -202,9 +211,13 @@
         "packages/ui/src/sourceListItemRename.tsx",
         "packages/ui/src/sourceListItemRename.test.tsx",
         "tests/e2e/listview-source-rename.spec.ts",
-        "migration/LISTITEM-INTERACTIONS-SOURCE.md"
+        "migration/LISTITEM-INTERACTIONS-SOURCE.md",
+        "packages/ui/src/sourceItemCheckbox.tsx",
+        "packages/ui/src/sourceItemCheckbox.css",
+        "packages/ui/src/sourceItemCheckbox.test.tsx",
+        "tests/e2e/listview-source-checkbox.spec.ts"
       ],
-      "verification": "CI #43603371340: 313 unit passed and 324/326 browser passed, 2 message-confirm cases failed because pending double-click leaked across modal focus. Focus-loss reset added; new CI pending. Original source inline 30-char rename and clickout plugin integrated in Win7 Explorer; full screenshot parity and optional checkbox still incomplete."
+      "verification": "Exact 0616 inline rename/clickout CI #43604884502 still running; source fa65 touch-only checkbox selection now staged for subsequent verification; optional listview item interactions and screenshot parity not fully verified."
     },
     {
       "source": "src/modules/apps/magnifier.js",

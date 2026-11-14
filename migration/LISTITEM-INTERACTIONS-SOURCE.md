@@ -23,3 +23,12 @@
 - The original 0616 optional checkbox toggle/item.toggle, long-press source menus, clickout Vue directive lifecycle for arbitrary hosted components, shortcut CSS theme art, original newFullName extension helper, source popupItem registration and exact screenshot pixel parity remain open.
 - The standalone source runtime vue-click-helper and plugin-clickout modules are now **in-progress**, not marked completed, as only their relevant item interactions are ported.
 - Do not infer full parity from tests or target-only screenshot captures. PR #1 stays draft and main unchanged; no release.
+
+## Source fa65 touch-only multi-selection checkbox — 14 November 2026
+
+- The immutable original shared chunk `src/modules/chunks/shared~bsod~games~main.js` (Git blob `ecca9d786763c6be07df543e94701fe057e545ad`) exports webpack module **fa65**. Its root is a `span.winui-checkbox.item-checkbox` with `role=checkbox`, `aria-checked`, `aria-label`, `data-test-item-checkbox`, plus hidden checkbox input and label; it stops pointer/mouse/touch/double-click bubbling, and emits `input: !value` when clicked.
+- The pinned original `src/modules/apps/computer.js` (Git blob `47aa521237c10f5e6763df37a1d8dcd73330f84f`) computes `showCheckboxes` as `isTouch && canMultiSelect && selection.length > 0`; item.toggle invokes `session.toggle(uri)` only then.
+- `packages/ui/src/sourceItemCheckbox.tsx` ports the source class, ARIA and event suppression, checked state and toggle callback. A keyboard Space/Enter toggle is an intentional accessibility improvement. `packages/ui/src/sourceListViewItem.tsx` renders this optionally when `toggle` exists, before the icon and text, as in the source.
+- React Explorer only enables source checkboxes on Win7 touch devices after at least one item is selected; a second checkbox toggles the existing Guest filesystem selection instead of navigating/opening a folder. Tiles and Details CSS explicitly reserve an extra checkbox slot, including compact mobile details columns. No host filesystem access is added.
+- Unit checks cover source checkbox class, attributes and checked/unselected representation; desktop/mobile Playwright creates two real folders and verifies conditional display, checked flags, multi-selection, deselection, keyboard accessibility and unchanged directory location.
+- The source's alternative theme artwork, exact hitbox/pixel sizing, long-tap menus and full source screenshot parity remain unverified; the shared source chunk contains unrelated modules and must not be marked fully migrated.

@@ -1,4 +1,5 @@
 import {useEffect,useRef,type ButtonHTMLAttributes,type MouseEvent as ReactMouseEvent,type ReactNode} from "react";
+import {SourceItemCheckbox} from "./sourceItemCheckbox";
 
 /** Original 0616 uses v-tap:400 through vue-click-helper. The first click
  * selects immediately; only the second click inside the 400ms window opens.
@@ -18,13 +19,14 @@ export interface SourceListViewItemProps
   itemType:string;
   itemLabel:string;
   active?:boolean;
+  toggle?:()=>void;
   onClickOutside?:(event:PointerEvent)=>void;
   popupSelector?:string;
   children:ReactNode;
 }
 export function SourceListViewItem({
   itemKey,itemType,itemLabel,active=false,className="",title,
-  children,onClick,onDoubleClick,onBlur,onClickOutside,popupSelector,...buttonProps
+  children,onClick,onDoubleClick,onBlur,toggle,onClickOutside,popupSelector,...buttonProps
 }:SourceListViewItemProps){
   const itemRef=useRef<HTMLButtonElement>(null);
   const previousClick=useRef<number|null>(null);
@@ -91,6 +93,7 @@ export function SourceListViewItem({
     data-test-listview-item={itemType}
     className={"listview__item"+(active?" is-active":"")+(className?" "+className:"")}
     onClick={activate}>
+    {toggle && <SourceItemCheckbox checked={active} label={itemLabel} onToggle={toggle}/>}
     {children}
   </button>;
 }

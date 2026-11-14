@@ -15,3 +15,6 @@ export type { SourceListViewItemProps, SourceListItemHighlightPart } from "./sou
 
 export {SourceListItemRename,SOURCE_LIST_RENAME_LIMIT} from "./sourceListItemRename";
 export type {SourceListItemRenameProps} from "./sourceListItemRename";
+
+export {SourceItemCheckbox} from "./sourceItemCheckbox";
+export type {SourceItemCheckboxProps} from "./sourceItemCheckbox";

@@ -1,3 +1,9 @@
+## Source fa65 touchscreen selection checkbox — 2026-11-14 (CI pending)
+
+- Found source fa65 in pinned shared~bsod~games~main.js blob `ecca9d786763c6be07df543e94701fe057e545ad`; source Computer blob `47aa521237c10f5e6763df37a1d8dcd73330f84f` shows checkboxes only on touch when selection nonempty.
+- Shared `SourceItemCheckbox` renders exact source aria/data-test markers and stops bubbling to outer list item; Explorer uses the existing Guest session `select(uri,true)` for real multi-selection, no invented files. Responsive Tiles/Details grid rules account for the additional leading checkbox. Unit and desktop/mobile e2e tests staged.
+- This increment is not yet CI-tested; previous inline rename/clickout run [#43604884502](https://github.com/codersachin99/windows-os/actions/runs/43604884502) is still active. Source inventory unchanged: 290 total, 257 pending / 25 in-progress / 8 implemented / 0 completely parity-verified. Draft PR #1 unmerged; main unchanged, no release.
+
 ## Source 0616 inline rename / clickout and modal safety repair — 2026-11-14 (combined CI pending)
 
 - Previous [CI #43603371340](https://github.com/codersachin99/windows-os/actions/runs/43603371340) **FAILURE** limited to two source-message desktop/mobile E2E cases: 313/313 unit tests passed, 324/326 browser cases passed. On quick re-click after No, the item double-click timer erroneously carried across the Delete modal and opened the folder, disabling Delete.

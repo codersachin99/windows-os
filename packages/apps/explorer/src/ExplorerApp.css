@@ -112,7 +112,8 @@
  .explorer-command { gap:3px; }
  .explorer-command button { padding:4px; }
  .explorer-list.has-details .explorer-item { grid-template-columns:minmax(120px,1fr) 70px; }
- .explorer-list.has-details .explorer-item > span:nth-child(3),.explorer-list.has-details .explorer-item > span:nth-child(4) { display:none; }
+ .explorer-list.has-details .explorer-item > .listview__item-extra:nth-last-child(2),
+ .explorer-list.has-details .explorer-item > .listview__item-extra:nth-last-child(3) { display:none; }
  .explorer-columns { grid-template-columns:minmax(120px,1fr) 70px; }
  .explorer-columns > .listview__header-column:nth-child(2),.explorer-columns > .listview__header-column:nth-child(3) { display:none; }
 }
@@ -371,3 +372,32 @@
   padding:0 2px;background:#fff;color:#152535;border:1px solid #699ccd;
   font:inherit;line-height:20px;text-align:left;
 }
+
+/* Source fa65 checkboxes are shown only for touch multi-selection.
+ * Preserve our responsive Details/Tiles grids when an extra leading span
+ * is inserted ahead of each item icon and label.
+ */
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox) {
+  grid-template-columns:24px 36px minmax(0,1fr);
+  gap:3px;
+}
+.explorer-list.has-tiles .explorer-item > .item-checkbox {
+  grid-column:1;grid-row:1 / span 3;align-self:center;
+}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox) .listview__item-iconbox{
+  grid-column:2;
+}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox) .listview__item-label{
+  grid-column:3;
+}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox)
+  .listview__item-extra:nth-child(4){grid-column:3;grid-row:2;}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox)
+  .listview__item-extra:nth-child(5){grid-column:3;grid-row:3;}
+.explorer-list.has-details .explorer-item > .item-checkbox{
+  grid-column:1;grid-row:1;justify-self:start;z-index:1;
+}
+.explorer-list.has-details .explorer-item:has(> .item-checkbox)
+  .listview__item-iconbox{margin-left:24px;}
+.explorer-list.has-details .explorer-item:has(> .item-checkbox)
+  .listview__item-label{padding-left:53px;}
