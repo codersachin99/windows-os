@@ -88,8 +88,12 @@ export function CameraApp({onClose,onRegisterClose}:CameraAppProps){
         }
       }
     };
-    void start();
+    // React StrictMode replays mount effects during development. Deferring
+    // the hardware request by one task lets the discarded effect cancel it,
+    // avoiding a duplicate getUserMedia call / permission prompt.
+    const startup=window.setTimeout(()=>{void start();},0);
     return ()=>{
+      window.clearTimeout(startup);
       generation.current++;
       clearStream();
     };
