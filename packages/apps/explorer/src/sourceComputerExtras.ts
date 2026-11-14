@@ -1,4 +1,4 @@
-import { getParentDirectory, sourceSizeFromBytes, type FileEntry } from "@windows-os/filesystem";
+import { sourceComputerSearchLocation, sourceSizeFromBytes, type FileEntry, type LegacyVolumeSession } from "@windows-os/filesystem";
 import { sourceRenameParts } from "@windows-os/ui/rename";
 import type { ExplorerViewMode } from "./model";
 
@@ -20,7 +20,7 @@ export function sourceComputerFileType(entry:Pick<ComputerFile,"name"|"type">):s
  * legacy 4cca.getSizeFrom formatting is a separately tracked parity gap.
  */
 export function sourceComputerItemExtras(
-  entry:ComputerFile,view:ExplorerViewMode,isSearch=false
+  entry:ComputerFile,view:ExplorerViewMode,isSearch=false,volume:LegacyVolumeSession|null=null
 ):string[]{
   if(view!=="details"&&view!=="tiles"&&view!=="content")return [];
   const date=new Date(entry.mtime).toLocaleString();
@@ -32,7 +32,7 @@ export function sourceComputerItemExtras(
   if(isSearch){
     // Source Content search replaces ordinary extras with date, location,
     // and (for files only) size; en-US keys date-modified-value/size-value.
-    const location=getParentDirectory(entry.uri);
+    const location=sourceComputerSearchLocation(entry.uri,volume);
     return directory?["Date modified: "+date,location]:
       ["Date modified: "+date,location,"Size: "+size];
   }

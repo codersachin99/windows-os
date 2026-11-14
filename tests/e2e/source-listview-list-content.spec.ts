@@ -58,3 +58,21 @@ test("pinned Computer Content file extras use source date/type/size order",async
   await file.click();
   await expect(file).toHaveClass(/is-selected/);
 });
+
+test("source search Content location resolves actual mounted C: rather than internal Guest URI",async({page})=>{
+  const win=await openComputer(page);
+  await win.getByRole("button",{name:"System (C:)",exact:true}).click();
+  await win.locator('input[aria-label="Upload files"]').setInputFiles({
+    name:"SourceLocationCheck.txt",mimeType:"text/plain",buffer:Buffer.from("location")
+  });
+  await expect(win.locator('[data-test-explorer-item="SourceLocationCheck.txt"]')).toBeVisible();
+  await setSourceView(win,"Content");
+  await win.getByRole("searchbox",{name:"Search files"}).fill("SourceLocationCheck");
+  await expect(win.getByText("1 found",{exact:true})).toBeVisible();
+  const extras=win.locator('[data-test-explorer-item="SourceLocationCheck.txt"]')
+    .locator('[data-test-source-content-extras] .listview__item-extra');
+  await expect(extras).toHaveCount(3);
+  await expect(extras.nth(0)).toContainText("Date modified:");
+  await expect(extras.nth(1)).toHaveText("C:\\");
+  await expect(extras.nth(2)).toHaveText("Size: 8 bytes");
+});

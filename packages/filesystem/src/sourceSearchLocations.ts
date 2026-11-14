@@ -1,4 +1,4 @@
-import { normalizeFileUri, SOURCE_GUEST_PROFILE, type LegacyVolumeSession } from "./index";
+import { getParentDirectory, normalizeFileUri, SOURCE_GUEST_PROFILE, type LegacyVolumeSession } from "./index";
 
 /**
  * Original Computer listSearch (2e2c.b + computer.js): when the query's in=
@@ -33,4 +33,17 @@ export function sourceSearchLocations(
       label: initialScope.split("/").pop() || initialScope });
   }
   return locations;
+}
+
+/** Source 4cca.getPathFromDisk used by original computer.js.getSearchExtras.
+ * Original search extras use the parent URI via 4cca.getParent and convert
+ * mounted paths into a drive-letter location, then fall back to that parent
+ * URI when no disk matches. Reuse existing strictly rooted disk mapping so
+ * a similarly named path outside the mounted drive cannot be spoofed.
+ */
+export function sourceComputerSearchLocation(
+  fileUri:string, volume:LegacyVolumeSession|null
+):string{
+  const parent=getParentDirectory(fileUri);
+  return volume?.toWindowsPath(parent)??parent;
 }

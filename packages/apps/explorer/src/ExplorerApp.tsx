@@ -721,7 +721,7 @@ export function ExplorerApp({
                         {isBin && item.originalPath ? item.originalPath.split("/").pop()
                           : found !== null ? sourceMarkedName(item.name, foundHighlights[item.uri]) : item.name}
                       </span>}
-                  {sourceComputerItemExtras(item, "content", found !== null).map((value,index) =>
+                  {sourceComputerItemExtras(item, "content", found !== null, volume).map((value,index) =>
                     <SourceListViewExtra key={index}>{value}</SourceListViewExtra>)}
                 </span>
               : renamingUri === item.uri

@@ -1,5 +1,6 @@
 import {describe,expect,it} from "vitest";
 import {sourceComputerFileType,sourceComputerItemExtras} from "./sourceComputerExtras";
+import {LegacyVolumeSession,VirtualFileStore,sourceGuestMounts,SOURCE_SYSTEM_DISK} from "@windows-os/filesystem";
 
 const file={
   uri:"/Users/Guest/Documents/Project.v1.TXT",
@@ -41,5 +42,16 @@ describe("pinned computer.js contentItems and getFileType",()=>{
       "Date modified: "+date,"/Users/Guest/Documents"
     ]);
     expect(sourceComputerItemExtras(file,"details",true)).toEqual([date,"TXT File","42 bytes"]);
+  });
+
+  it("uses mounted C: drive locations in source Content search only",()=>{
+    const volume=new LegacyVolumeSession(new VirtualFileStore(),sourceGuestMounts());
+    const mounted={...file,uri:SOURCE_SYSTEM_DISK+"/Users/Guest/Documents/Project.v1.TXT"};
+    expect(sourceComputerItemExtras(mounted,"content",true,volume)).toEqual([
+      "Date modified: "+date,"C:\\Users\\Guest\\Documents","Size: 42 bytes"
+    ]);
+    expect(sourceComputerItemExtras(mounted,"content",false,volume)).toEqual([
+      date,"TXT File","42 bytes"
+    ]);
   });
 });

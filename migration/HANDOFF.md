@@ -1,3 +1,9 @@
+## Source mounted C: path in Content search results — 2026-11-14 (CI pending)
+
+- Added pure `sourceComputerSearchLocation` to shared filesystem search locations: original pinned `computer.js.getSearchExtras` + `4cca.getPathFromDisk` shows the parent as a Windows drive path when backed by runtime mounted disks, else the source raw parent URI. Used existing validated `LegacyVolumeSession.toWindowsPath` to avoid matching unrelated `drive01` and other unmounted paths.
+- Wired Explorer Content search to actual volume; added filesystem and Explorer unit checks plus one desktop/mobile real C: upload/search browser case. Does not change ordinary Content or other view modes. **CI not yet run for this new slice**; preceding `[run-ci]` for formatter commit 6ce1129 is independent and must finish first.
+- Full pixel-level original parity and alternate-locale search labels remain pending. Inventory unchanged (290 = 255 Pending / 27 In Progress / 8 Implemented / 0 full source parity). Keep PR #1 draft, `main` untouched, no release.
+
 ## Exact shared 4cca.getSizeFrom source formatter — 2026-11-14 (CI pending)
 
 - Pinned original module `4cca` (Git blob `a3edd490a0f4e23052f2a3a74a694c8991911c56`) exports byte-size formatting as `0 bytes`, `N bytes`, and binary KB/MB/GB/TB with one decimal. Ported **without altering source rounding or units** into reusable `@windows-os/filesystem` helper `sourceSizeFromBytes`; Explorer and Bin metadata use it in Details, Tiles, Content and search extras.

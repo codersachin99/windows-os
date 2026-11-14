@@ -1,3 +1,7 @@
+## Original Content-search mounted-drive paths — 14 November 2026
+
+Win7 Explorer Content search now converts source-mounted Guest file locations into validated Windows drive-letter paths (for example, `C:\\Users\\Guest\\Documents`) and retains the original raw-parent fallback outside mounted disks. The adapter is reusable under the filesystem package, with unit contracts and a new desktop/mobile real-file search case. The change is staged without CI until the preceding formatter run is resolved; see [source trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
+
 ## Pinned original 4cca shared file-size formatter — 14 November 2026
 
 The original WindowsOS byte formatter is now a reusable filesystem utility, used across Explorer/Recycle Bin Listview Details/Tiles/Content and search extras. It preserves source units (`bytes`, `KB`, `MB`, `GB`, `TB`), 1024-byte thresholds and one-decimal display. Unit tests and desktop/mobile real Guest upload assertions cover exact 9-byte and 2048-byte outputs. The preceding metadata source slice passed [full CI #43608849980](https://github.com/codersachin99/windows-os/actions/runs/43608849980); this formatter change requires its own opt-in verification. See [migration trace](migration/LISTVIEW-LIST-CONTENT-SOURCE.md).
