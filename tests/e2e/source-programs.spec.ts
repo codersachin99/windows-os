@@ -28,7 +28,14 @@ test("Explorer opens migrated CMD/Notepad shortcuts and rejects genuinely nonpor
   await expect(explorer.locator('[data-test-explorer-item="Notepad.lnk"]')).toBeVisible();
 
   await explorer.locator('[data-test-explorer-item="Command Prompt.lnk"]').dblclick();
-  await expect(page.locator('[data-test-window="cmd"] [data-test-cmd-input]')).toBeVisible();
+  const cmd=page.locator('[data-test-window="cmd"]');
+  const cmdInput=cmd.locator('[data-test-cmd-input]');
+  await expect(cmdInput).toBeVisible();
+  // A newly opened source window sits above Explorer; close it before
+  // clicking an icon in the covered Explorer list.
+  await cmdInput.fill("exit");
+  await cmdInput.press("Enter");
+  await expect(cmd).toHaveCount(0);
   await explorer.locator('[data-test-explorer-item="WordPad.lnk"]').dblclick();
   await expect(explorer.getByRole("alert")).toContainText("WordPad application has not been migrated yet");
   await expect(page.locator('[data-test-window="wordpad"]')).toHaveCount(0);

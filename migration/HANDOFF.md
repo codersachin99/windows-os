@@ -1,3 +1,10 @@
+## Browser CMD overlay regression diagnosis — 2026-11-15
+
+- Source CMD [CI #43642780902](https://github.com/codersachin99/windows-os/actions/runs/43642780902) **FAILED 2 Playwright cases** (desktop/mobile) only in the Explorer open-shortcuts test: `locator.dblclick` timed out after CMD was successfully launched. The running CMD window overlaps Explorer, so the next `WordPad.lnk` row isn't clickable until the CMD window is closed.
+- Updated `tests/e2e/source-programs.spec.ts` to verify CMD input, execute original `EXIT`, assert the CMD window disappears, then double-click the still-unported WordPad shortcut and check its expected rejection. This checks actual source window lifecycle rather than forcing clicks through an overlapping window.
+- Prior [CI #43642780902](https://github.com/codersachin99/windows-os/actions/runs/43642780902) passed TS, unit, source audits and production build. Recent [source command commit 7b0f6c8](https://github.com/codersachin99/windows-os/commit/7b0f6c87123130b2a628c00f0622911cd714ca4f) adds Guest VFS REN/RD/exact DEL with non-destructive confirmation-required paths. This commit opts in **once** with `[run-ci]` to verify both the browser focus fix and these source commands.
+- Draft PR #1, main untouched, no release. CMD in progress, full screenshot parity not verified.
+
 ## Source CMD safe REN RD DEL command slice — 2026-11-15 (CI deferred)
 
 - Added original cmd.js Te `REN`/`RENAME`, `RD`/`RMDIR` and exact-file `DEL`/`ERASE` to mounted Guest VFS, with strict same-directory rename and source error strings. Source confirmation-required recursive `RD /S` and wildcard/directory `DEL` remain non-destructive unsupported paths until the original `waitForKey` interaction is reproduced. Vitest and Playwright acceptance added.
