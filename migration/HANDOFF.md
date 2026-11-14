@@ -1,3 +1,8 @@
+## Exact source Win7 dialog art and expanded capture — 2026-11-14 (combined verification pending)
+
+- Retrieved original warning.cce1fd36.webp (SHA 6bd336aa3a9ba01a4ab2879180a0ba8f5b0301aa) and error.026cae2a.webp (SHA 2a64837b8281a49be0cf491f18727f8978fd0323) through Base64, recreating target Git blobs with identical original hashes. The shared source messages dialog now uses them; source E2E and source-win7-art browser tests also assert the originals. No arbitrary CSS-generated stand-in glyphs for source Win7 warning/error.
+- New visual target-only scenes prepare Details metadata, Tiles metadata, and source Delete confirmation; expected new target screenshot total 40 (20 scenes × desktop/mobile), **not yet captured**. Original paired Vue screenshot token still unavailable. Combined one commit with [run-ci] and [capture-visual] will intentionally verify both code and the visual-capture script only when needed.
+
 ## Source messages.js reusable UI — 2026-11-14 (CI pending)
 
 - Pinned source messages.js (Git blob e5150261d7868071ed3c02aa9ab31ea82fe50b9e) provides error, confirm, progress via webpack 7680. Built shared SourceMessageDialog with original Yes/No data-test-confirm-answer attributes, default No focus, Escape cancellation, Progress disabled Stop and safe escaped text. Explorer/Recycle Bin Delete confirmation now reuses the component, retaining real VFS effects, existing alertdialog accessible label and shared CSS.

@@ -9,9 +9,11 @@ const sourceArt=[
   ["ie.66b8418d.webp","c587b0afe72cf508af2ecf438174416f36bc45bc"],
   ["chrome.0eddc17a.webp","6134df93f5f9037bc2ed99e3fb0ee78ebf79e145"],
   ["snipping.2c25345c.webp","3f83537a4a0503a10941fed592eb1cba4b3540c0"],
-  ["player.d45d301d.webp","3355030754e1019e19b0169f16070f45752e45c7"]
+  ["player.d45d301d.webp","3355030754e1019e19b0169f16070f45752e45c7"],
+  ["warning.cce1fd36.webp","6bd336aa3a9ba01a4ab2879180a0ba8f5b0301aa"],
+  ["error.026cae2a.webp","2a64837b8281a49be0cf491f18727f8978fd0323"]
 ] as const;
-test("seven exact original Win7 WebPs load with immutable source Git blob hashes",async({page})=>{
+test("nine exact original Win7 WebPs load with immutable source Git blob hashes",async({page})=>{
   await page.goto("/?theme=win7");
   for(const [filename,originalSha] of sourceArt){
     const response=await page.request.get("/assets/images/"+filename);

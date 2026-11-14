@@ -49,6 +49,9 @@ export const legacyArt = {
   chrome: "/assets/images/chrome.0eddc17a.webp",
   // Byte-identical original Windows 7 Internet Explorer icon.
   ie: "/assets/images/ie.66b8418d.webp",
+  // Source-exact Win7 base-message warning/error art.
+  messageWarning: "/assets/images/warning.cce1fd36.webp",
+  messageError: "/assets/images/error.026cae2a.webp",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
   viewModeIcon: {

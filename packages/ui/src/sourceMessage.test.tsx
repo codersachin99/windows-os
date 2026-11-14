@@ -28,7 +28,8 @@ describe("pinned source messages.js variants",()=>{
     const html=renderToStaticMarkup(<SourceMessageDialog
       data={{type:"error",message:'<img src=x onerror="alert(1)">',title:"Blocked"}}/>);
     expect(html).toContain("&lt;img");
-    expect(html).not.toContain("<img");
+    expect(html).toContain('src="/assets/images/error.026cae2a.webp"');
+    expect(html).not.toContain('<img src=x onerror');
     expect(html).toContain("OK");
   });
 });

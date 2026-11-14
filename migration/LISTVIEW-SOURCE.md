@@ -20,4 +20,4 @@
 - Browser cases (Chromium desktop and Pixel 7) create a real source folder, assert Tiles extras, change to Details via the source View menu, assert all three Details fields, maintain row selection, switch to Tiles again, double-click folder and cancel source Delete confirmation.
 - Original a321 exact width algorithm, full rich listview slots and alternate themes, other migrated apps that use source listviews and source-versus-React pixel equivalence are not fully migrated.
 
-CI pending. Both modules remain in-progress, draft PR #1 unmerged, main untouched, no release.
+Implemented-slice [full CI #43589707509](https://github.com/codersachin99/windows-os/actions/runs/43589707509) **SUCCESS** at commit 8d23db2: 305/305 unit tests in 62 files, 318/318 desktop/mobile Chromium E2E cases, 53 exact original-art audits, TypeScript and Vite build. The original a321 exact width normalization and source-vs-React screenshot/pixel parity remain pending. Both modules still **in-progress**, PR #1 draft, main untouched, no release.

@@ -1,3 +1,7 @@
+## Original Windows 7 message artwork — 14 November 2026
+
+The original source warning and error Win7 WebP icons have been imported byte-exactly (original Git blob SHA checked) and are used in the shared Error/Confirm message dialog. The next opt-in CI will verify browser-served hashes and original confirmation behavior. UI screenshot evidence will include Details, Tiles, and Delete-confirmation baselines; pixel-level original comparison still awaits original Vue capture access.
+
 ## Source-backed Windows message and confirmation UI — 14 November 2026
 
 The original messages.js error/confirm/progress variants are being rebuilt as a reusable shared SourceMessageDialog in packages/ui. Explorer and Recycle Bin now use its source-accurate Yes/No confirmation events; tests exercise focus, Escape, actual virtual-file deletion and safe progress/error rendering. The original global messages window bus, alert sound and pixel-level original Win7 styling remain unported. See [message source trace](migration/MESSAGES-SOURCE.md). CI pending.

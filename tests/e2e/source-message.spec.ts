@@ -29,6 +29,8 @@ test("original message-confirm has source yes/no markers and No is the default",
   await file.click();
   const dialog=await deleteSelected(win);
   await expect(dialog).toContainText("Move the selected items to the Recycle Bin?");
+  await expect(dialog.locator(".source-message__icon"))
+    .toHaveAttribute("src","/assets/images/warning.cce1fd36.webp");
   await expect(dialog.locator('[data-test-confirm-answer="yes"]')).toHaveText("Yes");
   const no=dialog.locator('[data-test-confirm-answer="no"]');
   await expect(no).toHaveText("No");

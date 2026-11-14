@@ -1,4 +1,5 @@
 import {useEffect,useRef,type ReactNode} from "react";
+import {legacyArt} from "@windows-os/assets";
 import "./sourceMessage.css";
 
 /** Original messages.js webpack 7680, message-error 3780 and message-confirm.
@@ -46,8 +47,8 @@ export function SourceMessageDialog({
           onClick={reject}>×</button>}
       </div>
       <div className="source-message__body">
-        {data.type==="error"&&<span aria-hidden="true" className="source-message__icon is-error">×</span>}
-        {data.type==="confirm"&&<span aria-hidden="true" className="source-message__icon is-warning">!</span>}
+        {data.type==="error"&&<img src={legacyArt.messageError} alt="" aria-hidden="true" className="source-message__icon is-error"/>}
+        {data.type==="confirm"&&<img src={legacyArt.messageWarning} alt="" aria-hidden="true" className="source-message__icon is-warning"/>}
         <div className="source-message__text">
           {data.type==="progress"&&data.header&&
             <div className="source-message__progress-header">{data.header}</div>}

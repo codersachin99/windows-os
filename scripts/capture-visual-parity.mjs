@@ -20,7 +20,8 @@ const TARGET_ONLY_SCENES = [
   "recycle-bin-populated", "recycle-bin-search-results",
   // React-only app baselines until original source runtime pairing is proven.
   "calc-initial", "notepad-initial", "chrome-new-tab", "ie-home",
-  "player-initial", "snipping-initial", "recorder-initial"
+  "player-initial", "snipping-initial", "recorder-initial",
+  "computer-details-metadata", "computer-tiles-metadata", "computer-message-confirm"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -131,6 +132,30 @@ async function prepareScene(page, kind, scene) {
       return;
     }
     const explorer = await openWindow(page, kind, "computer");
+    if (["computer-details-metadata", "computer-tiles-metadata",
+      "computer-message-confirm"].includes(scene)) {
+      await explorer.getByRole("button", { name: "New folder" }).click();
+      const prompt = explorer.getByRole("dialog", { name: "New folder" });
+      await prompt.getByRole("textbox", { name: "New folder name" })
+        .fill("ParitySourceUI");
+      await prompt.getByRole("button", { name: "OK" }).click();
+      const row = explorer.locator('[data-test-explorer-item="ParitySourceUI"]');
+      await row.waitFor({ state: "visible", timeout: 15000 });
+      if (scene === "computer-details-metadata") {
+        await explorer.getByRole("button", { name: "View", exact: true }).click();
+        await explorer.getByRole("menu", { name: "View options" })
+          .getByRole("menuitemradio", { name: "Details" }).click();
+        await explorer.locator('[data-test-source-listview="details"]')
+          .waitFor({ state: "visible" });
+      }
+      if (scene === "computer-message-confirm") {
+        await row.click();
+        await explorer.getByRole("button", { name: "Delete", exact: true }).click();
+        await explorer.getByRole("alertdialog", { name: "Confirm file operation" })
+          .waitFor({ state: "visible" });
+      }
+      return;
+    }
     if (scene === "recycle-bin-populated") {
       await explorer.getByRole("button", { name: "New folder" }).click();
       const create = explorer.getByRole("dialog", { name: "New folder" });

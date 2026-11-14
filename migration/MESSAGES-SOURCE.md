@@ -25,3 +25,8 @@
 - Existing Explorer delete, bin and file safety regression tests also run in opt-in CI.
 
 Full CI pending, source completeness and pixel parity not asserted; draft PR #1 stays open, main unchanged, no release.
+
+## Original Win7 message icon import
+
+- Original warning.cce1fd36.webp Git blob SHA 6bd336aa3a9ba01a4ab2879180a0ba8f5b0301aa, and error.026cae2a.webp SHA 2a64837b8281a49be0cf491f18727f8978fd0323. Both copied byte-for-byte from the pinned original through GitHub Base64 and recreated as target blobs with exactly the same SHA.
+- SourceMessageDialog now uses these original Win7 icons rather than provisional CSS glyphs. Source-file and browser asset hash checks must pass in the next full opt-in CI before marking the integration verified.
