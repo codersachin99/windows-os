@@ -1,3 +1,7 @@
+## Win7 Details source-column alignment repair — 14 November 2026
+
+First full Details [CI #43619748436](https://github.com/codersachin99/windows-os/actions/runs/43619748436) found one desktop Playwright alignment mismatch (345/346 browser cases passed; all TypeScript, unit and build checks passed): the generic 5px Explorer item gap displaced the first metadata column by 6px including its border. The pinned Win7 Details source has no row gap. Corrected in Win7-scoped CSS and added a strict zero-gap browser assertion; follow-up opt-in CI requested. See [source trace](migration/LISTVIEW-SOURCE.md).
+
 ## Source-faithful Windows 7 Details geometry — 14 November 2026
 
 The original Computer Details layout now renders through the shared `0616` item-info wrapper and source `a321` header: 220px columns, 16px icons, 204px filename widths (or 180px with touch selection). The 580px responsive layout shows Name and Size while retaining all source metadata. Pure and browser contracts added, with full verification requested via `[run-ci]`. Last combined List/Content/Tiles [CI #43617699223](https://github.com/codersachin99/windows-os/actions/runs/43617699223) passed. Source screenshot equivalence remains outstanding. See [Details source trace](migration/LISTVIEW-SOURCE.md).

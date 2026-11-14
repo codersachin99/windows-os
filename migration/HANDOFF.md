@@ -1,3 +1,10 @@
+## Details source alignment regression repair — 2026-11-14 (retest pending)
+
+- [Run #43619748436](https://github.com/codersachin99/windows-os/actions/runs/43619748436) **FAILED** after 345 of 346 browser tests passed. One desktop Details geometry check measured first-extra/header position offset 6px vs <=2px; TypeScript, units, source audit, Contacts contracts and Vite build passed.
+- Original pinned `listview-details.css` provides no row gap. Generic Explorer button styling inherited `gap:5px` plus 1px row border, causing precisely the 6px offset. Scoped Win7 Details `.explorer-item {gap:0}` restores source geometry without altering non-Win7 theme spacing.
+- Browser acceptance asserts exact computed `column-gap:0px` in addition to unchanged strict <=2px alignment tolerance. New opt-in **`[run-ci]`** verifies repair; do not claim green until Actions finishes.
+- Original parity inventory still 290 modules = 255 pending / 27 in progress / 8 implemented / zero fully source-pixel-verified. Keep draft PR #1, `main` untouched and no release.
+
 ## Pinned original Computer Details column layout — 2026-11-14 (CI pending)
 
 - Pinned `computer.js` source constants `se=16, ae=220, ne=204, re=24` and `src/styles/shell/listview-details.css` blob `2aedda59802d5a36ea0e106ddcdf4a16be4aca52`. Implemented original Win7 Details fixed 220px source header cells and VFS item extras within shared `0616` info wrapper, 16px icon, 204px regular or 180px touch-checkbox label width, and source 2px row/4px text padding. Other themes unaffected; narrow mobile uses a documented two-visible-column adaptation.

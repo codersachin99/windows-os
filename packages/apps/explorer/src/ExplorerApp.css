@@ -508,7 +508,7 @@
   display:flex;flex-wrap:wrap;min-width:fit-content;padding:0;
 }
 .explorer-stage.is-source-win7 .explorer-list.has-details .explorer-item{
-  display:flex;align-items:center;width:100%;min-width:880px;
+  display:flex;align-items:center;gap:0;width:100%;min-width:880px;
   padding:2px 0;text-align:left;
 }
 .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-iconbox{

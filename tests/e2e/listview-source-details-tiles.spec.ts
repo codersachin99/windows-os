@@ -98,6 +98,9 @@ test("pinned source Win7 Details header and 0616 item widths align to four 220px
   await expect(info.locator(".listview__item-extra")).toHaveCount(3);
   await expect(info.locator(".listview__item-extra").nth(1)).toHaveText("File folder");
   expect(await info.evaluate(el=>getComputedStyle(el).display)).toBe("flex");
+  // The original Details stylesheet has no row gap. An inherited Explorer
+  // gap would shift all fixed 220px source columns by five CSS pixels.
+  expect(await row.evaluate(el=>getComputedStyle(el).columnGap)).toBe("0px");
   expect(await row.locator(".listview__item-iconbox")
     .evaluate(el=>getComputedStyle(el).width)).toBe("16px");
   const columns=win.locator('[data-test-listview-columnheader] .listview__header-column');
