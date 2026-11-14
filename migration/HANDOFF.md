@@ -1,3 +1,10 @@
+## Source Camera migration — 2026-11-14 (FULL CI PENDING)
+
+- **Pinned original**: `src/modules/apps/camera.js` (Git blob `c87c1df95...`) requests front camera on mount (`1280×720`), switches to rear via `facingMode:environment`, captures track-resolution JPEG at 100% quality and opens JPEG-only Save As. Information modal shows fixed source resolution/format/quality.
+- **React port**: modular `packages/apps/camera` component/model with browser-permissioned video preview, facing switch, stale-request and stream-track cleanup, real canvas-to-JPEG conversion, signed JPEG-header check and virtual-file persistence. Source Save As type shared dialog reused without modifying Recorder/Notepad. Camera is an Accessories Start Menu program. Added exact original `camera-base.3c876d62.svg` fallback (source Git blob `23ce3c1e...`); unavailable Win7 WebP still a known gap. [Source trace](CAMERA-SOURCE.md).
+- **New tests**: 3 unit cases (constraints, JPEG config, source capture dimensions) plus desktop/mobile Chromium scenarios using canvas-backed simulated camera, switching and track cleanup, settings, JPEG Save As and opening in Photo Viewer, and denied camera permission. Physical camera hardware and full visual parity intentionally remain unverified.
+- **Status**: `camera.js` moved pending → **in-progress**, keeping immutable source SHA and concrete evidence. **268 pending / 14 in-progress / 8 implemented / 0 fully verified** of 290 pinned source modules. No merge, release, or main modification. Full CI only on explicit `[run-ci]` commit.
+
 ## Sound Recorder source migration — 2026-11-14 (INTEGRATED CI VERIFIED)
 
 - **Original**: pinned `src/modules/apps/recorder.js` (blob `449ee114...`) records microphone `audio/webm`, draws an analyser frequency meter (FFT 32), counts seconds, then converts audio to WAV and shows a WAV-only Save As dialog.

@@ -49,8 +49,17 @@
       "source": "src/modules/apps/camera.js",
       "sha": "c87c1df95b581d8dedc8eb3ce490516f5901d995",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/camera/src/CameraApp.tsx",
+        "packages/apps/camera/src/CameraApp.css",
+        "packages/apps/camera/src/model.ts",
+        "packages/apps/camera/src/model.test.ts",
+        "tests/e2e/camera.spec.ts",
+        "apps/web/public/assets/images/camera-base.3c876d62.svg",
+        "migration/CAMERA-SOURCE.md"
+      ],
+      "verification": "implementation-and-automated-video-stream-browser-test-added; integrated CI pending; real hardware, source Win7 artwork, source image conversion and pixel parity unverified"
     },
     {
       "source": "src/modules/apps/chrome.js",

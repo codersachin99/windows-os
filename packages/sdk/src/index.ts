@@ -68,6 +68,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 620, height: 440 }
   },
   {
+    id: "camera", label: "Camera", icon: legacyArt.camera,
+    kind: "utility", desktop: false, showInStart: true,
+    // Source camera.js inherits the default resizable WindowMain geometry;
+    // interim size until paired original screenshot review.
+    window: { width: 760, height: 540 }
+  },
+  {
     id: "recorder", label: "Sound Recorder", icon: legacyArt.recorder,
     kind: "utility", desktop: false, showInStart: true,
     // Source WindowMain: width 480, height 90, centered and not resizable.
