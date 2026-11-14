@@ -10,6 +10,7 @@ import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { AboutApp } from "@windows-os/apps/about";
 import { PhotoApp } from "@windows-os/apps/photo";
+import { RecorderApp } from "@windows-os/apps/recorder";
 import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
@@ -66,6 +67,9 @@ function ApplicationContent({
   if (appId === "notepad") return <NotepadApp initialFilePath={filePath}
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
+    onRegisterClose={handler => registerClose(windowId, handler)} />;
+  if (appId === "recorder") return <RecorderApp
+    onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "photo") return <PhotoApp initialFilePath={filePath}
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}

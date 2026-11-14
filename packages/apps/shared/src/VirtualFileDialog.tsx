@@ -7,17 +7,25 @@ export interface VirtualFileDialogProps {
   mode: "open" | "save";
   initialDirectory?: string | null;
   suggestedName?: string;
+  /** Original source dialog-save accepts an app-specific extension map. */
+  fileTypes?: ReadonlyArray<{ extension: string; label: string }>;
   onCancel(): void;
   onSelected(path: string): Promise<void> | void;
 }
 
 /** Virtual file dialog shared by document apps; never opens host OS files. */
+const DEFAULT_SAVE_TYPES = [
+  { extension: "txt", label: "Text Documents (*.txt)" },
+  { extension: "html", label: "HTML Documents (*.html; *.htm)" }
+] as const;
+
 export function VirtualFileDialog({ fileStore, mode, initialDirectory,
-  suggestedName = "", onCancel, onSelected }: VirtualFileDialogProps) {
+  suggestedName = "", fileTypes = DEFAULT_SAVE_TYPES,
+  onCancel, onSelected }: VirtualFileDialogProps) {
   const [directory, setDirectory] = useState(initialDirectory || "/");
   const [items, setItems] = useState<FileEntry[]>([]);
   const [name, setName] = useState(suggestedName);
-  const [extension, setExtension] = useState("txt");
+  const [extension, setExtension] = useState(fileTypes[0]?.extension ?? "txt");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [overwrite, setOverwrite] = useState<string | null>(null);
@@ -110,8 +118,9 @@ export function VirtualFileDialog({ fileStore, mode, initialDirectory,
         {mode === "save" && <div className="vfs-dialog__field">
           <label htmlFor="vfs-file-type">Save as type:</label>
           <select id="vfs-file-type" value={extension} onChange={event => setExtension(event.target.value)}>
-            <option value="txt">Text Documents (*.txt)</option>
-            <option value="html">HTML Documents (*.html; *.htm)</option>
+            {fileTypes.map(fileType => <option key={fileType.extension} value={fileType.extension}>
+              {fileType.label}
+            </option>)}
           </select>
         </div>}
         {error && <p className="vfs-dialog__error" role="alert">{error}</p>}

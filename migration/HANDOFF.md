@@ -1,3 +1,11 @@
+## Sound Recorder source migration — 2026-11-14 (INTEGRATED CI PENDING)
+
+- **Original**: pinned `src/modules/apps/recorder.js` (blob `449ee114...`) records microphone `audio/webm`, draws an analyser frequency meter (FFT 32), counts seconds, then converts audio to WAV and shows a WAV-only Save As dialog.
+- **New React slice**: modular `packages/apps/recorder` captures permissioned audio, converts it to a standards-compliant signed 16-bit PCM WAV using real browser audio decoding and persists bytes using the shared VFS; no host audio/disk access. Original shared `VirtualFileDialog` is extended with optional app-specific formats without altering Notepad TXT/HTML defaults. Hidden/foreground app registration reuses source `recorder` (Accessories, Start Menu).
+- **Tests**: pure RIFF/WAVE byte and duration model tests plus desktop/mobile Chromium tests with deterministic mocked microphone/MediaRecorder but *real* browser WAV decoding/conversion, file dialog, persistence, and denied-permission UI. One exact original `recorder-onebit.110a9439.svg` copied as fallback artwork (original blob `c50b4787...`); original Win7 WebP icon is a declared gap. [Full source trace](RECORDER-SOURCE.md).
+- **Honest scope**: moved `recorder.js` from pending to **in-progress**; now **269 pending / 13 in-progress / 8 implemented / 0 fully verified** of 290 source modules. Exact visual parity, real microphone hardware behavior and audio source conversion fidelity remain unverified. Draft PR #1, no merge/release.
+- **Verification next**: explicitly trigger full CI once with `[run-ci]` and record real results; avoid running expensive CI for documentation-only commits.
+
 ## Windows Photo Viewer source migration — 2026-11-14 (INTEGRATED CI VERIFIED)
 
 - **Pinned origin**: `legacy-win7@4e63290/src/modules/apps/photo.js` (`9df69903`) renders hidden photo viewer with disabled File/Print/E-mail/Burn/Open actions, source picture-kind sibling listing, wrapped Prev/Next, fit/actual size, zoom (100–800 × 20), 90° rotation, save-before-navigation/close, and 3-second slideshow.

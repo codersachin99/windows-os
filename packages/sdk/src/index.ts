@@ -68,6 +68,14 @@ const builtinApps: AppDefinition[] = [
     window: { width: 620, height: 440 }
   },
   {
+    id: "recorder", label: "Sound Recorder", icon: legacyArt.recorder,
+    kind: "utility", desktop: false, showInStart: true,
+    // Source WindowMain: width 480, height 90, centered and not resizable.
+    // Shared WindowFrame chrome requires a small interim height adjustment.
+    window: { width: 480, height: 115, centered: true,
+      resizable: false, minimizable: false }
+  },
+  {
     id: "photo", label: "Windows Photo Viewer", icon: legacyArt.photo,
     kind: "media", desktop: false, showInStart: false,
     // Source photo.js inherits a resizable standard WindowMain; exact opening

@@ -218,8 +218,18 @@
       "source": "src/modules/apps/recorder.js",
       "sha": "449ee11457fafdbea1f61052a5417a3e85cee022",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/recorder/src/RecorderApp.tsx",
+        "packages/apps/recorder/src/RecorderApp.css",
+        "packages/apps/recorder/src/wav.ts",
+        "packages/apps/recorder/src/wav.test.ts",
+        "packages/apps/shared/src/VirtualFileDialog.tsx",
+        "tests/e2e/recorder.spec.ts",
+        "apps/web/public/assets/images/recorder-onebit.110a9439.svg",
+        "migration/RECORDER-SOURCE.md"
+      ],
+      "verification": "implementation-and-mocked-microphone-WAV-browser-tests-submitted; integrated-CI-pending; real microphone and source visual parity unverified"
     },
     {
       "source": "src/modules/apps/run.js",

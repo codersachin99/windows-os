@@ -36,6 +36,9 @@ export const legacyArt = {
   // Exact source base-theme photo icon; Win7-specific photo.db6c5f81.webp
   // remains a tracked art import gap until binary source transport is available.
   photo: "/assets/images/photo-base.b5f2d859.svg",
+  // Exact original recorder-onebit artwork fallback; the original Win7
+  // recorder.519283f8.webp still needs binary source transport.
+  recorder: "/assets/images/recorder-onebit.110a9439.svg",
   fileExplorer: "/assets/images/fileexplorer.43fce486.webp",
   fileExplorerRefresh: "/assets/images/fileexplorer-refresh.7f376545.webp",
   viewModeIcon: {
