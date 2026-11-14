@@ -28,6 +28,13 @@ The original `photo.js#save()` attempts `image/<extension>` encoding for all sou
 - `packages/apps/explorer/src/ExplorerApp.tsx` opens image files with Photo Viewer, reusing original `matchesSourceKind(...,"picture")`, and does not change Recycle Bin safety.
 - New E2E `tests/e2e/photo.spec.ts` uploads **real binary PNG** files via the existing Explorer UI, opens one by double-click, checks source-disabled menu, original image dimensions, next/wrap, rotation save, zoom and close. A pure model test checks extensions, filtering, source wrap and 90-degree rotation.
 
+## CI proof — 14 November 2026
+
+- [Initial feature commit](https://github.com/codersachin99/windows-os/commit/343e76de531fc2c326c48784a6268431ac55bf86) added the Photo Viewer.
+- [Integration fix](https://github.com/codersachin99/windows-os/commit/3196055d0844c3f0b9c7094a6a58d0deb58c9143) corrected the new `@windows-os/apps/photo` TypeScript path alias after the first run revealed it was missing.
+- **[Full opt-in CI #43560941513 — SUCCESS](https://github.com/codersachin99/windows-os/actions/runs/43560941513)**: 274 passing unit tests (53 files), 272 desktop/mobile Chromium cases, TypeScript pass, original Contacts audit, Vite production build, **37/37** byte-for-byte checked imported source images. The new Photo browser test runs on both desktop/mobile and verifies a 3×2 real PNG from upload, open, wrapped sibling navigation, 90-degree rotation persisted as 2×3, disabled source menus, zoom and close.
+- This validates specific React functionality and source artwork integrity; **no paired original/React photo screenshots exist yet**.
+
 ## Acceptance boundary
 
-This is a **working source-backed functional slice**; it is not full legacy equivalence. The Windows 7 icon variant, source window geometry and media-control glyphs, image-save behavior for other formats, source original slideshow placement, all theme variants, and original-versus-React screenshot parity remain unverified. Run opt-in `[run-ci]` to confirm TypeScript, tests and source-art inventory before calling it CI-verified. PR stays draft and `main` is unchanged.
+This is a **working source-backed functional slice**; it is not full legacy equivalence. The Windows 7 icon variant, source window geometry and media-control glyphs, image-save behavior for other formats, source original slideshow placement, all theme variants, and original-versus-React screenshot parity remain unverified. The newly implemented functional slice is CI-verified as recorded above; original visual/format parity is not. PR stays draft and `main` is unchanged.

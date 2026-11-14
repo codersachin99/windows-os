@@ -198,7 +198,7 @@
         "apps/web/public/assets/images/photo-base.b5f2d859.svg",
         "migration/PHOTO-SOURCE.md"
       ],
-      "verification": "code-wired-and-tests-added; CI pending; original Win7 icon, slideshow/fullscreen, exhaustive format behavior and original-vs-React screenshot parity pending"
+      "verification": "CI 43560941513 passed: Photo unit/browser slice plus TypeScript/37 image audit; source Win7 icon, advanced formats and original-vs-React visual parity pending"
     },
     {
       "source": "src/modules/apps/player.js",
