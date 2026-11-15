@@ -1,14 +1,14 @@
 import {useState} from "react";
 import {legacyArt,legacySourceIconArtwork} from "@windows-os/assets";
-import {sourcePrograms,type VirtualFileStore} from "@windows-os/filesystem";
+import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-os/filesystem";
+import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
+  type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
-  sourceCpanelDisplayMatch,sourceCpanelOpenLocation,sourceCpanelResolutions,
-  sourceCpanelStep,sourceCpanelInstalledPrograms,sourceCpanelProgramsMatch,
-  sourceCpanelAccountsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
-  sourceCpanelActionCenterMatch,SOURCE_CPANEL_ACTION_CENTER_TEXT,
-  sourceCpanelBackupMatch,
+  sourceCpanelOpenLocation,sourceCpanelResolutions,
+  sourceCpanelStep,sourceCpanelInstalledPrograms,
+  SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,SOURCE_CPANEL_ACTION_CENTER_TEXT,
   type SourceControlPanelActionMessage,
   type SourceControlPanelHistory, type SourceControlPanelLocation
 } from "./model";
@@ -41,14 +41,21 @@ export function ControlPanelApp({
   const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
   const results=query.trim().length>0;
-  const matchingDisplay=sourceCpanelDisplayMatch(query);
-  const matchingPrograms=sourceCpanelProgramsMatch(query);
-  const matchingAccounts=sourceCpanelAccountsMatch(query);
-  const matchingActionCenter=sourceCpanelActionCenterMatch(query);
-  const matchingBackup=sourceCpanelBackupMatch(query);
-  const matchingNotification=query.trim().toLocaleLowerCase()
-    .split(/\s+/).filter(Boolean).every(term=>
-      ["notification","notifications","icons","taskbar","system"].some(x=>x.includes(term)));
+  // Pinned 3097: preserve all original registry entries; omit only program
+  // items absent from the pinned c170 source manifest (not arbitrary shell apps).
+  const sourceItems=SOURCE_CPANEL_REGISTRY.filter(item=>
+    item.target!=="program"||sourceProgramsById.has(item.id));
+  const searchResults=sourceCpanelSearchRegistry(query,sourceItems);
+  const sourceIcon=(item:SourceCpanelRegistryItem)=>{
+    if(item.id==="backup")return legacyArt.cpanel;
+    if(item.id==="notification"||item.id==="action-center")
+      return legacyArt.trayActionCenter;
+    return legacySourceIconArtwork(item.iconKey).src;
+  };
+  const openSourceItem=(item:SourceCpanelRegistryItem)=>{
+    if(!sourceCpanelIsSupported(item.id))return;
+    open(item.id as SourceControlPanelLocation);
+  };
   const programs=sourceCpanelInstalledPrograms(sourcePrograms);
   const open=(value:SourceControlPanelLocation)=>{
     setHistory(previous=>sourceCpanelOpenLocation(previous,value));
@@ -86,61 +93,27 @@ export function ControlPanelApp({
     <div className="windows-cpanel__content">
       {results?<div className="windows-cpanel__results"
         data-test-cpanel-results="">
-        {matchingDisplay?<article className="windows-cpanel__result"
-          data-test-cpanel-result="display">
-          <img src={legacyArt.display} alt="" width={40} height={40}/>
-          <div><button type="button" className="windows-cpanel__link"
-            onClick={()=>open("display")}>Display</button>
-            <button type="button" className="windows-cpanel__task"
-              data-test-cpanel-task="" onClick={()=>open("display")}>
-              Change display settings
-            </button></div>
-        </article>:null}
-        {matchingPrograms?<article className="windows-cpanel__result"
-          data-test-cpanel-result="programs">
-          <img src={legacyArt.programs} alt="" width={40} height={40}/>
-          <div><button type="button" className="windows-cpanel__link"
-            onClick={()=>open("programs")}>Programs and Features</button>
-            <button type="button" className="windows-cpanel__task"
-              onClick={()=>open("programs")}>Uninstall or change a program</button></div>
-        </article>:null}
-        {matchingAccounts?<article className="windows-cpanel__result"
-          data-test-cpanel-result="accounts">
-          <img src={legacyArt.accounts} alt="" width={40} height={40}/>
-          <div><button type="button" className="windows-cpanel__link"
-            onClick={()=>open("accounts")}>User Accounts</button>
-            <button type="button" className="windows-cpanel__task"
-              onClick={()=>open("accounts")}>Change your account</button></div>
-        </article>:null}
-        {matchingNotification?<article className="windows-cpanel__result"
-          data-test-cpanel-result="notification">
-          <img src={legacyArt.trayActionCenter} alt="" width={40} height={40}/>
-          <div><button type="button" className="windows-cpanel__link"
-            onClick={()=>open("notification")}>Notification Area Icons</button>
-            <button type="button" className="windows-cpanel__task"
-              onClick={()=>open("notification")}>Customize notification icons</button></div>
-        </article>:null}
-        {matchingActionCenter?<article className="windows-cpanel__result"
-          data-test-cpanel-result="action-center">
-          <img src={legacyArt.trayActionCenter} alt="" width={40} height={40}/>
-          <div><button type="button" className="windows-cpanel__link"
-            onClick={()=>open("action-center")}>Action Center</button>
-            <button type="button" className="windows-cpanel__task"
-              onClick={()=>open("action-center")}>
-              Review recent messages and resolve problems
-            </button></div>
-        </article>:null}
-        {matchingBackup?<article className="windows-cpanel__result"
-          data-test-cpanel-result="backup">
-          <img src={legacyArt.cpanel} alt="" width={40} height={40}/>
-          <div><button type="button" className="windows-cpanel__link"
-            onClick={()=>open("backup")}>Backup and Restore</button>
-            <button type="button" className="windows-cpanel__task"
-              onClick={()=>open("backup")}>Backup or restore your files</button></div>
-        </article>:null}
-        {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&
-          !matchingNotification&&!matchingActionCenter&&!matchingBackup&&
-          <p>No items match your search.</p>}
+        {searchResults.map(({item,tasks})=><article key={item.id}
+          className="windows-cpanel__result" data-test-cpanel-result={item.id}>
+          <img src={sourceIcon(item)} alt="" width={40} height={40}/>
+          <div>
+            <button type="button" className="windows-cpanel__link"
+              disabled={!sourceCpanelIsSupported(item.id)}
+              title={!sourceCpanelIsSupported(item.id)?
+                "Original target adapter is not migrated":undefined}
+              onClick={()=>openSourceItem(item)}>{item.label}</button>
+            {tasks.map((task,index)=>{
+              const target=sourceItems.find(candidate=>candidate.id===task.id);
+              const enabled=Boolean(target&&sourceCpanelIsSupported(target.id));
+              return <button key={index} type="button"
+                className="windows-cpanel__task" data-test-cpanel-task=""
+                disabled={!enabled}
+                title={!enabled?"Original target adapter is not migrated":undefined}
+                onClick={()=>{if(target)openSourceItem(target);}}>{task.label}</button>;
+            })}
+          </div>
+        </article>)}
+        {!searchResults.length?<p>No items match your search.</p>:null}
       </div>:location==="backup"?<BackupRestorePanel filesystem={filesystem}
         onBack={()=>open(null)}/>:location==="action-center"?<div className="windows-cpanel__action"
         data-test-cpanel-action-center="">
@@ -333,37 +306,20 @@ export function ControlPanelApp({
         </footer>
       </div>:<div className="windows-cpanel__home"
         data-test-cpanel-items="">
-        <h2>Adjust your computer's settings</h2>
-        <button type="button" data-test-cpanel-item="display"
-          className="windows-cpanel__tile" onClick={()=>open("display")}>
-          <img src={legacyArt.display} alt="" width={44} height={44}/>
-          <span>Display</span>
-        </button>
-        <button type="button" data-test-cpanel-item="programs"
-          className="windows-cpanel__tile" onClick={()=>open("programs")}>
-          <img src={legacyArt.programs} alt="" width={44} height={44}/>
-          <span>Programs and Features</span>
-        </button>
-        <button type="button" data-test-cpanel-item="accounts"
-          className="windows-cpanel__tile" onClick={()=>open("accounts")}>
-          <img src={legacyArt.accounts} alt="" width={44} height={44}/>
-          <span>User Accounts</span>
-        </button>
-        <button type="button" data-test-cpanel-item="notification"
-          className="windows-cpanel__tile" onClick={()=>open("notification")}>
-          <img src={legacyArt.trayActionCenter} alt="" width={44} height={44}/>
-          <span>Notification Area Icons</span>
-        </button>
-        <button type="button" data-test-cpanel-item="action-center"
-          className="windows-cpanel__tile" onClick={()=>open("action-center")}>
-          <img src={legacyArt.trayActionCenter} alt="" width={44} height={44}/>
-          <span>Action Center</span>
-        </button>
-        <button type="button" data-test-cpanel-item="backup"
-          className="windows-cpanel__tile" onClick={()=>open("backup")}>
-          <img src={legacyArt.cpanel} alt="" width={44} height={44}/>
-          <span>Backup and Restore</span>
-        </button>
+        <h2>Adjust your device's settings</h2>
+        <div className="windows-cpanel__source-list" role="group"
+          aria-label="Control Panel items">
+          {sourceItems.map(item=><button type="button" key={item.id}
+            data-test-cpanel-item={item.id}
+            className="windows-cpanel__tile"
+            disabled={!sourceCpanelIsSupported(item.id)}
+            title={!sourceCpanelIsSupported(item.id)?
+              "Original target adapter is not migrated":undefined}
+            onClick={()=>openSourceItem(item)}>
+            <img src={sourceIcon(item)} alt="" width={44} height={44}/>
+            <span>{item.label}</span>
+          </button>)}
+        </div>
       </div>}
     </div>
   </section>;
