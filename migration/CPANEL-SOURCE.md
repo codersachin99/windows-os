@@ -159,3 +159,18 @@ notification-history provider, read tracking and safe parsed inline
 links remain pending. The sixth original Control Panel page,
 Backup/Restore, is still outstanding. This follow-up does not
 trigger CI while the previous combined acceptance batch is active.
+
+## Original Backup/Restore contract and remaining gate — 15 November 2026
+
+Source-traced original `cpanel.js` `Pe/Ie/je` ZIP
+backup/restore and page `ue/Te`. Documented exact manifest,
+progress states, lastBackup, browser download, profile-only restore,
+existing-file skip, and source folder list discovery still needed.
+Added `migration/CPANEL-BACKUP-SPEC.md` with a security and test
+acceptance plan. No ZIP export or restore UI has been claimed,
+and current source program binaries are not exposed as native OS files.
+Five navigable Control Panel routes remain in-progress, final
+Backup/Restore page and full source visual parity pending.
+Current CI #43719078159 checks earlier tray work and does not include
+the newer Action Center source route or this documentation checkpoint.
+
