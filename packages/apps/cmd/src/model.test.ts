@@ -426,9 +426,9 @@ describe("source cmd.js gt()/mt() conditional && || and & chain grammar",()=>{
   it("executes sequential ampersands and conditional success/failure via real CMD status",async()=>{
     const {session}=await createShell();
     expect((await session.run("echo First & echo Second")).output)
-      .toEqual(["First","Second"]);
+      .toEqual(["First ","Second"]);
     expect((await session.run("echo Yes && echo Followed || echo Skipped")).output)
-      .toEqual(["Yes","Followed"]);
+      .toEqual(["Yes ","Followed "]);
     const failure=await session.run("thiscommanddoesnotexist && echo Skipped || echo Recovered");
     expect(failure.output).toEqual([
       "'thiscommanddoesnotexist' is not recognized as an internal or external command,",
@@ -459,11 +459,11 @@ describe("source cmd.js gt()/mt() conditional && || and & chain grammar",()=>{
     const {session}=await createShell();
     await session.run("set SAMPLE=before");
     expect((await session.run("echo %SAMPLE% & set SAMPLE=after & echo %SAMPLE%")).output)
-      .toEqual(["before","before"]);
+      .toEqual(["before ","before"]);
     expect((await session.run("echo %SAMPLE%")).output).toEqual(["after"]);
     await session.run("unknowncommand");
     expect((await session.run(" ")).errorlevel).toBe(9009);
-    expect((await session.run("echo ok || echo skipped")).output).toEqual(["ok"]);
+    expect((await session.run("echo ok || echo skipped")).output).toEqual(["ok "]);
   });
 });
 
@@ -489,16 +489,16 @@ describe("source cmd.js wt()/Tt.writeFile output redirects",()=>{
     const first=await session.run("echo Alpha > Documents\\report.txt");
     expect(first.output).toEqual([]);
     expect(first.errorlevel).toBe(0);
-    expect(await fs.read(document)).toBe("Alpha\r\n");
+    expect(await fs.read(document)).toBe("Alpha \r\n");
     expect((await session.run("echo Beta >> Documents\\report.txt")).output)
       .toEqual([]);
-    expect(await fs.read(document)).toBe("Alpha\r\nBeta\r\n");
+    expect(await fs.read(document)).toBe("Alpha \r\nBeta \r\n");
     await session.run("echo Replaced > Documents\\report.txt");
-    expect(await fs.read(document)).toBe("Replaced\r\n");
+    expect(await fs.read(document)).toBe("Replaced \r\n");
     const quote=await session.run('echo "A > B" > "Documents\\space name.txt"');
     expect(quote.output).toEqual([]);
     expect(await fs.read("/EXTERNAL/computer/drive0/Users/Guest/Documents/space name.txt"))
-      .toBe('"A > B"\r\n');
+      .toBe('"A > B" \r\n');
   });
   it("preserves errors for missing drives/directories and protects existing binary data",async()=>{
     const {fs,session}=await createShell();
@@ -519,9 +519,9 @@ describe("source cmd.js wt()/Tt.writeFile output redirects",()=>{
     const result=await session.run(
       "echo first > Documents\\chain.txt && echo next >> Documents\\chain.txt & type Documents\\chain.txt"
     );
-    expect(result.output).toEqual(["first","next",""]);
+    expect(result.output).toEqual(["first ","next ",""]);
     expect(result.errorlevel).toBe(0);
-    expect(await fs.read(path)).toBe("first\r\nnext\r\n");
+    expect(await fs.read(path)).toBe("first \r\nnext \r\n");
     const unknown=await session.run("badcommand > Documents\\error.txt");
     expect(unknown.output).toEqual([]);
     expect(unknown.errorlevel).toBe(0);

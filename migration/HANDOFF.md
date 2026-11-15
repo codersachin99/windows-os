@@ -867,3 +867,8 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Committed without [run-ci], to avoid triggering another GitHub Actions workflow during previous Tab completion browser suite #43669660346. Verify this later with the next deliberately opted-in acceptance batch; no claim of browser parity.
 - Preserve draft PR #1, main untouched and no release.
  / 0
+
+## CMD echo trailing-space test correction — 2026-11-15 (opt-in retest requested)
+
+- [Combined CI #43678975812](https://github.com/codersachin99/windows-os/actions/runs/43678975812) **FAILED four unit assertions** (376/380 pass). TypeScript passed; remaining audits/build/browser were skipped. The failing fixtures incorrectly discarded trailing spaces before operators, though original pinned cmd.js St/Te.echo preserves them. Source implementation preserves exact text.
+- Corrected expected output and CRLF bytes to retain original trailing spaces. Browser tests now match whitespace flexibly while still asserting order. No production changes; one [run-ci] recheck requested. No green claim until conclusion.

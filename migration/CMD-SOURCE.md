@@ -121,3 +121,7 @@ Pinned source cmd.js mt/gt/Ct/Tt.run: parses &&, || and & outside quoted spans; 
 
 Unit tests verify quoted syntax, conditional skip/recovery, VFS directory effects and single-expansion. Browser test verifies real shell conditions, quoted operator and mounted working-directory update. These are staged without [run-ci] until batched with the next source command slice.
 false
+
+## Original Te.echo retains space before source operators — 15 November 2026
+
+Combined [CI #43678975812](https://github.com/codersachin99/windows-os/actions/runs/43678975812) failed four unit fixtures that stripped source-preserved whitespace (echo Alpha > file writes "Alpha " plus CRLF). The pinned Te.echo strips only its first separating space; it does not trim trailing whitespace. Corrected the expected transcript, file bytes and browser assertions without changing production code. The follow-up [run-ci] checks the cumulative source chain, redirect, exact icon and transcript cap.

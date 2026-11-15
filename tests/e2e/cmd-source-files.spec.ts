@@ -95,7 +95,7 @@ test("original CMD Tab cycles source VFS paths, quotes spaces, and Escape clears
 test("original CMD chained conditions and quoted operators run on Guest session",async({page})=>{
   const {input,output,cmd}=await launchSourceCommandPrompt(page);
   await execute(input,"echo First & echo Second");
-  await expect(output).toHaveText("First\nSecond");
+  await expect(output).toHaveText(/First\s+Second/);
   await execute(input,"unknowncmd && echo Skipped || echo Recovered");
   await expect(output).toContainText("Recovered");
   await expect(output).not.toContainText("Skipped");
@@ -114,7 +114,7 @@ test("source CMD > and >> redirects to the real mounted Guest document store",as
   await execute(input,"echo original > Documents\\BrowserReport.txt");
   await execute(input,"echo appended >> Documents\\BrowserReport.txt");
   await execute(input,"type Documents\\BrowserReport.txt");
-  await expect(output).toContainText("original\nappended");
+  await expect(output).toContainText(/original\s+appended/);
   await execute(input,'echo "quoted > text" > "Documents\\Quoted Report.txt"');
   await execute(input,'type "Documents\\Quoted Report.txt"');
   await expect(output).toContainText('"quoted > text"');
