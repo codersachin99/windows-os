@@ -23,6 +23,7 @@ import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
+import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
 import { ShortcutWizard } from "./ShortcutWizard";
@@ -187,6 +188,22 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
   useEffect(() => {
     const keydown = (event: KeyboardEvent) => {
       if (state.phase !== "desktop" || event.repeat) return;
+      const sourceShortcut=sourceDesktopShortcut(event);
+      if(sourceShortcut){
+        event.preventDefault();
+        if(sourceShortcut==="minimize-all"){
+          // Source MinimizeAll is a taskbar action, not a close/remove.
+          for(const win of state.windows){
+            if(!win.minimized)dispatch({type:"MINIMIZE_WINDOW",id:win.id});
+          }
+        }else if(sourceShortcut==="toggle-start"){
+          dispatch({type:"TOGGLE_START"});
+        }else{
+          const app=appRegistry.get(sourceShortcut==="open-computer"?"computer":"run");
+          if(app)dispatch({type:"OPEN_APP",app});
+        }
+        return;
+      }
       // Windows+R is the original Win7 quick launcher. It is a shell command
       // palette only: RunApp opens registered applications, never host programs.
       if (event.metaKey && !event.ctrlKey && !event.altKey

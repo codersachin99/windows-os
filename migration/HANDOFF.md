@@ -1,4 +1,8 @@
 
+## Original desktop shell Alt hotkeys — 15 November 2026
+
+Read `legacy-win7/src/modules/system/main.js` source we.mounted hook and `src/modules/shell/hotkey.js` filter. Ported original **Alt+D** (MinimizeAll), **Alt+W** (Start toggle), **Alt+E** (Computer), **Alt+R** (Run) to the React DesktopShell using a pure typed action mapper with editable field guard. Added unit and desktop/mobile Playwright tests and source audit notes; updated `src/modules/shell/hotkey.js` module-tracker from pending to **in-progress**. Other source shortcuts **Alt+L** (Switch user, not LOG_OFF) and Shift+Tab (source no-op) intentionally remain unported rather than faked. CI has not run for these newer changes; previous CMD acceptance #43713451078 succeeded at commit a6487d8. Branch and PR remain draft, main untouched.
+
 ## Exact legacy Ping.js favicon probe and CMD utility CSS corrections — 15 November 2026
 
 Source `legacy-win7/src/modules/apps/cmd.js` includes inline module `a3be` / `3b61` with original Ping.js implementation: it creates a browser `Image`, assigns `src = targetOrigin + "/favicon.ico?" + Date.now()`, uses a 4000 ms timeout, and returns elapsed **Date** milliseconds; success is solely from `onload` (not ICMP). Updated the React browser-only probe to that source URL/cache-buster shape and Date-based timing. An isolated pure `sourceCmdPingImageUrl(target,nonce)` guards HTTP(S) origins; no arbitrary JavaScript/data URL or native OS operation is permitted. A unit test covers source URL formation and unsafe URL rejection, without live network dependence.

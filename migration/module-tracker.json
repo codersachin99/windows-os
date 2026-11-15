@@ -1499,8 +1499,13 @@
       "source": "src/modules/shell/hotkey.js",
       "sha": "1b04f98c293404dafdae9fe2ad667b95b2f3ac45",
       "area": "shell",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceDesktopHotkeys.ts",
+        "packages/ui/src/sourceDesktopHotkeys.test.ts",
+        "tests/e2e/desktop-source-hotkeys.spec.ts",
+        "migration/HOTKEYS-SOURCE.md"
+      ]
     },
     {
       "source": "src/modules/shell/index.js",
