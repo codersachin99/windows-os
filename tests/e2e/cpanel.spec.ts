@@ -139,3 +139,84 @@ test("original Control Panel Action Center shows source empty history, not inven
   await panel.getByRole("searchbox",{name:"Search Control Panel"}).fill("action");
   await expect(panel.locator('[data-test-cpanel-result="action-center"]')).toBeVisible();
 });
+
+
+test("original Backup and Restore downloads a ZIP and restores a removed Guest file without overwrite",async({page})=>{
+  await page.goto("/");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const desktop="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
+  const area=page.locator("#desktop-icons");
+  await area.click({button:"right",position:{x:295,y:290}});
+  const menu=page.locator("[data-test-desktop-menu]");
+  await menu.getByRole("menuitem",{name:/^New/}).click();
+  await menu.getByRole("menuitem",{name:"Text Document",exact:true}).click();
+  await page.locator("[data-test-desktop-rename]").fill("Backup Sample");
+  await page.locator("[data-test-desktop-rename]").press("Enter");
+  await expect(page.locator('[data-test-desktop-file="'+desktop+'/Backup Sample.txt"]'))
+    .toBeVisible();
+
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await page.locator("[data-test-open-cpanel]").click();
+  const panel=page.locator('[data-test-window="cpanel"] [data-test-cpanel]');
+  await panel.locator('[data-test-cpanel-item="backup"]').click();
+  await expect(panel.locator("[data-test-no-backup]"))
+    .toHaveText("No backup has been created.");
+  for(const name of ["Create a system image","Create a system repair disc"])
+    await expect(panel.getByRole("button",{name})).toBeDisabled();
+  const downloadEvent=page.waitForEvent("download");
+  await panel.locator("[data-test-backup-button]").click();
+  const download=await downloadEvent;
+  expect(download.suggestedFilename()).toMatch(/^win7simu-backup-\d+\.zip$/);
+  const archive=await import("node:fs/promises").then(fs=>fs.readFile(download.path()));
+  await expect(panel.locator('[data-test-backup-status="success"]'))
+    .toContainText("A backup of your files has been created.");
+  await expect(panel.locator("[data-test-last-backup]"))
+    .toContainText("Downloaded to your device");
+
+  // Simulate a Guest file lost between backup and restore.
+  await page.evaluate(path=>{
+    const key="windows-os:vfs:guest:v1";
+    const snapshot=JSON.parse(localStorage.getItem(key)!) as {
+      entries:{uri:string}[]
+    };
+    snapshot.entries=snapshot.entries.filter(entry=>entry.uri!==path);
+    localStorage.setItem(key,JSON.stringify(snapshot));
+  },desktop+"/Backup Sample.txt");
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-desktop-file="'+desktop+'/Backup Sample.txt"]'))
+    .toHaveCount(0);
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await page.locator("[data-test-open-cpanel]").click();
+  const reopened=page.locator('[data-test-window="cpanel"] [data-test-cpanel]');
+  await reopened.locator('[data-test-cpanel-item="backup"]').click();
+  await expect(reopened.locator("[data-test-last-backup]")).toBeVisible();
+  const upload=reopened.locator("[data-test-restore-upload]");
+  await upload.setInputFiles({
+    name:"backup.zip",mimeType:"application/zip",buffer:archive
+  });
+  await expect(reopened.locator('[data-test-backup-status="success"]'))
+    .toContainText("1 restored, 0 skipped");
+  await expect(page.locator('[data-test-desktop-file="'+desktop+'/Backup Sample.txt"]'))
+    .toBeVisible();
+  await upload.setInputFiles({
+    name:"backup.zip",mimeType:"application/zip",buffer:archive
+  });
+  await expect(reopened.locator('[data-test-backup-status="success"]'))
+    .toContainText("0 restored, 1 skipped");
+  await reopened.locator("[data-test-cpanel-back]").click();
+  await expect(reopened.locator("[data-test-cpanel-items]")).toBeVisible();
+  await reopened.getByRole("searchbox",{name:"Search Control Panel"}).fill("restore");
+  await expect(reopened.locator('[data-test-cpanel-result="backup"]')).toBeVisible();
+});
+
+test("Backup and Restore rejects a fake archive instead of changing Guest files",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  await panel.locator('[data-test-cpanel-item="backup"]').click();
+  await panel.locator("[data-test-restore-upload]").setInputFiles({
+    name:"fake.zip",mimeType:"application/zip",buffer:Buffer.from("not a zip")
+  });
+  await expect(panel.locator('[data-test-backup-status="error"]'))
+    .toContainText("Invalid backup file");
+});
