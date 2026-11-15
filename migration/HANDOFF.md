@@ -1,4 +1,19 @@
 
+## Original Alt+L separate Switch phase — 15 November 2026
+
+Traced `src/modules/runtime/vue-app.js` source logon view function
+`d(view): ["Logon","Switch"].includes(view)` and changeView event,
+confirming that Alt+L **must preserve session/windows** instead of LOG_OFF.
+Added a typed `switch` desktop phase with `SWITCH_USER` and
+`RESUME_SESSION` reducers and reused the existing Guest logon UI.
+Reentering Guest resumes the same open windows and filesystem session;
+actual Start-menu LOG_OFF still clears session/windows. Added unit and
+desktop/mobile Playwright regression plus source handoff. Unsupported
+authenticated multi-user switch remains explicit; full hotkey library
+and Control Panel source navigation are still pending.
+No redundant CI trigger while prior opt-in workflow #43716174491 runs.
+
+
 ## Original desktop shell Alt hotkeys — 15 November 2026
 
 Read `legacy-win7/src/modules/system/main.js` source we.mounted hook and `src/modules/shell/hotkey.js` filter. Ported original **Alt+D** (MinimizeAll), **Alt+W** (Start toggle), **Alt+E** (Computer), **Alt+R** (Run) to the React DesktopShell using a pure typed action mapper with editable field guard. Added unit and desktop/mobile Playwright tests and source audit notes; updated `src/modules/shell/hotkey.js` module-tracker from pending to **in-progress**. Other source shortcuts **Alt+L** (Switch user, not LOG_OFF) and Shift+Tab (source no-op) intentionally remain unported rather than faked. CI has not run for these newer changes; previous CMD acceptance #43713451078 succeeded at commit a6487d8. Branch and PR remain draft, main untouched.

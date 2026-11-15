@@ -109,6 +109,14 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
         : state;
     case "LOG_OFF":
       return { ...state, phase: "logon", session: null, windows: [], startOpen: false, selectedIcon: null };
+    case "SWITCH_USER":
+      // The original Switch view reuses logon UI, but does NOT log off or
+      // close the current user's running desktop windows.
+      return state.phase==="desktop"&&state.session
+        ?{...state,phase:"switch",startOpen:false,selectedIcon:null}:state;
+    case "RESUME_SESSION":
+      return state.phase==="switch"&&state.session
+        ?{...state,phase:"desktop",startOpen:false}:state;
     case "SHUTDOWN":
       return { ...state, phase: "shutdown", startOpen: false, windows: [] };
     case "BSOD":

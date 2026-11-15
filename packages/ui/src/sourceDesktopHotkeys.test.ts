@@ -14,7 +14,7 @@ describe("original source main.js we hotkeys and hotkey.js editable filter",()=>
     expect(sourceDesktopShortcut(key("w"))).toBe("toggle-start");
     expect(sourceDesktopShortcut(key("E"))).toBe("open-computer");
     expect(sourceDesktopShortcut(key("r"))).toBe("open-run");
-    expect(sourceDesktopShortcut(key("l"))).toBeNull();
+    expect(sourceDesktopShortcut(key("l"))).toBe("switch-user");
     expect(sourceDesktopShortcut(key("Tab",{shiftKey:true}))).toBeNull();
   });
   it("rejects other modifier chords and bare typing",()=>{

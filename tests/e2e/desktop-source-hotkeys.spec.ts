@@ -49,3 +49,17 @@ test("original hotkey filter preserves editable Run input while allowing desktop
   })));
   await expect(page.locator("[data-test-start-menu]")).toHaveCount(0);
 });
+
+
+test("original Alt+L opens Switch view without logging Guest off or dropping windows",async({page})=>{
+  await login(page);
+  await sourceAlt(page,"e");
+  await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+  await sourceAlt(page,"l");
+  await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(0);
+  await page.locator('[data-test-avatar="win7"]').click();
+  await expect(page.locator("[data-test-main-screen]")).toBeVisible();
+  // Source Switch retains the old desktop session; this is not LOG_OFF.
+  await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+});

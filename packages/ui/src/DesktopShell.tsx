@@ -198,6 +198,8 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
           }
         }else if(sourceShortcut==="toggle-start"){
           dispatch({type:"TOGGLE_START"});
+        }else if(sourceShortcut==="switch-user"){
+          dispatch({type:"SWITCH_USER"});
         }else{
           const app=appRegistry.get(sourceShortcut==="open-computer"?"computer":"run");
           if(app)dispatch({type:"OPEN_APP",app});

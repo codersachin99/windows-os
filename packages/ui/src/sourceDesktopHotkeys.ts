@@ -1,9 +1,9 @@
 /** Pinned legacy src/modules/system/main.js we.mounted() shortcuts:
  * alt+d Show desktop, alt+w Start, alt+e Computer, alt+r Run.
  * src/modules/shell/hotkey.js filter x() ignores editable inputs.
- * alt+l needs original Switch view (not equivalent to LOG_OFF) and
- * shift+tab is an intentional no-op; neither is hijacked here. */
-export type SourceDesktopShortcut="minimize-all"|"toggle-start"|"open-computer"|"open-run";
+ * alt+l Switch view is a separate simulated logon-like screen,
+ * preserving user session/windows; shift+tab is a source no-op. */
+export type SourceDesktopShortcut="minimize-all"|"toggle-start"|"open-computer"|"open-run"|"switch-user";
 export type SourceHotkeyEvent=Pick<KeyboardEvent,
   "key"|"altKey"|"ctrlKey"|"metaKey"|"shiftKey"|"target">;
 export function sourceHotkeyAcceptsTarget(target:EventTarget|null):boolean{
@@ -23,5 +23,6 @@ export function sourceDesktopShortcut(event:SourceHotkeyEvent):SourceDesktopShor
   if(key==="w")return "toggle-start";
   if(key==="e")return "open-computer";
   if(key==="r")return "open-run";
+  if(key==="l")return "switch-user";
   return null;
 }

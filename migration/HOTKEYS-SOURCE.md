@@ -24,3 +24,23 @@ so do not substitute `LOG_OFF` for it. `Shift+Tab` is a source-registered
 no-op and should not steal browser focus. The full hotkey.js library has
 scoping, bind/unbind and modifier state beyond this slice. Module status
 is **in-progress**, not complete or fully visually accepted.
+
+## Pinned Alt+L switch-user view — follow-up
+
+Original `src/modules/runtime/vue-app.js` `d(view)` returns true for
+both `"Logon"` and `"Switch"`, sharing the logon screen; `changeView`
+sets `view` without dispatching any window teardown. The original
+`src/modules/system/main.js` Alt+L emits `changeView({view:"Switch"})`.
+
+React now models `switch` as a **separate session phase** from true
+`LOG_OFF`: `SWITCH_USER` keeps Guest session, open windows and window
+geometry while hiding the desktop under the existing logon screen;
+`RESUME_SESSION` restores that exact session without remounting the Guest
+filesystem or creating duplicate windows. This is the source-backed behavior
+for the supported Guest route. Account switching to other authenticated
+users, the full upstream account backend and original screen transitions
+remain incomplete and are not simulated as successful sign-ins.
+
+Added reducer, hotkey mapping and desktop/mobile browser tests.
+`Shift+Tab` remains an intentionally unbound legacy no-op, and full
+scoped hotkey.js API is still migration-pending.

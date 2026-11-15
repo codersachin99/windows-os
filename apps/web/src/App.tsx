@@ -35,6 +35,10 @@ export default function App() {
     onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
   if (state.phase === "bsod") return <SourceBsodScreen
     code={state.bsodCode??"DUMMY_BSOD"} onRestart={() => dispatch({type:"RESTART"})}/>;
+  if (state.phase === "switch") return <LogonScreen
+    onGuest={() => dispatch({type:"RESUME_SESSION"})}
+    onShutdown={() => dispatch({type:"SHUTDOWN"})}
+    onRestart={() => dispatch({type:"RESTART"})}/>;
   if (state.phase === "shutdown") return <main className="windows-shutdown">
     <img src="/assets/images/start-button-classic.ec7b0b9f.webp" width={64} height={64} alt="" />
     <p>Windows is shutting down</p>

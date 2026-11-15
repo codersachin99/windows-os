@@ -190,3 +190,28 @@ describe("source Win7 shell BSOD virtual view transition",()=>{
     expect(restarted.windows).toHaveLength(0);
   });
 });
+
+
+describe("pinned hotkey Alt+L Switch view preserves existing user session",()=>{
+  it("switches to a distinct logon-like view, resumes same Guest windows and still permits actual LOG_OFF",()=>{
+    const boot=initialDesktopState();
+    expect(desktopReducer(boot,{type:"SWITCH_USER"})).toBe(boot);
+    expect(desktopReducer(boot,{type:"RESUME_SESSION"})).toBe(boot);
+    const signedIn=desktopReducer(desktopReducer(boot,{type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const open=desktopReducer(signedIn,{type:"OPEN_APP",app:appRegistry.get("computer")!});
+    const switched=desktopReducer(open,{type:"SWITCH_USER"});
+    expect(switched.phase).toBe("switch");
+    expect(switched.session).toEqual(open.session);
+    expect(switched.windows).toEqual(open.windows);
+    expect(switched.startOpen).toBe(false);
+    expect(desktopReducer(switched,{type:"OPEN_APP",app:appRegistry.get("notepad")!}))
+      .toEqual(switched);
+    const resumed=desktopReducer(switched,{type:"RESUME_SESSION"});
+    expect(resumed.phase).toBe("desktop");
+    expect(resumed.windows).toEqual(open.windows);
+    const signedOut=desktopReducer(resumed,{type:"LOG_OFF"});
+    expect(signedOut.phase).toBe("logon");
+    expect(signedOut.session).toBeNull();
+    expect(signedOut.windows).toHaveLength(0);
+  });
+});

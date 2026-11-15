@@ -1,5 +1,5 @@
 export type ThemeId = "win7" | "winxp" | "win11" | "win10" | "winvista" | "win31" | "win95" | "win98";
-export type SessionPhase = "boot" | "logon" | "desktop" | "shutdown" | "bsod";
+export type SessionPhase = "boot" | "logon" | "switch" | "desktop" | "shutdown" | "bsod";
 export type AppKind = "system" | "utility" | "media" | "game" | "web";
 
 export interface AppDefinition {
@@ -49,6 +49,8 @@ export type DesktopAction =
   | { type: "BOOT_COMPLETE" }
   | { type: "GUEST_LOGIN" }
   | { type: "LOG_OFF" }
+  | { type: "SWITCH_USER" }
+  | { type: "RESUME_SESSION" }
   | { type: "SHUTDOWN" }
   | { type: "BSOD"; code: string }
   | { type: "RESTART" }
