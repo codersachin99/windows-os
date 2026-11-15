@@ -590,7 +590,7 @@ function scoreTextFields(fields:readonly {text:string;weight:number}[],terms:rea
   const texts=fields.map(field=>sourceNormalize(field.text));
   let score=0;
   for(const term of terms){
-    const hits=fields.filter((field,i)=>termStartsWord(texts[i],term));
+    const hits=fields.filter((_,i)=>termStartsWord(texts[i],term));
     if(!hits.length)return 0;
     score+=Math.max(...hits.map(hit=>hit.weight));
   }
