@@ -189,3 +189,23 @@ test("original CMD PAUSE displays pending prompt and resumes on any key",async({
   await execute(input,"echo AfterInterrupt");
   await expect(output).toHaveText("AfterInterrupt");
 });
+
+
+test("source CMD RD /S requires Y and only deletes the confirmed Guest subtree",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"md Documents\\ConfirmDelete");
+  await execute(input,"md Documents\\ConfirmDelete\\Nested");
+  await execute(input,"rd /s Documents\\ConfirmDelete");
+  await expect(output).toContainText("Are you sure (Y/N)?");
+  await input.press("n");
+  await expect(output).toContainText("Are you sure (Y/N)? n");
+  await execute(input,"dir /b Documents");
+  await expect(output).toContainText("ConfirmDelete");
+
+  await execute(input,"rd /s Documents\\ConfirmDelete");
+  await expect(output).toContainText("Are you sure (Y/N)?");
+  await input.press("y");
+  await expect(output).toContainText("Are you sure (Y/N)? y");
+  await execute(input,"dir /b Documents");
+  await expect(output).not.toContainText("ConfirmDelete");
+});

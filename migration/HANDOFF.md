@@ -907,3 +907,9 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Ported original PAUSE with visible waiting message, injected keyboard keyResolver, any-key continuation and chained commands. Ctrl+C/unmount release pending key reads; stale UI output remains guarded.
 - Model and browser coverage added, including explicit unsupported response without a key host. No [run-ci] in this commit while Ctrl+C acceptance CI #43681551196 is still active; batch with next acceptance test.
 - Draft PR #1, main untouched, no release. No host shell access.
+
+
+## CMD original RD /S source confirmation — 15 November 2026 (CI staged)
+
+- Pinned Te.rd and ke(waitForKey) Y/N confirmation restored for nonempty RD /S or RMDIR /S; response N preserves actual Guest file bytes, Y performs an atomic Guest VFS removeTree, and empty folders delete without prompt. No host filesystem access.
+- Added model and real desktop/mobile confirmation browser tests. No [run-ci] yet while Ctrl+C CI #43681551196 runs; batch with PAUSE in the next opt-in test. Keep PR #1 draft and main untouched.

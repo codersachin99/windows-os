@@ -25,7 +25,7 @@ export interface SourceCmdColorStyle{
   backgroundColor:string;
   color:string;
 }
-type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"write"|"mkdir"|"remove"|"move"|"copy">;
+type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"write"|"mkdir"|"remove"|"removeTree"|"move"|"copy">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath"|"pathConfig">;
 
 /** Original b894 Ht.trim(): 300 visible CMD transcript entries. */
@@ -747,15 +747,10 @@ export class SourceCmdSession {
       }
     }else if(name==="rd"){
       const tokens=sourceCmdArguments(args);
-      // Original RD /S confirms removal of non-empty subtrees. Until
-      // source host.waitForKey is ported, never delete those without consent.
       const recursive=tokens.some(token=>/^\/s$/i.test(token));
       const target=tokens.find(token=>!/^\/s$/i.test(token));
       if(!target||tokens.length!==(recursive?2:1)){
         output=[INVALID_SYNTAX];errorlevel=1;
-      }else if(recursive){
-        output=["RD /S confirmation is not yet available in this migration."];
-        errorlevel=1;
       }else{
         try{
           const dest=this.resolve(target);
@@ -765,11 +760,29 @@ export class SourceCmdSession {
             if(!entry){output=[PATH_NOT_FOUND];errorlevel=1;}
             else if(entry.type!=="directory"){
               output=[NOT_DIRECTORY];errorlevel=1;
-            }else if((await this.fs.list(dest.uri)).length){
-              output=[DIR_NOT_EMPTY];errorlevel=1;
             }else{
-              try{await this.fs.remove(dest.uri);}
-              catch{output=[ACCESS_DENIED];errorlevel=1;}
+              const children=await this.fs.list(dest.uri);
+              if(children.length&&!recursive){
+                output=[DIR_NOT_EMPTY];errorlevel=1;
+              }else if(children.length&&!this.waitForKey){
+                output=["RD /S requires interactive confirmation."];
+                errorlevel=1;
+              }else{
+                let confirmed=true;
+                if(children.length){
+                  const question=dest.win+", Are you sure (Y/N)? ";
+                  const answer=await this.waitForKey!(question);
+                  // Original ke() accepts a single Y/y key only.
+                  output=[question+answer];
+                  confirmed=/^y$/i.test(answer);
+                }
+                if(confirmed){
+                  try{
+                    if(recursive)await this.fs.removeTree(dest.uri);
+                    else await this.fs.remove(dest.uri);
+                  }catch{output.push(ACCESS_DENIED);errorlevel=1;}
+                }
+              }
             }
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}

@@ -690,3 +690,57 @@ describe("original cmd.js ze.pause and b894 host.waitForKey source interaction",
     expect(result.errorlevel).toBe(1);
   });
 });
+
+
+describe("pinned source RD /S confirmation via host.waitForKey on Guest VFS",()=>{
+  it("requires Y to atomically remove a nonempty Guest folder and keeps N intact",async()=>{
+    const prompts:string[]=[];
+    let response="n";
+    const {fs,session}=await createShell(async message=>{
+      prompts.push(message);
+      return response;
+    });
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents/Recursive";
+    await fs.mkdir(root);
+    await fs.mkdir(root+"/Nested");
+    await fs.write("important",root+"/Nested/note.txt");
+    expect((await session.run("rd Documents\\Recursive")).output)
+      .toEqual(["The directory is not empty."]);
+    const denied=await session.run("rmdir /s Documents\\Recursive");
+    expect(denied.output).toEqual([
+      "C:\\Users\\Guest\\Documents\\Recursive, Are you sure (Y/N)? n"
+    ]);
+    expect(denied.errorlevel).toBe(0);
+    expect(await fs.read(root+"/Nested/note.txt")).toBe("important");
+    response="Y";
+    const approved=await session.run("rd /s Documents\\Recursive");
+    expect(approved.output).toEqual([
+      "C:\\Users\\Guest\\Documents\\Recursive, Are you sure (Y/N)? Y"
+    ]);
+    expect(approved.errorlevel).toBe(0);
+    expect(await fs.stat(root)).toBeNull();
+    expect(await fs.stat(root+"/Nested/note.txt")).toBeNull();
+    expect(prompts).toHaveLength(2);
+  });
+  it("does not ask confirmation for an empty directory even with /s",async()=>{
+    let timesAsked=0;
+    const {fs,session}=await createShell(async ()=>{
+      timesAsked++;
+      return "n";
+    });
+    const path="/EXTERNAL/computer/drive0/Users/Guest/Documents/EmptyForRD";
+    await fs.mkdir(path);
+    expect((await session.run("rd /s Documents\\EmptyForRD")).output).toEqual([]);
+    expect(await fs.stat(path)).toBeNull();
+    expect(timesAsked).toBe(0);
+  });
+  it("refuses nonempty recursive removal when interactive key reader is missing",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents/Protected";
+    await fs.mkdir(root);
+    await fs.write("keep",root+"/file.txt");
+    expect((await session.run("rd /s Documents\\Protected")).output)
+      .toEqual(["RD /S requires interactive confirmation."]);
+    expect(await fs.read(root+"/file.txt")).toBe("keep");
+  });
+});
