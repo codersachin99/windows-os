@@ -437,7 +437,7 @@ describe("source cmd.js gt()/mt() conditional && || and & chain grammar",()=>{
     expect(failure.errorlevel).toBe(0);
     expect((await session.run("thiscommanddoesnotexist & echo After")).output.at(-1))
       .toBe("After");
-    expect((await session.run("echo \\"A & B\\"")).output)
+    expect((await session.run('echo "A & B"')).output)
       .toEqual(['"A & B"']);
   });
 
