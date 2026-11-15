@@ -183,7 +183,12 @@ test("original CMD PAUSE displays pending prompt and resumes on any key",async({
   await input.fill("pause");
   await input.press("Enter");
   await expect(output).toHaveText("Press any key to continue . . .");
+  // A second PAUSE must still be in-flight before Ctrl+C. The synchronous
+  // source session ref, not a possibly stale render of busy, owns this state.
+  await expect(input).toHaveAttribute("readonly","");
+  const before=await cmd.locator("[data-test-cmd-entry]").count();
   await input.press("ControlOrMeta+c");
+  await expect(cmd.locator("[data-test-cmd-entry]")).toHaveCount(before);
   await expect(output).toHaveText("Press any key to continue . . .\n^C");
   await expect(input).not.toHaveAttribute("readonly");
   await execute(input,"echo AfterInterrupt");

@@ -108,7 +108,9 @@ export function CmdApp({
     setInput(next);
   };
   const execute=async()=>{
-    if(!shell||busy)return;
+    // The in-flight ref is set before React renders readOnly/busy.
+    // This closes the small between-commits keyboard race on rapid commands.
+    if(!shell||pendingEntry.current)return;
     completion.current=null;
     completionRequest.current++;
     const text=input;
@@ -160,7 +162,10 @@ export function CmdApp({
     if(!shell)return;
     // b894: cancel display of pending source output. Ongoing VFS
     // operations cannot be interrupted atomically, and may still finish.
-    const running=busy&&pendingEntry.current!==null;
+    // React's busy state is only for the readonly/visual UI. The synchronous
+    // ref is the authoritative running state: Ctrl+C must not produce an idle
+    // row while a PAUSE prompt is visible but state render is lagging.
+    const running=pendingEntry.current!==null;
     runId.current++;
     const release=keyResolver.current;
     keyResolver.current=null;
@@ -183,7 +188,7 @@ export function CmdApp({
       // A running command's Ctrl+C must always interrupt even if a prior
       // selection still exists (including an active PAUSE key wait).
       // At the idle prompt, preserve the pinned source copy-selection rule.
-      if(!busy&&selection&&!selection.isCollapsed)return;
+      if(!pendingEntry.current&&selection&&!selection.isCollapsed)return;
       event.preventDefault();
       interrupt();
       return;
