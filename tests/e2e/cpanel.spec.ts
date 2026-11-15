@@ -221,3 +221,47 @@ test("Backup and Restore rejects a fake archive instead of changing Guest files"
   await expect(panel.locator('[data-test-backup-status="error"]'))
     .toContainText("Invalid backup file");
 });
+
+test("pinned source Control Panel root exposes 24 tile targets without fake host settings",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const ids=[
+    "data","datetime","default","storage","display","action-center","backup",
+    "access","gadgets","keyboard","mouse","notification","personalize",
+    "power","programs","region","sound","speech","sync","system","taskbar",
+    "accounts","defender","update"
+  ];
+  const tiles=panel.locator("[data-test-cpanel-item]");
+  await expect(tiles).toHaveCount(ids.length);
+  expect(await tiles.evaluateAll(nodes=>nodes.map(node=>
+    node.getAttribute("data-test-cpanel-item")))).toEqual(ids);
+  await expect(panel.locator(".windows-cpanel__home h2"))
+    .toHaveText("Adjust your device's settings");
+  for(const id of ["defender","update","data","taskbar","gadgets"]){
+    await expect(panel.locator('[data-test-cpanel-item="'+id+'"]'))
+      .toBeDisabled();
+  }
+  for(const id of ["display","accounts","programs","notification","action-center","backup"]){
+    await expect(panel.locator('[data-test-cpanel-item="'+id+'"]'))
+      .toBeEnabled();
+  }
+});
+
+test("original Control Panel indexed tasks route only migrated destinations",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const search=panel.getByRole("searchbox",{name:"Search Control Panel"});
+  await search.fill("spyware");
+  await expect(panel.locator('[data-test-cpanel-result="defender"]'))
+    .toBeVisible();
+  await expect(panel.locator('[data-test-cpanel-result="defender"] button'))
+    .toBeDisabled();
+  await search.fill("customize icons");
+  const taskbar=panel.locator('[data-test-cpanel-result="taskbar"]');
+  await expect(taskbar).toBeVisible();
+  await expect(taskbar.locator(".windows-cpanel__link")).toBeDisabled();
+  await taskbar.getByRole("button",{name:"Customize icons on the taskbar"}).click();
+  await expect(panel.locator("[data-test-cpanel-notification]")).toBeVisible();
+  await panel.locator("[data-test-cpanel-back]").click();
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+});
