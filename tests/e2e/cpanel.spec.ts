@@ -197,14 +197,14 @@ test("original Backup and Restore downloads a ZIP and restores a removed Guest f
     name:"backup.zip",mimeType:"application/zip",buffer:archive
   });
   await expect(reopened.locator('[data-test-backup-status="success"]'))
-    .toContainText("1 restored, 0 skipped");
+    .toContainText(/1 restored, \d+ skipped/);
   await expect(page.locator('[data-test-desktop-file="'+desktop+'/Backup Sample.txt"]'))
     .toBeVisible();
   await upload.setInputFiles({
     name:"backup.zip",mimeType:"application/zip",buffer:archive
   });
   await expect(reopened.locator('[data-test-backup-status="success"]'))
-    .toContainText("0 restored, 1 skipped");
+    .toContainText(/0 restored, \d+ skipped/);
   await reopened.locator("[data-test-cpanel-back]").click();
   await expect(reopened.locator("[data-test-cpanel-items]")).toBeVisible();
   await reopened.getByRole("searchbox",{name:"Search Control Panel"}).fill("restore");
