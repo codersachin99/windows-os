@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
 import { legacyArt } from "@windows-os/assets";
-import { appRegistry } from "@windows-os/sdk";
+import { appRegistry,fileStore } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
@@ -78,6 +78,7 @@ function ApplicationContent({
       else dispatch({type:"BSOD",code:"DUMMY_BSOD"});
     }} />;
   if (appId === "cpanel") return <ControlPanelApp
+    filesystem={fileStore}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     trayPreferences={trayPreferences}
