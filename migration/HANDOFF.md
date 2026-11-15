@@ -1,4 +1,21 @@
 
+## First real source Control Panel Display slice — 15 November 2026
+
+Registered `cpanel` in the shared app registry and Start Menu right-side action, built
+`packages/apps/cpanel` as a separate React package. Source `cpanel.js`
+a259/pa location history (root null, back/forward, truncate forward)
+and original Display resolution/zoom choices are implemented, and web-only
+Display controls remain disabled per original source rather than writing
+host display settings. Imported original cpanel, display and resolution
+WebP binary artwork using exact legacy blob SHA verification.
+Added model and desktop/mobile Playwright contracts and a detailed
+`migration/CPANEL-SOURCE.md`. The Control Panel source tracker moves
+pending → in-progress; other five panels, root category registry,
+search index, layout pixel parity and native adapters remain pending.
+No full app acceptance is claimed. CI next opt-in batch when previous hotkey
+run #43716174491 concludes.
+
+
 ## Original Alt+L separate Switch phase — 15 November 2026
 
 Traced `src/modules/runtime/vue-app.js` source logon view function

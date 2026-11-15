@@ -6,6 +6,7 @@ import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
 import { CmdApp } from "@windows-os/apps/cmd";
+import { ControlPanelApp } from "@windows-os/apps/cpanel";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
@@ -67,6 +68,8 @@ function ApplicationContent({
       else if(view==="Shutdown")dispatch({type:"SHUTDOWN"});
       else dispatch({type:"BSOD",code:"DUMMY_BSOD"});
     }} />;
+  if (appId === "cpanel") return <ControlPanelApp
+    onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

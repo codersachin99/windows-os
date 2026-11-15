@@ -132,8 +132,15 @@
       "source": "src/modules/apps/cpanel.js",
       "sha": "38f2ad53f2d822ffc684a5472a746a81141690a3",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/cpanel/src/model.ts",
+        "packages/apps/cpanel/src/model.test.ts",
+        "packages/apps/cpanel/src/ControlPanelApp.tsx",
+        "packages/apps/cpanel/src/ControlPanelApp.css",
+        "tests/e2e/cpanel.spec.ts",
+        "migration/CPANEL-SOURCE.md"
+      ]
     },
     {
       "source": "src/modules/apps/find.js",

@@ -140,6 +140,10 @@ export function StartMenu({ dispatch }: StartMenuProps) {
         <strong>Guest</strong>
         <hr />
         <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("computer")! })}>Computer</button>
+        <button data-test-open-cpanel="" onClick={() => {
+          const panel=appRegistry.get("cpanel");
+          if(panel)dispatch({type:"OPEN_APP",app:panel});
+        }}>Control Panel</button>
         <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("web_contacts")! })}>Contacts</button>
         <hr />
         <button onClick={() => dispatch({ type: "LOG_OFF" })}>Log off</button>

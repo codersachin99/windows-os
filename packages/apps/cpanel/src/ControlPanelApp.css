@@ -1,0 +1,70 @@
+/* Original cpanel.js a259: white scrollable panel under a Win7
+ * window address bar, p-6 results, and a browser-disabled Display fieldset.
+ * Full original root tile inventory and skins remain pending. */
+.windows-cpanel{
+  width:100%;height:100%;min-height:0;
+  background:#fff;color:#202020;display:flex;flex-direction:column;
+  font-family:"Segoe UI",Tahoma,sans-serif;font-size:13px;
+}
+.windows-cpanel__addressbar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(#f7fbff,#e2edf8);border-bottom:1px solid #aebac8;
+  padding:7px 8px;flex:none;
+}
+.windows-cpanel__navigation{display:flex;gap:3px}
+.windows-cpanel__navigation button{
+  width:25px;height:24px;border:1px solid #8aa4bd;
+  background:linear-gradient(#fff,#d4e2f0);border-radius:3px;
+}
+.windows-cpanel__navigation button:disabled{opacity:.5}
+.windows-cpanel__breadcrumb{
+  display:flex;align-items:center;gap:5px;min-height:26px;padding:0 9px;
+  flex:1 1 180px;min-width:0;border:1px solid #adc0d0;background:#fff;
+}
+.windows-cpanel__breadcrumb button{
+  border:0;background:none;color:#28374a;cursor:pointer;padding:2px;
+}
+.windows-cpanel__addressbar input{
+  flex:0 1 190px;min-width:120px;max-width:100%;
+  height:26px;padding:4px 7px;border:1px solid #adc0d0;
+  background:#fff;color:#111;
+}
+.windows-cpanel__content{min-height:0;flex:1;overflow:auto}
+.windows-cpanel__home h2{
+  margin:0 0 20px;padding:24px;border-bottom:1px solid #d4d4d4;
+  font-weight:400;font-size:20px;color:#333;
+}
+.windows-cpanel__tile{
+  display:flex;align-items:center;gap:16px;text-align:left;
+  margin:0 24px 14px;padding:8px 14px;border:1px solid transparent;
+  color:#145f99;background:transparent;cursor:pointer;font-size:16px;
+}
+.windows-cpanel__tile:hover{background:#ecf5fd;border-color:#a9d2f0}
+.windows-cpanel__results{padding:24px}
+.windows-cpanel__result{display:flex;gap:12px;margin-bottom:16px}
+.windows-cpanel__result>div{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.windows-cpanel__link,.windows-cpanel__task{
+  border:0;background:none;padding:0;text-align:left;cursor:pointer;color:#1267a8
+}
+.windows-cpanel__link{font-size:20px}
+.windows-cpanel__task:hover,.windows-cpanel__link:hover{text-decoration:underline}
+.windows-cpanel__display{padding:12px 24px}
+.windows-cpanel__display h2{font-size:20px;font-weight:400;margin:12px 0 20px}
+.windows-cpanel__display-preview{
+  border:1px solid #222;padding:8px;margin-bottom:16px;display:flex;justify-content:center;
+}
+.windows-cpanel__display-preview img{display:block;max-width:208px;width:100%;object-fit:contain}
+.windows-cpanel__display fieldset{border:0;margin:0;padding:0;min-width:0}
+.windows-cpanel__display label{
+  display:flex;align-items:center;gap:12px;margin:0 0 16px;
+}
+.windows-cpanel__display label select{width:min(290px,70%);max-width:100%;height:27px}
+.windows-cpanel__display label{justify-content:space-between;max-width:490px}
+.windows-cpanel__footer{
+  margin:32px 0 0;display:flex;justify-content:flex-end;gap:10px;
+}
+.windows-cpanel__footer button{min-width:75px;padding:5px 13px}
+@media(max-width:480px){
+  .windows-cpanel__addressbar input{flex:1 1 100%}
+  .windows-cpanel__display{padding:10px 16px}
+}

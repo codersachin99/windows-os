@@ -21,6 +21,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 550, height: 400, resizable: false, centered: true }
   },
   {
+    id: "cpanel", label: "Control Panel", icon: legacyArt.cpanel,
+    kind: "system", desktop: false, showInStart: false,
+    // Original source WindowMain is a standard resizable shell window.
+    // Exact initial dimensions await side-by-side screenshot acceptance.
+    window: { width: 760, height: 490 }
+  },
+  {
     id: "cmd", label: "Command Prompt", icon: legacySourceIconArtwork("cmd").src,
     kind: "utility", desktop: false, showInStart: true,
     // Source cmd.js Ft=300 minimum height; interim width pending screenshot parity.

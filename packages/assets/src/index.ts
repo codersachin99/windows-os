@@ -24,6 +24,10 @@ export const legacyArt = {
   run: "/assets/images/run.cf7c0332.webp",
   // Byte-identical pinned original Windows 7 Command Prompt artwork.
   cmd: "/assets/images/cmd.a2c1d19b.webp",
+  // Byte-identical pinned Win7 Control Panel and Display page artwork.
+  cpanel: "/assets/images/cpanel.38ffbb1d.webp",
+  display: "/assets/images/display.8adb9edd.webp",
+  resolutionPreview: "/assets/images/resolution.f3fc8376.webp",
   sticky: "/assets/images/sticky.e63cea5a.webp",
   stickyAdd: "/assets/images/stickynotes-add.bfbefc41.webp",
   stickyClose: "/assets/images/stickynotes-close.80b2c95a.webp",
@@ -79,7 +83,8 @@ const sourceLegacyIconMap:Readonly<Record<string,string>>={
   player:legacyArt.player,recorder:legacyArt.recorder,
   magnifier:legacyArt.magnifier,snipping:legacyArt.snipping,
   taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
-  run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer
+  run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer,
+  cpanel:legacyArt.cpanel,display:legacyArt.display
 };
 export interface LegacySourceIconArtwork{
   src:string;
