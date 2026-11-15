@@ -1,5 +1,6 @@
 import {describe,it,expect} from "vitest";
 import {sourceProgramsById} from "@windows-os/filesystem";
+import {legacyCpanelTileArtwork} from "@windows-os/assets";
 import {
   SOURCE_CPANEL_REGISTRY,sourceCpanelIsSupported,sourceCpanelSearchRegistry
 } from "./sourceRegistry";
@@ -35,6 +36,14 @@ describe("pinned source 3097/a97a Control Panel registry",()=>{
         label:"Customize icons on the taskbar",id:"notification"
       }));
     expect(SOURCE_CPANEL_REGISTRY.reduce((a,x)=>a+x.tasks.length,0)).toBe(66);
+  });
+  it("has a pinned original artwork path for every root icon key",()=>{
+    const icons=SOURCE_CPANEL_REGISTRY.map(item=>legacyCpanelTileArtwork[item.iconKey]);
+    expect(icons).toHaveLength(24);
+    expect(icons.every(path=>path?.endsWith(".webp"))).toBe(true);
+    expect(legacyCpanelTileArtwork.backup).toContain("backup.5e4eb80c.webp");
+    expect(legacyCpanelTileArtwork["action-center-headline"])
+      .toContain("action-center-headline.27cc6d83.webp");
   });
   it("keeps unavailable program/settings visible, but not falsely executable",()=>{
     expect(sourceCpanelIsSupported("display")).toBe(true);
