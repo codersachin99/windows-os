@@ -292,6 +292,21 @@ export function sourceCmdPipelineSegments(input:string):string[]{
   return segments;
 }
 
+/** Original cmd.js vt(): keep the untouched argument separator whitespace.
+ * Original ECHO strips just ONE leading ASCII space and retains the rest. */
+export function sourceCmdRawRest(value:string):string{
+  const text=String(value||"");
+  const start=text.search(/\S/);
+  if(start<0)return text;
+  if(text[start]==='"'){
+    const end=text.indexOf('"',start+1);
+    return end<0?"":text.slice(end+1);
+  }
+  const remaining=text.slice(start);
+  const index=remaining.search(/\s/);
+  return index<0?"":remaining.slice(index);
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -509,10 +524,12 @@ export class SourceCmdSession {
       else if(args===";")this.environment.delete("PATH");
       else this.setEnvironment("PATH",args);
     }else if(name==="echo"){
-      if(!args)output=["ECHO is "+(this.echo?"on":"off")];
-      else if(/^(on|off)$/i.test(args))this.echo=args.toLowerCase()==="on";
-      else if(args===".")output=[""];
-      else output=[rest];
+      const sourceRest=sourceCmdRawRest(sourceCmdUnglue(expanded));
+      const value=sourceRest.trim();
+      if(!value)output=["ECHO is "+(this.echo?"on":"off")];
+      else if(/^(on|off)$/i.test(value))this.echo=value.toLowerCase()==="on";
+      else if(value===".")output=[""];
+      else output=[sourceRest.replace(/^ /,"")];
     }else if(name==="find"||name==="sort"||name==="more"){
       const tokens=sourceCmdArguments(args);
       const flags=new Set(tokens.filter(token=>token.startsWith("/"))

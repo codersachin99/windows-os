@@ -879,3 +879,9 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Pinned yt()/Tt.runPipeline and ie FIND/SORT/MORE implemented with original quote-aware pipe splitter, stage output forwarding, Guest file read input and source flags. Intermediate output is hidden, final output may be sent to source wt() redirect. Source helper and real Guest unit/browser contracts included.
 - No host process is run. This commit intentionally omits [run-ci] while existing chain+redirect retest #43679131656 remains active. Run a single opt-in CI on a later combined checkpoint after inspecting current results.
 - Still pending: CMD batches, host interactions/confirmation and screenshot parity, plus other source commands. Keep PR #1 draft, main untouched and no release.
+
+
+## CMD source vt() ECHO whitespace fidelity — 2026-11-15 (CI batched later)
+
+- Original ECHO source preserves untrimmed rest and removes one leading literal space; added sourceCmdRawRest and ECHO tests for multi-space, tab, ON/OFF, dot and chained operators. Other command parsing remains unchanged.
+- This commit contains no [run-ci] while #43679131656 remains in progress. Combine with pending quoted pipeline/FIND/SORT/MORE CI once previous verification concludes. Draft PR #1, main untouched and no release.

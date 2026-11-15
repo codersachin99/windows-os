@@ -8,7 +8,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdCompletionTarget,sourceCmdApplyCompletion,
   sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
   sourceCmdChainSegments,sourceCmdParseRedirect,
-  sourceCmdPipelineSegments} from "./model";
+  sourceCmdPipelineSegments,sourceCmdRawRest} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -584,5 +584,25 @@ describe("original cmd.js yt()/ie FIND SORT MORE source VFS pipelines",()=>{
     expect((await session.run('sort Q:\\host-secret.txt')).output)
       .toEqual(["The system cannot find the file specified."]);
     expect((await session.run('echo sample | find missing')).errorlevel).toBe(1);
+  });
+});
+
+
+describe("original cmd.js vt()/Te.echo separator whitespace fidelity",()=>{
+  it("keeps all untouched separator whitespace before ECHO arguments",()=>{
+    expect(sourceCmdRawRest(" echo   padded  ")).toBe("   padded  ");
+    expect(sourceCmdRawRest("echo\tpadded")).toBe("\tpadded");
+    expect(sourceCmdRawRest('echo "A & B"')).toBe(' "A & B"');
+    expect(sourceCmdRawRest("echo")).toBe("");
+  });
+  it("strips only the first separating ASCII space, not meaningful input",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("echo   padded  ")).output).toEqual(["  padded  "]);
+    expect((await session.run("echo\tpadded")).output).toEqual(["\tpadded"]);
+    expect((await session.run("echo   off")).echo).toBe(false);
+    expect((await session.run("echo   .")).output).toEqual([""]);
+    expect((await session.run("echo   on")).echo).toBe(true);
+    expect((await session.run("echo first & echo second")).output)
+      .toEqual(["first ","second"]);
   });
 });
