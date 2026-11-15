@@ -135,6 +135,20 @@ describe("source Ie backup / je safe Guest restore",()=>{
     expect(found).toBe(true);
     expect(()=>sourceParseBackupArchive(symlink)).toThrow(/ZIP symlink/);
   });
+  it("preflights conflicting ZIP files and parents before creating directories",async()=>{
+    const store=await guest();
+    const archive=makeZip({
+      "Documents/first/ok.txt":text("hello"),
+      "Documents/other.txt":text("file"),
+      "Documents/other.txt/nested.txt":text("must not become a directory")
+    });
+    await expect(sourceRestoreBackupArchive(store,archive))
+      .rejects.toThrow(/file and folder collision/);
+    expect(await store.stat(SOURCE_GUEST_PROFILE+"/Documents/first"))
+      .toBeNull();
+    expect(await store.stat(SOURCE_GUEST_PROFILE+"/Documents/other.txt"))
+      .toBeNull();
+  });
   it("rejects inconsistent payload CRC and keeps Guest data intact",async()=>{
     const bytes=makeZip({"Documents/ok.txt":text("abc")}).slice();
     const view=new DataView(bytes.buffer);
