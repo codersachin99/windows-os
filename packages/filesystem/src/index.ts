@@ -539,6 +539,9 @@ export type { FileSearchRequest, FileSearchResult, FileSearchProgress } from "./
 
 export * from "./sourceGuest";
 
+// Source f106/Ie/je Guest profile ZIP backup/restore with strict import bounds.
+export * from "./sourceBackup";
+
 export * from "./sourcePrograms";
 
 export { transferFiles } from "./transfer";
