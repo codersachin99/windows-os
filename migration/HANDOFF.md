@@ -988,3 +988,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Added original Re/Ne/je simulated task listing from actual open desktop windows, image names and source PID step, aligned table and fixed source simulation memory. TASKKILL /PID and /IM send close requests via existing DesktopShell onRequestCloseWindow, never host OS process signals. Unit and desktop/mobile tests check live CMD window, missing task errors and closure.
 - No [run-ci] here while earlier WHERE/START [CI #43684125612](https://github.com/codersachin99/windows-os/actions/runs/43684125612) and DIR/interactive [CI #43683710914](https://github.com/codersachin99/windows-os/actions/runs/43683710914) are still running browser suites. Verify and batch later.
 - Keep PR #1 draft, main untouched, no premature release; visual parity pending.
+
+
+## Source TASKLIST / TASKKILL combined opt-in acceptance — 2026-11-15
+
+- [Simulated window process support 9c2c6b2](https://github.com/codersachin99/windows-os/commit/9c2c6b23a55c4f734805ff82849fa2634648c0db): original source PIDs, source-specified tasklist column formatting, TASKKILL /PID and /IM through existing DesktopShell window close request. Unit tests and desktop/mobile tests added for live CMD task listing and self-termination. Underlying host OS processes are never observed or terminated.
+- This commit opts in to one [run-ci] combined test batch for the new source simulated task commands. Other source command changes (DIR, WHERE, START) were already submitted in earlier separate opt-in batches and remain subject to their own browser conclusions. This run verifies the latest complete feature branch including them.
+- Do not claim source, unit, build or browser passes before this new workflow reports. Keep PR #1 draft, main untouched, and no premature release or full parity claim.
