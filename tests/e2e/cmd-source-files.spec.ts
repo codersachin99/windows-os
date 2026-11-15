@@ -355,3 +355,14 @@ test("original CMD SHUTDOWN uses the simulator shutdown view only",async({page})
   await expect(page.getByRole("button",{name:"Restart WindowsOS"})).toBeVisible();
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
 });
+
+
+test("original browser CMD HOSTNAME writes the source blank host field",async({page})=>{
+  const {cmd,input}=await launchSourceCommandPrompt(page);
+  await execute(input,"hostname");
+  const entry=cmd.locator("[data-test-cmd-entry]").last();
+  await expect(entry.locator("[data-test-cmd-line]")).toContainText("hostname");
+  await expect(entry.locator("[data-test-cmd-output]")).toHaveText("");
+  await execute(input,"echo HostnameDone");
+  await expect(cmd.locator("[data-test-cmd-output]").last()).toHaveText("HostnameDone");
+});

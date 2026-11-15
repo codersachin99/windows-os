@@ -1091,3 +1091,17 @@ describe("pinned original ot.logoff and ot.shutdown simulator lifecycle bridges"
     expect(result.output).toEqual(["The simulated system view is unavailable."]);
   });
 });
+
+
+describe("original Ze.hostname using pinned browser Device2Web host field",()=>{
+  it("prints the original blank browser hostname rather than identifying the host OS",async()=>{
+    const {session}=await createShell();
+    const result=await session.run("hostname");
+    expect(result.errorlevel).toBe(0);
+    expect(result.output).toEqual([""]);
+    expect((await session.run("help hostname")).output)
+      .toContain("Prints the name of the current host.");
+    expect((await session.run("echo still-running")).output)
+      .toEqual(["still-running"]);
+  });
+});

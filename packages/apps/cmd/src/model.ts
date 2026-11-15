@@ -94,6 +94,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   winver:"Displays the version of Windows.",
   logoff:"Logs the current user off.",
   shutdown:"Allows proper shutdown of the device.",
+  hostname:"Prints the name of the current host.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -777,6 +778,10 @@ export class SourceCmdSession {
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
       }
+    }else if(name==="hostname"){
+      // Original Ze.hostname asks getDeviceInfo().host; pinned browser
+      // Device2Web.getInfo() sets host:"". Never leak the native host name.
+      output=[""];
     }else if(name==="ipconfig"){
       output=sourceCmdIpconfigOutput();
     }else if(name==="tasklist"){

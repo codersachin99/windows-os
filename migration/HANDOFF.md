@@ -1,3 +1,8 @@
+
+## Original CMD Ze.HOSTNAME web-adapter behavior — 15 November 2026
+
+Pinned source CMD `Ze.hostname` writes `(await host.getDeviceInfo()).host`. The pinned browser `src/modules/runtime/capacitor-plugin-device2.js` `Device2Web.getInfo()` returns `host:""`, overriding the generic device info. Therefore the original **web** simulator prints exactly one blank line for `HOSTNAME` with exit status 0; it does not display the user's actual computer hostname, IP address, or an invented machine name. Ported that exact web behavior and source HELP description to CMD, with pure and desktop/mobile browser assertions. This does not claim native Capacitor/Tauri device-info parity; those would require a distinct permissioned host adapter. The prior opt-in CI `#43689829426` covers commits through `a3ff1b3`, **not** this newer HOSTNAME slice, which deliberately omits `[run-ci]` while the existing batch runs.
+
 ## On-demand acceptance checkpoint — 15 November 2026
 
 An opt-in `[run-ci]` acceptance batch is requested for source CMD `IPCONFIG` (commit `280d534`), source `WINVER` adapter (`098fe59`), repeated `PAUSE` Ctrl+C in-flight guard (`f7e80d2`), and simulator-only `LOGOFF`/`SHUTDOWN` view bridges (`9c29c02`). Previous CI `#43684413314` failed only the two existing desktop/mobile PAUSE/interrupt browser cases; TypeScript, unit, build and 384 other browser tests passed. The new test run must validate the changed pause behavior and four source commands across desktop/mobile before any claim of acceptance. PR #1 stays draft, main untouched; no visual pixel-parity acceptance or product release is implied.
