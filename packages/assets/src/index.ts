@@ -22,6 +22,8 @@ export const legacyArt = {
   notepad: "/assets/images/notepad.90e3ce4c.webp",
   calculator: "/assets/images/calc.1733a9a0.webp",
   run: "/assets/images/run.cf7c0332.webp",
+  // Byte-identical pinned original Windows 7 Command Prompt artwork.
+  cmd: "/assets/images/cmd.a2c1d19b.webp",
   sticky: "/assets/images/sticky.e63cea5a.webp",
   stickyAdd: "/assets/images/stickynotes-add.bfbefc41.webp",
   stickyClose: "/assets/images/stickynotes-close.80b2c95a.webp",
@@ -77,7 +79,7 @@ const sourceLegacyIconMap:Readonly<Record<string,string>>={
   player:legacyArt.player,recorder:legacyArt.recorder,
   magnifier:legacyArt.magnifier,snipping:legacyArt.snipping,
   taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
-  run:legacyArt.run,computer:legacyArt.computer
+  run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer
 };
 export interface LegacySourceIconArtwork{
   src:string;

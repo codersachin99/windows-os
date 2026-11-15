@@ -12,7 +12,12 @@ async function launchSourceCommandPrompt(page:Page):Promise<{
   const start=page.locator('[data-test-start-menu]');
   await start.locator('[data-test-all-programs]').click();
   await start.locator('[data-test-source-program-folder="Accessories"]').click();
-  await start.locator('[data-test-source-program="cmd"]').click();
+  const sourceCmd=start.locator('[data-test-source-program="cmd"]');
+  await expect(sourceCmd).toHaveAttribute("data-source-program-artwork","original");
+  await expect(sourceCmd.locator("img")).toHaveAttribute(
+    "src",/\/cmd\.a2c1d19b\.webp$/
+  );
+  await sourceCmd.click();
   const cmd=page.locator('[data-test-window="cmd"]');
   const input=cmd.locator('[data-test-cmd-input]');
   await expect(input).toBeVisible();

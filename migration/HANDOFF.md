@@ -852,3 +852,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 - New SourceCmdSession.complete enumerates actual Guest VFS names under the current mounted Windows path, with original quoted/unquoted token detection, case-insensitive prefix and sorted matching; sourceCmdApplyCompletion adds quotes for spaces. React CMD Tab cycles matches; Escape clears text; non-Tab editing cancels cycling. It never reads the host filesystem.
 - Added pure/VFS unit tests and desktop/mobile Playwright source prompt scenario for Tab cycling, quoted paths and missing mounts. This commit uses **[run-ci]** exactly once to run verification; do not declare this slice verified before the workflow completes.
 - Remaining original CMD features: pipe/redirection/batch, source interactive confirmations and interrupt, exact icon artwork, and original-vs-migration screenshots. CMD remains in progress; 290 tracked original source modules: 254 pending / 28 in progress / 8 implemented / 0 fully pixel-verified. Preserve open draft PR #1, main and no releases.
+
+
+## Source-exact CMD icon artwork — 2026-11-15 (CI deliberately skipped)
+
+- Imported legacy-win7 original cmd.a2c1d19b.webp, exact 536-byte source/target Git blob SHA bcec3ad17a595cc2eb99686b084773b7bb171d9c. Shared original icon registry now maps cmd to this asset, removing the former generic-file placeholder in original CMD shortcut and app window artwork.
+- Added asset/unit contract and browser assertion checking installed Start Menu CMD .lnk icon and original-artwork provenance. This change is **without [run-ci]**, avoiding a second overlapping GitHub Actions run while Tab completion CI #43669660346 finishes. This exact-artwork change is not yet CI verified.
+- Draft PR #1 stays open and unmerged, main unchanged, no release. Remaining CMD work: pipes, redirect, batch, full source commands, confirmation/interrupt and screenshot parity.

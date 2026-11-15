@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {legacyArt} from "./index";
+import {legacyArt,legacySourceIconArtwork} from "./index";
 /** Pinned exact Win7 theme image choices, never fallback glyph approximations. */
 describe("source Windows 7 application icon assets",()=>{
   it("selects all seven original themed WebP icons",()=>{
@@ -15,6 +15,12 @@ describe("source Windows 7 application icon assets",()=>{
       chrome:"/assets/images/chrome.0eddc17a.webp",
       snipping:"/assets/images/snipping.2c25345c.webp",
       player:"/assets/images/player.d45d301d.webp"
+    });
+  });
+  it("uses byte-pinned original CMD artwork rather than the generic file fallback",()=>{
+    expect(legacyArt.cmd).toBe("/assets/images/cmd.a2c1d19b.webp");
+    expect(legacySourceIconArtwork("cmd")).toEqual({
+      src:"/assets/images/cmd.a2c1d19b.webp",exactSourceArtwork:true
     });
   });
 });
