@@ -7,7 +7,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue,
   sourceCmdCompletionTarget,sourceCmdApplyCompletion,
   sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
-  sourceCmdChainSegments} from "./model";
+  sourceCmdChainSegments,sourceCmdParseRedirect} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -464,5 +464,68 @@ describe("source cmd.js gt()/mt() conditional && || and & chain grammar",()=>{
     await session.run("unknowncommand");
     expect((await session.run(" ")).errorlevel).toBe(9009);
     expect((await session.run("echo ok || echo skipped")).output).toEqual(["ok"]);
+  });
+});
+
+
+describe("source cmd.js wt()/Tt.writeFile output redirects",()=>{
+  it("honors the last unquoted > or >>, preserving quoted paths and empty-target text",()=>{
+    expect(sourceCmdParseRedirect('echo "quoted > text" > "Documents\\my report.txt"'))
+      .toEqual({text:'echo "quoted > text" ',redirect:{
+        path:"Documents\\my report.txt",append:false
+      }});
+    expect(sourceCmdParseRedirect("echo one > Documents\\first.txt >> Documents\\next.txt"))
+      .toEqual({text:"echo one > Documents\\first.txt ",redirect:{
+        path:"Documents\\next.txt",append:true
+      }});
+    expect(sourceCmdParseRedirect("echo text >"))
+      .toEqual({text:"echo text >",redirect:null});
+    expect(sourceCmdParseRedirect('echo "literal >>"'))
+      .toEqual({text:'echo "literal >>"',redirect:null});
+  });
+  it("writes overwrite and append source CRLF records into actual mounted Guest files",async()=>{
+    const {fs,session}=await createShell();
+    const document="/EXTERNAL/computer/drive0/Users/Guest/Documents/report.txt";
+    const first=await session.run("echo Alpha > Documents\\report.txt");
+    expect(first.output).toEqual([]);
+    expect(first.errorlevel).toBe(0);
+    expect(await fs.read(document)).toBe("Alpha\r\n");
+    expect((await session.run("echo Beta >> Documents\\report.txt")).output)
+      .toEqual([]);
+    expect(await fs.read(document)).toBe("Alpha\r\nBeta\r\n");
+    await session.run("echo Replaced > Documents\\report.txt");
+    expect(await fs.read(document)).toBe("Replaced\r\n");
+    const quote=await session.run('echo "A > B" > "Documents\\space name.txt"');
+    expect(quote.output).toEqual([]);
+    expect(await fs.read("/EXTERNAL/computer/drive0/Users/Guest/Documents/space name.txt"))
+      .toBe('"A > B"\r\n');
+  });
+  it("preserves errors for missing drives/directories and protects existing binary data",async()=>{
+    const {fs,session}=await createShell();
+    expect((await session.run("echo unsafe > Q:\\file.txt")).output)
+      .toEqual(["The system cannot find the drive specified."]);
+    expect((await session.run("echo unsafe > Documents\\missing\\file.txt")).output)
+      .toEqual(["Access is denied."]);
+    const binary="/EXTERNAL/computer/drive0/Users/Guest/Documents/immutable.bin";
+    await fs.writeBytes(new Uint8Array([0,1,255,77]),binary);
+    expect((await session.run("echo corrupt >> Documents\\immutable.bin")).errorlevel)
+      .toBe(1);
+    expect(Array.from(await fs.readBytes(binary))).toEqual([0,1,255,77]);
+    expect((await session.run("echo invalid > Documents")).errorlevel).toBe(1);
+  });
+  it("composes source conditional chains around redirected commands",async()=>{
+    const {fs,session}=await createShell();
+    const path="/EXTERNAL/computer/drive0/Users/Guest/Documents/chain.txt";
+    const result=await session.run(
+      "echo first > Documents\\chain.txt && echo next >> Documents\\chain.txt & type Documents\\chain.txt"
+    );
+    expect(result.output).toEqual(["first","next",""]);
+    expect(result.errorlevel).toBe(0);
+    expect(await fs.read(path)).toBe("first\r\nnext\r\n");
+    const unknown=await session.run("badcommand > Documents\\error.txt");
+    expect(unknown.output).toEqual([]);
+    expect(unknown.errorlevel).toBe(0);
+    expect((await fs.read("/EXTERNAL/computer/drive0/Users/Guest/Documents/error.txt")))
+      .toContain("not recognized as an internal or external command");
   });
 });

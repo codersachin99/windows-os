@@ -25,7 +25,7 @@ export interface SourceCmdColorStyle{
   backgroundColor:string;
   color:string;
 }
-type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move"|"copy">;
+type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"write"|"mkdir"|"remove"|"move"|"copy">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath"|"pathConfig">;
 
 /** Original b894 Ht.trim(): 300 visible CMD transcript entries. */
@@ -243,6 +243,34 @@ export function sourceCmdChainSegments(input:string):SourceCmdChainSegment[]{
   }
 }
 
+/** Pinned cmd.js mt()/wt(): choose the LAST nonquoted > or >> token.
+ * Missing file arguments leave source text unchanged. */
+export interface SourceCmdRedirect{
+  path:string;
+  append:boolean;
+}
+export interface SourceCmdParsedRedirect{
+  text:string;
+  redirect:SourceCmdRedirect|null;
+}
+export function sourceCmdParseRedirect(input:string):SourceCmdParsedRedirect{
+  const text=String(input||"");
+  let quoted=false;
+  let at=-1;
+  let token="";
+  for(let i=0;i<text.length;i++){
+    if(text[i]==='"'){quoted=!quoted;continue;}
+    if(quoted||text[i]!==">")continue;
+    at=i;
+    token=text.startsWith(">>",i)?">>":">";
+    if(token===">>")i++;
+  }
+  if(at<0)return {text,redirect:null};
+  const [path]=sourceCmdArguments(text.slice(at+token.length));
+  if(!path)return {text,redirect:null};
+  return {text:text.slice(0,at),redirect:{path,append:token===">>"}};
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -311,7 +339,7 @@ export class SourceCmdSession {
       return this.environment.get(key)?.value;
     });
     const segments=sourceCmdChainSegments(expanded);
-    if(segments.length===1)return this.executeSingle(input,prompt,expanded);
+    if(segments.length===1)return this.executeRedirectedSegment(input,prompt,expanded);
     let output:string[]=[];
     let clear=false;
     let exit=false;
@@ -322,7 +350,7 @@ export class SourceCmdSession {
       if(segment.operator==="||"&&this.lastErrorLevel===0)continue;
       // Original execute() returns the previous ERRORLEVEL for empty input.
       if(!segment.text.trim())continue;
-      const result=await this.executeSingle(input,prompt,segment.text);
+      const result=await this.executeRedirectedSegment(input,prompt,segment.text);
       if(result.clear){clear=true;output=[];}
       output.push(...result.output);
       if(result.title!==undefined)title=result.title;
@@ -331,6 +359,38 @@ export class SourceCmdSession {
     }
     return {prompt,input,output,clear,exit,title,style,
       echo:this.echo,errorlevel:this.lastErrorLevel};
+  }
+
+  /** Source Tt.runPipeline/writeFile: buffer command output, write CRLF
+   * into a mounted Guest file. Successful redirect sets ERRORLEVEL=0,
+   * even if the redirected command itself failed, matching source Tt. */
+  private async executeRedirectedSegment(
+    input:string,prompt:string,segment:string
+  ):Promise<SourceCmdResult>{
+    const {text,redirect}=sourceCmdParseRedirect(segment);
+    if(!redirect)return this.executeSingle(input,prompt,text);
+    const result=await this.executeSingle(input,prompt,text);
+    let output:string[]=[];
+    let errorlevel=0;
+    try{
+      const target=this.resolve(redirect.path);
+      if(!target.uri){
+        output=[DRIVE_NOT_FOUND];
+        errorlevel=1;
+      }else{
+        // Preserve binary-backed Guest files rather than corrupting them.
+        const entry=await this.fs.stat(target.uri);
+        if(entry?.type==="directory")throw new Error("Cannot redirect to a directory");
+        let prefix="";
+        if(redirect.append&&entry)prefix=await this.fs.read(target.uri);
+        await this.fs.write(prefix+result.output.join("\r\n")+"\r\n",target.uri);
+      }
+    }catch{
+      output=[ACCESS_DENIED];
+      errorlevel=1;
+    }
+    this.lastErrorLevel=errorlevel;
+    return {...result,output,errorlevel};
   }
 
   /** Single parsed command. Never re-expand variables inside a chain. */

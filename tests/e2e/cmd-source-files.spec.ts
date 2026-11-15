@@ -107,3 +107,20 @@ test("original CMD chained conditions and quoted operators run on Guest session"
   await execute(input,"echo %CD%");
   await expect(output).toHaveText("C:\\Users\\Guest\\ChainBrowser");
 });
+
+
+test("source CMD > and >> redirects to the real mounted Guest document store",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"echo original > Documents\\BrowserReport.txt");
+  await execute(input,"echo appended >> Documents\\BrowserReport.txt");
+  await execute(input,"type Documents\\BrowserReport.txt");
+  await expect(output).toContainText("original\nappended");
+  await execute(input,'echo "quoted > text" > "Documents\\Quoted Report.txt"');
+  await execute(input,'type "Documents\\Quoted Report.txt"');
+  await expect(output).toContainText('"quoted > text"');
+  await execute(input,"echo forbidden > Q:\\cannot-write.txt");
+  await expect(output).toHaveText("The system cannot find the drive specified.");
+  await execute(input,"echo end > Documents\\BrowserReport.txt && type Documents\\BrowserReport.txt");
+  await expect(output).toContainText("end");
+  await expect(output).not.toContainText("original");
+});
