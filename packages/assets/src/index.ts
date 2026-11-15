@@ -27,6 +27,7 @@ export const legacyArt = {
   // Byte-identical pinned Win7 Control Panel and Display page artwork.
   cpanel: "/assets/images/cpanel.38ffbb1d.webp",
   display: "/assets/images/display.8adb9edd.webp",
+  programs: "/assets/images/programs.610e703b.webp",
   resolutionPreview: "/assets/images/resolution.f3fc8376.webp",
   sticky: "/assets/images/sticky.e63cea5a.webp",
   stickyAdd: "/assets/images/stickynotes-add.bfbefc41.webp",
@@ -84,7 +85,8 @@ const sourceLegacyIconMap:Readonly<Record<string,string>>={
   magnifier:legacyArt.magnifier,snipping:legacyArt.snipping,
   taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
   run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer,
-  cpanel:legacyArt.cpanel,display:legacyArt.display
+  cpanel:legacyArt.cpanel,display:legacyArt.display,
+  programs:legacyArt.programs
 };
 export interface LegacySourceIconArtwork{
   src:string;

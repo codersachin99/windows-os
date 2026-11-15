@@ -1,7 +1,9 @@
+import type {SourceProgram} from "@windows-os/filesystem";
+
 /** Pinned legacy-win7 src/modules/apps/cpanel.js a259/pa.
  * Source windowLocation/history uses a null root and a typed panel id.
  * Only Display's web behavior is implemented in this first slice. */
-export type SourceControlPanelLocation=null|"display";
+export type SourceControlPanelLocation=null|"display"|"programs";
 export interface SourceControlPanelHistory{
   readonly entries:readonly SourceControlPanelLocation[];
   readonly index:number;
@@ -57,4 +59,31 @@ export function sourceCpanelDisplayMatch(query:string):boolean{
   const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
   return terms.length>0&&terms.every(term=>
     ["display","resolution","screen","zoom"].some(value=>value.includes(term)));
+}
+
+/** Original cpanel.js ra program panel maps appItems/programItems to
+ * sorted selectable rows. The current Guest's installed source executable
+ * manifest is the only available installation truth; do not fabricate
+ * package versions, dates or host-installed Windows applications. */
+export interface SourceCpanelInstalledProgram{
+  id:string;
+  name:string;
+  iconKey:string;
+  version:string;
+  type:string;
+}
+export function sourceCpanelInstalledPrograms(
+  programs:readonly SourceProgram[]
+):SourceCpanelInstalledProgram[]{
+  return programs.filter(program=>Boolean(program.installPath)&&!program.hidden)
+    .map(program=>({
+      id:program.id,name:program.name,iconKey:program.id,
+      version:"--",type:"Simulation"
+    }))
+    .sort((a,b)=>a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));
+}
+export function sourceCpanelProgramsMatch(query:string):boolean{
+  const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  return terms.length>0&&terms.every(term=>
+    ["programs","install","uninstall"].some(word=>word.includes(term)));
 }

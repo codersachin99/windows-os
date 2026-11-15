@@ -46,3 +46,24 @@ test("source Control Panel search returns the Display task and rejects unknown l
     .toContainText("No items match your search.");
   await expect(panel.locator("[data-test-cpanel-item='unavailable-widget']")).toHaveCount(0);
 });
+
+
+test("source Control Panel Programs lists real simulated packages and supports selection/history",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  await panel.locator('[data-test-cpanel-item="programs"]').click();
+  const programs=panel.locator("[data-test-cpanel-programs]");
+  await expect(programs).toBeVisible();
+  const notepad=programs.locator('[data-test-cpanel-program="notepad"]');
+  await expect(notepad).toBeVisible();
+  await expect(programs.locator('[data-test-cpanel-program="cpanel"]')).toHaveCount(0);
+  await notepad.getByRole("button",{name:"Notepad"}).click();
+  await expect(notepad).toHaveAttribute("aria-selected","true");
+  await expect(programs.getByRole("button",{name:"Organize"})).toBeDisabled();
+  await panel.locator("[data-test-cpanel-back]").click();
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+  await panel.locator("[data-test-cpanel-forward]").click();
+  await expect(programs).toBeVisible();
+  await panel.getByRole("searchbox",{name:"Search Control Panel"}).fill("uninstall");
+  await expect(panel.locator('[data-test-cpanel-result="programs"]')).toBeVisible();
+});

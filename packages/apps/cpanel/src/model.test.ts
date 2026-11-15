@@ -2,7 +2,8 @@ import {describe,it,expect} from "vitest";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelStep,sourceCpanelResolutions,
-  sourceCpanelDisplayMatch
+  sourceCpanelDisplayMatch,sourceCpanelInstalledPrograms,
+  sourceCpanelProgramsMatch
 } from "./model";
 
 describe("pinned a259 cpanel location history",()=>{
@@ -37,5 +38,25 @@ describe("pinned a259 cpanel location history",()=>{
     expect(sourceCpanelDisplayMatch("screen zoom")).toBe(true);
     expect(sourceCpanelDisplayMatch("sound")).toBe(false);
     expect(sourceCpanelDisplayMatch("")).toBe(false);
+  });
+});
+
+
+describe("source cpanel.js ra Programs list from the actual source install manifest",()=>{
+  it("sorts and filters installed visible source packages without invented metadata",()=>{
+    const programs=[
+      {id:"zeta",name:"Zeta",category:"accessories",installPath:"Windows/zeta.exe"},
+      {id:"alpha",name:"Alpha",category:"games",installPath:"Windows/alpha.exe"},
+      {id:"hidden",name:"Hidden",category:"system",installPath:"Windows/hidden.exe",hidden:true},
+      {id:"missing",name:"Missing",category:"system"}
+    ];
+    const rows=sourceCpanelInstalledPrograms(programs);
+    expect(rows.map(p=>p.id)).toEqual(["alpha","zeta"]);
+    expect(rows[0]).toMatchObject({
+      name:"Alpha",version:"--",type:"Simulation",iconKey:"alpha"
+    });
+    expect(sourceCpanelProgramsMatch("uninstall")).toBe(true);
+    expect(sourceCpanelProgramsMatch("PROGRAM")).toBe(true);
+    expect(sourceCpanelProgramsMatch("sound")).toBe(false);
   });
 });

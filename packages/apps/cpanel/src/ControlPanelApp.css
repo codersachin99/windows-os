@@ -68,3 +68,33 @@
   .windows-cpanel__addressbar input{flex:1 1 100%}
   .windows-cpanel__display{padding:10px 16px}
 }
+
+/* Source cpanel.js ra programs: px-8 py-6 heading, disabled Organize,
+ * column header, selectable program rows, and source 16px program icons. */
+.windows-cpanel__programs-heading{padding:24px 32px}
+.windows-cpanel__programs-heading h2{font-weight:400;font-size:20px;margin:0 0 10px}
+.windows-cpanel__programs-heading p{margin:0}
+.windows-cpanel__programs-menu{
+  background:#f0f4f7;padding:7px 10px;border-top:1px solid #c8d2dc;
+  border-bottom:1px solid #c8d2dc
+}
+.windows-cpanel__programs-menu button{
+  border:0;background:transparent;color:#6b6b6b
+}
+.windows-cpanel__programs-table{overflow:auto;max-width:100%}
+.windows-cpanel__programs-table table{
+  width:100%;border-collapse:collapse;text-align:left;white-space:nowrap
+}
+.windows-cpanel__programs-table th{
+  background:#f3f7fa;border-right:1px solid #cad5e0;border-bottom:1px solid #cad5e0;
+  padding:7px 10px;font-weight:400;min-width:95px
+}
+.windows-cpanel__programs-table th:first-child{min-width:200px;width:48%}
+.windows-cpanel__programs-table td{padding:3px 10px}
+.windows-cpanel__programs-table tr.is-selected{background:#cbe6fc}
+.windows-cpanel__programs-table tr:not(.is-selected):hover{background:#edf7ff}
+.windows-cpanel__program-select{
+  display:flex;align-items:center;gap:8px;padding:4px 0;
+  border:0;background:transparent;color:inherit;text-align:left;
+  width:100%;cursor:pointer;font:inherit
+}

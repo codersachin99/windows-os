@@ -1,4 +1,27 @@
 
+## Programs and Features — source-list/selection follow-up
+
+The original `src/modules/apps/cpanel.js` `ra` programs panel renders
+a two-pane list with heading `uninstall-change-program`, source instruction,
+disabled Organize menu, name/date/version/type table and click-selectable
+rows sorted by lower-case label. The React Control Panel now exposes a
+second real navigation location `programs`; its rows come from the
+already source-pinned c170 manifest `sourcePrograms`, filtered to actual
+Guest-installed executable paths and excluding source-hidden entries.
+The module does **not** invent host machine installed packages or device
+version metadata: version is `--`, date explicitly unknown, type
+`Simulation`. The original split between `appItems` (device metadata)
+and `programItems` (simulator data) is still pending. Row selection,
+Back/Forward history, search discovery and no-uninstall-without-permissions
+are covered by model and desktop/mobile browser tests.
+
+Imported source exact `programs.610e703b.webp` with verified Git blob
+SHA `20787fca64de67b1b40ba3c16baf2f3362d84e6a`. The original
+installer launch side pane and uninstall flows are not implemented;
+do not substitute deleting Guest binaries. Other internal Control Panel
+screens, full category/search index and screenshot fidelity are pending.
+
+
 ## First real source Control Panel Display slice — 15 November 2026
 
 Registered `cpanel` in the shared app registry and Start Menu right-side action, built
