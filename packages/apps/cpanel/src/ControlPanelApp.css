@@ -119,3 +119,38 @@
 .windows-cpanel__account-card>div{display:flex;flex-direction:column;gap:5px}
 .windows-cpanel__account-card strong{font-weight:500;font-size:19px}
 .windows-cpanel__account-card span{color:#555}
+
+/* Pinned cpanel.js qe notification-area and system-icons two-page panel.
+ * The source has a large fixed px-32 inset; clamp to fit mobile Win7 shell. */
+.windows-cpanel__notification{display:flex;flex-direction:column;height:100%}
+.windows-cpanel__notification-body{
+  flex:1;overflow:auto;padding:20px clamp(14px,9vw,128px);
+  display:flex;flex-direction:column;gap:9px
+}
+.windows-cpanel__notification h2{font-weight:400;font-size:20px;margin:0}
+.windows-cpanel__notification p{margin:2px 0 10px}
+.windows-cpanel__notification-list{
+  border:1px solid #b5c3d2;overflow:auto;min-height:96px;
+  background:#fff;padding:12px;flex-shrink:1
+}
+.windows-cpanel__notification-head,
+.windows-cpanel__notification-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;
+  min-width:265px;margin-bottom:14px;
+}
+.windows-cpanel__notification-row>span{
+  display:flex;align-items:center;gap:10px;min-width:0
+}
+.windows-cpanel__notification-row img{object-fit:contain}
+.windows-cpanel__notification-row select{max-width:100%;min-width:0}
+.windows-cpanel__notification-link{
+  color:#1267a8;background:none;border:0;padding:2px 0;
+  text-align:left;cursor:pointer;align-self:flex-start
+}
+.windows-cpanel__notification-link:disabled{opacity:.5;cursor:default}
+.windows-cpanel__notification-check{display:flex;align-items:center;gap:8px}
+.windows-cpanel__notification-footer{
+  padding:10px clamp(14px,9vw,128px);display:flex;justify-content:flex-end;
+  gap:9px;border-top:1px solid #c0cbd6;background:#eef3f8;
+}
+.windows-cpanel__notification-footer button{min-width:72px}

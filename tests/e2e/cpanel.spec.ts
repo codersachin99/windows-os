@@ -87,3 +87,34 @@ test("source Control Panel Guest account page disables sign-in edits and switche
   // The live Guest Control Panel window survives the switch.
   await expect(win).toBeVisible();
 });
+
+
+test("source taskbar notifications preferences update visible tray and hidden popup",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  await panel.locator('[data-test-cpanel-item="notification"]').click();
+  const notice=panel.locator("[data-test-cpanel-notification]");
+  await expect(notice).toBeVisible();
+  for(const id of ["TaskbarActionCenter","TaskbarNetwork","TaskbarBattery","TaskbarVolume"]){
+    await expect(page.locator('[data-test-tray-icon="'+id+'"]')).toHaveCount(1);
+  }
+  const volume=notice.locator('[data-test-cpanel-notification-icon="TaskbarVolume"]');
+  await volume.getByRole("combobox").selectOption("hidden");
+  await expect(page.locator('[data-test-tray-icon="TaskbarVolume"]')).toHaveCount(0);
+  await page.locator('[data-test-tray-hidden-toggle]').click();
+  await expect(page.locator('[data-test-tray-hidden-icon="TaskbarVolume"]')).toBeVisible();
+  await notice.locator('[data-test-cpanel-always-show]').check();
+  await expect(page.locator('[data-test-tray-icon="TaskbarVolume"]')).toHaveCount(1);
+  await expect(page.locator("[data-test-tray-hidden-items]")).toHaveCount(0);
+  await notice.locator('[data-test-cpanel-system-icons-link]').click();
+  await expect(notice.locator('[data-test-cpanel-system-icon="clock"]')).toBeVisible();
+  await notice.getByRole("combobox",{name:"Clock system icon"}).selectOption("off");
+  await expect(page.locator("[data-test-tray-clock]")).toHaveCount(0);
+  await notice.getByRole("combobox",{name:"Clock system icon"}).selectOption("shown");
+  await expect(page.locator("[data-test-tray-clock]")).toHaveCount(1);
+  await notice.locator('[data-test-cpanel-system-icons-link]').click();
+  await notice.locator('[data-test-cpanel-always-show]').uncheck();
+  await notice.locator('[data-test-cpanel-restore-tray]').click();
+  await expect(volume.getByRole("combobox")).toHaveValue("shown");
+  await expect(page.locator('[data-test-tray-icon="TaskbarVolume"]')).toHaveCount(1);
+});

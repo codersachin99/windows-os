@@ -80,3 +80,35 @@ and desktop/mobile browser acceptance for Guest switch/resume. All
 other original Control Panel account pages and screenshot parity
 remain pending. This commit intentionally avoids `[run-ci]` while
 the earlier Display+Programs acceptance run #43717661924 is active.
+
+## Notification Area Icons — source bc55 + cpanel.js qe responsive tray behavior
+
+Original `src/modules/shell/taskbar-base.js` module `bc55`
+defines **four** default tray items in order: Action Center, Network,
+Battery, Volume, each state `"shown"`; `showClockIcon=true`,
+`alwaysShowIcons=false`. Its selectors `visibleItems`, `hiddenItems`
+and `enabledItems` differentiate `shown`, `hidden`,
+`notifications-only` and `off`. The source `cpanel.js` `qe`
+panel provides the notification-area dropdowns, system icon on/off
+subpage, Restore defaults, Always show checkbox, and OK/Cancel footer.
+
+React now has a typed pure tray preference model, original initial values,
+source selector functions and deterministic unit tests. The fourth
+Control Panel page `notification` renders both `qe` subviews.
+Preferences are lifted to `App` so they survive source
+`Alt+L` Switch/resume; visible tray icons, clock visibility and
+hidden-icons flyout update immediately on selection. Restore default
+behaviors resets only `trayItems` exactly as the source action; it
+does not implicitly change the independent clock/always-show options.
+Desktop/mobile browser tests exercise visible/hidden flags, flyout,
+always-show, system clock off/on and restoring defaults.
+
+Imported five byte-identical pinned Win7 assets: volume 100, network,
+action-center, datetime-s and battery 90. Tray images are simulator UI;
+their presence **does not assert real host battery level or internet
+connectivity**, and clicking icons does not control native speakers or
+OS notifications. Full Vuex persisted settings, tray popup contents,
+notification counts/actions, source mobile skin and pixel screenshots
+remain pending. The page and shell tray wiring intentionally have no
+`[run-ci]` while CI #43717661924 from the previous Display/Programs
+batch is running. The new code cannot be called CI-accepted yet.

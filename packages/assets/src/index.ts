@@ -29,6 +29,12 @@ export const legacyArt = {
   display: "/assets/images/display.8adb9edd.webp",
   programs: "/assets/images/programs.610e703b.webp",
   accounts: "/assets/images/accounts.2f4d5075.webp",
+  // Pinned source taskbar-base.js Win7 tray icon variants.
+  trayVolume: "/assets/images/volume-100.fb90d926.webp",
+  trayNetwork: "/assets/images/network.21b75845.webp",
+  trayActionCenter: "/assets/images/action-center.4d8b33c7.webp",
+  trayClock: "/assets/images/datetime-s.4f8b0fa9.webp",
+  trayBattery: "/assets/images/battery-90.a4b58b08.webp",
   resolutionPreview: "/assets/images/resolution.f3fc8376.webp",
   sticky: "/assets/images/sticky.e63cea5a.webp",
   stickyAdd: "/assets/images/stickynotes-add.bfbefc41.webp",

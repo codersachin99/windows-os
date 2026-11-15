@@ -2,9 +2,12 @@ import { useCallback, useEffect, useReducer, useRef } from "react";
 import { desktopReducer, initialDesktopState } from "@windows-os/engine";
 import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
 import { sourceFilesystemRuntime } from "@windows-os/sdk";
+import {sourceDefaultTrayPreferences} from "@windows-os/apps/cpanel";
+import {useState} from "react";
 
 export default function App() {
   const [state, dispatch] = useReducer(desktopReducer, undefined, initialDesktopState);
+  const [trayPreferences,setTrayPreferences]=useState(sourceDefaultTrayPreferences);
   const guestLoginPending = useRef(false);
   const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);
   useEffect(() => {
@@ -44,5 +47,7 @@ export default function App() {
     <p>Windows is shutting down</p>
     <button onClick={() => dispatch({ type: "RESTART" })}>Restart WindowsOS</button>
   </main>;
-  return <DesktopShell state={state} dispatch={dispatch} />;
+  return <DesktopShell state={state} dispatch={dispatch}
+    trayPreferences={trayPreferences}
+    onTrayPreferencesChange={setTrayPreferences}/>;
 }

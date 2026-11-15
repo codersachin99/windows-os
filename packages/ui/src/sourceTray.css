@@ -1,0 +1,8 @@
+.windows-taskbar__tray-icon{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:24px}
+.windows-taskbar__tray-icon img{object-fit:contain}
+.windows-taskbar__tray{position:relative}
+.windows-taskbar__hidden-items{position:absolute;bottom:calc(100% + 6px);right:0;
+  z-index:80;display:flex;gap:12px;align-items:center;padding:11px 12px;
+  border:1px solid #859db6;border-radius:3px;min-width:60px;
+  background:linear-gradient(#f8fdff,#e2eaf4);box-shadow:0 2px 8px #0004}
+.windows-taskbar__hidden-items img{object-fit:contain}

@@ -8,29 +8,42 @@ import {
   sourceCpanelAccountsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
   type SourceControlPanelHistory, type SourceControlPanelLocation
 } from "./model";
+import {
+  SOURCE_TRAY_ITEMS,sourceTrayRestoreDefaults,sourceTraySetBehavior,
+  type SourceTrayIconId,type SourceTrayBehavior,type SourceTrayPreferences
+} from "./notification";
 import "./ControlPanelApp.css";
 
 export interface ControlPanelAppProps{
   onClose():void;
   onSwitchUser():void;
+  trayPreferences:SourceTrayPreferences;
+  onTrayPreferencesChange(value:SourceTrayPreferences):void;
 }
 /** Source cpanel.js a259: address breadcrumbs, back/forward history,
  * instant search, tiles root and navigated panel body. The first real panel
  * is the original Display view; remaining panels are tracked, not invented. */
-export function ControlPanelApp({onClose,onSwitchUser}:ControlPanelAppProps){
+export function ControlPanelApp({
+  onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange
+}:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     SOURCE_CPANEL_INITIAL_HISTORY);
   const [query,setQuery]=useState("");
   const [selectedProgram,setSelectedProgram]=useState<string|null>(null);
+  const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
   const results=query.trim().length>0;
   const matchingDisplay=sourceCpanelDisplayMatch(query);
   const matchingPrograms=sourceCpanelProgramsMatch(query);
   const matchingAccounts=sourceCpanelAccountsMatch(query);
+  const matchingNotification=query.trim().toLocaleLowerCase()
+    .split(/\s+/).filter(Boolean).every(term=>
+      ["notification","notifications","icons","taskbar","system"].some(x=>x.includes(term)));
   const programs=sourceCpanelInstalledPrograms(sourcePrograms);
   const open=(value:SourceControlPanelLocation)=>{
     setHistory(previous=>sourceCpanelOpenLocation(previous,value));
     setQuery("");
+    setShowSystemIcons(false);
   };
   const changeSearch=(value:string)=>{
     setQuery(value);
@@ -49,7 +62,9 @@ export function ControlPanelApp({onClose,onSwitchUser}:ControlPanelAppProps){
         <button type="button" onClick={()=>open(null)}>Control Panel</button>
         {location!==null&&<span data-test-cpanel-location="">
           <span aria-hidden="true"> › </span>
-          {location==="display"?"Display":location==="programs"?"Programs and Features":"User Accounts"}
+          {location==="display"?"Display":location==="programs"?
+            "Programs and Features":location==="accounts"?
+            "User Accounts":"Notification Area Icons"}
         </span>}
       </nav>
       <input type="search" value={query} onChange={event=>changeSearch(event.target.value)}
@@ -85,7 +100,99 @@ export function ControlPanelApp({onClose,onSwitchUser}:ControlPanelAppProps){
             <button type="button" className="windows-cpanel__task"
               onClick={()=>open("accounts")}>Change your account</button></div>
         </article>:null}
-        {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&<p>No items match your search.</p>}
+        {matchingNotification?<article className="windows-cpanel__result"
+          data-test-cpanel-result="notification">
+          <img src={legacyArt.trayActionCenter} alt="" width={40} height={40}/>
+          <div><button type="button" className="windows-cpanel__link"
+            onClick={()=>open("notification")}>Notification Area Icons</button>
+            <button type="button" className="windows-cpanel__task"
+              onClick={()=>open("notification")}>Customize notification icons</button></div>
+        </article>:null}
+        {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&!matchingNotification&&
+          <p>No items match your search.</p>}
+      </div>:location==="notification"?<div className="windows-cpanel__notification"
+        data-test-cpanel-notification="">
+        <div className="windows-cpanel__notification-body">
+          <h2>{showSystemIcons?"Turn system icons on or off":"Select which icons and notifications appear on the taskbar"}</h2>
+          <p>{showSystemIcons?
+            "Turn individual system icons on or off.":
+            "You can choose which icons and notifications appear in the notification area."}
+          </p>
+          <div className="windows-cpanel__notification-list">
+            <div className="windows-cpanel__notification-head">
+              <strong>{showSystemIcons?"System Icons":"Icons"}</strong>
+              <strong>Behaviors</strong>
+            </div>
+            {showSystemIcons?<div className="windows-cpanel__notification-row"
+              data-test-cpanel-system-icon="clock">
+              <span><img src={legacyArt.trayClock} width={16} height={16} alt=""/>Clock</span>
+              <select aria-label="Clock system icon"
+                value={trayPreferences.showClockIcon?"shown":"off"}
+                onChange={event=>onTrayPreferencesChange({...trayPreferences,
+                  showClockIcon:event.target.value!=="off"})}>
+                <option value="shown">On</option><option value="off">Off</option>
+              </select>
+            </div>:null}
+            {SOURCE_TRAY_ITEMS.filter(item=>showSystemIcons||
+              trayPreferences.icons[item.id]!=="off").map(item=>
+              <div key={item.id} className="windows-cpanel__notification-row"
+                data-test-cpanel-notification-icon={item.id}>
+                <span><img src={legacyArt[item.asset]} width={16} height={16}
+                  alt=""/>{item.label}</span>
+                <select aria-label={item.label+" behavior"}
+                  disabled={!showSystemIcons&&trayPreferences.alwaysShowIcons}
+                  value={showSystemIcons?
+                    (trayPreferences.icons[item.id]==="off"?"off":"shown"):
+                    trayPreferences.icons[item.id]}
+                  onChange={event=>{
+                    const value=event.target.value;
+                    // Source system-icon dropdown uses On/Off; the main
+                    // list uses shown, hidden and notifications-only.
+                    const next:SourceTrayBehavior=showSystemIcons?
+                      (value==="off"?"off":"shown"):
+                      value as SourceTrayBehavior;
+                    onTrayPreferencesChange(sourceTraySetBehavior(
+                      trayPreferences,item.id as SourceTrayIconId,next));
+                  }}>
+                  {showSystemIcons?<><option value="shown">On</option>
+                    <option value="off">Off</option></>:<>
+                    <option value="shown">Show icon and notifications</option>
+                    <option value="hidden">Hide icon and notifications</option>
+                    <option value="notifications-only">Only show notifications</option>
+                  </>}
+                </select>
+              </div>
+            )}
+          </div>
+          <button type="button" className="windows-cpanel__notification-link"
+            onClick={()=>setShowSystemIcons(value=>!value)}
+            data-test-cpanel-system-icons-link="">
+            {showSystemIcons?"Customize notification icons":
+              "Turn system icons on or off"}
+          </button>
+          <button type="button" className="windows-cpanel__notification-link"
+            disabled={!showSystemIcons&&trayPreferences.alwaysShowIcons}
+            data-test-cpanel-restore-tray=""
+            onClick={()=>onTrayPreferencesChange(
+              sourceTrayRestoreDefaults(trayPreferences))}>
+            Restore default icon behaviors
+          </button>
+          {!showSystemIcons&&<label className="windows-cpanel__notification-check">
+            <input type="checkbox" data-test-cpanel-always-show=""
+              checked={trayPreferences.alwaysShowIcons}
+              onChange={event=>onTrayPreferencesChange({...trayPreferences,
+                alwaysShowIcons:event.target.checked})}/>
+            Always show all icons and notifications on the taskbar
+          </label>}
+        </div>
+        <footer className="windows-cpanel__notification-footer">
+          <button type="button" onClick={()=>{
+            if(showSystemIcons)setShowSystemIcons(false);else onClose();
+          }}>OK</button>
+          <button type="button" onClick={()=>{
+            if(showSystemIcons)setShowSystemIcons(false);else onClose();
+          }}>Cancel</button>
+        </footer>
       </div>:location==="accounts"?<div className="windows-cpanel__accounts"
         data-test-cpanel-accounts="">
         <h2>Make changes to your user account</h2>
@@ -188,6 +295,11 @@ export function ControlPanelApp({onClose,onSwitchUser}:ControlPanelAppProps){
           className="windows-cpanel__tile" onClick={()=>open("accounts")}>
           <img src={legacyArt.accounts} alt="" width={44} height={44}/>
           <span>User Accounts</span>
+        </button>
+        <button type="button" data-test-cpanel-item="notification"
+          className="windows-cpanel__tile" onClick={()=>open("notification")}>
+          <img src={legacyArt.trayActionCenter} alt="" width={44} height={44}/>
+          <span>Notification Area Icons</span>
         </button>
       </div>}
     </div>

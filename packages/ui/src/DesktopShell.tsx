@@ -6,7 +6,10 @@ import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
 import { CmdApp } from "@windows-os/apps/cmd";
-import { ControlPanelApp } from "@windows-os/apps/cpanel";
+import {
+  ControlPanelApp,SOURCE_TRAY_ITEMS,sourceTrayVisible,sourceTrayHidden,
+  type SourceTrayPreferences
+} from "@windows-os/apps/cpanel";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
@@ -28,10 +31,13 @@ import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
 import { ShortcutWizard } from "./ShortcutWizard";
+import "./sourceTray.css";
 
 interface DesktopShellProps {
   state: DesktopState;
   dispatch: Dispatch<DesktopAction>;
+  trayPreferences:SourceTrayPreferences;
+  onTrayPreferencesChange(value:SourceTrayPreferences):void;
 }
 
 interface ApplicationContentProps {
@@ -44,10 +50,13 @@ interface ApplicationContentProps {
   theme: DesktopState["theme"];
   windows: DesktopState["windows"];
   onRequestCloseWindow(id: string): void;
+  trayPreferences:SourceTrayPreferences;
+  onTrayPreferencesChange(value:SourceTrayPreferences):void;
 }
 function ApplicationContent({
   appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
-  windows, onRequestCloseWindow, theme
+  windows, onRequestCloseWindow, theme,
+  trayPreferences,onTrayPreferencesChange
 }: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
@@ -70,7 +79,9 @@ function ApplicationContent({
     }} />;
   if (appId === "cpanel") return <ControlPanelApp
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
-    onSwitchUser={() => dispatch({type:"SWITCH_USER"})}/>;
+    onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
+    trayPreferences={trayPreferences}
+    onTrayPreferencesChange={onTrayPreferencesChange}/>;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {
@@ -162,9 +173,12 @@ function Clock() {
   </time>;
 }
 
-export function DesktopShell({ state, dispatch }: DesktopShellProps) {
+export function DesktopShell({
+  state,dispatch,trayPreferences,onTrayPreferencesChange
+}:DesktopShellProps) {
   const desktop = appRegistry.desktop();
   const [magnifierScale, setMagnifierScale] = useState(1);
+  const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
   const magnifierActive = state.windows.some(win => win.appId === "magnifier");
   // Original magnifier follows document mousemove while mounted, even at 1x,
@@ -272,7 +286,9 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
-            windows={state.windows} onRequestCloseWindow={requestClose} />
+            windows={state.windows} onRequestCloseWindow={requestClose}
+            trayPreferences={trayPreferences}
+            onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch} />}
@@ -284,7 +300,9 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
-            windows={state.windows} onRequestCloseWindow={requestClose} />
+            windows={state.windows} onRequestCloseWindow={requestClose}
+            trayPreferences={trayPreferences}
+            onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base">
@@ -303,9 +321,22 @@ export function DesktopShell({ state, dispatch }: DesktopShellProps) {
           ))}
         </div>
         <div className="windows-taskbar__tray">
-          <button title="Show hidden icons" aria-label="Show hidden icons">▴</button>
-          <span role="img" aria-label="Sound">◖))</span>
-          <Clock />
+          <button title="Show hidden icons" aria-label="Show hidden icons"
+            data-test-tray-hidden-toggle="" onClick={()=>setShowHiddenTray(v=>!v)}>▴</button>
+          {showHiddenTray&&sourceTrayHidden(trayPreferences).length>0&&
+            <div className="windows-taskbar__hidden-items" data-test-tray-hidden-items=""
+              role="group" aria-label="Hidden notification area icons">
+              {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayHidden(trayPreferences).includes(item.id))
+                .map(item=><img key={item.id} src={legacyArt[item.asset]}
+                  width={16} height={16} title={item.label}
+                  data-test-tray-hidden-icon={item.id} alt={item.label}/>)}
+            </div>}
+          {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
+            .map(item=><span key={item.id} title={item.label}
+              data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
+              <img src={legacyArt[item.asset]} width={16} height={16}
+                alt={item.label}/></span>)}
+          {trayPreferences.showClockIcon&&<div data-test-tray-clock=""><Clock/></div>}
         </div>
         <button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           onClick={() => state.windows.forEach(win => dispatch({ type: "MINIMIZE_WINDOW", id: win.id }))} />
