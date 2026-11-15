@@ -919,3 +919,11 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - Original De/xe/ke selectors and exact '*' Y/N flow ported for DEL/ERASE on actual Guest files. Source glob matching, case-insensitive names, preservation of directories, and explicit rejection when all-files confirmation UI is absent. Pure unit and desktop/mobile browser tests added.
 - No [run-ci] in this commit while the preceding Ctrl+C run remains active. Batch with PAUSE and RD /S in the next full acceptance. PR #1 draft; main untouched; no releases.
+
+
+## Source CMD pause, Y/N RD and DEL confirmation combined acceptance — 15 November 2026 (CI requested)
+
+- Cumulative source keyboard/interactive commits: [Ctrl+C 1b360aa](https://github.com/codersachin99/windows-os/commit/1b360aaf2b938f0da45fd5c8b951dc5bc1d0c0b7), [PAUSE c226b68](https://github.com/codersachin99/windows-os/commit/c226b6835f0eb1dae2692dcd73ecc6f075b46a12), [RD /S fa1b20e](https://github.com/codersachin99/windows-os/commit/fa1b20ee262ad42b8c8d210be1c4b1c9b090a4ba) and [DEL wildcard 12642ea](https://github.com/codersachin99/windows-os/commit/12642eac8b2e86b96a35ed497ec48427a6870aec).
+- This docs handoff commit intentionally contains [run-ci] to opt into one **full combined** TypeScript, units, original-source audits, production build and desktop/mobile Playwright verification. No green claim before workflow completion. Prior Ctrl+C [CI #43681551196](https://github.com/codersachin99/windows-os/actions/runs/43681551196) had not completed its browser stage when this was scheduled.
+- Y/N confirmation only mutates real mounted Guest VFS; N means no deletion; Y (single char) allows the specifically named subtree/files. Without interactive key host, destructive multi-file operations refuse execution. Host OS is never touched.
+- Keep draft PR #1, main unchanged and no release. Source screenshot parity and unimplemented CMD commands/batch behavior remain pending.
