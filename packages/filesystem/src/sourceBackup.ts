@@ -81,8 +81,8 @@ function manifestFrom(data:Uint8Array):SourceBackupManifest{
     !Array.isArray(m.folders)||m.folders.length!==SOURCE_BACKUP_FOLDERS.length||
     m.folders.some((item,index)=>item!==SOURCE_BACKUP_FOLDERS[index])||
     typeof m.createdAt!=="string"||!Number.isFinite(Date.parse(m.createdAt))||
-    !Number.isSafeInteger(m.fileCount)||(m.fileCount as number)<0||
-    (m.fileCount as number)>SOURCE_BACKUP_MAX_FILES)fail("invalid manifest");
+    typeof m.fileCount!=="number"||!Number.isSafeInteger(m.fileCount)||
+    m.fileCount<0||m.fileCount>SOURCE_BACKUP_MAX_FILES)fail("invalid manifest");
   return m as unknown as SourceBackupManifest;
 }
 
