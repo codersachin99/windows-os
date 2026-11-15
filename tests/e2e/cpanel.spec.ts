@@ -258,7 +258,9 @@ test("original Control Panel indexed tasks route only migrated destinations",asy
   await search.fill("spyware");
   await expect(panel.locator('[data-test-cpanel-result="defender"]'))
     .toBeVisible();
-  await expect(panel.locator('[data-test-cpanel-result="defender"] button'))
+  await expect(panel.locator('[data-test-cpanel-result="defender"] .windows-cpanel__link'))
+    .toBeDisabled();
+  await expect(panel.locator('[data-test-cpanel-result="defender"] .windows-cpanel__task'))
     .toBeDisabled();
   await search.fill("customize icons");
   const taskbar=panel.locator('[data-test-cpanel-result="taskbar"]');
