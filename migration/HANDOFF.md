@@ -885,3 +885,11 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - Original ECHO source preserves untrimmed rest and removes one leading literal space; added sourceCmdRawRest and ECHO tests for multi-space, tab, ON/OFF, dot and chained operators. Other command parsing remains unchanged.
 - This commit contains no [run-ci] while #43679131656 remains in progress. Combine with pending quoted pipeline/FIND/SORT/MORE CI once previous verification concludes. Draft PR #1, main untouched and no release.
+
+
+## Combined original CMD pipe and ECHO source acceptance — 2026-11-15 (CI requested)
+
+- The new pipeline/FIND/SORT/MORE work 0fcf85d and exact ECHO raw-rest spacing d300159 have pure/unit and desktop/mobile browser test coverage but no previous CI execution.
+- Opted in to a single full [run-ci] batch for these two commits (plus the already staged source CMD chain/redirect/icon/history fixes); do not infer any pass until GitHub concludes this new workflow.
+- Previous chain/redirect [CI #43679131656](https://github.com/codersachin99/windows-os/actions/runs/43679131656) was still running its desktop/mobile Playwright suite at this checkpoint; it was triggered on commit 5c689b2, before these newer features. Separate commit-SHA concurrency prevents the new opt-in from cancelling it.
+- Preserve draft PR #1, main untouched and no release. Remaining original CMD behaviors: batch execution, interactive confirmation / interruption, and screenshot/pixel parity, plus unfinished original commands.
