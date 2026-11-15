@@ -21,7 +21,9 @@ test("original Control Panel Display navigation uses actual pinned artwork and B
   await expect(display).toBeVisible();
   await expect(display.locator(".windows-cpanel__display-preview img"))
     .toHaveAttribute("src",/resolution\.f3fc8376\.webp/);
-  await expect(display.locator("fieldset")).toBeDisabled();
+  // Playwright toBeDisabled checks form controls, not the fieldset
+  // container itself. Assert the real inherited HTML disabled attribute.
+  await expect(display.locator("fieldset")).toHaveAttribute("disabled","");
   await expect(display.getByLabel("Resolution")).toBeDisabled();
   await expect(display.getByLabel("Zoom")).toBeDisabled();
   await expect(display.getByRole("option",{name:/Fullscreen/})).toHaveCount(1);

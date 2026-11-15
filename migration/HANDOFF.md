@@ -1,4 +1,26 @@
 
+## CI root cause and combined Control Panel acceptance — 15 November 2026
+
+[Run #43717661924](https://github.com/codersachin99/windows-os/actions/runs/43717661924)
+completed **FAILURE**: TypeScript, unit, audits and build passed;
+**414 desktop/mobile browser tests passed**, exactly **two** failed on
+`tests/e2e/cpanel.spec.ts` Display test. The test incorrectly
+used Playwright `expect(fieldset).toBeDisabled()` even though its
+browser locator resolved to `<fieldset disabled ...>` with the
+disabled attribute present. Playwright's disabled check covers the
+inherited *form controls*, not the fieldset element itself; the test
+therefore checks `toHaveAttribute("disabled","")` and keeps the
+independent disabled select assertions. No production UI code changed
+for that correction.
+
+This combined **[run-ci]** checkpoint checks Display/Programs,
+the Guest-only User Accounts screen + original Switch semantics, the
+source bc55 notification preferences and real taskbar tray wiring,
+and all existing regressions. Do not report success until the exact
+run completes. PR stays draft, main untouched, and all remaining
+source CPANEL pages and pixel visual parity remain pending.
+
+
 ## Notification Area Icons — source bc55 + cpanel.js qe responsive tray behavior
 
 Original `src/modules/shell/taskbar-base.js` module `bc55`
