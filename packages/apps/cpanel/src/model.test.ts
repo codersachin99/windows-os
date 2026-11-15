@@ -5,7 +5,8 @@ import {
   sourceCpanelDisplayMatch,sourceCpanelInstalledPrograms,
   sourceCpanelProgramsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
   sourceCpanelAccountsMatch,
-  sourceCpanelActionCenterMatch,SOURCE_CPANEL_ACTION_CENTER_TEXT
+  sourceCpanelActionCenterMatch,SOURCE_CPANEL_ACTION_CENTER_TEXT,
+  sourceCpanelBackupMatch
 } from "./model";
 
 describe("pinned a259 cpanel location history",()=>{
@@ -91,5 +92,17 @@ describe("pinned cpanel.js te empty Action Center and source locale strings",()=
     expect(sourceCpanelActionCenterMatch("Action Center")).toBe(true);
     expect(sourceCpanelActionCenterMatch("messages")).toBe(true);
     expect(sourceCpanelActionCenterMatch("resolution")).toBe(false);
+  });
+});
+
+
+describe("source cpanel Backup and Restore navigation",()=>{
+  it("provides an independent sixth route and original backup search",()=>{
+    const state=sourceCpanelOpenLocation(SOURCE_CPANEL_INITIAL_HISTORY,"backup");
+    expect(state.entries).toEqual([null,"backup"]);
+    expect(sourceCpanelStep(state,-1).entries[1]).toBe("backup");
+    expect(sourceCpanelBackupMatch("backup")).toBe(true);
+    expect(sourceCpanelBackupMatch("restore")).toBe(true);
+    expect(sourceCpanelBackupMatch("screen resolution")).toBe(false);
   });
 });
