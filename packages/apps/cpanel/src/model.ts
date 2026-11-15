@@ -3,7 +3,7 @@ import type {SourceProgram} from "@windows-os/filesystem";
 /** Pinned legacy-win7 src/modules/apps/cpanel.js a259/pa.
  * Source windowLocation/history uses a null root and a typed panel id.
  * Only Display's web behavior is implemented in this first slice. */
-export type SourceControlPanelLocation=null|"display"|"programs"|"accounts"|"notification";
+export type SourceControlPanelLocation=null|"display"|"programs"|"accounts"|"notification"|"action-center";
 export interface SourceControlPanelHistory{
   readonly entries:readonly SourceControlPanelLocation[];
   readonly index:number;
@@ -109,4 +109,28 @@ export function sourceCpanelAccountsMatch(query:string):boolean{
   const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
   return terms.length>0&&terms.every(term=>
     ["accounts","account","guest","user","password"].some(word=>word.includes(term)));
+}
+
+/** Source cpanel.js te/oe reads the Vuex notification history. This
+ * migration's Guest session has no source notifications history provider yet,
+ * so an empty array is the truthful state, not a fabricated "all clear"
+ * security evaluation or invented system alert. */
+export interface SourceControlPanelActionMessage{
+  id:string;
+  type:"success"|"info"|"warning"|"error";
+  title:string;
+  body:string;
+}
+export const SOURCE_CPANEL_ACTION_CENTER_TEXT={
+  title:"Review recent messages and resolve problems",
+  emptyInstruction:"Action Center has nothing to report.",
+  hasMessagesInstruction:"Action Center has detected one or more issues for you to review.",
+  empty:"No messages",
+  changeSettings:"Change Action Center settings",
+  archived:"View archived messages"
+} as const;
+export function sourceCpanelActionCenterMatch(query:string):boolean{
+  const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  return terms.length>0&&terms.every(term=>
+    ["action","center","security","messages","problem"].some(word=>word.includes(term)));
 }

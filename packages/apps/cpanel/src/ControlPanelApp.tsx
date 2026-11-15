@@ -6,6 +6,8 @@ import {
   sourceCpanelDisplayMatch,sourceCpanelOpenLocation,sourceCpanelResolutions,
   sourceCpanelStep,sourceCpanelInstalledPrograms,sourceCpanelProgramsMatch,
   sourceCpanelAccountsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
+  sourceCpanelActionCenterMatch,SOURCE_CPANEL_ACTION_CENTER_TEXT,
+  type SourceControlPanelActionMessage,
   type SourceControlPanelHistory, type SourceControlPanelLocation
 } from "./model";
 import {
@@ -19,12 +21,15 @@ export interface ControlPanelAppProps{
   onSwitchUser():void;
   trayPreferences:SourceTrayPreferences;
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
+  /** Original Vuex Action Center history when available; no fabricated alerts. */
+  messages?:readonly SourceControlPanelActionMessage[];
 }
 /** Source cpanel.js a259: address breadcrumbs, back/forward history,
  * instant search, tiles root and navigated panel body. The first real panel
  * is the original Display view; remaining panels are tracked, not invented. */
 export function ControlPanelApp({
-  onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange
+  onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange,
+  messages=[]
 }:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     SOURCE_CPANEL_INITIAL_HISTORY);
@@ -36,6 +41,7 @@ export function ControlPanelApp({
   const matchingDisplay=sourceCpanelDisplayMatch(query);
   const matchingPrograms=sourceCpanelProgramsMatch(query);
   const matchingAccounts=sourceCpanelAccountsMatch(query);
+  const matchingActionCenter=sourceCpanelActionCenterMatch(query);
   const matchingNotification=query.trim().toLocaleLowerCase()
     .split(/\s+/).filter(Boolean).every(term=>
       ["notification","notifications","icons","taskbar","system"].some(x=>x.includes(term)));
@@ -64,7 +70,8 @@ export function ControlPanelApp({
           <span aria-hidden="true"> › </span>
           {location==="display"?"Display":location==="programs"?
             "Programs and Features":location==="accounts"?
-            "User Accounts":"Notification Area Icons"}
+            "User Accounts":location==="notification"?
+            "Notification Area Icons":"Action Center"}
         </span>}
       </nav>
       <input type="search" value={query} onChange={event=>changeSearch(event.target.value)}
@@ -108,8 +115,40 @@ export function ControlPanelApp({
             <button type="button" className="windows-cpanel__task"
               onClick={()=>open("notification")}>Customize notification icons</button></div>
         </article>:null}
-        {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&!matchingNotification&&
+        {matchingActionCenter?<article className="windows-cpanel__result"
+          data-test-cpanel-result="action-center">
+          <img src={legacyArt.trayActionCenter} alt="" width={40} height={40}/>
+          <div><button type="button" className="windows-cpanel__link"
+            onClick={()=>open("action-center")}>Action Center</button>
+            <button type="button" className="windows-cpanel__task"
+              onClick={()=>open("action-center")}>
+              Review recent messages and resolve problems
+            </button></div>
+        </article>:null}
+        {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&
+          !matchingNotification&&!matchingActionCenter&&
           <p>No items match your search.</p>}
+      </div>:location==="action-center"?<div className="windows-cpanel__action"
+        data-test-cpanel-action-center="">
+        <aside className="windows-cpanel__action-sidebar">
+          <button type="button" onClick={()=>open(null)}>Control Panel</button>
+          <button type="button" disabled>{SOURCE_CPANEL_ACTION_CENTER_TEXT.changeSettings}</button>
+          <button type="button" disabled>{SOURCE_CPANEL_ACTION_CENTER_TEXT.archived}</button>
+        </aside>
+        <div className="windows-cpanel__action-content">
+          <h2>{SOURCE_CPANEL_ACTION_CENTER_TEXT.title}</h2>
+          <p>{messages.length?
+            SOURCE_CPANEL_ACTION_CENTER_TEXT.hasMessagesInstruction:
+            SOURCE_CPANEL_ACTION_CENTER_TEXT.emptyInstruction}</p>
+          {!messages.length?<p className="windows-cpanel__action-empty"
+            data-test-no-messages="">{SOURCE_CPANEL_ACTION_CENTER_TEXT.empty}</p>:
+            messages.map(message=><article key={message.id}
+              data-test-cpanel-action-message={message.id}
+              className={"windows-cpanel__action-message is-"+message.type}>
+              <strong>{message.title}</strong>
+              <p>{message.body}</p>
+            </article>)}
+        </div>
       </div>:location==="notification"?<div className="windows-cpanel__notification"
         data-test-cpanel-notification="">
         <div className="windows-cpanel__notification-body">
@@ -300,6 +339,11 @@ export function ControlPanelApp({
           className="windows-cpanel__tile" onClick={()=>open("notification")}>
           <img src={legacyArt.trayActionCenter} alt="" width={44} height={44}/>
           <span>Notification Area Icons</span>
+        </button>
+        <button type="button" data-test-cpanel-item="action-center"
+          className="windows-cpanel__tile" onClick={()=>open("action-center")}>
+          <img src={legacyArt.trayActionCenter} alt="" width={44} height={44}/>
+          <span>Action Center</span>
         </button>
       </div>}
     </div>

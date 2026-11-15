@@ -120,3 +120,22 @@ test("source taskbar notifications preferences update visible tray and hidden po
   await expect(volume.getByRole("combobox")).toHaveValue("shown");
   await expect(page.locator('[data-test-tray-icon="TaskbarVolume"]')).toHaveCount(1);
 });
+
+
+test("original Control Panel Action Center shows source empty history, not invented alerts",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  await panel.locator('[data-test-cpanel-item="action-center"]').click();
+  const action=panel.locator("[data-test-cpanel-action-center]");
+  await expect(action).toBeVisible();
+  await expect(action).toContainText("Review recent messages and resolve problems");
+  await expect(action).toContainText("Action Center has nothing to report.");
+  await expect(action.locator("[data-test-no-messages]")).toHaveText("No messages");
+  await expect(action.locator("[data-test-cpanel-action-message]")).toHaveCount(0);
+  await expect(action.getByRole("button",{name:"Change Action Center settings"})).toBeDisabled();
+  await expect(action.getByRole("button",{name:"View archived messages"})).toBeDisabled();
+  await panel.locator("[data-test-cpanel-back]").click();
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+  await panel.getByRole("searchbox",{name:"Search Control Panel"}).fill("action");
+  await expect(panel.locator('[data-test-cpanel-result="action-center"]')).toBeVisible();
+});

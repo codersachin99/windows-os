@@ -1,4 +1,31 @@
 
+## Action Center read-only source Guest notification history — 15 November 2026
+
+Source `src/modules/apps/cpanel.js` `te/oe` Action Center panel
+reads Vuex `notifications.history`, calls `MarkAllRead` on mount,
+displays the `review-messages-title` header, and shows either
+`no-messages` or actual history cards. Pinned
+`assets/locales/en-US.json` provides **exact** strings:
+"Review recent messages and resolve problems",
+"Action Center has nothing to report.", "No messages",
+"Change Action Center settings" and "View archived messages".
+The latter two source side links are **disabled**.
+
+The fifth Control Panel location `action-center` now renders this
+source Guest empty-state because no real notification-history provider
+is mounted in the React shell; it does **not** invent alerts, security
+diagnoses, a backend history, or mark nonexistent messages read.
+The component accepts an optional typed `messages` list for eventual
+Vuex-notification history parity; until then the Guest source history
+is truthfully empty. A source-specific search, Back/Forward navigation,
+and desktop/mobile browser test verify exact translated copy, blocked
+links, no invented message entries, and route reopening. The full
+notification-history provider, read tracking and safe parsed inline
+links remain pending. The sixth original Control Panel page,
+Backup/Restore, is still outstanding. This follow-up does not
+trigger CI while the previous combined acceptance batch is active.
+
+
 ## CI root cause and combined Control Panel acceptance — 15 November 2026
 
 [Run #43717661924](https://github.com/codersachin99/windows-os/actions/runs/43717661924)

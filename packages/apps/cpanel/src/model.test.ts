@@ -4,7 +4,8 @@ import {
   sourceCpanelOpenLocation,sourceCpanelStep,sourceCpanelResolutions,
   sourceCpanelDisplayMatch,sourceCpanelInstalledPrograms,
   sourceCpanelProgramsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
-  sourceCpanelAccountsMatch
+  sourceCpanelAccountsMatch,
+  sourceCpanelActionCenterMatch,SOURCE_CPANEL_ACTION_CENTER_TEXT
 } from "./model";
 
 describe("pinned a259 cpanel location history",()=>{
@@ -73,5 +74,22 @@ describe("pinned original Kt Guest account controls",()=>{
     expect(sourceCpanelAccountsMatch("guest account")).toBe(true);
     expect(sourceCpanelAccountsMatch("password")).toBe(true);
     expect(sourceCpanelAccountsMatch("resolution")).toBe(false);
+  });
+});
+
+
+describe("pinned cpanel.js te empty Action Center and source locale strings",()=>{
+  it("uses original en-US translation keys with no fabricated Guest issues",()=>{
+    expect(SOURCE_CPANEL_ACTION_CENTER_TEXT).toEqual({
+      title:"Review recent messages and resolve problems",
+      emptyInstruction:"Action Center has nothing to report.",
+      hasMessagesInstruction:"Action Center has detected one or more issues for you to review.",
+      empty:"No messages",
+      changeSettings:"Change Action Center settings",
+      archived:"View archived messages"
+    });
+    expect(sourceCpanelActionCenterMatch("Action Center")).toBe(true);
+    expect(sourceCpanelActionCenterMatch("messages")).toBe(true);
+    expect(sourceCpanelActionCenterMatch("resolution")).toBe(false);
   });
 });
