@@ -169,3 +169,8 @@ Combined [CI #43682005351](https://github.com/codersachin99/windows-os/actions/r
 ## Original ze.cmd nested interpreter banner — 15 November 2026
 
 Source cmd.js ze.cmd does not start a host subprocess or another simulator CMD window; it invokes host.getBanner and writes those lines into the same console. Ported the exact original Win7 banner through existing SOURCE_CMD_BANNER for the CMD command, with HELP metadata and real model/browser regression tests. Kept simulator permissions and window lifecycle unchanged. This commit deliberately omits [run-ci] while the previous PAUSE/RD/DEL full CI runs; batch later. Screenshot parity remains pending.
+
+
+## Ctrl+C while PAUSE waits and RD /S browser verification — 15 November 2026
+
+[CI #43682097876](https://github.com/codersachin99/windows-os/actions/runs/43682097876) finished with 398 unit passes and 372 browser passes, but four browser failures (the same two scenarios on desktop and mobile). Ctrl+C while PAUSE is busy was blocked by the noncollapsed browser text-selection guard; the updated handler always treats Ctrl+C as interrupt when a source command is running, while retaining text-copy behavior at the idle prompt. The RD /S test checked the last *output row* after deleting the only listed folder and running bare DIR: an empty DIR /B emits no output, leaving the previous Y/N prompt as that locator. It now creates a safe DirAnchor.txt sentinel, verifies its listing after confirmed deletion, and verifies the removed directory no longer appears. The simulated filesystem deletion behavior did not require a change. Opt-in test run is held until bundled with the original DIR feature.

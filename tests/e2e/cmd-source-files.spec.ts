@@ -193,6 +193,7 @@ test("original CMD PAUSE displays pending prompt and resumes on any key",async({
 
 test("source CMD RD /S requires Y and only deletes the confirmed Guest subtree",async({page})=>{
   const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"echo anchor > Documents\\DirAnchor.txt");
   await execute(input,"md Documents\\ConfirmDelete");
   await execute(input,"md Documents\\ConfirmDelete\\Nested");
   await execute(input,"rd /s Documents\\ConfirmDelete");
@@ -207,6 +208,9 @@ test("source CMD RD /S requires Y and only deletes the confirmed Guest subtree",
   await input.press("y");
   await expect(output).toContainText("Are you sure (Y/N)? y");
   await execute(input,"dir /b Documents");
+  // DIR /B of an empty folder emits zero output lines, so use a mounted
+  // sentinel instead of mistakenly asserting on the prior RD question.
+  await expect(output).toContainText("DirAnchor.txt");
   await expect(output).not.toContainText("ConfirmDelete");
 });
 

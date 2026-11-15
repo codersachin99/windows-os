@@ -167,7 +167,10 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
   const onKeyDown=(event:KeyboardEvent<HTMLInputElement>)=>{
     if(event.key.toLowerCase()==="c"&&(event.ctrlKey||event.metaKey)){
       const selection=window.getSelection();
-      if(selection&&!selection.isCollapsed)return; // preserve source copy selection
+      // A running command's Ctrl+C must always interrupt even if a prior
+      // selection still exists (including an active PAUSE key wait).
+      // At the idle prompt, preserve the pinned source copy-selection rule.
+      if(!busy&&selection&&!selection.isCollapsed)return;
       event.preventDefault();
       interrupt();
       return;

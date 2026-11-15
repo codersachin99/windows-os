@@ -939,3 +939,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - Added source ze.cmd: prints original Win7 host.getBanner contents within current simulated session, no new window, no host process. Unit/browser contracts and HELP registration added.
 - No [run-ci] while PAUSE/RD/DEL acceptance #43682097876 remains active. Batch with next opt-in verification. PR #1 draft, main untouched, no release.
+
+
+## Correct PAUSE Ctrl+C + empty DIR /B E2E locator regression — 15 November 2026
+
+- [CI #43681551196](https://github.com/codersachin99/windows-os/actions/runs/43681551196) **SUCCESS** for independent Ctrl+C acceptance. Combined [CI #43682097876](https://github.com/codersachin99/windows-os/actions/runs/43682097876) **FAILED only four browser tests** (two cases × desktop/mobile); TypeScript, 398 unit tests, source audits, Vite build and 372 other browser tests succeeded.
+- React browser copy-selection guard now applies only while idle, so busy PAUSE Ctrl+C is not swallowed by a stale text selection. The RD browser test now plants a durable DirAnchor.txt before Y/N confirmation and checks that anchor plus the absent deleted name; original DIR /B of an empty directory legitimately renders zero output and leaves last rendered output on prior RD.
+- This checkpoint omits [run-ci] until combined with next original DIR /S /W implementation and tests. Draft PR #1 remains open, main unchanged and no release. Review browser acceptance before green claim.
