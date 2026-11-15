@@ -180,3 +180,51 @@
   .windows-cpanel__action-sidebar{max-width:none;padding:8px 14px}
   .windows-cpanel__action-content{padding:16px}
 }
+
+
+/* Original ue/Te source Backup and Restore: Win7 side pane, two grouped
+ * actions, progress/result status, and browser-only ZIP download/upload. */
+.windows-cpanel__backup{display:flex;min-height:100%;min-width:0}
+.windows-cpanel__backup-sidebar{
+  flex:0 0 175px;background:#f6f9fc;border-right:1px solid #c8d4e0;
+  padding:24px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:18px
+}
+.windows-cpanel__backup-sidebar button{
+  background:none;border:0;padding:0;color:#1267a8;text-align:left;
+  cursor:pointer;font:inherit
+}
+.windows-cpanel__backup-sidebar button:disabled{color:#8c979f;cursor:default}
+.windows-cpanel__backup-content{flex:1;min-width:0;padding:24px 32px}
+.windows-cpanel__backup-content h2{font-weight:400;font-size:20px;margin:0 0 20px}
+.windows-cpanel__backup-group{
+  border:1px solid #b3c7d5;margin:0 0 24px;background:#fff;min-width:0
+}
+.windows-cpanel__backup-group h3{
+  background:#e9f2fc;border-bottom:1px solid #b3c7d5;
+  color:#1c4770;font-size:15px;font-weight:400;margin:0;padding:9px 14px
+}
+.windows-cpanel__backup-row{
+  padding:16px 24px;display:flex;flex-wrap:wrap;
+  gap:12px;align-items:flex-start;justify-content:space-between
+}
+.windows-cpanel__backup-row p{margin:0 0 7px}
+.windows-cpanel__backup-row button{
+  flex:none;padding:5px 12px;border:1px solid #9db0c0;border-radius:3px;
+  background:linear-gradient(#fff,#e1ebf4);color:#222;cursor:pointer
+}
+.windows-cpanel__backup-row button:disabled{opacity:.55;cursor:default}
+.windows-cpanel__backup-status{
+  border:1px solid #a4b6c7;padding:14px 16px;margin:0 0 16px;
+  display:flex;flex-direction:column;gap:9px
+}
+.windows-cpanel__backup-status[data-test-backup-status="error"]{border-color:#bb5555}
+.windows-cpanel__backup-status progress{width:100%;max-width:320px}
+@media(max-width:520px){
+  .windows-cpanel__backup{flex-direction:column}
+  .windows-cpanel__backup-sidebar{
+    flex:0 0 auto;flex-direction:row;flex-wrap:wrap;gap:8px 16px;
+    padding:10px 14px;border-right:0;border-bottom:1px solid #c8d4e0
+  }
+  .windows-cpanel__backup-content{padding:16px}
+  .windows-cpanel__backup-row{padding:12px}
+}
