@@ -12,6 +12,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdDirDetailLine,sourceCmdDirSummary,sourceCmdDirWideLines,
   sourceCmdWhereInstallPath,sourceCmdResolveProgramId,
   sourceCmdTasks,sourceCmdTasklistOutput,sourceCmdIpconfigOutput,
+  sourceCmdBrowserDeviceInfo,sourceCmdSystemInfoOutput,
   SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
@@ -1011,7 +1012,7 @@ describe("pinned source Ze.ipconfig uses the simulator adapter, not host network
   it("renders the original fixed virtual TCP/IP configuration with V() alignment",()=>{
     const lines=sourceCmdIpconfigOutput();
     expect(lines.slice(0,6)).toEqual([
-      "","WindowsOS IP Configuration","","",
+      "","Windows IP Configuration","","",
       "Ethernet adapter Local Area Connection:",""
     ]);
     expect(lines).toHaveLength(10);
@@ -1103,5 +1104,66 @@ describe("original Ze.hostname using pinned browser Device2Web host field",()=>{
       .toContain("Prints the name of the current host.");
     expect((await session.run("echo still-running")).output)
       .toEqual(["still-running"]);
+  });
+});
+
+
+describe("pinned cmd.js Ze.systeminfo and browser DeviceWeb/Device2Web adapter",()=>{
+  const input={
+    userAgent:"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "+
+      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    vendor:"Google Inc.",language:"en-GB",languages:["en-US","en-GB"],
+    timezone:"Asia/Kolkata",innerWidth:1440,innerHeight:900,batteryLevel:0.62
+  };
+  it("parses the original source web device fields without native host access",()=>{
+    const info=sourceCmdBrowserDeviceInfo(input);
+    expect(info).toMatchObject({
+      host:"",model:"Windows NT 10.0",osVersion:"Windows NT 10.0; Win64; x64",
+      manufacturer:"Google Inc.",locale:"en-US",timezone:"Asia/Kolkata",
+      bootTime:0,display:"900x1440",battery:62,camera:[]
+    });
+    expect(info.totalMemory).toBe(16*1024**3);
+    expect(info.availMemory).toBe(16*1024**3);
+    expect(sourceCmdBrowserDeviceInfo({...input,batteryLevel:0}).battery).toBe(100);
+    expect(()=>sourceCmdBrowserDeviceInfo({...input,userAgent:""})).toThrow();
+  });
+  it("formats source Win7 fields with two-column spacing and camera MP rounding",()=>{
+    const info=sourceCmdBrowserDeviceInfo(input);
+    const output=sourceCmdSystemInfoOutput(info);
+    expect(output).toHaveLength(22);
+    expect(output.find(x=>x.includes("OS Name:")))
+      .toContain("Microsoft Windows 7 Simulator");
+    expect(output.find(x=>x.includes("Total Physical Memory:"))).toContain("16 GB");
+    expect(output.find(x=>x.includes("Available Physical Memory:"))).toContain("16.0 GB");
+    expect(output.find(x=>x.includes("Camera Resolutions:"))).toContain("N/A");
+    expect(output.find(x=>x.includes("Actual OS Version:")))
+      .toContain("Windows NT 10.0; Win64; x64");
+    expect(output.find(x=>x.includes("Battery:"))).toContain("62%");
+    expect(output.map(row=>row.indexOf("  ")).every(column=>column>=0)).toBe(true);
+    const cameras=sourceCmdSystemInfoOutput({...info,camera:["1920x1080","640x480"]});
+    expect(cameras.some(x=>x.includes("Camera 1:")&&x.includes("3 MP"))).toBe(true);
+    expect(cameras.some(x=>x.includes("Camera 2:")&&x.includes("1 MP"))).toBe(true);
+  });
+  it("calls the injected simulator browser adapter, preserving a detached failure",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();await ensureSourceGuestDirectories(fs);
+    let requests=0;
+    const shell=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,undefined,undefined,undefined,undefined,
+      async()=>{requests++;return sourceCmdBrowserDeviceInfo(input);});
+    const result=await shell.run("systeminfo");
+    expect(result.errorlevel).toBe(0);
+    expect(result.output.some(line=>line.includes("OS Version:")&&
+      line.includes("6.1.7600 Build 7600"))).toBe(true);
+    expect(requests).toBe(1);
+    expect((await shell.run("hostname")).output).toEqual([""]);
+    expect(requests).toBe(2);
+    expect((await shell.run("help systeminfo")).output)
+      .toContain("Displays device specific properties and configuration.");
+    const disconnected=await createShell();
+    expect((await disconnected.session.run("systeminfo")).output)
+      .toEqual(["The simulated device information is unavailable."]);
+    expect((await disconnected.session.run("systeminfo")).errorlevel).toBe(1);
   });
 });

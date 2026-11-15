@@ -3,7 +3,7 @@ import {fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult,
   type SourceCmdColorStyle,sourceCmdApplyCompletion,
   type SourceCmdCompletionTarget,sourceCmdTrimEntries,
-  sourceCmdInterruptedEntries} from "./model";
+  sourceCmdInterruptedEntries,sourceCmdBrowserDeviceInfo} from "./model";
 import "./source.css";
 import "./CmdApp.css";
 
@@ -58,7 +58,26 @@ export function CmdApp({
       },programId=>launchRef.current?.(programId)??false,
       ()=>listRef.current?.()??[],
       windowId=>terminateRef.current?.(windowId),
-      view=>changeViewRef.current?.(view));}
+      view=>changeViewRef.current?.(view),
+      async ()=>{
+        // Original DeviceWeb/Device2Web browser metadata, no host OS API.
+        const batteryApi=(navigator as Navigator & {
+          getBattery?:()=>Promise<{level:number}>
+        }).getBattery;
+        let batteryLevel=1;
+        if(batteryApi){
+          try{batteryLevel=(await batteryApi.call(navigator)).level||1;}
+          catch{batteryLevel=1;}
+        }
+        return sourceCmdBrowserDeviceInfo({
+          userAgent:navigator.userAgent,vendor:navigator.vendor,
+          oscpu:(navigator as Navigator & {oscpu?:string}).oscpu,
+          language:navigator.language,languages:navigator.languages,
+          timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,
+          innerWidth:window.innerWidth,innerHeight:window.innerHeight,
+          batteryLevel
+        });
+      });}
     catch{return null;}
   },[volume]);
   const [input,setInput]=useState("");

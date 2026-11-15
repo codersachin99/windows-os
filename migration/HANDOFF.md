@@ -1,4 +1,11 @@
 
+## Original CMD SYSTEMINFO web-device adapter and IPCONFIG heading correction — 15 November 2026
+
+Pinned legacy `src/modules/apps/cmd.js` `ot.systeminfo` reads `host.getDeviceInfo()`, formats the eight static Windows 7 simulator `st` values and `it(device)` fields with `V(rows,2)` aligned columns. `getDeviceInfo` merges `DeviceWeb.getInfo()` (browser user-agent model, actual OS string and manufacturer) with `Device2Web.getInfo()` (blank host, boot time zero, browser locale/timezone, 16GiB simulated total/available memory, viewport height x width, no cameras) and browser battery fraction when supported, default 100%. The React CMD uses an injected read-only browser adapter, original user-agent parser and pure formatter. No native OS/device/driver inquiry, network access or fake computer name. Disconnected unit model fails visibly instead of inventing details. Added unit contracts for browser UA parsing, source metadata, memory, camera, locale and battery, plus desktop/mobile browser acceptance.
+
+Pinned source module `15ca` `$["e"]="Windows"` in the base variant. Consequently original `Ze.ipconfig` outputs **Windows IP Configuration**, not the previous assumed `WindowsOS IP Configuration`. Corrected command, unit test and both browser assertions. This follow-up intentionally has no `[run-ci]` while CMD Ctrl+C acceptance #43711921734 is running. That workflow cannot verify this newer change. Other source CMD host integrations and full screenshot parity remain pending.
+
+
 ## Root-caused source PAUSE Ctrl+C modifier key regression — 15 November 2026
 
 CI [#43689829426](https://github.com/codersachin99/windows-os/actions/runs/43689829426) finished **failure** with 392 Playwright passes and exactly two desktop/mobile failures in the same `PAUSE` Ctrl+C test. The new expectation saw **four** entries where **three** were expected. This uncovered the cause: `ControlOrMeta+c` emits a **modifier keydown first**, and our `keyResolver` treated that Control/Meta key as `PAUSE`'s any-key acknowledgement, prematurely completing the command before the `c` keydown. Subsequent Ctrl+C then appended a separate idle `^C` entry instead of interrupting the pending PAUSE output. An earlier failed test had observed the same underlying issue as a missing `^C` in the expected pending row.

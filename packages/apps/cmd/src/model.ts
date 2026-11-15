@@ -95,6 +95,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   logoff:"Logs the current user off.",
   shutdown:"Allows proper shutdown of the device.",
   hostname:"Prints the name of the current host.",
+  systeminfo:"Displays device specific properties and configuration.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -114,10 +115,117 @@ export function sourceCmdIpconfigOutput():string[]{
   ];
   // Original cmd.js V(fields, 1) pads the first column to max width + 1.
   const width=Math.max(...fields.map(([label])=>label.length));
-  return ["","WindowsOS IP Configuration","","",
+  return ["","Windows IP Configuration","","",
     "Ethernet adapter Local Area Connection:","",
     ...fields.map(([label,value])=>label.padEnd(width+1)+value)
   ];
+}
+
+/** Pinned cmd.js it/st/V and browser DeviceWeb + Device2Web. */
+export interface SourceCmdDeviceInfo{
+  host:string;
+  bootTime:number;
+  manufacturer:string;
+  model:string|undefined;
+  locale:string;
+  timezone:string;
+  totalMemory:number;
+  availMemory:number;
+  osVersion:string|undefined;
+  display:string;
+  camera:readonly string[];
+  battery:number;
+}
+export interface SourceCmdBrowserDeviceInput{
+  userAgent:string;
+  vendor:string;
+  oscpu?:string;
+  language:string;
+  languages?:readonly string[];
+  timezone:string;
+  innerWidth:number;
+  innerHeight:number;
+  batteryLevel?:number;
+}
+/** The original web adapter reads navigator metadata only. This deliberately
+ * does NOT inspect native OS identity, processes, disks or environment. */
+export function sourceCmdBrowserDeviceInfo(input:SourceCmdBrowserDeviceInput):SourceCmdDeviceInfo{
+  if(!input.userAgent)throw new Error("Device API not available in this browser");
+  const ua=input.userAgent;
+  let end=ua.indexOf(") AppleWebKit");
+  if(ua.includes(") Gecko"))end=ua.indexOf(") Gecko");
+  const system=ua.substring(ua.indexOf("(")+1,end);
+  let model:string|undefined;
+  let osVersion:string|undefined;
+  if(ua.includes("Android")){
+    const part=system.replace("; wv","").split("; ").pop();
+    model=part?.split(" Build")[0];
+    osVersion=system.split("; ")[1];
+  }else{
+    model=system.split("; ")[0];
+    if(input.oscpu)osVersion=input.oscpu;
+    else if(ua.includes("Windows"))osVersion=system;
+    else{
+      const part=system.split("; ").pop();
+      if(part){
+        const items=part.replace(" like Mac OS X","").split(" ");
+        osVersion=items[items.length-1].replace(/_/g,".");
+      }
+    }
+  }
+  const memory=16*1024**3;
+  return {
+    host:"",bootTime:0,manufacturer:input.vendor,
+    model,osVersion,
+    locale:input.languages?.[0]||input.language,
+    timezone:input.timezone,totalMemory:memory,availMemory:memory,
+    display:input.innerHeight+"x"+input.innerWidth,camera:[],
+    battery:100*(input.batteryLevel||1)
+  };
+}
+function sourceCmdSystemBootTime(value:number):string{
+  const date=new Date(value);
+  const hour=date.getHours()%12||12;
+  const pad=(n:number)=>String(n).padStart(2,"0");
+  return (date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear()+
+    ", "+hour+":"+pad(date.getMinutes())+":"+pad(date.getSeconds())+
+    " "+(date.getHours()<12?"AM":"PM");
+}
+/** Exactly source it() rows including V(fields, 2) label spacing. */
+export function sourceCmdSystemInfoOutput(info:SourceCmdDeviceInfo):string[]{
+  const gigabyte=1024**3;
+  const cameras=info.camera.map((resolution,index)=>{
+    const [width,height]=resolution.split("x");
+    return ["  Camera "+(index+1)+":",
+      Math.ceil((+width*+height)/1e6)+" MP"] as [string,string];
+  });
+  const fields:[string,string][]=[
+    ["Host Name:",info.host],
+    ["OS Name:","Microsoft Windows 7 Simulator"],
+    ["OS Version:","6.1.7600 Build 7600"],
+    ["OS Manufacturer:","Microsoft Corporation"],
+    ["OS Configuration:","Standalone Workstation"],
+    ["OS Build Type:","Multiprocessor Free"],
+    ["Registered Owner:","Admin"],
+    ["Registered Organization:","WindowsOS"],
+    ["Product ID:","00000-10000-20000-AA000"],
+    ["Original Install Date:","N/A"],
+    ["Last Update Date:","N/A"],
+    ["System Boot Time:",sourceCmdSystemBootTime(info.bootTime)],
+    ["System Manufacturer:",info.manufacturer],
+    ["System Model:",String(info.model)],
+    ["System Locale:",info.locale],
+    ["System Timezone:",info.timezone],
+    ["Total Physical Memory:",sourceCmdInteger(Math.ceil(info.totalMemory/gigabyte))+" GB"],
+    ["Available Physical Memory:",(info.availMemory/gigabyte).toFixed(1)+" GB"],
+    ["Actual OS Version:",String(info.osVersion)],
+    ["Display:",info.display],
+    ["Camera Resolutions:",cameras.length?"":"N/A"],
+    ...cameras,
+    ["Battery:",info.battery+"%"]
+  ];
+  const width=Math.max(...fields.map(([label])=>label.length));
+  return fields.map(([label,value])=>label.padEnd(width+2)+value);
 }
 
 const DRIVE_NOT_FOUND="The system cannot find the drive specified.";
@@ -476,7 +584,9 @@ export class SourceCmdSession {
     private readonly openWindows?: ()=>readonly SourceCmdOpenWindow[],
     private readonly terminateWindow?: (windowId:string)=>void,
     /** Original ot.logoff/shutdown: change simulated shell view, never the host OS. */
-    private readonly changeView?: (view:"Logon"|"Shutdown")=>void
+    private readonly changeView?: (view:"Logon"|"Shutdown")=>void,
+    /** Source getDeviceInfo: browser adapter, never native host info. */
+    private readonly getDeviceInfo?: ()=>Promise<SourceCmdDeviceInfo>
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -779,9 +889,20 @@ export class SourceCmdSession {
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
       }
     }else if(name==="hostname"){
-      // Original Ze.hostname asks getDeviceInfo().host; pinned browser
-      // Device2Web.getInfo() sets host:"". Never leak the native host name.
-      output=[""];
+      // Device2Web browser adapter returns the blank source host name.
+      try{output=[this.getDeviceInfo?(await this.getDeviceInfo()).host:""];}
+      catch{output=[""];errorlevel=1;}
+    }else if(name==="systeminfo"){
+      if(!this.getDeviceInfo){
+        output=["The simulated device information is unavailable."];
+        errorlevel=1;
+      }else{
+        try{output=sourceCmdSystemInfoOutput(await this.getDeviceInfo());}
+        catch{
+          output=["The simulated device information is unavailable."];
+          errorlevel=1;
+        }
+      }
     }else if(name==="ipconfig"){
       output=sourceCmdIpconfigOutput();
     }else if(name==="tasklist"){

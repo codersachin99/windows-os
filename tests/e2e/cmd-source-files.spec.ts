@@ -320,14 +320,14 @@ test("source CMD TASKLIST lists simulated windows and TASKKILL closes CMD",async
 test("original CMD IPCONFIG prints legacy virtual Ethernet values, not host networking",async({page})=>{
   const {input,output}=await launchSourceCommandPrompt(page);
   await execute(input,"ipconfig");
-  await expect(output).toContainText("WindowsOS IP Configuration");
+  await expect(output).toContainText("Windows IP Configuration");
   await expect(output).toContainText("Ethernet adapter Local Area Connection:");
   await expect(output).toContainText("192.168.1.42");
   await expect(output).toContainText("255.255.255.0");
   await expect(output).toContainText("192.168.1.1");
   await execute(input,"IPCONFIG /ALL");
   await expect(output).toContainText("192.168.1.42");
-  await expect(output).toContainText("WindowsOS IP Configuration");
+  await expect(output).toContainText("Windows IP Configuration");
 });
 
 
@@ -370,4 +370,22 @@ test("original browser CMD HOSTNAME writes the source blank host field",async({p
   await expect(entry.locator("[data-test-cmd-output]")).toHaveText("");
   await execute(input,"echo HostnameDone");
   await expect(cmd.locator("[data-test-cmd-output]").last()).toHaveText("HostnameDone");
+});
+
+
+test("original CMD SYSTEMINFO prints the source web-device configuration",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"systeminfo");
+  await expect(output).toContainText("OS Name:");
+  await expect(output).toContainText("Microsoft Windows 7 Simulator");
+  await expect(output).toContainText("6.1.7600 Build 7600");
+  await expect(output).toContainText("System Manufacturer:");
+  await expect(output).toContainText("Total Physical Memory:");
+  await expect(output).toContainText("16 GB");
+  await expect(output).toContainText("Available Physical Memory:");
+  await expect(output).toContainText("16.0 GB");
+  await expect(output).toContainText("Camera Resolutions:");
+  await expect(output).toContainText("N/A");
+  await expect(output).toContainText("Battery:");
+  await expect(output).not.toContainText("The simulated device information is unavailable.");
 });
