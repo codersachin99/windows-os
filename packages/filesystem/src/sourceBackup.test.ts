@@ -3,7 +3,7 @@ import {zipSync} from "fflate";
 import {VirtualFileStore} from "./index";
 import {ensureSourceGuestDirectories,SOURCE_GUEST_PROFILE} from "./sourceGuest";
 import {
-  SOURCE_BACKUP_FOLDERS,sourceBackupDestination,sourceCreateBackupArchive,
+  SOURCE_BACKUP_FOLDERS,sourceBackupDestination,sourceBackupTextFile,sourceCreateBackupArchive,
   sourceParseBackupArchive,sourceRestoreBackupArchive
 } from "./sourceBackup";
 
@@ -28,6 +28,9 @@ describe("original f106 backup scope and safe ZIP path contract",()=>{
     ]);
     expect(sourceBackupDestination("Documents/notes.txt"))
       .toBe(SOURCE_GUEST_PROFILE+"/Documents/notes.txt");
+    expect(sourceBackupTextFile("README.md")).toBe(true);
+    expect(sourceBackupTextFile("Notes.lnk")).toBe(true);
+    expect(sourceBackupTextFile("picture.png")).toBe(false);
     expect(sourceBackupDestination("AppData/Roaming/sub/file.dat"))
       .toBe(SOURCE_GUEST_PROFILE+"/AppData/Roaming/sub/file.dat");
   });
@@ -46,7 +49,7 @@ describe("source Ie backup / je safe Guest restore",()=>{
     await store.write("hello Guest",SOURCE_GUEST_PROFILE+"/Documents/example.txt");
     await store.writeBytes(new Uint8Array([0,255,8,0,128]),
       SOURCE_GUEST_PROFILE+"/Pictures/pic.bin");
-    await store.write("private settings",SOURCE_GUEST_PROFILE+"/AppData/Roaming/settings.ini");
+    await store.write("private settings",SOURCE_GUEST_PROFILE+"/AppData/Roaming/settings.json");
     // Non-profile installed system file must never be included.
     await store.write("outside", "/EXTERNAL/computer/drive0/Windows/exclude.txt");
     const steps:string[]=[];
@@ -62,7 +65,7 @@ describe("source Ie backup / je safe Guest restore",()=>{
     expect(steps.at(-1)).toBe("done");
     const parsed=sourceParseBackupArchive(archive.archive);
     expect(parsed.files.map(file=>file.name).sort()).toEqual([
-      "AppData/Roaming/settings.ini","Documents/example.txt","Pictures/pic.bin"
+      "AppData/Roaming/settings.json","Documents/example.txt","Pictures/pic.bin"
     ]);
     const other=await guest();
     expect(await sourceRestoreBackupArchive(other,archive.archive))
@@ -71,7 +74,7 @@ describe("source Ie backup / je safe Guest restore",()=>{
       .toBe("hello Guest");
     expect(await other.readBytes(SOURCE_GUEST_PROFILE+"/Pictures/pic.bin"))
       .toEqual(new Uint8Array([0,255,8,0,128]));
-    expect(await other.read(SOURCE_GUEST_PROFILE+"/AppData/Roaming/settings.ini"))
+    expect(await other.read(SOURCE_GUEST_PROFILE+"/AppData/Roaming/settings.json"))
       .toBe("private settings");
   });
   it("reads a regular deflated ZIP and never overwrites existing user files",async()=>{
