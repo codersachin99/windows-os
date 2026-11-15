@@ -231,6 +231,7 @@ test("pinned source Control Panel root exposes 24 tile targets without fake host
     "power","programs","region","sound","speech","sync","system","taskbar",
     "accounts","defender","update"
   ];
+  await expect(panel.locator('[data-test-source-listview="tiles"]')).toBeVisible();
   const tiles=panel.locator("[data-test-cpanel-item]");
   await expect(tiles).toHaveCount(ids.length);
   expect(await tiles.evaluateAll(nodes=>nodes.map(node=>
