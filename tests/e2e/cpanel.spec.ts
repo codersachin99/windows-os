@@ -238,9 +238,9 @@ test("pinned source Control Panel root exposes 24 tile targets without fake host
   await expect(panel.locator(".windows-cpanel__home h2"))
     .toHaveText("Adjust your device's settings");
   await expect(panel.locator('[data-test-cpanel-item="backup"] img'))
-    .toHaveAttribute("src",/backup\\.5e4eb80c\\.webp/);
+    .toHaveAttribute("src",/backup\.5e4eb80c\.webp/);
   await expect(panel.locator('[data-test-cpanel-item="action-center"] img'))
-    .toHaveAttribute("src",/action-center-headline\\.27cc6d83\\.webp/);
+    .toHaveAttribute("src",/action-center-headline\.27cc6d83\.webp/);
   for(const id of ["defender","update","data","taskbar","gadgets"]){
     await expect(panel.locator('[data-test-cpanel-item="'+id+'"]'))
       .toBeDisabled();
