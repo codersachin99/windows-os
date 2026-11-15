@@ -2,7 +2,8 @@ import {useEffect,useMemo,useRef,useState,type KeyboardEvent} from "react";
 import {fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult,
   type SourceCmdColorStyle,sourceCmdApplyCompletion,
-  type SourceCmdCompletionTarget,sourceCmdTrimEntries} from "./model";
+  type SourceCmdCompletionTarget,sourceCmdTrimEntries,
+  sourceCmdInterruptedEntries} from "./model";
 import "./source.css";
 import "./CmdApp.css";
 
@@ -38,6 +39,10 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
   const [consoleStyle,setConsoleStyle]=useState<SourceCmdColorStyle|null>(null);
   const [prompt,setPrompt]=useState(shell?.prompt??"");
   const [busy,setBusy]=useState(false);
+  // The pinned b894 Ht.runId guards transcript updates after Ctrl+C.
+  // Interrupting is a UI cancellation, not a rollback of Guest VFS writes.
+  const runId=useRef(0);
+  const pendingEntry=useRef<SourceCmdResult|null>(null);
   const completion=useRef<ActiveCmdCompletion|null>(null);
   const completionRequest=useRef(0);
   const history=useRef<string[]>([]);
@@ -83,11 +88,23 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       if(history.current.length>100)history.current.shift();
     }
     index.current=history.current.length;
+    const token=++runId.current;
+    // Source Ht.submit() adds the command row before the execution promise.
+    // This gives an in-flight Ctrl+C a real row to append ^C to.
+    const pending:SourceCmdResult={
+      prompt:shell.echoEnabled?shell.prompt:"",
+      input:text,output:[],echo:shell.echoEnabled,errorlevel:shell.errorlevel
+    };
+    pendingEntry.current=pending;
+    setEntries(current=>sourceCmdTrimEntries([...current,pending]));
     setBusy(true);
     setInput("");
     try{
       const result=await shell.run(text);
-      setEntries(current=>result.clear?[]:sourceCmdTrimEntries([...current,result]));
+      if(token!==runId.current)return;
+      setEntries(current=>result.clear?[]:current.map(item=>
+        item===pending?result:item
+      ));
       if(result.clear)setShowBanner(false);
       if(result.title!==undefined)onTitleChange(result.title||"Command Prompt");
       if(result.style!==undefined)setConsoleStyle(result.style);
@@ -95,17 +112,45 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       setEcho(result.echo);
       if(result.exit){onClose();return;}
     }catch(cause){
-      setEntries(current=>sourceCmdTrimEntries([...current,{
-        prompt:shell.prompt,input:text,
-        output:[cause instanceof Error?cause.message:"Command failed"],
-        echo:shell.echoEnabled,errorlevel:1
-      }]));
+      if(token!==runId.current)return;
+      setEntries(current=>current.map(item=>item===pending?{
+        ...pending,output:[cause instanceof Error?cause.message:"Command failed"],
+        errorlevel:1
+      }:item));
     }finally{
-      setBusy(false);
-      inputRef.current?.focus();
+      if(token===runId.current){
+        pendingEntry.current=null;
+        setBusy(false);
+        inputRef.current?.focus();
+      }
     }
   };
+  const interrupt=()=>{
+    if(!shell)return;
+    // b894: cancel display of pending source output. Ongoing VFS
+    // operations cannot be interrupted atomically, and may still finish.
+    const running=busy&&pendingEntry.current!==null;
+    runId.current++;
+    pendingEntry.current=null;
+    completion.current=null;
+    completionRequest.current++;
+    setEntries(current=>sourceCmdInterruptedEntries(current,{
+      busy:running,prompt:shell.prompt,input,
+      echo:shell.echoEnabled,errorlevel:shell.errorlevel
+    }));
+    setInput("");
+    setBusy(false);
+    index.current=history.current.length;
+    inputRef.current?.focus();
+  };
   const onKeyDown=(event:KeyboardEvent<HTMLInputElement>)=>{
+    if(event.key.toLowerCase()==="c"&&(event.ctrlKey||event.metaKey)){
+      const selection=window.getSelection();
+      if(selection&&!selection.isCollapsed)return; // preserve source copy selection
+      event.preventDefault();
+      interrupt();
+      return;
+    }
     if(event.key!=="Tab"){
       completion.current=null;
       completionRequest.current++;

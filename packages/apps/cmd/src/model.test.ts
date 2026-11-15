@@ -8,7 +8,8 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdCompletionTarget,sourceCmdApplyCompletion,
   sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
   sourceCmdChainSegments,sourceCmdParseRedirect,
-  sourceCmdPipelineSegments,sourceCmdRawRest} from "./model";
+  sourceCmdPipelineSegments,sourceCmdRawRest,
+  sourceCmdInterruptedEntries} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -604,5 +605,45 @@ describe("original cmd.js vt()/Te.echo separator whitespace fidelity",()=>{
     expect((await session.run("echo   on")).echo).toBe(true);
     expect((await session.run("echo first & echo second")).output)
       .toEqual(["first ","second"]);
+  });
+});
+
+
+describe("original cmd.js Ht.interrupt Ctrl+C transcript behavior",()=>{
+  it("records idle input with ^C without executing, changing source errorlevel or command history",async()=>{
+    const {session}=await createShell();
+    const previous=await session.run("notarealcommand");
+    const entries=sourceCmdInterruptedEntries([previous],{
+      busy:false,prompt:session.prompt,input:"echo unfinished",
+      echo:session.echoEnabled,errorlevel:session.errorlevel
+    });
+    expect(entries).toHaveLength(2);
+    expect(entries[1]).toEqual({
+      prompt:"C:\\Users\\Guest>",input:"echo unfinished^C",output:[],
+      echo:true,errorlevel:9009
+    });
+    expect(session.errorlevel).toBe(9009);
+  });
+  it("appends ^C to pending output rather than creating another command line",()=>{
+    const previous={prompt:"C:\\Users\\Guest>",input:"tree /f",
+      output:["Folder PATH listing"],echo:true,errorlevel:0};
+    const entries=sourceCmdInterruptedEntries([previous],{
+      busy:true,prompt:previous.prompt,input:"",echo:true,errorlevel:0
+    });
+    expect(entries).toEqual([{
+      ...previous,output:["Folder PATH listing","^C"]
+    }]);
+    expect(previous.output).toEqual(["Folder PATH listing"]);
+  });
+  it("retains the original last-300 transcript limit for both interruption paths",()=>{
+    const existing=Array.from({length:300},(_,i)=>({
+      prompt:"C:\\>",input:"echo "+i,output:[],echo:true,errorlevel:0
+    }));
+    const entries=sourceCmdInterruptedEntries(existing,{
+      busy:false,prompt:"C:\\>",input:"next",echo:true,errorlevel:0
+    });
+    expect(entries).toHaveLength(300);
+    expect(entries[0].input).toBe("echo 1");
+    expect(entries[299].input).toBe("next^C");
   });
 });

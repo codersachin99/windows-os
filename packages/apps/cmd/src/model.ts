@@ -35,6 +35,26 @@ export function sourceCmdTrimEntries<T>(entries:readonly T[]):T[]{
     ?entries.slice(-SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES):[...entries];
 }
 
+/** Original b894 Ht.interrupt(): idle Ctrl+C prints the current input
+ * followed by ^C; an active submission appends ^C to its last output.
+ * The transcript mutation is pure and never cancels or rolls back VFS I/O. */
+export function sourceCmdInterruptedEntries(
+  entries:readonly SourceCmdResult[],
+  state:{busy:boolean;prompt:string;input:string;echo:boolean;errorlevel:number}
+):SourceCmdResult[]{
+  if(state.busy&&entries.length){
+    const latest=entries[entries.length-1];
+    return sourceCmdTrimEntries([
+      ...entries.slice(0,-1),
+      {...latest,output:[...latest.output,"^C"]}
+    ]);
+  }
+  return sourceCmdTrimEntries([...entries,{
+    prompt:state.prompt,input:state.input+"^C",output:[],
+    echo:state.echo,errorlevel:state.errorlevel
+  }]);
+}
+
 export const SOURCE_CMD_BANNER=[
   "Microsoft Windows [Version 6.1.7600]",
   "Copyright (c) 2009 Microsoft Corporation. All rights reserved."

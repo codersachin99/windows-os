@@ -142,3 +142,27 @@ test("source CMD SORT FIND MORE pipeline uses shared Guest files and final redir
   await execute(input,'echo "not a | command" | more');
   await expect(output).toContainText("not a | command");
 });
+
+
+test("original CMD Ctrl+C interrupts idle input, leaves history intact and accepts another command",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"echo HistoryBeforeInterrupt");
+  await expect(output).toHaveText("HistoryBeforeInterrupt");
+
+  await input.fill("md MustNotBeCreated");
+  await input.press("ControlOrMeta+c");
+  await expect(input).toHaveValue("");
+  const last=cmd.locator("[data-test-cmd-entry]").last();
+  await expect(last.locator("[data-test-cmd-line]"))
+    .toHaveText("C:\\Users\\Guest>md MustNotBeCreated^C");
+  await expect(last.locator("[data-test-cmd-output]")).toHaveCount(0);
+
+  await input.press("ArrowUp");
+  await expect(input).toHaveValue("echo HistoryBeforeInterrupt");
+  await input.press("Escape");
+  await execute(input,"dir /b");
+  await expect(output).not.toContainText("MustNotBeCreated");
+  await expect(output).toContainText("Documents");
+  await execute(input,"echo Ready");
+  await expect(output).toHaveText("Ready");
+});

@@ -135,3 +135,10 @@ Pinned original cmd.js yt() splits only unquoted vertical bars into pipeline sta
 ## Original vt() ECHO interior spacing — 15 November 2026
 
 Source cmd.js vt() retains the literal whitespace separator between the command and rest, while Te.echo trims only to classify ON/OFF/"." and displays e.rest.replace(/^ /,"") for other text. The prior React parser collapsed multiple spaces between ECHO and its text. Added sourceCmdRawRest and directed only ECHO rendering/classification through it, preserving multiple leading spaces, tabs and trailing spaces, without changing other command parsing. Added unit tests including a chained ECHO regression. This commit intentionally skips CI while the prior combined browser suite is active; verify with the subsequent pipeline batch. This is source compatibility, not native host shell access.
+
+
+## Original CMD Ht.interrupt Ctrl+C and pending transcript — 15 November 2026
+
+Pinned legacy b894 Ht.submit immediately appends a pending row, then Ht.interrupt increments runId, appends ^C to in-flight row output or inserts a new idle prompt/input^C entry, clears the input, and leaves the shell command-history recall unchanged. The React CMD UI now stages the pending command row before awaiting SourceCmdSession.run; a monotonic runId suppresses late stale-result rendering, source busy state resets and Tab completion is invalidated. Ctrl/Meta+C preserves noncollapsed window text selections. An interrupted idle command is not executed and is not inserted into Up/Down recall. Existing 300-entry transcript retention remains active for both paths.
+
+Important limitation: the original source interrupts UI output by invalidating runId; it does not atomically cancel underlying explorer filesystem work. This migration likewise does not claim to cancel or reverse already-started Guest VFS mutations; stale effects may finish. It never executes a host command. Added pure state tests for idle/busy/retention and a desktop/mobile browser test for idle Ctrl+C, history and filesystem non-mutation. This commit opts in to one full [run-ci] acceptance batch; verify its conclusion before claiming this behavior passes.
