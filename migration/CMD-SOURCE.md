@@ -113,3 +113,10 @@ The earlier Tab keyboard CI run was started before this artwork commit. This sep
 ## Original CMD Ht transcript memory bound — 2026-11-15
 
 Source cmd.js b894 Ht sets Ft=300 for retained visible entries while separate Tt shell sets xt=100 for command history. The migrated React console already retained 100 history commands but previously allowed unbounded output DOM entries. It now uses a tested generic sourceCmdTrimEntries helper for both normal results and error entries, preserving only the newest 300 lines and leaving the editable active input outside the transcript. No output text or command processing changes. This incremental commit intentionally omits [run-ci] while the earlier Tab completion run is still being checked.
+
+
+## Original CMD Tt.run conditional chains — 2026-11-15
+
+Pinned source cmd.js mt/gt/Ct/Tt.run: parses &&, || and & outside quoted spans; annotates each segment with the immediately preceding operator; only executes && on prior success or || on prior failure, while & executes unconditionally. Original Ct percent-variable expansion occurs **once before** splitting, not after individual SET/CD operations. Added a pure sourceCmdChainSegments helper, retained command execution against real Guest VFS, single-history input/output result, combined output, last error level, and sequential title/color/CLS/EXIT propagation. Blank commands now retain previous errorlevel, matching the pinned Tt.execute behavior. This does not enable pipes, redirects, batch files or native host shell execution.
+
+Unit tests verify quoted syntax, conditional skip/recovery, VFS directory effects and single-expansion. Browser test verifies real shell conditions, quoted operator and mounted working-directory update. These are staged without [run-ci] until batched with the next source command slice.

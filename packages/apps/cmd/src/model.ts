@@ -211,6 +211,38 @@ export interface SourceCmdCompletion{
   matches:string[];
 }
 
+/** Original cmd.js gt()/mt() split &&, || and & only outside quotes.
+ * Keep the exact operator on the *following* command for source Tt.run().
+ * This is an isolated grammar primitive, not host shell evaluation. */
+export interface SourceCmdChainSegment{
+  text:string;
+  operator:""|"&"|"&&"|"||";
+}
+export function sourceCmdChainSegments(input:string):SourceCmdChainSegment[]{
+  const result:SourceCmdChainSegment[]=[];
+  let remaining=String(input??"");
+  let operator:SourceCmdChainSegment["operator"]="";
+  while(true){
+    let quoted=false;
+    let index=-1;
+    let found:SourceCmdChainSegment["operator"]="";
+    for(let i=0;i<remaining.length;i++){
+      if(remaining[i]==='"'){quoted=!quoted;continue;}
+      if(quoted)continue;
+      if(remaining.startsWith("&&",i)){index=i;found="&&";break;}
+      if(remaining.startsWith("||",i)){index=i;found="||";break;}
+      if(remaining[i]==="&"){index=i;found="&";break;}
+    }
+    if(index<0){
+      result.push({text:remaining,operator});
+      return result;
+    }
+    result.push({text:remaining.slice(0,index),operator});
+    operator=found;
+    remaining=remaining.slice(index+found.length);
+  }
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -269,12 +301,44 @@ export class SourceCmdSession {
   async run(raw:string):Promise<SourceCmdResult>{
     const input=String(raw);
     const prompt=this.prompt;
+    // Pinned Tt.run() performs Ct variable expansion only once, BEFORE
+    // parsing any conditional operators. Later SET commands do not expand
+    // variables again in the remaining segments.
     const expanded=sourceCmdExpandVariables(input,name=>{
       const key=name.toUpperCase();
       if(key==="ERRORLEVEL")return String(this.lastErrorLevel);
       if(key==="CD")return this.cwd;
       return this.environment.get(key)?.value;
     });
+    const segments=sourceCmdChainSegments(expanded);
+    if(segments.length===1)return this.executeSingle(input,prompt,expanded);
+    let output:string[]=[];
+    let clear=false;
+    let exit=false;
+    let title:string|undefined;
+    let style:SourceCmdColorStyle|null|undefined;
+    for(const segment of segments){
+      if(segment.operator==="&&"&&this.lastErrorLevel!==0)continue;
+      if(segment.operator==="||"&&this.lastErrorLevel===0)continue;
+      // Original execute() returns the previous ERRORLEVEL for empty input.
+      if(!segment.text.trim())continue;
+      const result=await this.executeSingle(input,prompt,segment.text);
+      if(result.clear){clear=true;output=[];}
+      output.push(...result.output);
+      if(result.title!==undefined)title=result.title;
+      if(result.style!==undefined)style=result.style;
+      if(result.exit){exit=true;break;}
+    }
+    return {prompt,input,output,clear,exit,title,style,
+      echo:this.echo,errorlevel:this.lastErrorLevel};
+  }
+
+  /** Single parsed command. Never re-expand variables inside a chain. */
+  private async executeSingle(input:string,prompt:string,expanded:string):
+    Promise<SourceCmdResult>{
+    if(!expanded.trim())return {
+      prompt,input,output:[],echo:this.echo,errorlevel:this.lastErrorLevel
+    };
     const match=/^\s*(\S+)(?:\s+([\s\S]*))?$/.exec(sourceCmdUnglue(expanded));
     const sourceName=(match?.[1]??"").toLowerCase();
     const name=SOURCE_CMD_ALIASES[sourceName]??sourceName;

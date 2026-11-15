@@ -90,3 +90,20 @@ test("original CMD Tab cycles source VFS paths, quotes spaces, and Escape clears
   await input.press("Tab");
   await expect(input).toHaveValue("type Q:\\NoMatch");
 });
+
+
+test("original CMD chained conditions and quoted operators run on Guest session",async({page})=>{
+  const {input,output,cmd}=await launchSourceCommandPrompt(page);
+  await execute(input,"echo First & echo Second");
+  await expect(output).toHaveText("First\nSecond");
+  await execute(input,"unknowncmd && echo Skipped || echo Recovered");
+  await expect(output).toContainText("Recovered");
+  await expect(output).not.toContainText("Skipped");
+  await execute(input,'echo "A & B"');
+  await expect(output).toHaveText('"A & B"');
+  await execute(input,"md ChainBrowser && cd ChainBrowser");
+  await expect(cmd.locator(".cmd__prompt"))
+    .toHaveText("C:\\Users\\Guest\\ChainBrowser>");
+  await execute(input,"echo %CD%");
+  await expect(output).toHaveText("C:\\Users\\Guest\\ChainBrowser");
+});

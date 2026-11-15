@@ -6,7 +6,8 @@ import {
 import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables,
   sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue,
   sourceCmdCompletionTarget,sourceCmdApplyCompletion,
-  sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES} from "./model";
+  sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
+  sourceCmdChainSegments} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -401,5 +402,67 @@ describe("original cmd.js b894 Ht.trim() transcript retention",()=>{
     expect(sourceCmdTrimEntries(entries).length).toBe(300);
     expect(sourceCmdTrimEntries([1,2])).toEqual([1,2]);
     expect(entries.length).toBe(305);
+  });
+});
+
+
+describe("source cmd.js gt()/mt() conditional && || and & chain grammar",()=>{
+  it("splits only unquoted operators, with the source following-segment annotation",()=>{
+    expect(sourceCmdChainSegments('echo "A & B && C | D" & echo done')).toEqual([
+      {text:'echo "A & B && C | D" ',operator:""},
+      {text:" echo done",operator:"&"}
+    ]);
+    expect(sourceCmdChainSegments("echo one && echo two || echo three & echo four"))
+      .toEqual([
+        {text:"echo one ",operator:""},
+        {text:" echo two ",operator:"&&"},
+        {text:" echo three ",operator:"||"},
+        {text:" echo four",operator:"&"}
+      ]);
+    expect(sourceCmdChainSegments('echo "unclosed && quotes & not split'))
+      .toEqual([{text:'echo "unclosed && quotes & not split',operator:""}]);
+  });
+
+  it("executes sequential ampersands and conditional success/failure via real CMD status",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("echo First & echo Second")).output)
+      .toEqual(["First","Second"]);
+    expect((await session.run("echo Yes && echo Followed || echo Skipped")).output)
+      .toEqual(["Yes","Followed"]);
+    const failure=await session.run("thiscommanddoesnotexist && echo Skipped || echo Recovered");
+    expect(failure.output).toEqual([
+      "'thiscommanddoesnotexist' is not recognized as an internal or external command,",
+      "operable program or batch file.","Recovered"
+    ]);
+    expect(failure.errorlevel).toBe(0);
+    expect((await session.run("thiscommanddoesnotexist & echo After")).output.at(-1))
+      .toBe("After");
+    expect((await session.run("echo \\"A & B\\"")).output)
+      .toEqual(['"A & B"']);
+  });
+
+  it("runs conditional filesystem changes safely on shared Guest VFS",async()=>{
+    const {fs,session}=await createShell();
+    const command=await session.run('md ChainWork && cd ChainWork & echo %CD%');
+    expect(command.output).toEqual(["C:\\Users\\Guest"]);
+    expect(session.currentDirectory).toBe("C:\\Users\\Guest\\ChainWork");
+    expect((await fs.stat("/EXTERNAL/computer/drive0/Users/Guest/ChainWork"))
+      ?.type).toBe("directory");
+    await session.run("rd ChainWork");
+    expect((await session.run("cd Nonexistent && md ShouldNotExist")).errorlevel)
+      .toBe(1);
+    expect(await fs.stat("/EXTERNAL/computer/drive0/Users/Guest/ShouldNotExist"))
+      .toBeNull();
+  });
+
+  it("expands %vars% once before parsing chains, preserves skip and blank errorlevel",async()=>{
+    const {session}=await createShell();
+    await session.run("set SAMPLE=before");
+    expect((await session.run("echo %SAMPLE% & set SAMPLE=after & echo %SAMPLE%")).output)
+      .toEqual(["before","before"]);
+    expect((await session.run("echo %SAMPLE%")).output).toEqual(["after"]);
+    await session.run("unknowncommand");
+    expect((await session.run(" ")).errorlevel).toBe(9009);
+    expect((await session.run("echo ok || echo skipped")).output).toEqual(["ok"]);
   });
 });

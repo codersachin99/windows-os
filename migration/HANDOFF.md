@@ -866,3 +866,4 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Restored original Ht.trim/Ft=300 visible history-entry cap for both normal results and exceptions; distinct original Tt xt=100 command recall is already retained in the React input. Added one pure test covering >300 retention and unchanged input history.
 - Committed without [run-ci], to avoid triggering another GitHub Actions workflow during previous Tab completion browser suite #43669660346. Verify this later with the next deliberately opted-in acceptance batch; no claim of browser parity.
 - Preserve draft PR #1, main untouched and no release.
+ / 
