@@ -913,3 +913,9 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - Pinned Te.rd and ke(waitForKey) Y/N confirmation restored for nonempty RD /S or RMDIR /S; response N preserves actual Guest file bytes, Y performs an atomic Guest VFS removeTree, and empty folders delete without prompt. No host filesystem access.
 - Added model and real desktop/mobile confirmation browser tests. No [run-ci] yet while Ctrl+C CI #43681551196 runs; batch with PAUSE in the next opt-in test. Keep PR #1 draft and main untouched.
+
+
+## CMD source DEL wildcard and directory confirmation — 15 November 2026 (CI staged)
+
+- Original De/xe/ke selectors and exact '*' Y/N flow ported for DEL/ERASE on actual Guest files. Source glob matching, case-insensitive names, preservation of directories, and explicit rejection when all-files confirmation UI is absent. Pure unit and desktop/mobile browser tests added.
+- No [run-ci] in this commit while the preceding Ctrl+C run remains active. Batch with PAUSE and RD /S in the next full acceptance. PR #1 draft; main untouched; no releases.

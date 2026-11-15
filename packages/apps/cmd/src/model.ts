@@ -791,24 +791,57 @@ export class SourceCmdSession {
       const tokens=sourceCmdArguments(args);
       if(tokens.length!==1||!tokens[0]){
         output=[INVALID_SYNTAX];errorlevel=1;
-      }else if(/[*?]/.test(tokens[0])){
-        // Source DEL confirms wildcard/all-file operations. Reject until
-        // source waitForKey confirmation behavior is implemented.
-        output=["DEL wildcard confirmation is not yet available in this migration."];
-        errorlevel=1;
       }else{
         try{
-          const dest=this.resolve(tokens[0]);
-          if(!dest.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          const selected=this.resolve(tokens[0]);
+          if(!selected.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
           else{
-            const entry=await this.fs.stat(dest.uri);
-            if(!entry){output=["Could Not Find "+dest.win];errorlevel=1;}
-            else if(entry.type==="directory"){
-              output=["DEL directory confirmation is not yet available in this migration."];
-              errorlevel=1;
-            }else{
-              try{await this.fs.remove(dest.uri);}
-              catch{output=[ACCESS_DENIED];errorlevel=1;}
+            // Source De(): a directory means all files within it; otherwise
+            // treat the final Windows path component as a filename pattern.
+            const candidate=/[*?]/.test(tokens[0])
+              ?null:await this.fs.stat(selected.uri);
+            const folder=candidate?.type==="directory"
+              ?selected.win:selected.win.slice(0,Math.max(
+                selected.win.lastIndexOf("\\"),selected.win.lastIndexOf("/")));
+            const pattern=candidate?.type==="directory"?"*"
+              :getFileName(selected.uri);
+            const dir=this.resolve(folder||".");
+            if(!dir.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+            else{
+              const dirStat=await this.fs.stat(dir.uri);
+              if(dirStat?.type!=="directory"){
+                output=[PATH_NOT_FOUND];errorlevel=1;
+              }else{
+                let confirmed=true;
+                if(pattern==="*"){
+                  if(!this.waitForKey){
+                    output=["DEL all-files requires interactive confirmation."];
+                    errorlevel=1;
+                    confirmed=false;
+                  }else{
+                    const question=dir.win.replace(/[\\/]$/,"")+"\\*, Are you sure (Y/N)? ";
+                    const answer=await this.waitForKey(question);
+                    output=[question+answer];
+                    confirmed=/^y$/i.test(answer);
+                  }
+                }
+                if(confirmed){
+                  const entries=(await this.fs.list(dir.uri))
+                    .filter(item=>matchFilePattern(item.name,pattern))
+                    .sort((a,b)=>a.name.localeCompare(b.name,undefined,
+                      {sensitivity:"base"}));
+                  const matching=entries.filter(item=>item.type==="file");
+                  if(!matching.length){
+                    output.push("Could Not Find "+
+                      dir.win.replace(/[\\/]$/,"")+"\\"+pattern);
+                    errorlevel=1;
+                  }else{
+                    try{
+                      for(const file of matching)await this.fs.remove(file.uri);
+                    }catch{output.push(ACCESS_DENIED);errorlevel=1;}
+                  }
+                }
+              }
             }
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}

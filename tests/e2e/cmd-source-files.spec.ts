@@ -209,3 +209,22 @@ test("source CMD RD /S requires Y and only deletes the confirmed Guest subtree",
   await execute(input,"dir /b Documents");
   await expect(output).not.toContainText("ConfirmDelete");
 });
+
+
+test("source CMD DEL all-files confirmation preserves folders and respects N/Y",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"md Documents\\TrashPractice");
+  await execute(input,"md Documents\\TrashPractice\\ChildFolder");
+  await execute(input,"echo keep > Documents\\TrashPractice\\Note.txt");
+  await execute(input,"del Documents\\TrashPractice");
+  await expect(output).toContainText("Are you sure (Y/N)?");
+  await input.press("n");
+  await execute(input,"dir /b Documents\\TrashPractice");
+  await expect(output).toContainText("Note.txt");
+  await execute(input,"del Documents\\TrashPractice\\*");
+  await expect(output).toContainText("Are you sure (Y/N)?");
+  await input.press("y");
+  await execute(input,"dir /b Documents\\TrashPractice");
+  await expect(output).not.toContainText("Note.txt");
+  await expect(output).toContainText("ChildFolder");
+});

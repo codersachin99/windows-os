@@ -744,3 +744,54 @@ describe("pinned source RD /S confirmation via host.waitForKey on Guest VFS",()=
     expect(await fs.read(root+"/file.txt")).toBe("keep");
   });
 });
+
+
+describe("pinned Te.del, De(), xe() and ke() Guest wildcard confirmation",()=>{
+  it("removes matching files only, case-insensitively, without touching directories",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.write("1",root+"/One.TXT");
+    await fs.write("2",root+"/Two.txt");
+    await fs.write("keep",root+"/Safe.log");
+    await fs.mkdir(root+"/KeepFolder");
+    expect((await session.run("del Documents\\*.txt")).output).toEqual([]);
+    expect(await fs.stat(root+"/One.TXT")).toBeNull();
+    expect(await fs.stat(root+"/Two.txt")).toBeNull();
+    expect(await fs.read(root+"/Safe.log")).toBe("keep");
+    expect((await fs.stat(root+"/KeepFolder"))?.type).toBe("directory");
+  });
+  it("requires Y for DEL of all files in an existing directory",async()=>{
+    const prompts:string[]=[];
+    let key="n";
+    const {fs,session}=await createShell(async prompt=>{
+      prompts.push(prompt);
+      return key;
+    });
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents/AllFiles";
+    await fs.mkdir(root);
+    await fs.mkdir(root+"/SubFolder");
+    await fs.write("survives",root+"/a.txt");
+    const denied=await session.run("del Documents\\AllFiles");
+    expect(denied.output).toEqual([
+      "C:\\Users\\Guest\\Documents\\AllFiles\\*, Are you sure (Y/N)? n"
+    ]);
+    expect(await fs.read(root+"/a.txt")).toBe("survives");
+    key="Y";
+    const permitted=await session.run("del Documents\\AllFiles\\*");
+    expect(permitted.output).toEqual([
+      "C:\\Users\\Guest\\Documents\\AllFiles\\*, Are you sure (Y/N)? Y"
+    ]);
+    expect(await fs.stat(root+"/a.txt")).toBeNull();
+    expect((await fs.stat(root+"/SubFolder"))?.type).toBe("directory");
+    expect(prompts).toHaveLength(2);
+  });
+  it("protects all-files deletes without an interactive confirmation reader",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents/NoHost";
+    await fs.mkdir(root);
+    await fs.write("keep",root+"/precious.txt");
+    expect((await session.run("erase Documents\\NoHost\\*")).output)
+      .toEqual(["DEL all-files requires interactive confirmation."]);
+    expect(await fs.read(root+"/precious.txt")).toBe("keep");
+  });
+});
