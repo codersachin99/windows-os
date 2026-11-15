@@ -1,12 +1,14 @@
 import {useState} from "react";
 import {legacyArt,legacySourceIconArtwork} from "@windows-os/assets";
-import {sourcePrograms} from "@windows-os/filesystem";
+import {sourcePrograms,type VirtualFileStore} from "@windows-os/filesystem";
+import {BackupRestorePanel} from "./BackupRestorePanel";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelDisplayMatch,sourceCpanelOpenLocation,sourceCpanelResolutions,
   sourceCpanelStep,sourceCpanelInstalledPrograms,sourceCpanelProgramsMatch,
   sourceCpanelAccountsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
   sourceCpanelActionCenterMatch,SOURCE_CPANEL_ACTION_CENTER_TEXT,
+  sourceCpanelBackupMatch,
   type SourceControlPanelActionMessage,
   type SourceControlPanelHistory, type SourceControlPanelLocation
 } from "./model";
@@ -17,6 +19,7 @@ import {
 import "./ControlPanelApp.css";
 
 export interface ControlPanelAppProps{
+  filesystem:VirtualFileStore;
   onClose():void;
   onSwitchUser():void;
   trayPreferences:SourceTrayPreferences;
@@ -29,7 +32,7 @@ export interface ControlPanelAppProps{
  * is the original Display view; remaining panels are tracked, not invented. */
 export function ControlPanelApp({
   onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange,
-  messages=[]
+  filesystem,messages=[]
 }:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     SOURCE_CPANEL_INITIAL_HISTORY);
@@ -42,6 +45,7 @@ export function ControlPanelApp({
   const matchingPrograms=sourceCpanelProgramsMatch(query);
   const matchingAccounts=sourceCpanelAccountsMatch(query);
   const matchingActionCenter=sourceCpanelActionCenterMatch(query);
+  const matchingBackup=sourceCpanelBackupMatch(query);
   const matchingNotification=query.trim().toLocaleLowerCase()
     .split(/\s+/).filter(Boolean).every(term=>
       ["notification","notifications","icons","taskbar","system"].some(x=>x.includes(term)));
@@ -71,7 +75,8 @@ export function ControlPanelApp({
           {location==="display"?"Display":location==="programs"?
             "Programs and Features":location==="accounts"?
             "User Accounts":location==="notification"?
-            "Notification Area Icons":"Action Center"}
+            "Notification Area Icons":location==="action-center"?"Action Center":
+            "Backup and Restore"}
         </span>}
       </nav>
       <input type="search" value={query} onChange={event=>changeSearch(event.target.value)}
@@ -125,10 +130,19 @@ export function ControlPanelApp({
               Review recent messages and resolve problems
             </button></div>
         </article>:null}
+        {matchingBackup?<article className="windows-cpanel__result"
+          data-test-cpanel-result="backup">
+          <img src={legacyArt.cpanel} alt="" width={40} height={40}/>
+          <div><button type="button" className="windows-cpanel__link"
+            onClick={()=>open("backup")}>Backup and Restore</button>
+            <button type="button" className="windows-cpanel__task"
+              onClick={()=>open("backup")}>Backup or restore your files</button></div>
+        </article>:null}
         {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&
-          !matchingNotification&&!matchingActionCenter&&
+          !matchingNotification&&!matchingActionCenter&&!matchingBackup&&
           <p>No items match your search.</p>}
-      </div>:location==="action-center"?<div className="windows-cpanel__action"
+      </div>:location==="backup"?<BackupRestorePanel filesystem={filesystem}
+        onBack={()=>open(null)}/>:location==="action-center"?<div className="windows-cpanel__action"
         data-test-cpanel-action-center="">
         <aside className="windows-cpanel__action-sidebar">
           <button type="button" onClick={()=>open(null)}>Control Panel</button>
@@ -344,6 +358,11 @@ export function ControlPanelApp({
           className="windows-cpanel__tile" onClick={()=>open("action-center")}>
           <img src={legacyArt.trayActionCenter} alt="" width={44} height={44}/>
           <span>Action Center</span>
+        </button>
+        <button type="button" data-test-cpanel-item="backup"
+          className="windows-cpanel__tile" onClick={()=>open("backup")}>
+          <img src={legacyArt.cpanel} alt="" width={44} height={44}/>
+          <span>Backup and Restore</span>
         </button>
       </div>}
     </div>
