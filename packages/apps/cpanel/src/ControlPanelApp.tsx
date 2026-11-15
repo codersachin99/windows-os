@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {legacyArt,legacySourceIconArtwork} from "@windows-os/assets";
+import {legacyArt,legacySourceIconArtwork,legacyCpanelTileArtwork} from "@windows-os/assets";
 import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-os/filesystem";
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
   type SourceCpanelRegistryItem} from "./sourceRegistry";
@@ -46,12 +46,8 @@ export function ControlPanelApp({
   const sourceItems=SOURCE_CPANEL_REGISTRY.filter(item=>
     item.target!=="program"||sourceProgramsById.has(item.id));
   const searchResults=sourceCpanelSearchRegistry(query,sourceItems);
-  const sourceIcon=(item:SourceCpanelRegistryItem)=>{
-    if(item.id==="backup")return legacyArt.cpanel;
-    if(item.id==="notification"||item.id==="action-center")
-      return legacyArt.trayActionCenter;
-    return legacySourceIconArtwork(item.iconKey).src;
-  };
+  const sourceIcon=(item:SourceCpanelRegistryItem)=>
+    legacyCpanelTileArtwork[item.iconKey]??legacySourceIconArtwork(item.iconKey).src;
   const openSourceItem=(item:SourceCpanelRegistryItem)=>{
     if(!sourceCpanelIsSupported(item.id))return;
     open(item.id as SourceControlPanelLocation);
