@@ -86,6 +86,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   path:"Displays or sets a search path for executable files.",
   pause:"Suspends processing and waits for a key to be pressed.",
   where:"Displays the location of files that match a search pattern.",
+  start:"Starts a specified program or application package.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -380,7 +381,7 @@ export function sourceCmdDirWideLines(
 }
 
 /** Source ze.where + c170 program install metadata; no host PATH search. */
-export function sourceCmdWhereInstallPath(query:string):string|null{
+export function sourceCmdResolveProgramId(query:string):string|null{
   const value=String(query||"").trim().toLowerCase();
   if(!value)return null;
   const program=sourcePrograms.find(program=>{
@@ -389,6 +390,12 @@ export function sourceCmdWhereInstallPath(query:string):string|null{
       installed.replace(/\.exe$/i,"")];
     return names.some(name=>name.toLowerCase()===value);
   });
+  return program?.id??null;
+}
+/** Original WHERE resolves the source program ID, then its install path. */
+export function sourceCmdWhereInstallPath(query:string):string|null{
+  const id=sourceCmdResolveProgramId(query);
+  const program=sourcePrograms.find(p=>p.id===id);
   return program?.installPath
     ?"C:\\"+program.installPath.replace(/\//g,"\\"):null;
 }
@@ -405,7 +412,9 @@ export class SourceCmdSession {
     startUri:string,
     private readonly now:()=>Date=()=>new Date(),
     /** Source b894 host.waitForKey: injected UI key reader, never host shell. */
-    private readonly waitForKey?: (prompt:string)=>Promise<string>
+    private readonly waitForKey?: (prompt:string)=>Promise<string>,
+    /** Source ze.start host bridge: run only registered simulated apps. */
+    private readonly launchProgram?: (programId:string)=>boolean
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -706,6 +715,15 @@ export class SourceCmdSession {
             if(!count)output.push("No subfolders exist");
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="start"){
+      const [programName]=sourceCmdArguments(args);
+      if(programName){
+        const programId=sourceCmdResolveProgramId(programName);
+        if(!programId||!this.launchProgram?.(programId)){
+          output=["The system cannot find the file "+programName+"."];
+          errorlevel=1;
+        }
       }
     }else if(name==="where"){
       const [programName]=sourceCmdArguments(args);

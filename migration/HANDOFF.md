@@ -967,3 +967,9 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Added ze.where based on existing c170 source program installation catalog (IDs, aliases, executable basenames), returning source C: paths or original info/help text. Browser Guest simulation only, no host process lookup.
 - Added pure/model and desktop/mobile browser contract tests. No [run-ci] while earlier DIR /S /W + PAUSE browser CI #43683710914 remains active. Batch with later verification.
 - Keep draft PR #1 and main unchanged, no release. Source-host integration commands and screenshot parity remain incomplete.
+
+
+## CMD ze.START desktop host adapter — 2026-11-15 (CI staged)
+
+- Original START command now dispatches a real installed program via DesktopShell appRegistry and OPEN_APP; shares source c170 resolver with WHERE. Unknown/unsupported apps fail visibly, no host program execution or invented windows. Missing START arg is a successful no-op per source.
+- Added pure/model contracts and desktop/mobile Playwright real Notepad launch. Staged without [run-ci] while earlier DIR /S /W + browser fixes CI #43683710914 runs. Keep draft PR #1 and main untouched.

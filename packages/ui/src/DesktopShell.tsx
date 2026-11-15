@@ -52,7 +52,13 @@ function ApplicationContent({
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "cmd") return <CmdApp
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
-    onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })} />;
+    onTitleChange={title => dispatch({ type: "SET_WINDOW_TITLE", id: windowId, title })}
+    onLaunchProgram={programId=>{
+      const app=appRegistry.get(programId);
+      if(!app)return false;
+      dispatch({type:"OPEN_APP",app});
+      return true;
+    }} />;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

@@ -16,13 +16,16 @@ interface ActiveCmdCompletion{
 interface CmdAppProps{
   onClose():void;
   onTitleChange(title:string):void;
+  onLaunchProgram?(programId:string):boolean;
 }
 /**
  * Pinned source cmd.js window b894 / Ht: black monospace console, one
  * banner and per-command prompt/output rows, editable keyboard input and
  * command history. Remaining commands and terminal pixel parity pending.
  */
-export function CmdApp({onClose,onTitleChange}:CmdAppProps){
+export function CmdApp({onClose,onTitleChange,onLaunchProgram}:CmdAppProps){
+  const launchRef=useRef(onLaunchProgram);
+  launchRef.current=onLaunchProgram;
   const [entries,setEntries]=useState<SourceCmdResult[]>([]);
   const pendingEntry=useRef<SourceCmdResult|null>(null);
   const keyResolver=useRef<((key:string)=>void)|null>(null);
@@ -41,7 +44,7 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
             ?{...entry,output:[...entry.output,message]}:entry
         ));
         return new Promise<string>(resolve=>{keyResolver.current=resolve;});
-      });}
+      },programId=>launchRef.current?.(programId)??false);}
     catch{return null;}
   },[volume]);
   const [input,setInput]=useState("");

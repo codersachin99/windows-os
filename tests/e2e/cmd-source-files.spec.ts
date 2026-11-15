@@ -278,3 +278,16 @@ test("source CMD WHERE reports source app installation paths, never host binarie
   await expect(output)
     .toHaveText("INFO: Could not find files for the given pattern(s).");
 });
+
+
+test("original CMD START opens a real registered Guest app window",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"start notepad");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(cmd).toHaveCount(1);
+  await execute(input,"start missing-app-no-window");
+  await expect(output).toHaveText(
+    "The system cannot find the file missing-app-no-window."
+  );
+  await expect(page.locator('[data-test-window="notepad"]')).toHaveCount(1);
+});

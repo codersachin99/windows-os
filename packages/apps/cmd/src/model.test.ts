@@ -10,7 +10,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdChainSegments,sourceCmdParseRedirect,
   sourceCmdPipelineSegments,sourceCmdRawRest,
   sourceCmdDirDetailLine,sourceCmdDirSummary,sourceCmdDirWideLines,
-  sourceCmdWhereInstallPath,
+  sourceCmdWhereInstallPath,sourceCmdResolveProgramId,
   SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
@@ -914,5 +914,35 @@ describe("original cmd.js ze.where and c170 installed-program paths",()=>{
     const help=await session.run("where");
     expect(help.output).toContain("WHERE program");
     expect(help.errorlevel).toBe(1);
+  });
+});
+
+
+describe("pinned original ze.start app launch via source desktop registry",()=>{
+  it("resolves original source IDs/aliases, never arbitrary host commands",()=>{
+    expect(sourceCmdResolveProgramId("mspaint.exe")).toBe("paint");
+    expect(sourceCmdResolveProgramId("calculator")).toBe("calc");
+    expect(sourceCmdResolveProgramId("NOTEPAD")).toBe("notepad");
+    expect(sourceCmdResolveProgramId("uninstalled-native-program")).toBeNull();
+  });
+  it("only opens installed source apps through the injected desktop callback",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();
+    await ensureSourceGuestDirectories(fs);
+    const launched:string[]=[];
+    const session=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,id=>{launched.push(id);return id==="notepad";});
+    expect((await session.run("start notepad")).output).toEqual([]);
+    expect((await session.run("start notepad")).errorlevel).toBe(0);
+    expect(launched).toEqual(["notepad","notepad"]);
+    const rejected=await session.run("start calculator");
+    expect(rejected.output).toEqual(["The system cannot find the file calculator."]);
+    expect(rejected.errorlevel).toBe(1);
+    expect(launched).toEqual(["notepad","notepad","calc"]);
+    const unknown=await session.run("start missing-binary");
+    expect(unknown.output).toEqual(["The system cannot find the file missing-binary."]);
+    expect(unknown.errorlevel).toBe(1);
+    expect((await session.run("start")).errorlevel).toBe(0);
   });
 });
