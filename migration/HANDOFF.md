@@ -1,4 +1,9 @@
 
+## Control Panel Display + Programs combined opt-in acceptance — 15 November 2026
+
+The previous [desktop original hotkeys CI #43716174491](https://github.com/codersachin99/windows-os/actions/runs/43716174491) finished **SUCCESS** on commit `942f594`. The feature branch subsequently added the source Alt+L Switch/Guest-session-preserving view (`df0babf`), first Control Panel Display navigation/disabled-web-controls/source binary assets (`c6b0bf5`), and Control Panel Programs list/search/selection with source-installed executable manifest (`f9304c7`). This checkpoint requests **one deliberate `[run-ci]`** batch to verify those commits in TypeScript, Vitest, source inventory/build and desktop/mobile Chromium. Do not claim it passed before the workflow completes. Keep PR #1 draft and main untouched; Control Panel's other four internal pages, true source category registry and exact screenshots remain pending.
+
+
 ## Programs and Features — source-list/selection follow-up
 
 The original `src/modules/apps/cpanel.js` `ra` programs panel renders
