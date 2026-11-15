@@ -1,4 +1,9 @@
 
+## Original CMD 41-command name inventory; on-demand acceptance request — 15 November 2026
+
+Pinned `legacy-win7/src/modules/apps/cmd.js` contains 41 `key:` built-in commands. Original name inventory regression now checks all 41 migrated `SOURCE_CMD_HELP` entrypoints, covering source `PING` and `BSOD` additions; this does **not** imply every flag/edge case, dynamically reachable browser host operation, source-specific screen, or visual pixel is accepted. The previous source interactive-keyboard CI [#43711921734](https://github.com/codersachin99/windows-os/actions/runs/43711921734) finished **SUCCESS** on commit `182ba8a`, including all TypeScript, unit, source audits, Vite build and desktop/mobile browser checks. That run predates `SYSTEMINFO`, the corrected `Windows IP Configuration` heading, the Win7 BSOD view, and the browser-only PING probe. This commit requests a **single** `[run-ci]` acceptance batch for those changes, new source-unit contracts and browser coverage. Never claim passing before the exact batch finishes. Keep draft PR #1 open, main untouched and no release; overall source screenshot parity remains zero formally accepted.
+
+
 ## Original CMD Ze.PING browser probe with deterministic packet contracts — 15 November 2026
 
 Pinned `cmd.js` Ze.ping uses original `Je` parsing (4 packets default, `-n` 1..20), a first `host.ping(target)` reachability probe, then 32-byte request lines, timeout messages and `Qe` packet loss/min/max/average summary. Its target parser deliberately uses the **first argument not beginning with '-'**, even though `-n` is counted separately; this is a source behavior, not a native system command grammar. Added model command branch, source count/statistics pure helpers, HELP metadata and deterministic injected browser `pingTarget` tests including partial packet loss and invalid/missing targets.

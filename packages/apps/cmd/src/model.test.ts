@@ -3,7 +3,7 @@ import {
   VirtualFileStore,LegacyVolumeSession,sourceGuestMounts,
   ensureSourceGuestDirectories,SOURCE_GUEST_PROFILE
 } from "@windows-os/filesystem";
-import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables,
+import {SOURCE_CMD_BANNER,SOURCE_CMD_HELP,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables,
   sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue,
   sourceCmdCompletionTarget,sourceCmdApplyCompletion,
   sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
@@ -1246,5 +1246,19 @@ describe("pinned original Ze.ping source grammar and browser probe output",()=>{
     expect(missing.output).toEqual([
       "Ping request could not find host source-host-not-found.test. Please check the name and try again."
     ]);
+  });
+});
+
+
+describe("pinned original CMD built-in name inventory (41 commands)",()=>{
+  it("registers all 41 source command entrypoints without inventing BAT execution",()=>{
+    const pinned=[
+      "bsod","cd","cls","cmd","color","copy","date","del","dir","echo",
+      "exit","find","help","hostname","ipconfig","logoff","md","more",
+      "move","path","pause","ping","popd","pushd","rd","ren","set",
+      "shutdown","sort","start","systeminfo","taskkill","tasklist",
+      "time","title","tree","type","ver","vol","where","winver"
+    ];
+    expect(Object.keys(SOURCE_CMD_HELP).sort()).toEqual(pinned.sort());
   });
 });
