@@ -228,3 +228,36 @@
   .windows-cpanel__backup-content{padding:16px}
   .windows-cpanel__backup-row{padding:12px}
 }
+
+/* Original cpanel.js a259 uses the shared listview-main "tiles" root mode
+ * for the complete 3097 registry, not a six-link vertical shortcut menu.
+ * Cap widths and wrap source tile rows for narrow simulated desktops. */
+.windows-cpanel__source-list{
+  display:flex;flex-wrap:wrap;align-content:flex-start;
+  gap:4px;padding:8px 20px 24px;
+}
+.windows-cpanel__source-list .windows-cpanel__tile{
+  width:215px;min-height:60px;margin:0;padding:6px 8px;
+  gap:11px;align-items:center;font-size:14px;line-height:19px;
+  overflow-wrap:anywhere
+}
+.windows-cpanel__source-list .windows-cpanel__tile img{
+  width:44px;height:44px;object-fit:contain;flex:none
+}
+.windows-cpanel__source-list .windows-cpanel__tile:disabled{
+  cursor:default;opacity:.56
+}
+.windows-cpanel__source-list .windows-cpanel__tile:disabled:hover{
+  border-color:transparent;background:transparent
+}
+.windows-cpanel__results button:disabled{cursor:default;opacity:.55}
+.windows-cpanel__results button:disabled:hover{text-decoration:none}
+@media(max-width:480px){
+  .windows-cpanel__source-list{padding:8px 12px 18px}
+  .windows-cpanel__source-list .windows-cpanel__tile{
+    width:calc(50% - 2px);min-width:125px;gap:7px;font-size:12px
+  }
+  .windows-cpanel__source-list .windows-cpanel__tile img{
+    width:32px;height:32px
+  }
+}
