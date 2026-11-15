@@ -28,6 +28,13 @@ export interface SourceCmdColorStyle{
 type CmdFilesystem=Pick<VirtualFileStore,"stat"|"list"|"read"|"mkdir"|"remove"|"move"|"copy">;
 type CmdVolume=Pick<LegacyVolumeSession,"toUri"|"toWindowsPath"|"pathConfig">;
 
+/** Original b894 Ht.trim(): 300 visible CMD transcript entries. */
+export const SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES=300;
+export function sourceCmdTrimEntries<T>(entries:readonly T[]):T[]{
+  return entries.length>SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES
+    ?entries.slice(-SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES):[...entries];
+}
+
 export const SOURCE_CMD_BANNER=[
   "Microsoft Windows [Version 6.1.7600]",
   "Copyright (c) 2009 Microsoft Corporation. All rights reserved."

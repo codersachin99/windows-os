@@ -5,7 +5,8 @@ import {
 } from "@windows-os/filesystem";
 import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables,
   sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue,
-  sourceCmdCompletionTarget,sourceCmdApplyCompletion} from "./model";
+  sourceCmdCompletionTarget,sourceCmdApplyCompletion,
+  sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -389,5 +390,16 @@ describe("pinned cmd.js b894 Tab completion from actual mounted Guest VFS",()=>{
         target:{head:"type ",dir:"Q:\\",prefix:"Unavailable"},matches:[]
       });
     expect(await fs.read(root+"/Read Me.txt")).toBe("safe");
+  });
+});
+
+describe("original cmd.js b894 Ht.trim() transcript retention",()=>{
+  it("retains exactly the newest 300 source output entries without discarding live input",()=>{
+    expect(SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES).toBe(300);
+    const entries=Array.from({length:305},(_,i)=>i);
+    expect(sourceCmdTrimEntries(entries)).toEqual(entries.slice(5));
+    expect(sourceCmdTrimEntries(entries).length).toBe(300);
+    expect(sourceCmdTrimEntries([1,2])).toEqual([1,2]);
+    expect(entries.length).toBe(305);
   });
 });

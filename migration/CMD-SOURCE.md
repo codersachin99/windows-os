@@ -108,3 +108,8 @@ Added pure splitting/rendering + mounted filesystem unit contracts and a desktop
 Imported pinned legacy-win7 assets/images/cmd.a2c1d19b.webp (536 bytes) to the same public asset name as a Git blob. The source and target blob SHA are both bcec3ad17a595cc2eb99686b084773b7bb171d9c. Added the shared CMD key to legacyArt and legacySourceIconArtwork, so Start Menu installed CMD shortcuts, app registry, and Win7 shell surfaces resolve the original image instead of an explicit generic-file fallback. Asset test checks exact path and source classification; the live Guest Start Menu browser contract checks the image and installed .lnk artwork status. No invented artwork and no host access.
 
 The earlier Tab keyboard CI run was started before this artwork commit. This separate artwork commit intentionally omits [run-ci]; it remains browser/CI-unverified until a subsequent opt-in batch. CMD is still in progress and pixel comparison remains pending.
+
+
+## Original CMD Ht transcript memory bound — 2026-11-15
+
+Source cmd.js b894 Ht sets Ft=300 for retained visible entries while separate Tt shell sets xt=100 for command history. The migrated React console already retained 100 history commands but previously allowed unbounded output DOM entries. It now uses a tested generic sourceCmdTrimEntries helper for both normal results and error entries, preserving only the newest 300 lines and leaving the editable active input outside the transcript. No output text or command processing changes. This incremental commit intentionally omits [run-ci] while the earlier Tab completion run is still being checked.

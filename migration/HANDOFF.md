@@ -859,3 +859,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Imported legacy-win7 original cmd.a2c1d19b.webp, exact 536-byte source/target Git blob SHA bcec3ad17a595cc2eb99686b084773b7bb171d9c. Shared original icon registry now maps cmd to this asset, removing the former generic-file placeholder in original CMD shortcut and app window artwork.
 - Added asset/unit contract and browser assertion checking installed Start Menu CMD .lnk icon and original-artwork provenance. This change is **without [run-ci]**, avoiding a second overlapping GitHub Actions run while Tab completion CI #43669660346 finishes. This exact-artwork change is not yet CI verified.
 - Draft PR #1 stays open and unmerged, main unchanged, no release. Remaining CMD work: pipes, redirect, batch, full source commands, confirmation/interrupt and screenshot parity.
+
+
+## CMD source b894 300-entry transcript cap — 2026-11-15 (batched, no CI)
+
+- Restored original Ht.trim/Ft=300 visible history-entry cap for both normal results and exceptions; distinct original Tt xt=100 command recall is already retained in the React input. Added one pure test covering >300 retention and unchanged input history.
+- Committed without [run-ci], to avoid triggering another GitHub Actions workflow during previous Tab completion browser suite #43669660346. Verify this later with the next deliberately opted-in acceptance batch; no claim of browser parity.
+- Preserve draft PR #1, main untouched and no release.

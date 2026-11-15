@@ -2,7 +2,7 @@ import {useEffect,useMemo,useRef,useState,type KeyboardEvent} from "react";
 import {fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult,
   type SourceCmdColorStyle,sourceCmdApplyCompletion,
-  type SourceCmdCompletionTarget} from "./model";
+  type SourceCmdCompletionTarget,sourceCmdTrimEntries} from "./model";
 import "./source.css";
 import "./CmdApp.css";
 
@@ -87,7 +87,7 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     setInput("");
     try{
       const result=await shell.run(text);
-      setEntries(current=>result.clear?[]:[...current,result]);
+      setEntries(current=>result.clear?[]:sourceCmdTrimEntries([...current,result]));
       if(result.clear)setShowBanner(false);
       if(result.title!==undefined)onTitleChange(result.title||"Command Prompt");
       if(result.style!==undefined)setConsoleStyle(result.style);
@@ -95,11 +95,11 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       setEcho(result.echo);
       if(result.exit){onClose();return;}
     }catch(cause){
-      setEntries(current=>[...current,{
+      setEntries(current=>sourceCmdTrimEntries([...current,{
         prompt:shell.prompt,input:text,
         output:[cause instanceof Error?cause.message:"Command failed"],
         echo:shell.echoEnabled,errorlevel:1
-      }]);
+      }]));
     }finally{
       setBusy(false);
       inputRef.current?.focus();
