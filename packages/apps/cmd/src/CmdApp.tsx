@@ -23,17 +23,28 @@ interface CmdAppProps{
  * command history. Remaining commands and terminal pixel parity pending.
  */
 export function CmdApp({onClose,onTitleChange}:CmdAppProps){
+  const [entries,setEntries]=useState<SourceCmdResult[]>([]);
+  const pendingEntry=useRef<SourceCmdResult|null>(null);
+  const keyResolver=useRef<((key:string)=>void)|null>(null);
   const [volume,setVolume]=useState(()=>sourceFilesystemRuntime.snapshot());
   useEffect(()=>sourceFilesystemRuntime.subscribe(setVolume),[]);
   const shell=useMemo(()=>{
     if(!volume)return null;
     const parent=volume.toUri("C:\\Users\\Guest");
     const initial=parent??volume.desktopPath;
-    try{return new SourceCmdSession(fileStore,volume,initial);}
+    try{return new SourceCmdSession(fileStore,volume,initial,()=>new Date(),
+      async message=>{
+        if(!pendingEntry.current)return "";
+        // Original Ht.submit shows the prompt before a key is read.
+        setEntries(current=>current.map((entry,index)=>
+          index===current.length-1
+            ?{...entry,output:[...entry.output,message]}:entry
+        ));
+        return new Promise<string>(resolve=>{keyResolver.current=resolve;});
+      });}
     catch{return null;}
   },[volume]);
   const [input,setInput]=useState("");
-  const [entries,setEntries]=useState<SourceCmdResult[]>([]);
   const [showBanner,setShowBanner]=useState(true);
   const [echo,setEcho]=useState(true);
   const [consoleStyle,setConsoleStyle]=useState<SourceCmdColorStyle|null>(null);
@@ -42,7 +53,6 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
   // The pinned b894 Ht.runId guards transcript updates after Ctrl+C.
   // Interrupting is a UI cancellation, not a rollback of Guest VFS writes.
   const runId=useRef(0);
-  const pendingEntry=useRef<SourceCmdResult|null>(null);
   const completion=useRef<ActiveCmdCompletion|null>(null);
   const completionRequest=useRef(0);
   const history=useRef<string[]>([]);
@@ -56,6 +66,12 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     setEcho(shell?.echoEnabled??true);
     inputRef.current?.focus();
   },[shell]);
+  useEffect(()=>()=>{ // Unmount releases an outstanding PAUSE key wait.
+    runId.current++;
+    const release=keyResolver.current;
+    keyResolver.current=null;
+    release?.("");
+  },[]);
   useEffect(()=>{
     const container=scroll.current;
     if(container)container.scrollTop=container.scrollHeight;
@@ -102,8 +118,9 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     try{
       const result=await shell.run(text);
       if(token!==runId.current)return;
-      setEntries(current=>result.clear?[]:current.map(item=>
-        item===pending?result:item
+      // PAUSE may have replaced the pending row reference while waiting.
+      setEntries(current=>result.clear?[]:current.map((item,index)=>
+        index===current.length-1?result:item
       ));
       if(result.clear)setShowBanner(false);
       if(result.title!==undefined)onTitleChange(result.title||"Command Prompt");
@@ -113,10 +130,11 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       if(result.exit){onClose();return;}
     }catch(cause){
       if(token!==runId.current)return;
-      setEntries(current=>current.map(item=>item===pending?{
-        ...pending,output:[cause instanceof Error?cause.message:"Command failed"],
-        errorlevel:1
-      }:item));
+      setEntries(current=>current.map((item,index)=>
+        index===current.length-1?{
+          ...pending,output:[cause instanceof Error?cause.message:"Command failed"],
+          errorlevel:1
+        }:item));
     }finally{
       if(token===runId.current){
         pendingEntry.current=null;
@@ -131,6 +149,9 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     // operations cannot be interrupted atomically, and may still finish.
     const running=busy&&pendingEntry.current!==null;
     runId.current++;
+    const release=keyResolver.current;
+    keyResolver.current=null;
+    release?.("");
     pendingEntry.current=null;
     completion.current=null;
     completionRequest.current++;
@@ -149,6 +170,13 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       if(selection&&!selection.isCollapsed)return; // preserve source copy selection
       event.preventDefault();
       interrupt();
+      return;
+    }
+    if(keyResolver.current){
+      event.preventDefault();
+      const release=keyResolver.current;
+      keyResolver.current=null;
+      release(event.key);
       return;
     }
     if(event.key!=="Tab"){

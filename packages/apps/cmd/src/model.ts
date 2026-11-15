@@ -82,6 +82,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   pushd:"Saves the current directory then changes it.",
   set:"Displays, sets, or removes environment variables.",
   path:"Displays or sets a search path for executable files.",
+  pause:"Suspends processing and waits for a key to be pressed.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -337,7 +338,9 @@ export class SourceCmdSession {
     private readonly fs:CmdFilesystem,
     private readonly volume:CmdVolume,
     startUri:string,
-    private readonly now:()=>Date=()=>new Date()
+    private readonly now:()=>Date=()=>new Date(),
+    /** Source b894 host.waitForKey: injected UI key reader, never host shell. */
+    private readonly waitForKey?: (prompt:string)=>Promise<string>
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -657,6 +660,14 @@ export class SourceCmdSession {
       }else{
         output=commandNames.map(command=>
           command.toUpperCase().padEnd(9)+SOURCE_CMD_HELP[command]);
+      }
+    }else if(name==="pause"){
+      if(!this.waitForKey){
+        output=["PAUSE requires an interactive console."];
+        errorlevel=1;
+      }else{
+        output=["Press any key to continue . . ."];
+        await this.waitForKey(output[0]);
       }
     }else if(name==="exit"){
       exit=true;

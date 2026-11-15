@@ -900,3 +900,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 - Both earlier [chain/redirect CI #43679131656](https://github.com/codersachin99/windows-os/actions/runs/43679131656) and [FIND/SORT/MORE + ECHO CI #43679639347](https://github.com/codersachin99/windows-os/actions/runs/43679639347) **SUCCESS**, including desktop/mobile browser checks at commit e1eb0b2.
 - Pinned b894 submit/interrupt source behavior added: visible pending command row, Ctrl/Meta+C idle appends input^C, during busy appends ^C and discards late UI result by runId, keeps 300-row transcript and 100-item history recall. Noncollapsed text selection is left to browser copy. No promise of underlying Guest VFS cancellation: once started, mutations may still finish.
 - Pure unit and real desktop/mobile Playwright input/history/no-unintended-file test added. One [run-ci] requested to verify this change. Keep PR #1 draft, main untouched, no release; source visual parity and confirmation/other original commands still pending.
+
+
+## Source ze PAUSE + b894 keyResolver — 15 November 2026 (CI staged)
+
+- Ported original PAUSE with visible waiting message, injected keyboard keyResolver, any-key continuation and chained commands. Ctrl+C/unmount release pending key reads; stale UI output remains guarded.
+- Model and browser coverage added, including explicit unsupported response without a key host. No [run-ci] in this commit while Ctrl+C acceptance CI #43681551196 is still active; batch with next acceptance test.
+- Draft PR #1, main untouched, no release. No host shell access.

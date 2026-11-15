@@ -166,3 +166,26 @@ test("original CMD Ctrl+C interrupts idle input, leaves history intact and accep
   await execute(input,"echo Ready");
   await expect(output).toHaveText("Ready");
 });
+
+
+test("original CMD PAUSE displays pending prompt and resumes on any key",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  await input.fill("pause");
+  await input.press("Enter");
+  await expect(output).toHaveText("Press any key to continue . . .");
+  await expect(input).toHaveAttribute("readonly","");
+  await input.press("x");
+  await expect(cmd.locator(".cmd__prompt")).toHaveText("C:\\Users\\Guest>");
+  await expect(input).not.toHaveAttribute("readonly");
+  await execute(input,"echo Resumed");
+  await expect(output).toHaveText("Resumed");
+
+  await input.fill("pause");
+  await input.press("Enter");
+  await expect(output).toHaveText("Press any key to continue . . .");
+  await input.press("ControlOrMeta+c");
+  await expect(output).toHaveText("Press any key to continue . . .\n^C");
+  await expect(input).not.toHaveAttribute("readonly");
+  await execute(input,"echo AfterInterrupt");
+  await expect(output).toHaveText("AfterInterrupt");
+});

@@ -11,11 +11,12 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdPipelineSegments,sourceCmdRawRest,
   sourceCmdInterruptedEntries} from "./model";
 
-async function createShell(){
+async function createShell(waitForKey?: (message:string)=>Promise<string>){
   const fs=new VirtualFileStore();
   await ensureSourceGuestDirectories(fs);
   const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
-  const session=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE);
+  const session=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+    ()=>new Date(),waitForKey);
   return {fs,session};
 }
 describe("pinned cmd.js Tt prompt and first source command engine slice",()=>{
@@ -645,5 +646,47 @@ describe("original cmd.js Ht.interrupt Ctrl+C transcript behavior",()=>{
     expect(entries).toHaveLength(300);
     expect(entries[0].input).toBe("echo 1");
     expect(entries[299].input).toBe("next^C");
+  });
+});
+
+describe("original cmd.js ze.pause and b894 host.waitForKey source interaction",()=>{
+  it("displays source pause message and waits for an injected keyboard acknowledgement",async()=>{
+    const prompts:string[]=[];
+    let resolveKey:((key:string)=>void)|undefined;
+    const {session}=await createShell(message=>{
+      prompts.push(message);
+      return new Promise<string>(resolve=>{resolveKey=resolve;});
+    });
+    let finished=false;
+    const command=session.run("pause").then(result=>{
+      finished=true;
+      return result;
+    });
+    await Promise.resolve();
+    expect(prompts).toEqual(["Press any key to continue . . ."]);
+    expect(finished).toBe(false);
+    resolveKey?.("Space");
+    expect((await command).output).toEqual(["Press any key to continue . . ."]);
+    expect(finished).toBe(true);
+    expect(session.errorlevel).toBe(0);
+  });
+  it("resumes chained commands from the same Guest shell after PAUSE",async()=>{
+    const messages:string[]=[];
+    const {session}=await createShell(async message=>{
+      messages.push(message);
+      return "Enter";
+    });
+    const result=await session.run("echo Before & pause & echo After");
+    expect(messages).toEqual(["Press any key to continue . . ."]);
+    expect(result.output).toEqual([
+      "Before ","Press any key to continue . . .","After"
+    ]);
+    expect(result.errorlevel).toBe(0);
+  });
+  it("fails visibly instead of hanging if no user input host exists",async()=>{
+    const {session}=await createShell();
+    const result=await session.run("pause");
+    expect(result.output).toEqual(["PAUSE requires an interactive console."]);
+    expect(result.errorlevel).toBe(1);
   });
 });
