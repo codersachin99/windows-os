@@ -1,4 +1,29 @@
 
+## User Accounts — source Guest-only Kt/Xt page
+
+Pinned `src/modules/apps/cpanel.js` `Kt` handles original
+account panel `accounts` and `pageLinks`. With `user=null`
+(the pinned browser Guest desktop), `Change password`, `Change picture`,
+`Change name`, `Link account`, and `Delete account` are disabled;
+the Guest card from `G` displays `Guest account`; the
+`logoff()` action emits `changeView({view:"Switch"})`, **not** a
+destructive `LOG_OFF`. React now renders that source Guest card and
+blocked actions, and invokes the existing permissioned `SWITCH_USER`
+phase to preserve running windows and files. This was verified from
+the source; authenticated account management and backend changes are
+not faked. The source's "View other accounts" action relies on the
+original account backend and is explicitly disabled pending that
+integration.
+
+Added narrow account search, Back/Forward navigation, source file-art
+`accounts.2f4d5075.webp` imported byte-identically (blob SHA
+`9b11bc4dd87a06e76db474967deaeda6d45c9def`), unit contracts
+and desktop/mobile browser acceptance for Guest switch/resume. All
+other original Control Panel account pages and screenshot parity
+remain pending. This commit intentionally avoids `[run-ci]` while
+the earlier Display+Programs acceptance run #43717661924 is active.
+
+
 ## Control Panel Display + Programs combined opt-in acceptance — 15 November 2026
 
 The previous [desktop original hotkeys CI #43716174491](https://github.com/codersachin99/windows-os/actions/runs/43716174491) finished **SUCCESS** on commit `942f594`. The feature branch subsequently added the source Alt+L Switch/Guest-session-preserving view (`df0babf`), first Control Panel Display navigation/disabled-web-controls/source binary assets (`c6b0bf5`), and Control Panel Programs list/search/selection with source-installed executable manifest (`f9304c7`). This checkpoint requests **one deliberate `[run-ci]`** batch to verify those commits in TypeScript, Vitest, source inventory/build and desktop/mobile Chromium. Do not claim it passed before the workflow completes. Keep PR #1 draft and main untouched; Control Panel's other four internal pages, true source category registry and exact screenshots remain pending.

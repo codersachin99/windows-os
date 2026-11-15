@@ -3,7 +3,7 @@ import type {SourceProgram} from "@windows-os/filesystem";
 /** Pinned legacy-win7 src/modules/apps/cpanel.js a259/pa.
  * Source windowLocation/history uses a null root and a typed panel id.
  * Only Display's web behavior is implemented in this first slice. */
-export type SourceControlPanelLocation=null|"display"|"programs";
+export type SourceControlPanelLocation=null|"display"|"programs"|"accounts";
 export interface SourceControlPanelHistory{
   readonly entries:readonly SourceControlPanelLocation[];
   readonly index:number;
@@ -86,4 +86,27 @@ export function sourceCpanelProgramsMatch(query:string):boolean{
   const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
   return terms.length>0&&terms.every(term=>
     ["programs","install","uninstall"].some(word=>word.includes(term)));
+}
+
+/** Source cpanel.js Kt.pageLinks() for user=null (Guest). The authenticated
+ * controls are disabled upstream. Account listing depends on the not-yet-
+ * migrated backend; it is visibly unavailable rather than fabricated. */
+export interface SourceCpanelGuestAccountLink{
+  id:"password"|"picture"|"name"|"link"|"delete"|"logoff"|"others";
+  label:string;
+  disabled:boolean;
+}
+export const SOURCE_CPANEL_GUEST_ACCOUNT_LINKS:readonly SourceCpanelGuestAccountLink[]=[
+  {id:"password",label:"Change your password",disabled:true},
+  {id:"picture",label:"Change your picture",disabled:true},
+  {id:"name",label:"Change your account name",disabled:true},
+  {id:"link",label:"Link your account",disabled:true},
+  {id:"delete",label:"Delete your account",disabled:true},
+  {id:"logoff",label:"Log off account",disabled:false},
+  {id:"others",label:"View other accounts",disabled:true}
+];
+export function sourceCpanelAccountsMatch(query:string):boolean{
+  const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  return terms.length>0&&terms.every(term=>
+    ["accounts","account","guest","user","password"].some(word=>word.includes(term)));
 }

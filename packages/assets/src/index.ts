@@ -28,6 +28,7 @@ export const legacyArt = {
   cpanel: "/assets/images/cpanel.38ffbb1d.webp",
   display: "/assets/images/display.8adb9edd.webp",
   programs: "/assets/images/programs.610e703b.webp",
+  accounts: "/assets/images/accounts.2f4d5075.webp",
   resolutionPreview: "/assets/images/resolution.f3fc8376.webp",
   sticky: "/assets/images/sticky.e63cea5a.webp",
   stickyAdd: "/assets/images/stickynotes-add.bfbefc41.webp",
@@ -86,7 +87,7 @@ const sourceLegacyIconMap:Readonly<Record<string,string>>={
   taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
   run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer,
   cpanel:legacyArt.cpanel,display:legacyArt.display,
-  programs:legacyArt.programs
+  programs:legacyArt.programs,accounts:legacyArt.accounts
 };
 export interface LegacySourceIconArtwork{
   src:string;

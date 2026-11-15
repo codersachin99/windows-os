@@ -69,7 +69,8 @@ function ApplicationContent({
       else dispatch({type:"BSOD",code:"DUMMY_BSOD"});
     }} />;
   if (appId === "cpanel") return <ControlPanelApp
-    onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
+    onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
+    onSwitchUser={() => dispatch({type:"SWITCH_USER"})}/>;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

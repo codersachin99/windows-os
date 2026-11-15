@@ -3,7 +3,8 @@ import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelStep,sourceCpanelResolutions,
   sourceCpanelDisplayMatch,sourceCpanelInstalledPrograms,
-  sourceCpanelProgramsMatch
+  sourceCpanelProgramsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
+  sourceCpanelAccountsMatch
 } from "./model";
 
 describe("pinned a259 cpanel location history",()=>{
@@ -58,5 +59,19 @@ describe("source cpanel.js ra Programs list from the actual source install manif
     expect(sourceCpanelProgramsMatch("uninstall")).toBe(true);
     expect(sourceCpanelProgramsMatch("PROGRAM")).toBe(true);
     expect(sourceCpanelProgramsMatch("sound")).toBe(false);
+  });
+});
+
+
+describe("pinned original Kt Guest account controls",()=>{
+  it("does not enable authenticated profile changes for user=null",()=>{
+    const links=SOURCE_CPANEL_GUEST_ACCOUNT_LINKS;
+    expect(links.map(link=>link.id)).toEqual([
+      "password","picture","name","link","delete","logoff","others"
+    ]);
+    expect(links.filter(link=>!link.disabled).map(link=>link.id)).toEqual(["logoff"]);
+    expect(sourceCpanelAccountsMatch("guest account")).toBe(true);
+    expect(sourceCpanelAccountsMatch("password")).toBe(true);
+    expect(sourceCpanelAccountsMatch("resolution")).toBe(false);
   });
 });

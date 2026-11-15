@@ -67,3 +67,23 @@ test("source Control Panel Programs lists real simulated packages and supports s
   await panel.getByRole("searchbox",{name:"Search Control Panel"}).fill("uninstall");
   await expect(panel.locator('[data-test-cpanel-result="programs"]')).toBeVisible();
 });
+
+
+test("source Control Panel Guest account page disables sign-in edits and switches users safely",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  await panel.locator('[data-test-cpanel-item="accounts"]').click();
+  const accounts=panel.locator("[data-test-cpanel-accounts]");
+  await expect(accounts).toBeVisible();
+  await expect(accounts.locator("[data-test-cpanel-guest-account]"))
+    .toContainText("Guest account");
+  for(const action of ["password","picture","name","link","delete","others"]){
+    await expect(accounts.locator('[data-test-account-action="'+action+'"]')).toBeDisabled();
+  }
+  await accounts.locator('[data-test-account-action="logoff"]').click();
+  await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
+  await page.locator('[data-test-avatar="win7"]').click();
+  // Original source emits changeView({view:"Switch"}), not LOG_OFF.
+  // The live Guest Control Panel window survives the switch.
+  await expect(win).toBeVisible();
+});

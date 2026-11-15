@@ -56,3 +56,27 @@ SHA `20787fca64de67b1b40ba3c16baf2f3362d84e6a`. The original
 installer launch side pane and uninstall flows are not implemented;
 do not substitute deleting Guest binaries. Other internal Control Panel
 screens, full category/search index and screenshot fidelity are pending.
+
+## User Accounts — source Guest-only Kt/Xt page
+
+Pinned `src/modules/apps/cpanel.js` `Kt` handles original
+account panel `accounts` and `pageLinks`. With `user=null`
+(the pinned browser Guest desktop), `Change password`, `Change picture`,
+`Change name`, `Link account`, and `Delete account` are disabled;
+the Guest card from `G` displays `Guest account`; the
+`logoff()` action emits `changeView({view:"Switch"})`, **not** a
+destructive `LOG_OFF`. React now renders that source Guest card and
+blocked actions, and invokes the existing permissioned `SWITCH_USER`
+phase to preserve running windows and files. This was verified from
+the source; authenticated account management and backend changes are
+not faked. The source's "View other accounts" action relies on the
+original account backend and is explicitly disabled pending that
+integration.
+
+Added narrow account search, Back/Forward navigation, source file-art
+`accounts.2f4d5075.webp` imported byte-identically (blob SHA
+`9b11bc4dd87a06e76db474967deaeda6d45c9def`), unit contracts
+and desktop/mobile browser acceptance for Guest switch/resume. All
+other original Control Panel account pages and screenshot parity
+remain pending. This commit intentionally avoids `[run-ci]` while
+the earlier Display+Programs acceptance run #43717661924 is active.

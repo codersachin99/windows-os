@@ -5,17 +5,19 @@ import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelDisplayMatch,sourceCpanelOpenLocation,sourceCpanelResolutions,
   sourceCpanelStep,sourceCpanelInstalledPrograms,sourceCpanelProgramsMatch,
+  sourceCpanelAccountsMatch,SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
   type SourceControlPanelHistory, type SourceControlPanelLocation
 } from "./model";
 import "./ControlPanelApp.css";
 
 export interface ControlPanelAppProps{
   onClose():void;
+  onSwitchUser():void;
 }
 /** Source cpanel.js a259: address breadcrumbs, back/forward history,
  * instant search, tiles root and navigated panel body. The first real panel
  * is the original Display view; remaining panels are tracked, not invented. */
-export function ControlPanelApp({onClose}:ControlPanelAppProps){
+export function ControlPanelApp({onClose,onSwitchUser}:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     SOURCE_CPANEL_INITIAL_HISTORY);
   const [query,setQuery]=useState("");
@@ -24,6 +26,7 @@ export function ControlPanelApp({onClose}:ControlPanelAppProps){
   const results=query.trim().length>0;
   const matchingDisplay=sourceCpanelDisplayMatch(query);
   const matchingPrograms=sourceCpanelProgramsMatch(query);
+  const matchingAccounts=sourceCpanelAccountsMatch(query);
   const programs=sourceCpanelInstalledPrograms(sourcePrograms);
   const open=(value:SourceControlPanelLocation)=>{
     setHistory(previous=>sourceCpanelOpenLocation(previous,value));
@@ -46,7 +49,7 @@ export function ControlPanelApp({onClose}:ControlPanelAppProps){
         <button type="button" onClick={()=>open(null)}>Control Panel</button>
         {location!==null&&<span data-test-cpanel-location="">
           <span aria-hidden="true"> › </span>
-          {location==="display"?"Display":"Programs and Features"}
+          {location==="display"?"Display":location==="programs"?"Programs and Features":"User Accounts"}
         </span>}
       </nav>
       <input type="search" value={query} onChange={event=>changeSearch(event.target.value)}
@@ -74,7 +77,35 @@ export function ControlPanelApp({onClose}:ControlPanelAppProps){
             <button type="button" className="windows-cpanel__task"
               onClick={()=>open("programs")}>Uninstall or change a program</button></div>
         </article>:null}
-        {!matchingDisplay&&!matchingPrograms&&<p>No items match your search.</p>}
+        {matchingAccounts?<article className="windows-cpanel__result"
+          data-test-cpanel-result="accounts">
+          <img src={legacyArt.accounts} alt="" width={40} height={40}/>
+          <div><button type="button" className="windows-cpanel__link"
+            onClick={()=>open("accounts")}>User Accounts</button>
+            <button type="button" className="windows-cpanel__task"
+              onClick={()=>open("accounts")}>Change your account</button></div>
+        </article>:null}
+        {!matchingDisplay&&!matchingPrograms&&!matchingAccounts&&<p>No items match your search.</p>}
+      </div>:location==="accounts"?<div className="windows-cpanel__accounts"
+        data-test-cpanel-accounts="">
+        <h2>Make changes to your user account</h2>
+        <div className="windows-cpanel__account-layout">
+          <nav aria-label="Account actions" className="windows-cpanel__account-links">
+            {SOURCE_CPANEL_GUEST_ACCOUNT_LINKS.map(link=>
+              <button type="button" key={link.id}
+                data-test-account-action={link.id}
+                disabled={link.disabled}
+                onClick={link.id==="logoff"?onSwitchUser:undefined}
+                title={link.disabled?"Requires the original account backend":undefined}>
+                {link.label}
+              </button>
+            )}
+          </nav>
+          <div className="windows-cpanel__account-card" data-test-cpanel-guest-account="">
+            <img src={legacyArt.guestAvatar} alt="" width={87} height={87}/>
+            <div><strong>Guest</strong><span>Guest account</span></div>
+          </div>
+        </div>
       </div>:location==="programs"?<div className="windows-cpanel__programs"
         data-test-cpanel-programs="">
         <div className="windows-cpanel__programs-heading">
@@ -152,6 +183,11 @@ export function ControlPanelApp({onClose}:ControlPanelAppProps){
           className="windows-cpanel__tile" onClick={()=>open("programs")}>
           <img src={legacyArt.programs} alt="" width={44} height={44}/>
           <span>Programs and Features</span>
+        </button>
+        <button type="button" data-test-cpanel-item="accounts"
+          className="windows-cpanel__tile" onClick={()=>open("accounts")}>
+          <img src={legacyArt.accounts} alt="" width={44} height={44}/>
+          <span>User Accounts</span>
         </button>
       </div>}
     </div>
