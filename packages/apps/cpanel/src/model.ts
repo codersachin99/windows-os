@@ -3,7 +3,7 @@ import type {SourceProgram} from "@windows-os/filesystem";
 /** Pinned legacy-win7 src/modules/apps/cpanel.js a259/pa.
  * Source windowLocation/history uses a null root and a typed panel id.
  * Only Display's web behavior is implemented in this first slice. */
-export type SourceControlPanelLocation=null|"display"|"programs"|"accounts"|"notification"|"action-center";
+export type SourceControlPanelLocation=null|"display"|"programs"|"accounts"|"notification"|"action-center"|"backup";
 export interface SourceControlPanelHistory{
   readonly entries:readonly SourceControlPanelLocation[];
   readonly index:number;
@@ -133,4 +133,12 @@ export function sourceCpanelActionCenterMatch(query:string):boolean{
   const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
   return terms.length>0&&terms.every(term=>
     ["action","center","security","messages","problem"].some(word=>word.includes(term)));
+}
+
+
+/** Original Control Panel Backup & Restore is searchable as its own page. */
+export function sourceCpanelBackupMatch(query:string):boolean{
+  const terms=query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  return terms.length>0&&terms.every(term=>
+    ["backup","back up","restore","recovery","files"].some(word=>word.includes(term)));
 }
