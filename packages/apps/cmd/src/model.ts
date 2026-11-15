@@ -90,6 +90,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   start:"Starts a specified program or application package.",
   tasklist:"Displays all currently running tasks.",
   taskkill:"Terminates a running task.",
+  ipconfig:"Displays all current TCP/IP network configuration values.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -97,6 +98,24 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   title:"Sets the window title for a CMD.EXE session.",
   ver:"Displays the Windows version."
 };
+/** Pinned cmd.js Ze.ipconfig / qe: these addresses belong to the LEGACY
+ * simulated Ethernet adapter, not the visitor's network or host machine.
+ * Source ipconfig accepts /ALL but prints the same fixed four-field view. */
+export function sourceCmdIpconfigOutput():string[]{
+  const fields:[string,string][]=[
+    ["   Connection-specific DNS Suffix  . :",""],
+    ["   IPv4 Address. . . . . . . . . . . :","192.168.1.42"],
+    ["   Subnet Mask . . . . . . . . . . . :","255.255.255.0"],
+    ["   Default Gateway . . . . . . . . :","192.168.1.1"]
+  ];
+  // Original cmd.js V(fields, 1) pads the first column to max width + 1.
+  const width=Math.max(...fields.map(([label])=>label.length));
+  return ["","WindowsOS IP Configuration","","",
+    "Ethernet adapter Local Area Connection:","",
+    ...fields.map(([label,value])=>label.padEnd(width+1)+value)
+  ];
+}
+
 const DRIVE_NOT_FOUND="The system cannot find the drive specified.";
 const PATH_NOT_FOUND="The system cannot find the path specified.";
 const FILE_NOT_FOUND="The system cannot find the file specified.";
@@ -753,6 +772,8 @@ export class SourceCmdSession {
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
       }
+    }else if(name==="ipconfig"){
+      output=sourceCmdIpconfigOutput();
     }else if(name==="tasklist"){
       output=sourceCmdTasklistOutput(sourceCmdTasks(this.openWindows?.()??[]));
     }else if(name==="taskkill"){

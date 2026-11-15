@@ -11,7 +11,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdPipelineSegments,sourceCmdRawRest,
   sourceCmdDirDetailLine,sourceCmdDirSummary,sourceCmdDirWideLines,
   sourceCmdWhereInstallPath,sourceCmdResolveProgramId,
-  sourceCmdTasks,sourceCmdTasklistOutput,
+  sourceCmdTasks,sourceCmdTasklistOutput,sourceCmdIpconfigOutput,
   SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
@@ -1003,5 +1003,34 @@ describe("source cmd.js Re/Ne/je TASKLIST and TASKKILL Guest processes",()=>{
     expect(missing.output).toEqual(["ERROR: The process 9999 not found."]);
     expect(missing.errorlevel).toBe(1);
     expect((await session.run("taskkill")).errorlevel).toBe(1);
+  });
+});
+ 
+
+describe("pinned source Ze.ipconfig uses the simulator adapter, not host networking",()=>{
+  it("renders the original fixed virtual TCP/IP configuration with V() alignment",()=>{
+    const lines=sourceCmdIpconfigOutput();
+    expect(lines.slice(0,6)).toEqual([
+      "","WindowsOS IP Configuration","","",
+      "Ethernet adapter Local Area Connection:",""
+    ]);
+    expect(lines).toHaveLength(10);
+    expect(lines.find(line=>line.includes("IPv4 Address")))
+      .toMatch(/IPv4 Address.*:\s+192\.168\.1\.42$/);
+    expect(lines.find(line=>line.includes("Subnet Mask")))
+      .toMatch(/Subnet Mask.*:\s+255\.255\.255\.0$/);
+    expect(lines.find(line=>line.includes("Default Gateway")))
+      .toMatch(/Default Gateway.*:\s+192\.168\.1\.1$/);
+  });
+  it("IPCONFIG and /ALL output are source-identical without reading a host adapter",async()=>{
+    const {session}=await createShell();
+    const plain=await session.run("ipconfig");
+    const detailed=await session.run("IPCONFIG /ALL");
+    expect(plain.errorlevel).toBe(0);
+    expect(detailed.errorlevel).toBe(0);
+    expect(plain.output).toEqual(sourceCmdIpconfigOutput());
+    expect(detailed.output).toEqual(plain.output);
+    expect((await session.run("help ipconfig")).output)
+      .toContain("Displays all current TCP/IP network configuration values.");
   });
 });

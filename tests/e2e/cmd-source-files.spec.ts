@@ -305,3 +305,17 @@ test("source CMD TASKLIST lists simulated windows and TASKKILL closes CMD",async
   await execute(input,"taskkill /im cmd.exe");
   await expect(cmd).toHaveCount(0);
 });
+ 
+
+test("original CMD IPCONFIG prints legacy virtual Ethernet values, not host networking",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"ipconfig");
+  await expect(output).toContainText("WindowsOS IP Configuration");
+  await expect(output).toContainText("Ethernet adapter Local Area Connection:");
+  await expect(output).toContainText("192.168.1.42");
+  await expect(output).toContainText("255.255.255.0");
+  await expect(output).toContainText("192.168.1.1");
+  await execute(input,"IPCONFIG /ALL");
+  await expect(output).toContainText("192.168.1.42");
+  await expect(output).toContainText("WindowsOS IP Configuration");
+});

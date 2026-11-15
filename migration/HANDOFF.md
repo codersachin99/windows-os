@@ -1,3 +1,8 @@
+
+## Pinned CMD IPCONFIG virtual Ethernet adapter — 15 November 2026
+
+Original `legacy-win7/src/modules/apps/cmd.js` Ze.ipconfig uses constant `qe` with IPv4 192.168.1.42, mask 255.255.255.0 and gateway 192.168.1.1. It prints a WindowsOS IP Configuration heading and the simulated Ethernet adapter (via source V column alignment); `/ALL` does not add fields in the pinned source. Ported this one self-contained command to the existing CMD model with a pure output helper, HELP metadata, unit assertions and desktop/mobile Playwright regression. No network adapter, DNS lookup, web ping or native host networking is queried. This is not yet HOSTNAME/PING/SYSTEMINFO or full CMD pixel parity. The change intentionally omits `[run-ci]` while the earlier cumulative TASKLIST/TASKKILL opt-in workflow is unresolved; CI must be requested only when a meaningful new batch needs validation.
+
 ## CMD SET PATH prefix/casing test correction — 2026-11-15
 
 - [Combined CMD CI #43645135418](https://github.com/codersachin99/windows-os/actions/runs/43645135418) **FAILED exactly 1 unit assertion** out of 368 tests; TypeScript was green, later steps (audit/build/browser) were skipped. The new original environment model correctly deletes the original `Path` key on `PATH ;`, re-adds it with uppercase `PATH` on `PATH C:\Tools;C:\Bin` and returns both `PATH` and `PATHEXT` for source `SET path` prefix lookup. The initial test incorrectly expected one `Path=` item. There is no evidence of a production-code failure; fix the test expectation to match the pinned `bt` map and `SET` source command.
