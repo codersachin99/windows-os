@@ -51,33 +51,33 @@ remain pending. Native ZIP writer, account profiles beyond Guest, and source
 Android behavior remain outside this browser slice. Browser download
 initiation is not a guarantee the user retained the file.
 
-## Next implementation and security gates
+## Original security/acceptance gates (implementation checklist)
 
-1. Resolve the pinned `f106` filesystem module's **exact**
+1. [x] Resolve the pinned `f106` filesystem module's **exact**
    `backupFolders` list. Do not infer a collection from Guest folder
    names or include app binaries / another user's data.
-2. Provide a reusable streaming browser ZIP codec compatible with the
+2. [x] Provide a reusable browser ZIP codec compatible with the
    source manifest. Prefer a vetted library to invented archive formats;
    if adding dependencies, commit the lockfile and test it.
-3. Implement ZIP export by reading `VirtualFileStore.list()` and
+3. [x] Implement ZIP export by reading `VirtualFileStore.list()` and
    `readBytes()` under the current `SOURCE_GUEST_PROFILE`. Persist
    lastBackup only after the archive has successfully downloaded.
-4. Implement safe import with checks for absolute paths, `..`,
+4. [x] Implement safe import with checks for absolute paths, `..`,
    duplicate/case-colliding destinations, symlink-like archive records,
    size/entry limits and invalid/missing manifest. Validate all
    destinations remain within the **current Guest profile** before
    writing; use existing create-only file helpers so restored entries
    cannot overwrite source files.
-5. Unit-test archive interoperability and malicious ZIP inputs,
+5. [ ] Unit-test archive interoperability and malicious ZIP inputs,
    count/progress, no overwrite, binary roundtrip and persist/reload.
    Exercise browser download, upload and error states in Playwright at
    desktop and mobile sizes, before claiming feature parity.
-6. Keep Backup & Restore **pending**, not a fake interactive
-   placeholder, until these gates pass. No host OS backup or disk
+6. [ ] Keep Backup & Restore **in-progress** until the new CI browser
+   acceptance and parity gates pass. No host OS backup or disk
    write authority.
 
-The current `ControlPanelApp` has five real page routes—Display,
-Programs and Features, Guest Accounts, Notification Area Icons and
-Action Center. Backup/Restore remains the sixth missing page, and full
-source category/search registry and screenshot parity are separately
-pending.
+The current `ControlPanelApp` has all six original navigable page routes:
+Display, Programs and Features, Guest Accounts, Notification Area Icons,
+Action Center, and now Backup/Restore. Full source category/search registry,
+source-specific icon import, native streaming for large files, and paired
+screenshot parity are still pending.
