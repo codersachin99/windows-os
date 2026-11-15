@@ -1,3 +1,36 @@
+## Full pinned Control Panel registry + backup acceptance recheck (15 November 2026)
+
+Source original 3097/a97a/a682 defines **24** root items, ordered tiles and
+**66** en-US tasks (5985 keyword/word-start ranking). Imported typed
+`packages/apps/cpanel/src/sourceRegistry.ts`, rendered all 24 root items and
+search tasks, preserved source-supported redirects, and kept host-native
+settings/unmigrated program launchers visibly disabled instead of faking
+host operations. Imported **21** byte-identical Win7 source icon files,
+including original Backup/Restore, completing exact artwork for all 24 items.
+The three previously imported images were Display, Programs and Accounts.
+See `migration/CPANEL-REGISTRY-SOURCE.md`. All six original page routes
+have working React slices but full visual/source parity is not accepted.
+
+[Run #43724080733](https://github.com/codersachin99/windows-os/actions/runs/43724080733)
+ended **FAILURE** only in the desktop and mobile Backup ZIP browser test:
+**424 of 426 passed**; each failed on a stale expected string
+"1 restored, 0 skipped" because the source Guest snapshot contains
+34 already-existing AppData Start Menu shortcuts. The actual restore
+succeeded ("1 restored, 34 skipped"). Commit d97996c corrected the
+assertion to accommodate source shortcuts without weakening the one-file
+restore/no-overwrite contract. Added unit/E2E checks for source registry,
+redirects, exact image paths and browser/mobile behavior, plus a preflight
+file-vs-folder ZIP collision guard and its regression test. TypeScript,
+Vitest, source audits and build passed in the earlier failed run, but it
+did not include these subsequent changes.
+
+This **single deliberately opted-in [run-ci] checkpoint** covers the
+corrected ZIP/browser regression, 24-entry root registry, task search,
+source-exact icons, and all existing suites. Do not claim it passed until
+its exact Actions run completes. Keep feature PR #1 draft and
+`main` unchanged. Next after CI: original-vs-React screenshot parity,
+then theme/host adapter parity and any remaining source gaps.
+
 ## Sixth Control Panel page — real source ZIP Backup & Restore (15 November 2026)
 
 The previous combined notification/tray run #43719078159 finished SUCCESS.
