@@ -4,7 +4,8 @@ import {
   ensureSourceGuestDirectories,SOURCE_GUEST_PROFILE
 } from "@windows-os/filesystem";
 import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariables,
-  sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue} from "./model";
+  sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue,
+  sourceCmdCompletionTarget,sourceCmdApplyCompletion} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -347,5 +348,46 @@ describe("source cmd.js TREE, VOL, DATE and TIME output",()=>{
       "├───Alpha","├───Bravo","└───notes.txt"
     ]);
     expect((await session.run("tree Documents /q")).errorlevel).toBe(1);
+  });
+});
+
+describe("pinned cmd.js b894 Tab completion from actual mounted Guest VFS",()=>{
+  it("splits quoted and unquoted paths using original a() and c() rules",()=>{
+    expect(sourceCmdCompletionTarget('type "My Files\\Re')).toEqual({
+      head:"type ",dir:"My Files\\",prefix:"Re"
+    });
+    expect(sourceCmdCompletionTarget("copy Documents\\ab Desktop")).toEqual({
+      head:"copy Documents\\ab ",dir:"",prefix:"Desktop"
+    });
+    expect(sourceCmdCompletionTarget("dir /b Documents\\fi")).toEqual({
+      head:"dir /b ",dir:"Documents\\",prefix:"fi"
+    });
+    expect(sourceCmdApplyCompletion(
+      {head:"type ",dir:"My Files\\",prefix:"Re"},"Read me.txt"
+    )).toBe('type "My Files\\Read me.txt"');
+    expect(sourceCmdApplyCompletion(
+      {head:"cd ",dir:"",prefix:"Do"},"Documents"
+    )).toBe("cd Documents");
+  });
+
+  it("filters and sorts actual Guest directory entries without mutating files",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.write("safe",root+"/Read Me.txt");
+    await fs.write("safe",root+"/readme.txt");
+    const found=await session.complete("type Documents\\re");
+    expect(found.target).toEqual({
+      head:"type ",dir:"Documents\\",prefix:"re"
+    });
+    expect(found.matches).toEqual(["Read Me.txt","readme.txt"]);
+    expect(sourceCmdApplyCompletion(found.target,found.matches[0]))
+      .toBe('type "Documents\\Read Me.txt"');
+    const quoted=await session.complete('type "Documents\\READ');
+    expect(quoted.matches).toEqual(["Read Me.txt","readme.txt"]);
+    expect(await session.complete("type Q:\\Unavailable"))
+      .toEqual({
+        target:{head:"type ",dir:"Q:\\",prefix:"Unavailable"},matches:[]
+      });
+    expect(await fs.read(root+"/Read Me.txt")).toBe("safe");
   });
 });

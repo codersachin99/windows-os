@@ -61,3 +61,27 @@ test("source CMD DATE TIME and hexadecimal COLOR are visible without altering ho
   await expect(cmd.locator('[data-test-cmd-container]')).toHaveCSS(
     "background-color","rgb(0, 0, 0)");
 });
+
+test("original CMD Tab cycles source VFS paths, quotes spaces, and Escape clears",async({page})=>{
+  const {cmd,input}=await launchSourceCommandPrompt(page);
+  await input.fill("cd D");
+  await input.press("Tab");
+  await expect(input).toHaveValue("cd Desktop");
+  await input.press("Tab");
+  await expect(input).toHaveValue("cd Documents");
+  await input.press("Escape");
+  await expect(input).toHaveValue("");
+
+  await execute(input,'md "Documents\\My Source Folder"');
+  await expect(cmd.locator("[data-test-cmd-entry]")).toHaveCount(1);
+  await input.fill('cd "Documents\\My So');
+  await input.press("Tab");
+  await expect(input).toHaveValue('cd "Documents\\My Source Folder"');
+  await input.press("Enter");
+  await expect(cmd.locator(".cmd__prompt"))
+    .toHaveText("C:\\Users\\Guest\\Documents\\My Source Folder>");
+
+  await input.fill("type Q:\\NoMatch");
+  await input.press("Tab");
+  await expect(input).toHaveValue("type Q:\\NoMatch");
+});

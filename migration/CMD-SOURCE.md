@@ -94,3 +94,10 @@ Pinned `ot.date`/`ot.time` format date as `Sun MM/DD/YYYY` and time as `HH:mm:ss
 - This commit requests **one opt-in [run-ci]** rerun for the full cumulative original CMD COPY/MOVE, COLOR, SET/PATH, % expansion, TREE/VOL/DATE/TIME and browser source contracts. No green claim until full run finishes.
 - Draft PR #1, main untouched, no release. CMD module still in progress; source screenshot parity unverified.
 
+
+
+## Source b894 keyboard Tab completion and Escape — 2026-11-15
+
+Pinned original CMD src/modules/apps/cmd.js b894 a/c/l and Ht complete/applyCompletion: Tab extracts the last unquoted path argument, resolves its directory from the active Windows working directory, filters actual Guest VFS entry names with case-insensitive starts-with, and sorts with the source base-sensitivity comparator. A single Tab inserts the first candidate; successive Tab presses cycle matches while retaining command prefix. Candidates containing whitespace receive double quotes. Escape clears input, and non-Tab input or history navigation cancels cycling. Unknown/unmounted paths leave input unchanged, never trigger a host lookup.
+
+Added pure splitting/rendering + mounted filesystem unit contracts and a desktop/mobile browser interaction case for cycling Desktop/Documents, escaping, creating and completing a quoted folder, and missing drive. This is a **keyboard interaction slice**, not full Command Prompt parity: pipes, redirects, batch behavior, interrupt/confirmation flows, original CMD icon and pixel comparison remain outstanding. One opt-in CI run is requested with this change; verify results before calling it green. PR #1 remains draft; main untouched, no release.

@@ -844,3 +844,11 @@ The original `apps/illustrator/index.html` and `apps/photoshop/index.html` are z
 The preserved backend contains legacy account/security behavior, including non-production password/token handling. Never publicly expose it without authentication/security review. The new `windows-os` GitHub repository is **public**, whereas the source repository was private: check rights for original bundled artwork, sounds, fonts and third-party code before promoting a distributable build. Do not commit private DB configuration, user data or tokens.
 
 **Acceptance gate:** Full source parity means every original module/feature has mapped source behavior, tested interactions, correctly rendered artwork/themes across target viewports, and the status tracker is entirely verified. A green CI on this initial vertical slice is not that gate.
+
+
+## CMD original Tab path completion and Escape — 2026-11-15 (CI requested)
+
+- After corrected CMD cross-surface [run #43645272266](https://github.com/codersachin99/windows-os/actions/runs/43645272266) completed **SUCCESS**, continued pinned legacy cmd.js Ht keyboard controls and helpers a/c/l.
+- New SourceCmdSession.complete enumerates actual Guest VFS names under the current mounted Windows path, with original quoted/unquoted token detection, case-insensitive prefix and sorted matching; sourceCmdApplyCompletion adds quotes for spaces. React CMD Tab cycles matches; Escape clears text; non-Tab editing cancels cycling. It never reads the host filesystem.
+- Added pure/VFS unit tests and desktop/mobile Playwright source prompt scenario for Tab cycling, quoted paths and missing mounts. This commit uses **[run-ci]** exactly once to run verification; do not declare this slice verified before the workflow completes.
+- Remaining original CMD features: pipe/redirection/batch, source interactive confirmations and interrupt, exact icon artwork, and original-vs-migration screenshots. CMD remains in progress; 290 tracked original source modules: 254 pending / 28 in progress / 8 implemented / 0 fully pixel-verified. Preserve open draft PR #1, main and no releases.

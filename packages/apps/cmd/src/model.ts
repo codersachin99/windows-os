@@ -169,6 +169,41 @@ export function sourceCmdUnglue(input:string):string{
   return first[1]+match[1]+" "+match[2]+first[3];
 }
 
+/** Original cmd.js b894 a(): split the final path argument at the last
+ * unquoted whitespace, preserving command/argument prefix verbatim. */
+export interface SourceCmdCompletionTarget{
+  head:string;
+  dir:string;
+  prefix:string;
+}
+export function sourceCmdCompletionTarget(raw:string):SourceCmdCompletionTarget{
+  const input=String(raw||"");
+  let start=0;
+  let quoted=false;
+  for(let i=0;i<input.length;i++){
+    if(input[i]==='"')quoted=!quoted;
+    else if(!quoted&&/\s/.test(input[i]))start=i+1;
+  }
+  const path=input.slice(start).replace(/"/g,"");
+  const separator=Math.max(path.lastIndexOf("\\"),path.lastIndexOf("/"));
+  return {
+    head:input.slice(0,start),
+    dir:path.slice(0,separator+1),
+    prefix:path.slice(separator+1)
+  };
+}
+/** Original c(): quote only a completed path containing whitespace. */
+export function sourceCmdApplyCompletion(
+  target:SourceCmdCompletionTarget,name:string
+):string{
+  const path=target.dir+name;
+  return target.head+(/\s/.test(path)?'"'+path+'"':path);
+}
+export interface SourceCmdCompletion{
+  target:SourceCmdCompletionTarget;
+  matches:string[];
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -207,6 +242,22 @@ export class SourceCmdSession {
   private resolve(argument:string):{win:string;uri:string|null}{
     const win=resolveWindowsPath(argument,{cwd:this.cwd});
     return {win,uri:this.volume.toUri(win)};
+  }
+  /** Original b894 l(): complete names from the mounted Guest directory.
+   * Never read the host filesystem or execute a candidate. */
+  async complete(input:string):Promise<SourceCmdCompletion>{
+    const target=sourceCmdCompletionTarget(input);
+    try{
+      const directory=this.resolve(target.dir||".");
+      if(!directory.uri)return {target,matches:[]};
+      const entries=await this.fs.list(directory.uri);
+      const matches=entries.map(entry=>entry.name)
+        .filter(name=>name.toLowerCase().startsWith(target.prefix.toLowerCase()))
+        .sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:"base"}));
+      return {target,matches};
+    }catch{
+      return {target,matches:[]};
+    }
   }
   async run(raw:string):Promise<SourceCmdResult>{
     const input=String(raw);

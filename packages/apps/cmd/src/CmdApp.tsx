@@ -1,10 +1,17 @@
 import {useEffect,useMemo,useRef,useState,type KeyboardEvent} from "react";
 import {fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult,
-  type SourceCmdColorStyle} from "./model";
+  type SourceCmdColorStyle,sourceCmdApplyCompletion,
+  type SourceCmdCompletionTarget} from "./model";
 import "./source.css";
 import "./CmdApp.css";
 
+interface ActiveCmdCompletion{
+  target:SourceCmdCompletionTarget;
+  matches:string[];
+  index:number;
+  output:string;
+}
 interface CmdAppProps{
   onClose():void;
   onTitleChange(title:string):void;
@@ -31,11 +38,15 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
   const [consoleStyle,setConsoleStyle]=useState<SourceCmdColorStyle|null>(null);
   const [prompt,setPrompt]=useState(shell?.prompt??"");
   const [busy,setBusy]=useState(false);
+  const completion=useRef<ActiveCmdCompletion|null>(null);
+  const completionRequest=useRef(0);
   const history=useRef<string[]>([]);
   const index=useRef(0);
   const inputRef=useRef<HTMLInputElement>(null);
   const scroll=useRef<HTMLDivElement>(null);
   useEffect(()=>{
+    completion.current=null;
+    completionRequest.current++;
     setPrompt(shell?.prompt??"");
     setEcho(shell?.echoEnabled??true);
     inputRef.current?.focus();
@@ -44,8 +55,28 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     const container=scroll.current;
     if(container)container.scrollTop=container.scrollHeight;
   },[entries,input]);
+  const complete=async()=>{
+    if(!shell||busy)return;
+    const previous=completion.current;
+    if(previous&&previous.output===input&&previous.matches.length){
+      previous.index=(previous.index+1)%previous.matches.length;
+      const next=sourceCmdApplyCompletion(previous.target,previous.matches[previous.index]);
+      previous.output=next;
+      setInput(next);
+      return;
+    }
+    const request=++completionRequest.current;
+    const found=await shell.complete(input);
+    if(request!==completionRequest.current||
+      inputRef.current?.value!==input||!found.matches.length)return;
+    const next=sourceCmdApplyCompletion(found.target,found.matches[0]);
+    completion.current={...found,index:0,output:next};
+    setInput(next);
+  };
   const execute=async()=>{
     if(!shell||busy)return;
+    completion.current=null;
+    completionRequest.current++;
     const text=input;
     if(text.trim()){
       history.current.push(text);
@@ -75,7 +106,13 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
     }
   };
   const onKeyDown=(event:KeyboardEvent<HTMLInputElement>)=>{
-    if(event.key==="Enter"){event.preventDefault();void execute();}
+    if(event.key!=="Tab"){
+      completion.current=null;
+      completionRequest.current++;
+    }
+    if(event.key==="Tab"){event.preventDefault();void complete();}
+    else if(event.key==="Escape"){event.preventDefault();setInput("");}
+    else if(event.key==="Enter"){event.preventDefault();void execute();}
     else if(event.key==="ArrowUp"){
       event.preventDefault();
       if(index.current>0){
@@ -100,7 +137,11 @@ export function CmdApp({onClose,onTitleChange}:CmdAppProps){
       {echo&&!busy&&<span className="cmd__prompt">{prompt}</span>}
       <input ref={inputRef} data-test-cmd-input="" aria-label="Command Prompt input"
         className="cmd__input" value={input} readOnly={busy}
-        onChange={e=>setInput(e.target.value)} onKeyDown={onKeyDown}
+        onChange={e=>{
+          completion.current=null;
+          completionRequest.current++;
+          setInput(e.target.value);
+        }} onKeyDown={onKeyDown}
         autoComplete="off" spellCheck={false}/>
     </div>:<p role="alert">The original Guest filesystem is not mounted.</p>}
   </div>;
