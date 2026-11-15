@@ -927,3 +927,9 @@ The preserved backend contains legacy account/security behavior, including non-p
 - This docs handoff commit intentionally contains [run-ci] to opt into one **full combined** TypeScript, units, original-source audits, production build and desktop/mobile Playwright verification. No green claim before workflow completion. Prior Ctrl+C [CI #43681551196](https://github.com/codersachin99/windows-os/actions/runs/43681551196) had not completed its browser stage when this was scheduled.
 - Y/N confirmation only mutates real mounted Guest VFS; N means no deletion; Y (single char) allows the specifically named subtree/files. Without interactive key host, destructive multi-file operations refuse execution. Host OS is never touched.
 - Keep draft PR #1, main unchanged and no release. Source screenshot parity and unimplemented CMD commands/batch behavior remain pending.
+
+
+## DEL old wildcard-rejection test corrected — 2026-11-15 (CI retest requested)
+
+- [First PAUSE/RD/DEL CI #43682005351](https://github.com/codersachin99/windows-os/actions/runs/43682005351) **FAILED exactly one stale unit assertion** (397/398 passed); TypeScript passed, later stages skipped. The old DEL test was still asserting a live *.txt pattern should fail, but original Te.del now correctly removes matching files. Replaced it with nonexistent *.log and retained named-file/directory protections.
+- No source runtime changes. This commit opts into a new single [run-ci] to verify the corrected cumulative tests and desktop/mobile browser scenarios. No pass claim until completion; draft PR #1, main untouched, no release.

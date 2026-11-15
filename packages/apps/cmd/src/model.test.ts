@@ -149,7 +149,7 @@ describe("original cmd.js Te REN RD DEL with safe source VFS semantics",()=>{
     expect((await session.run("ren Documents\\updated.txt ..\\escape.txt")).errorlevel).toBe(1);
     expect(await fs.read(base+"/updated.txt")).toBe("journal");
   });
-  it("RD/RMDIR removes only empty directories; /S is withheld pending source confirmation",async()=>{
+  it("RD/RMDIR protects nonempty directories without an interactive confirmation reader",async()=>{
     const {fs,session}=await createShell();
     const base="/EXTERNAL/computer/drive0/Users/Guest";
     await session.run("md Scratch");
@@ -168,15 +168,15 @@ describe("original cmd.js Te REN RD DEL with safe source VFS semantics",()=>{
   });
 });
 
-describe("original cmd.js Te DEL and ERASE without unchecked wildcard removal",()=>{
-  it("deletes a named source VFS file but never deletes a directory or wildcard matches",async()=>{
+describe("original cmd.js Te DEL and ERASE named paths and missing wildcard safeguards",()=>{
+  it("deletes a named source VFS file but never deletes a directory or nonexistent wildcard",async()=>{
     const {fs,session}=await createShell();
     const base="/EXTERNAL/computer/drive0/Users/Guest/Documents";
     await fs.write("temporary",base+"/temp.txt");
     await fs.write("permanent",base+"/keep.txt");
     expect((await session.run("erase Documents\\temp.txt")).errorlevel).toBe(0);
     expect(await fs.stat(base+"/temp.txt")).toBeNull();
-    expect((await session.run("del Documents\\*.txt")).errorlevel).toBe(1);
+    expect((await session.run("del Documents\\*.log")).errorlevel).toBe(1);
     expect(await fs.read(base+"/keep.txt")).toBe("permanent");
     expect((await session.run("del Documents")).errorlevel).toBe(1);
     expect(await fs.stat(base)).toMatchObject({type:"directory"});
