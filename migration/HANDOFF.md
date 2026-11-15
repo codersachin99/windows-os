@@ -1,3 +1,16 @@
+## Sixth Control Panel page — real source ZIP Backup & Restore (15 November 2026)
+
+The previous combined notification/tray run #43719078159 finished SUCCESS.
+Resolved the exact seven original f106 backupFolders and 0e9a text formats.
+Implemented sourceBackup.ts (fflate, original manifest, ZIP hardening, safe
+profile-only create-only restore), BackupRestorePanel.tsx (browser download,
+upload, progress, results, lastBackup), sixth Control Panel route, and
+source-pinned Vitest/Playwright regression coverage. CI acceptance is
+requested in the next deliberate [run-ci] checkpoint; do not claim the new
+feature passed until that run completes. All six navigable original pages
+exist but category UI, theme skins, original screenshots, native adapters
+and pixel/function parity remain pending. PR #1 stays draft; main untouched.
+
 
 ## Original Backup/Restore contract and remaining gate — 15 November 2026
 
