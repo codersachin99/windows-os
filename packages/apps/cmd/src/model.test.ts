@@ -13,6 +13,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdWhereInstallPath,sourceCmdResolveProgramId,
   sourceCmdTasks,sourceCmdTasklistOutput,sourceCmdIpconfigOutput,
   sourceCmdBrowserDeviceInfo,sourceCmdSystemInfoOutput,
+  sourceCmdPingCount,sourceCmdPingSummary,
   SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
@@ -1190,5 +1191,60 @@ describe("source CMD ot.bsod opens the simulated Win7 stop screen",()=>{
     const result=await session.run("bsod");
     expect(result.errorlevel).toBe(1);
     expect(result.output).toEqual(["The simulated system view is unavailable."]);
+  });
+});
+
+
+describe("pinned original Ze.ping source grammar and browser probe output",()=>{
+  it("reproduces the original 4-default/20-max -n count and packet statistics",()=>{
+    expect(sourceCmdPingCount(["example.test"])).toBe(4);
+    expect(sourceCmdPingCount(["example.test","-n","2"])).toBe(2);
+    expect(sourceCmdPingCount(["example.test","-N","99"])).toBe(20);
+    expect(sourceCmdPingCount(["-n","0","example.test"])).toBe(4);
+    expect(sourceCmdPingCount(["-n","not-a-number","example.test"])).toBe(4);
+    expect(sourceCmdPingSummary("demo.test",[10,20],3)).toEqual([
+      "","Ping statistics for demo.test:",
+      "    Packets: Sent = 3, Received = 2, Lost = 1 (33% loss),",
+      "Approximate round trip times in milli-seconds:",
+      "    Minimum = 10ms, Maximum = 20ms, Average = 15ms"
+    ]);
+    expect(sourceCmdPingSummary("demo.test",[],2)).toEqual([
+      "","Ping statistics for demo.test:",
+      "    Packets: Sent = 2, Received = 0, Lost = 2 (100% loss),"
+    ]);
+  });
+  it("probes first then simulates source requests with deterministic browser adapter",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();await ensureSourceGuestDirectories(fs);
+    const hosts:string[]=[];
+    let count=0;
+    const shell=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,undefined,undefined,undefined,undefined,
+      undefined,async host=>{
+        hosts.push(host);count++;
+        if(count===3)throw new Error("Timeout");
+        return count===1?1:count===2?13.6:27.2;
+      });
+    const result=await shell.run("ping demo.test -n 3");
+    expect(hosts).toEqual(["demo.test","demo.test","demo.test","demo.test"]);
+    expect(result.errorlevel).toBe(0);
+    expect(result.output).toContain("Pinging demo.test with 32 bytes of data:");
+    expect(result.output).toContain("Reply from demo.test: bytes=32 time=14ms TTL=64");
+    expect(result.output).toContain("Request timed out.");
+    expect(result.output).toContain("Reply from demo.test: bytes=32 time=27ms TTL=64");
+    expect(result.output.some(x=>x.includes("Packets: Sent = 3, Received = 2, Lost = 1 (33% loss)"))).toBe(true);
+  });
+  it("handles missing targets, missing web adapter and lookup failure without host shell",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("ping")).output).toEqual([
+      "Usage: ping [-n count] target_name"
+    ]);
+    expect((await session.run("ping")).errorlevel).toBe(1);
+    const missing=await session.run("ping source-host-not-found.test");
+    expect(missing.errorlevel).toBe(1);
+    expect(missing.output).toEqual([
+      "Ping request could not find host source-host-not-found.test. Please check the name and try again."
+    ]);
   });
 });

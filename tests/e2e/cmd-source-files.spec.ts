@@ -404,3 +404,14 @@ test("source CMD BSOD opens the Win7 stop screen and click restarts the Guest si
   await screen.click({position:{x:8,y:8}});
   await expect(page.locator("[data-test-boot-screen]")).toBeVisible();
 });
+
+
+test("original CMD PING rejects missing target without launching a native executable",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"ping");
+  await expect(output).toHaveText("Usage: ping [-n count] target_name");
+  await execute(input,'ping "not a valid host"');
+  await expect(output).toHaveText(
+    "Ping request could not find host not a valid host. Please check the name and try again."
+  );
+});

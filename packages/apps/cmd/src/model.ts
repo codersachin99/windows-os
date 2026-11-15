@@ -97,6 +97,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   hostname:"Prints the name of the current host.",
   systeminfo:"Displays device specific properties and configuration.",
   bsod:"Displays a dummy Blue Screen Of Death.",
+  ping:"Tests a network connection to a destination host.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -227,6 +228,36 @@ export function sourceCmdSystemInfoOutput(info:SourceCmdDeviceInfo):string[]{
   ];
   const width=Math.max(...fields.map(([label])=>label.length));
   return fields.map(([label,value])=>label.padEnd(width+2)+value);
+}
+
+/** Pinned original cmd.js Je()/Qe() ping request count and statistics.
+ * The leading probe is separate from the actual requested packet count. */
+export const SOURCE_CMD_PING_DEFAULT_COUNT=4;
+export const SOURCE_CMD_PING_MAX_COUNT=20;
+export const SOURCE_CMD_PING_BYTES=32;
+export function sourceCmdPingCount(args:readonly string[]):number{
+  const index=args.findIndex(value=>value.toLowerCase()==="-n");
+  const number=index<0?NaN:Number(args[index+1]);
+  return !Number.isInteger(number)||number<1
+    ?SOURCE_CMD_PING_DEFAULT_COUNT:Math.min(number,SOURCE_CMD_PING_MAX_COUNT);
+}
+export function sourceCmdPingSummary(
+  target:string,times:readonly number[],sent:number
+):string[]{
+  const lost=sent-times.length;
+  const result=[
+    "",
+    "Ping statistics for "+target+":",
+    "    Packets: Sent = "+sent+", Received = "+times.length+
+      ", Lost = "+lost+" ("+Math.round((100*lost)/sent)+"% loss),"
+  ];
+  if(!times.length)return result;
+  const total=times.reduce((sum,value)=>sum+value,0);
+  return [...result,
+    "Approximate round trip times in milli-seconds:",
+    "    Minimum = "+Math.min(...times)+"ms, Maximum = "+Math.max(...times)+
+      "ms, Average = "+Math.round(total/times.length)+"ms"
+  ];
 }
 
 const DRIVE_NOT_FOUND="The system cannot find the drive specified.";
@@ -587,7 +618,9 @@ export class SourceCmdSession {
     /** Original ot.logoff/shutdown: change simulated shell view, never the host OS. */
     private readonly changeView?: (view:"Logon"|"Shutdown"|"Bsod")=>void,
     /** Source getDeviceInfo: browser adapter, never native host info. */
-    private readonly getDeviceInfo?: ()=>Promise<SourceCmdDeviceInfo>
+    private readonly getDeviceInfo?: ()=>Promise<SourceCmdDeviceInfo>,
+    /** Original Ze.ping probes a permitted web endpoint, never native ICMP. */
+    private readonly pingTarget?: (target:string)=>Promise<number>
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -888,6 +921,39 @@ export class SourceCmdSession {
             if(!count)output.push("No subfolders exist");
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="ping"){
+      const tokens=sourceCmdArguments(args);
+      // Preserve original Ze.ping target selection: first token not prefixed
+      // by "-", while Je() separately scans -n for its count.
+      const target=tokens.find(token=>!token.startsWith("-"));
+      if(!target){
+        output=["Usage: ping [-n count] target_name"];
+        errorlevel=1;
+      }else{
+        const count=sourceCmdPingCount(tokens);
+        try{
+          if(!this.pingTarget)throw new Error("No browser ping adapter");
+          await this.pingTarget(target);
+          output=["","Pinging "+target+" with "+SOURCE_CMD_PING_BYTES+" bytes of data:"];
+          const times:number[]=[];
+          for(let index=0;index<count;index++){
+            try{
+              const latency=await this.pingTarget(target);
+              times.push(latency);
+              output.push("Reply from "+target+": bytes="+SOURCE_CMD_PING_BYTES+
+                " time="+Math.round(latency)+"ms TTL=64");
+            }catch{
+              output.push("Request timed out.");
+            }
+          }
+          output.push(...sourceCmdPingSummary(target,times,count));
+          if(!times.length)errorlevel=1;
+        }catch{
+          output=["Ping request could not find host "+target+
+            ". Please check the name and try again."];
+          errorlevel=1;
+        }
       }
     }else if(name==="hostname"){
       // Device2Web browser adapter returns the blank source host name.

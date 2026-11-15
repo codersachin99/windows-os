@@ -4,6 +4,7 @@ import {SourceCmdSession,SOURCE_CMD_BANNER,type SourceCmdResult,
   type SourceCmdColorStyle,sourceCmdApplyCompletion,
   type SourceCmdCompletionTarget,sourceCmdTrimEntries,
   sourceCmdInterruptedEntries,sourceCmdBrowserDeviceInfo} from "./model";
+import {sourceCmdBrowserPing} from "./browserPing";
 import "./source.css";
 import "./CmdApp.css";
 
@@ -77,7 +78,7 @@ export function CmdApp({
           innerWidth:window.innerWidth,innerHeight:window.innerHeight,
           batteryLevel
         });
-      });}
+      },sourceCmdBrowserPing);}
     catch{return null;}
   },[volume]);
   const [input,setInput]=useState("");
