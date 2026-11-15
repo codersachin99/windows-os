@@ -81,6 +81,38 @@ export const legacyArt = {
   contacts: "/apps/contacts/icon.webp"
 } as const;
 
+
+/** Source Win7 icon assets for the pinned 3097 Control Panel registry.
+ * Every file below was imported byte-identically from legacy-win7 at
+ * LEGACY_REVISION. The source "personalize" category uses "personal" art.
+ * Alternate shell themes remain separate and are NOT asserted here. */
+export const legacyCpanelTileArtwork:Readonly<Record<string,string>>=Object.freeze({
+  data:"/assets/images/data.7f45037b.webp",
+  datetime:"/assets/images/datetime.a146b1e9.webp",
+  default:"/assets/images/default.7934e9f9.webp",
+  storage:"/assets/images/storage.d28402ed.webp",
+  display:legacyArt.display,
+  "action-center-headline":"/assets/images/action-center-headline.27cc6d83.webp",
+  backup:"/assets/images/backup.5e4eb80c.webp",
+  access:"/assets/images/access.564b9198.webp",
+  gadgets:"/assets/images/gadgets.6b10acd8.webp",
+  keyboard:"/assets/images/keyboard.5a5a435d.webp",
+  mouse:"/assets/images/mouse.061c3f15.webp",
+  notification:"/assets/images/notification.da3d3f8a.webp",
+  personalize:"/assets/images/personal.ccbfdd3a.webp",
+  power:"/assets/images/power.e9c91fa5.webp",
+  programs:legacyArt.programs,
+  region:"/assets/images/region.4e615968.webp",
+  sound:"/assets/images/sound.fbf2cc53.webp",
+  speech:"/assets/images/speech.35e2276d.webp",
+  sync:"/assets/images/sync.0b44bb3c.webp",
+  system:"/assets/images/system.011a8064.webp",
+  taskbar:"/assets/images/taskbar.5a0a4fcb.webp",
+  accounts:legacyArt.accounts,
+  defender:"/assets/images/defender.cab18690.webp",
+  update:"/assets/images/update.6d0c5c2f.webp"
+});
+
 /** Pinned source 4cca and 0f35 theme icon keys. Only byte-imported original
  * Win7 assets appear here. Other types retain original generic file fallback.
  */
@@ -93,7 +125,8 @@ const sourceLegacyIconMap:Readonly<Record<string,string>>={
   taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
   run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer,
   cpanel:legacyArt.cpanel,display:legacyArt.display,
-  programs:legacyArt.programs,accounts:legacyArt.accounts
+  programs:legacyArt.programs,accounts:legacyArt.accounts,
+  ...legacyCpanelTileArtwork
 };
 export interface LegacySourceIconArtwork{
   src:string;
