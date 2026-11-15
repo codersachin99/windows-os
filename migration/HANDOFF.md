@@ -1,3 +1,24 @@
+## Source ListView reuse and CI acceptance state (15 November 2026)
+
+The source Control Panel 24-tile root now renders using the already
+shared `SourceListView variant="tiles"` engine rather than a bespoke
+list container. Added an explicit desktop/mobile Playwright marker test.
+The pinned 21 new image blobs and 24-item registry remain intact.
+Also tightened the new unsupported Defender search-result assertions to
+target the heading and task buttons individually (Playwright strict
+locators reject two matched buttons).
+
+[CI #43731878736](https://github.com/codersachin99/windows-os/actions/runs/43731878736)
+on 08a43b3 has **passed** TypeScript, all Vitest tests, source audits
+and Vite build; the desktop/mobile browser stage was still executing at
+this handoff edit. The follow-up test locator and SourceListView reuse
+were committed **after** that CI snapshot, so they must not be claimed
+as CI-accepted. If that browser stage fails on the old ambiguous
+Defender selector, do not treat it as production UI failure; the
+selector correction is already in branch. Trigger the next full batch
+only when actually necessary with the requested [run-ci] commit.
+Keep PR #1 draft, no main merge and no release.
+
 ## Source registry unit assertion correction (15 November 2026)
 
 [CI #43731769836](https://github.com/codersachin99/windows-os/actions/runs/43731769836)
