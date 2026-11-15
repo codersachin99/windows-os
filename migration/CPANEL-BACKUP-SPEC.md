@@ -27,6 +27,30 @@ The original UI shows `No backup created`, `Back up now`,
 The source disabled side-pane actions `Create a system image` and
 `Create a system repair disc` must stay disabled.
 
+## Implemented working slice — 15 November 2026
+
+- Verified pinned webpack f106.backupFolders as **Desktop, Downloads, Documents,
+  Music, Pictures, Videos, AppData** (exact source order).
+  Original 0e9a text/shortcut extensions: txt,text,readme,md,json,xml,rtf,wpl,lnk.
+- packages/filesystem/src/sourceBackup.ts provides standard ZIP export via
+  fflate, original manifest.json, progress events and strict file-size bounds.
+  ZIP import preflights central/local headers, CRC, path traversal, symlinks,
+  duplicate/case-colliding names, file count and manifest before Guest writes.
+- Restore targets only SOURCE_GUEST_PROFILE in these seven folders, skips
+  preexisting files, creates profile-only directories and stages new content
+  through VirtualFileStore.createFilesAtomic. No host-disk access.
+- packages/apps/cpanel/src/BackupRestorePanel.tsx provides browser Download,
+  ZIP Upload, progress/result state, last-backup metadata and disabled system
+  image/system repair controls. This is the sixth navigable Control Panel view.
+- Unit and desktop/mobile browser tests cover file download/upload, source
+  manifest, binary/text restoration, skip existing, malformed and unsafe ZIP.
+
+**Verification:** committed but no new CI result yet. Archive limits are
+5,000 files and 25 MiB expanded data; screenshots and full visual parity
+remain pending. Native ZIP writer, account profiles beyond Guest, and source
+Android behavior remain outside this browser slice. Browser download
+initiation is not a guarantee the user retained the file.
+
 ## Next implementation and security gates
 
 1. Resolve the pinned `f106` filesystem module's **exact**
