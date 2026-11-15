@@ -827,7 +827,7 @@ describe("original cmd.js Te.dir source /B /S /W and formatting",()=>{
       {name:"a",type:"file"},{name:"b",type:"file"},
       {name:"c",type:"directory"},{name:"d",type:"file"},
       {name:"e",type:"file"},{name:"f",type:"file"}
-    ])).toEqual(["a  c  e","b  d  f"]);
+    ])).toEqual(["a  [c]  e","b  d    f"]);
     expect(SOURCE_CMD_DIR_MAX_DEPTH).toBe(12);
     expect(SOURCE_CMD_DIR_MAX_ENTRIES).toBe(5000);
   });
