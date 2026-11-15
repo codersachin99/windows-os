@@ -292,3 +292,16 @@ test("original CMD START opens a real registered Guest app window",async({page})
   await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
   await expect(cmd).toHaveCount(1);
 });
+
+
+test("source CMD TASKLIST lists simulated windows and TASKKILL closes CMD",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"tasklist");
+  await expect(output).toContainText("Image Name");
+  await expect(output).toContainText("cmd.exe");
+  await expect(output).toContainText("8,192 K");
+  await execute(input,"taskkill /pid 9999");
+  await expect(output).toHaveText("ERROR: The process 9999 not found.");
+  await execute(input,"taskkill /im cmd.exe");
+  await expect(cmd).toHaveCount(0);
+});

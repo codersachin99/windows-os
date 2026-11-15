@@ -88,6 +88,8 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   pause:"Suspends processing and waits for a key to be pressed.",
   where:"Displays the location of files that match a search pattern.",
   start:"Starts a specified program or application package.",
+  tasklist:"Displays all currently running tasks.",
+  taskkill:"Terminates a running task.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -401,6 +403,38 @@ export function sourceCmdWhereInstallPath(query:string):string|null{
     ?"C:\\"+program.installPath.replace(/\//g,"\\"):null;
 }
 
+/** Original cmd.js Re()/Ne()/je(): task IDs and simulated PIDs are derived
+ * from open *Guest windows*, not host processes. PIDs start 1000, step 4. */
+export interface SourceCmdOpenWindow{
+  id:string;
+  appId:string;
+}
+export interface SourceCmdTask{
+  windowId:string;
+  appId:string;
+  image:string;
+  pid:number;
+}
+export function sourceCmdTasks(windows:readonly SourceCmdOpenWindow[]):SourceCmdTask[]{
+  const allowed=new Set(sourcePrograms.map(program=>program.id));
+  return windows.filter(window=>allowed.has(window.appId))
+    .map((window,index)=>({
+      windowId:window.id,appId:window.appId,
+      image:window.appId+".exe",pid:1000+index*4
+    }));
+}
+/** Source V(): align columns to max cell width plus two spaces. */
+export function sourceCmdTasklistOutput(tasks:readonly SourceCmdTask[]):string[]{
+  const heading=["Image Name","PID","Session Name","Session#","Mem Usage"];
+  const lines=[heading,heading.map(text=>"=".repeat(text.length)),
+    ...tasks.map(task=>[task.image,sourceCmdInteger(task.pid),
+      "Console","1","8,192 K"])];
+  const widths=heading.map((_,column)=>
+    Math.max(...lines.map(row=>row[column].length)));
+  return ["",...lines.map(row=>row.map((value,i)=>
+    i===row.length-1?value:value.padEnd(widths[i]+2)).join(""))];
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -415,7 +449,9 @@ export class SourceCmdSession {
     /** Source b894 host.waitForKey: injected UI key reader, never host shell. */
     private readonly waitForKey?: (prompt:string)=>Promise<string>,
     /** Source ze.start host bridge: run only registered simulated apps. */
-    private readonly launchProgram?: (programId:string)=>boolean
+    private readonly launchProgram?: (programId:string)=>boolean,
+    private readonly openWindows?: ()=>readonly SourceCmdOpenWindow[],
+    private readonly terminateWindow?: (windowId:string)=>void
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -716,6 +752,41 @@ export class SourceCmdSession {
             if(!count)output.push("No subfolders exist");
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="tasklist"){
+      output=sourceCmdTasklistOutput(sourceCmdTasks(this.openWindows?.()??[]));
+    }else if(name==="taskkill"){
+      const tokens=sourceCmdArguments(args);
+      const option=/^\/(pid|im)(?::(.*))?$/i.exec(tokens[0]??"");
+      const value=option?.[2]||tokens[1];
+      const byImage=option?.[1].toLowerCase()==="im";
+      const pid=option?.[1].toLowerCase()==="pid"?Number(value):NaN;
+      if(!option||!value||(byImage?false:!Number.isInteger(pid))){
+        output=[
+          "Terminates a running program.","",
+          "TASKKILL {/PID pid | /IM name}","",
+          "  /PID pid     The process id to terminate, as TASKLIST reports it.",
+          "  /IM name     The image name to terminate, e.g. notepad.exe.","",
+          "Use TASKLIST to see what is running."
+        ];
+        errorlevel=1;
+      }else{
+        const tasks=sourceCmdTasks(this.openWindows?.()??[]);
+        const program=byImage?
+          sourceCmdResolveProgramId(value.replace(/\.exe$/i,"")):null;
+        const task=byImage?tasks.find(task=>task.appId===program):
+          tasks.find(task=>task.pid===pid);
+        if(task){
+          this.terminateWindow?.(task.windowId);
+          output=[
+            'SUCCESS: Sent termination signal to the process "'+
+              task.image+'" with PID '+task.pid+'.'
+          ];
+        }else{
+          output=["ERROR: The process "+
+            (byImage?'"'+value+'"':String(pid))+" not found."];
+          errorlevel=1;
+        }
       }
     }else if(name==="start"){
       const [programName]=sourceCmdArguments(args);

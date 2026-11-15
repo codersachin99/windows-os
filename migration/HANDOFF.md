@@ -981,3 +981,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 - [WHERE 526f64f](https://github.com/codersachin99/windows-os/commit/526f64f6e46b15ca28599e9d7c865ef1451c814c) returns source manifest C: program-install paths. [START aab21fe](https://github.com/codersachin99/windows-os/commit/aab21fe4ed17c285cff43da30f351999e5c8c44a) launches real installed apps via desktop appRegistry/OPEN_APP, no host programs. Browser acceptance test made foreground-safe in [7955ff2](https://github.com/codersachin99/windows-os/commit/7955ff223dd5a26358eeb6b24d8dacf2a63f9e52).
 - This commit requests one [run-ci] combined acceptance for WHERE/START and source BAT-negative boundary. Earlier DIR/keyboard corrective CI [#43683710914](https://github.com/codersachin99/windows-os/actions/runs/43683710914) has already passed TypeScript/unit/source checks/build and is running browser tests; it does not verify WHERE/START. Keep CI opt-in only.
 - Remain on draft PR #1, main untouched, no premature release or complete-parity claim.
+
+
+## CMD simulated TASKLIST/TASKKILL source semantics — 2026-11-15 (CI staged)
+
+- Added original Re/Ne/je simulated task listing from actual open desktop windows, image names and source PID step, aligned table and fixed source simulation memory. TASKKILL /PID and /IM send close requests via existing DesktopShell onRequestCloseWindow, never host OS process signals. Unit and desktop/mobile tests check live CMD window, missing task errors and closure.
+- No [run-ci] here while earlier WHERE/START [CI #43684125612](https://github.com/codersachin99/windows-os/actions/runs/43684125612) and DIR/interactive [CI #43683710914](https://github.com/codersachin99/windows-os/actions/runs/43683710914) are still running browser suites. Verify and batch later.
+- Keep PR #1 draft, main untouched, no premature release; visual parity pending.

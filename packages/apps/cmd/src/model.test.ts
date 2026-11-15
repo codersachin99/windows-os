@@ -11,6 +11,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdPipelineSegments,sourceCmdRawRest,
   sourceCmdDirDetailLine,sourceCmdDirSummary,sourceCmdDirWideLines,
   sourceCmdWhereInstallPath,sourceCmdResolveProgramId,
+  sourceCmdTasks,sourceCmdTasklistOutput,
   SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
@@ -957,5 +958,50 @@ describe("pinned Tt.execute only recognizes registered internal commands",()=>{
     expect(attempt.errorlevel).toBe(9009);
     expect(attempt.output[0]).toContain("not recognized");
     expect(await fs.read(uri)).toBe("echo NEVER_EXECUTED");
+  });
+});
+
+
+describe("source cmd.js Re/Ne/je TASKLIST and TASKKILL Guest processes",()=>{
+  it("derives PIDs from installed Guest windows with original 1000/4 numbering",()=>{
+    const tasks=sourceCmdTasks([
+      {id:"cmd-window",appId:"cmd"},
+      {id:"unrelated-window",appId:"not-in-source"},
+      {id:"notepad-window",appId:"notepad"}
+    ]);
+    expect(tasks).toEqual([
+      {windowId:"cmd-window",appId:"cmd",image:"cmd.exe",pid:1000},
+      {windowId:"notepad-window",appId:"notepad",image:"notepad.exe",pid:1004}
+    ]);
+    const lines=sourceCmdTasklistOutput(tasks);
+    expect(lines[0]).toBe("");
+    expect(lines.some(line=>line.includes("Image Name")&&line.includes("PID")))
+      .toBe(true);
+    expect(lines.some(line=>line.includes("cmd.exe")&&line.includes("1,000")&&
+      line.includes("8,192 K"))).toBe(true);
+  });
+  it("lists, terminates by PID or image, and rejects absent tasks without host access",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();await ensureSourceGuestDirectories(fs);
+    const windows=[
+      {id:"cmd-window",appId:"cmd"},
+      {id:"notepad-window",appId:"notepad"}
+    ];
+    const terminated:string[]=[];
+    const session=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,undefined,()=>windows,id=>terminated.push(id));
+    const listing=await session.run("tasklist");
+    expect(listing.output.some(line=>line.includes("notepad.exe"))).toBe(true);
+    expect((await session.run("taskkill /IM notepad.exe")).output)
+      .toEqual(['SUCCESS: Sent termination signal to the process "notepad.exe" with PID 1004.']);
+    expect(terminated).toEqual(["notepad-window"]);
+    expect((await session.run("taskkill /pid 1000")).output)
+      .toEqual(['SUCCESS: Sent termination signal to the process "cmd.exe" with PID 1000.']);
+    expect(terminated).toEqual(["notepad-window","cmd-window"]);
+    const missing=await session.run("taskkill /pid 9999");
+    expect(missing.output).toEqual(["ERROR: The process 9999 not found."]);
+    expect(missing.errorlevel).toBe(1);
+    expect((await session.run("taskkill")).errorlevel).toBe(1);
   });
 });
