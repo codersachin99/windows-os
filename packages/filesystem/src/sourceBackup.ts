@@ -41,6 +41,10 @@ interface ArchiveEntry{
   name:string;
   data:Uint8Array;
 }
+/** Original 0e9a text/shortcut extension classifiers (u and l). */
+export function sourceBackupTextFile(name:string):boolean{
+  return /\.(?:txt|text|readme|md|json|xml|rtf|wpl|lnk)$/i.test(name);
+}
 function fail(message:string):never{
   throw new Error("Invalid backup file ("+message+").");
 }
@@ -250,12 +254,13 @@ export async function sourceRestoreBackupArchive(
   report(options.onProgress,"restore","start",0,0,"Preparing restore");
   const {files}=sourceParseBackupArchive(archive);
   let restored=0,skipped=0;
-  const fresh:{path:string;content:Uint8Array}[]=[];
+  const fresh:{path:string;content:string|Uint8Array}[]=[];
   for(let i=0;i<files.length;i++){
     const file=files[i],path=sourceBackupDestination(file.name);
     const exists=await filesystem.stat(path);
     if(exists)skipped++;
-    else fresh.push({path,content:file.data});
+    else fresh.push({path,content:sourceBackupTextFile(file.name)
+      ?new TextDecoder().decode(file.data):file.data});
     report(options.onProgress,"restore","processing",i+1,files.length,
       (exists?"Skipped ":"Restoring ")+file.name,{restored,skipped});
   }
