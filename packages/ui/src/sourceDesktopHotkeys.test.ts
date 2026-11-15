@@ -33,6 +33,6 @@ describe("original source main.js we hotkeys and hotkey.js editable filter",()=>
     const content={tagName:"DIV",isContentEditable:true} as unknown as EventTarget;
     expect(sourceHotkeyAcceptsTarget(content)).toBe(false);
     expect(sourceDesktopShortcut(key("w",{target:content}))).toBeNull();
-    expect(sourceDesktopShortcut(key("w",{target:{tagName:"BUTTON"} as EventTarget}))).toBe("toggle-start");
+    expect(sourceDesktopShortcut(key("w",{target:{tagName:"BUTTON"} as unknown as EventTarget}))).toBe("toggle-start");
   });
 });
