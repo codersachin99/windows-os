@@ -61,7 +61,11 @@ function ApplicationContent({
     }}
     onListWindows={()=>windows.map(window=>({id:window.id,appId:window.appId}))}
     onTerminateWindow={id=>onRequestCloseWindow(id)}
-    onChangeView={view=>dispatch({type:view==="Logon"?"LOG_OFF":"SHUTDOWN"})} />;
+    onChangeView={view=>{
+      if(view==="Logon")dispatch({type:"LOG_OFF"});
+      else if(view==="Shutdown")dispatch({type:"SHUTDOWN"});
+      else dispatch({type:"BSOD",code:"DUMMY_BSOD"});
+    }} />;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { desktopReducer, initialDesktopState } from "@windows-os/engine";
-import { BootScreen, DesktopShell, LogonScreen } from "@windows-os/ui";
+import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
 import { sourceFilesystemRuntime } from "@windows-os/sdk";
 
 export default function App() {
@@ -33,6 +33,8 @@ export default function App() {
       });
   }}
     onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
+  if (state.phase === "bsod") return <SourceBsodScreen
+    code={state.bsodCode??"DUMMY_BSOD"} onRestart={() => dispatch({type:"RESTART"})}/>;
   if (state.phase === "shutdown") return <main className="windows-shutdown">
     <img src="/assets/images/start-button-classic.ec7b0b9f.webp" width={64} height={64} alt="" />
     <p>Windows is shutting down</p>

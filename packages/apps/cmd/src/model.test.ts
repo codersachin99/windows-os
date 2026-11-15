@@ -1167,3 +1167,28 @@ describe("pinned cmd.js Ze.systeminfo and browser DeviceWeb/Device2Web adapter",
     expect((await disconnected.session.run("systeminfo")).errorlevel).toBe(1);
   });
 });
+
+
+describe("source CMD ot.bsod opens the simulated Win7 stop screen",()=>{
+  it("delegates to the simulator view instead of crashing the host",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();await ensureSourceGuestDirectories(fs);
+    const views:string[]=[];
+    const shell=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,undefined,undefined,undefined,
+      view=>views.push(view));
+    const result=await shell.run("bsod");
+    expect(result.errorlevel).toBe(0);
+    expect(result.output).toEqual([]);
+    expect(views).toEqual(["Bsod"]);
+    expect((await shell.run("help bsod")).output)
+      .toContain("Displays a dummy Blue Screen Of Death.");
+  });
+  it("reports a missing simulated view host instead of faking a blue screen",async()=>{
+    const {session}=await createShell();
+    const result=await session.run("bsod");
+    expect(result.errorlevel).toBe(1);
+    expect(result.output).toEqual(["The simulated system view is unavailable."]);
+  });
+});

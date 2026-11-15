@@ -1,5 +1,5 @@
 export type ThemeId = "win7" | "winxp" | "win11" | "win10" | "winvista" | "win31" | "win95" | "win98";
-export type SessionPhase = "boot" | "logon" | "desktop" | "shutdown";
+export type SessionPhase = "boot" | "logon" | "desktop" | "shutdown" | "bsod";
 export type AppKind = "system" | "utility" | "media" | "game" | "web";
 
 export interface AppDefinition {
@@ -33,6 +33,8 @@ export interface DesktopWindow {
 
 export interface DesktopState {
   phase: SessionPhase;
+  /** Original simulated BSOD reason, never a real host failure. */
+  bsodCode?:string;
   theme: ThemeId;
   session: { kind: "guest"; label: "Guest" } | null;
   windows: DesktopWindow[];
@@ -48,6 +50,7 @@ export type DesktopAction =
   | { type: "GUEST_LOGIN" }
   | { type: "LOG_OFF" }
   | { type: "SHUTDOWN" }
+  | { type: "BSOD"; code: string }
   | { type: "RESTART" }
   | { type: "OPEN_APP"; app: AppDefinition; file?: { path: string } }
   | { type: "FOCUS_WINDOW"; id: string }

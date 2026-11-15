@@ -1,0 +1,26 @@
+/* Pinned legacy src/styles/shell/bsod.css and source 6812 template. */
+.windows-source-bsod.bsod__screen.is-win7{
+  position:fixed;
+  inset:0;
+  box-sizing:border-box;
+  z-index:9999;
+  min-height:100vh;
+  width:100%;
+  padding:0 5vmax;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  gap:1rem;
+  background-color:#0100ad;
+  color:white;
+  font-family:"Lucida Console",lucidacons,monospace;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.4;
+  cursor:default;
+  outline-offset:-4px;
+}
+@media(max-width:520px){
+  .windows-source-bsod.bsod__screen.is-win7{font-size:clamp(12px,3vw,20px);gap:.6rem;}
+}

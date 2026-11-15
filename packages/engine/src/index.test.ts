@@ -170,3 +170,23 @@ describe("responsive native window cascade", () => {
     expect(tiny.y+tiny.height).toBe(280);
   });
 });
+
+
+describe("source Win7 shell BSOD virtual view transition",()=>{
+  it("enters a simulated BSOD from desktop and restarts via existing boot flow",()=>{
+    const boot=initialDesktopState();
+    expect(desktopReducer(boot,{type:"BSOD",code:"DUMMY_BSOD"})).toBe(boot);
+    const logon=desktopReducer(boot,{type:"BOOT_COMPLETE"});
+    const desktop=desktopReducer(logon,{type:"GUEST_LOGIN"});
+    const opened=desktopReducer(desktop,{type:"OPEN_APP",app:appRegistry.get("cmd")!});
+    const bsod=desktopReducer(opened,{type:"BSOD",code:"DUMMY_BSOD"});
+    expect(bsod.phase).toBe("bsod");
+    expect(bsod.bsodCode).toBe("DUMMY_BSOD");
+    expect(bsod.windows).toHaveLength(0);
+    expect(bsod.startOpen).toBe(false);
+    const restarted=desktopReducer(bsod,{type:"RESTART"});
+    expect(restarted.phase).toBe("boot");
+    expect(restarted.bsodCode).toBeUndefined();
+    expect(restarted.windows).toHaveLength(0);
+  });
+});

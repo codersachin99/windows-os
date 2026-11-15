@@ -96,6 +96,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   shutdown:"Allows proper shutdown of the device.",
   hostname:"Prints the name of the current host.",
   systeminfo:"Displays device specific properties and configuration.",
+  bsod:"Displays a dummy Blue Screen Of Death.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -584,7 +585,7 @@ export class SourceCmdSession {
     private readonly openWindows?: ()=>readonly SourceCmdOpenWindow[],
     private readonly terminateWindow?: (windowId:string)=>void,
     /** Original ot.logoff/shutdown: change simulated shell view, never the host OS. */
-    private readonly changeView?: (view:"Logon"|"Shutdown")=>void,
+    private readonly changeView?: (view:"Logon"|"Shutdown"|"Bsod")=>void,
     /** Source getDeviceInfo: browser adapter, never native host info. */
     private readonly getDeviceInfo?: ()=>Promise<SourceCmdDeviceInfo>
   ){
@@ -948,6 +949,13 @@ export class SourceCmdSession {
           output=["The system cannot find the file "+programName+"."];
           errorlevel=1;
         }
+      }
+    }else if(name==="bsod"){
+      // Pinned ot.bsod host.changeView({view:"Bsod",error:"DUMMY_BSOD"}).
+      if(this.changeView)this.changeView("Bsod");
+      else{
+        output=["The simulated system view is unavailable."];
+        errorlevel=1;
       }
     }else if(name==="logoff"||name==="shutdown"){
       // Original ot.logoff/shutdown delegates to host.changeView; these are

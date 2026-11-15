@@ -19,7 +19,7 @@ interface CmdAppProps{
   onLaunchProgram?(programId:string):boolean;
   onListWindows?():readonly {id:string;appId:string}[];
   onTerminateWindow?(windowId:string):void;
-  onChangeView?(view:"Logon"|"Shutdown"):void;
+  onChangeView?(view:"Logon"|"Shutdown"|"Bsod"):void;
 }
 /**
  * Pinned source cmd.js window b894 / Ht: black monospace console, one

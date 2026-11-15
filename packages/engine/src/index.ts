@@ -111,6 +111,10 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
       return { ...state, phase: "logon", session: null, windows: [], startOpen: false, selectedIcon: null };
     case "SHUTDOWN":
       return { ...state, phase: "shutdown", startOpen: false, windows: [] };
+    case "BSOD":
+      return state.phase==="desktop"
+        ?{...state,phase:"bsod",bsodCode:action.code,startOpen:false,windows:[]}
+        :state;
     case "RESTART": {
       const restored = initialDesktopState();
       return { ...restored, theme: state.theme, wallpaper: state.wallpaper };

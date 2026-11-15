@@ -389,3 +389,18 @@ test("original CMD SYSTEMINFO prints the source web-device configuration",async(
   await expect(output).toContainText("Battery:");
   await expect(output).not.toContainText("The simulated device information is unavailable.");
 });
+
+
+test("source CMD BSOD opens the Win7 stop screen and click restarts the Guest simulator",async({page})=>{
+  const {input}=await launchSourceCommandPrompt(page);
+  await execute(input,"bsod");
+  const screen=page.locator("[data-test-bsod-screen]");
+  await expect(screen).toBeVisible();
+  await expect(screen).toHaveCSS("background-color","rgb(1, 0, 173)");
+  await expect(screen).toContainText("ERROR_DUMMY_BSOD");
+  await expect(screen).toContainText("Technical information:");
+  await expect(screen).toContainText("*** STOP: 0x000000000");
+  await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
+  await screen.click({position:{x:8,y:8}});
+  await expect(page.locator("[data-test-boot-screen]")).toBeVisible();
+});
