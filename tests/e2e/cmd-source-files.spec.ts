@@ -243,3 +243,24 @@ test("source CMD nested CMD command displays original banner in the same Guest w
   await execute(input,"echo StillInGuest");
   await expect(output).toHaveText("StillInGuest");
 });
+
+
+test("original DIR /B /S /W lists the Guest subtree without invented entries",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"md Documents\\WideNested");
+  await execute(input,"echo first > Documents\\WideOne.txt");
+  await execute(input,"echo second > Documents\\WideNested\\WideTwo.txt");
+  await execute(input,"dir /b /s Documents\\*.txt");
+  await expect(output).toContainText("C:\\Users\\Guest\\Documents\\WideOne.txt");
+  await expect(output).toContainText(
+    "C:\\Users\\Guest\\Documents\\WideNested\\WideTwo.txt"
+  );
+  await execute(input,"dir /w Documents");
+  await expect(output).toContainText("[WideNested]");
+  await expect(output).toContainText("WideOne.txt");
+  await expect(output).toContainText("Volume Serial Number is");
+  await execute(input,"dir Documents\\WideOne.txt");
+  await expect(output).toContainText("Directory of C:\\Users\\Guest\\Documents");
+  await expect(output).toContainText("WideOne.txt");
+  await expect(output).not.toContainText("WideTwo.txt");
+});

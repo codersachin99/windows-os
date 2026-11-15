@@ -9,6 +9,8 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
   sourceCmdChainSegments,sourceCmdParseRedirect,
   sourceCmdPipelineSegments,sourceCmdRawRest,
+  sourceCmdDirDetailLine,sourceCmdDirSummary,sourceCmdDirWideLines,
+  SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
 async function createShell(waitForKey?: (message:string)=>Promise<string>){
@@ -65,7 +67,7 @@ describe("pinned cmd.js Tt prompt and first source command engine slice",()=>{
     expect(full.output).toContain(" Directory of C:\\Users\\Guest\\Documents");
     expect(full.output.some(line=>line.includes("z.txt"))).toBe(true);
     expect((await session.run("dir /b Documents\\*.txt")).output).toEqual(["a.txt","z.txt"]);
-    expect((await session.run("dir /s")).errorlevel).toBe(1);
+    expect((await session.run("dir /s")).errorlevel).toBe(0);
   });
 });
 
@@ -807,5 +809,78 @@ describe("original cmd.js ze.cmd interpreter banner command",()=>{
       .toContain("Starts a new instance");
     expect((await session.run("cmd && echo still-in-guest")).output)
       .toEqual([...SOURCE_CMD_BANNER,"still-in-guest"]);
+  });
+});
+
+
+describe("original cmd.js Te.dir source /B /S /W and formatting",()=>{
+  it("formats source pe rows, me totals and 5-column V(j()) in source order",()=>{
+    const item={uri:"/Virtual/demo.txt",name:"demo.txt",type:"file" as const,
+      size:12345,mtime:new Date(2024,1,3,14,5).getTime()};
+    expect(sourceCmdDirDetailLine(item))
+      .toBe("02/03/2024  02:05 PM            12,345 demo.txt");
+    expect(sourceCmdDirSummary(2,1,12500,300)[0])
+      .toContain("2 File(s)");
+    expect(sourceCmdDirSummary(2,1,12500,300)[1])
+      .toContain("300 bytes free");
+    expect(sourceCmdDirWideLines([
+      {name:"a",type:"file"},{name:"b",type:"file"},
+      {name:"c",type:"directory"},{name:"d",type:"file"},
+      {name:"e",type:"file"},{name:"f",type:"file"}
+    ])).toEqual(["a  c  e","b  d  f"]);
+    expect(SOURCE_CMD_DIR_MAX_DEPTH).toBe(12);
+    expect(SOURCE_CMD_DIR_MAX_ENTRIES).toBe(5000);
+  });
+  it("lists case-insensitive wildcard matches across real nested Guest folders",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.mkdir(root+"/Nested");
+    await fs.mkdir(root+"/Nested/Deep");
+    await fs.write("x",root+"/Alpha.TXT");
+    await fs.write("y",root+"/Nested/Beta.txt");
+    await fs.write("z",root+"/Nested/Deep/Gamma.TXT");
+    await fs.write("keep",root+"/Nested/Deep/ignored.log");
+    const bare=await session.run("dir /b /s Documents\\*.txt");
+    expect(bare.output).toEqual([
+      "C:\\Users\\Guest\\Documents\\Alpha.TXT",
+      "C:\\Users\\Guest\\Documents\\Nested\\Beta.txt",
+      "C:\\Users\\Guest\\Documents\\Nested\\Deep\\Gamma.TXT"
+    ]);
+    expect((await session.run("dir /b Documents\\Nested\\Deep")).output)
+      .toEqual(["Gamma.TXT","ignored.log"]);
+    expect((await session.run("dir /b Documents\\Alpha.TXT")).output)
+      .toEqual(["Alpha.TXT"]);
+  });
+  it("shows source volume/header/summary and wide directory brackets",async()=>{
+    const {fs,session}=await createShell();
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.mkdir(root+"/Nested");
+    await fs.write("hello",root+"/Example.txt");
+    const wide=await session.run("dir /w Documents");
+    expect(wide.errorlevel).toBe(0);
+    expect(wide.output).toContain(" Volume in drive C is System");
+    expect(wide.output.some(s=>s.includes("Volume Serial Number is"))).toBe(true);
+    expect(wide.output).toContain(" Directory of C:\\Users\\Guest\\Documents");
+    expect(wide.output.some(s=>s.includes("[Nested]"))).toBe(true);
+    expect(wide.output.some(s=>s.includes("Example.txt"))).toBe(true);
+    expect(wide.output.some(s=>s.includes("1 File(s)"))).toBe(true);
+    expect(wide.output.some(s=>s.includes("1 Dir(s)"))).toBe(true);
+    const full=await session.run("dir Documents");
+    expect(full.output.some(s=>s.includes("<DIR>")&&s.includes("Nested"))).toBe(true);
+    expect(full.output.some(s=>/^\d\d\/\d\d\/\d{4}/.test(s))).toBe(true);
+  });
+  it("bounds recursive listings at source 12 levels and rejects invalid flags",async()=>{
+    const {fs,session}=await createShell();
+    let path="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    for(let i=0;i<14;i++){
+      path+="/Level"+i;
+      await fs.mkdir(path);
+      await fs.write(String(i),path+"/log.txt");
+    }
+    const listing=await session.run("dir /b /s Documents\\*.txt");
+    expect(listing.errorlevel).toBe(0);
+    expect(listing.output.some(s=>s.includes("Level11\\log.txt"))).toBe(true);
+    expect(listing.output.some(s=>s.includes("Level12\\log.txt"))).toBe(false);
+    expect((await session.run("dir /z Documents")).errorlevel).toBe(1);
   });
 });

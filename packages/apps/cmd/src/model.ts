@@ -329,6 +329,54 @@ export function sourceCmdRawRest(value:string):string{
   return index<0?"":remaining.slice(index);
 }
 
+/** Source cmd.js Te.dir constants Se=12 and Ce=5000. */
+export const SOURCE_CMD_DIR_MAX_DEPTH=12;
+export const SOURCE_CMD_DIR_MAX_ENTRIES=5000;
+/** Source z(): group integer byte counts with commas. */
+export function sourceCmdInteger(n:number):string{
+  return Math.abs(Math.trunc(Number(n)||0)).toLocaleString("en-US");
+}
+/** Source pe(): Win7 date/time, 14-character size/<DIR> field and file name. */
+export function sourceCmdDirDetailLine(file:FileEntry):string{
+  const date=new Date(file.mtime);
+  const pad=(value:number)=>String(value).padStart(2,"0");
+  const day=pad(date.getMonth()+1)+"/"+pad(date.getDate())+
+    "/"+date.getFullYear();
+  const hours=pad(date.getHours()%12||12)+":"+pad(date.getMinutes())+
+    " "+(date.getHours()<12?"AM":"PM");
+  const size=file.type==="directory"?"<DIR>".padEnd(14):
+    sourceCmdInteger(file.size).padStart(14);
+  return (day+"  "+hours+"    "+size).padEnd(38)+" "+file.name;
+}
+/** Source fe()/me(): fixed 39-column, width-aligned totals. */
+export function sourceCmdDirSummary(
+  files:number,dirs:number,bytes:number,free:number
+):string[]{
+  const format=(count:number,label:string,value:number,suffix="")=>{
+    const leading=sourceCmdInteger(count).padStart(16)+" "+label;
+    return leading+sourceCmdInteger(value).padStart(39-leading.length)+
+      " bytes"+suffix;
+  };
+  return [format(files,"File(s)",bytes),format(dirs,"Dir(s)",free," free")];
+}
+/** Source V(j(lines,5)): up to five dynamically spaced columns, filled
+ * column-first instead of row-first, with [brackets] around directories. */
+export function sourceCmdDirWideLines(
+  entries:readonly Pick<FileEntry,"name"|"type">[]
+):string[]{
+  const values=entries.map(file=>file.type==="directory"?
+    "["+file.name+"]":file.name);
+  const rowCount=Math.ceil(values.length/5);
+  if(!rowCount)return [];
+  const rows=Array.from({length:rowCount},(_,row)=>
+    Array.from({length:5},(_,col)=>values[col*rowCount+row]??"")
+      .filter((value,col)=>value!==""||col===0));
+  const widths=Array.from({length:5},(_,column)=>
+    Math.max(0,...rows.map(row=>row[column]?.length??0)));
+  return rows.map(row=>row.map((cell,col)=>
+    col===row.length-1?cell:cell.padEnd(widths[col]+2)).join(""));
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -905,46 +953,93 @@ export class SourceCmdSession {
       const previous=this.directoryStack.pop();
       if(previous)this.cwd=previous;
     }else if(name==="dir"){
-      const parts=(args.match(/"[^"]*"|\S+/g)??[]).map(t=>
-        t.startsWith('"')&&t.endsWith('"')?t.slice(1,-1):t);
-      const flags=parts.filter(t=>t.startsWith("/")).map(t=>t.slice(1).toLowerCase());
-      const path=parts.filter(t=>!t.startsWith("/")).join(" ").trim()||".";
-      if(flags.some(f=>f!=="b")){
+      const tokens=sourceCmdArguments(args);
+      const flags=tokens.filter(token=>token.startsWith("/"))
+        .map(token=>token.slice(1).toLowerCase());
+      const target=tokens.find(token=>!token.startsWith("/"))||".";
+      const bare=flags.includes("b");
+      const wide=flags.includes("w");
+      const recursive=flags.includes("s");
+      if(flags.some(flag=>!["b","s","w"].includes(flag))){
         output=["The requested DIR option is not yet available in this migration."];
         errorlevel=1;
       }else{
         try{
-          // Source DIR uses actual filesystem metadata and a case-insensitive
-          // filename predicate; never fabricate disk entries or host paths.
-          let dir=path;
-          let pattern="*";
-          if(/[*?]/.test(path)){
-            const last=Math.max(path.lastIndexOf("/"),path.lastIndexOf("\\"));
-            pattern=path.slice(last+1);
-            dir=last<0?".":path.slice(0,last+1);
-          }
-          const dest=this.resolve(dir);
-          if(!dest.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
+          // Original De(): existing directory -> '*', otherwise use its
+          // parent and filename, even for a concrete file with no wildcard.
+          const resolved=this.resolve(target);
+          if(!resolved.uri){output=[DRIVE_NOT_FOUND];errorlevel=1;}
           else{
-            const stat=await this.fs.stat(dest.uri);
-            if(stat?.type!=="directory"){output=[PATH_NOT_FOUND];errorlevel=1;}
-            else{
-              const entries:(FileEntry[])=(await this.fs.list(dest.uri))
-                .filter(item=>matchFilePattern(item.name,pattern))
-                .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:"base"}));
-              if(flags.includes("b"))output=entries.map(item=>item.name);
-              else{
-                output=[""," Directory of "+dest.win,""];
-                if(!entries.length)output.push("File Not Found");
-                for(const entry of entries){
-                  const size=entry.type==="directory"?"<DIR>":String(entry.size);
-                  output.push(size.padStart(8)+"  "+entry.name);
+            const existing=/[*?]/.test(target)?null:
+              await this.fs.stat(resolved.uri);
+            const separator=resolved.win.lastIndexOf("\\");
+            const win=existing?.type==="directory"?resolved.win:
+              resolved.win.slice(0,Math.max(3,separator));
+            const pattern=existing?.type==="directory"?"*":
+              resolved.win.slice(separator+1);
+            const directory=this.resolve(win);
+            const drive=directory.win[0]?.toUpperCase();
+            const metadata=this.volume.pathConfig.drives.find(d=>
+              d.letter.toUpperCase()===drive);
+            if(!metadata||!directory.uri){
+              output=[DRIVE_NOT_FOUND];errorlevel=1;
+            }else if((await this.fs.stat(directory.uri))?.type!=="directory"){
+              output=[PATH_NOT_FOUND];errorlevel=1;
+            }else{
+              const label=metadata.label??"";
+              const free=Math.max((metadata.size??0)-(metadata.used??0),0);
+              const counts={files:0,dirs:0,bytes:0,entries:0};
+              const result:string[]=[];
+              if(!bare)result.push(
+                " Volume in drive "+drive+" is "+label,
+                " Volume Serial Number is "+sourceCmdVolumeSerial(drive,label)
+              );
+              const visit=async(path:string,depth:number):Promise<void>=>{
+                if(counts.entries>=SOURCE_CMD_DIR_MAX_ENTRIES)return;
+                const folder=this.resolve(path);
+                if(!folder.uri)return;
+                let all:FileEntry[];
+                try{all=await this.fs.list(folder.uri);}
+                catch{return;}
+                const matches=all.filter(item=>matchFilePattern(item.name,pattern))
+                  .sort((a,b)=>a.name.localeCompare(b.name,undefined,
+                    {sensitivity:"base"}));
+                if(!bare){
+                  result.push(""," Directory of "+folder.win,"");
+                  if(!matches.length)result.push("File Not Found");
                 }
-                const nFiles=entries.filter(f=>f.type==="file");
-                output.push("       "+nFiles.length+" File(s)  "+
-                  nFiles.reduce((sum,f)=>sum+f.size,0)+" bytes");
-                output.push("       "+(entries.length-nFiles.length)+" Dir(s)");
+                const wideList:FileEntry[]=[];
+                for(const item of matches){
+                  if(counts.entries>=SOURCE_CMD_DIR_MAX_ENTRIES)break;
+                  counts.entries++;
+                  if(item.type==="directory")counts.dirs++;
+                  else{counts.files++;counts.bytes+=item.size;}
+                  if(bare){
+                    const full=folder.win.replace(/\\$/,"")+"\\"+item.name;
+                    result.push(recursive?full:item.name);
+                  }else if(wide)wideList.push(item);
+                  else result.push(sourceCmdDirDetailLine(item));
+                }
+                if(wide&&wideList.length)
+                  result.push(...sourceCmdDirWideLines(wideList));
+                if(!recursive||depth>=SOURCE_CMD_DIR_MAX_DEPTH)return;
+                for(const item of all){
+                  if(counts.entries>=SOURCE_CMD_DIR_MAX_ENTRIES)break;
+                  if(item.type!=="directory")continue;
+                  await visit(folder.win.replace(/\\$/,"")+"\\"+item.name,depth+1);
+                }
+              };
+              await visit(directory.win,0);
+              if(!bare){
+                result.push(...sourceCmdDirSummary(
+                  counts.files,counts.dirs,counts.bytes,free
+                ));
+                if(counts.entries>=SOURCE_CMD_DIR_MAX_ENTRIES){
+                  result.push("(listing stopped after "+
+                    SOURCE_CMD_DIR_MAX_ENTRIES+" entries)");
+                }
               }
+              output=result;
             }
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
