@@ -933,3 +933,9 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - [First PAUSE/RD/DEL CI #43682005351](https://github.com/codersachin99/windows-os/actions/runs/43682005351) **FAILED exactly one stale unit assertion** (397/398 passed); TypeScript passed, later stages skipped. The old DEL test was still asserting a live *.txt pattern should fail, but original Te.del now correctly removes matching files. Replaced it with nonexistent *.log and retained named-file/directory protections.
 - No source runtime changes. This commit opts into a new single [run-ci] to verify the corrected cumulative tests and desktop/mobile browser scenarios. No pass claim until completion; draft PR #1, main untouched, no release.
+
+
+## Original CMD banner command — 2026-11-15 (CI pending)
+
+- Added source ze.cmd: prints original Win7 host.getBanner contents within current simulated session, no new window, no host process. Unit/browser contracts and HELP registration added.
+- No [run-ci] while PAUSE/RD/DEL acceptance #43682097876 remains active. Batch with next opt-in verification. PR #1 draft, main untouched, no release.

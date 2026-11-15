@@ -228,3 +228,14 @@ test("source CMD DEL all-files confirmation preserves folders and respects N/Y",
   await expect(output).not.toContainText("Note.txt");
   await expect(output).toContainText("ChildFolder");
 });
+
+
+test("source CMD nested CMD command displays original banner in the same Guest window",async({page})=>{
+  const {cmd,input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"cmd");
+  await expect(output).toContainText("Microsoft Windows [Version 6.1.7600]");
+  await expect(output).toContainText("Copyright (c) 2009");
+  await expect(cmd).toHaveCount(1);
+  await execute(input,"echo StillInGuest");
+  await expect(output).toHaveText("StillInGuest");
+});

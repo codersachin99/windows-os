@@ -164,3 +164,8 @@ Pinned original cmd.js De() treats an existing directory as pattern *, uses its 
 ## CMD DEL original wildcard existing-test contract repair — 15 November 2026
 
 Combined [CI #43682005351](https://github.com/codersachin99/windows-os/actions/runs/43682005351) failed one stale Vitest assertion out of 398 tests after source DEL *.txt was intentionally made functional. The earlier test assumed all wildcard deletes are rejected and used the only remaining .txt file as a sentinel, so the newly supported pattern properly deleted it and returned status zero. Corrected that old safeguard test to attempt a nonexistent *.log pattern instead. Separate new tests already verify actual wildcard deletion and Y/N confirmation. This is a test-only change; source DEL implementation remains unchanged. One follow-up [run-ci] requested for the combined interaction acceptance and browser suite. Do not claim green until that run completes.
+
+
+## Original ze.cmd nested interpreter banner — 15 November 2026
+
+Source cmd.js ze.cmd does not start a host subprocess or another simulator CMD window; it invokes host.getBanner and writes those lines into the same console. Ported the exact original Win7 banner through existing SOURCE_CMD_BANNER for the CMD command, with HELP metadata and real model/browser regression tests. Kept simulator permissions and window lifecycle unchanged. This commit deliberately omits [run-ci] while the previous PAUSE/RD/DEL full CI runs; batch later. Screenshot parity remains pending.

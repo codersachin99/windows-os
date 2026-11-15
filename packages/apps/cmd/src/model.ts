@@ -62,6 +62,7 @@ export const SOURCE_CMD_BANNER=[
 
 export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   cd:"Displays the name of or changes the current directory.",
+  cmd:"Starts a new instance of the Windows command interpreter.",
   color:"Sets the default console foreground and background colors.",
   copy:"Copies one or more files to another location.",
   move:"Moves one or more files from one directory to another directory.",
@@ -642,6 +643,9 @@ export class SourceCmdSession {
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
       }
+    }else if(name==="cmd"){
+      // Pinned source ze.cmd writes host.getBanner(); no nested host process.
+      output=[...SOURCE_CMD_BANNER];
     }else if(name==="ver"){
       output=["",SOURCE_CMD_BANNER[0]];
     }else if(name==="title"){

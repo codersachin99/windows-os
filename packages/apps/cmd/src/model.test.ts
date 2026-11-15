@@ -795,3 +795,17 @@ describe("pinned Te.del, De(), xe() and ke() Guest wildcard confirmation",()=>{
     expect(await fs.read(root+"/precious.txt")).toBe("keep");
   });
 });
+
+
+describe("original cmd.js ze.cmd interpreter banner command",()=>{
+  it("prints the pinned simulated Win7 banner without opening host processes",async()=>{
+    const {session}=await createShell();
+    const result=await session.run("cmd");
+    expect(result.output).toEqual([...SOURCE_CMD_BANNER]);
+    expect(result.errorlevel).toBe(0);
+    expect((await session.run("help cmd")).output[0])
+      .toContain("Starts a new instance");
+    expect((await session.run("cmd && echo still-in-guest")).output)
+      .toEqual([...SOURCE_CMD_BANNER,"still-in-guest"]);
+  });
+});
