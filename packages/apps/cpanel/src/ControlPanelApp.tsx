@@ -27,9 +27,9 @@ export interface ControlPanelAppProps{
   /** Original Vuex Action Center history when available; no fabricated alerts. */
   messages?:readonly SourceControlPanelActionMessage[];
 }
-/** Source cpanel.js a259: address breadcrumbs, back/forward history,
- * instant search, tiles root and navigated panel body. The first real panel
- * is the original Display view; remaining panels are tracked, not invented. */
+/** Source cpanel.js a259 and pinned 3097 registry: breadcrumb/history,
+ * original 24-tile root, indexed task search and six genuinely migrated
+ * destinations. Other setting/program targets stay visibly disabled. */
 export function ControlPanelApp({
   onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange,
   filesystem,messages=[]
