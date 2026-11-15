@@ -1,3 +1,16 @@
+## Source registry unit assertion correction (15 November 2026)
+
+[CI #43731769836](https://github.com/codersachin99/windows-os/actions/runs/43731769836)
+passed strict TypeScript, then failed **one newly authored unit assertion**;
+**468 of 469 Vitest tests passed**. The test incorrectly used
+`toMatchObject({tasks:[{label:"Back up your computer"}]})` on the pinned
+Backup entry, but the exact source correctly defines **two tasks**, backup
+and restore. Commit 80c481d now explicitly checks both labels without
+changing production registry code. This is the single new deliberate
+**[run-ci]** full gate after the two acceptance-test-only corrections.
+Do not claim the target passed until its exact run completes. Main remains
+untouched; draft PR #1 stays open.
+
 ## Source registry CI TypeScript correction — 15 November 2026
 
 [Opt-in run #43731673649](https://github.com/codersachin99/windows-os/actions/runs/43731673649)
