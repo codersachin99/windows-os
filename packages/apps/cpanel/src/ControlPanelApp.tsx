@@ -4,6 +4,7 @@ import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
   type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
+import {SourceListView} from "@windows-os/ui/listview";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelResolutions,
@@ -303,8 +304,7 @@ export function ControlPanelApp({
       </div>:<div className="windows-cpanel__home"
         data-test-cpanel-items="">
         <h2>Adjust your device's settings</h2>
-        <div className="windows-cpanel__source-list" role="group"
-          aria-label="Control Panel items">
+        <SourceListView variant="tiles" className="windows-cpanel__source-list">
           {sourceItems.map(item=><button type="button" key={item.id}
             data-test-cpanel-item={item.id}
             className="windows-cpanel__tile"
@@ -315,7 +315,7 @@ export function ControlPanelApp({
             <img src={sourceIcon(item)} alt="" width={44} height={44}/>
             <span>{item.label}</span>
           </button>)}
-        </div>
+        </SourceListView>
       </div>}
     </div>
   </section>;
