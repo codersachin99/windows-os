@@ -167,7 +167,8 @@ test("original Backup and Restore downloads a ZIP and restores a removed Guest f
   await panel.locator("[data-test-backup-button]").click();
   const download=await downloadEvent;
   expect(download.suggestedFilename()).toMatch(/^win7simu-backup-\d+\.zip$/);
-  const archive=await import("node:fs/promises").then(fs=>fs.readFile(download.path()));
+  const archive=await import("node:fs/promises").then(async fs=>
+    fs.readFile(await download.path()));
   await expect(panel.locator('[data-test-backup-status="success"]'))
     .toContainText("A backup of your files has been created.");
   await expect(panel.locator("[data-test-last-backup]"))
