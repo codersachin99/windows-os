@@ -1059,3 +1059,35 @@ describe("source ze.winver opens the already-registered About Windows dialog",()
     expect(result.output).toEqual(["The system cannot find the file winver."]);
   });
 });
+
+
+describe("pinned original ot.logoff and ot.shutdown simulator lifecycle bridges",()=>{
+  it("routes LOGOFF and SHUTDOWN to the simulated view host, not the native OS",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();
+    await ensureSourceGuestDirectories(fs);
+    const views:string[]=[];
+    const shell=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,undefined,undefined,undefined,
+      view=>views.push(view));
+    const off=await shell.run("logoff");
+    expect(off.errorlevel).toBe(0);
+    expect(off.output).toEqual([]);
+    expect(views).toEqual(["Logon"]);
+    const power=await shell.run("SHUTDOWN");
+    expect(power.errorlevel).toBe(0);
+    expect(power.output).toEqual([]);
+    expect(views).toEqual(["Logon","Shutdown"]);
+    expect((await shell.run("help logoff")).output)
+      .toContain("Logs the current user off.");
+    expect((await shell.run("help shutdown")).output)
+      .toContain("Allows proper shutdown of the device.");
+  });
+  it("refuses fake success without a simulated view adapter",async()=>{
+    const {session}=await createShell();
+    const result=await session.run("shutdown");
+    expect(result.errorlevel).toBe(1);
+    expect(result.output).toEqual(["The simulated system view is unavailable."]);
+  });
+});

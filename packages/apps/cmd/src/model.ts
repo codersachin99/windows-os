@@ -92,6 +92,8 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   taskkill:"Terminates a running task.",
   ipconfig:"Displays all current TCP/IP network configuration values.",
   winver:"Displays the version of Windows.",
+  logoff:"Logs the current user off.",
+  shutdown:"Allows proper shutdown of the device.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -471,7 +473,9 @@ export class SourceCmdSession {
     /** Source ze.start host bridge: run only registered simulated apps. */
     private readonly launchProgram?: (programId:string)=>boolean,
     private readonly openWindows?: ()=>readonly SourceCmdOpenWindow[],
-    private readonly terminateWindow?: (windowId:string)=>void
+    private readonly terminateWindow?: (windowId:string)=>void,
+    /** Original ot.logoff/shutdown: change simulated shell view, never the host OS. */
+    private readonly changeView?: (view:"Logon"|"Shutdown")=>void
   ){
     const initial=volume.toWindowsPath(startUri);
     if(!initial)throw new Error("CMD starting directory is not mounted");
@@ -818,6 +822,14 @@ export class SourceCmdSession {
           output=["The system cannot find the file "+programName+"."];
           errorlevel=1;
         }
+      }
+    }else if(name==="logoff"||name==="shutdown"){
+      // Original ot.logoff/shutdown delegates to host.changeView; these are
+      // Guest simulator transitions, not system or browser shutdown requests.
+      if(this.changeView)this.changeView(name==="logoff"?"Logon":"Shutdown");
+      else{
+        output=["The simulated system view is unavailable."];
+        errorlevel=1;
       }
     }else if(name==="winver"){
       // Source ze.winver has program:"about": only the registered Guest

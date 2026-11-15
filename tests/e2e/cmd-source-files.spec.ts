@@ -337,3 +337,21 @@ test("original CMD WINVER reuses the installed About Windows dialog host",async(
   await expect(about).toHaveCount(0);
   await expect(cmd).toBeVisible();
 });
+
+
+test("original CMD LOGOFF returns to the Guest logon screen",async({page})=>{
+  const {input}=await launchSourceCommandPrompt(page);
+  await execute(input,"logoff");
+  await expect(page.locator('[data-test-avatar="win7"]')).toBeVisible();
+  await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
+  await expect(page.locator("#desktop-icons")).toHaveCount(0);
+});
+
+test("original CMD SHUTDOWN uses the simulator shutdown view only",async({page})=>{
+  const {input}=await launchSourceCommandPrompt(page);
+  await execute(input,"shutdown");
+  await expect(page.locator(".windows-shutdown")).toBeVisible();
+  await expect(page.getByText("Windows is shutting down")).toBeVisible();
+  await expect(page.getByRole("button",{name:"Restart WindowsOS"})).toBeVisible();
+  await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
+});

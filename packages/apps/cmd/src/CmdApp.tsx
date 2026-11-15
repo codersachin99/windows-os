@@ -19,6 +19,7 @@ interface CmdAppProps{
   onLaunchProgram?(programId:string):boolean;
   onListWindows?():readonly {id:string;appId:string}[];
   onTerminateWindow?(windowId:string):void;
+  onChangeView?(view:"Logon"|"Shutdown"):void;
 }
 /**
  * Pinned source cmd.js window b894 / Ht: black monospace console, one
@@ -26,7 +27,7 @@ interface CmdAppProps{
  * command history. Remaining commands and terminal pixel parity pending.
  */
 export function CmdApp({
-  onClose,onTitleChange,onLaunchProgram,onListWindows,onTerminateWindow
+  onClose,onTitleChange,onLaunchProgram,onListWindows,onTerminateWindow,onChangeView
 }:CmdAppProps){
   const launchRef=useRef(onLaunchProgram);
   launchRef.current=onLaunchProgram;
@@ -34,6 +35,8 @@ export function CmdApp({
   listRef.current=onListWindows;
   const terminateRef=useRef(onTerminateWindow);
   terminateRef.current=onTerminateWindow;
+  const changeViewRef=useRef(onChangeView);
+  changeViewRef.current=onChangeView;
   const [entries,setEntries]=useState<SourceCmdResult[]>([]);
   const pendingEntry=useRef<SourceCmdResult|null>(null);
   const keyResolver=useRef<((key:string)=>void)|null>(null);
@@ -54,7 +57,8 @@ export function CmdApp({
         return new Promise<string>(resolve=>{keyResolver.current=resolve;});
       },programId=>launchRef.current?.(programId)??false,
       ()=>listRef.current?.()??[],
-      windowId=>terminateRef.current?.(windowId));}
+      windowId=>terminateRef.current?.(windowId),
+      view=>changeViewRef.current?.(view));}
     catch{return null;}
   },[volume]);
   const [input,setInput]=useState("");
