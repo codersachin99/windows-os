@@ -275,11 +275,21 @@ export async function sourceRestoreBackupArchive(
       parent=getParentDirectory(parent);
     }
   }
-  for(const path of [...parents].sort((a,b)=>a.split("/").length-b.split("/").length)){
+  // Preflight every required directory before the first filesystem write.
+  // An invalid ZIP with a file occupying another entry's parent must not
+  // leave partly-created directories behind.
+  const targetNames=new Set(fresh.map(file=>file.path.toLocaleLowerCase()));
+  const orderedParents=[...parents].sort((a,b)=>
+    a.split("/").length-b.split("/").length);
+  const missingParents:string[]=[];
+  for(const path of orderedParents){
+    if(targetNames.has(path.toLocaleLowerCase()))
+      fail("file and folder collision");
     const existing=await filesystem.stat(path);
     if(existing?.type==="file")throw new Error("Restore parent is a file: "+path);
-    if(!existing)await filesystem.mkdir(path);
+    if(!existing)missingParents.push(path);
   }
+  for(const path of missingParents)await filesystem.mkdir(path);
   if(fresh.length)await filesystem.createFilesAtomic(fresh);
   restored=fresh.length;
   report(options.onProgress,"restore","done",files.length,files.length,
