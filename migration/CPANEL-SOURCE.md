@@ -1,3 +1,17 @@
+## Source registry acceptance follow-up — 15 November 2026
+
+The earlier Display-only migration section below is a historical checkpoint.
+The root now uses 24 pinned 3097 entries, source a682 task/keyword search,
+tile-mode ordering and exact Win7 source artwork for all registry items.
+All six navigable panel destinations exist; unsupported host-setting and
+unmigrated program targets remain visible but disabled. See
+[migration/CPANEL-REGISTRY-SOURCE.md](CPANEL-REGISTRY-SOURCE.md) and
+[migration/CPANEL-BACKUP-SPEC.md](CPANEL-BACKUP-SPEC.md).
+Previous backup CI #43724080733 passed 424/426 browser tests and failed
+only the expected skipped-shortcuts count in the source Guest backup
+test (34 existing AppData entries); a corrected browser assertion is
+committed. Do not declare source/visual parity before the next CI batch.
+
 # Source Control Panel a259 / Display — initial navigable React slice
 
 Pinned source: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
