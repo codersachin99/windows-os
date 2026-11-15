@@ -124,3 +124,21 @@ test("source CMD > and >> redirects to the real mounted Guest document store",as
   await expect(output).toContainText("end");
   await expect(output).not.toContainText("original");
 });
+
+
+test("source CMD SORT FIND MORE pipeline uses shared Guest files and final redirect",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"echo zebra > Documents\\PipeBrowser.txt");
+  await execute(input,"echo Apple >> Documents\\PipeBrowser.txt");
+  await execute(input,"echo apple >> Documents\\PipeBrowser.txt");
+  await execute(input,'type Documents\\PipeBrowser.txt | find /i /c "apple"');
+  await expect(output).toHaveText("---------- : 2");
+  await execute(input,'type Documents\\PipeBrowser.txt | sort /r | find /i "apple"');
+  await expect(output).toContainText(/apple/i);
+  await execute(input,"type Documents\\PipeBrowser.txt | more > Documents\\PipeCopy.txt");
+  await execute(input,"type Documents\\PipeCopy.txt");
+  await expect(output).toContainText("zebra");
+  await expect(output).toContainText("Apple");
+  await execute(input,'echo "not a | command" | more');
+  await expect(output).toContainText("not a | command");
+});

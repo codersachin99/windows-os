@@ -872,3 +872,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - [Combined CI #43678975812](https://github.com/codersachin99/windows-os/actions/runs/43678975812) **FAILED four unit assertions** (376/380 pass). TypeScript passed; remaining audits/build/browser were skipped. The failing fixtures incorrectly discarded trailing spaces before operators, though original pinned cmd.js St/Te.echo preserves them. Source implementation preserves exact text.
 - Corrected expected output and CRLF bytes to retain original trailing spaces. Browser tests now match whitespace flexibly while still asserting order. No production changes; one [run-ci] recheck requested. No green claim until conclusion.
+
+
+## CMD yt() pipeline FIND/SORT/MORE — 2026-11-15 (CI batched later)
+
+- Pinned yt()/Tt.runPipeline and ie FIND/SORT/MORE implemented with original quote-aware pipe splitter, stage output forwarding, Guest file read input and source flags. Intermediate output is hidden, final output may be sent to source wt() redirect. Source helper and real Guest unit/browser contracts included.
+- No host process is run. This commit intentionally omits [run-ci] while existing chain+redirect retest #43679131656 remains active. Run a single opt-in CI on a later combined checkpoint after inspecting current results.
+- Still pending: CMD batches, host interactions/confirmation and screenshot parity, plus other source commands. Keep PR #1 draft, main untouched and no release.

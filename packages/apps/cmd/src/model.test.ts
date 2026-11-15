@@ -7,7 +7,8 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdVolumeSerial,sourceCmdDateValue,sourceCmdTimeValue,
   sourceCmdCompletionTarget,sourceCmdApplyCompletion,
   sourceCmdTrimEntries,SOURCE_CMD_MAX_TRANSCRIPT_ENTRIES,
-  sourceCmdChainSegments,sourceCmdParseRedirect} from "./model";
+  sourceCmdChainSegments,sourceCmdParseRedirect,
+  sourceCmdPipelineSegments} from "./model";
 
 async function createShell(){
   const fs=new VirtualFileStore();
@@ -527,5 +528,61 @@ describe("source cmd.js wt()/Tt.writeFile output redirects",()=>{
     expect(unknown.errorlevel).toBe(0);
     expect((await fs.read("/EXTERNAL/computer/drive0/Users/Guest/Documents/error.txt")))
       .toContain("not recognized as an internal or external command");
+  });
+});
+
+
+describe("original cmd.js yt()/ie FIND SORT MORE source VFS pipelines",()=>{
+  it("splits unquoted pipes but never pipe art inside quotes",()=>{
+    expect(sourceCmdPipelineSegments('echo "a | b" | find /i "A" | more'))
+      .toEqual(['echo "a | b" ',' find /i "A" ',' more']);
+    expect(sourceCmdPipelineSegments("echo intact")).toEqual(["echo intact"]);
+  });
+  it("filters case-insensitively and counts or inverts original Guest file lines",async()=>{
+    const {fs,session}=await createShell();
+    const path="/EXTERNAL/computer/drive0/Users/Guest/Documents/pipeline.txt";
+    await fs.write("zebra\r\nApple\r\napple\r\n",path);
+    expect((await session.run('find /i "apple" Documents\\pipeline.txt')).output)
+      .toEqual(["Apple","apple"]);
+    expect((await session.run('find /c "apple" Documents\\pipeline.txt')).output)
+      .toEqual(["---------- : 1"]);
+    expect((await session.run('find /v "apple" Documents\\pipeline.txt')).output)
+      .toEqual(["zebra","Apple",""]);
+    expect((await session.run('find "missing" Documents\\pipeline.txt')).errorlevel)
+      .toBe(1);
+    expect((await session.run('find /c "missing" Documents\\pipeline.txt')).errorlevel)
+      .toBe(0);
+    expect((await session.run("more Documents\\pipeline.txt")).output)
+      .toEqual(["zebra","Apple","apple",""]);
+    expect((await session.run("more Q:\\not-mounted.txt")).output)
+      .toEqual(["The system cannot find the file specified."]);
+  });
+  it("pipes through actual source SORT/FIND/MORE and redirects only last stage",async()=>{
+    const {fs,session}=await createShell();
+    await fs.write("zebra\r\nApple\r\napple\r\n",
+      "/EXTERNAL/computer/drive0/Users/Guest/Documents/pipeline.txt");
+    expect((await session.run("type Documents\\pipeline.txt | sort /r")).output)
+      .toEqual(["zebra","apple","Apple",""]);
+    const filtered=await session.run('type Documents\\pipeline.txt | find /i "apple" | more');
+    expect(filtered.output).toEqual(["Apple","apple"]);
+    expect(filtered.errorlevel).toBe(0);
+    const count=await session.run('type Documents\\pipeline.txt | find /i /c "apple"');
+    expect(count.output).toEqual(["---------- : 2"]);
+    const directed=await session.run(
+      'type Documents\\pipeline.txt | find /i "apple" > Documents\\filtered.txt'
+    );
+    expect(directed.output).toEqual([]);
+    expect(await fs.read("/EXTERNAL/computer/drive0/Users/Guest/Documents/filtered.txt"))
+      .toBe("Apple\r\napple\r\n");
+    expect((await session.run('echo "a | b" | more')).output)
+      .toEqual(['"a | b" ']);
+  });
+  it("handles malformed FIND and file errors without native host pipelines",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("find")).output)
+      .toEqual(["The syntax of the command is incorrect."]);
+    expect((await session.run('sort Q:\\host-secret.txt')).output)
+      .toEqual(["The system cannot find the file specified."]);
+    expect((await session.run('echo sample | find missing')).errorlevel).toBe(1);
   });
 });

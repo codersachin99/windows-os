@@ -125,3 +125,8 @@ false
 ## Original Te.echo retains space before source operators — 15 November 2026
 
 Combined [CI #43678975812](https://github.com/codersachin99/windows-os/actions/runs/43678975812) failed four unit fixtures that stripped source-preserved whitespace (echo Alpha > file writes "Alpha " plus CRLF). The pinned Te.echo strips only its first separating space; it does not trim trailing whitespace. Corrected the expected transcript, file bytes and browser assertions without changing production code. The follow-up [run-ci] checks the cumulative source chain, redirect, exact icon and transcript cap.
+
+
+## Source yt() pipes and ie FIND/SORT/MORE — 15 November 2026
+
+Pinned original cmd.js yt() splits only unquoted vertical bars into pipeline stages. Original Tt.runPipeline buffers intermediate stage output and passes it as piped input to the next command, with only final output displayed (or written to Guest VFS through wt redirection). The original ie commands FIND (V/C/I flags, case-sensitive by default, "---------- : N" count), SORT (base-insensitive order and /R reverse) and MORE (pass-through for simulator) read files or piped input using se(). Ported source-backed counterparts with a reusable quote-aware splitter and real mounted Guest file reads. No native process pipelines. Added pure model and browser integration contracts including real Guest Documents piping and redirection. In-progress implementation; this commit deliberately skips CI while the previous corrected chain/redirect acceptance batch runs. Original visual/screenshot parity remains pending.

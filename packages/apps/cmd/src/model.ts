@@ -62,6 +62,9 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   pushd:"Saves the current directory then changes it.",
   set:"Displays, sets, or removes environment variables.",
   path:"Displays or sets a search path for executable files.",
+  find:"Searches for a text string in a file or files.",
+  sort:"Sorts input.",
+  more:"Displays output one screen at a time.",
   type:"Displays the contents of a text file.",
   title:"Sets the window title for a CMD.EXE session.",
   ver:"Displays the Windows version."
@@ -271,6 +274,24 @@ export function sourceCmdParseRedirect(input:string):SourceCmdParsedRedirect{
   return {text:text.slice(0,at),redirect:{path,append:token===">>"}};
 }
 
+/** Original cmd.js yt(): each unquoted vertical bar divides a pipeline.
+ * Quotes and original command spacing are retained in the segments. */
+export function sourceCmdPipelineSegments(input:string):string[]{
+  const segments:string[]=[];
+  const text=String(input||"");
+  let start=0;
+  let quoted=false;
+  for(let i=0;i<text.length;i++){
+    if(text[i]==='"'){quoted=!quoted;continue;}
+    if(!quoted&&text[i]==="|"){
+      segments.push(text.slice(start,i));
+      start=i+1;
+    }
+  }
+  segments.push(text.slice(start));
+  return segments;
+}
+
 export class SourceCmdSession {
   private cwd:string;
   private echo=true;
@@ -361,6 +382,49 @@ export class SourceCmdSession {
       echo:this.echo,errorlevel:this.lastErrorLevel};
   }
 
+  /** Pinned Tt.runPipeline and yt(): intermediate command output is
+   * buffered for the next segment, only final output reaches transcript. */
+  private async executePipelineSegment(
+    input:string,prompt:string,text:string
+  ):Promise<SourceCmdResult>{
+    const segments=sourceCmdPipelineSegments(text);
+    if(segments.length===1)return this.executeSingle(input,prompt,text);
+    let piped:string[]=[];
+    let last:SourceCmdResult|undefined;
+    let clear=false;
+    let exit=false;
+    let title:string|undefined;
+    let style:SourceCmdColorStyle|null|undefined;
+    for(const segment of segments){
+      const result=await this.executeSingle(input,prompt,segment,piped);
+      last=result;
+      piped=result.output;
+      if(result.clear)clear=true;
+      if(result.title!==undefined)title=result.title;
+      if(result.style!==undefined)style=result.style;
+      if(result.exit){exit=true;break;}
+    }
+    return {...last!,output:piped,clear,exit,title,style,
+      prompt,input,echo:this.echo,errorlevel:this.lastErrorLevel};
+  }
+
+  /** Original se(): read named text files from Guest VFS, or consume the
+   * upstream pipeline if no explicit file arguments were supplied. */
+  private async sourceFilterLines(
+    paths:readonly string[],piped:readonly string[]
+  ):Promise<string[]|null>{
+    if(!paths.length)return [...piped];
+    const lines:string[]=[];
+    for(const path of paths){
+      try{
+        const file=this.resolve(path);
+        if(!file.uri)return null;
+        lines.push(...(await this.fs.read(file.uri)).split(/\r?\n/));
+      }catch{return null;}
+    }
+    return lines;
+  }
+
   /** Source Tt.runPipeline/writeFile: buffer command output, write CRLF
    * into a mounted Guest file. Successful redirect sets ERRORLEVEL=0,
    * even if the redirected command itself failed, matching source Tt. */
@@ -368,8 +432,8 @@ export class SourceCmdSession {
     input:string,prompt:string,segment:string
   ):Promise<SourceCmdResult>{
     const {text,redirect}=sourceCmdParseRedirect(segment);
-    if(!redirect)return this.executeSingle(input,prompt,text);
-    const result=await this.executeSingle(input,prompt,text);
+    if(!redirect)return this.executePipelineSegment(input,prompt,text);
+    const result=await this.executePipelineSegment(input,prompt,text);
     let output:string[]=[];
     let errorlevel=0;
     try{
@@ -394,8 +458,9 @@ export class SourceCmdSession {
   }
 
   /** Single parsed command. Never re-expand variables inside a chain. */
-  private async executeSingle(input:string,prompt:string,expanded:string):
-    Promise<SourceCmdResult>{
+  private async executeSingle(
+    input:string,prompt:string,expanded:string,piped:readonly string[]=[]
+  ):Promise<SourceCmdResult>{
     if(!expanded.trim())return {
       prompt,input,output:[],echo:this.echo,errorlevel:this.lastErrorLevel
     };
@@ -448,6 +513,33 @@ export class SourceCmdSession {
       else if(/^(on|off)$/i.test(args))this.echo=args.toLowerCase()==="on";
       else if(args===".")output=[""];
       else output=[rest];
+    }else if(name==="find"||name==="sort"||name==="more"){
+      const tokens=sourceCmdArguments(args);
+      const flags=new Set(tokens.filter(token=>token.startsWith("/"))
+        .map(token=>token.slice(1).split(":")[0].toLowerCase()));
+      const values=tokens.filter(token=>!token.startsWith("/"));
+      const needle=name==="find"?values.shift():undefined;
+      if(name==="find"&&needle===undefined){
+        output=[INVALID_SYNTAX];errorlevel=1;
+      }else{
+        const lines=await this.sourceFilterLines(values,piped);
+        if(!lines){output=[FILE_NOT_FOUND];errorlevel=1;}
+        else if(name==="more")output=lines;
+        else if(name==="sort"){
+          output=[...lines].sort((a,b)=>a.localeCompare(b,undefined,
+            {sensitivity:"base"}));
+          if(flags.has("r"))output.reverse();
+        }else{
+          const fold=flags.has("i");
+          const search=fold?needle!.toLowerCase():needle!;
+          const matched=lines.filter(line=>{
+            const match=(fold?line.toLowerCase():line).includes(search);
+            return flags.has("v")?!match:match;
+          });
+          if(flags.has("c"))output=["---------- : "+matched.length];
+          else{output=matched;errorlevel=matched.length?0:1;}
+        }
+      }
     }else if(name==="date"||name==="time"){
       const value=name==="date"
         ?sourceCmdDateValue(this.now()):sourceCmdTimeValue(this.now());
