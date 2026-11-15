@@ -26,10 +26,13 @@ describe("pinned source 3097/a97a Control Panel registry",()=>{
     expect(SOURCE_CPANEL_REGISTRY.find(x=>x.id==="display")).toMatchObject({
       label:"Display",category:"appearance",target:"panel",iconKey:"display"
     });
-    expect(SOURCE_CPANEL_REGISTRY.find(x=>x.id==="backup")).toMatchObject({
-      label:"Backup and Restore",category:"system-security",target:"panel",
-      tasks:[{label:"Back up your computer"}]
+    const backup=SOURCE_CPANEL_REGISTRY.find(x=>x.id==="backup");
+    expect(backup).toMatchObject({
+      label:"Backup and Restore",category:"system-security",target:"panel"
     });
+    expect(backup?.tasks.map(task=>task.label)).toEqual([
+      "Back up your computer","Restore data, files, or computers from backup"
+    ]);
     expect(SOURCE_CPANEL_REGISTRY.find(x=>x.id==="sound")?.label).toBe("Sounds");
     expect(SOURCE_CPANEL_REGISTRY.find(x=>x.id==="taskbar")?.tasks)
       .toContainEqual(expect.objectContaining({
