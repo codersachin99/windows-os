@@ -1,4 +1,12 @@
 
+## Root-caused source PAUSE Ctrl+C modifier key regression — 15 November 2026
+
+CI [#43689829426](https://github.com/codersachin99/windows-os/actions/runs/43689829426) finished **failure** with 392 Playwright passes and exactly two desktop/mobile failures in the same `PAUSE` Ctrl+C test. The new expectation saw **four** entries where **three** were expected. This uncovered the cause: `ControlOrMeta+c` emits a **modifier keydown first**, and our `keyResolver` treated that Control/Meta key as `PAUSE`'s any-key acknowledgement, prematurely completing the command before the `c` keydown. Subsequent Ctrl+C then appended a separate idle `^C` entry instead of interrupting the pending PAUSE output. An earlier failed test had observed the same underlying issue as a missing `^C` in the expected pending row.
+
+The repair explicitly ignores standalone Control/Meta keydowns while `PAUSE`'s keyResolver is pending; the next Ctrl+C chord keydown reaches `interrupt()` and annotates the existing row, while ordinary `x`/Enter/other keys still acknowledge PAUSE. The real on-screen keyboard regression now presses Control alone first and checks the prompt remains pending, then Control+C and checks the same entry receives `^C` with no additional entry. These are simulator-only UI changes: no native process, host shell or disk modification. The fix is committed with a single **[run-ci]** opt-in acceptance; no acceptance may be claimed until browser suites finish.
+
+
+
 ## Original CMD Ze.HOSTNAME web-adapter behavior — 15 November 2026
 
 Pinned source CMD `Ze.hostname` writes `(await host.getDeviceInfo()).host`. The pinned browser `src/modules/runtime/capacitor-plugin-device2.js` `Device2Web.getInfo()` returns `host:""`, overriding the generic device info. Therefore the original **web** simulator prints exactly one blank line for `HOSTNAME` with exit status 0; it does not display the user's actual computer hostname, IP address, or an invented machine name. Ported that exact web behavior and source HELP description to CMD, with pure and desktop/mobile browser assertions. This does not claim native Capacitor/Tauri device-info parity; those would require a distinct permissioned host adapter. The prior opt-in CI `#43689829426` covers commits through `a3ff1b3`, **not** this newer HOSTNAME slice, which deliberately omits `[run-ci]` while the existing batch runs.

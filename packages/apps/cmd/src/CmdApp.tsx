@@ -199,6 +199,10 @@ export function CmdApp({
     }
     if(keyResolver.current){
       event.preventDefault();
+      // A Ctrl+C chord dispatches Control/Meta *before* the C keydown.
+      // Do not satisfy PAUSE with the modifier itself: otherwise C runs
+      // against an already-idle prompt and produces an extra ^C row.
+      if(event.key==="Control"||event.key==="Meta")return;
       const release=keyResolver.current;
       keyResolver.current=null;
       release(event.key);

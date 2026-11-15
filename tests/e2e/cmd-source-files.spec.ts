@@ -187,6 +187,11 @@ test("original CMD PAUSE displays pending prompt and resumes on any key",async({
   // source session ref, not a possibly stale render of busy, owns this state.
   await expect(input).toHaveAttribute("readonly","");
   const before=await cmd.locator("[data-test-cmd-entry]").count();
+  // Control/Meta keydown must not prematurely release an any-key PAUSE.
+  await input.press("Control");
+  await expect(input).toHaveAttribute("readonly","");
+  await expect(output).toHaveText("Press any key to continue . . .");
+  await expect(cmd.locator("[data-test-cmd-entry]")).toHaveCount(before);
   await input.press("ControlOrMeta+c");
   await expect(cmd.locator("[data-test-cmd-entry]")).toHaveCount(before);
   await expect(output).toHaveText("Press any key to continue . . .\n^C");
