@@ -960,3 +960,10 @@ The preserved backend contains legacy account/security behavior, including non-p
 - [First DIR source CI #43683595361](https://github.com/codersachin99/windows-os/actions/runs/43683595361) failed one **test fixture**, not implementation: five-column /W expected output omitted source brackets around directories and dynamic column spacing (402/403 units otherwise passed; TypeScript passed). [Fixture corrected 3910ba9](https://github.com/codersachin99/windows-os/commit/3910ba9dae59d6f895a4246302e7e98ed7a7e4d2), no production change.
 - This handoff commit opts into one [run-ci] for corrected /W unit fixture, original DIR /S /W/browser listing tests, original CMD banner, and prior PAUSE Ctrl+C and RD /S end-to-end fixes. The original source remains authoritative; do not adjust implementation for wrong expected output.
 - Check the new CI job after it finishes; do not call it green before full desktop/mobile Playwright results. PR #1 remains draft, main unchanged, no release. Source CMD parity and visual captures remain incomplete.
+
+
+## CMD source WHERE simulation support — 2026-11-15 (CI staged)
+
+- Added ze.where based on existing c170 source program installation catalog (IDs, aliases, executable basenames), returning source C: paths or original info/help text. Browser Guest simulation only, no host process lookup.
+- Added pure/model and desktop/mobile browser contract tests. No [run-ci] while earlier DIR /S /W + PAUSE browser CI #43683710914 remains active. Batch with later verification.
+- Keep draft PR #1 and main unchanged, no release. Source-host integration commands and screenshot parity remain incomplete.

@@ -264,3 +264,17 @@ test("original DIR /B /S /W lists the Guest subtree without invented entries",as
   await expect(output).toContainText("WideOne.txt");
   await expect(output).not.toContainText("WideTwo.txt");
 });
+
+
+test("source CMD WHERE reports source app installation paths, never host binaries",async({page})=>{
+  const {input,output}=await launchSourceCommandPrompt(page);
+  await execute(input,"where notepad");
+  await expect(output).toHaveText("C:\\Windows\\System32\\notepad.exe");
+  await execute(input,"where calculator");
+  await expect(output).toHaveText("C:\\Windows\\System32\\calc.exe");
+  await execute(input,"where mspaint.exe");
+  await expect(output).toHaveText("C:\\Windows\\System32\\mspaint.exe");
+  await execute(input,"where source-never-installed");
+  await expect(output)
+    .toHaveText("INFO: Could not find files for the given pattern(s).");
+});

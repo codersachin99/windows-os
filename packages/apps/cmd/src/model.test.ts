@@ -10,6 +10,7 @@ import {SOURCE_CMD_BANNER,SourceCmdSession,sourceCmdUnglue,sourceCmdExpandVariab
   sourceCmdChainSegments,sourceCmdParseRedirect,
   sourceCmdPipelineSegments,sourceCmdRawRest,
   sourceCmdDirDetailLine,sourceCmdDirSummary,sourceCmdDirWideLines,
+  sourceCmdWhereInstallPath,
   SOURCE_CMD_DIR_MAX_DEPTH,SOURCE_CMD_DIR_MAX_ENTRIES,
   sourceCmdInterruptedEntries} from "./model";
 
@@ -882,5 +883,36 @@ describe("original cmd.js Te.dir source /B /S /W and formatting",()=>{
     expect(listing.output.some(s=>s.includes("Level11\\log.txt"))).toBe(true);
     expect(listing.output.some(s=>s.includes("Level12\\log.txt"))).toBe(false);
     expect((await session.run("dir /z Documents")).errorlevel).toBe(1);
+  });
+});
+
+
+describe("original cmd.js ze.where and c170 installed-program paths",()=>{
+  it("maps source program IDs aliases and executable names to C: installs",()=>{
+    expect(sourceCmdWhereInstallPath("notepad"))
+      .toBe("C:\\Windows\\System32\\notepad.exe");
+    expect(sourceCmdWhereInstallPath("NOTEPAD.EXE"))
+      .toBe("C:\\Windows\\System32\\notepad.exe");
+    expect(sourceCmdWhereInstallPath("mspaint"))
+      .toBe("C:\\Windows\\System32\\mspaint.exe");
+    expect(sourceCmdWhereInstallPath("calculator"))
+      .toBe("C:\\Windows\\System32\\calc.exe");
+    expect(sourceCmdWhereInstallPath("cmd"))
+      .toBe("C:\\Windows\\System32\\cmd.exe");
+    expect(sourceCmdWhereInstallPath("unlisted-binary")).toBeNull();
+  });
+  it("reports installed source paths with original help and errorlevel behavior",async()=>{
+    const {session}=await createShell();
+    expect((await session.run("where notepad")).output)
+      .toEqual(["C:\\Windows\\System32\\notepad.exe"]);
+    expect((await session.run("where mspaint.exe")).output)
+      .toEqual(["C:\\Windows\\System32\\mspaint.exe"]);
+    const missing=await session.run("where unknownprogram");
+    expect(missing.output)
+      .toEqual(["INFO: Could not find files for the given pattern(s)."]);
+    expect(missing.errorlevel).toBe(1);
+    const help=await session.run("where");
+    expect(help.output).toContain("WHERE program");
+    expect(help.errorlevel).toBe(1);
   });
 });

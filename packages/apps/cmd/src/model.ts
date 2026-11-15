@@ -1,6 +1,7 @@
 import {
   resolveWindowsPath,matchFilePattern,getParentDirectory,getFileName,
-  type FileEntry,type LegacyVolumeSession,type VirtualFileStore
+  type FileEntry,type LegacyVolumeSession,type VirtualFileStore,
+  sourcePrograms
 } from "@windows-os/filesystem";
 
 /**
@@ -84,6 +85,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   set:"Displays, sets, or removes environment variables.",
   path:"Displays or sets a search path for executable files.",
   pause:"Suspends processing and waits for a key to be pressed.",
+  where:"Displays the location of files that match a search pattern.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -375,6 +377,20 @@ export function sourceCmdDirWideLines(
     Math.max(0,...rows.map(row=>row[column]?.length??0)));
   return rows.map(row=>row.map((cell,col)=>
     col===row.length-1?cell:cell.padEnd(widths[col]+2)).join(""));
+}
+
+/** Source ze.where + c170 program install metadata; no host PATH search. */
+export function sourceCmdWhereInstallPath(query:string):string|null{
+  const value=String(query||"").trim().toLowerCase();
+  if(!value)return null;
+  const program=sourcePrograms.find(program=>{
+    const installed=program.installPath?.split("/").at(-1)??"";
+    const names=[program.id,...(program.aliases??[]),installed,
+      installed.replace(/\.exe$/i,"")];
+    return names.some(name=>name.toLowerCase()===value);
+  });
+  return program?.installPath
+    ?"C:\\"+program.installPath.replace(/\//g,"\\"):null;
 }
 
 export class SourceCmdSession {
@@ -690,6 +706,23 @@ export class SourceCmdSession {
             if(!count)output.push("No subfolders exist");
           }
         }catch{output=[PATH_NOT_FOUND];errorlevel=1;}
+      }
+    }else if(name==="where"){
+      const [programName]=sourceCmdArguments(args);
+      if(!programName){
+        output=[
+          "Displays the location of a program.","",
+          "WHERE program","",
+          "  program      The name of the program to locate."
+        ];
+        errorlevel=1;
+      }else{
+        const install=sourceCmdWhereInstallPath(programName);
+        if(install)output=[install];
+        else{
+          output=["INFO: Could not find files for the given pattern(s)."];
+          errorlevel=1;
+        }
       }
     }else if(name==="cmd"){
       // Pinned source ze.cmd writes host.getBanner(); no nested host process.
