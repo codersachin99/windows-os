@@ -1,3 +1,15 @@
+## Source registry CI TypeScript correction — 15 November 2026
+
+[Opt-in run #43731673649](https://github.com/codersachin99/windows-os/actions/runs/43731673649)
+failed early in strict TypeScript (`TS6133`): unused callback parameter
+`field` in `sourceRegistry.ts` search scoring. No production or browser
+logic failure was reached. Commit b03bffe replaced the unused parameter
+with `_`; the predicate uses the source word-start matcher as intended.
+This deliberate follow-up **[run-ci]** checkpoint reruns all gates on the
+corrected code plus earlier ZIP correction and 24 original tile icons.
+Do not claim tests passed until the exact new run finishes. PR #1 stays
+draft; main remains untouched.
+
 ## Full pinned Control Panel registry + backup acceptance recheck (15 November 2026)
 
 Source original 3097/a97a/a682 defines **24** root items, ordered tiles and
