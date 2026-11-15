@@ -1,4 +1,9 @@
 
+## Source CMD WINVER opens the original About Windows window — 15 November 2026
+
+Original pinned cmd.js `ze.winver` declares `program: "about"` and delegates to the simulator host's `openWindow("about")`. The React CMD now delegates `WINVER` through the existing permissioned `launchProgram("about")` callback, which is already backed by DesktopShell AppRegistry and the faithful About Windows package. There is no native `winver.exe` execution. If no launcher is connected, it returns an explicit failure rather than pretending success. Added command HELP metadata, pure adapter coverage and desktop/mobile Playwright verification that the real About dialog opens and closes. This commit deliberately does not include `[run-ci]`; combine with other substantive source commands once previously running CMD browser acceptance concludes. The larger CMD and screenshot parity remain unfinished.
+
+
 ## Pinned CMD IPCONFIG virtual Ethernet adapter — 15 November 2026
 
 Original `legacy-win7/src/modules/apps/cmd.js` Ze.ipconfig uses constant `qe` with IPv4 192.168.1.42, mask 255.255.255.0 and gateway 192.168.1.1. It prints a WindowsOS IP Configuration heading and the simulated Ethernet adapter (via source V column alignment); `/ALL` does not add fields in the pinned source. Ported this one self-contained command to the existing CMD model with a pure output helper, HELP metadata, unit assertions and desktop/mobile Playwright regression. No network adapter, DNS lookup, web ping or native host networking is queried. This is not yet HOSTNAME/PING/SYSTEMINFO or full CMD pixel parity. The change intentionally omits `[run-ci]` while the earlier cumulative TASKLIST/TASKKILL opt-in workflow is unresolved; CI must be requested only when a meaningful new batch needs validation.

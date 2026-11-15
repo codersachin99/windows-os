@@ -91,6 +91,7 @@ export const SOURCE_CMD_HELP:Readonly<Record<string,string>>={
   tasklist:"Displays all currently running tasks.",
   taskkill:"Terminates a running task.",
   ipconfig:"Displays all current TCP/IP network configuration values.",
+  winver:"Displays the version of Windows.",
   find:"Searches for a text string in a file or files.",
   sort:"Sorts input.",
   more:"Displays output one screen at a time.",
@@ -817,6 +818,13 @@ export class SourceCmdSession {
           output=["The system cannot find the file "+programName+"."];
           errorlevel=1;
         }
+      }
+    }else if(name==="winver"){
+      // Source ze.winver has program:"about": only the registered Guest
+      // About dialog is opened; never spawn winver.exe on the host.
+      if(!this.launchProgram?.("about")){
+        output=["The system cannot find the file winver."];
+        errorlevel=1;
       }
     }else if(name==="where"){
       const [programName]=sourceCmdArguments(args);

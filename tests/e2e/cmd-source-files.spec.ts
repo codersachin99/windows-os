@@ -319,3 +319,16 @@ test("original CMD IPCONFIG prints legacy virtual Ethernet values, not host netw
   await expect(output).toContainText("192.168.1.42");
   await expect(output).toContainText("WindowsOS IP Configuration");
 });
+
+
+test("original CMD WINVER reuses the installed About Windows dialog host",async({page})=>{
+  const {cmd,input}=await launchSourceCommandPrompt(page);
+  await execute(input,"winver");
+  const about=page.locator('[data-test-window="about"]');
+  await expect(about).toBeVisible();
+  await expect(about.locator('[data-test-about-dialog]')).toBeVisible();
+  await expect(about.getByRole("button",{name:"Close About"})).toBeVisible();
+  await about.getByRole("button",{name:"Close About"}).click();
+  await expect(about).toHaveCount(0);
+  await expect(cmd).toBeVisible();
+});

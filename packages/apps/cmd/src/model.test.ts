@@ -1034,3 +1034,28 @@ describe("pinned source Ze.ipconfig uses the simulator adapter, not host network
       .toContain("Displays all current TCP/IP network configuration values.");
   });
 });
+
+
+describe("source ze.winver opens the already-registered About Windows dialog",()=>{
+  it("routes WINVER only through the permissioned simulated application launcher",async()=>{
+    const fs=new VirtualFileStore();
+    const volume=new LegacyVolumeSession(fs,sourceGuestMounts());
+    await volume.mount();
+    await ensureSourceGuestDirectories(fs);
+    const launched:string[]=[];
+    const shell=new SourceCmdSession(fs,volume,SOURCE_GUEST_PROFILE,
+      ()=>new Date(),undefined,id=>{launched.push(id);return id==="about";});
+    expect((await shell.run("winver")).errorlevel).toBe(0);
+    expect(launched).toEqual(["about"]);
+    expect((await shell.run("help winver")).output)
+      .toContain("Displays the version of Windows.");
+    expect((await shell.run("winver")).output).toEqual([]);
+    expect(launched).toEqual(["about","about"]);
+  });
+  it("does not claim a native executable was launched when the host adapter refuses",async()=>{
+    const {session}=await createShell();
+    const result=await session.run("winver");
+    expect(result.errorlevel).toBe(1);
+    expect(result.output).toEqual(["The system cannot find the file winver."]);
+  });
+});
