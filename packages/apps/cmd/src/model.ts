@@ -7,8 +7,9 @@ import {
 /**
  * First runnable vertical slice of original cmd.js Tt shell / te, Te, ot.
  * Source CMD uses a Windows-path working directory and the *real* mounted
- * explorer filesystem. Remaining original commands/pipes/batch files are
- * explicitly pending: never pretend to implement or execute a host shell.
+ * explorer filesystem. Unported original built-ins and window host bridges
+ * are pending. The pinned source executes only known built-in commands;
+ * it does NOT execute .BAT/.CMD files or host operating-system programs.
  */
 export interface SourceCmdResult {
   prompt:string;

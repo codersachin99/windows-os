@@ -973,3 +973,11 @@ The preserved backend contains legacy account/security behavior, including non-p
 
 - Original START command now dispatches a real installed program via DesktopShell appRegistry and OPEN_APP; shares source c170 resolver with WHERE. Unknown/unsupported apps fail visibly, no host program execution or invented windows. Missing START arg is a successful no-op per source.
 - Added pure/model contracts and desktop/mobile Playwright real Notepad launch. Staged without [run-ci] while earlier DIR /S /W + browser fixes CI #43683710914 runs. Keep draft PR #1 and main untouched.
+
+
+## Source CMD fixed-command dispatch + current WHERE/START acceptance — 2026-11-15
+
+- Source Tt.execute only looks up registered ht() internal commands. BAT/CMD script execution and native process execution are **not supported by the pinned source**, despite PATHEXT default values. Avoid introducing those as invented migration requirements. A mounted Guest .bat non-execution test has been added and related source commentary corrected.
+- [WHERE 526f64f](https://github.com/codersachin99/windows-os/commit/526f64f6e46b15ca28599e9d7c865ef1451c814c) returns source manifest C: program-install paths. [START aab21fe](https://github.com/codersachin99/windows-os/commit/aab21fe4ed17c285cff43da30f351999e5c8c44a) launches real installed apps via desktop appRegistry/OPEN_APP, no host programs. Browser acceptance test made foreground-safe in [7955ff2](https://github.com/codersachin99/windows-os/commit/7955ff223dd5a26358eeb6b24d8dacf2a63f9e52).
+- This commit requests one [run-ci] combined acceptance for WHERE/START and source BAT-negative boundary. Earlier DIR/keyboard corrective CI [#43683710914](https://github.com/codersachin99/windows-os/actions/runs/43683710914) has already passed TypeScript/unit/source checks/build and is running browser tests; it does not verify WHERE/START. Keep CI opt-in only.
+- Remain on draft PR #1, main untouched, no premature release or complete-parity claim.

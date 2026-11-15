@@ -946,3 +946,16 @@ describe("pinned original ze.start app launch via source desktop registry",()=>{
     expect((await session.run("start")).errorlevel).toBe(0);
   });
 });
+
+
+describe("pinned Tt.execute only recognizes registered internal commands",()=>{
+  it("never evaluates an unrecognized BAT file as a host or Guest script",async()=>{
+    const {fs,session}=await createShell();
+    const uri="/EXTERNAL/computer/drive0/Users/Guest/Documents/safe.bat";
+    await fs.write("echo NEVER_EXECUTED",uri);
+    const attempt=await session.run("Documents\\safe.bat");
+    expect(attempt.errorlevel).toBe(9009);
+    expect(attempt.output[0]).toContain("not recognized");
+    expect(await fs.read(uri)).toBe("echo NEVER_EXECUTED");
+  });
+});
