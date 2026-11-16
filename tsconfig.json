@@ -49,6 +49,9 @@
       "@windows-os/ui/listview": [
         "packages/ui/src/sourceListView.tsx"
       ],
+      "@windows-os/ui/navigation": [
+        "packages/ui/src/SourceWin7HistoryNav.tsx"
+      ],
       "@windows-os/ui": [
         "packages/ui/src/index.ts"
       ],
