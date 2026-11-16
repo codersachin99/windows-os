@@ -6,6 +6,7 @@ import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupporte
 import {BackupRestorePanel} from "./BackupRestorePanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
+import {SourceWin7HistoryNav} from "@windows-os/ui";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelResolutions,
@@ -76,13 +77,13 @@ export function ControlPanelApp({
   };
   return <section className="windows-cpanel is-cpanel" data-test-cpanel="">
     <header className="windows-cpanel__addressbar">
-      <div className="windows-cpanel__navigation">
-        <button type="button" aria-label="Back" disabled={history.index===0}
-          data-test-cpanel-back="" onClick={()=>setHistory(previous=>sourceCpanelStep(previous,-1))}>‹</button>
-        <button type="button" aria-label="Forward"
-          disabled={history.index>=history.entries.length-1}
-          data-test-cpanel-forward="" onClick={()=>setHistory(previous=>sourceCpanelStep(previous,1))}>›</button>
-      </div>
+      <SourceWin7HistoryNav className="windows-cpanel__navigation"
+        ariaLabel="Control Panel history"
+        canGoBack={history.index>0}
+        canGoForward={history.index<history.entries.length-1}
+        backTestId="data-test-cpanel-back" forwardTestId="data-test-cpanel-forward"
+        onBack={()=>setHistory(previous=>sourceCpanelStep(previous,-1))}
+        onForward={()=>setHistory(previous=>sourceCpanelStep(previous,1))}/>
       <nav className="windows-cpanel__breadcrumb" aria-label="Control Panel location">
         <button type="button" onClick={()=>open(null)}>Control Panel</button>
         {location!==null&&<span data-test-cpanel-location="">
