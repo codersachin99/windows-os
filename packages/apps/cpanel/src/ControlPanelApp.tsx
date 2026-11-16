@@ -7,6 +7,7 @@ import {BackupRestorePanel} from "./BackupRestorePanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
 import {SourceWin7HistoryNav} from "@windows-os/ui/navigation";
+import type {ThemeId} from "@windows-os/contracts";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelResolutions,
@@ -21,8 +22,15 @@ import {
 } from "./notification";
 import "./ControlPanelApp.css";
 
+/** Win7 exact sprite is source-verified; never impose that artwork on
+ * unverified WinXP, Win11 or other legacy theme skins. */
+export function sourceCpanelUseWin7Nav(theme:ThemeId):boolean{
+  return theme==="win7";
+}
+
 export interface ControlPanelAppProps{
   filesystem:VirtualFileStore;
+  theme?:ThemeId;
   onClose():void;
   onSwitchUser():void;
   trayPreferences:SourceTrayPreferences;
@@ -35,7 +43,7 @@ export interface ControlPanelAppProps{
  * destinations. Other setting/program targets stay visibly disabled. */
 export function ControlPanelApp({
   onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange,
-  filesystem,messages=[]
+  filesystem,theme="win7",messages=[]
 }:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     SOURCE_CPANEL_INITIAL_HISTORY);
@@ -77,13 +85,22 @@ export function ControlPanelApp({
   };
   return <section className="windows-cpanel is-cpanel" data-test-cpanel="">
     <header className="windows-cpanel__addressbar">
-      <SourceWin7HistoryNav className="windows-cpanel__navigation"
-        ariaLabel="Control Panel history"
-        canGoBack={history.index>0}
-        canGoForward={history.index<history.entries.length-1}
-        backTestId="data-test-cpanel-back" forwardTestId="data-test-cpanel-forward"
-        onBack={()=>setHistory(previous=>sourceCpanelStep(previous,-1))}
-        onForward={()=>setHistory(previous=>sourceCpanelStep(previous,1))}/>
+      {sourceCpanelUseWin7Nav(theme)?
+        <SourceWin7HistoryNav className="windows-cpanel__navigation"
+          ariaLabel="Control Panel history"
+          canGoBack={history.index>0}
+          canGoForward={history.index<history.entries.length-1}
+          backTestId="data-test-cpanel-back" forwardTestId="data-test-cpanel-forward"
+          onBack={()=>setHistory(previous=>sourceCpanelStep(previous,-1))}
+          onForward={()=>setHistory(previous=>sourceCpanelStep(previous,1))}/>:
+        <nav className="windows-cpanel__navigation windows-cpanel__navigation--fallback"
+          aria-label="Control Panel history">
+          <button type="button" aria-label="Back" disabled={history.index===0}
+            data-test-cpanel-back="" onClick={()=>setHistory(previous=>sourceCpanelStep(previous,-1))}>‹</button>
+          <button type="button" aria-label="Forward"
+            disabled={history.index>=history.entries.length-1}
+            data-test-cpanel-forward="" onClick={()=>setHistory(previous=>sourceCpanelStep(previous,1))}>›</button>
+        </nav>}
       <nav className="windows-cpanel__breadcrumb" aria-label="Control Panel location">
         <button type="button" onClick={()=>open(null)}>Control Panel</button>
         {location!==null&&<span data-test-cpanel-location="">
