@@ -1,5 +1,5 @@
 import {
-  useCallback, useEffect, useMemo, useRef, useState,
+  useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,
   type Dispatch, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent
 } from "react";
 import type { AppDefinition, DesktopAction } from "@windows-os/contracts";
@@ -14,6 +14,7 @@ import {
   createSourceDesktopItem, type DesktopNewItem
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
+import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
 import { importDroppedFiles, SHELL_DRAG_TYPE } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
@@ -46,7 +47,7 @@ interface ActivePress {
   narrowTo: string | null;
   dragToken: string | null;
 }
-type DesktopMenu = { x: number; y: number; id: string | null; view: boolean; newOpen: boolean };
+type DesktopMenu = { x: number; y: number; anchorX:number; anchorY:number; id: string | null; view: boolean; newOpen: boolean };
 interface ActiveBand {
   start: DesktopPoint;
   previous: string[];
@@ -87,6 +88,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const renameRef = useRef<{id:string;value:string} | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const uploadInput = useRef<HTMLInputElement>(null);
+  const menuHost = useRef<HTMLDivElement>(null);
   const press = useRef<ActivePress | null>(null);
   const bandPress = useRef<ActiveBand | null>(null);
   const anchor = useRef<string | null>(null);
@@ -664,12 +666,21 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     const id = item?.dataset.testDesktopIcon ?? null;
     if (id && !selected.includes(id)) pick(id, false, false);
     const bounds = list.current?.getBoundingClientRect();
-    setMenu({
-      id, view: false, newOpen: false,
-      x: Math.max(0, Math.min(event.clientX - (bounds?.left ?? 0), Math.max(0, area.width - 196))),
-      y: Math.max(0, Math.min(event.clientY - (bounds?.top ?? 0), Math.max(0, area.height - 270)))
-    });
+    const x=event.clientX-(bounds?.left??0);
+    const y=event.clientY-(bounds?.top??0);
+    // The source measures the real popup before deciding its edge flip.
+    // Initial anchor is corrected in a layout effect after mount.
+    setMenu({id,view:false,newOpen:false,anchorX:x,anchorY:y,x,y});
   };
+  useLayoutEffect(()=>{
+    const element=menuHost.current;
+    if(!element||!menu)return;
+    const position=sourceDesktopMenuPosition(
+      {x:menu.anchorX,y:menu.anchorY},
+      {width:element.offsetWidth,height:element.offsetHeight},area);
+    if(menu.x===position.x&&menu.y===position.y)return;
+    setMenu(current=>current?{...current,x:position.x,y:position.y}:current);
+  },[menu,area]);
   // Pinned main.js DesktopMenu: Copy path and Upload here operate on
   // the source-mounted Guest desktop, never on the host filesystem.
   const copyDesktopPath = () => {
@@ -852,7 +863,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     {band && <div data-test-desktop-band="" className="desktop__icon-band windows-desktop__band"
       style={{ left: band.left, top: band.top, width: band.width, height: band.height }}
       aria-hidden="true" />}
-    {menu && <div role="menu" className="windows-desktop__menu"
+    {menu && <div ref={menuHost} role="menu" className="windows-desktop__menu"
       data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}>
       {menu.id ? <>
         <button role="menuitem" onClick={() => {
