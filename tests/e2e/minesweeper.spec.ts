@@ -48,6 +48,18 @@ test("native Minesweeper changes source difficulty and supports touch flag mode"
   await mine.getByRole("menuitemradio",{name:"Intermediate"}).click();
   await expect(mine.locator("[data-test-mine-cell]")).toHaveCount(144);
   await expect(mine.locator("[data-test-minesweeper-remaining]")).toHaveText("30");
+  // The source's 21px 12x12 board exceeds the initial migration frame on
+  // some mobile viewports. Verify all cells remain reachable via in-window
+  // scrolling rather than mistaking screenshot clipping for lost rows.
+  const finalCell=mine.locator('[data-test-mine-cell="11:11"]');
+  await finalCell.scrollIntoViewIfNeeded();
+  await expect(finalCell).toBeVisible();
+  const stage=await mine.locator(".windows-minesweeper__stage").boundingBox();
+  const last=await finalCell.boundingBox();
+  expect(stage).not.toBeNull();
+  expect(last).not.toBeNull();
+  if(stage&&last)expect(last.y+last.height)
+    .toBeLessThanOrEqual(stage.y+stage.height+2);
   const flagMode=mine.locator("[data-test-minesweeper-flag-mode]");
   await flagMode.check();
   const first=mine.locator('[data-test-mine-cell="0:0"]');
