@@ -272,3 +272,23 @@ test("original Control Panel indexed tasks route only migrated destinations",asy
   await panel.locator("[data-test-cpanel-back]").click();
   await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
 });
+
+test("source 5985 search supports quoted phrases and filter-only home behavior",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const search=panel.getByRole("searchbox",{name:"Search Control Panel"});
+  await search.fill('"screen resolution"');
+  await expect(panel.locator('[data-test-cpanel-result="display"]'))
+    .toBeVisible();
+  await expect(panel.locator('[data-test-cpanel-result="display"]'))
+    .toContainText("Adjust screen resolution");
+  await search.fill('kind:"screen resolution"');
+  await expect(panel.locator('[data-test-cpanel-items]')).toBeVisible();
+  await expect(panel.locator('[data-test-cpanel-results]')).toHaveCount(0);
+  await search.fill("recovery kind:zip");
+  await expect(panel.locator('[data-test-cpanel-result="backup"]'))
+    .toBeVisible();
+  await panel.locator('[data-test-cpanel-result="backup"]')
+    .getByRole("button",{name:"Backup and Restore"}).click();
+  await expect(panel.locator('[data-test-backup-restore]')).toBeVisible();
+});
