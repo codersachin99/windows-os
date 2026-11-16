@@ -1,3 +1,21 @@
+## Deliberate 68-scene Tetris visual capture — 17 November 2026
+
+The Tetris canvas, source assets, Help/Stats child windows and
+original game-over wipe are integrated into the React Games library.
+This commit opts into the screenshot workflow **[capture-visual]**
+only, not a full CI pass. Capture 34 React scenes each at desktop
+and Pixel 7, including source-backed Tetris initial/playing/Help/
+Statistics and parented Minesweeper result/stats screenshots.
+Inspect visual job logs, the exact manifest, artifact images and
+nonzero errors. This is a target-only baseline:
+`sourceCaptured=0` and `parityStatus=not-assessed` until
+the actual pinned Vue runtime is captured. The separate Tetris
+functional CI #43939723976 is still an older SHA, excluding
+the later game-over/audio-source-style corrections.
+Do not claim visual success before the run finishes.
+
+---
+
 ## Source CSS integrity for Tetris — 17 November 2026
 
 Copied the exact original Tetris 13bc CSS to
