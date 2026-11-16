@@ -1,10 +1,10 @@
-import {useState} from "react";
+import {useEffect,useState} from "react";
 import {legacyArt,legacySourceIconArtwork,legacyCpanelTileArtwork} from "@windows-os/assets";
 import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-os/filesystem";
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
   type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
-import {sourceParseSearch} from "@windows-os/engine";
+import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
@@ -39,17 +39,20 @@ export function ControlPanelApp({
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     SOURCE_CPANEL_INITIAL_HISTORY);
   const [query,setQuery]=useState("");
+  const [searchedQuery,setSearchedQuery]=useState("");
+  const [delayedSearch]=useState(()=>sourceCreateDelayedSearch(setSearchedQuery));
+  useEffect(()=>()=>delayedSearch.cancel(),[delayedSearch]);
   const [selectedProgram,setSelectedProgram]=useState<string|null>(null);
   const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
   // Source a259 displays the home tiles for filter-only queries: webpack
   // 5985 records filters separately and a682 requires at least one term.
-  const results=sourceParseSearch(query).terms.length>0;
+  const results=location===null&&sourceParseSearch(searchedQuery).terms.length>0;
   // Pinned 3097: preserve all original registry entries; omit only program
   // items absent from the pinned c170 source manifest (not arbitrary shell apps).
   const sourceItems=SOURCE_CPANEL_REGISTRY.filter(item=>
     item.target!=="program"||sourceProgramsById.has(item.id));
-  const searchResults=sourceCpanelSearchRegistry(query,sourceItems);
+  const searchResults=sourceCpanelSearchRegistry(searchedQuery,sourceItems);
   const sourceIcon=(item:SourceCpanelRegistryItem)=>
     legacyCpanelTileArtwork[item.iconKey]??legacySourceIconArtwork(item.iconKey).src;
   const openSourceItem=(item:SourceCpanelRegistryItem)=>{
@@ -60,11 +63,15 @@ export function ControlPanelApp({
   const open=(value:SourceControlPanelLocation)=>{
     setHistory(previous=>sourceCpanelOpenLocation(previous,value));
     setQuery("");
+    delayedSearch.type("");
     setShowSystemIcons(false);
   };
   const changeSearch=(value:string)=>{
     setQuery(value);
-    if(value.trim())setHistory(previous=>sourceCpanelOpenLocation(previous,null));
+    if(value) setHistory(previous=>sourceCpanelOpenLocation(previous,null));
+    // Original webpack 1902: type(nonempty) publishes in 300ms, but
+    // clearing publishes immediately and cancels the previous timer.
+    delayedSearch.type(value);
   };
   return <section className="windows-cpanel is-cpanel" data-test-cpanel="">
     <header className="windows-cpanel__addressbar">
