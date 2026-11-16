@@ -139,8 +139,20 @@
         "packages/apps/cpanel/src/ControlPanelApp.tsx",
         "packages/apps/cpanel/src/ControlPanelApp.css",
         "tests/e2e/cpanel.spec.ts",
-        "migration/CPANEL-SOURCE.md"
-      ]
+        "migration/CPANEL-SOURCE.md",
+        "packages/apps/cpanel/src/BackupRestorePanel.tsx",
+        "packages/apps/cpanel/src/sourceRegistry.ts",
+        "packages/apps/cpanel/src/sourceRegistry.test.ts",
+        "packages/filesystem/src/sourceBackup.ts",
+        "packages/engine/src/sourceSearch.ts",
+        "packages/engine/src/sourceDelayedSearch.ts",
+        "packages/ui/src/SourceWin7HistoryNav.tsx",
+        "packages/ui/src/sourceWin7HistoryNav.css",
+        "packages/ui/src/SourceWin7HistoryNav.test.tsx",
+        "migration/CPANEL-REGISTRY-SOURCE.md",
+        "migration/CPANEL-BACKUP-SPEC.md"
+      ],
+      "verification": "Opt-in CI #43807380475 succeeded (432 desktop/mobile browser tests, TypeScript, units, audits and Vite build), validating the indexed 24-item/66-task slice. Source 1902 debounce, navigation state and shared Win7 sprite follow-ups added after that SHA; latest acceptance is pending. Original source runtime screenshots, alternate skins, native setting/program targets and full parity still pending."
     },
     {
       "source": "src/modules/apps/find.js",
