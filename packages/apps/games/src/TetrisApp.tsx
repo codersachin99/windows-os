@@ -23,7 +23,9 @@ function play(audio:HTMLAudioElement|undefined,rewind=true):void{
 }
 export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisAppProps){
   const engineRef=useRef<SourceTetrisEngine|null>(null);
-  if(!engineRef.current)engineRef.current=new SourceTetrisEngine();
+  // Source 13bc calls Math.random() at each new game/piece, not just
+  // once when the game component mounts. Keep runtime seeded fixtures valid.
+  if(!engineRef.current)engineRef.current=new SourceTetrisEngine(()=>Math.random());
   const engine=engineRef.current;
   const root=useRef<HTMLElement|null>(null);
   const canvas=useRef<HTMLCanvasElement|null>(null);
