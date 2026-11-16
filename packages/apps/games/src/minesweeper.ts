@@ -28,6 +28,16 @@ export const SOURCE_MINE_INTERMEDIATE:Readonly<SourceMineOptions>=Object.freeze(
   rows:12,cols:12,mines:30
 });
 
+/** Pinned 245c.open() starts the clock only while the *board* is
+ * PRISTINE. A right-click flag advances Board to IN_PROGRESS, even
+ * before a safe cell opens; preserve that original timer quirk.
+ */
+export function sourceMineShouldStartTimer(
+  state:SourceMineBoardState
+):boolean{
+  return state===SOURCE_MINE_BOARD_STATE.PRISTINE;
+}
+
 export function sourceGenerateMineArray(
   options:Partial<SourceMineOptions>={},
   random:()=>number=Math.random
