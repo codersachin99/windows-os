@@ -31,9 +31,9 @@ test("pinned Classic Tetris 13bc runs in source fullscreen with real canvas and 
   await game.locator('[data-test-tetris="play"]').click();
   await expect(game).toHaveAttribute("data-test-tetris-state","drop");
   await expect(game.locator('[data-test-tetris="play"]')).toHaveAttribute("aria-label","Pause");
-  await page.keyboard.press("KeyP");
+  await page.keyboard.press("p");
   await expect(game).toHaveAttribute("data-test-tetris-state","pause");
-  await page.keyboard.press("KeyP");
+  await page.keyboard.press("p");
   await expect(game).toHaveAttribute("data-test-tetris-state","drop");
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.press("ArrowUp");
