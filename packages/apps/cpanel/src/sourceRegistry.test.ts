@@ -2,7 +2,8 @@ import {describe,it,expect} from "vitest";
 import {sourceProgramsById} from "@windows-os/filesystem";
 import {legacyCpanelTileArtwork} from "@windows-os/assets";
 import {
-  SOURCE_CPANEL_REGISTRY,sourceCpanelIsSupported,sourceCpanelSearchRegistry
+  SOURCE_CPANEL_REGISTRY,sourceCpanelIsSupported,sourceCpanelSearchRegistry,
+  sourceCpanelAddressIconKey
 } from "./sourceRegistry";
 
 const sourceOrder=[
@@ -89,5 +90,24 @@ describe("pinned a682 + 5985 weighted search across original tasks",()=>{
     expect(sourceCpanelSearchRegistry("solution")).toEqual([]);
     expect(sourceCpanelSearchRegistry("unavailable-widget")).toEqual([]);
     expect(sourceCpanelSearchRegistry("")).toEqual([]);
+  });
+});
+
+describe("source a259 addressIcon and a97a current-location art",()=>{
+  it("uses Control Panel art at root and registry artwork at a child",()=>{
+    expect(sourceCpanelAddressIconKey(null)).toBe("cpanel");
+    for(const location of ["display","programs","accounts","notification",
+      "action-center","backup"]){
+      const registry=SOURCE_CPANEL_REGISTRY.find(item=>item.id===location);
+      expect(registry).toBeDefined();
+      expect(sourceCpanelAddressIconKey(location)).toBe(registry?.iconKey);
+      expect(legacyCpanelTileArtwork[sourceCpanelAddressIconKey(location)])
+        .toMatch(/\.webp$/);
+    }
+    expect(sourceCpanelAddressIconKey("action-center"))
+      .toBe("action-center-headline");
+  });
+  it("falls back to root artwork for unknown/corrupt historical locations",()=>{
+    expect(sourceCpanelAddressIconKey("missing-panel")).toBe("cpanel");
   });
 });
