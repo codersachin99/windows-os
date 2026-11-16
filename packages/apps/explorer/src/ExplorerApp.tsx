@@ -24,6 +24,7 @@ import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
 import {SOURCE_VIEW_MODES} from "./sourceViewModes";
 import {sourceDesktopMenuPosition} from "@windows-os/ui/menu-position";
+import {createSourceDesktopItem,type DesktopNewItem} from "@windows-os/ui/desktop-create";
 import {
   sourceComputerDetailsLabelWidth,sourceComputerItemExtras,
   SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH
@@ -106,7 +107,7 @@ export function ExplorerApp({
   const [confirm, setConfirm] = useState<"recycle" | "permanent" | "empty" | null>(null);
   const [context, setContext] = useState<{
     kind:"item"|"background"; x:number;y:number;
-    anchorX:number;anchorY:number;viewOpen:boolean;uri?:string
+    anchorX:number;anchorY:number;viewOpen:boolean;newOpen:boolean;uri?:string
   }|null>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
@@ -495,6 +496,16 @@ export function ExplorerApp({
         cause.message:"Cannot copy folder path"));
   };
 
+  /** Source main.js ExplorerMenu New submenu creates the same safe Guest
+   * folder/TXT/RTF objects as Desktop New, not host filesystem files. */
+  const createSourceExplorerItem=(kind:DesktopNewItem)=>{
+    void execute(async()=>{
+      const uri=await createSourceDesktopItem(fileStore,state.path,kind);
+      session.select(uri);
+      if(theme==="win7")setRenamingUri(uri);
+    });
+  };
+
   const showContext = (
     event: import("react").MouseEvent<HTMLElement>,
     kind: "item" | "background", uri?: string
@@ -504,7 +515,7 @@ export function ExplorerApp({
     if (kind === "item" && uri && !state.selected.includes(uri)) session.select(uri);
     if (kind === "background") session.clearSelection();
     setContext({
-      kind,uri,viewOpen:false,
+      kind,uri,viewOpen:false,newOpen:false,
       anchorX:event.clientX,anchorY:event.clientY,
       x:event.clientX,y:event.clientY
     });
@@ -882,7 +893,7 @@ export function ExplorerApp({
         <button role="menuitem" aria-expanded={context.viewOpen}
           data-test-explorer-context-view=""
           onClick={()=>setContext(current=>current?{
-            ...current,viewOpen:!current.viewOpen
+            ...current,viewOpen:!current.viewOpen,newOpen:false
           }:current)}>View ▸</button>
         {context.viewOpen&&SOURCE_VIEW_MODES.map(mode=>
           <button key={mode.value} role="menuitemradio"
@@ -906,9 +917,24 @@ export function ExplorerApp({
           disabled={isBin}
           onClick={()=>contextAction(()=>fileInput.current?.click())}>
           Upload files here</button>
-        {!isBin&&<button role="menuitem" onClick={()=>contextAction(()=>{
-          setName("");setPrompt("folder");
-        })}>New folder</button>}
+        {!isBin&&<>
+          <button role="menuitem" aria-expanded={context.newOpen}
+            data-test-explorer-context-new=""
+            onClick={()=>setContext(current=>current?{
+              ...current,newOpen:!current.newOpen,viewOpen:false
+            }:current)}>New ▸</button>
+          {context.newOpen&&([
+            ["folder","Folder"],["richtext","Rich Text Document"],
+            ["text","Text Document"]
+          ] as const).map(([kind,label])=>
+            <button key={kind} role="menuitem"
+              data-test-explorer-context-new-kind={kind}
+              onClick={()=>contextAction(()=>createSourceExplorerItem(kind))}>
+              {label}
+            </button>)}
+        </>}
+        <button role="menuitem" disabled title="Source Explorer Properties not migrated">
+          Properties</button>
       </>}
     </div>}
     {showSearchDialog && !isBin && <SearchDialog initialScope={state.path}
