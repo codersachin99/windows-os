@@ -181,3 +181,9 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
       return { ...state, wallpaper: action.path };
   }
 }
+
+export {
+  SOURCE_SEARCH_WEIGHT,sourceNormalizeSearch,sourceParseSearch,
+  sourceFindSearchTerm,sourceScoreSearch,
+  type SourceSearchQuery,type SourceSearchField
+} from "./sourceSearch";
