@@ -575,6 +575,17 @@ export const SOURCE_CPANEL_REGISTRY:readonly SourceCpanelRegistryItem[]=
   }
 ]);
 
+/** Original a259.addressIcon uses currentLocation.icon from a97a:
+ * null root => "cpanel"; nested panel => its original registry icon.
+ * The icon is a real Win7 image key, never synthesized from route text.
+ */
+export function sourceCpanelAddressIconKey(
+  location:null|string
+):string{
+  if(location===null)return "cpanel";
+  return SOURCE_CPANEL_REGISTRY.find(item=>item.id===location)?.iconKey??"cpanel";
+}
+
 export interface SourceCpanelSearchResult{
   readonly item:SourceCpanelRegistryItem;
   readonly tasks:readonly SourceCpanelTask[];
