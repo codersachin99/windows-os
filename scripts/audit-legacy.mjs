@@ -91,6 +91,18 @@ for (const name of importedAudio) {
     failures.push(`Source audio bytes changed: ${name}`);
 }
 
+// Preserve the untouched original 245c stylesheet as visual evidence.
+const mineSourceCss = inventory.find(x =>
+  x.path === "src/styles/games/minesweeper.css");
+const mineCssBytes = await readFile(resolve(root,
+  "migration/source-css/minesweeper.css"));
+const mineCssSha = createHash("sha1")
+  .update(`blob ${mineCssBytes.length}\0`)
+  .update(mineCssBytes).digest("hex");
+if (!mineSourceCss || mineCssBytes.length !== mineSourceCss.bytes ||
+    mineCssSha !== mineSourceCss.sha)
+  failures.push("Pinned Minesweeper source CSS bytes changed");
+
 const byStatus = Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
   .map(status => [status, tracker.modules.filter(m => m.status === status).length]));
 console.log(JSON.stringify({
@@ -100,6 +112,7 @@ console.log(JSON.stringify({
   assets: inventory.filter(x => x.path.startsWith("assets/")).length,
   byteCheckedImportedImages: importedImages.length,
   byteCheckedImportedAudio: importedAudio.length,
+  byteCheckedMinesweeperSourceCSS: mineCssSha === mineSourceCss?.sha,
   styles: inventory.filter(x => x.path.startsWith("src/styles/")).length,
   byStatus,
   externalApps: externalEntries.length,
