@@ -290,5 +290,5 @@ test("source 5985 search supports quoted phrases and filter-only home behavior",
     .toBeVisible();
   await panel.locator('[data-test-cpanel-result="backup"]')
     .getByRole("button",{name:"Backup and Restore"}).click();
-  await expect(panel.locator('[data-test-backup-restore]')).toBeVisible();
+  await expect(panel.locator('[data-test-cpanel-backup]')).toBeVisible();
 });
