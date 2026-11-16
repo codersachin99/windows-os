@@ -1,3 +1,24 @@
+## Advanced acceptance correction — 16 November 2026
+
+The first Advanced opt-in CI
+[run #43876422581](https://github.com/codersachin99/windows-os/actions/runs/43876422581)
+failed at **one newly added unit assertion**:
+`packages/engine/src/index.test.ts` expected the original generic
+`TOGGLE_MAXIMIZE` no-op on a non-resizable window to return the same
+DesktopState object. Existing reducer behavior always allocates a new
+state object for this action, even though it correctly leaves the
+fixed game window `maximized:false`. The test was too strict;
+change it to assert the actual non-maximized behavior rather than
+object identity. The run stopped at Vitest; browser acceptance was
+not executed. The pure viewport sizing tests passed.
+
+The following deliberate `[run-ci]` commit verifies the corrected
+test plus full Advanced desktop/mobile browser coverage. Do not
+claim acceptance until its run completes on the exact new SHA.
+No CI on routine pushes, no merge or release.
+
+---
+
 ## Deliberate Advanced acceptance gate — 16 November 2026
 
 `6f4dea9` adds source 245c Advanced fullscreen behavior and
