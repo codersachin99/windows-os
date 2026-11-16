@@ -5,7 +5,7 @@
  * Exact source asset palette and full interaction parity are still pending.
  * Keep Win7 selectors untouched; never borrow its look for XP/Win11.
  */
-.windows-startmenu--winxp{
+.windows-desktop[data-theme="winxp"] .windows-startmenu--winxp{
   width:min(360px,calc(100vw - 8px));
   max-height:calc(100dvh - 44px);min-height:0;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
@@ -62,7 +62,7 @@
 /* Pinned 18ee Win11 is bottom-centered, has search above a 6-column
  * grid (90x80 cells, 32px icons), and an account/power footer.
  * Current Guest program data remains a conservative interim source adapter. */
-.windows-startmenu--win11{
+.windows-desktop[data-theme="win11"] .windows-startmenu--win11{
   left:50%;bottom:calc(var(--taskbar-height,40px) + 8px);
   transform:translateX(-50%);
   display:flex;flex-direction:column;gap:0;
