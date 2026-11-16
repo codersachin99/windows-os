@@ -53,8 +53,14 @@ at revision `4e63290d783009e1293433c6ccf252abba9c1187`.
   `sourceCreateDelayedSearch` engine helper and preserves immediate empty
   input updates, pending-query cancellation, forced `now()` behavior and
   unmount cleanup. A dedicated Vitest suite tests the helper with fake
-  timers. The search input remains directly responsive while results wait
-  for the exact source delay.
+  timers. In the original `src/modules/shell/win7-ui.js`,
+  `WinuiSearchbox instant` emits the input event immediately, but the
+  `a259` `search(t)` handler dispatches it to `1902.type(t)`;
+  consequently the input remains directly responsive while results wait
+  for exactly 300 ms. The `a259.openLocation` method does **not** clear
+  `searchText` or `searchedText`, so Back from a matching panel
+  returns to the same search results until the input is explicitly emptied.
+  This was confirmed in pinned source and is now covered by browser tests.
 - `ControlPanelApp.tsx` renders **all 24** tiles in original source order.
   A root item is enabled only for the six genuinely implemented panel
   destinations: Display, Programs and Features, Guest User Accounts,
