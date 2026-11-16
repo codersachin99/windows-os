@@ -10,7 +10,7 @@ import {
   ControlPanelApp,SOURCE_TRAY_ITEMS,sourceTrayVisible,sourceTrayHidden,
   type SourceTrayPreferences
 } from "@windows-os/apps/cpanel";
-import {GamesApp} from "@windows-os/apps/games";
+import {GamesApp,MinesweeperApp} from "@windows-os/apps/games";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
@@ -134,6 +134,8 @@ function ApplicationContent({
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
+  if (appId === "minesweeper") return <MinesweeperApp
+    onClose={()=>dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
   if (appId === "games") return <GamesApp theme={theme}
     isPlayable={gameId=>Boolean(appRegistry.get(gameId))}
     onLaunchGame={gameId=>{
