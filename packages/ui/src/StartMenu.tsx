@@ -139,6 +139,10 @@ export function StartMenu({ dispatch }: StartMenuProps) {
         <img src={legacyArt.guestAvatar} alt="Guest" className="windows-startmenu__avatar" />
         <strong>Guest</strong>
         <hr />
+        <button data-test-open-games="" onClick={() => {
+          const games=appRegistry.get("games");
+          if(games)dispatch({type:"OPEN_APP",app:games});
+        }}>Games</button>
         <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("computer")! })}>Computer</button>
         <button data-test-open-cpanel="" onClick={() => {
           const panel=appRegistry.get("cpanel");
