@@ -220,9 +220,9 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
         onPointerDown={pointerDown} onPointerUp={pointerUp}
         onContextMenu={event=>event.preventDefault()}/>
       <button type="button" className="windows-tetris__control"
-        data-test-tetris="play" aria-label={state==="drop"?"Pause":"Play"}
+        data-test-tetris="play" aria-label={state==="pause"||state==="game-over"?"Play":"Pause"}
         onClick={togglePlay} style={styleFor("play")}>
-        {state==="drop"?"Ⅱ":"▶"}
+        {state==="pause"||state==="game-over"?"▶":"Ⅱ"}
       </button>
       <button type="button" className="windows-tetris__control"
         data-test-tetris="new" aria-label="New Game" title="New Game"

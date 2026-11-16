@@ -1,3 +1,37 @@
+## First playable Classic Tetris integration — 17 November 2026
+
+Committed real `TetrisApp` using source 13bc's 10×22 board,
+Fisher-Yates is NOT substituted: the original 8-outcome/7-piece
+source random picker, seven exact source piece rotations/initial
+positions, source frame gravity and score formula, 60 FPS request
+animation loop, soft/hard drop, no wall kicks, ghost and next piece
+preview, responsive source canvas wide/narrow layout. The original
+CSS chrome includes the black background, cyan `#9edbf2`
+border and fixed fullscreen non-resizable window. The original
+`tetris-bg.abd0ff80.webp` and all eight original Tetris audio
+MP3s are source/target Git blob SHA matches; all imported assets
+are audited against pinned `migration/legacy-files.tsv`.
+
+Original 13bc controls: left/right arrows or drag, up/X clockwise,
+Z counterclockwise, down soft drop, space hard drop, P/Esc pause,
+canvas tap rotates, Play/Pause and New Game buttons. Original
+Help content and a browser-backed Statistics/highscore adapter are
+implemented via reusable parented shell child windows. The
+statistics adapter and current burn/game-over rendering are not
+claimed byte-identical to the original GameStats store and full
+original animation engine. Source parity requires source paired
+visual evidence and input/audio acceptance.
+
+`tetris` is now registered in the Games AppRegistry and has a
+fullscreen fixed `WindowMain`. Four other built-in game engines
+(Chess, Mahjong, Purble Place, Solitaire, Spider Solitaire: five
+other engine families) stay disabled. New Vitest and desktop/mobile
+browser cases cover engine layout and gameplay, Win7 source shell
+launch, fixed fullscreen, keyboard hard drop, Help and Statistics
+child windows. This is **unverified code until a deliberate CI pass**.
+
+---
+
 # Pinned Tetris 13bc source contract — 17 November 2026
 
 Legacy pinned revision `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`

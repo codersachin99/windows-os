@@ -1,3 +1,25 @@
+## Playable source Tetris integration (pending acceptance) — 17 November 2026
+
+The source 13bc Tetris is now a real React canvas game rather than
+an unavailable Games tile. Implemented full-screen fixed shell
+registration, source-shape/score physics and 60fps tick loop, original
+responsive canvas projection, keyboard/touch-pointer play/pause/new
+controls, independent Help/Stats child windows, browser statistics
+adapter and nine byte-identical source background/audio assets.
+See `migration/TETRIS-SOURCE.md`. Added two paired desktop/mobile
+browser contract tests in `tests/e2e/tetris.spec.ts`. The legacy
+tracker remains **in-progress** because source input timing,
+animations and exact original GameStats/visual parity are not
+fully accepted. This work followed child-window CI #43937165381,
+which ran on prior SHA `481babc` and does **not** test Tetris.
+
+Do not claim runnable acceptance until new opt-in `[run-ci]`
+tests TypeScript, unit, source image/audio inventory and browser
+actions. Do not merge draft PR #1 into main. Original Vue source
+comparison is `not-assessed`, not complete.
+
+---
+
 ## Tetris source engine foundation — 17 November 2026
 
 Started pinned Tetris 13bc pure engine under

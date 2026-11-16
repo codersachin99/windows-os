@@ -1211,9 +1211,15 @@
       "evidence": [
         "packages/apps/games/src/sourceTetris.ts",
         "packages/apps/games/src/sourceTetris.test.ts",
-        "migration/TETRIS-SOURCE.md"
+        "migration/TETRIS-SOURCE.md",
+        "packages/apps/games/src/sourceTetrisCanvas.ts",
+        "packages/apps/games/src/sourceTetrisCanvas.test.ts",
+        "packages/apps/games/src/TetrisApp.tsx",
+        "packages/apps/games/src/TetrisApp.css",
+        "packages/apps/games/src/tetrisStats.ts",
+        "tests/e2e/tetris.spec.ts"
       ],
-      "verification": "Pure source 13bc engine initial model (pieces, 10x22, gravity, scoring, hard drop, pause). Not playable: canvas, frame/ARE parity, audio, dialogs, input, and browser tests pending."
+      "verification": "Source 13bc Tetris now playable via React canvas and original fullscreen fixed shell, 60fps engine, 8 source audio assets, background, keyboard/pointer controls, Help and Statistics child windows. Yet to verify full CI/browser, original animation/pixel parity and account storage; still in-progress."
     },
     {
       "source": "src/modules/index.js",
