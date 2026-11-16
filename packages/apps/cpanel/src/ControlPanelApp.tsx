@@ -61,9 +61,10 @@ export function ControlPanelApp({
   };
   const programs=sourceCpanelInstalledPrograms(sourcePrograms);
   const open=(value:SourceControlPanelLocation)=>{
+    // Source a259 openLocation does not clear either searchText or
+    // searchedText: returning to the root via Back re-shows prior results.
+    // Only an explicit empty search input resets the indexed results.
     setHistory(previous=>sourceCpanelOpenLocation(previous,value));
-    setQuery("");
-    delayedSearch.type("");
     setShowSystemIcons(false);
   };
   const changeSearch=(value:string)=>{
