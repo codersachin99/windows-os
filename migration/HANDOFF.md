@@ -1,3 +1,48 @@
+## Source Games library + first playable Minesweeper; combined gate (16 November 2026)
+
+[Previous full CI #43813132144](https://github.com/codersachin99/windows-os/actions/runs/43813132144)
+completed **SUCCESS** on exact commit
+`ecae28088d7b6ad2b77301e4511e86d643c26928`:
+**442 / 442** desktop/mobile Chromium tests, TypeScript, all units,
+source inventory and Contacts audits, production Vite build.
+This accepts the source a259 Control Panel current-location icons,
+25px breadcrumb with ancestor-only navigation, XP skin guard and
+24th-tile responsive reachability. It does **not** accept later code.
+
+**After** that source SHA, traced original `games.js` webpack 24d9,
+`computer.js` pane-games, and filesystem 5401: source special folder
+`shell:games` is **not** the physical Guest Start-menu Games .lnk path.
+Created `packages/apps/games` containing a native source Games
+library, source seven installed offline titles and publishers,
+two collapsible `SourceListView variant="tiles"` sections,
+and explicitly empty original Online games. Registered the Games app
+and original right-side Start-menu entry. Games and its assets are
+**in progress**, not complete pixel/interaction parity.
+
+Traced original Minesweeper webpack **9538** board semantics and
+**245c** UI: implemented source Fisher–Yates generator,
+rectangular board/8-neighbor counts, three flag states, flood fill,
+Board WON/LOST behavior, and source Beginner (8x9, 10 mines) /
+Intermediate (12x12, 30 mines). Added an actual playable
+`MinesweeperApp` with source first-click reroll, game result
+counting, restart, timer, contextual flag cycle, and touch flag
+adapter. Registered a real Minesweeper `game` runtime; it is now
+the **one enabled tile** in the Games library. Remaining six
+games stay disabled pending their own engines. Original sprites,
+audio, Advanced viewport sizing, statistics, skin polish and
+source-versus-target pixel comparison are NOT implemented/verified.
+Source exact game icon WebPs remain inventoried but absent; generic
+adapter fallback is not represented as parity. New unit and paired
+Chromium cases cover source engine and gameplay. See
+`migration/GAMES-SOURCE.md`.
+
+This **deliberately opted-in [run-ci]** commit checks the *entire*
+post-ecae280 Games/Minesweeper slice, including actual UI browser
+routes and all existing apps. Do **not** mark success until the exact
+CI run completes and all tests are inspected. Ordinary subsequent
+pushes must not trigger expensive Actions; no premature main merge,
+release, or draft PR ready-for-review.
+
 ## Full CI accepted and source addressbar icon follow-up — 16 November 2026
 
 **Latest validated snapshot:** [CI #43811148997](https://github.com/codersachin99/windows-os/actions/runs/43811148997)
