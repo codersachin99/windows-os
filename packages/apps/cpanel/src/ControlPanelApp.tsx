@@ -4,6 +4,7 @@ import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
   type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
+import {sourceParseSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
@@ -41,7 +42,9 @@ export function ControlPanelApp({
   const [selectedProgram,setSelectedProgram]=useState<string|null>(null);
   const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
-  const results=query.trim().length>0;
+  // Source a259 displays the home tiles for filter-only queries: webpack
+  // 5985 records filters separately and a682 requires at least one term.
+  const results=sourceParseSearch(query).terms.length>0;
   // Pinned 3097: preserve all original registry entries; omit only program
   // items absent from the pinned c170 source manifest (not arbitrary shell apps).
   const sourceItems=SOURCE_CPANEL_REGISTRY.filter(item=>
