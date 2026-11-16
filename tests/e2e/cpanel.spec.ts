@@ -362,3 +362,19 @@ test("non-Win7 Control Panel never receives the Win7-only navigation sprite",asy
   await back.click();
   await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
 });
+
+test("all 24 Control Panel root tiles remain reachable within the scrollable window",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const tiles=panel.locator("[data-test-cpanel-item]");
+  await expect(tiles).toHaveCount(24);
+  const last=panel.locator('[data-test-cpanel-item="update"]');
+  await last.scrollIntoViewIfNeeded();
+  await expect(last).toBeVisible();
+  await expect(last).toBeDisabled();
+  // The document itself must not scroll sideways on a mobile shell when
+  // a long Win7 Control Panel icon list is navigated.
+  expect(await page.evaluate(()=>document.documentElement.scrollLeft)).toBe(0);
+  await panel.locator('[data-test-cpanel-item="backup"]').click();
+  await expect(panel.locator("[data-test-cpanel-backup]")).toBeVisible();
+});
