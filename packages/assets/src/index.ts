@@ -92,6 +92,11 @@ export const legacyArt = {
 
 
 /** Three byte-identical original Minesweeper 245c game sprites. */
+export const legacyMineAudio = Object.freeze({
+  newGame:"/assets/audio/minesweeper-new.60909dd9.mp3",
+  lose:"/assets/audio/minesweeper-lose.b3b70bbb.mp3"
+});
+
 export const legacyMineArtwork = Object.freeze({
   cell:"/assets/images/minesweeper-cell.a0c15d1c.webp",
   mine:"/assets/images/minesweeper-mine.cbba8bd0.webp",

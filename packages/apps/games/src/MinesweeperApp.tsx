@@ -4,7 +4,7 @@ import {
   sourceMineRoundStarted,sourceMineRoundWon,sourceMineWinPercentage,
   type SourceMineStatsLevel
 } from "./mineStatistics";
-import {legacyMineArtwork} from "@windows-os/assets";
+import {legacyMineArtwork,legacyMineAudio} from "@windows-os/assets";
 import {
   SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_CELL_FLAG,SOURCE_MINE_CELL_STATE,
@@ -28,6 +28,14 @@ function sourceSafeOpenCount(grid:readonly (readonly SourceMineCell[])[]):number
     cell.state===SOURCE_MINE_CELL_STATE.OPEN&&!cell.isMine).length,0);
 }
 
+function playSourceGameAudio(audio:HTMLAudioElement|null):void{
+  if(!audio)return;
+  try{
+    audio.currentTime=0;
+    void audio.play().catch(()=>{/* Browser autoplay restrictions are nonfatal. */});
+  }catch{/* Missing or disabled sound hardware must not break gameplay. */}
+}
+
 /** Source 9538 Board + 245c game rules, result and stats UI.
  * Original sprites are imported; audio, true static child windows,
  * Advanced layout and full pixel parity remain pending. */
@@ -46,8 +54,12 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
   const [statLevel,setStatLevel]=useState<SourceMineStatsLevel>(0);
   const [stats,setStats]=useState(readMineStatistics);
   const resultTimeout=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const bgmRef=useRef<HTMLAudioElement|null>(null);
+  const sfxRef=useRef<HTMLAudioElement|null>(null);
   const options=optionsFor(level);
   useEffect(()=>{persistMineStatistics(stats);},[stats]);
+  // Pinned 245c mounted() calls newGame(), attempting to play this track.
+  useEffect(()=>{playSourceGameAudio(bgmRef.current);},[]);
   useEffect(()=>()=>{
     if(resultTimeout.current!==null)clearTimeout(resultTimeout.current);
   },[]);
@@ -60,12 +72,14 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
     if(resultTimeout.current!==null)clearTimeout(resultTimeout.current);
     resultTimeout.current=null;
     const next=newBoard(optionsFor(chosen));
+    playSourceGameAudio(bgmRef.current);
     setLevel(chosen);setBoard(next);setGrid(next.grid());
     setResult(0);setRoundEnded(false);setElapsed(0);setStarted(false);
     setFlagMode(false);setGameMenu(false);setStatsOpen(false);
     setResetConfirm(false);
   };
   const finish=(outcome:Exclude<Result,0>)=>{
+    if(outcome===-1)playSourceGameAudio(sfxRef.current);
     setStarted(false);setRoundEnded(true);
     // Source 245c schedules its child result window one second after the
     // board has ended, while revealing all mine images immediately on loss.
@@ -146,27 +160,8 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
       </div>}
     </nav>
     <div className="windows-minesweeper__stage">
-      <div className="windows-minesweeper__scorebar">
-        <img className="windows-minesweeper__stats-icon" src={legacyMineArtwork.mine}
-          alt="" width={21} height={21}/>
-        <output data-test-minesweeper-remaining="" aria-label="Mines remaining">{remaining}</output>
-        <button type="button" className="windows-minesweeper__restart"
-          aria-label="New Game" disabled={statsOpen||result!==0}
-          onClick={()=>reset()}>
-          {result===-1?":(":result===1?":D":":)"}
-        </button>
-        <output data-test-minesweeper-seconds="" aria-label="Elapsed seconds">{elapsed}</output>
-        <img className="windows-minesweeper__stats-icon" src={legacyMineArtwork.timer}
-          alt="" width={21} height={21}/>
-      </div>
-      <div className="windows-minesweeper__controls">
-        <label><input type="checkbox" checked={flagMode}
-          disabled={statsOpen||result!==0||roundEnded}
-          onChange={event=>setFlagMode(event.target.checked)}
-          data-test-minesweeper-flag-mode=""/>Flag mode (touch)</label>
-        <span role="status" data-test-minesweeper-result="">{status}</span>
-      </div>
-      <div className="windows-minesweeper__board"
+      <div className="windows-minesweeper__source-grid">
+      <div className="windows-minesweeper__board minesweeper__grid"
         role="group" aria-label="Minesweeper grid"
         style={{gridTemplateColumns:`repeat(${options.cols},21px)`}}>
         {grid.map((row,y)=>row.map((cell,x)=>{
@@ -191,6 +186,27 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
               event.preventDefault();flag(x,y);
             }}>{content}</button>;
         }))}
+      </div>
+
+        <div className="windows-minesweeper__scorebar minesweeper__stats">
+          <img className="windows-minesweeper__stats-icon" src={legacyMineArtwork.timer}
+            alt="" width={30} height={30}/>
+          <output data-test-minesweeper-seconds="" aria-label="Elapsed seconds">{elapsed}</output>
+          <output data-test-minesweeper-total-mines="" aria-label="Total mines">{options.mines}</output>
+          <img className="windows-minesweeper__stats-icon" src={legacyMineArtwork.mine}
+            alt="" width={30} height={30}/>
+        </div>
+      </div>
+      <div className="windows-minesweeper__controls">
+        <button type="button" className="windows-minesweeper__restart"
+          aria-label="New Game" disabled={statsOpen||result!==0}
+          onClick={()=>reset()}>New game</button>
+        <label><input type="checkbox" checked={flagMode}
+          disabled={statsOpen||result!==0||roundEnded}
+          onChange={event=>setFlagMode(event.target.checked)}
+          data-test-minesweeper-flag-mode=""/>Flag mode (touch)</label>
+        <output data-test-minesweeper-remaining="" aria-label="Mines remaining">{remaining}</output>
+        <span role="status" data-test-minesweeper-result="">{status}</span>
       </div>
     </div>
     {result!==0?<div className="windows-minesweeper__overlay">
@@ -253,5 +269,9 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
         </footer>
       </section>
     </div>:null}
+    <audio ref={bgmRef} src={legacyMineAudio.newGame}
+      data-test-minesweeper-bgm="" preload="auto"/>
+    <audio ref={sfxRef} src={legacyMineAudio.lose}
+      data-test-minesweeper-sfx="" preload="auto"/>
   </section>;
 }

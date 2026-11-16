@@ -25,6 +25,13 @@ test("native Minesweeper has 8x9 source beginner grid, flags and real reveal",as
     .toHaveAttribute("src","/assets/images/minesweeper-mine.cbba8bd0.webp");
   await expect(mine.locator('[data-test-mine-cell="0:0"]'))
     .toHaveCSS("background-image",/minesweeper-cell\.a0c15d1c\.webp/);
+  await expect(mine.locator('[data-test-minesweeper-total-mines]')).toHaveText("10");
+  await expect(mine.locator('[data-test-minesweeper-bgm]'))
+    .toHaveAttribute("src","/assets/audio/minesweeper-new.60909dd9.mp3");
+  await expect(mine.locator('[data-test-minesweeper-sfx]'))
+    .toHaveAttribute("src","/assets/audio/minesweeper-lose.b3b70bbb.mp3");
+  await expect(mine.locator(".windows-minesweeper__source-grid"))
+    .toHaveCSS("background-image",/linear-gradient/);
   // Source first click protects from a mine by regenerating the board.
   await mine.locator('[data-test-mine-cell="0:0"]').click();
   await expect(mine.locator(".windows-minesweeper__cell.is-open").first())

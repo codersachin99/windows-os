@@ -1,3 +1,23 @@
+## Source Minesweeper visual/audio continuation (16 November 2026)
+
+Source-verified `src/styles/games/minesweeper.css`: the previous
+generic gray scorebar and face button above the game were not the
+original Minesweeper's cyan/navy board and bottom stats bar.
+React is now sourced to these exact tile/number colors, border,
+opacity and background values. Two original new-game/loss mp3
+assets were imported byte-identically, and the legacy audit now
+verifies all imported audio bytes. Original CSS itself is preserved
+as a byte-identical migration reference.
+
+The result/statistics acceptance CI #43853843232 ran against SHA
+`1ec009a94bcf279b847267d3b2234453c66b4caa` and does NOT
+include this newer CSS/audio commit. Wait for its actual result
+before scheduling a new opt-in `[run-ci]` gate. Original pixel
+parity/host account storage still not assessed. No main merge or
+release; PR #1 remains draft.
+
+---
+
 ## Deliberate Minesweeper dialog/statistics acceptance gate — 16 November 2026
 
 Request one `[run-ci]` gate for the previously committed 245c

@@ -122,3 +122,61 @@
   max-height:130px;overflow:auto;
 }
 .windows-minesweeper__dialog--stats td{padding:2px 8px 2px 0}
+
+/* Pinned original src/styles/games/minesweeper.css values
+ * (SHA 51e624fd88af6940655c2cb98b433bbcd6754866).
+ * The extra restart/touch flag strip is an accessibility adapter. */
+.windows-minesweeper__stage{
+  align-items:safe center;justify-content:flex-start;gap:0;
+  padding:20px 20px 10px;
+  background-image:radial-gradient(ellipse at 0 0,rgba(135,157,181,.1019607843),#879db5);
+}
+.windows-minesweeper__source-grid{
+  display:flex;flex-direction:column;flex:none;width:max-content;
+  box-shadow:0 0 0 2px #808da4;border:1px solid #000;
+  background:linear-gradient(135deg,#0ff,#000078);
+}
+.windows-minesweeper__board{border:0;box-shadow:none;background:transparent;padding:0;gap:0}
+.windows-minesweeper__cell{border:1px solid #000;opacity:.45}
+.windows-minesweeper__cell:not(.is-open):hover{filter:brightness(1.6)}
+.windows-minesweeper__cell.is-open{
+  opacity:1;border:1px solid #000;
+  background:#e1eef7;box-shadow:inset 0 0 0 2px #fff;
+}
+.windows-minesweeper__cell.is-mine{
+  opacity:1;border:1px solid #000;color:#830000;
+  background:#e1eef7 url("/assets/images/minesweeper-mine.cbba8bd0.webp") center/contain no-repeat;
+}
+.windows-minesweeper__cell[data-adjacent="1"]{color:#4050be}
+.windows-minesweeper__cell[data-adjacent="2"]{color:#397e2d}
+.windows-minesweeper__cell[data-adjacent="3"]{color:#b60704}
+.windows-minesweeper__cell[data-adjacent="4"]{color:#010183}
+.windows-minesweeper__cell[data-adjacent="5"]{color:#8b0000}
+.windows-minesweeper__scorebar{
+  margin-top:10px;border:0;min-width:0;padding:0 0 2px;
+  background:none;gap:0;justify-content:space-between;
+}
+.windows-minesweeper__scorebar output{
+  box-sizing:border-box;width:45px;min-width:45px;
+  padding:4px 0;color:#fff;border-radius:.3em;
+  font:700 16px/1.25 "Segoe UI",Tahoma,sans-serif;letter-spacing:normal;
+  background:linear-gradient(135deg,#2c4f8f,#3d6cbc);
+  box-shadow:inset 1px 1px 2px 1px #203665,-1px -1px 2px 1px #69819c,
+    1px 1px 2px 1px #d4dae0;
+}
+.windows-minesweeper__stats-icon{
+  box-sizing:content-box;width:30px;height:30px;
+  padding:1px 0 1px 1px;border-radius:50%;background:#efefef;
+  box-shadow:-1px -1px 4px 1px #476581;
+}
+.windows-minesweeper__scorebar output:first-of-type{margin-right:auto}
+.windows-minesweeper__scorebar output:last-of-type{margin-left:auto}
+.windows-minesweeper__controls{
+  margin-top:10px;gap:10px;padding:4px 8px;max-width:100%;
+  background:#ecf1f6bb;border-radius:3px;
+}
+.windows-minesweeper__restart{
+  width:auto;height:auto;min-height:24px;padding:2px 7px;
+  font:11px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-minesweeper__controls output{font:600 12px monospace}

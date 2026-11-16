@@ -1,3 +1,28 @@
+## Source Minesweeper CSS and sound — 16 November 2026
+
+The original source CSS `src/styles/games/minesweeper.css` (blob
+`51e624fd88af6940655c2cb98b433bbcd6754866`) was copied
+byte-identically to `migration/source-css/minesweeper.css`. Source
+245c draws the board on a cyan/navy gradient, with 45% opaque
+closed tiles, pale-blue raised open tiles and **bottom** stats row
+(timer icon, elapsed seconds, fixed mine count, mine icon).
+React now applies those source values in locally scoped CSS. The
+temporary face/restart and touch flag UI are moved into a separate
+accessible adapter strip outside the source board. Original window
+geometry and screenshot pairing remain outstanding.
+
+Copied pinned source `minesweeper-new.60909dd9.mp3` and
+`minesweeper-lose.b3b70bbb.mp3` with source=target Git blob hashes.
+React plays original new-game music and loss SFX, catching blocked
+browser autoplay. Source audit now hashes the imported audio bytes
+against `migration/legacy-files.tsv`, as it already does for images.
+No audio transcoding, substituted music or fake assets.
+
+This CSS/audio work was committed after the deliberate result/stats
+CI and needs independent verification before acceptance.
+
+---
+
 ## Minesweeper 245c result and statistics lifecycle — 16 November 2026
 
 Source-traced the original Vue 245c result and statistics branches

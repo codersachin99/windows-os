@@ -71,6 +71,26 @@ for (const name of importedImages) {
   }
 }
 
+// Audit byte-identical original gameplay audio (not just images).
+const importedAudioDir = resolve(root, "apps/web/public/assets/audio");
+const importedAudio = (await readdir(importedAudioDir))
+  .filter(name => /\.(?:mp3|ogg|wav)$/i.test(name));
+const expectedAudio = new Map(inventory.filter(x => x.path.startsWith("assets/audio/"))
+  .map(x => [x.path.slice("assets/audio/".length), x]));
+if (!importedAudio.length) failures.push("No imported source game audio found to audit");
+for (const name of importedAudio) {
+  const original = expectedAudio.get(name);
+  if (!original) {
+    failures.push(`Untracked imported audio: ${name}`);
+    continue;
+  }
+  const bytes = await readFile(resolve(importedAudioDir, name));
+  const gitBlobSha = createHash("sha1")
+    .update(`blob ${bytes.length}\0`).update(bytes).digest("hex");
+  if (bytes.length !== original.bytes || gitBlobSha !== original.sha)
+    failures.push(`Source audio bytes changed: ${name}`);
+}
+
 const byStatus = Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
   .map(status => [status, tracker.modules.filter(m => m.status === status).length]));
 console.log(JSON.stringify({
@@ -79,6 +99,7 @@ console.log(JSON.stringify({
   sourceModules: sourceModules.length,
   assets: inventory.filter(x => x.path.startsWith("assets/")).length,
   byteCheckedImportedImages: importedImages.length,
+  byteCheckedImportedAudio: importedAudio.length,
   styles: inventory.filter(x => x.path.startsWith("src/styles/")).length,
   byStatus,
   externalApps: externalEntries.length,
