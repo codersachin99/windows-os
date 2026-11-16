@@ -75,3 +75,32 @@ test("pinned Desktop Display opens existing Control Panel Display with Back hist
   await panel.locator("[data-test-cpanel-forward]").click();
   await expect(panel.locator("[data-test-cpanel-display]")).toBeVisible();
 });
+
+test("source measured desktop menu flips inside viewport as View/New expand",async({page})=>{
+  await desktopGuest(page);
+  const desktop=page.locator("#desktop-icons");
+  const rect=await desktop.boundingBox();
+  expect(rect).not.toBeNull();
+  await desktop.click({button:"right",position:{
+    x:Math.max(10,rect!.width-15),y:Math.max(10,rect!.height-15)
+  }});
+  const menu=desktop.locator("[data-test-desktop-menu]");
+  const inDesktop=async()=>{
+    const popup=await menu.boundingBox();
+    const area=await desktop.boundingBox();
+    expect(popup).not.toBeNull();
+    expect(area).not.toBeNull();
+    expect(popup!.x).toBeGreaterThanOrEqual(area!.x-1);
+    expect(popup!.y).toBeGreaterThanOrEqual(area!.y-1);
+    expect(popup!.x+popup!.width).toBeLessThanOrEqual(area!.x+area!.width+1);
+    expect(popup!.y+popup!.height).toBeLessThanOrEqual(area!.y+area!.height+1);
+  };
+  await expect(menu).toBeVisible();
+  await inDesktop();
+  await menu.getByRole("menuitem",{name:/View/}).click();
+  await expect(menu.getByRole("menuitemradio",{name:/Small icons/})).toBeVisible();
+  await inDesktop();
+  await menu.getByRole("menuitem",{name:/New/}).click();
+  await expect(menu.locator("[data-test-desktop-new-text]")).toBeVisible();
+  await inDesktop();
+});
