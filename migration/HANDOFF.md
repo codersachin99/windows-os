@@ -1,3 +1,26 @@
+## Additional prioritized shell context-menu slice — 17 November 2026
+
+After the shell-first integrated `[run-ci]` snapshot, added measured
+context-menu positioning and desktop/mobile nested submenu bounds,
+then the pinned source Computer and Bin background menus: all 8 shared
+View options, Copy path, Upload files here (non-Bin only),
+Refresh, and Recycle Bin's safe Empty status. See
+[migration/SHELL-PRIORITY.md](SHELL-PRIORITY.md) for detailed source
+trace, migrated/pending behavior and new tests
+(`sourceDesktopMenuPosition.test.ts`,
+`desktop-context-source.spec.ts`,
+`explorer-context-source.spec.ts`).
+
+**Validation boundary:** Earlier shell
+[CI #43962896634](https://github.com/codersachin99/windows-os/actions/runs/43962896634)
+started at exact SHA `a0a3100` and does **not** contain the later
+menu positioning or Computer/Bin changes. It passed typecheck, units,
+source audits and build; browser suite was in progress at this note.
+No additional `[run-ci]` yet: await the first result and batch fixes
+before another opt-in gate. Keep PR draft, `main` unchanged, no release.
+
+---
+
 ## Shell-first priority pivot and integrated acceptance — 17 November 2026
 
 Product priority explicitly changed: **themes, context menus, desktop,
