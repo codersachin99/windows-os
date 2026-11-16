@@ -1,3 +1,33 @@
+## Verified original Games/Minesweeper artwork — 16 November 2026
+
+Restored eleven original WebP files from the exact pinned private
+`legacy-win7@4e63290` Git blobs into the React public assets directory.
+Each asset's source Git blob SHA was independently compared with the
+newly uploaded target Git blob SHA; **all eleven matched exactly**.
+The import uses the authenticated repository contents in Base64 rather
+than attempting cross-repository object reuse.
+
+Original virtual Games folder icon: `games.e71bd970.webp`.
+Original c170 entries: `chess.92e3ebb6.webp`,
+`mahjong.129fbf1a.webp`, `minesweeper.d2b56ae5.webp`,
+`purbleplace.55ae3611.webp`, `solitaire.35c75495.webp`,
+`spidersolitaire.2d281206.webp`, `tetris.7ea2464e.webp`.
+Original Minesweeper sprite files:
+`minesweeper-cell.a0c15d1c.webp`,
+`minesweeper-mine.cbba8bd0.webp`,
+`minesweeper-timer.663f9d44.webp`.
+
+`legacySourceIconArtwork` now serves all eight Games icons without
+generic-file fallback. The in-game covered-cell, opened-mine and timer/mine
+markers use original source artwork while retaining the existing live React
+game engine. Tests guard mapping and desktop/mobile rendered paths. The
+source 245c's other UI, sound, stats dialog, result dialog, viewport
+geometry and six missing game engines are **not** declared complete.
+Original-vs-target pixel comparison remains **not assessed**; no
+claim about the whole game's screenshot parity is made.
+
+---
+
 ## First real game engine: Minesweeper source 9538/245c
 
 The original `src/modules/games/minesweeper.js` contains a

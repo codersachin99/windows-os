@@ -1,6 +1,5 @@
-/* Minesweeper source 245c grid uses 21px source cells; original WebP
- * cell, mine, counter and face sprites are not imported yet. Use neutral
- * scoped CSS and text until exact pinned assets are available. */
+/* Original 245c 21px cell/mine WebP sprites are now byte-identical.
+ * Counter/restart framing, flagged glyphs, dialog and audio remain partial. */
 .windows-minesweeper{
   background:#c0c0c0;color:#222;
   height:100%;min-height:0;display:flex;flex-direction:column;
@@ -58,14 +57,16 @@
 .windows-minesweeper__cell{
   display:grid;place-items:center;min-width:21px;min-height:21px;
   width:21px;height:21px;cursor:pointer;font:700 13px monospace;
-  background:#ccc;color:#152a3e;
+  background:#ccc url("/assets/images/minesweeper-cell.a0c15d1c.webp") center/contain no-repeat;
+  color:#152a3e;
   border:2px outset #fff;padding:0;
 }
 .windows-minesweeper__cell.is-open{
   border:1px solid #999;background:#ddd;cursor:default;
 }
 .windows-minesweeper__cell.is-mine{
-  background:#edc9c9;color:#830000;
+  background:#edc9c9 url("/assets/images/minesweeper-mine.cbba8bd0.webp") center/contain no-repeat;
+  color:#830000;
 }
 .windows-minesweeper__cell[data-adjacent="1"]{color:#235bba}
 .windows-minesweeper__cell[data-adjacent="2"]{color:#278042}
@@ -75,3 +76,5 @@
   .windows-minesweeper__stage{padding:8px 3px}
   .windows-minesweeper__scorebar{gap:15px}
 }
+
+.windows-minesweeper__stats-icon{width:21px;height:21px;object-fit:contain;flex:none}

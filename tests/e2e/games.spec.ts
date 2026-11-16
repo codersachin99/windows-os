@@ -14,6 +14,12 @@ test("original Games Start entry opens source shell:games pane with installed ti
   await expect(offline.locator("[data-test-offline-game]")).toHaveCount(7);
   await expect(games.locator('[data-test-offline-game="chess"]'))
     .toContainText("Chess Titans");
+  await expect(games.locator('[data-test-offline-game="chess"] img'))
+    .toHaveAttribute("src","/assets/images/chess.92e3ebb6.webp");
+  await expect(games.locator('[data-test-offline-game="minesweeper"] img'))
+    .toHaveAttribute("src","/assets/images/minesweeper.d2b56ae5.webp");
+  await expect(games.locator(".windows-games__address-location img"))
+    .toHaveAttribute("src","/assets/images/games.e71bd970.webp");
   await expect(games.locator('[data-test-offline-game="tetris"]'))
     .toContainText("Classic Tetris");
   await expect(games.locator('[data-test-offline-game="tetris"]'))

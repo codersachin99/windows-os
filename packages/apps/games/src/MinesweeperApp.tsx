@@ -1,4 +1,5 @@
 import {useEffect,useState,type MouseEvent} from "react";
+import {legacyMineArtwork} from "@windows-os/assets";
 import {
   SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_CELL_FLAG,SOURCE_MINE_CELL_STATE,
@@ -107,12 +108,16 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
     </nav>
     <div className="windows-minesweeper__stage">
       <div className="windows-minesweeper__scorebar">
+        <img className="windows-minesweeper__stats-icon" src={legacyMineArtwork.mine}
+          alt="" width={21} height={21}/>
         <output data-test-minesweeper-remaining="" aria-label="Mines remaining">{remaining}</output>
         <button type="button" className="windows-minesweeper__restart"
           aria-label="New Game" onClick={()=>reset()}>
           {result===-1?":(":result===1?":D":":)"}
         </button>
         <output data-test-minesweeper-seconds="" aria-label="Elapsed seconds">{elapsed}</output>
+        <img className="windows-minesweeper__stats-icon" src={legacyMineArtwork.timer}
+          alt="" width={21} height={21}/>
       </div>
       <div className="windows-minesweeper__controls">
         <label><input type="checkbox" checked={flagMode}

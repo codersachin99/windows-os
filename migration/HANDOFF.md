@@ -1,3 +1,26 @@
+## Games original graphics restoration (16 November 2026)
+
+Exact pinned original Games library (eight icons) and Minesweeper
+(three WebP graphics) were copied through authenticated source Base64
+and target Git blob creation. All **11 / 11 source-to-target Git blob
+SHA-1 comparisons passed**. React icon routing and Minesweeper
+sprite rendering are updated with unit and Playwright assertions.
+No release, merge or false pixel-parity claim. Source copyright/
+redistribution clearance remains a release blocker.
+
+The previous deliberately opted-in
+[CI #43817006528](https://github.com/codersachin99/windows-os/actions/runs/43817006528)
+at `036b5f1d462aaa2b6add3644566b438ac5a85b2c`
+completed **SUCCESS**: TypeScript, Vitest, original-source audits,
+production build and browser contracts. That run covers the earlier
+timer/mobile-scroll corrections but **not this later artwork commit**.
+Do not run Actions for every normal push; use an explicit
+`[run-ci]` commit when the next functional/artwork batch is ready.
+The successful 54 target-only images remain visual evidence without
+original-side reference. PR #1 draft, main untouched.
+
+---
+
 ## Games/Minesweeper accepted 450/450; final source-timer regression gate — 16 November 2026
 
 **Accepted functional source snapshot:** opt-in

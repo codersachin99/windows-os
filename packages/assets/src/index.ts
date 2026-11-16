@@ -26,6 +26,15 @@ export const legacyArt = {
   cmd: "/assets/images/cmd.a2c1d19b.webp",
   // Byte-identical pinned Win7 Control Panel and Display page artwork.
   cpanel: "/assets/images/cpanel.38ffbb1d.webp",
+  // Original c170 game icons and shell:games folder, verified by pinned Git blob SHA.
+  games: "/assets/images/games.e71bd970.webp",
+  chess: "/assets/images/chess.92e3ebb6.webp",
+  mahjong: "/assets/images/mahjong.129fbf1a.webp",
+  minesweeper: "/assets/images/minesweeper.d2b56ae5.webp",
+  purbleplace: "/assets/images/purbleplace.55ae3611.webp",
+  solitaire: "/assets/images/solitaire.35c75495.webp",
+  spidersolitaire: "/assets/images/spidersolitaire.2d281206.webp",
+  tetris: "/assets/images/tetris.7ea2464e.webp",
   display: "/assets/images/display.8adb9edd.webp",
   programs: "/assets/images/programs.610e703b.webp",
   accounts: "/assets/images/accounts.2f4d5075.webp",
@@ -82,6 +91,13 @@ export const legacyArt = {
 } as const;
 
 
+/** Three byte-identical original Minesweeper 245c game sprites. */
+export const legacyMineArtwork = Object.freeze({
+  cell:"/assets/images/minesweeper-cell.a0c15d1c.webp",
+  mine:"/assets/images/minesweeper-mine.cbba8bd0.webp",
+  timer:"/assets/images/minesweeper-timer.663f9d44.webp"
+});
+
 /** Source Win7 icon assets for the pinned 3097 Control Panel registry.
  * Every file below was imported byte-identically from legacy-win7 at
  * LEGACY_REVISION. The source "personalize" category uses "personal" art.
@@ -124,6 +140,10 @@ const sourceLegacyIconMap:Readonly<Record<string,string>>={
   magnifier:legacyArt.magnifier,snipping:legacyArt.snipping,
   taskmgr:legacyArt.taskmgr,sticky:legacyArt.sticky,
   run:legacyArt.run,cmd:legacyArt.cmd,computer:legacyArt.computer,
+  games:legacyArt.games,chess:legacyArt.chess,mahjong:legacyArt.mahjong,
+  minesweeper:legacyArt.minesweeper,purbleplace:legacyArt.purbleplace,
+  solitaire:legacyArt.solitaire,spidersolitaire:legacyArt.spidersolitaire,
+  tetris:legacyArt.tetris,
   cpanel:legacyArt.cpanel,display:legacyArt.display,
   programs:legacyArt.programs,accounts:legacyArt.accounts,
   ...legacyCpanelTileArtwork
