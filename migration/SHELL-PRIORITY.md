@@ -130,3 +130,48 @@ still offers its existing direct New folder action. Original per-item menus,
 source iconography, theme skin CSS, source popup hover transition, properties,
 complete shortcut creation and paired original screenshots remain pending.
 No assertion that the entire shell has reached source parity is made.
+
+## Source DesktopItemMenu and Computer New submenu follow-up
+
+Pinned original `src/modules/system/main.js` DesktopItemMenu `M.items()`
+source action order: Open, Bin-only Empty Recycle Bin, Pin/Unpin,
+Send to Desktop (installed default programs), Send to → Compressed folder
+(file paths), Download (eligible non-shortcut extensions), Cut, Copy,
+Delete, Rename, Properties. Visibility is conditioned on multiple
+selection, system icon, shortcut backing and valid path.
+
+Migrated pure `sourceDesktopItemMenu.ts` defines this order and disabled
+predicates with unit tests for system Computer, empty/populated Bin,
+installed source apps, TXT files, directory/.lnk exclusions and
+multiselection. `DesktopIcons` uses it to render the item menu.
+- Empty Bin is enabled only after reading the actual source-mounted
+  trash directory. A confirmation is required before
+  `VirtualFileStore.emptyTrash` permanently removes items; Cancel
+  leaves them intact.
+- Download for eligible regular files uses `readBytes` and a scoped
+  browser Blob URL, preserving Guest file bytes rather than touching
+  host files.
+- Send to Desktop calls the existing `createSourceDesktopShortcut`
+  with installed pinned source program ID and collision-safe .lnk
+  JSON. This is intentionally not enabled for arbitrary URLs,
+  uninstalled programs or source system icons.
+- Pin/Unpin, Compressed Folder and Properties remain visibly disabled
+  until the corresponding real source services exist. They must not
+  be reported as finished despite correct menu visibility.
+- New desktop/mobile acceptance tests exercise item order,
+  file download, multi-select restrictions and confirm/cancel/empty
+  Recycle Bin lifecycle.
+
+Original `main.js` ExplorerMenu background New submenu differs from
+Desktop New: it has **Folder, Rich Text Document, Text Document**,
+without Shortcut. `ExplorerApp` now uses shared
+`@windows-os/ui/desktop-create` and existing `ExplorerSession`
+for actual Guest VFS operations and Win7 inline renaming. Bin continues
+to hide New. Context-menu Properties stays disabled as upstream.
+The shared source folder/text/RTF helper has retained collision-safe
+creation and its existing unit coverage; Explorer browser cases verify
+all three payload types. Original hover submenus/visual theme fidelity
+and complete Explorer item Send To/Properties remain outstanding.
+
+No release until exact-SHA opt-in tests pass, source vs React screenshots
+are compared and outstanding shell modules close.
