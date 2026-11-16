@@ -24,16 +24,17 @@ test("original Games Start entry opens source shell:games pane with installed ti
     .toContainText("Classic Tetris");
   await expect(games.locator('[data-test-offline-game="tetris"]'))
     .toContainText("Albert Lobo");
-  // Only source-backed Tetris and Minesweeper have playable React engines.
+  // Source-backed Tetris, Minesweeper and Klondike have React engines.
   // Other .exe stubs remain disabled, not fabricated.
-  for(const id of ["chess","mahjong","purbleplace",
-    "solitaire","spidersolitaire"]){
+  for(const id of ["chess","mahjong","purbleplace","spidersolitaire"]){
     await expect(games.locator('[data-test-offline-game="'+id+'"]'))
       .toBeDisabled();
   }
   await expect(games.locator('[data-test-offline-game="minesweeper"]'))
     .toBeEnabled();
   await expect(games.locator('[data-test-offline-game="tetris"]'))
+    .toBeEnabled();
+  await expect(games.locator('[data-test-offline-game="solitaire"]'))
     .toBeEnabled();
   await expect(games.locator('[data-test-source-listview="online-games"]'))
     .toBeVisible();
