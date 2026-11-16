@@ -344,3 +344,21 @@ test("Win7 Control Panel reuses the exact four-state 27px navigation sprite",asy
   await forward.click();
   await expect(panel.locator("[data-test-cpanel-display]")).toBeVisible();
 });
+
+test("non-Win7 Control Panel never receives the Win7-only navigation sprite",async({page})=>{
+  await page.goto("/?theme=winxp");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await page.locator('[data-test-open-cpanel]').click();
+  const panel=page.locator('[data-test-window="cpanel"] [data-test-cpanel]');
+  const nav=panel.getByRole("navigation",{name:"Control Panel history"});
+  const back=nav.getByRole("button",{name:"Back"});
+  await expect(nav).toHaveClass(/windows-cpanel__navigation--fallback/);
+  await expect(back).toBeDisabled();
+  expect(await back.evaluate(el=>getComputedStyle(el).backgroundImage))
+    .not.toContain("data:image/webp;base64");
+  await panel.locator('[data-test-cpanel-item="display"]').click();
+  await expect(back).toBeEnabled();
+  await back.click();
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+});
