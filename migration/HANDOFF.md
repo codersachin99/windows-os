@@ -1,3 +1,16 @@
+## Shared original 0510 card dragging model — 17 November 2026
+
+Added `sourceCardDrag.ts` and Vitest coverage for exact
+4px axis drag threshold, first-greatest-overlap legal target,
+and CSS-scaled board coordinate conversion, source-traced
+from shared cards mixin 0510 and helper 5ea1. Solitaire UI
+is intentionally still disabled; the game will use these
+shared primitives along with the imported sprite/sounds.
+This later code is not in the earlier Solitaire model
+`[run-ci]` snapshot #43948813972. Keep draft PR #1.
+
+---
+
 ## Deliberate Solitaire model/assets acceptance — 17 November 2026
 
 One opt-in **[run-ci]** for the source-backed Klondike

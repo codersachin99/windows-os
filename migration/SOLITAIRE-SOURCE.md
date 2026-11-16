@@ -1,3 +1,25 @@
+## Shared 0510 card drag/drop behavior — 17 November 2026
+
+Traced `src/modules/chunks/shared~solitaire~spidersolitaire.js`,
+webpack 0510/5ea1. Source `startCardDrag` ignores non-primary
+mousedown, saves start screen and board offsets, then promotes
+a pending click into a drag after a **4px move on either axis**
+(not a 4px radial distance). A pending mouseup invokes
+click-to-auto-placement; dragged mouseup drops onto the legal
+zone with maximum **positive rectangle overlap** (first
+zone wins ties), or plays Drop if none. Board-relative pointer
+geometry corrects for CSS scale by
+`(clientX - bounds.left)/(bounds.width/offsetWidth)`.
+Shared `sourceCardDrag.ts` ports these as pure functions,
+with deterministic tests, ready for both Solitaire and Spider.
+
+This is deliberately not yet wired to a Solitaire board window;
+do not claim card dragging exists or that the Solitaire tile is
+playable. The upcoming UI must call these rather than invent
+distance/nearest-center/touch heuristics.
+
+---
+
 ## Klondike e202 original sprite, pile layout and CSS — 17 November 2026
 
 Decoded pinned source `cards-spritesheet.f136d9d3.webp`:
