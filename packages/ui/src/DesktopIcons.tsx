@@ -11,11 +11,14 @@ import { appRegistry, browserStorage, fileClipboard, fileDragSession, fileStore,
 import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
 import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
-  createSourceDesktopItem, type DesktopNewItem
+  createSourceDesktopItem,createSourceDesktopShortcut,type DesktopNewItem
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
-import { importDroppedFiles, SHELL_DRAG_TYPE } from "@windows-os/filesystem";
+import {
+  sourceDesktopItemMenu,type SourceDesktopItemMenuAction
+} from "./sourceDesktopItemMenu";
+import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
@@ -83,6 +86,8 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [error, setError] = useState<string | null>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
+  const [pendingEmptyBin,setPendingEmptyBin]=useState(false);
+  const [trashCount,setTrashCount]=useState(0);
   const [createdId, setCreatedId] = useState<string | null>(null);
   const [renaming, setRenaming] = useState<{id:string;value:string} | null>(null);
   const renameRef = useRef<{id:string;value:string} | null>(null);
@@ -105,6 +110,24 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     target?.setAttribute("data-desktop-pointer-hover", "true");
   }, []);
 
+
+  // Source DesktopItemMenu Bin action reads the actual mounted trash folder
+  // on the same VFS as Explorer, never an assumed empty or fabricated path.
+  useEffect(()=>{
+    let live=true,revision=0;
+    const refresh=()=>{
+      const token=++revision;
+      const path=sourceFilesystemRuntime.snapshot()?.trashPath;
+      if(!path){if(live)setTrashCount(0);return;}
+      void fileStore.list(path).then(entries=>{
+        if(live&&token===revision)setTrashCount(entries.length);
+      }).catch(()=>{if(live&&token===revision)setTrashCount(0);});
+    };
+    refresh();
+    const unsubFiles=fileStore.subscribe(refresh);
+    const unsubRuntime=sourceFilesystemRuntime.subscribe(refresh);
+    return ()=>{live=false;revision++;unsubFiles();unsubRuntime();};
+  },[]);
 
   // Explorer and Desktop share one file clipboard. The host OS clipboard is
   // intentionally untouched and unmounted data is never fabricated.
@@ -252,6 +275,49 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       setError(null);
     }).catch(cause =>
       setError(cause instanceof Error ? cause.message : "Cannot create desktop item"));
+  };
+
+  const sendProgramToDesktop = (item:DesktopItem)=>{
+    setMenu(null);
+    const desktop=sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if(!desktop||!item.app||!sourceProgramsById.get(item.app.id)?.installPath){
+      setError("The installed source program or Guest Desktop is unavailable.");
+      return;
+    }
+    void createSourceDesktopShortcut(fileStore,desktop,item.app.id,item.label)
+      .then(uri=>{setSelected(["file:"+uri]);setError(null);})
+      .catch(cause=>setError(cause instanceof Error?
+        cause.message:"Cannot create desktop shortcut"));
+  };
+  const downloadSourceFile=(item:DesktopItem)=>{
+    setMenu(null);
+    const entry=item.file?.entry;
+    if(!entry||entry.type!=="file")return;
+    void fileStore.readBytes(entry.uri).then(bytes=>{
+      const blob=new Blob([new Uint8Array(bytes)],{type:"application/octet-stream"});
+      const url=URL.createObjectURL(blob);
+      const link=document.createElement("a");
+      link.href=url;link.download=entry.name;
+      document.body.append(link);link.click();link.remove();
+      // Release after click navigation has had an opportunity to consume
+      // the object URL; no data is uploaded to the host or another service.
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+      setError(null);
+    }).catch(cause=>setError(cause instanceof Error?
+      cause.message:"Cannot download desktop file"));
+  };
+  const requestEmptyBin=()=>{
+    setMenu(null);
+    if(trashCount>0&&sourceFilesystemRuntime.snapshot()?.trashPath)
+      setPendingEmptyBin(true);
+  };
+  const confirmEmptyBin=()=>{
+    setPendingEmptyBin(false);
+    const path=sourceFilesystemRuntime.snapshot()?.trashPath;
+    if(!path)return;
+    void fileStore.emptyTrash(path).then(()=>setError(null))
+      .catch(cause=>setError(cause instanceof Error?
+        cause.message:"Could not empty Recycle Bin"));
   };
 
   const openShortcutWizard = () => {
@@ -728,6 +794,36 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     }
   };
   const size = SOURCE_DESKTOP_ICON_SIZES[options.iconSize];
+  const contextItem=items.find(item=>item.id===menu?.id);
+  const contextKeys=menu?.id&&selected.includes(menu.id)?selected:
+    menu?.id?[menu.id]:[];
+  const itemActions=contextItem?sourceDesktopItemMenu({
+    id:contextItem.id,
+    isFile:Boolean(contextItem.file),
+    fileName:contextItem.file?.entry.name,
+    fileType:contextItem.file?.entry.type,
+    programInstalled:Boolean(
+      contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
+    multiple:contextKeys.length>1,
+    trashCount
+  }):[];
+  const runItemAction=(action:SourceDesktopItemMenuAction,item:DesktopItem)=>{
+    switch(action){
+      case "open":
+        setMenu(null);openItem(item);break;
+      case "empty-bin":requestEmptyBin();break;
+      case "send-desktop":sendProgramToDesktop(item);break;
+      case "download":downloadSourceFile(item);break;
+      case "cut":prepareDesktopClipboard("cut",contextKeys);break;
+      case "copy":prepareDesktopClipboard("copy",contextKeys);break;
+      case "delete":requestDesktopDelete(contextKeys);break;
+      case "rename":if(item.file)beginRename(item.file);break;
+      // Source Pin/Properties/Compress have no migrated implementation yet.
+      case "pin":
+      case "send-to":
+      case "properties":break;
+    }
+  };
 
   return <div id="desktop-icons" ref={list}
     className={"desktop__icon-list windows-desktop__icons" +
@@ -866,28 +962,14 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     {menu && <div ref={menuHost} role="menu" className="windows-desktop__menu"
       data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}>
       {menu.id ? <>
-        <button role="menuitem" onClick={() => {
-          const app = items.find(item => item.id === menu.id);
-          setMenu(null);
-          if (app) openItem(app);
-        }}>Open</button>
-        {items.find(item => item.id === menu.id)?.file && <>
-          <button role="menuitem" onClick={() => {
-            prepareDesktopClipboard("cut", selected.includes(menu.id!) ? selected : [menu.id!]);
-          }}>Cut</button>
-          <button role="menuitem" onClick={() => {
-            prepareDesktopClipboard("copy", selected.includes(menu.id!) ? selected : [menu.id!]);
-          }}>Copy</button>
-          <button role="menuitem" onClick={() => {
-            const file = items.find(item => item.id === menu.id)?.file;
-            setMenu(null);
-            if (file) beginRename(file);
-          }}>Rename</button>
-          <button role="menuitem" onClick={() => {
-            requestDesktopDelete(selected.includes(menu.id!) ? selected : [menu.id!]);
-          }}>Delete</button>
-        </>}
-        <button role="menuitem" disabled title="Original shortcut properties are pending">Properties</button>
+        {contextItem&&itemActions.map(action=>
+          <button key={action.id} role="menuitem"
+            data-test-desktop-item-action={action.id}
+            disabled={action.disabled}
+            title={action.disabled?"Original action not yet migrated or unavailable":undefined}
+            onClick={()=>runItemAction(action.id,contextItem)}>
+            {action.label}
+          </button>)}
       </> : <>
         <button role="menuitem" aria-expanded={menu.view}
           onClick={() => setMenu({ ...menu, view: !menu.view, newOpen: false })}>View ▸</button>
@@ -942,6 +1024,26 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         importDesktopUploads(event.currentTarget.files);
         event.currentTarget.value="";
       }}/>
+    {pendingEmptyBin&&<div className="windows-desktop__create-backdrop"
+      data-test-desktop-empty-bin="" role="alertdialog" aria-modal="true"
+      aria-label="Confirm empty Recycle Bin"
+      onPointerDown={event=>event.stopPropagation()}
+      onClick={event=>event.stopPropagation()}
+      onContextMenu={event=>event.stopPropagation()}
+      onKeyDown={event=>{
+        if(event.key==="Escape"){event.preventDefault();setPendingEmptyBin(false);}
+      }}>
+      <div className="windows-desktop__create-dialog">
+        <h3>Empty Recycle Bin</h3>
+        <p>Permanently delete all {trashCount} item{trashCount===1?"":"s"} in
+          the Recycle Bin?</p>
+        <div className="windows-desktop__create-actions">
+          <button autoFocus type="button"
+            onClick={()=>setPendingEmptyBin(false)}>No</button>
+          <button type="button" onClick={confirmEmptyBin}>Yes</button>
+        </div>
+      </div>
+    </div>}
     {pendingDelete && <div className="windows-desktop__create-backdrop"
       data-test-desktop-confirm="" role="alertdialog" aria-modal="true"
       aria-label="Confirm desktop deletion"
