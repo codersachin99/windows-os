@@ -311,3 +311,30 @@ test("original a259 retains indexed search when navigating Back from a matched p
   await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
   await expect(panel.locator("[data-test-cpanel-results]")).toHaveCount(0);
 });
+
+test("Win7 Control Panel reuses the exact four-state 27px navigation sprite",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const nav=panel.getByRole("navigation",{name:"Control Panel history"});
+  const back=nav.getByRole("button",{name:"Back"});
+  const forward=nav.getByRole("button",{name:"Forward"});
+  await expect(nav).toBeVisible();
+  await expect(back).toBeDisabled();
+  await expect(forward).toBeDisabled();
+  await expect(back).toHaveCSS("background-position-y","-81px");
+  await expect(forward).toHaveCSS("transform","matrix(-1, 0, 0, 1, 0, 0)");
+  const sprite=await back.evaluate(element=>({
+    image:getComputedStyle(element).backgroundImage,
+    width:element.getBoundingClientRect().width
+  }));
+  expect(sprite.image).toContain("data:image/webp;base64,");
+  expect(sprite.width).toBe(27);
+  await panel.locator('[data-test-cpanel-item="display"]').click();
+  await expect(back).toBeEnabled();
+  await expect(back).toHaveCSS("background-position-y","0px");
+  await back.click();
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+  await expect(forward).toBeEnabled();
+  await forward.click();
+  await expect(panel.locator("[data-test-cpanel-display]")).toBeVisible();
+});
