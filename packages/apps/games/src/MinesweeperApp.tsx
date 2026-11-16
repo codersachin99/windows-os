@@ -1,6 +1,6 @@
 import {useEffect,useState,type MouseEvent} from "react";
 import {
-  SourceMineBoard,sourceGenerateMineArray,SOURCE_MINE_BEGINNER,
+  SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_CELL_FLAG,SOURCE_MINE_CELL_STATE,
   SOURCE_MINE_BOARD_STATE,type SourceMineOptions,type SourceMineCell
 } from "./minesweeper";
@@ -59,9 +59,10 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
     if(!chosen||chosen.state===SOURCE_MINE_CELL_STATE.OPEN||
       chosen.flag!==SOURCE_MINE_CELL_FLAG.NONE)return;
     let active=board;
+    const pristine=sourceMineShouldStartTimer(board.state());
     // Original Vue 245c.open() protects a mine on the first unopened
     // board cell by regenerating the entire source board once.
-    if(board.state()===SOURCE_MINE_BOARD_STATE.PRISTINE&&chosen.isMine){
+    if(pristine&&chosen.isMine){
       active=newBoard(options);
       setBoard(active);
       active.openCell(x,y);
@@ -69,7 +70,9 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
       setStarted(true);
       return;
     }
-    setStarted(true);
+    // Source 245c only starts the timer on a pristine Board. Flagging
+    // first makes it IN_PROGRESS and deliberately leaves the clock stopped.
+    if(pristine)setStarted(true);
     active.openCell(x,y);
     const next=active.grid();
     setGrid(next);
