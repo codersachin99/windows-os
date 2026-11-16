@@ -72,7 +72,7 @@ export class SourceMineBoard{
     this.cells=mineArray.map((row,y)=>row.map((isMine,x)=>({
       x,y,isMine:isMine===1,numAdjacentMines:this.neighborCount(mineArray,x,y),
       state:SOURCE_MINE_CELL_STATE.CLOSED,flag:SOURCE_MINE_CELL_FLAG.NONE
-    })));
+    } satisfies MutableCell)));
   }
   state():SourceMineBoardState{return this.boardState;}
   numRows():number{return this.rows;}
