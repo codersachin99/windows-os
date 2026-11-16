@@ -107,7 +107,7 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
         <output data-test-minesweeper-remaining="" aria-label="Mines remaining">{remaining}</output>
         <button type="button" className="windows-minesweeper__restart"
           aria-label="New Game" onClick={()=>reset()}>
-          {result===-1?"☹":result===1?"😎":"☺"}
+          {result===-1?":(":result===1?":D":":)"}
         </button>
         <output data-test-minesweeper-seconds="" aria-label="Elapsed seconds">{elapsed}</output>
       </div>
@@ -123,8 +123,8 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
         {grid.map((row,y)=>row.map((cell,x)=>{
           const openCell=cell.state===SOURCE_MINE_CELL_STATE.OPEN;
           const mine=(openCell||result===-1)&&cell.isMine;
-          const content=mine?"✹":!openCell?
-            cell.flag===SOURCE_MINE_CELL_FLAG.EXCLAMATION?"⚑":
+          const content=mine?"*":!openCell?
+            cell.flag===SOURCE_MINE_CELL_FLAG.EXCLAMATION?"F":
             cell.flag===SOURCE_MINE_CELL_FLAG.QUESTION?"?":""
             :cell.numAdjacentMines||"";
           const label=`Row ${y+1} column ${x+1} ${mine?"mine":
