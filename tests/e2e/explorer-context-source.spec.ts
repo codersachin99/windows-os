@@ -72,3 +72,39 @@ test("source Bin context retains View/Copy path but forbids upload and paste",as
   await expect(menu.getByRole("menuitemradio")).toHaveCount(8);
   await expect(menu).toBeVisible();
 });
+
+test("pinned Computer New submenu creates source folder, TXT and RTF in Guest VFS",async({page})=>{
+  const computer=await openFolder(page,"computer");
+  const expected=[
+    ["folder","New folder"],
+    ["richtext","New Rich Text Document.rtf"],
+    ["text","New Text Document.txt"]
+  ] as const;
+  for(const [kind,filename] of expected){
+    const menu=await openBackgroundMenu(computer);
+    await menu.locator("[data-test-explorer-context-new]").click();
+    await expect(menu.locator("[data-test-explorer-context-new-kind]")).toHaveText([
+      "Folder","Rich Text Document","Text Document"
+    ]);
+    await menu.locator('[data-test-explorer-context-new-kind="'+kind+'"]').click();
+    const item=computer.locator('[data-test-explorer-item="'+filename+'"]');
+    await expect(item).toBeVisible();
+    // Win7 source offers immediate inline rename on created items.
+    const editor=item.locator("input");
+    if(await editor.count())await editor.press("Enter");
+    await expect(item).toBeVisible();
+  }
+  const paths=await page.evaluate(()=>{
+    const raw=JSON.parse(localStorage.getItem("windows-os:vfs:guest:v1")||"{}") as {
+      entries:{uri:string;content?:string;type:string}[]
+    };
+    return raw.entries.filter(entry=>entry.uri.includes("New ")).map(entry=>({
+      uri:entry.uri,content:entry.content
+    }));
+  });
+  expect(paths.some(p=>p.uri.endsWith("/New folder"))).toBe(true);
+  expect(paths.some(p=>p.uri.endsWith("/New Rich Text Document.rtf")&&
+    p.content?.startsWith("{\\\\rtf1\\\\ansi"))).toBe(true);
+  expect(paths.some(p=>p.uri.endsWith("/New Text Document.txt")&&p.content===""))
+    .toBe(true);
+});
