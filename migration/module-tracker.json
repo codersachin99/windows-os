@@ -1197,11 +1197,16 @@
       "evidence": [
         "packages/apps/games/src/sourceCards.ts",
         "packages/apps/games/src/sourceCards.test.ts",
+        "packages/apps/games/src/sourceCardArtwork.ts",
+        "packages/apps/games/src/sourceCardArtwork.test.ts",
         "packages/apps/games/src/sourceSolitaire.ts",
         "packages/apps/games/src/sourceSolitaire.test.ts",
-        "migration/SOLITAIRE-SOURCE.md"
+        "packages/apps/games/src/sourceSolitaireLayout.ts",
+        "migration/SOLITAIRE-SOURCE.md",
+        "migration/source-css/solitaire.css",
+        "migration/source-css/shared~solitaire~spidersolitaire.css"
       ],
-      "verification": "Source e202/5ea1 pure rules model and unit tests begun. Card sprite/drag rendering, source shuffle/suit sequence, preferences, audio, dialogs and browser gameplay pending; tile disabled."
+      "verification": "Source e202/5ea1/2f7e Klondike pure model, source card sprite dimensions, responsive board layout and 10 byte-identical source media assets. Unit tests added but pending new CI acceptance. No Solitaire React window yet; drag/UI/sound/dialogs/screenshot parity missing; tile disabled."
     },
     {
       "source": "src/modules/games/spidersolitaire.js",
