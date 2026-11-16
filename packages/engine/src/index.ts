@@ -187,3 +187,8 @@ export {
   sourceFindSearchTerm,sourceScoreSearch,
   type SourceSearchQuery,type SourceSearchField
 } from "./sourceSearch";
+
+export {
+  SOURCE_SEARCH_DEBOUNCE_MS,sourceCreateDelayedSearch,
+  type SourceDelayedSearch
+} from "./sourceDelayedSearch";
