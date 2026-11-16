@@ -48,6 +48,13 @@ at revision `4e63290d783009e1293433c6ccf252abba9c1187`.
   Control Panel filters are parsed and retained, but source a682 does not
   use them to filter item results; a filter-only search therefore shows
   root tiles instead of a fabricated "No items" state.
+- The original 1902 helper in the same pinned shared webpack chunk defines
+  a **300 ms** debounce for nonempty search text. React now uses the reusable
+  `sourceCreateDelayedSearch` engine helper and preserves immediate empty
+  input updates, pending-query cancellation, forced `now()` behavior and
+  unmount cleanup. A dedicated Vitest suite tests the helper with fake
+  timers. The search input remains directly responsive while results wait
+  for the exact source delay.
 - `ControlPanelApp.tsx` renders **all 24** tiles in original source order.
   A root item is enabled only for the six genuinely implemented panel
   destinations: Display, Programs and Features, Guest User Accounts,
@@ -68,6 +75,5 @@ at revision `4e63290d783009e1293433c6ccf252abba9c1187`.
 **Scope/acceptance:** registry and asset import implemented, but do not mark
 Control Panel visually/source-parity accepted until a successful opted-in
 test run and fixed original/React screenshot comparison. Remaining gaps:
-exact source CSS/listview tile geometry, original search debounce timing
-and semantic filter consumers, translated locales beyond pinned en-US, program/setting host adapters,
+exact source CSS/listview tile geometry, source search host-filter consumers, translated locales beyond pinned en-US, program/setting host adapters,
 theme-specific asset maps, and full screenshot comparison. PR stays draft.
