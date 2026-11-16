@@ -24,7 +24,10 @@ const TARGET_ONLY_SCENES = [
   "computer-details-metadata", "computer-tiles-metadata", "computer-message-confirm",
   // Source registry, indexed search and working Backup/Action Center views.
   // Target-only until the private pinned Vue runtime can be captured.
-  "cpanel-root", "cpanel-search", "cpanel-backup", "cpanel-action-center"
+  "cpanel-root", "cpanel-search", "cpanel-backup", "cpanel-action-center",
+  // Games shell and first source-backed playable game. React-only until
+  // original Vue source runtime can be launched at the pinned SHA.
+  "games-library", "minesweeper-initial", "minesweeper-intermediate"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -124,6 +127,25 @@ async function prepareScene(page, kind, scene) {
       await page.locator('[data-test-program="' + appId + '"]').click();
       await page.locator('[data-test-window="' + appId + '"]')
         .waitFor({ state: "visible", timeout: 15000 });
+      return;
+    }
+    if (scene==="games-library"||scene.startsWith("minesweeper-")) {
+      await page.getByRole("button",{name:"Open Start menu"}).click();
+      await page.locator("[data-test-open-games]").click();
+      const games=page.locator('[data-test-window="games"] [data-test-games-root]');
+      await games.waitFor({state:"visible",timeout:15000});
+      await games.locator('[data-test-offline-game="minesweeper"]')
+        .waitFor({state:"visible",timeout:10000});
+      if(scene==="games-library")return;
+      await games.locator('[data-test-offline-game="minesweeper"]').click();
+      const mine=page.locator('[data-test-window="minesweeper"] [data-test-minesweeper]');
+      await mine.waitFor({state:"visible",timeout:15000});
+      if(scene==="minesweeper-intermediate"){
+        await mine.getByRole("button",{name:"Game",exact:true}).click();
+        await mine.getByRole("menuitemradio",{name:"Intermediate"}).click();
+        await mine.locator("[data-test-mine-cell]").first()
+          .waitFor({state:"visible",timeout:10000});
+      }
       return;
     }
     if (scene.startsWith("cpanel-")) {
