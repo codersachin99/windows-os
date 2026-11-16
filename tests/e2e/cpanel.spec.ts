@@ -270,6 +270,12 @@ test("original Control Panel indexed tasks route only migrated destinations",asy
   await taskbar.getByRole("button",{name:"Customize icons on the taskbar"}).click();
   await expect(panel.locator("[data-test-cpanel-notification]")).toBeVisible();
   await panel.locator("[data-test-cpanel-back]").click();
+  // Source a259.openLocation preserves searchedText. Back from a task
+  // returns to the prior search results; only explicit clearing shows tiles.
+  await expect(search).toHaveValue("customize icons");
+  await expect(taskbar).toBeVisible();
+  await expect(panel.locator("[data-test-cpanel-items]")).toHaveCount(0);
+  await search.fill("");
   await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
 });
 
