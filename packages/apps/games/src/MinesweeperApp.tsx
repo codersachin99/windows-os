@@ -1,4 +1,9 @@
-import {useEffect,useState,type MouseEvent} from "react";
+import {useEffect,useRef,useState,type MouseEvent} from "react";
+import {
+  emptyMineStatistics,persistMineStatistics,readMineStatistics,
+  sourceMineRoundStarted,sourceMineRoundWon,sourceMineWinPercentage,
+  type SourceMineStatsLevel
+} from "./mineStatistics";
 import {legacyMineArtwork} from "@windows-os/assets";
 import {
   SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
@@ -23,10 +28,9 @@ function sourceSafeOpenCount(grid:readonly (readonly SourceMineCell[])[]):number
     cell.state===SOURCE_MINE_CELL_STATE.OPEN&&!cell.isMine).length,0);
 }
 
-/** First playable Games port: 9538 Board + 245c source game rules.
- * Source 21px grid, first-click mine reroll, right-click flag cycle, timer,
- * and all-safe-cells winning rule. Source CSS/audio/stats and Advanced
- * responsive layout remain pending and are never claimed implemented. */
+/** Source 9538 Board + 245c game rules, result and stats UI.
+ * Original sprites are imported; audio, true static child windows,
+ * Advanced layout and full pixel parity remain pending. */
 export function MinesweeperApp({onClose}:MinesweeperAppProps){
   const [level,setLevel]=useState<Level>(0);
   const [board,setBoard]=useState(()=>newBoard(SOURCE_MINE_BEGINNER));
@@ -36,31 +40,58 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
   const [started,setStarted]=useState(false);
   const [flagMode,setFlagMode]=useState(false);
   const [gameMenu,setGameMenu]=useState(false);
+  const [roundEnded,setRoundEnded]=useState(false);
+  const [statsOpen,setStatsOpen]=useState(false);
+  const [resetConfirm,setResetConfirm]=useState(false);
+  const [statLevel,setStatLevel]=useState<SourceMineStatsLevel>(0);
+  const [stats,setStats]=useState(readMineStatistics);
+  const resultTimeout=useRef<ReturnType<typeof setTimeout>|null>(null);
   const options=optionsFor(level);
+  useEffect(()=>{persistMineStatistics(stats);},[stats]);
+  useEffect(()=>()=>{
+    if(resultTimeout.current!==null)clearTimeout(resultTimeout.current);
+  },[]);
   useEffect(()=>{
     if(!started||result!==0)return;
     const interval=setInterval(()=>setElapsed(value=>value+1),1000);
     return ()=>clearInterval(interval);
   },[started,result]);
   const reset=(chosen:Level=level)=>{
+    if(resultTimeout.current!==null)clearTimeout(resultTimeout.current);
+    resultTimeout.current=null;
     const next=newBoard(optionsFor(chosen));
     setLevel(chosen);setBoard(next);setGrid(next.grid());
-    setResult(0);setElapsed(0);setStarted(false);setFlagMode(false);
-    setGameMenu(false);
+    setResult(0);setRoundEnded(false);setElapsed(0);setStarted(false);
+    setFlagMode(false);setGameMenu(false);setStatsOpen(false);
+    setResetConfirm(false);
+  };
+  const finish=(outcome:Exclude<Result,0>)=>{
+    setStarted(false);setRoundEnded(true);
+    // Source 245c schedules its child result window one second after the
+    // board has ended, while revealing all mine images immediately on loss.
+    resultTimeout.current=setTimeout(()=>{
+      setResult(outcome);resultTimeout.current=null;
+    },1000);
+  };
+  const closeGame=()=>{
+    if(resultTimeout.current!==null)clearTimeout(resultTimeout.current);
+    resultTimeout.current=null;onClose();
   };
   const flag=(x:number,y:number)=>{
-    if(result!==0)return;
+    if(result!==0||roundEnded||statsOpen||resetConfirm)return;
     board.cycleCellFlag(x,y);
     setGrid(board.grid());
   };
   const open=(x:number,y:number)=>{
-    if(result!==0)return;
+    if(result!==0||roundEnded||statsOpen||resetConfirm)return;
     if(flagMode){flag(x,y);return;}
     const chosen=board.cell(x,y);
     if(!chosen||chosen.state===SOURCE_MINE_CELL_STATE.OPEN||
       chosen.flag!==SOURCE_MINE_CELL_FLAG.NONE)return;
     let active=board;
     const pristine=sourceMineShouldStartTimer(board.state());
+    const recorded=pristine?sourceMineRoundStarted(stats,level):stats;
+    if(pristine)setStats(recorded);
     // Original Vue 245c.open() protects a mine on the first unopened
     // board cell by regenerating the entire source board once.
     if(pristine&&chosen.isMine){
@@ -76,15 +107,20 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
     if(pristine)setStarted(true);
     active.openCell(x,y);
     const next=active.grid();
-    setGrid(next);
     if(chosen.isMine){
-      setResult(-1);
+      // Original source explicitly reveals every mine on a lost board.
+      setGrid(next.map(row=>row.map(cell=>cell.isMine?
+        {...cell,state:SOURCE_MINE_CELL_STATE.OPEN}:cell)));
+      finish(-1);
       return;
     }
+    setGrid(next);
     // Source 245c counts opened safe cells separately from 9538.Board.WON,
     // which also requires correctly flagged mines. Preserve the UI rule.
-    if(sourceSafeOpenCount(next)===options.rows*options.cols-options.mines)
-      setResult(1);
+    if(sourceSafeOpenCount(next)===options.rows*options.cols-options.mines){
+      setStats(sourceMineRoundWon(recorded,level,elapsed,Date.now()));
+      finish(1);
+    }
   };
   const flagged=grid.flat().filter(cell=>cell.flag===SOURCE_MINE_CELL_FLAG.EXCLAMATION).length;
   const remaining=options.mines-flagged;
@@ -92,6 +128,7 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
   return <section className="windows-minesweeper" data-test-minesweeper="">
     <nav className="windows-minesweeper__menubar" aria-label="Minesweeper menus">
       <button type="button" aria-expanded={gameMenu}
+        disabled={statsOpen||result!==0}
         onClick={()=>setGameMenu(v=>!v)}>Game</button>
       <button type="button" disabled>Help</button>
       {gameMenu&&<div className="windows-minesweeper__menu" role="menu">
@@ -102,8 +139,10 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
           onClick={()=>reset(1)}>Intermediate</button>
         <button type="button" role="menuitem" disabled
           title="Original viewport-derived Advanced mode is not migrated">Advanced</button>
-        <button type="button" role="menuitem" disabled>Statistics</button>
-        <button type="button" role="menuitem" onClick={onClose}>Exit</button>
+        <button type="button" role="menuitem" onClick={()=>{
+          setGameMenu(false);setStatLevel(level);setStatsOpen(true);
+        }}>Statistics</button>
+        <button type="button" role="menuitem" onClick={closeGame}>Exit</button>
       </div>}
     </nav>
     <div className="windows-minesweeper__stage">
@@ -112,7 +151,8 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
           alt="" width={21} height={21}/>
         <output data-test-minesweeper-remaining="" aria-label="Mines remaining">{remaining}</output>
         <button type="button" className="windows-minesweeper__restart"
-          aria-label="New Game" onClick={()=>reset()}>
+          aria-label="New Game" disabled={statsOpen||result!==0}
+          onClick={()=>reset()}>
           {result===-1?":(":result===1?":D":":)"}
         </button>
         <output data-test-minesweeper-seconds="" aria-label="Elapsed seconds">{elapsed}</output>
@@ -121,6 +161,7 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
       </div>
       <div className="windows-minesweeper__controls">
         <label><input type="checkbox" checked={flagMode}
+          disabled={statsOpen||result!==0||roundEnded}
           onChange={event=>setFlagMode(event.target.checked)}
           data-test-minesweeper-flag-mode=""/>Flag mode (touch)</label>
         <span role="status" data-test-minesweeper-result="">{status}</span>
@@ -130,8 +171,8 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
         style={{gridTemplateColumns:`repeat(${options.cols},21px)`}}>
         {grid.map((row,y)=>row.map((cell,x)=>{
           const openCell=cell.state===SOURCE_MINE_CELL_STATE.OPEN;
-          const mine=(openCell||result===-1)&&cell.isMine;
-          const content=mine?"*":!openCell?
+          const mine=openCell&&cell.isMine;
+          const content=mine?"":!openCell?
             cell.flag===SOURCE_MINE_CELL_FLAG.EXCLAMATION?"F":
             cell.flag===SOURCE_MINE_CELL_FLAG.QUESTION?"?":""
             :cell.numAdjacentMines||"";
@@ -139,6 +180,7 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
             openCell?"open":cell.flag===SOURCE_MINE_CELL_FLAG.EXCLAMATION?
             "flagged":cell.flag===SOURCE_MINE_CELL_FLAG.QUESTION?"question":"covered"}`;
           return <button key={x+"-"+y} type="button"
+            disabled={roundEnded||result!==0||statsOpen}
             data-test-mine-cell={x+":"+y}
             aria-label={label} aria-pressed={openCell}
             className={"windows-minesweeper__cell"+
@@ -151,5 +193,65 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
         }))}
       </div>
     </div>
+    {result!==0?<div className="windows-minesweeper__overlay">
+      <section className="windows-minesweeper__dialog" role="dialog"
+        aria-modal="true" aria-label={result===1?"Games won":"Games lost"}
+        data-test-minesweeper-result-dialog="">
+        <header>{result===1?"Games won":"Games lost"}</header>
+        <p>{result===1?"Congratulations, you won the game!":
+          "Sorry you lost this game. Better luck next time!"}</p>
+        <p>Time: {elapsed} Seconds</p>
+        <footer>
+          <button type="button" onClick={closeGame}>Exit</button>
+          <button type="button" className="is-default" onClick={()=>reset()}>Play again</button>
+        </footer>
+      </section>
+    </div>:null}
+    {statsOpen?<div className="windows-minesweeper__overlay">
+      <section className="windows-minesweeper__dialog windows-minesweeper__dialog--stats"
+        role="dialog" aria-modal={!resetConfirm} aria-label="Minesweeper Statistics"
+        data-test-minesweeper-statistics="">
+        <header>Minesweeper Statistics</header>
+        <label className="windows-minesweeper__stats-level">Difficulty
+          <select value={statLevel}
+            onChange={event=>setStatLevel(Number(event.target.value) as SourceMineStatsLevel)}>
+            <option value={0}>Beginner</option>
+            <option value={1}>Intermediate</option>
+            <option value={2} disabled>Advanced</option>
+          </select>
+        </label>
+        <fieldset><legend>Best times</legend>
+          {stats[statLevel].scores.length?<table><tbody>
+            {stats[statLevel].scores.map((score,index)=><tr key={index}>
+              <td>{score.time} Seconds</td>
+              <td>{new Date(score.date).toLocaleDateString()}</td>
+            </tr>)}
+          </tbody></table>:null}
+        </fieldset>
+        <p data-test-mine-games-played="">Games played: {stats[statLevel].total}</p>
+        <p data-test-mine-games-won="">Games won: {stats[statLevel].won}</p>
+        <p data-test-mine-win-percentage="">Win percentage: {
+          sourceMineWinPercentage(stats[statLevel])}</p>
+        <footer>
+          <button type="button" className="is-default"
+            onClick={()=>setStatsOpen(false)}>Close</button>
+          <button type="button" onClick={()=>setResetConfirm(true)}>Reset</button>
+        </footer>
+      </section>
+    </div>:null}
+    {resetConfirm?<div className="windows-minesweeper__overlay windows-minesweeper__overlay--confirm">
+      <section className="windows-minesweeper__dialog" role="alertdialog"
+        aria-modal="true" aria-label="Reset statistics"
+        data-test-minesweeper-reset-confirm="">
+        <header>Reset statistics</header>
+        <p>Reset all Minesweeper statistics?</p>
+        <footer>
+          <button type="button" onClick={()=>setResetConfirm(false)}>Cancel</button>
+          <button type="button" className="is-default" onClick={()=>{
+            setStats(emptyMineStatistics());setResetConfirm(false);
+          }}>Reset</button>
+        </footer>
+      </section>
+    </div>:null}
   </section>;
 }

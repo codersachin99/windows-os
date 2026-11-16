@@ -1,3 +1,26 @@
+## Minesweeper source result + statistics slice (16 November 2026)
+
+Latest accepted baseline: [CI #43838335106](https://github.com/codersachin99/windows-os/actions/runs/43838335106)
+completed **SUCCESS** at exact SHA `2edf0cc10210aad11aed32adc5d5c64fb19dccd0`:
+TypeScript, Vitest, original image/blob source inventory, Contacts audit,
+production build and all desktop/mobile Chromium browser contracts.
+It accepts 11 byte-identical imported Games/Minesweeper images.
+
+New post-baseline development: delayed source result dialog with
+original 245c English win/loss text and replay/exit, show every mine
+on loss, active per-level Statistics menu, browser-persisted played/
+won/best times and Reset confirmation. Added unit and deterministic
+browser regressions. See `migration/GAMES-SOURCE.md`.
+Source `e0b8` persistence format and independent OS child windows
+are not yet ported; browser storage/overlays are declared adapters.
+Do not claim complete source parity or a new CI pass until a dedicated
+`[run-ci]` run tests this post-baseline commit.
+
+Keep PR #1 draft, main unchanged, no release. Ordinary pushes keep
+GitHub Actions skipped unless deliberately tagged.
+
+---
+
 ## Deliberate Games graphics acceptance gate — 16 November 2026
 
 After byte-identical restoration of 11 original Games/Minesweeper images

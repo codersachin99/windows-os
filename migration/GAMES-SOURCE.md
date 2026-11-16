@@ -1,3 +1,42 @@
+## Minesweeper 245c result and statistics lifecycle — 16 November 2026
+
+Source-traced the original Vue 245c result and statistics branches
+from pinned `src/modules/games/minesweeper.js` and the English source
+strings in `assets/locales/en-US.json`:
+
+- After a loss, original 245c exposes all mine cells and calls
+  `gameStats.complete()`; after a safe-cell win it calls
+  `gameStats.win()` and `saveScore({time:count,date:Date.now()})`.
+  Both outcomes clear the timer and show the result child window
+  **1,000 ms later**. React now reveals all mine sprites immediately,
+  schedules the matching delayed result, and renders the original
+  English text and **Exit / Play again** actions.
+- The pinned original's `Game > Statistics` is an active item and
+  opens a static child window with Beginner, Intermediate, Advanced
+  rows, best-times listing, total games, wins and integer win
+  percentage. React now implements this actual panel for the two
+  currently supported levels, with persisted per-difficulty browser
+  statistics, Cancel/Reset confirmation and Close.
+- Browser statistics storage at
+  `windows-os:minesweeper:guest:statistics:v1` is an **adaptation**,
+  not an assertion that the original `e0b8` user account persistence
+  byte format has been copied. Stats engine and reset behavior need
+  original account-store trace before claiming full data parity.
+  Advanced still cannot be selected in the playable React game.
+- Result/stats are currently responsive **in-window overlays** rather
+  than independent OS child-window instances. True window geometry,
+  parent locking, source stat reset confirmation artwork, music/sfx,
+  and original-versus-target pixel acceptance remain outstanding.
+
+Browser tests cover deterministic lost gameplay, source-delay result
+actions, statistics and reset; unit tests cover state transitions,
+per-difficulty grouping, score order and invalid persisted data.
+This commit is a functional expansion **after** successful original
+Games artwork [CI #43838335106](https://github.com/codersachin99/windows-os/actions/runs/43838335106).
+CI acceptance for this later code must be separately checked.
+
+---
+
 ## Verified original Games/Minesweeper artwork — 16 November 2026
 
 Restored eleven original WebP files from the exact pinned private

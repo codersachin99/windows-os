@@ -82,3 +82,45 @@ test("native Minesweeper changes source difficulty and supports touch flag mode"
   await expect(page.locator('[data-test-window="minesweeper"]')).toHaveCount(0);
   await expect(page.locator('[data-test-window="games"]')).toBeVisible();
 });
+
+test("source 245c loss reveals mines, delays result, and supports statistics/reset",async({page})=>{
+  const mine=await openMinesweeper(page);
+  // The original 9538 Fisher-Yates with RNG 0.5 places a mine at 0:0,
+  // while 1:0 is a safe numbered cell. Restart AFTER fixing RNG so both
+  // board positions are deterministic across Chromium profiles.
+  await page.evaluate(()=>{Math.random=()=>0.5;});
+  await mine.getByRole("button",{name:"New Game"}).click();
+  const safe=mine.locator('[data-test-mine-cell="1:0"]');
+  await safe.click();
+  await expect(safe).toHaveClass(/is-open/);
+  await mine.locator('[data-test-mine-cell="0:0"]').click();
+  await expect(mine.locator('[data-test-mine-cell="0:0"]')).toHaveClass(/is-mine/);
+  const dialog=mine.locator('[data-test-minesweeper-result-dialog]');
+  await expect(dialog).toBeVisible({timeout:6000});
+  await expect(dialog).toContainText("Sorry you lost this game. Better luck next time!");
+  await expect(dialog.getByRole("button",{name:"Play again"})).toBeVisible();
+  await dialog.getByRole("button",{name:"Play again"}).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(mine.locator('[data-test-mine-cell]')).toHaveCount(72);
+  await mine.getByRole("button",{name:"Game",exact:true}).click();
+  await mine.getByRole("menuitem",{name:"Statistics"}).click();
+  const stats=mine.locator('[data-test-minesweeper-statistics]');
+  await expect(stats).toBeVisible();
+  await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 1");
+  await expect(stats.locator('[data-test-mine-games-won]')).toHaveText("Games won: 0");
+  await expect(stats.locator('[data-test-mine-win-percentage]'))
+    .toHaveText("Win percentage: 0%");
+  await stats.getByRole("combobox").selectOption("1");
+  await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 0");
+  await stats.getByRole("combobox").selectOption("0");
+  await stats.getByRole("button",{name:"Reset"}).click();
+  const confirmation=mine.locator('[data-test-minesweeper-reset-confirm]');
+  await expect(confirmation).toBeVisible();
+  await confirmation.getByRole("button",{name:"Cancel"}).click();
+  await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 1");
+  await stats.getByRole("button",{name:"Reset"}).click();
+  await confirmation.getByRole("button",{name:"Reset"}).click();
+  await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 0");
+  await stats.getByRole("button",{name:"Close"}).click();
+  await expect(stats).toHaveCount(0);
+});
