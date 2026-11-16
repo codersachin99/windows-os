@@ -10,7 +10,7 @@ import {
   ControlPanelApp,SOURCE_TRAY_ITEMS,sourceTrayVisible,sourceTrayHidden,
   type SourceTrayPreferences
 } from "@windows-os/apps/cpanel";
-import {GamesApp,MinesweeperApp} from "@windows-os/apps/games";
+import {GamesApp,MinesweeperApp,TetrisApp} from "@windows-os/apps/games";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
@@ -134,6 +134,10 @@ function ApplicationContent({
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
+  if (appId === "tetris") return <TetrisApp
+    parentWindowId={windowId}
+    parentMinimized={Boolean(windows.find(win=>win.id===windowId)?.minimized)}
+    onClose={()=>dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
   if (appId === "minesweeper") return <MinesweeperApp
     parentWindowId={windowId}
     parentMinimized={Boolean(windows.find(win=>win.id===windowId)?.minimized)}

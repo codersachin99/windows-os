@@ -85,7 +85,7 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
     }),
     z: state.topZ + 1,
     minimized: false,
-    maximized: false,
+    maximized: app.window.fullscreen===true,
     resizable: app.window.resizable,
     minimizable: app.window.minimizable,
     titlebarIcon: app.window.titlebarIcon

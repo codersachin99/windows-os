@@ -23,6 +23,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
+    id: "tetris", label: "Classic Tetris",
+    icon: legacySourceIconArtwork("tetris").src,
+    kind: "game", desktop: false, showInStart: false,
+    // Original 13bc WindowMain fullscreen=true, resizable=false.
+    window: {width:920,height:620,resizable:false,fullscreen:true}
+  },
+  {
     id: "minesweeper", label: "Minesweeper",
     icon: legacySourceIconArtwork("minesweeper").src,
     kind: "game", desktop: false, showInStart: false,

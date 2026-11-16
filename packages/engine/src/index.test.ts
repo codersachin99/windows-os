@@ -248,3 +248,18 @@ describe("source 245c Advanced level requests fullscreen on a non-resizable game
     });
   });
 });
+
+describe("pinned Tetris fullscreen but non-resizable WindowMain contract",()=>{
+  it("opens the original fixed game maximized without enabling manual maximize",()=>{
+    const guest=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const app=appRegistry.get("tetris")!;
+    expect(app.window).toMatchObject({resizable:false,fullscreen:true});
+    const state=desktopReducer(guest,{type:"OPEN_APP",app});
+    const win=state.windows[0];
+    expect(win.maximized).toBe(true);
+    expect(win.resizable).toBe(false);
+    expect(desktopReducer(state,{type:"TOGGLE_MAXIMIZE",id:win.id})
+      .windows[0].maximized).toBe(true);
+  });
+});

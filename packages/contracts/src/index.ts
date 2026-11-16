@@ -8,6 +8,8 @@ export interface AppDefinition {
   icon: string;
   kind: AppKind;
   window: { width: number; height: number; resizable?: boolean; centered?: boolean;
+    /** Pinned fullscreen WindowMain can be fixed-size while maximized. */
+    fullscreen?:boolean;
     location?: "bottom-left"; minimizable?: boolean; titlebarIcon?: boolean };
   desktop?: boolean;
   showInStart?: boolean;

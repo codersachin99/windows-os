@@ -1,4 +1,6 @@
 export {GamesApp} from "./GamesApp";
+export {TetrisApp} from "./TetrisApp";
+export type {TetrisAppProps} from "./TetrisApp";
 export type {GamesAppProps} from "./GamesApp";
 export {SOURCE_GAMES_PATH,SOURCE_ONLINE_GAMES,sourceOfflineGames} from "./model";
 export type {SourceOfflineGame} from "./model";

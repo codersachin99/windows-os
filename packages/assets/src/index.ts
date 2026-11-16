@@ -92,6 +92,20 @@ export const legacyArt = {
 
 
 /** Three byte-identical original Minesweeper 245c game sprites. */
+export const legacyTetrisArtwork = Object.freeze({
+  background:"/assets/images/tetris-bg.abd0ff80.webp",
+  audio:{
+    bgm:"/assets/audio/tetris-bgm.4e25e1ef.mp3",
+    burn:"/assets/audio/tetris-burn.73862414.mp3",
+    levelup:"/assets/audio/tetris-levelup.94899555.mp3",
+    lock:"/assets/audio/tetris-lock.d3a08852.mp3",
+    move:"/assets/audio/tetris-move.4ca1112f.mp3",
+    over:"/assets/audio/tetris-over.e473e7b4.mp3",
+    quad:"/assets/audio/tetris-quad.7a619527.mp3",
+    rotate:"/assets/audio/tetris-rotate.b19c7c35.mp3"
+  }
+});
+
 export const legacyMineAudio = Object.freeze({
   newGame:"/assets/audio/minesweeper-new.60909dd9.mp3",
   lose:"/assets/audio/minesweeper-lose.b3b70bbb.mp3"
