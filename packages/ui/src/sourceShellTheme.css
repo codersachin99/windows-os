@@ -1,0 +1,169 @@
+/*
+ * Theme-specific shell tokens transcribed from pinned legacy-win7
+ * src/modules/themes/theme-winxp-scss.js and theme-win11-scss.js,
+ * and original .winxp/.win11 taskbar/window/desktop rules.
+ *
+ * Scope these adaptations to their selected theme. Win7 remains the
+ * existing dedicated source baseline. These are exact color/size values
+ * and a minimal geometry adapter, not a claim that all artwork and
+ * themes are pixel-perfect or complete.
+ */
+.windows-desktop[data-theme="winxp"]{
+  --source-startbutton-bg:#42a542;
+  --source-startmenu-border:#1665cb;
+  --source-startmenu-border-body:#81b6ff;
+  --source-startmenu-border-top:#ff8e24;
+  --source-startmenu-gradient-1:#1061cc;
+  --source-startmenu-gradient-2:#4792ec;
+  --source-startmenu-shadow-top:#1455b7;
+  --source-startmenu-right:#d3e5fa;
+  --source-startmenu-right-text:#0a246a;
+  --source-taskbar-bg:#2257d5;
+  --source-taskbar-tray:#1290e9;
+  --source-window-active-border:#0055e6;
+  --source-window-bg:#7a96df;
+  --source-accent:#316ac5;
+  font-family:Tahoma,"Microsoft Sans Serif",sans-serif;
+}
+.windows-desktop[data-theme="winxp"] .windows-taskbar{
+  background:linear-gradient(rgba(0,0,0,.2) 2%,rgba(255,255,255,.2667) 8%,
+    rgba(255,255,255,0) 17%,rgba(255,255,255,0) 30%,
+    rgba(255,255,255,.0667) 89%,rgba(0,0,0,.2) 98%),
+    var(--source-taskbar-bg);
+  border-top:1px solid #6eb6f8;
+  box-shadow:inset 0 1px 0 #fff5;
+  backdrop-filter:none;
+}
+.windows-desktop[data-theme="winxp"] .windows-taskbar__tray{
+  background:linear-gradient(rgba(0,0,0,.2) 2%,rgba(255,255,255,.2667) 8%,
+    rgba(255,255,255,0) 17%,rgba(255,255,255,0) 30%,
+    rgba(255,255,255,.0667) 89%,rgba(0,0,0,.2) 98%),
+    var(--source-taskbar-tray);
+  border-left:1px solid #0009;
+  box-shadow:inset 2px 0 #fff6;
+  padding:0 7px;height:100%;
+}
+.windows-desktop[data-theme="winxp"] .windows-taskbar__application{
+  border:0;border-radius:4px;background:var(--source-taskbar-bg);
+  box-shadow:inset 1px 1px #fff3,0 0 0 1px #0003;color:#fff;
+}
+.windows-desktop[data-theme="winxp"] .windows-taskbar__application:hover{
+  background:#55a0ff;
+}
+.windows-desktop[data-theme="winxp"] .windows-window{
+  border:3px solid var(--source-window-active-border);
+  border-radius:8px 8px 0 0;
+  background:var(--source-window-bg);
+  backdrop-filter:none;box-shadow:2px 3px 9px #0007;
+}
+.windows-desktop[data-theme="winxp"] .windows-window__titlebar{
+  color:#fff;font-weight:bold;text-shadow:1px 1px #0009;
+}
+.windows-desktop[data-theme="winxp"] .windows-desktop__shortcut.is-active
+.desktop__icon-name{
+  background:var(--source-accent);color:#fff;text-shadow:none;
+}
+.windows-desktop[data-theme="winxp"] .windows-startmenu--winxp{
+  border-color:var(--source-startmenu-border);
+  background:var(--source-taskbar-bg);
+}
+.windows-desktop[data-theme="winxp"] .windows-startmenu__xp-header{
+  background:radial-gradient(circle at 100% 0,rgba(0,0,0,.133) 0,
+    transparent 6%),linear-gradient(180deg,#ffffff66 1.5%,
+    #00000011 5%,var(--source-startmenu-gradient-1) 10%,
+    var(--source-startmenu-gradient-2));
+  border-bottom-color:var(--source-startmenu-border);
+  box-shadow:inset -2px 0 3px var(--source-startmenu-shadow-top),
+    inset 2px 0 3px #fff3;
+}
+.windows-desktop[data-theme="winxp"] .windows-startmenu__right{
+  background:var(--source-startmenu-right);
+  color:var(--source-startmenu-right-text);
+  border-left-color:var(--source-startmenu-border-body);
+}
+
+/* Source win11 theme uses a 48px centered taskbar, 40px task icons,
+ * light surface #f0f0f0 and #0003 borders. */
+.windows-desktop[data-theme="win11"]{
+  --taskbar-height:48px;
+  --source-surface:#f0f0f0;
+  --source-surface-bright:#f9f9f9;
+  --source-surface-hover:#e5f3ff;
+  --source-surface-active:#cce8ff;
+  --source-border:#0003;
+  --source-text:#1a1a1a;
+  --source-startmenu-bg:#f9f9f9;
+  --source-startmenu-item-hover:#fff;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar{
+  height:48px;justify-content:center;
+  background:var(--source-surface);color:var(--source-text);
+  border-top:1px solid var(--source-border);box-shadow:none;
+  backdrop-filter:none;gap:4px;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__start{
+  flex:0 0 40px;width:40px;height:40px;margin:0;
+  border-radius:4px;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__start img{
+  filter:none;width:32px;height:32px;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__running{
+  flex:0 1 auto;max-width:calc(100% - 215px);gap:4px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__application{
+  flex:0 0 40px;width:40px;height:40px;
+  background:transparent;border:1px solid transparent;
+  box-shadow:none;border-radius:4px;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__application:hover,
+.windows-desktop[data-theme="win11"] .windows-taskbar__application:not(.is-minimized){
+  background:var(--source-surface-bright);
+  border-color:#0001;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__tray{
+  position:absolute;right:17px;top:0;height:48px;
+  padding:0;gap:6px;color:var(--source-text);
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__tray>button,
+.windows-desktop[data-theme="win11"] .windows-taskbar__clock{
+  color:var(--source-text);
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__show-desktop{
+  position:absolute;right:0;bottom:0;height:48px;width:5px;
+  border:0;border-left:1px solid var(--source-border);background:transparent;
+}
+.windows-desktop[data-theme="win11"] .windows-window{
+  border-radius:8px;border:1px solid #0003;padding:4px;
+  background:var(--source-surface);
+  backdrop-filter:none;box-shadow:0 5px 15px #0003;
+}
+.windows-desktop[data-theme="win11"] .windows-window__titlebar{
+  color:var(--source-text);text-shadow:none;
+}
+.windows-desktop[data-theme="win11"] .windows-desktop__shortcut:hover{
+  border-color:transparent;background:#ffffff22;
+}
+.windows-desktop[data-theme="win11"] .windows-desktop__shortcut.is-active{
+  border-color:transparent;background:#ffffff44;
+}
+.windows-desktop[data-theme="win11"] .windows-startmenu--win11{
+  background:var(--source-startmenu-bg);
+  border-color:var(--source-border);
+}
+.windows-desktop[data-theme="win11"] .windows-startmenu--win11
+.windows-startmenu__program:hover{
+  background:var(--source-startmenu-item-hover);
+}
+@media(max-width:520px){
+  .windows-desktop[data-theme="win11"] .windows-taskbar__running{
+    max-width:calc(100% - 230px);
+  }
+  .windows-desktop[data-theme="win11"] .windows-taskbar__tray{
+    right:7px;gap:3px;
+  }
+  .windows-desktop[data-theme="win11"] .windows-taskbar__clock{
+    min-width:55px;font-size:10px;
+  }
+}
