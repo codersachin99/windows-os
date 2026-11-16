@@ -1204,9 +1204,16 @@
         "packages/apps/games/src/sourceSolitaireLayout.ts",
         "migration/SOLITAIRE-SOURCE.md",
         "migration/source-css/solitaire.css",
-        "migration/source-css/shared~solitaire~spidersolitaire.css"
+        "migration/source-css/shared~solitaire~spidersolitaire.css",
+        "packages/apps/games/src/SolitaireApp.tsx",
+        "packages/apps/games/src/SolitaireApp.css",
+        "packages/apps/games/src/sourceSolitaireView.ts",
+        "packages/apps/games/src/sourceSolitaireView.test.ts",
+        "tests/e2e/solitaire.spec.ts",
+        "packages/sdk/src/index.ts",
+        "packages/ui/src/DesktopShell.tsx"
       ],
-      "verification": "Source e202/5ea1/2f7e Klondike pure model, source card sprite dimensions, responsive board layout and 10 byte-identical source media assets. Unit tests added but pending new CI acceptance. No Solitaire React window yet; drag/UI/sound/dialogs/screenshot parity missing; tile disabled."
+      "verification": "Source e202/5ea1/2f7e pure Klondike model, exact card media and sprite, responsive React board, source 0510 pointer drag, pile/deal/undo interactions and parented Help/Appearance dialogs have source-backed tests awaiting opt-in CI. Browser launch now wired. Original statistics persistence, exact win animation, preference persistence and paired legacy screenshot parity are outstanding; do not call verified."
     },
     {
       "source": "src/modules/games/spidersolitaire.js",
