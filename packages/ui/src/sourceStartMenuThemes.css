@@ -1,0 +1,143 @@
+/*
+ * Theme-specific Start menu composition, traced to pinned legacy-win7:
+ * src/modules/shell/startmenu-winxp.js (6f58) and startmenu-win11.js (18ee)
+ * src/styles/shell/startmenu-winxp.css and startmenu-win11.css.
+ * Exact source asset palette and full interaction parity are still pending.
+ * Keep Win7 selectors untouched; never borrow its look for XP/Win11.
+ */
+.windows-startmenu--winxp{
+  width:min(360px,calc(100vw - 8px));
+  max-height:calc(100dvh - 44px);min-height:0;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:0;padding:0;overflow:hidden;border-radius:6px 6px 0 0;
+  border-color:#1d478f;
+  background:#d7e5f7;color:#111;
+  box-shadow:2px 2px 2px #0008;
+}
+.windows-startmenu--winxp .windows-startmenu__xp-header{
+  grid-column:1/-1;display:flex;align-items:center;gap:10px;
+  min-height:65px;box-sizing:border-box;padding:6px 10px;
+  border-bottom:1px solid #2850a8;
+  background:linear-gradient(#75a7ee 0%,#2969ca 65%,#1555bb 100%);
+  color:#fff;text-shadow:2px 2px 3px #000c;font-size:17px;
+}
+.windows-startmenu--winxp .windows-startmenu__xp-header img{
+  width:48px;height:48px;object-fit:cover;
+  border:2px solid #e7f0ff;border-radius:3px;
+}
+.windows-startmenu--winxp .windows-startmenu__left{
+  min-height:0;border:0;background:#fff;
+}
+.windows-startmenu--winxp .windows-startmenu__right{
+  min-height:0;overflow-y:auto;align-items:stretch;
+  background:#d6e5fa;border-left:1px solid #9bafcb;padding:6px 2px;
+}
+.windows-startmenu--winxp .windows-startmenu__right>hr:first-of-type,
+.windows-startmenu--winxp .windows-startmenu__right>hr:last-of-type{
+  border-top-color:#9bafcb;
+}
+.windows-startmenu--winxp .windows-startmenu__right button{
+  color:#14396d;
+}
+.windows-startmenu--winxp .windows-startmenu__programs{
+  min-height:0;overflow-y:auto;padding:6px 2px;
+}
+.windows-startmenu--winxp .windows-startmenu__program{
+  min-height:36px;gap:4px;font-size:12px;
+}
+.windows-startmenu--winxp .windows-startmenu__xp-footer{
+  grid-column:1/-1;display:flex;justify-content:flex-end;
+  gap:8px;align-items:center;padding:7px 10px;
+  border-top:1px solid #6b90c9;background:linear-gradient(#3e7bd2,#2058b2);
+}
+.windows-startmenu--winxp .windows-startmenu__xp-footer button{
+  color:#fff;cursor:pointer;border:1px solid #a6d2ff99;
+  border-radius:3px;padding:5px 8px;font-size:12px;
+  background:linear-gradient(#fca456,#c36524);
+}
+.windows-startmenu--winxp .windows-startmenu__xp-footer button:first-child{
+  background:linear-gradient(#7bba6a,#36813a);
+}
+/* Pinned 18ee Win11 is bottom-centered, has search above a 6-column
+ * grid (90x80 cells, 32px icons), and an account/power footer.
+ * Current Guest program data remains a conservative interim source adapter. */
+.windows-startmenu--win11{
+  left:50%;bottom:calc(var(--taskbar-height,40px) + 8px);
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;gap:0;
+  width:min(620px,calc(100vw - 16px));max-height:calc(100dvh - 65px);
+  min-height:0;box-sizing:border-box;overflow:hidden;
+  padding:0;border-radius:12px;border-color:#a1adba;
+  background:#f1f5fb;color:#222;box-shadow:0 9px 28px #0008;
+}
+.windows-startmenu--win11 .windows-startmenu__left{display:contents}
+.windows-startmenu--win11 .windows-startmenu__search{
+  order:0;flex:none;margin:24px 24px 12px;
+  min-height:34px;border-radius:5px;border-bottom:2px solid #357cc7;
+  box-shadow:0 1px 2px #0002;
+}
+.windows-startmenu--win11 .windows-startmenu__search input{
+  font-size:13px;padding:9px;
+}
+.windows-startmenu--win11 .windows-startmenu__all-programs{
+  order:1;align-self:flex-end;flex:none;margin:0 26px 7px;
+  padding:5px 11px;font-size:12px;border:1px solid #d4dbe5;
+  border-radius:5px;background:#e5edf7;
+}
+.windows-startmenu--win11 .windows-startmenu__programs{
+  order:2;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
+  align-content:start;gap:3px;padding:8px 22px 18px;
+  min-height:0;overflow:auto;scrollbar-width:thin;
+}
+.windows-startmenu--win11 .windows-startmenu__program{
+  min-width:0;min-height:80px;
+  flex-direction:column;justify-content:center;align-items:center;
+  gap:8px;padding:8px 2px;text-align:center;border-radius:5px;
+  font-size:11px;overflow-wrap:anywhere;
+}
+.windows-startmenu--win11 .windows-startmenu__program img{
+  width:32px;height:32px;object-fit:contain;
+}
+.windows-startmenu--win11 .windows-startmenu__program:hover{
+  background:#dfeaf6;border-color:transparent;
+}
+.windows-startmenu--win11.is-all-programs .windows-startmenu__programs{
+  grid-template-columns:minmax(0,1fr);
+}
+.windows-startmenu--win11.is-all-programs .windows-startmenu__program{
+  min-height:34px;flex-direction:row;justify-content:flex-start;
+  text-align:left;gap:10px;padding:5px 9px;
+}
+.windows-startmenu--win11 .windows-startmenu__right{
+  order:3;flex:none;display:flex;flex-direction:row;align-items:center;
+  min-height:55px;gap:12px;padding:8px 28px;
+  border-top:1px solid #cdd7e3;background:#e9eef7;
+  color:#25374f;
+}
+.windows-startmenu--win11 .windows-startmenu__right>.windows-startmenu__avatar{
+  width:32px;height:32px;border-radius:50%;border:0;
+}
+.windows-startmenu--win11 .windows-startmenu__right>strong{
+  color:#25374f;text-shadow:none;font-size:13px;
+}
+.windows-startmenu--win11 .windows-startmenu__right>hr,
+.windows-startmenu--win11 .windows-startmenu__right>button:not(.windows-startmenu__power){
+  display:none;
+}
+.windows-startmenu--win11 .windows-startmenu__right>.windows-startmenu__power{
+  margin:0 0 0 auto;padding:5px 11px;background:transparent;
+  border:0;color:#25374f;
+}
+@media(max-width:520px){
+  .windows-startmenu--win11 .windows-startmenu__programs{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    padding:8px 14px;
+  }
+  .windows-startmenu--win11.is-all-programs .windows-startmenu__programs{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .windows-startmenu--win11 .windows-startmenu__search{
+    margin:12px 12px 8px;
+  }
+}
