@@ -78,7 +78,7 @@ function ApplicationContent({
       else dispatch({type:"BSOD",code:"DUMMY_BSOD"});
     }} />;
   if (appId === "cpanel") return <ControlPanelApp
-    filesystem={fileStore}
+    filesystem={fileStore} theme={theme}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     trayPreferences={trayPreferences}
