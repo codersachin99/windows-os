@@ -2,8 +2,10 @@
  * shared~solitaire~spidersolitaire.js. Both games consume a deck of
  * id/suit/rank/faceUp cards, common alternating-color and last-card
  * utilities. The original ec2b suit ordering and 2f7e shuffle sequence
- * have not yet been recovered; the default suit order and PRNG shuffle
- * below are explicit browser adapters, not a verified source deck hash.
+ * have not both been recovered. The 2f7e shuffle IS source-exact:
+ * it copies the deck and swaps each index i with floor(Math.random()*(i+1)).
+ * Default suit iteration order from ec2b is still an explicit adapter,
+ * not a verified source deck hash.
  */
 export type SourceCardSuit="clubs"|"diamonds"|"hearts"|"spades";
 export interface SourceCard{
@@ -24,8 +26,8 @@ export function sourceCardsDifferentColor(a:SourceCard,b:SourceCard):boolean{
   const red=(suit:SourceCardSuit)=>suit==="diamonds"||suit==="hearts";
   return red(a.suit)!==red(b.suit);
 }
-/** Deterministic injection point for CI; original source 5ea1 delegates
- * to separate 2f7e shuffle and must be compared before full RNG parity.
+/** Deterministic CI injection point. Original 2f7e implements this
+ * exact Fisher-Yates loop; only ec2b's suit sequence remains unresolved.
  */
 export function sourceCardsDeck(
   random:()=>number=Math.random,

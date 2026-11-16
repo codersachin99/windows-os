@@ -1,5 +1,6 @@
 import {describe,it,expect} from "vitest";
-import {legacyArt,legacyMineArtwork,legacySourceIconArtwork} from "./index";
+import {legacyArt,legacyMineArtwork,legacySourceIconArtwork,
+  legacyCardArtwork,legacyCardAudio} from "./index";
 /** Pinned exact Win7 theme image choices, never fallback glyph approximations. */
 describe("source Windows 7 application icon assets",()=>{
   it("selects all seven original themed WebP icons",()=>{
@@ -33,6 +34,18 @@ describe("source Windows 7 application icon assets",()=>{
       mine:"/assets/images/minesweeper-mine.cbba8bd0.webp",
       timer:"/assets/images/minesweeper-timer.663f9d44.webp"
     });
+  });
+  it("pins the original shared card sprite, backgrounds and sounds",()=>{
+    expect(legacyCardArtwork).toEqual({
+      spritesheet:"/assets/images/cards-spritesheet.f136d9d3.webp",
+      klondikeBackground:"/assets/images/cards-bg-klondike.85b0dfcd.webp",
+      spiderBackground:"/assets/images/cards-bg-spider.48a00ea1.webp"
+    });
+    expect(Object.keys(legacyCardAudio).sort()).toEqual([
+      "complete","drop","fireworks","home","pick","place","warning"
+    ]);
+    expect(legacyCardAudio.home)
+      .toBe("/assets/audio/cards-home.086a0222.mp3");
   });
   it("uses byte-pinned original CMD artwork rather than the generic file fallback",()=>{
     expect(legacyArt.cmd).toBe("/assets/images/cmd.a2c1d19b.webp");

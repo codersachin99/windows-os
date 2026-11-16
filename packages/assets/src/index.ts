@@ -91,7 +91,25 @@ export const legacyArt = {
 } as const;
 
 
-/** Three byte-identical original Minesweeper 245c game sprites. */
+/** Source-pinned shared card-game art and sound used by source
+ * Solitaire e202, Spider 6b74 and shared card 5ea1. These are
+ * byte-identical Git blobs, not regenerated card artwork. */
+export const legacyCardArtwork=Object.freeze({
+  spritesheet:"/assets/images/cards-spritesheet.f136d9d3.webp",
+  klondikeBackground:"/assets/images/cards-bg-klondike.85b0dfcd.webp",
+  spiderBackground:"/assets/images/cards-bg-spider.48a00ea1.webp"
+});
+export const legacyCardAudio=Object.freeze({
+  complete:"/assets/audio/cards-complete.83202212.mp3",
+  drop:"/assets/audio/cards-drop.c01a1fb5.mp3",
+  fireworks:"/assets/audio/cards-fireworks.6177db2d.mp3",
+  home:"/assets/audio/cards-home.086a0222.mp3",
+  pick:"/assets/audio/cards-pick.004c73d6.mp3",
+  place:"/assets/audio/cards-place.7417fc28.mp3",
+  warning:"/assets/audio/cards-warning.32db113e.mp3"
+});
+
+/** Original Tetris asset manifest, shared as a typed source mapping. */
 export const legacyTetrisArtwork = Object.freeze({
   background:"/assets/images/tetris-bg.abd0ff80.webp",
   audio:{

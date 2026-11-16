@@ -1,3 +1,28 @@
+## Shared card art and exact 2f7e shuffle — 17 November 2026
+
+Source tracing `src/modules/chunks/shared~solitaire~spidersolitaire.js`
+verified webpack module 2f7e uses standard Fisher–Yates swapping
+from the final card to the first, selecting index
+`Math.floor(Math.random()*(i+1))` and returning a copied array.
+`sourceCardsDeck` uses the same shuffle and allows injected
+deterministic RNG for tests. Source ec2b suit order remains
+to be confirmed and must not be claimed byte-parity.
+
+Imported 10 original shared card assets by copying exact original
+Git blobs from pinned legacy-win7, source and target SHA matched:
+3 WebP images (`cards-spritesheet.f136d9d3.webp`,
+`cards-bg-klondike.85b0dfcd.webp`,
+`cards-bg-spider.48a00ea1.webp`) and 7 original
+`cards-*.mp3` effects (complete, drop, fireworks, home,
+pick, place, warning). They're exported as typed
+`legacyCardArtwork` and `legacyCardAudio` in the reusable
+assets package. Existing source audit SHA-checks every imported
+WebP and MP3 against the pinned migration inventory. No card UI
+or audio playback is claimed yet. The same assets can serve
+Solitaire and Spider Solitaire without duplicate imports.
+
+---
+
 # Pinned Solitaire e202 + shared 5ea1 source rules — 17 November 2026
 
 Legacy source pinned SHA `4e63290d783009e1293433c6ccf252abba9c1187`.

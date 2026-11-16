@@ -1,3 +1,20 @@
+## Original shared card assets restored — 17 November 2026
+
+After Solitaire rules port `2553c2a`, restored all 3 common
+card-game source images and 7 audio effects byte-identically
+using Git blobs. The shared asset manifest now covers
+Klondike + Spider backgrounds, the original source card sheet
+and seven `cards-*` effects; tests bind the exact source names.
+Tracked in `migration/SOLITAIRE-SOURCE.md`. Original 2f7e
+Fisher-Yates algorithm is now confirmed by source, though ec2b
+suit iteration order remains unresolved. Solitaire remains
+**in-progress, not playable**; no fake game windows enabled.
+This slice is later than input CI #43945990957, and needs
+its own opt-in audit/build acceptance. Keep draft PR/main
+unmodified and no product release.
+
+---
+
 ## Solitaire pure rules port — 17 November 2026
 
 Source-backed groundwork for the next Games engine:
