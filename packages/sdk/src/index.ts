@@ -16,6 +16,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
+    id: "games", label: "Games", icon: legacySourceIconArtwork("games").src,
+    kind: "system", desktop: false, showInStart: false,
+    // Original games.js wraps Computer at virtual "shell:games" and
+    // inherits its resizable shell window. Exact source dimensions pending.
+    window: { width: 760, height: 490 }
+  },
+  {
     id: "shortcut", label: "Shortcut", icon: legacyArt.shortcut,
     kind: "system", desktop: false, showInStart: false,
     window: { width: 550, height: 400, resizable: false, centered: true }
