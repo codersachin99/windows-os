@@ -1,3 +1,47 @@
+## Games/Minesweeper accepted 450/450; final source-timer regression gate — 16 November 2026
+
+**Accepted functional source snapshot:** opt-in
+[CI #43814952314](https://github.com/codersachin99/windows-os/actions/runs/43814952314)
+at exact SHA `760fa39a1246d3cb164c2b690157bb6820301967`
+completed **SUCCESS**: **450 / 450** desktop/mobile Chromium browser
+tests, TypeScript, all unit tests, source inventory and Contacts
+source audits, and production Vite build. This includes the newly
+registered original `shell:games` library and actually playable
+Minesweeper Beginner/Intermediate source board/game UI, with
+safe disabled entries for six still-unported game engines.
+
+**Accepted screenshot evidence:** explicit
+[visual capture #43816057643](https://github.com/codersachin99/windows-os/actions/runs/43816057643)
+at `7320d45` **succeeded 54 / 54 React-only desktop/mobile PNGs**
+with **zero errors**, artifact **14203045417** (26.4 MB).
+All six new Games/Minesweeper images were downloaded and visually
+inspected. Source checkout was unavailable:
+`sourceConfigured=false`, `sourceCaptured=0`,
+`parityStatus=not-assessed`. These are target screenshots,
+**NOT original/React pixel parity**. The Win7 Minesweeper 12x12
+Intermediate board needs inner content scrolling at mobile widths;
+a new Playwright regression asserts the final row/cell remains
+scroll-reachable in the window.
+
+**Post-450 CI code:** original pinned `minesweeper.js`
+webpack 245c starts its timer only while Board.state() is PRISTINE.
+Earlier flagging flips the board to IN_PROGRESS, so the clock
+remains stopped on later opening; added typed
+`sourceMineShouldStartTimer` and its unit regression and wired it
+into the React handler. Also added the Intermediate bottom-right
+scroll-reachability browser assertion. Both are **after** the
+450-pass CI SHA and must not be claimed as accepted by that run.
+
+This deliberately opted-in **[run-ci]** commit tests those later
+changes and all existing source-backed apps as a single gate. Inspect
+the exact new Actions result before promoting this checkpoint;
+ordinary subsequent pushes remain skipped. Pinned source Games/WebP
+binary artwork is **still missing**. A safe test of cross-repo
+Git object reuse failed with HTTP 422; no source blobs were copied
+or branches mutated by the experiment. Require legitimate source
+binary import plus matching Git blob SHA checks before claiming
+asset parity. Keep PR #1 draft, main unchanged, no release.
+
 ## Pinned Minesweeper timer correction + source Games visual proof — 16 November 2026
 
 Original `src/modules/games/minesweeper.js` webpack 245c
