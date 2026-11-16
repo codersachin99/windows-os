@@ -18,12 +18,15 @@ test("original Games Start entry opens source shell:games pane with installed ti
     .toContainText("Classic Tetris");
   await expect(games.locator('[data-test-offline-game="tetris"]'))
     .toContainText("Albert Lobo");
-  // Installed source .exe stubs do NOT mean an implemented game engine.
-  for(const id of ["chess","mahjong","minesweeper","purbleplace",
+  // Source .exe stubs do NOT mean an implemented game. Only the
+  // actual React port of Minesweeper is currently executable.
+  for(const id of ["chess","mahjong","purbleplace",
     "solitaire","spidersolitaire","tetris"]){
     await expect(games.locator('[data-test-offline-game="'+id+'"]'))
       .toBeDisabled();
   }
+  await expect(games.locator('[data-test-offline-game="minesweeper"]'))
+    .toBeEnabled();
   await expect(games.locator('[data-test-source-listview="online-games"]'))
     .toBeVisible();
   await expect(games.locator("[data-test-offline-game]")).toHaveCount(7);
@@ -34,6 +37,9 @@ test("original Games Start entry opens source shell:games pane with installed ti
   await games.locator("[data-test-games-offline-toggle]").click();
   await expect(offline.locator("[data-test-offline-game]")).toHaveCount(7);
   await expect(games.getByRole("navigation",{name:"Games history"})).toBeVisible();
+  await games.locator('[data-test-offline-game="minesweeper"]').click();
+  await expect(page.locator('[data-test-window="minesweeper"] [data-test-minesweeper]'))
+    .toBeVisible();
 });
 
 test("XP Games shell remains navigable without borrowing Win7 history artwork",async({page})=>{
