@@ -1,3 +1,20 @@
+## Deliberate Tetris playable milestone acceptance — 17 November 2026
+
+Following Tetris pure engine, source canvas layout, nine exact pinned
+source background/audio imports, game window and two browser scenarios,
+run one explicit **[run-ci]** acceptance: TypeScript, all Vitest
+(including Tetris physics/layout/stats), original source integrity
+audits, production Vite build, all desktop/mobile Playwright cases,
+and source Tetris menu/play/hard-drop/Help/Statistics window tests.
+Do not mark Tetris fully implemented or verified merely because
+it is visible in the Games folder; original animation, pointer,
+audio and source-vs-target pixel pairing are still unfinished.
+The prior child-window CI #43937165381 used SHA `481babc`
+and cannot accept Tetris changes. Record the new exact run result
+before making any acceptance claim. No repeat CI on ordinary commits.
+
+---
+
 ## Playable source Tetris integration (pending acceptance) — 17 November 2026
 
 The source 13bc Tetris is now a real React canvas game rather than
