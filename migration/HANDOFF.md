@@ -1,3 +1,27 @@
+## 1902 source search latency follow-up (16 November 2026)
+
+The pinned `shared~cpanel~startmenu...` webpack **1902** exports
+`delayedSearch(callback, delay=300)` with source semantics:
+nonempty text schedules a 300 ms emission; a new value cancels the
+prior timer; empty text emits immediately; `now(text)` emits only if
+different from the last delivered value; and `cancel()` clears a
+pending timer. Implemented shared
+`packages/engine/src/sourceDelayedSearch.ts`, exported from
+`@windows-os/engine`, with five fake-timer unit tests.
+
+`ControlPanelApp` now preserves responsive input text while separately
+debouncing the searched query, automatically cleans up timers when the
+window unmounts, and prioritizes the active navigated page over stale
+search results. This is source-backed behavior, not a new search feature.
+
+**CI boundary:** [Run #43807380475](https://github.com/codersachin99/windows-os/actions/runs/43807380475)
+at `f565741` had passed TypeScript, units, source audits and build;
+desktop/mobile Playwright still running when last checked. All 1902
+helper and React debounce commits came **after** that exact CI snapshot.
+They are committed but **not yet CI accepted**. Do not trigger a
+second expensive browser run while that older one is still executing
+unless there is a clear need. PR #1 remains draft and main unchanged.
+
 ## Pinned 5985 generic source search + combined full acceptance (16 November 2026)
 
 [Prior opt-in CI #43731878736](https://github.com/codersachin99/windows-os/actions/runs/43731878736)
