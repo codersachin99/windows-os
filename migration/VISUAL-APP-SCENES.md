@@ -1,3 +1,24 @@
+## Control Panel source-registry screenshot scenes — 16 November 2026
+
+Four additional **target-only** Win7 desktop/mobile captures are now
+specified in `scripts/capture-visual-parity.mjs`:
+
+- `cpanel-root`: real 24-source-item tiles using original artwork.
+- `cpanel-search`: exact quoted task search `"screen resolution"`,
+  waiting for source 300 ms debounce and visible Display task result.
+- `cpanel-backup`: real browser ZIP Backup/Restore screen.
+- `cpanel-action-center`: source Guest notification-history view.
+
+These add **eight proposed target screenshots** to the previous 40-scene
+batch (4 scenes in each of two profiles), for **48 target screenshots**
+if every existing and new scene captures successfully. No screenshot
+capture run has yet been verified for these additions. They remain
+`sourceComparisonEligible:false` until reliable selectors and
+source side fixtures have been tested against the exact private
+`legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187` runtime.
+Do not claim a source comparison or visual parity from target-only PNGs.
+Capture only with explicit `[capture-visual]` or manual workflow input.
+
 # Application window screenshot evidence expansion
 
 ## Capture purpose
