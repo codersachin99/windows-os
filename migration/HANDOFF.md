@@ -1,3 +1,26 @@
+## Follow-up visual capture fixtures — 16 November 2026
+
+Added four explicitly **target-only** Control Panel screenshot scenes in
+`scripts/capture-visual-parity.mjs`: `cpanel-root` (24 original
+source tiles/art), `cpanel-search` (quoted Display task after source
+1902 debounce), `cpanel-backup` (real browser ZIP view), and
+`cpanel-action-center` (real Guest empty history). Each captures at
+1920x1080 desktop and Pixel 7 mobile for eight additional target-only
+images when the explicit opt-in visual workflow is run. These
+scenarios are **not source comparison eligible**, because source-side
+Vue selectors have not been verified at the exact private pinned SHA;
+they are reproducible evidence plans, not successful screenshots or
+pixel-parity claims. Details: `migration/VISUAL-APP-SCENES.md`.
+
+Latest branch includes source 5985 full shared search, source 1902
+300ms delayed search, and new target-only capture fixtures.
+Opt-in [CI #43807380475](https://github.com/codersachin99/windows-os/actions/runs/43807380475)
+at **f565741** passed TypeScript/unit/source audits/build at the last
+poll; browser tests were still running. All debounce and visual-fixture
+commits were made **after** f565741 and require separate acceptance.
+No unnecessary second GitHub Actions run has been triggered.
+Keep PR #1 draft; no main merge or release.
+
 ## 1902 source search latency follow-up (16 November 2026)
 
 The pinned `shared~cpanel~startmenu...` webpack **1902** exports
