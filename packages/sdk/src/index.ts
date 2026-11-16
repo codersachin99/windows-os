@@ -23,6 +23,15 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
+    id: "minesweeper", label: "Minesweeper",
+    icon: legacySourceIconArtwork("minesweeper").src,
+    kind: "game", desktop: false, showInStart: false,
+    // Original 245c Win7 uses a fixed, non-resizable game window.
+    // The source beginner board itself is 9*21 by 8*21 pixels;
+    // initial outer frame geometry is provisional before screenshot parity.
+    window: { width: 380, height: 375, resizable: false }
+  },
+  {
     id: "shortcut", label: "Shortcut", icon: legacyArt.shortcut,
     kind: "system", desktop: false, showInStart: false,
     window: { width: 550, height: 400, resizable: false, centered: true }
