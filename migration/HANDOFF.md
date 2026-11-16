@@ -1,3 +1,27 @@
+## Theme-safe Control Panel navigation and mobile reachability — 16 November 2026
+
+After the `fcaa2e3` opt-in CI snapshot, inspected original Win7
+Control Panel desktop/mobile captures and identified that its exact
+27px Win7 sprite must not leak to the other supported skin IDs.
+`DesktopShell` now passes actual theme to `ControlPanelApp`;
+source-pinned Win7 shared artwork is used when and only when
+`theme==="win7"`. WinXP, Win11 and other themes keep previous
+neutral Back/Forward controls while their individual source skins
+remain unported. Added `themeNav.test.ts` and XP browser navigation
+regressions, plus a browser test verifying that all 24 original
+Control Panel tiles can be scrolled to on both desktop and mobile
+without document-level horizontal scrolling.
+
+**CI separation:** [CI #43811148997](https://github.com/codersachin99/windows-os/actions/runs/43811148997)
+is testing `fcaa2e362b4c92a283dc868d3fa1fbbaaf5c178d`
+and had passed TypeScript/unit/audit/build while browser tests were
+running at last inspection. All theme-safe and viewport reachability
+commits are **after** its snapshot and require the next opt-in
+acceptance, not an automatic extra CI per commit. PR #1 draft, no merge
+or product release. The earlier React-only visual capture
+[43809843426](https://github.com/codersachin99/windows-os/actions/runs/43809843426)
+succeeded 48/48 with no source comparator.
+
 ## Acceptance follow-up: stale test fixed, 48 visual screenshots verified (16 November 2026)
 
 - [CI #43808943088](https://github.com/codersachin99/windows-os/actions/runs/43808943088)
