@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {legacyArt,legacySourceIconArtwork} from "@windows-os/assets";
+import {legacySourceIconArtwork} from "@windows-os/assets";
 import {SourceListView} from "@windows-os/ui/listview";
 import {SourceWin7HistoryNav} from "@windows-os/ui/navigation";
 import type {ThemeId} from "@windows-os/contracts";
