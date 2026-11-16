@@ -13,6 +13,7 @@ export default defineConfig({
       "@windows-os/assets": app("./packages/assets/src/index.ts"),
       "@windows-os/engine": app("./packages/engine/src/index.ts"),
       "@windows-os/ui/message": app("./packages/ui/src/sourceMessage.tsx"),
+      "@windows-os/ui/child-window": app("./packages/ui/src/SourceChildWindow.tsx"),
       "@windows-os/ui/checkbox": app("./packages/ui/src/sourceItemCheckbox.tsx"),
       "@windows-os/ui/rename": app("./packages/ui/src/sourceListItemRename.tsx"),
       "@windows-os/ui/listitem": app("./packages/ui/src/sourceListViewItem.tsx"),

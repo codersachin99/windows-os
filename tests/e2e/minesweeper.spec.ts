@@ -102,7 +102,7 @@ test("source 245c loss reveals mines, delays result, and supports statistics/res
   await expect(safe).toHaveClass(/is-open/);
   await mine.locator('[data-test-mine-cell="0:0"]').click();
   await expect(mine.locator('[data-test-mine-cell="0:0"]')).toHaveClass(/is-mine/);
-  const dialog=mine.locator('[data-test-minesweeper-result-dialog]');
+  const dialog=page.locator('[data-test-minesweeper-result-dialog]');
   await expect(dialog).toBeVisible({timeout:6000});
   await expect(dialog).toContainText("Sorry you lost this game. Better luck next time!");
   await expect(dialog.getByRole("button",{name:"Play again"})).toBeVisible();
@@ -111,7 +111,7 @@ test("source 245c loss reveals mines, delays result, and supports statistics/res
   await expect(mine.locator('[data-test-mine-cell]')).toHaveCount(72);
   await mine.getByRole("button",{name:"Game",exact:true}).click();
   await mine.getByRole("menuitem",{name:"Statistics"}).click();
-  const stats=mine.locator('[data-test-minesweeper-statistics]');
+  const stats=page.locator('[data-test-minesweeper-statistics]');
   await expect(stats).toBeVisible();
   await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 1");
   await expect(stats.locator('[data-test-mine-games-won]')).toHaveText("Games won: 0");
@@ -121,7 +121,7 @@ test("source 245c loss reveals mines, delays result, and supports statistics/res
   await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 0");
   await stats.getByRole("combobox").selectOption("0");
   await stats.getByRole("button",{name:"Reset"}).click();
-  const confirmation=mine.locator('[data-test-minesweeper-reset-confirm]');
+  const confirmation=page.locator('[data-test-minesweeper-reset-confirm]');
   await expect(confirmation).toBeVisible();
   await confirmation.getByRole("button",{name:"Cancel"}).click();
   await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 1");
@@ -165,4 +165,37 @@ test("source Advanced fills the fixed game's fullscreen window using 22px viewpo
   await expect(windowFrame).not.toHaveClass(/is-maximized/);
   await expect(mine.locator("[data-test-mine-cell]")).toHaveCount(72);
   await expect(mine.locator('[data-test-minesweeper-total-mines]')).toHaveText("10");
+});
+
+test("source Minesweeper result and statistics are independent locked child windows",async({page})=>{
+  const mine=await openMinesweeper(page);
+  const parent=page.locator('[data-test-window="minesweeper"]');
+  const id=await parent.getAttribute("data-test-window-id");
+  expect(id).toBeTruthy();
+  await mine.getByRole("button",{name:"Game",exact:true}).click();
+  await mine.getByRole("menuitem",{name:"Statistics"}).click();
+  const child=page.locator('[data-test-child-window="minesweeper-stats"]');
+  await expect(child).toBeVisible();
+  await expect(child).toHaveAttribute("data-test-child-parent",id!);
+  await expect(child.getByRole("dialog",{name:"Minesweeper Statistics"}))
+    .toHaveCount(0); // Child itself is the dialog, not a nested modal
+  await expect(child).toHaveAttribute("role","dialog");
+  await expect(child.locator(".windows-window__titlebar"))
+    .toContainText("Minesweeper Statistics");
+  await expect(parent).toHaveJSProperty("inert",true);
+  await child.getByRole("button",{name:"Close Minesweeper Statistics"}).click();
+  await expect(child).toHaveCount(0);
+  await expect(parent).toHaveJSProperty("inert",false);
+  // Source result child titlebar close exits the whole game.
+  await page.evaluate(()=>{Math.random=()=>0.5;});
+  await mine.getByRole("button",{name:"New Game"}).click();
+  await mine.locator('[data-test-mine-cell="1:0"]').click();
+  await mine.locator('[data-test-mine-cell="0:0"]').click();
+  const result=page.locator('[data-test-child-window="minesweeper-result"]');
+  await expect(result).toBeVisible({timeout:6000});
+  await expect(result).toHaveAttribute("data-test-child-parent",id!);
+  await expect(parent).toHaveJSProperty("inert",true);
+  await result.getByRole("button",{name:"Close Games lost"}).click();
+  await expect(page.locator('[data-test-window="minesweeper"]')).toHaveCount(0);
+  await expect(result).toHaveCount(0);
 });

@@ -38,6 +38,7 @@ export function WindowFrame({ window: win, dispatch, children, onRequestClose }:
   return (
     <section role="dialog" aria-label={win.title} aria-hidden={win.minimized || undefined}
       data-test-window={win.minimized ? undefined : win.appId}
+      data-test-window-id={win.id}
       className={`windows-window ${win.maximized ? "is-maximized" : ""}`}
       style={win.minimized ? { ...style, display: "none" } : style} onPointerDown={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })}>
       <div className="windows-window__titlebar" onPointerDown={pointerDown} onPointerMove={pointerMove}

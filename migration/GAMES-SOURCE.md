@@ -1,3 +1,44 @@
+## Minesweeper parented source child window migration — 17 November 2026
+
+Pinned `src/modules/games/minesweeper.js` webpack 245c has **three
+sibling windows** in its root fragment: fixed main `WindowMain`
+(`lock: result<0 || stats`), result `WindowMain`
+(`id=window-minesweeper-result`, `parent=minesweeper`,
+`centered:true`, `resizable:false`, `w=280`), and a static
+statistics `WindowMainStatic` (`id=window-minesweeper-stats`,
+`parent=minesweeper`). Both children have a native-looking titlebar
+and WindowControls hiding maximize/minimize. The result's titlebar
+Close calls `exitGame`; the stats titlebar Close calls `toggleStats`.
+
+React's reusable `SourceChildWindow` now portals these child windows
+to the desktop canvas as **separate window siblings**, reusing the
+real shell Aero titlebar/buttons and preserving 280px result and
+260px original statistics CSS width. The parent shell window's own
+`data-test-window-id` determines which exact instance is locked
+using `HTMLElement.inert`; other desktop applications remain usable.
+The child hides with its minimized parent and restores with it.
+The in-game reset-confirmation appears inside the statistics child,
+and Escape/Tab are managed within each child. The titlebar
+close action, replay, Exit, Close, and Reset controls retain their
+functional behavior. The child never creates another taskbar entry.
+
+No claim that React's child-window stacking, original Vue
+`WindowMainStatic` animations, position offsets, or close-window
+events have passed pixel parity. React portals are an explicit shell
+adapter, not host OS windows. New browser tests verify separate
+siblings, parent-instance linkage and inert lock/restore.
+
+Latest accepted before this batch:
+[Advanced CI #43876750158](https://github.com/codersachin99/windows-os/actions/runs/43876750158)
+**454 browser tests / 507 Vitest tests passed** at exact SHA
+`8fe240ca8b505cf2d39ea9ab75d024abceb2c075`.
+[visual #43877288974](https://github.com/codersachin99/windows-os/actions/runs/43877288974)
+collected **60/60 React-only scenes**, zero errors,
+`sourceCaptured=0`, `parityStatus=not-assessed`.
+This new child-window code needs independent opt-in verification.
+
+---
+
 ## Advanced level fullscreen viewport contract — 16 November 2026
 
 Pinned original `src/modules/games/minesweeper.js` 245c defines

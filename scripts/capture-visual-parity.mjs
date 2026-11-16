@@ -171,14 +171,14 @@ async function prepareScene(page, kind, scene) {
       }else if(scene==="minesweeper-statistics"){
         await mine.getByRole("button",{name:"Game",exact:true}).click();
         await mine.getByRole("menuitem",{name:"Statistics"}).click();
-        await mine.locator("[data-test-minesweeper-statistics]")
+        await page.locator("[data-test-minesweeper-statistics]")
           .waitFor({state:"visible",timeout:10000});
       }else if(scene==="minesweeper-result"){
         await page.evaluate(()=>{Math.random=()=>0.5;});
         await mine.getByRole("button",{name:"New Game"}).click();
         await mine.locator('[data-test-mine-cell="1:0"]').click();
         await mine.locator('[data-test-mine-cell="0:0"]').click();
-        await mine.locator("[data-test-minesweeper-result-dialog]")
+        await page.locator("[data-test-minesweeper-result-dialog]")
           .waitFor({state:"visible",timeout:10000});
       }
       return;

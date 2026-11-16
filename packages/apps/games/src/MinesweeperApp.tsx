@@ -5,6 +5,7 @@ import {
   type SourceMineStatsLevel
 } from "./mineStatistics";
 import {legacyMineArtwork,legacyMineAudio} from "@windows-os/assets";
+import {SourceChildWindow} from "@windows-os/ui/child-window";
 import {
   SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,
   sourceMineAdvancedOptions,SOURCE_MINE_BEGINNER,
@@ -15,6 +16,8 @@ import "./MinesweeperApp.css";
 
 export interface MinesweeperAppProps {
   onClose():void;
+  parentWindowId:string;
+  parentMinimized?:boolean;
   fullscreen?:boolean;
   onFullscreenChange?(fullscreen:boolean):void;
 }
@@ -44,7 +47,7 @@ function playSourceGameAudio(audio:HTMLAudioElement|null):void{
  * Original sprites are imported; audio, true static child windows,
  * Advanced layout and full pixel parity remain pending. */
 export function MinesweeperApp({
-  onClose,fullscreen=false,onFullscreenChange
+  onClose,parentWindowId,parentMinimized=false,fullscreen=false,onFullscreenChange
 }:MinesweeperAppProps){
   const [level,setLevel]=useState<Level>(0);
   const [options,setOptions]=useState<SourceMineOptions>(SOURCE_MINE_BEGINNER);
@@ -246,25 +249,30 @@ export function MinesweeperApp({
         <span role="status" data-test-minesweeper-result="">{status}</span>
       </div>
     </div>
-    {result!==0?<div className="windows-minesweeper__overlay">
-      <section className="windows-minesweeper__dialog" role="dialog"
-        aria-modal="true" aria-label={result===1?"Games won":"Games lost"}
+    {result!==0?<SourceChildWindow id="minesweeper-result"
+      parentWindowId={parentWindowId} hidden={parentMinimized}
+      title={result===1?"Games won":"Games lost"} width={280} onClose={closeGame}>
+      <section className="windows-minesweeper__dialog"
         data-test-minesweeper-result-dialog="">
-        <header>{result===1?"Games won":"Games lost"}</header>
         <p>{result===1?"Congratulations, you won the game!":
           "Sorry you lost this game. Better luck next time!"}</p>
         <p>Time: {elapsed} Seconds</p>
         <footer>
           <button type="button" onClick={closeGame}>Exit</button>
-          <button type="button" className="is-default" onClick={()=>reset()}>Play again</button>
+          <button type="button" className="is-default" data-child-autofocus=""
+            onClick={()=>reset()}>Play again</button>
         </footer>
       </section>
-    </div>:null}
-    {statsOpen?<div className="windows-minesweeper__overlay">
+    </SourceChildWindow>:null}
+    {statsOpen?<SourceChildWindow id="minesweeper-stats"
+      parentWindowId={parentWindowId} hidden={parentMinimized}
+      title="Minesweeper Statistics" width={260}
+      onClose={()=>{
+        if(resetConfirm)setResetConfirm(false);
+        else setStatsOpen(false);
+      }}>
       <section className="windows-minesweeper__dialog windows-minesweeper__dialog--stats"
-        role="dialog" aria-modal={!resetConfirm} aria-label="Minesweeper Statistics"
         data-test-minesweeper-statistics="">
-        <header>Minesweeper Statistics</header>
         <label className="windows-minesweeper__stats-level">Difficulty
           <select value={statLevel}
             onChange={event=>setStatLevel(Number(event.target.value) as SourceMineStatsLevel)}>
@@ -286,26 +294,31 @@ export function MinesweeperApp({
         <p data-test-mine-win-percentage="">Win percentage: {
           sourceMineWinPercentage(stats[statLevel])}</p>
         <footer>
-          <button type="button" className="is-default"
+          <button type="button" className="is-default" data-child-autofocus=""
             onClick={()=>setStatsOpen(false)}>Close</button>
           <button type="button" onClick={()=>setResetConfirm(true)}>Reset</button>
         </footer>
       </section>
-    </div>:null}
-    {resetConfirm?<div className="windows-minesweeper__overlay windows-minesweeper__overlay--confirm">
-      <section className="windows-minesweeper__dialog" role="alertdialog"
-        aria-modal="true" aria-label="Reset statistics"
-        data-test-minesweeper-reset-confirm="">
-        <header>Reset statistics</header>
-        <p>Reset all Minesweeper statistics?</p>
-        <footer>
-          <button type="button" onClick={()=>setResetConfirm(false)}>Cancel</button>
-          <button type="button" className="is-default" onClick={()=>{
-            setStats(emptyMineStatistics());setResetConfirm(false);
-          }}>Reset</button>
-        </footer>
-      </section>
-    </div>:null}
+      {resetConfirm?<div className="windows-minesweeper__overlay windows-minesweeper__overlay--confirm">
+        <section className="windows-minesweeper__dialog" role="alertdialog"
+          aria-modal="true" aria-label="Reset statistics"
+          data-test-minesweeper-reset-confirm=""
+          onKeyDown={event=>{
+            if(event.key==="Escape"){
+              event.preventDefault();event.stopPropagation();setResetConfirm(false);
+            }
+          }}>
+          <header>Reset statistics</header>
+          <p>Reset all Minesweeper statistics?</p>
+          <footer>
+            <button type="button" onClick={()=>setResetConfirm(false)}>Cancel</button>
+            <button type="button" className="is-default" onClick={()=>{
+              setStats(emptyMineStatistics());setResetConfirm(false);
+            }}>Reset</button>
+          </footer>
+        </section>
+      </div>:null}
+    </SourceChildWindow>:null}
     <audio ref={bgmRef} src={legacyMineAudio.newGame}
       data-test-minesweeper-bgm="" preload="auto"/>
     <audio ref={sfxRef} src={legacyMineAudio.lose}

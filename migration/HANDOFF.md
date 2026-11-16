@@ -1,3 +1,33 @@
+## Minesweeper child-window port — 17 November 2026
+
+Accepted Advanced functional gate:
+[CI #43876750158](https://github.com/codersachin99/windows-os/actions/runs/43876750158)
+SUCCESS, exact SHA `8fe240ca8b505cf2d39ea9ab75d024abceb2c075`:
+**507/507 unit tests**, **454/454 Chromium desktop/mobile cases**,
+TypeScript, source file hashes, Contacts audit, production Vite build.
+Accepted Advanced visual baseline:
+[run #43877288974](https://github.com/codersachin99/windows-os/actions/runs/43877288974)
+SUCCESS, exact SHA `19e36d9e2c74de4369fd674c4f49367047cdd37b`:
+**60/60** React screenshots; zero errors; original source inaccessible,
+`parityStatus=not-assessed`. ZIP artifact 14230782421.
+
+New work: pinned source 245c has result and statistics as separate
+window siblings. Added reusable `SourceChildWindow` inside the
+UI package; portaled result/stats out of main game with native shell
+titlebars, exact parent-instance locking, close/minimize behavior and
+focus handling. Existing gameplay and stats controls are unchanged.
+Changed E2E/capture selectors for the now separate DOM siblings.
+Added browser acceptance for parent inert lock, titlebar exits,
+and child removal. See `migration/GAMES-SOURCE.md`.
+
+**Not accepted by prior CI**; verify on the next explicit
+`[run-ci]` commit, then consider a target visual scene capture
+before claiming visual approximation. Original paired source
+screenshots and other six game engines remain missing.
+Do not merge draft PR #1 into main or tag a release.
+
+---
+
 ## One deliberate Advanced visual capture — 16 November 2026
 
 Added three target-only Minesweeper scenes: Advanced fullscreen,

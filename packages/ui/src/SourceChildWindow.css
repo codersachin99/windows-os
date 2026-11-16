@@ -1,0 +1,26 @@
+/* Pinned 245c renders WindowMain parent=minesweeper and
+ * WindowMainStatic for stats as separate siblings of the game.
+ * The portal shares WindowsOS's Aero titlebar/window skin. */
+.windows-game-child-window{
+  position:absolute;top:calc((100% - 40px)/2);left:50%;
+  transform:translate(-50%,-50%);
+  z-index:3000;min-width:0;min-height:0;height:auto;
+  max-height:calc(100% - 48px);padding:5px;
+  overflow:hidden;box-sizing:border-box;
+}
+.windows-game-child-window__titlebar{cursor:default;touch-action:auto}
+.windows-game-child-window__body{
+  flex:0 1 auto;min-height:0;overflow:auto;background:#fff;
+}
+.windows-game-child-window .windows-minesweeper__dialog{
+  width:100%;max-height:none;overflow:visible;box-shadow:none;
+  border:0;padding:10px;text-align:center;
+  background:white;
+}
+.windows-game-child-window .windows-minesweeper__dialog--stats{
+  text-align:left;
+}
+.windows-game-child-window .windows-minesweeper__dialog>header{display:none}
+@media(max-width:480px){
+  .windows-game-child-window{top:calc((100% - 40px)/2)}
+}

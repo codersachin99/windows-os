@@ -193,3 +193,5 @@
 @media(max-width:480px){
   .windows-minesweeper__advanced-viewport{left:3px;right:3px;top:8px;bottom:10px}
 }
+
+/* Result and statistics are now shell-sibling child windows, not in-game sheets. */

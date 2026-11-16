@@ -135,6 +135,8 @@ function ApplicationContent({
     return <ContactsApp />;
   }
   if (appId === "minesweeper") return <MinesweeperApp
+    parentWindowId={windowId}
+    parentMinimized={Boolean(windows.find(win=>win.id===windowId)?.minimized)}
     fullscreen={Boolean(windows.find(win=>win.id===windowId)?.maximized)}
     onFullscreenChange={fullscreen=>dispatch({
       type:"SET_MINESWEEPER_FULLSCREEN",id:windowId,fullscreen
