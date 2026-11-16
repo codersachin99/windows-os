@@ -14,7 +14,8 @@ describe("pinned webpack 1902 delayed source search",()=>{
     vi.advanceTimersByTime(299);
     expect(receive).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1);
-    expect(receive).toHaveBeenCalledExactlyOnceWith("s");
+    expect(receive).toHaveBeenCalledTimes(1);
+    expect(receive).toHaveBeenCalledWith("s");
     delayed.cancel();
   });
   it("replaces older scheduled terms with latest input",()=>{
@@ -26,7 +27,8 @@ describe("pinned webpack 1902 delayed source search",()=>{
     vi.advanceTimersByTime(299);
     expect(receive).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1);
-    expect(receive).toHaveBeenCalledExactlyOnceWith("def");
+    expect(receive).toHaveBeenCalledTimes(1);
+    expect(receive).toHaveBeenCalledWith("def");
     delayed.cancel();
   });
   it("publishes clearing immediately and cancels a pending query",()=>{
@@ -34,7 +36,8 @@ describe("pinned webpack 1902 delayed source search",()=>{
     const delayed=sourceCreateDelayedSearch(receive);
     delayed.type("pending");
     delayed.type("");
-    expect(receive).toHaveBeenCalledExactlyOnceWith("");
+    expect(receive).toHaveBeenCalledTimes(1);
+    expect(receive).toHaveBeenCalledWith("");
     vi.advanceTimersByTime(500);
     expect(receive).toHaveBeenCalledTimes(1);
   });
@@ -44,7 +47,8 @@ describe("pinned webpack 1902 delayed source search",()=>{
     delayed.type("first");
     expect(delayed.now("first")).toBe(true);
     expect(delayed.now("first")).toBeUndefined();
-    expect(receive).toHaveBeenCalledExactlyOnceWith("first");
+    expect(receive).toHaveBeenCalledTimes(1);
+    expect(receive).toHaveBeenCalledWith("first");
     vi.runAllTimers();
     expect(receive).toHaveBeenCalledTimes(1);
     expect(delayed.now("second")).toBe(true);
