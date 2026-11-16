@@ -80,6 +80,7 @@ function ApplicationContent({
     }} />;
   if (appId === "cpanel") return <ControlPanelApp
     filesystem={fileStore} theme={theme}
+    initialLocation={filePath==="display"?"display":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     trayPreferences={trayPreferences}
