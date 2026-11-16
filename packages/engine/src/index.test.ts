@@ -215,3 +215,36 @@ describe("pinned hotkey Alt+L Switch view preserves existing user session",()=>{
     expect(signedOut.windows).toHaveLength(0);
   });
 });
+
+describe("source 245c Advanced level requests fullscreen on a non-resizable game",()=>{
+  it("maximizes only the intended Minesweeper and restores normal dimensions",()=>{
+    const desktop=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const game=appRegistry.get("minesweeper")!;
+    const other=appRegistry.get("taskmgr")!;
+    const openGame=desktopReducer(desktop,{type:"OPEN_APP",app:game});
+    const openBoth=desktopReducer(openGame,{type:"OPEN_APP",app:other});
+    const gameId=openBoth.windows[0].id,otherId=openBoth.windows[1].id;
+    expect(openBoth.windows[0].resizable).toBe(false);
+    expect(desktopReducer(openBoth,{type:"TOGGLE_MAXIMIZE",id:gameId}))
+      .toBe(openBoth);
+    expect(desktopReducer(openBoth,{type:"SET_MINESWEEPER_FULLSCREEN",
+      id:otherId,fullscreen:true})).toBe(openBoth);
+    expect(desktopReducer(openBoth,{type:"SET_MINESWEEPER_FULLSCREEN",
+      id:"missing",fullscreen:true})).toBe(openBoth);
+    const advanced=desktopReducer(openBoth,{type:"SET_MINESWEEPER_FULLSCREEN",
+      id:gameId,fullscreen:true});
+    expect(advanced.windows[0]).toMatchObject({
+      appId:"minesweeper",maximized:true,resizable:false
+    });
+    expect(advanced.windows[1].maximized).toBe(false);
+    expect(desktopReducer(advanced,{type:"SET_MINESWEEPER_FULLSCREEN",
+      id:gameId,fullscreen:true})).toBe(advanced);
+    const beginner=desktopReducer(advanced,{type:"SET_MINESWEEPER_FULLSCREEN",
+      id:gameId,fullscreen:false});
+    expect(beginner.windows[0]).toMatchObject({
+      maximized:false,width:openBoth.windows[0].width,
+      height:openBoth.windows[0].height
+    });
+  });
+});

@@ -84,7 +84,7 @@ test("native Minesweeper changes source difficulty and supports touch flag mode"
   await expect(mine.locator("[data-test-mine-cell]")).toHaveCount(72);
   await expect(flagMode).not.toBeChecked();
   await mine.getByRole("button",{name:"Game",exact:true}).click();
-  await expect(mine.getByRole("menuitem",{name:"Advanced"})).toBeDisabled();
+  await expect(mine.getByRole("menuitemradio",{name:"Advanced"})).toBeEnabled();
   await mine.getByRole("menuitem",{name:"Exit"}).click();
   await expect(page.locator('[data-test-window="minesweeper"]')).toHaveCount(0);
   await expect(page.locator('[data-test-window="games"]')).toBeVisible();
@@ -130,4 +130,39 @@ test("source 245c loss reveals mines, delays result, and supports statistics/res
   await expect(stats.locator('[data-test-mine-games-played]')).toHaveText("Games played: 0");
   await stats.getByRole("button",{name:"Close"}).click();
   await expect(stats).toHaveCount(0);
+});
+
+test("source Advanced fills the fixed game's fullscreen window using 22px viewport math",async({page})=>{
+  const mine=await openMinesweeper(page);
+  const windowFrame=page.locator('[data-test-window="minesweeper"]');
+  await expect(windowFrame).not.toHaveClass(/is-maximized/);
+  await mine.getByRole("button",{name:"Game",exact:true}).click();
+  await mine.getByRole("menuitemradio",{name:"Advanced"}).click();
+  await expect(windowFrame).toHaveClass(/is-maximized/);
+  const stage=mine.locator('[data-test-minesweeper-advanced-viewport]');
+  const {rows,cols,mines}=await stage.evaluate(element=>{
+    const height=(element.clientHeight-1)/22;
+    const width=(element.clientWidth-1)/22;
+    return {
+      rows:Math.max(2,Math.floor(height)),
+      cols:Math.max(2,Math.floor(width)),
+      mines:Math.floor(height*width/2)
+    };
+  });
+  expect(rows*cols).toBeGreaterThan(144);
+  expect(rows*cols).toBeLessThanOrEqual(20000);
+  const grid=mine.locator('[data-test-minesweeper-level="2"]');
+  await expect(grid).toHaveAttribute("data-test-minesweeper-rows",String(rows));
+  await expect(grid).toHaveAttribute("data-test-minesweeper-cols",String(cols));
+  await expect(mine.locator("[data-test-mine-cell]")).toHaveCount(rows*cols);
+  await expect(mine.locator("[data-test-minesweeper-total-mines]"))
+    .toHaveText(String(mines));
+  const last=mine.locator('[data-test-mine-cell="'+(cols-1)+":"+(rows-1)+'"]');
+  await last.scrollIntoViewIfNeeded();
+  await expect(last).toBeVisible();
+  await mine.getByRole("button",{name:"Game",exact:true}).click();
+  await mine.getByRole("menuitemradio",{name:"Beginner"}).click();
+  await expect(windowFrame).not.toHaveClass(/is-maximized/);
+  await expect(mine.locator("[data-test-mine-cell]")).toHaveCount(72);
+  await expect(mine.locator('[data-test-minesweeper-total-mines]')).toHaveText("10");
 });

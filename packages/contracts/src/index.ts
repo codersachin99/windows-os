@@ -59,6 +59,8 @@ export type DesktopAction =
   | { type: "MOVE_WINDOW"; id: string; x: number; y: number }
   | { type: "MINIMIZE_WINDOW"; id: string }
   | { type: "TOGGLE_MAXIMIZE"; id: string }
+  /** Source 245c fullscreen=true for Advanced, despite resizable=false. */
+  | { type: "SET_MINESWEEPER_FULLSCREEN"; id: string; fullscreen: boolean }
   | { type: "CLOSE_WINDOW"; id: string }
   | { type: "SET_WINDOW_TITLE"; id: string; title: string }
   | { type: "TOGGLE_START" }

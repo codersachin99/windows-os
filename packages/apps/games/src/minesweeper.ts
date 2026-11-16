@@ -28,6 +28,33 @@ export const SOURCE_MINE_INTERMEDIATE:Readonly<SourceMineOptions>=Object.freeze(
   rows:12,cols:12,mines:30
 });
 
+/** Exact pinned Vue 245c Advanced level watcher uses
+ * e=size(21)+1; scrollWidth-- / scrollHeight-- then:
+ * rows=floor(height/e), cols=floor(width/e),
+ * mines=floor(((width/e)*(height/e))/2).
+ * Its measured grid is fullscreen; the React adapter supplies available
+ * content dimensions after requesting a fullscreen shell window.
+ * Guard pathological zero/huge host viewports before calling 9538.
+ */
+export function sourceMineAdvancedOptions(
+  scrollWidth:number,scrollHeight:number
+):SourceMineOptions{
+  if(!Number.isFinite(scrollWidth)||!Number.isFinite(scrollHeight))
+    throw new Error("Invalid Advanced Minesweeper viewport");
+  const factor=22;
+  const width=Math.max(0,scrollWidth-1)/factor;
+  const height=Math.max(0,scrollHeight-1)/factor;
+  let cols=Math.max(2,Math.floor(width));
+  let rows=Math.max(2,Math.floor(height));
+  if(cols*rows>20000){
+    const scale=Math.sqrt(20000/(cols*rows));
+    cols=Math.max(2,Math.floor(cols*scale));
+    rows=Math.max(2,Math.floor(rows*scale));
+  }
+  return {rows,cols,mines:Math.max(1,
+    Math.min(rows*cols-1,Math.floor(width*height/2)))};
+}
+
 /** Pinned 245c.open() starts the clock only while the *board* is
  * PRISTINE. A right-click flag advances Board to IN_PROGRESS, even
  * before a safe cell opens; preserve that original timer quirk.

@@ -135,6 +135,10 @@ function ApplicationContent({
     return <ContactsApp />;
   }
   if (appId === "minesweeper") return <MinesweeperApp
+    fullscreen={Boolean(windows.find(win=>win.id===windowId)?.maximized)}
+    onFullscreenChange={fullscreen=>dispatch({
+      type:"SET_MINESWEEPER_FULLSCREEN",id:windowId,fullscreen
+    })}
     onClose={()=>dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
   if (appId === "games") return <GamesApp theme={theme}
     isPlayable={gameId=>Boolean(appRegistry.get(gameId))}

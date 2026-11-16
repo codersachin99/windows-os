@@ -1,3 +1,37 @@
+## Advanced level fullscreen viewport contract — 16 November 2026
+
+Pinned original `src/modules/games/minesweeper.js` 245c defines
+`level===2` as `WindowMain fullscreen:true` but keeps
+`resizable:false`. Its watcher measures `$refs.grid.scrollWidth`
+and `scrollHeight` after `nextTick`, subtracts one from each
+dimension, divides by **22px** (21px source cell + 1px gutter),
+then computes `rows=floor(height/22)`, `cols=floor(width/22)`,
+`mines=floor((width/22)*(height/22)/2)`. This is significantly
+different from fixed Beginner 8×9/10 and Intermediate 12×12/30.
+
+New React `sourceMineAdvancedOptions` preserves the exact source
+arithmetic for normal viewports and bounds pathological tiny/huge
+dimensions to the 9538 engine's valid nonempty <=20,000-cell domain.
+`MinesweeperApp` requests a **game-specific fullscreen action**
+from the shell; regular nonresizable WindowFrame maximize remains
+disabled. After fullscreen layout is committed, a hidden measurement
+plane tracks the source grid content-box area, then derives a real
+board with the source generator. New Game in Advanced reuses the
+selected dimensions, while selecting Beginner/Intermediate restores
+fixed window geometry. Advanced statistics row is selectable.
+
+**Source fidelity boundary:** exact original grid.scrollWidth may
+differ from the current React measurement plane because React's
+temporary accessory controls, titlebar and shell geometry are not
+identical; this is a measured fullscreen adapter, **not accepted
+original pixel parity**. No invented generic mine counts/preset or
+resizable titlebar are introduced. Test viewport geometry in both
+Chromium desktop and mobile, plus reducer/unit constraints.
+This code is after accepted #43856185812 and needs a new opt-in
+acceptance gate. Keep PR #1 draft and no main merge/release.
+
+---
+
 ## Source Minesweeper CSS and sound — 16 November 2026
 
 The original source CSS `src/styles/games/minesweeper.css` (blob

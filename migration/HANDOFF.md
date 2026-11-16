@@ -1,3 +1,27 @@
+## Minesweeper Advanced measured fullscreen continuation — 16 November 2026
+
+Latest accepted opt-in
+[CI #43856185812](https://github.com/codersachin99/windows-os/actions/runs/43856185812)
+succeeded on **e19ed49e3cbebae624a1c1e5332d03771dc3f9fe**:
+**452 / 452** desktop+mobile Chromium browser cases; TypeScript,
+unit tests, original image + audio + CSS byte audits, Contacts audit
+and production build all passed. This accepts result/stats, source
+CSS styles, game icon and original audio as scoped React behavior,
+but not full source pixel parity.
+
+The next slice implements source 245c Advanced:
+fullscreen fixed game window, viewport-derived 22px grid and
+half-density mine count, read after shell fullscreen commit, and
+normal-size restoration on Beginner/Intermediate. Game-specific
+fullscreen cannot maximize unrelated fixed windows. Added unit,
+reducer and paired browser tests. See `migration/GAMES-SOURCE.md`.
+No claim of acceptance until exact newer [run-ci] success.
+Six additional game engines, original source account storage and
+independent child windows remain pending. Draft PR #1 and main
+unchanged; no release. Do not trigger CI for routine pushes.
+
+---
+
 ## Minesweeper result/statistics accepted; source CSS+audio gate — 16 November 2026
 
 [Opt-in CI #43853843232](https://github.com/codersachin99/windows-os/actions/runs/43853843232)

@@ -161,6 +161,15 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
         ? window.resizable === false ? window
           : { ...window, maximized: !window.maximized, minimized: false }
         : window) };
+    case "SET_MINESWEEPER_FULLSCREEN": {
+      // Only the pinned game's level watcher may force its fixed-size window
+      // into fullscreen; generic non-resizable windows stay protected.
+      const target=state.windows.find(win=>win.id===action.id);
+      if(!target||target.appId!=="minesweeper"||
+         target.maximized===action.fullscreen)return state;
+      return {...state,windows:state.windows.map(win=>win.id===action.id
+        ? {...win,maximized:action.fullscreen,minimized:false} : win)};
+    }
     case "CLOSE_WINDOW":
       return { ...state, windows: state.windows.filter(window => window.id !== action.id) };
     case "SET_WINDOW_TITLE":

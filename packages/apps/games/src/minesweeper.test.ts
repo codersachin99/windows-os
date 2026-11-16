@@ -1,6 +1,7 @@
 import {describe,it,expect} from "vitest";
 import {
-  SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
+  SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,
+  sourceMineAdvancedOptions,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_BOARD_STATE,
   SOURCE_MINE_CELL_STATE,SOURCE_MINE_CELL_FLAG
 } from "./minesweeper";
@@ -84,5 +85,22 @@ describe("pinned minesweeper.js 9538 source Board",()=>{
     expect(sourceMineShouldStartTimer(board.state())).toBe(false);
     expect(sourceMineShouldStartTimer(SOURCE_MINE_BOARD_STATE.WON)).toBe(false);
     expect(sourceMineShouldStartTimer(SOURCE_MINE_BOARD_STATE.LOST)).toBe(false);
+  });
+});
+
+describe("pinned source 245c Advanced viewport sizing",()=>{
+  it("uses original 22px gutter/21px tile and continuous mine density math",()=>{
+    expect(sourceMineAdvancedOptions(220,176)).toEqual({rows:7,cols:9,mines:39});
+    expect(sourceMineAdvancedOptions(398,398)).toEqual({rows:18,cols:18,mines:162});
+    expect(sourceMineAdvancedOptions(595,485)).toEqual({rows:22,cols:27,mines:297});
+  });
+  it("bounds impossible host viewport sizes without changing normal source math",()=>{
+    const tiny=sourceMineAdvancedOptions(1,1);
+    expect(tiny).toEqual({rows:2,cols:2,mines:1});
+    const wide=sourceMineAdvancedOptions(16000,9000);
+    expect(wide.rows*wide.cols).toBeLessThanOrEqual(20000);
+    expect(wide.mines).toBeGreaterThan(0);
+    expect(wide.mines).toBeLessThan(wide.rows*wide.cols);
+    expect(()=>sourceMineAdvancedOptions(NaN,100)).toThrow("viewport");
   });
 });

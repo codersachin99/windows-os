@@ -6,19 +6,23 @@ import {
 } from "./mineStatistics";
 import {legacyMineArtwork,legacyMineAudio} from "@windows-os/assets";
 import {
-  SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
+  SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,
+  sourceMineAdvancedOptions,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_CELL_FLAG,SOURCE_MINE_CELL_STATE,
   type SourceMineOptions,type SourceMineCell
 } from "./minesweeper";
 import "./MinesweeperApp.css";
 
-export interface MinesweeperAppProps {onClose():void;}
-type Level=0|1;
+export interface MinesweeperAppProps {
+  onClose():void;
+  fullscreen?:boolean;
+  onFullscreenChange?(fullscreen:boolean):void;
+}
+type Level=0|1|2;
 type Result=0|-1|1;
-/** Pinned source 245c uses level 0=8x9/10, 1=12x12/30. The original
- * Advanced dynamically derives cells from actual window scroll sizes;
- * that mode is intentionally disabled until its viewport contract ports. */
-const optionsFor=(level:Level):SourceMineOptions=>
+/** Source beginner/intermediate are fixed. Advanced holds its current
+ * viewport-derived size until a new level is selected, as in Vue 245c. */
+const optionsFor=(level:0|1):SourceMineOptions=>
   level===0?SOURCE_MINE_BEGINNER:SOURCE_MINE_INTERMEDIATE;
 function newBoard(options:SourceMineOptions):SourceMineBoard{
   return new SourceMineBoard(sourceGenerateMineArray(options));
@@ -39,8 +43,12 @@ function playSourceGameAudio(audio:HTMLAudioElement|null):void{
 /** Source 9538 Board + 245c game rules, result and stats UI.
  * Original sprites are imported; audio, true static child windows,
  * Advanced layout and full pixel parity remain pending. */
-export function MinesweeperApp({onClose}:MinesweeperAppProps){
+export function MinesweeperApp({
+  onClose,fullscreen=false,onFullscreenChange
+}:MinesweeperAppProps){
   const [level,setLevel]=useState<Level>(0);
+  const [options,setOptions]=useState<SourceMineOptions>(SOURCE_MINE_BEGINNER);
+  const advancedViewport=useRef<HTMLDivElement|null>(null);
   const [board,setBoard]=useState(()=>newBoard(SOURCE_MINE_BEGINNER));
   const [grid,setGrid]=useState(()=>board.grid());
   const [result,setResult]=useState<Result>(0);
@@ -56,7 +64,6 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
   const resultTimeout=useRef<ReturnType<typeof setTimeout>|null>(null);
   const bgmRef=useRef<HTMLAudioElement|null>(null);
   const sfxRef=useRef<HTMLAudioElement|null>(null);
-  const options=optionsFor(level);
   useEffect(()=>{persistMineStatistics(stats);},[stats]);
   // Pinned 245c mounted() calls newGame(), attempting to play this track.
   useEffect(()=>{playSourceGameAudio(bgmRef.current);},[]);
@@ -68,16 +75,40 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
     const interval=setInterval(()=>setElapsed(value=>value+1),1000);
     return ()=>clearInterval(interval);
   },[started,result]);
-  const reset=(chosen:Level=level)=>{
+  const reset=(chosen:Level=level,sourceOptions?:SourceMineOptions)=>{
     if(resultTimeout.current!==null)clearTimeout(resultTimeout.current);
     resultTimeout.current=null;
-    const next=newBoard(optionsFor(chosen));
+    const nextOptions=sourceOptions??(chosen===2?options:optionsFor(chosen));
+    const next=newBoard(nextOptions);
     playSourceGameAudio(bgmRef.current);
-    setLevel(chosen);setBoard(next);setGrid(next.grid());
+    setLevel(chosen);setOptions(nextOptions);
+    setBoard(next);setGrid(next.grid());
     setResult(0);setRoundEnded(false);setElapsed(0);setStarted(false);
     setFlagMode(false);setGameMenu(false);setStatsOpen(false);
     setResetConfirm(false);
   };
+  const selectLevel=(chosen:Level)=>{
+    setGameMenu(false);
+    if(chosen===2){
+      // Original WindowMain receives fullscreen=true before its watcher
+      // measures scrollWidth/scrollHeight for Advanced.
+      if(!onFullscreenChange)return;
+      setLevel(2);
+      onFullscreenChange(true);
+      return;
+    }
+    if(level===2)onFullscreenChange?.(false);
+    reset(chosen);
+  };
+  useEffect(()=>{
+    if(level!==2||!fullscreen)return;
+    const measure=advancedViewport.current;
+    if(!measure)return;
+    const sized=sourceMineAdvancedOptions(measure.clientWidth,measure.clientHeight);
+    reset(2,sized);
+    // Recompute once upon fullscreen transition, not on every board click.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[level,fullscreen]);
   const finish=(outcome:Exclude<Result,0>)=>{
     if(outcome===-1)playSourceGameAudio(sfxRef.current);
     setStarted(false);setRoundEnded(true);
@@ -148,11 +179,12 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
       {gameMenu&&<div className="windows-minesweeper__menu" role="menu">
         <button type="button" role="menuitem" onClick={()=>reset()}>New Game</button>
         <button type="button" role="menuitemradio" aria-checked={level===0}
-          onClick={()=>reset(0)}>Beginner</button>
+          onClick={()=>selectLevel(0)}>Beginner</button>
         <button type="button" role="menuitemradio" aria-checked={level===1}
-          onClick={()=>reset(1)}>Intermediate</button>
-        <button type="button" role="menuitem" disabled
-          title="Original viewport-derived Advanced mode is not migrated">Advanced</button>
+          onClick={()=>selectLevel(1)}>Intermediate</button>
+        <button type="button" role="menuitemradio" aria-checked={level===2}
+          disabled={!onFullscreenChange}
+          onClick={()=>selectLevel(2)}>Advanced</button>
         <button type="button" role="menuitem" onClick={()=>{
           setGameMenu(false);setStatLevel(level);setStatsOpen(true);
         }}>Statistics</button>
@@ -160,9 +192,14 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
       </div>}
     </nav>
     <div className="windows-minesweeper__stage">
+      <div className="windows-minesweeper__advanced-viewport"
+        ref={advancedViewport} data-test-minesweeper-advanced-viewport="" />
       <div className="windows-minesweeper__source-grid">
       <div className="windows-minesweeper__board minesweeper__grid"
         role="group" aria-label="Minesweeper grid"
+        data-test-minesweeper-level={level}
+        data-test-minesweeper-rows={options.rows}
+        data-test-minesweeper-cols={options.cols}
         style={{gridTemplateColumns:`repeat(${options.cols},21px)`}}>
         {grid.map((row,y)=>row.map((cell,x)=>{
           const openCell=cell.state===SOURCE_MINE_CELL_STATE.OPEN;
@@ -233,7 +270,7 @@ export function MinesweeperApp({onClose}:MinesweeperAppProps){
             onChange={event=>setStatLevel(Number(event.target.value) as SourceMineStatsLevel)}>
             <option value={0}>Beginner</option>
             <option value={1}>Intermediate</option>
-            <option value={2} disabled>Advanced</option>
+            <option value={2} disabled={!onFullscreenChange}>Advanced</option>
           </select>
         </label>
         <fieldset><legend>Best times</legend>

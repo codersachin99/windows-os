@@ -180,3 +180,16 @@
   font:11px "Segoe UI",Tahoma,sans-serif;
 }
 .windows-minesweeper__controls output{font:600 12px monospace}
+
+/* A hidden measurement plane mirroring source 245c's fullscreen grid
+ * content box. The original measures grid.scrollWidth/scrollHeight
+ * after nextTick, then subtracts one pixel and divides by 22px.
+ * The React game's extra touch controls live outside this plane. */
+.windows-minesweeper__stage{position:relative}
+.windows-minesweeper__advanced-viewport{
+  position:absolute;top:20px;right:20px;bottom:10px;left:20px;
+  pointer-events:none;visibility:hidden;
+}
+@media(max-width:480px){
+  .windows-minesweeper__advanced-viewport{left:3px;right:3px;top:8px;bottom:10px}
+}
