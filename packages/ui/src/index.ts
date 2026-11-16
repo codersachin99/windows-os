@@ -19,3 +19,6 @@ export type {SourceListItemRenameProps} from "./sourceListItemRename";
 export {SourceItemCheckbox} from "./sourceItemCheckbox";
 export type {SourceItemCheckboxProps} from "./sourceItemCheckbox";
 export { SourceBsodScreen } from "./SourceBsodScreen";
+
+export {SourceWin7HistoryNav} from "./SourceWin7HistoryNav";
+export type {SourceWin7HistoryNavProps} from "./SourceWin7HistoryNav";
