@@ -148,8 +148,22 @@ async function prepareScene(page, kind, scene) {
         if(scene==="minesweeper-advanced"){
           await page.locator('[data-test-window="minesweeper"].is-maximized')
             .waitFor({state:"visible",timeout:15000});
-          await mine.locator('[data-test-minesweeper-level="2"] [data-test-mine-cell]')
-            .first().waitFor({state:"visible",timeout:10000});
+          // Wait for the effect scheduled *after* fullscreen layout. The
+          // level changes before the new viewport-derived board is mounted.
+          await page.waitForFunction(()=>{
+            const root=document.querySelector(
+              '[data-test-window="minesweeper"] [data-test-minesweeper]');
+            const measure=root?.querySelector(
+              '[data-test-minesweeper-advanced-viewport]');
+            const grid=root?.querySelector('[data-test-minesweeper-level="2"]');
+            if(!measure||!grid)return false;
+            const rows=Number(grid.getAttribute("data-test-minesweeper-rows"));
+            const cols=Number(grid.getAttribute("data-test-minesweeper-cols"));
+            const targetRows=Math.max(2,Math.floor((measure.clientHeight-1)/22));
+            const targetCols=Math.max(2,Math.floor((measure.clientWidth-1)/22));
+            return rows===targetRows&&cols===targetCols&&
+              grid.querySelectorAll('[data-test-mine-cell]').length===rows*cols;
+          },null,{timeout:20000});
         }else{
           await mine.locator("[data-test-mine-cell]").first()
             .waitFor({state:"visible",timeout:10000});
