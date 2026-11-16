@@ -1,3 +1,35 @@
+## Acceptance #43807380475 passed; full source-search follow-up (16 November 2026)
+
+[Opt-in CI #43807380475](https://github.com/codersachin99/windows-os/actions/runs/43807380475)
+completed **SUCCESS** on exact SHA `f565741f02d2777f53621bb61fbd23500dbd5041`:
+**432 / 432 Chromium desktop+mobile tests**, TypeScript, all unit tests,
+original source inventory audits, Contacts source parity audit, and Vite
+build. This validates the pinned 24-icon/66-task Control Panel registry,
+original weighted `5985` search engine, task routes, Backup/Restore
+browser interchange, and corrected strict test selectors, but **not**
+any commits made later.
+
+The next code batch added pinned source **1902** delayed search and
+five fake-timer tests, wired it to the Control Panel's distinct
+`searchText` input and `searchedText` indexed results, and added
+four target-only screenshot scenes in `scripts/capture-visual-parity.mjs`
+for desktop/mobile. Source proof: pinned
+`src/modules/shell/win7-ui.js` `WinuiSearchbox instant` emits every
+keystroke at once, while pinned `cpanel.js` `a259.search(t)` calls
+`delayedSearch.type(t)` and thus delays **result updates** by 300 ms.
+Source `a259.openLocation(t)` does not clear search state: when Back
+returns from a matched panel to root, the original search results
+reappear. React now preserves both search values until explicit user
+clear; new paired browser test covers Back and clear. It is a
+source-fidelity correction, not a new feature.
+
+**Next action:** execute one opt-in `[run-ci]` checkpoint over these
+later engine/UI/tests, inspect results before calling them accepted.
+Then opt-in `[capture-visual]` for target-only source-locked
+screenshots if CI passes; source/target pixel parity remains **unproven**
+because the legacy private runtime has not been captured. Draft PR #1
+only, no merge to main and no product release.
+
 ## Follow-up visual capture fixtures — 16 November 2026
 
 Added four explicitly **target-only** Control Panel screenshot scenes in
