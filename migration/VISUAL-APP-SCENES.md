@@ -1,3 +1,23 @@
+## Verified opt-in React capture — 16 November 2026
+
+[GitHub Actions run #43809843426](https://github.com/codersachin99/windows-os/actions/runs/43809843426)
+on exact code SHA `b9fb0fe7d0cc0e3ae2778e9ccd83b96b06e15fa1`
+completed **SUCCESS**. Capture logs report **48 successful PNG captures,
+0 capture errors** across 24 desktop and 24 mobile scenes, including
+all four Control Panel scenarios in both profiles. Artifact:
+[visual-parity-b9fb0fe…](https://github.com/codersachin99/windows-os/actions/runs/43809843426/artifacts/14200540179)
+(23,610,707-byte ZIP, retained by Actions for 14 days).
+
+The workflow explicitly reported `No legacy read token`: source
+checkout was skipped, `sourceConfigured=false`,
+`sourceCaptured=0`, and `parityStatus="not-assessed"`. Thus these
+are **target React screenshot baselines only**. The 38 scenes marked
+source-ineligible are not misrepresented as legacy parity; the ten
+shared-scene names also have only React renders. Source/target
+pixel-difference scores cannot be asserted from this artifact.
+The success proves that all 48 specified target scene fixtures
+were successfully navigated/captured under Playwright Chromium.
+
 ## Control Panel source-registry screenshot scenes — 16 November 2026
 
 Four additional **target-only** Win7 desktop/mobile captures are now
