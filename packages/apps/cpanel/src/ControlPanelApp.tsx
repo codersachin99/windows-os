@@ -6,7 +6,7 @@ import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupporte
 import {BackupRestorePanel} from "./BackupRestorePanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
-import {SourceWin7HistoryNav} from "@windows-os/ui";
+import {SourceWin7HistoryNav} from "@windows-os/ui/navigation";
 import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelResolutions,
