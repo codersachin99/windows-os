@@ -378,3 +378,20 @@ test("all 24 Control Panel root tiles remain reachable within the scrollable win
   await panel.locator('[data-test-cpanel-item="backup"]').click();
   await expect(panel.locator("[data-test-cpanel-backup]")).toBeVisible();
 });
+
+test("source Win7 Control Panel address icon follows active breadcrumb without fake root link",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const breadcrumb=panel.getByRole("navigation",{name:"Control Panel location"});
+  const icon=panel.locator("[data-test-cpanel-address-icon]");
+  await expect(icon).toHaveAttribute("src",/cpanel\.38ffbb1d\.webp/);
+  await expect(breadcrumb.getByText("Control Panel",{exact:true})).toBeVisible();
+  await expect(breadcrumb.getByRole("button",{name:"Control Panel"})).toHaveCount(0);
+  await panel.locator('[data-test-cpanel-item="action-center"]').click();
+  await expect(icon).toHaveAttribute("src",/action-center-headline\.27cc6d83\.webp/);
+  await expect(panel.locator("[data-test-cpanel-action-center]")).toBeVisible();
+  await breadcrumb.getByRole("button",{name:"Control Panel"}).click();
+  await expect(icon).toHaveAttribute("src",/cpanel\.38ffbb1d\.webp/);
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+  await expect(breadcrumb.getByRole("button",{name:"Control Panel"})).toHaveCount(0);
+});
