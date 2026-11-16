@@ -316,7 +316,7 @@ export function DesktopShell({
             onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
       ))}
-      {state.startOpen && <StartMenu dispatch={dispatch} />}
+      {state.startOpen && <StartMenu dispatch={dispatch} theme={state.theme} />}
       </div>
       {/* The control surface remains independent of the transformed canvas;
           other programs and their windows zoom together with the desktop. */}
