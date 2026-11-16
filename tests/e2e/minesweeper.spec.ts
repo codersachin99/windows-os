@@ -23,6 +23,11 @@ test("native Minesweeper has 8x9 source beginner grid, flags and real reveal",as
   await mine.locator('[data-test-mine-cell="0:0"]').click();
   await expect(mine.locator(".windows-minesweeper__cell.is-open").first())
     .toBeVisible();
+  // Start a new pristine round for deterministic flag-cycle assertions:
+  // pinned 245c rerolls only once after a first-click mine, so that
+  // rare second mine must not make tests nondeterministic.
+  await mine.getByRole("button",{name:"New Game"}).click();
+  await expect(mine.locator(".windows-minesweeper__cell.is-open")).toHaveCount(0);
   const covered=mine.locator(".windows-minesweeper__cell:not(.is-open)").first();
   await covered.click({button:"right"});
   await expect(covered).toHaveText("F");
