@@ -1193,8 +1193,15 @@
       "source": "src/modules/games/solitaire.js",
       "sha": "517c3786537ce265f288dd91c5ce6a215b4cb7cf",
       "area": "games",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/games/src/sourceCards.ts",
+        "packages/apps/games/src/sourceCards.test.ts",
+        "packages/apps/games/src/sourceSolitaire.ts",
+        "packages/apps/games/src/sourceSolitaire.test.ts",
+        "migration/SOLITAIRE-SOURCE.md"
+      ],
+      "verification": "Source e202/5ea1 pure rules model and unit tests begun. Card sprite/drag rendering, source shuffle/suit sequence, preferences, audio, dialogs and browser gameplay pending; tile disabled."
     },
     {
       "source": "src/modules/games/spidersolitaire.js",

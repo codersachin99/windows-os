@@ -1,3 +1,22 @@
+## Solitaire pure rules port — 17 November 2026
+
+Source-backed groundwork for the next Games engine:
+`sourceCards.ts` for shared 5ea1 deck/color primitives,
+`sourceSolitaire.ts` for the pinned e202 Klondike game:
+7 descending tableau columns, 4 foundations, draw three/one,
+stock recycling, alternating run/auto-drop validation, scoring
+and 50-step Undo. Unit tests exercise deterministic source
+logic. See `migration/SOLITAIRE-SOURCE.md`. Tracker now
+`in-progress` for Solitaire; **Games tile remains disabled**.
+Original 2f7e shuffle and ec2b suit order, card artwork and
+browser UI still missing; never claim complete game parity.
+This code is after the active Tetris input [run-ci]
+#43945990957 and is NOT covered by that snapshot.
+Batch a later verification when a further Solitaire slice is ready.
+PR #1 stays draft; main unchanged, no release.
+
+---
+
 ## Tetris source input fidelity acceptance gate — 17 November 2026
 
 One deliberate `[run-ci]` acceptance is requested for the
