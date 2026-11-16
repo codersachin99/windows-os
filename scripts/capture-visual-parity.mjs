@@ -28,7 +28,8 @@ const TARGET_ONLY_SCENES = [
   // Games shell and first source-backed playable game. React-only until
   // original Vue source runtime can be launched at the pinned SHA.
   "games-library", "minesweeper-initial", "minesweeper-intermediate",
-  "minesweeper-advanced", "minesweeper-statistics", "minesweeper-result"
+  "minesweeper-advanced", "minesweeper-statistics", "minesweeper-result",
+  "tetris-initial", "tetris-playing", "tetris-help", "tetris-statistics"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -128,6 +129,37 @@ async function prepareScene(page, kind, scene) {
       await page.locator('[data-test-program="' + appId + '"]').click();
       await page.locator('[data-test-window="' + appId + '"]')
         .waitFor({ state: "visible", timeout: 15000 });
+      return;
+    }
+    if (scene.startsWith("tetris-")) {
+      await page.getByRole("button",{name:"Open Start menu"}).click();
+      await page.locator("[data-test-open-games]").click();
+      const games=page.locator('[data-test-window="games"] [data-test-games-root]');
+      await games.waitFor({state:"visible",timeout:15000});
+      await games.locator('[data-test-offline-game="tetris"]').click();
+      const game=page.locator('[data-test-window="tetris"] [data-test-tetris-root]');
+      await game.waitFor({state:"visible",timeout:15000});
+      await game.locator("[data-test-tetris-canvas]")
+        .waitFor({state:"visible",timeout:10000});
+      if(scene==="tetris-playing"){
+        await page.evaluate(()=>{Math.random=()=>0.5;});
+        await game.locator('[data-test-tetris="play"]').click();
+        await page.keyboard.press("Space");
+        await page.waitForFunction(()=>{
+          const score=document.querySelector('[data-test-tetris-root]');
+          return Number(score?.getAttribute("data-test-tetris-score"))>0;
+        },null,{timeout:15000});
+      }else if(scene==="tetris-help"){
+        await game.getByRole("button",{name:"Help",exact:true}).click();
+        await game.getByRole("menuitem",{name:"View Help"}).click();
+        await page.locator('[data-test-child-window="tetris-help"]')
+          .waitFor({state:"visible",timeout:10000});
+      }else if(scene==="tetris-statistics"){
+        await game.getByRole("button",{name:"Game",exact:true}).click();
+        await game.getByRole("menuitem",{name:"Statistics"}).click();
+        await page.locator('[data-test-child-window="tetris-stats"]')
+          .waitFor({state:"visible",timeout:10000});
+      }
       return;
     }
     if (scene==="games-library"||scene.startsWith("minesweeper-")) {

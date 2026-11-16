@@ -1,3 +1,29 @@
+## Classic Tetris source-game visual scenes — 17 November 2026
+
+Planned four new **target React-only** Tetris scenes, each at the
+fixed desktop 1920×1080 and Pixel 7 mobile profile:
+
+- `tetris-initial`: source `shell:games` tile launches non-resizable
+  fullscreen canvas and original responsive HUD layout;
+- `tetris-playing`: deterministic original piece distribution,
+  Play and hard drop using actual keyboard input, wait for score;
+- `tetris-help`: actual Help menu opens parented independent child;
+- `tetris-statistics`: actual Statistics menu and child window.
+
+Existing `minesweeper-result` and `minesweeper-statistics`
+scenes already target the newly portaled desktop siblings.
+Prior accepted visual run #43877288974 recorded 60/60 target
+screenshots, `sourceCaptured=0`, and
+`parityStatus=not-assessed`. The proposed new set raises to
+**68 planned target screenshots (34 scenes × 2 profiles)**.
+No original-source screenshots are available yet, and these
+captures must not be used to claim pixel parity. Actual capture
+run success and PNGs must be verified separately; do not
+invent visual results. Source Tetris sound/assets licenses and
+GameStats binary fidelity remain release blockers.
+
+---
+
 ## Source Games Advanced/statistics/result screenshot fixtures — 16 November 2026
 
 Added three **React-target-only** source-backed Minesweeper visual

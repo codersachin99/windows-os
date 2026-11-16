@@ -1,3 +1,19 @@
+## Visual plan for first playable Tetris and parented child windows — 17 November 2026
+
+Authored four deterministic React-only screenshot scenes for
+original Tetris fullscreen board, played/locked piece, Help and
+Statistics child windows, taking planned target coverage to 68
+desktop/mobile PNGs. Also corrected existing Minesweeper
+statistics/result selectors to find their new desktop siblings,
+not descendants of the main game window. This is a capture
+**plan**, not an executed or visually accepted run.
+Run `[capture-visual]` only after functional Tetris acceptance,
+inspect the new visual manifest/PNG artifact, and keep
+`sourceComparisonEligible=false` for these target-only scenes.
+No main merge/release. Draft PR #1.
+
+---
+
 ## Deliberate Tetris playable milestone acceptance — 17 November 2026
 
 Following Tetris pure engine, source canvas layout, nine exact pinned
