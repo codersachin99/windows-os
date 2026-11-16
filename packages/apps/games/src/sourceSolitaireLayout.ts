@@ -1,5 +1,5 @@
 import type {SourceSolitaireState,SourceSolitairePile} from "./sourceSolitaire";
-import {sourceSolitairePile} from "./sourceSolitaire";
+
 import {SOURCE_CARD_SPRITE_HEIGHT,SOURCE_CARD_SPRITE_WIDTH}
   from "./sourceCardArtwork";
 export interface SourceSolitaireLayout{
