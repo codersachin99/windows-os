@@ -1207,8 +1207,13 @@
       "source": "src/modules/games/tetris.js",
       "sha": "e9d2c95f9ce215ffb12d3645db88b90fba2dd1a3",
       "area": "games",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/games/src/sourceTetris.ts",
+        "packages/apps/games/src/sourceTetris.test.ts",
+        "migration/TETRIS-SOURCE.md"
+      ],
+      "verification": "Pure source 13bc engine initial model (pieces, 10x22, gravity, scoring, hard drop, pause). Not playable: canvas, frame/ARE parity, audio, dialogs, input, and browser tests pending."
     },
     {
       "source": "src/modules/index.js",
