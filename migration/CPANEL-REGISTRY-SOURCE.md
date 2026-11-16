@@ -77,9 +77,12 @@ at revision `4e63290d783009e1293433c6ccf252abba9c1187`.
   pressed (-54px), disabled (-81px) and mirrored Forward states.
   Both applications keep their own history state, accessible roles and
   previous browser-test markers; there are no substitute text arrows on
-  the Win7 Control Panel surface. New shared unit and desktop/mobile
-  Control Panel browser regressions are committed but await an acceptance
-  CI checkpoint.
+  the Win7 Control Panel surface. The actual theme is now passed from
+  `DesktopShell` into Control Panel: **only Win7** uses its source sprite,
+  and WinXP/Win11/other themes retain neutral navigation until their own
+  pinned artwork is migrated. A theme-selection unit and XP desktop/mobile
+  browser test cover the non-Win7 guard. The shared navigation browser
+  tests still require an acceptance CI checkpoint.
 - `packages/assets/src/index.ts` exposes `legacyCpanelTileArtwork`
   with source-locked artwork for every entry. Existing source image
   bytes are reused, not synthesized icons.
