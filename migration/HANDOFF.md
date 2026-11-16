@@ -1,3 +1,27 @@
+## Minesweeper result/statistics accepted; source CSS+audio gate — 16 November 2026
+
+[Opt-in CI #43853843232](https://github.com/codersachin99/windows-os/actions/runs/43853843232)
+completed **SUCCESS** at exact SHA `1ec009a94bcf279b847267d3b2234453c66b4caa`:
+**452 / 452** desktop/mobile Chromium browser cases passed, including
+deterministic loss, replay, per-level statistics and Reset/Cancel;
+TypeScript, all unit tests, source image/Contacts audits and Vite
+production build also passed. This is the accepted 245c result/stats
+lifecycle checkpoint, not full source pixel or account-persistence parity.
+
+After that baseline, `9d56cb9` imported **two original Minesweeper mp3s**
+with matching source/target Git blob SHA, restored original cyan-to-navy
+board/stats layout using source CSS values, and saved original CSS bytes;
+`5eb31d9` added byte-exact CSS integrity audit. These are not covered
+by #43853843232. The current opt-in **[run-ci]** commit accepts that
+later CSS/audio slice and all previous regression tests once its own
+run completes successfully. Do not mark it passed before checking the
+exact run SHA/steps. Regular future pushes remain CI-skipped.
+
+Open draft PR #1 remains unmerged; main unchanged and no release.
+Do not present target-only screenshots as original pixel parity.
+
+---
+
 ## Source Minesweeper visual/audio continuation (16 November 2026)
 
 Source-verified `src/styles/games/minesweeper.css`: the previous
