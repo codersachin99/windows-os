@@ -1,3 +1,31 @@
+## Klondike e202 original sprite, pile layout and CSS — 17 November 2026
+
+Decoded pinned source `cards-spritesheet.f136d9d3.webp`:
+**949×490 pixels** = **13×5** exact source cells of **73×98**.
+Visual source verifies four ordered suit rows clubs, diamonds,
+hearts, spades; final row has three card backs and an empty-slot
+marker in columns 0,1,2,3. Source 5ea1 CSS references this sheet
+and applies `round(width*98/73)` card height, 13×5 scaled
+background size and rank/suit or back/empty cell offsets.
+`sourceCardArtwork.ts` recreates these calculations.
+
+`sourceSolitaireLayout.ts` ports e202 board geometry:
+7 columns, 0.14-width gaps, width clamped 40–96, 0.28-height
+vertical tableau gap, 0.09-height face-down and 0.2-height
+face-up offsets, scaled down if stacks overflow available height.
+Stock, waste, four foundations and seven tableau rectangles are
+computed as the original. Deterministic tests check sprite
+positions, 660×500 geometry and mobile stack compression.
+
+Also preserved original `src/styles/games/solitaire.css` and
+`src/styles/games/shared~solitaire~spidersolitaire.css`
+byte-for-byte in `migration/source-css`; the source audit now
+checks both Git blob hashes. No replacement artwork or generic
+card CSS is claimed equal to source. The playable Solitaire
+UI and its source-accurate drag interactions are still pending.
+
+---
+
 ## Shared card art and exact 2f7e shuffle — 17 November 2026
 
 Source tracing `src/modules/chunks/shared~solitaire~spidersolitaire.js`

@@ -114,6 +114,19 @@ if(!tetrisSourceCSS||tetrisCSS.length!==tetrisSourceCSS.bytes||
   tetrisCSSSha!==tetrisSourceCSS.sha)
   failures.push("Pinned Tetris source CSS bytes changed");
 
+for(const originalCssPath of [
+  "src/styles/games/solitaire.css",
+  "src/styles/games/shared~solitaire~spidersolitaire.css"
+]){
+  const baseName=originalCssPath.split("/").at(-1);
+  const original=inventory.find(x=>x.path===originalCssPath);
+  const bytes=await readFile(resolve(root,"migration/source-css",baseName));
+  const hash=createHash("sha1").update(`blob ${bytes.length}\0`)
+    .update(bytes).digest("hex");
+  if(!original||original.bytes!==bytes.length||original.sha!==hash)
+    failures.push(`Source cards CSS bytes changed: ${originalCssPath}`);
+}
+
 const byStatus = Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
   .map(status => [status, tracker.modules.filter(m => m.status === status).length]));
 console.log(JSON.stringify({

@@ -1,3 +1,18 @@
+## Source Solitaire card sprite/layout — 17 November 2026
+
+Original 949×490 image (13 columns by 5 rows; 73×98 card)
+and source e202 pile geometry have been ported to reusable
+`sourceCardArtwork.ts` / `sourceSolitaireLayout.ts`,
+with sprite and mobile pile-layout unit tests. Original
+Klondike and shared-card CSS were imported with verified
+source=target Git blobs and pinned audit checks.
+Solitaire's card sprite and layout are ready for the UI,
+but no playable Solitaire app is enabled yet.
+These changes are after the original Tetris input acceptance
+run #43945990957 and need their own opt-in verification.
+
+---
+
 ## Original shared card assets restored — 17 November 2026
 
 After Solitaire rules port `2553c2a`, restored all 3 common
