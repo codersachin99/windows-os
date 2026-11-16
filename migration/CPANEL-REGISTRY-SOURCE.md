@@ -1,3 +1,32 @@
+## Source address-bar icon and breadcrumb interaction — 16 November 2026
+
+Original `src/modules/apps/cpanel.js` webpack `a259` uses
+`currentLocation = a97a.trail(location).at(-1)` and
+`addressIcon = currentLocation.icon`, so the root uses **cpanel**
+artwork while each of the six navigable pages uses that source
+registry entry's icon (not a static Control Panel glyph). The original
+`addressLocation` maps its trail to breadcrumb labels with a
+`click: openLocation(t.id)` callback **only on ancestors**; the
+current segment has no click callback.
+
+React now computes this using the portable
+`sourceCpanelAddressIconKey()` registry helper. The Win7 address
+location displays the existing byte-identical `cpanel.38ffbb1d.webp`
+at root, the appropriate pinned registry artwork on each page
+(including `action-center-headline.27cc6d83.webp`), and preserves
+original 25px translucent Win7 location geometry. At root
+"Control Panel" is text, not an artificial clickable breadcrumb;
+when on a child route it is an ancestor button that returns home.
+Other themes do not borrow Win7 artwork while their skins remain
+unported.
+
+New registry unit tests and desktop/mobile Playwright tests assert
+all six dynamic keys, icon transitions and ancestor-only click
+behavior. Actual original/React screenshot difference is still
+**not assessed** because the source private runtime was not paired.
+This commit occurred after successful CI #43811148997 and awaits the
+next deliberate opt-in regression batch.
+
 # Original Control Panel source registry / tile mode / task search
 
 Pinned: [legacy-win7](https://github.com/codersachin99/legacy-win7/tree/4e63290d783009e1293433c6ccf252abba9c1187)
