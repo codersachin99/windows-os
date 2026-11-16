@@ -2,7 +2,7 @@ import {useEffect,useState,type MouseEvent} from "react";
 import {
   SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_CELL_FLAG,SOURCE_MINE_CELL_STATE,
-  SOURCE_MINE_BOARD_STATE,type SourceMineOptions,type SourceMineCell
+  type SourceMineOptions,type SourceMineCell
 } from "./minesweeper";
 import "./MinesweeperApp.css";
 
