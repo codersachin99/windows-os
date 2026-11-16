@@ -1,3 +1,36 @@
+## Playable Solitaire React slice — 17 November 2026
+
+The preceding Solitaire/card rules and asset acceptance at
+[CI #43949278947](https://github.com/codersachin99/windows-os/actions/runs/43949278947)
+completed **SUCCESS** on the earlier exact SHA `f9e7382`. It does
+**not** cover the new Solitaire React board below.
+
+Added `sourceSolitaireView.ts` with e202 52-card rendered order,
+three-card waste .22-width fan, face-up affordances, source
+foundation-before-tableau legal targets, and the original 0510
+overlap-based drag drop, plus deterministic unit tests.
+
+Added `SolitaireApp.tsx` / CSS: original imported 949x490 card sheet
+and Klondike background, live engine-backed stock dealing/undo,
+draw-one/draw-three, foundation/tableau auto-moves, pointer-captured
+drag, card face keyboard activation, source audio effects, responsive
+scroll-reachable board, status time/score and parented source-styled
+Help/About/Appearance windows with three card backs. Added the actual
+660x500 app registry entry and mounted the game in DesktopShell; the
+original Games tile now launches it. Playwright desktop/mobile
+acceptance tests check card inventory, source image paths, stock and
+undo, draw-one, visible pointer drag, child dialog lock and Exit.
+
+**Known incompleteness:** original Solitaire Statistics persistence,
+full win particle animation and original deck/prefs persistence are
+NOT migrated. Source runtime paired visual parity still unavailable.
+The `solitaire.js` tracker remains `in-progress`, NOT verified.
+Do not merge draft PR #1 or release a product. This opt-in `[run-ci]`
+commit starts a new exact-SHA typecheck/unit/source-audit/build/browser
+acceptance; only call it green after GitHub finishes.
+
+---
+
 ## Solitaire/card source audit acceptance correction — 17 November 2026
 
 The initial Solitaire source-model [run #43948813972](https://github.com/codersachin99/windows-os/actions/runs/43948813972)
