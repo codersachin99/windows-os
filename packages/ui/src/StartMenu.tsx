@@ -1,5 +1,6 @@
 import { useEffect, useState, type Dispatch } from "react";
-import type { DesktopAction } from "@windows-os/contracts";
+import type { DesktopAction, ThemeId } from "@windows-os/contracts";
+import "./sourceStartMenuThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL} from "@windows-os/assets";
 import {
   parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
@@ -9,6 +10,7 @@ import { appRegistry, fileStore } from "@windows-os/sdk";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
+  theme?:ThemeId;
 }
 interface InstalledShortcut {
   path: string;
@@ -38,7 +40,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 }
 
 /** The original All Programs tree is populated from installed .lnk files. */
-export function StartMenu({ dispatch }: StartMenuProps) {
+export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
   const [query, setQuery] = useState("");
   const [allPrograms, setAllPrograms] = useState(false);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -77,7 +79,17 @@ export function StartMenu({ dispatch }: StartMenuProps) {
     if (app) dispatch({ type: "OPEN_APP", app });
   };
   return (
-    <nav className="windows-startmenu" id="start-menu" data-test-start-menu="" aria-label="Start menu">
+    <nav className={"windows-startmenu" +
+      (theme==="winxp"?" windows-startmenu--winxp":
+      theme==="win11"?" windows-startmenu--win11":"") +
+      (allPrograms&&!query?" is-all-programs":"")}
+      data-source-start-theme={theme}
+      id="start-menu" data-test-start-menu="" aria-label="Start menu">
+      {theme==="winxp"&&<header className="windows-startmenu__xp-header"
+        data-test-startmenu-xp-header="">
+        <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
+        <strong>Guest</strong>
+      </header>}
       <div className="windows-startmenu__left">
         <div className="windows-startmenu__programs">
           {allPrograms && !query ? <>
@@ -136,8 +148,9 @@ export function StartMenu({ dispatch }: StartMenuProps) {
         </label>
       </div>
       <div className="windows-startmenu__right">
-        <img src={legacyArt.guestAvatar} alt="Guest" className="windows-startmenu__avatar" />
-        <strong>Guest</strong>
+        {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
+          alt="Guest" className="windows-startmenu__avatar" />}
+        {theme!=="winxp"&&<strong>Guest</strong>}
         <hr />
         <button data-test-open-games="" onClick={() => {
           const games=appRegistry.get("games");
@@ -150,9 +163,18 @@ export function StartMenu({ dispatch }: StartMenuProps) {
         }}>Control Panel</button>
         <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("web_contacts")! })}>Contacts</button>
         <hr />
-        <button onClick={() => dispatch({ type: "LOG_OFF" })}>Log off</button>
-        <button className="windows-startmenu__power" onClick={() => dispatch({ type: "SHUTDOWN" })}>Shut down</button>
+        {theme!=="winxp"&&<button onClick={() => dispatch({ type: "LOG_OFF" })}>
+          Log off</button>}
+        {theme!=="winxp"&&<button className="windows-startmenu__power"
+          onClick={() => dispatch({ type: "SHUTDOWN" })}>Shut down</button>}
       </div>
+      {theme==="winxp"&&<footer className="windows-startmenu__xp-footer"
+        data-test-startmenu-xp-footer="">
+        <button type="button" onClick={() => dispatch({type:"LOG_OFF"})}>
+          Log off</button>
+        <button type="button" onClick={() => dispatch({type:"SHUTDOWN"})}>
+          Turn off computer</button>
+      </footer>}
     </nav>
   );
 }
