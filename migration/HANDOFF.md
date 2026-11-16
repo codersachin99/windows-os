@@ -1,3 +1,40 @@
+## Shell-first priority pivot and integrated acceptance — 17 November 2026
+
+Product priority explicitly changed: **themes, context menus, desktop,
+Start menu, Computer/Recycle Bin Explorer ahead of further game engines**.
+Source-locked implementation order and incomplete source contracts are
+in [migration/SHELL-PRIORITY.md](SHELL-PRIORITY.md). Draft PR #1,
+`main` untouched, no release/pixel parity claim.
+
+Previous Solitaire React acceptance
+[run #43952536487](https://github.com/codersachin99/windows-os/actions/runs/43952536487)
+completed **FAILURE: 468/470 browser**, both errors identical:
+`aria-hidden` decorative drag element marked not visible by
+Playwright. TS, units, source audits, contacts source tests and build
+all PASSED. Corrected regression to assert DOM presence and
+pointer-events, no underlying engine behavior changed.
+
+First shell batch source-backed in this branch:
+- Desktop background menu: Copy path (mounted Guest path via browser
+  clipboard), Upload files here (native multi-file to safe Guest VFS),
+  Display (live Control Panel location/historical Back-Forward).
+  Gadgets/Personalize shown disabled pending their actual source app
+  engines. Source `main.js` menu order retained; desktop/mobile tests.
+- WinXP profile-top, two-column Start, bottom actions; Win11 centered,
+  search-top, six-column Start with responsive narrow four-column.
+  Win7 baseline unchanged. React skin is structural **only**; color,
+  image, pinned/recent semantics and pixel parity remain unaccepted.
+  Source `startmenu-winxp.js`/`startmenu-win11.js` and corresponding
+  source CSS traced. Tests assert themes/responsive functionality.
+
+This opt-in `[run-ci]` commit requests full TypeScript, Vitest,
+legacy source audits, build and all desktop/mobile Chromium tests.
+It supersedes only the previous test snapshot when its **exact commit**
+has actually passed. If it fails, diagnose and correct before claiming
+any acceptance. Do not trigger unrelated workflows or visual captures.
+
+---
+
 ## Playable Solitaire React slice — 17 November 2026
 
 The preceding Solitaire/card rules and asset acceptance at
