@@ -73,6 +73,18 @@ describe("pinned a682 + 5985 weighted search across original tasks",()=>{
       item=>item.item.id==="taskbar");
     expect(taskbar?.tasks.map(x=>x.id)).toContain("notification");
   });
+  it("uses original quoted phrases, filter grammar, and weighted task ranking",()=>{
+    expect(sourceCpanelSearchRegistry('"screen resolution"')[0].item.id)
+      .toBe("display");
+    expect(sourceCpanelSearchRegistry('"screen resolution"')[0].tasks
+      .map(x=>x.label)).toContain("Adjust screen resolution");
+    expect(sourceCpanelSearchRegistry("recovery kind:zip")[0].item.id)
+      .toBe("backup");
+    expect(sourceCpanelSearchRegistry('kind:"screen resolution"')).toEqual([]);
+    expect(sourceCpanelSearchRegistry('"backup restore nonsense"')).toEqual([]);
+    expect(sourceCpanelSearchRegistry("display")[0].score).toBe(1010);
+    expect(sourceCpanelSearchRegistry("disp")[0].score).toBe(110);
+  });
   it("does not silently match middle-of-word or unknown labels",()=>{
     expect(sourceCpanelSearchRegistry("solution")).toEqual([]);
     expect(sourceCpanelSearchRegistry("unavailable-widget")).toEqual([]);
