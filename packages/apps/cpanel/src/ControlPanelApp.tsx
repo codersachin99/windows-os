@@ -2,7 +2,7 @@ import {useEffect,useState} from "react";
 import {legacyArt,legacySourceIconArtwork,legacyCpanelTileArtwork} from "@windows-os/assets";
 import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-os/filesystem";
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
-  type SourceCpanelRegistryItem} from "./sourceRegistry";
+  sourceCpanelAddressIconKey,type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
@@ -54,6 +54,10 @@ export function ControlPanelApp({
   const [selectedProgram,setSelectedProgram]=useState<string|null>(null);
   const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
+  const addressIconKey=sourceCpanelAddressIconKey(location);
+  const addressIconSrc=addressIconKey==="cpanel"
+    ?legacyArt.cpanel:legacyCpanelTileArtwork[addressIconKey]
+    ??legacySourceIconArtwork(addressIconKey).src;
   // Source a259 displays the home tiles for filter-only queries: webpack
   // 5985 records filters separately and a682 requires at least one term.
   const results=location===null&&sourceParseSearch(searchedQuery).terms.length>0;
@@ -101,8 +105,15 @@ export function ControlPanelApp({
             disabled={history.index>=history.entries.length-1}
             data-test-cpanel-forward="" onClick={()=>setHistory(previous=>sourceCpanelStep(previous,1))}>›</button>
         </nav>}
-      <nav className="windows-cpanel__breadcrumb" aria-label="Control Panel location">
-        <button type="button" onClick={()=>open(null)}>Control Panel</button>
+      <nav className={"windows-cpanel__breadcrumb"+
+        (sourceCpanelUseWin7Nav(theme)?" is-source-win7":"")}
+        aria-label="Control Panel location">
+        {sourceCpanelUseWin7Nav(theme)&&<img
+          className="windows-cpanel__address-icon" src={addressIconSrc}
+          width={18} height={18} alt="" data-test-cpanel-address-icon=""/>}
+        {location===null?
+          <span className="windows-cpanel__crumb-current">Control Panel</span>:
+          <button type="button" onClick={()=>open(null)}>Control Panel</button>}
         {location!==null&&<span data-test-cpanel-location="">
           <span aria-hidden="true"> › </span>
           {location==="display"?"Display":location==="programs"?
