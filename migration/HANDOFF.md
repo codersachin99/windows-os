@@ -1,3 +1,36 @@
+## Full CI accepted and source addressbar icon follow-up — 16 November 2026
+
+**Latest validated snapshot:** [CI #43811148997](https://github.com/codersachin99/windows-os/actions/runs/43811148997)
+completed **SUCCESS** on `fcaa2e362b4c92a283dc868d3fa1fbbaaf5c178d`.
+**436 / 436** desktop/mobile Chromium Playwright tests passed,
+along with TypeScript, all Vitest unit tests, both original-source
+audits and the production Vite build. It includes the corrected
+search Back/Forward expectation, original 300ms indexed search, and
+shared exact Win7 nav WebP sprites. Earlier #43808943088's two
+obsolete assertions are fixed and no longer failures.
+
+After that CI source SHA, the next parity slice:
+1. passes the real theme through `DesktopShell` to Control Panel,
+   limiting the original Win7 27px sprite to Win7 instead of applying
+   it to WinXP and Win11; adds theme unit and XP browser regressions;
+2. scrolls and verifies all 24 original root tiles under the
+   responsive window on both desktop/mobile with a browser contract;
+3. ports pinned `a259.currentLocation.icon` and
+   `a259.addressLocation` into the React addressbar, using
+   source-locked active page WebP artwork instead of a static root
+   icon and rendering the current segment as text (only ancestors
+   are clickable). Adds unit tests for six icons and paired browser
+   tests for root/Action Center transitions. See
+   `migration/CPANEL-REGISTRY-SOURCE.md`.
+
+This next **[run-ci]** commit opts in to one full acceptance batch
+for all of the post-`fcaa2e3` source UI and regression changes.
+Do **not** mark that batch successful before checking its exact
+run SHA/result. The 48 React-only screenshots in visual run
+#43809843426 were captured successfully, but the private legacy Vue
+runtime was unavailable: original-versus-React pixel parity remains
+`not-assessed`. No main merge, release, or draft-PR promotion.
+
 ## Theme-safe Control Panel navigation and mobile reachability — 16 November 2026
 
 After the `fcaa2e3` opt-in CI snapshot, inspected original Win7
