@@ -52,6 +52,9 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
       statsRef.current=updated;setStats(updated);
     }
     if(before.level!==after.level)play(audio.current.levelup);
+    // Source 13bc opens Statistics at GAME_OVER_END, not START.
+    if(!before.gameOverComplete&&after.gameOverComplete&&
+      after.state==="game-over")setStatsOpen(true);
   };
   useEffect(()=>{
     const sounds:Record<string,HTMLAudioElement>={};
@@ -98,8 +101,8 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
       bank=Math.min(250,bank+Math.max(0,time-last));last=time;
       let changed=false;let steps=0;
       const first=engine.snapshot();
-      if(first.state!=="game-over"&&first.state!=="pause"&&
-        !help&&!statsOpen&&!parentMinimized){
+      if((first.state!=="game-over"||!first.gameOverComplete)&&
+        first.state!=="pause"&&!help&&!statsOpen&&!parentMinimized){
         let before=first;
         while(bank>=1000/60&&steps++<15){
           const input=queued.current;queued.current={};

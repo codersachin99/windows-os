@@ -1,3 +1,23 @@
+## Original 13bc GAME_OVER animation and stats handoff — 17 November 2026
+
+The pinned Classic Tetris engine's `_triggerGameOver()` emits
+`GAME_OVER_START`, sets `gameOverLine=1` and enters
+`STATE_GAME_OVER`. `_processGameOver()` advances every
+eighth frame, fills the next of 22 rows with white color index 7
+and, once all rows are exhausted, emits `GAME_OVER_END`.
+The pinned Vue handler saves the score at start and automatically
+opens Statistics on end.
+
+The React model now retains this original stepped wipe rather
+than generic instant game-over. Its snapshot exposes
+`gameOverComplete`, the RAF continues through the wipe and
+the parented Statistics child automatically opens on completion.
+A deterministic model test exercises top-out and the final
+all-white bottom row. Exact source canvas pixel parity and
+input timing still need original runtime reference.
+
+---
+
 ## First playable Classic Tetris integration — 17 November 2026
 
 Committed real `TetrisApp` using source 13bc's 10×22 board,

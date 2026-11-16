@@ -1,3 +1,16 @@
+## Tetris game-over source animation continuation — 17 November 2026
+
+Source 13bc ends with a white 22-row board wipe, advancing each
+row every 8 frames, then GAME_OVER_END opens the stats window.
+The React model and animation loop now implement this sequence
+with a deterministic top-out regression. This is **after**
+Tetris CI #43939723976 at SHA `88e4895` and is not covered
+by that older run. The next explicit acceptance gate must
+cover this correction alongside the visual/browser fixes.
+Keep draft PR #1, no main merge or release.
+
+---
+
 ## Visual plan for first playable Tetris and parented child windows — 17 November 2026
 
 Authored four deterministic React-only screenshot scenes for

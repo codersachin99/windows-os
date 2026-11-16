@@ -56,6 +56,20 @@ describe("pinned 13bc Classic Tetris pure source engine",()=>{
     expect(game.snapshot().board.flat().filter(x=>x!==-1).length)
       .toBeGreaterThan(0);
   });
+  it("animates 13bc top-out as a 22-row 8-frame white wipe",()=>{
+    const game=new SourceTetrisEngine(()=>0.5);
+    game.start();
+    let guard=0;
+    while(game.snapshot().state!=="game-over"&&guard++<7000){
+      const state=game.snapshot().state;
+      game.advance(state==="drop"?{hardDrop:true}:{});
+    }
+    expect(game.snapshot().state).toBe("game-over");
+    expect(game.snapshot().gameOverComplete).toBe(false);
+    for(let i=0;i<180;i++)game.advance();
+    expect(game.snapshot().gameOverComplete).toBe(true);
+    expect(game.snapshot().board[21].every(cell=>cell===7)).toBe(true);
+  });
   it("supports source no-wall-kick rotation, lateral bounds and reversible pause",()=>{
     const game=new SourceTetrisEngine(()=>0.7);
     game.start();

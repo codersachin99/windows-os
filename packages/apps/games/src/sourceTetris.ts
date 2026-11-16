@@ -81,6 +81,8 @@ export interface SourceTetrisSnapshot{
   readonly rotation:number;
   readonly level:number;readonly lines:number;readonly score:number;
   readonly frame:number;
+  /** The source emits GAME_OVER_END only after the white board wipe. */
+  readonly gameOverComplete:boolean;
 }
 function choose(random:()=>number,multiplier:number):number{
   const r=random();
@@ -111,13 +113,16 @@ export class SourceTetrisEngine{
   private clearedColumns=-1;
   private areFrames=-1;
   private lastLockHeight=0;
+  private gameOverLine=-1;
+  private gameOverComplete=true;
   constructor(random:()=>number=Math.random){this.random=random;}
   snapshot():SourceTetrisSnapshot{
     return {state:this.status,board:this.board.map(row=>[...row]),
       current:SOURCE_TETRIS_PIECES[this.currentId].name,
       next:SOURCE_TETRIS_PIECES[this.nextId].name,
       position:[...this.pos],rotation:this.rotation,
-      level:this.level,lines:this.lines,score:this.score,frame:this.frame};
+      level:this.level,lines:this.lines,score:this.score,frame:this.frame,
+      gameOverComplete:this.gameOverComplete};
   }
   private nextPiece():number{
     let id=choose(this.random,8);
@@ -134,6 +139,7 @@ export class SourceTetrisEngine{
     this.rotation=0;this.status="drop";
     this.level=0;this.lines=0;this.score=0;this.downScore=0;
     this.frame=0;this.areFrames=-1;this.lastLockHeight=0;this.cleared=[];
+    this.gameOverLine=-1;this.gameOverComplete=false;
     this.clearedColumns=-1;
     // Source _resetParams: first gridcell starts after 36 extra frames.
     this.framesTilDrop=36+sourceTetrisFramesPerGridCell(this.level);
@@ -213,7 +219,18 @@ export class SourceTetrisEngine{
     if(this.canPlace(this.currentId,this.rotation,...this.pos)){
       this.framesTilDrop=sourceTetrisFramesPerGridCell(this.level);
       this.status="drop";
-    }else this.status="game-over";
+    }else{
+      // Original GAME_OVER_START begins a stepped white 22-row wipe.
+      this.status="game-over";this.gameOverLine=1;
+      this.gameOverComplete=false;
+    }
+  }
+  private animateGameOver():void{
+    if(this.gameOverComplete||this.frame%8!==0)return;
+    this.gameOverLine++;
+    if(this.gameOverLine<this.board.length)
+      this.board[this.gameOverLine].fill(7);
+    else this.gameOverComplete=true;
   }
   advance(input:SourceTetrisInput={}):SourceTetrisSnapshot{
     if(input.pause&&this.status!=="game-over"){
@@ -239,7 +256,7 @@ export class SourceTetrisEngine{
     else if(this.status==="are"){
       this.areFrames--;
       if(this.areFrames===0)this.spawn();
-    }
+    }else if(this.status==="game-over")this.animateGameOver();
     this.frame++;
     return this.snapshot();
   }
