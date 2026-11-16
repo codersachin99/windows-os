@@ -1,3 +1,38 @@
+## Acceptance follow-up: stale test fixed, 48 visual screenshots verified (16 November 2026)
+
+- [CI #43808943088](https://github.com/codersachin99/windows-os/actions/runs/43808943088)
+  completed with **432 / 434** Chromium desktop/mobile tests passing.
+  TypeScript, all units, source/Contacts audits and Vite build passed.
+  The only two failures were identical outdated Playwright assertions in
+  `tests/e2e/cpanel.spec.ts`: after opening the "Customize icons on
+  the taskbar" search result then navigating Back, the test expected
+  root tiles. The source `a259.openLocation()` **preserves query and
+  searched results**. This code behavior was already correct; fixed
+  the stale test in commit `43c526d` to assert retained task results,
+  then explicit empty search input and home tiles.
+- [Visual #43809843426](https://github.com/codersachin99/windows-os/actions/runs/43809843426)
+  completed **SUCCESS** at `b9fb0fe`: 48 / 48 React screenshots
+  across 24 desktop and 24 mobile scenes, **zero capture errors**,
+  artifact ID `14200540179`. All four Control Panel scenes succeeded
+  in both profiles. Source token was not configured; the exact pinned
+  `legacy-win7` instance was **not captured**, so visual source
+  parity is **not assessed**. Artifact is accessible from that run.
+  Screenshot ZIP was downloaded and the desktop/mobile Control Panel
+  PNGs inspected: source sprite navigation renders, all four target
+  surfaces are visible, narrow mobile scroll containers are present.
+  No comparison to source pixels was possible.
+- `migration/module-tracker.json` now includes the new registry,
+  Backup/Restore, source 5985 and 1902 engines, original artwork and
+  shared Win7 nav evidence without upgrading source status to verified.
+
+The following deliberately opted-in **[run-ci]** push tests current
+code including the corrected historical browser expectation,
+source-delayed search and Back query retention, shared exact WebP
+27px history nav for Explorer+Control Panel, new unit/desktop/mobile
+nav contracts, and all previously accepted app suites.
+**Do not claim this batch succeeded until it completes.**
+Keep PR #1 draft, no main merge or release.
+
 ## Shared exact Win7 navigation sprites + deliberate visual capture (16 November 2026)
 
 Ported the original 27px Win7 Back/Forward history navigation sprite
