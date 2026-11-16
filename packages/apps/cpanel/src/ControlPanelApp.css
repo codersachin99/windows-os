@@ -11,8 +11,15 @@
   background:linear-gradient(#f7fbff,#e2edf8);border-bottom:1px solid #aebac8;
   padding:7px 8px;flex:none;
 }
-/* Source Win7 27px state sprites and nav background now live in shared
- * packages/ui/src/sourceWin7HistoryNav.css (also used by Explorer). */
+/* Win7 exact 27px source sprite lives in shared sourceWin7HistoryNav.css.
+ * Keep neutral controls for legacy non-Win7 themes until their original
+ * themed navigation sprites/layout are independently source-verified. */
+.windows-cpanel__navigation--fallback{display:flex;gap:3px;align-items:center}
+.windows-cpanel__navigation--fallback button{
+  width:25px;height:24px;border:1px solid #8aa4bd;
+  background:linear-gradient(#fff,#d4e2f0);border-radius:3px;
+}
+.windows-cpanel__navigation--fallback button:disabled{opacity:.5}
 .windows-cpanel__breadcrumb{
   display:flex;align-items:center;gap:5px;min-height:26px;padding:0 9px;
   flex:1 1 180px;min-width:0;border:1px solid #adc0d0;background:#fff;
