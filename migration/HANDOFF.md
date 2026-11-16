@@ -1,3 +1,38 @@
+## Shared exact Win7 navigation sprites + deliberate visual capture (16 November 2026)
+
+Ported the original 27px Win7 Back/Forward history navigation sprite
+from the Explorer-only CSS into the reusable
+`packages/ui/src/SourceWin7HistoryNav.tsx` and
+`sourceWin7HistoryNav.css`. The exact original source WebP data URLs
+and -27px hover / -54px pressed / -81px disabled offsets were preserved,
+with horizontally mirrored Forward. Explorer retains its existing
+`SourceWin7Navigation` wrapper and selectors, now delegating to the
+generic sprite control. Control Panel replaces its approximate 25x24
+text arrows with the same source navigation and retains functional
+history and Playwright `data-test-cpanel-back/forward` selectors.
+A dedicated `@windows-os/ui/navigation` Vite/TS alias avoids cycles.
+New shared SSR unit and desktop/mobile CSS+history E2E tests are
+committed. See `migration/SEARCH-ADDRESSBAR-SOURCE.md` and
+`migration/CPANEL-REGISTRY-SOURCE.md`.
+
+**Acceptance boundaries:** original [CI #43807380475](https://github.com/codersachin99/windows-os/actions/runs/43807380475)
+**passed 432/432 browser tests** on f565741. Opt-in
+[CI #43808943088](https://github.com/codersachin99/windows-os/actions/runs/43808943088)
+on f5c3463 had passed TypeScript, units, audits and build and was
+running browser tests when last checked. The exact-sprite extraction
+and its new tests are **after that CI snapshot**, therefore not yet
+accepted. Do not merge or release.
+
+This commit intentionally uses **[capture-visual]** to obtain real
+target React desktop/mobile screenshot evidence for all existing
+scenes plus the four Control Panel new scenes, independently of full
+CI and only once this milestone needs visual review. If the private
+source access token is missing, the workflow correctly records
+target-only evidence; it must not report source pixel parity.
+After screenshot evidence, inspect the actual artifact and run one
+deliberate `[run-ci]` gate on this newer shared UI when the existing
+CI finishes. Keep PR #1 draft, main untouched.
+
 ## Acceptance #43807380475 passed; full source-search follow-up (16 November 2026)
 
 [Opt-in CI #43807380475](https://github.com/codersachin99/windows-os/actions/runs/43807380475)
