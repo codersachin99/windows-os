@@ -1,3 +1,19 @@
+## Deliberate Advanced acceptance gate — 16 November 2026
+
+`6f4dea9` adds source 245c Advanced fullscreen behavior and
+window content-box 22px grid sizing. This commit opts in **once**
+with `[run-ci]` to check TypeScript, all unit tests, original-source
+image/audio/CSS audits, Contacts audit, production Vite build and
+the entire desktop/mobile Playwright suite including the new
+Advanced on/off fullscreen case. Older accepted baseline is
+[CI #43856185812](https://github.com/codersachin99/windows-os/actions/runs/43856185812),
+452/452 at `e19ed49e`; it does **not** include Advanced.
+Do not claim this new batch passes until checking the exact workflow
+run and head SHA. Unmarked subsequent commits are CI-skipped.
+Keep PR #1 draft, main untouched, no release.
+
+---
+
 ## Minesweeper Advanced measured fullscreen continuation — 16 November 2026
 
 Latest accepted opt-in
