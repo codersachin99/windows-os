@@ -1,3 +1,26 @@
+## Unexecuted Games/Minesweeper screenshot scenes — 16 November 2026
+
+Three additional **target-only** scenes were appended to
+`scripts/capture-visual-parity.mjs`:
+`games-library` (source `shell:games` 7-title offline catalog),
+`minesweeper-initial` (live source Beginner 8×9/10 board), and
+`minesweeper-intermediate` (Game menu → Intermediate 12×12/30).
+The same deterministic clock, desktop **1920×1080** and **Pixel 7**
+mobile profiles apply. Each scenario uses the real Start-menu Games
+entry and real React Minesweeper window; game random placements are
+**not pixel deterministic** yet, so compare layout/background control
+geometry rather than asserting matching mine locations.
+
+This raises target plans to **27 scenes × 2 profiles = 54 PNGs**,
+but **no new screenshot capture was executed at this commit**.
+The prior successfully captured run #43809843426 included 48
+React screenshots only. Source counterparts for Games and
+Minesweeper have never been captured from pinned Vue; these remain
+not-assessed, not eligible for pixel-diff acceptance. Run only an
+explicit `[capture-visual]` commit after actual Games acceptance.
+Original game icon/board WebPs also remain missing and must be
+imported byte-identically before visual parity can be claimed.
+
 ## Verified opt-in React capture — 16 November 2026
 
 [GitHub Actions run #43809843426](https://github.com/codersachin99/windows-os/actions/runs/43809843426)
