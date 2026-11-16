@@ -1,4 +1,4 @@
-import { useEffect, useState, type Dispatch } from "react";
+import { useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, ThemeId } from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL} from "@windows-os/assets";
@@ -41,6 +41,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
+  const menuRef=useRef<HTMLElement>(null);
   const [query, setQuery] = useState("");
   const [allPrograms, setAllPrograms] = useState(false);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -74,6 +75,28 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
     return () => { active = false; unsubscribe(); };
   }, [allPrograms, activeFolder]);
 
+  useEffect(()=>{
+    const outside=(event:PointerEvent)=>{
+      if(!(event.target instanceof Node))return;
+      if(menuRef.current?.contains(event.target))return;
+      const start=document.querySelector('[data-test-start-button]');
+      if(start?.contains(event.target))return;
+      dispatch({type:"CLOSE_START"});
+    };
+    const escape=(event:KeyboardEvent)=>{
+      if(event.key!=="Escape")return;
+      event.preventDefault();
+      dispatch({type:"CLOSE_START"});
+      document.querySelector<HTMLButtonElement>(
+        '[data-test-start-button]')?.focus();
+    };
+    window.addEventListener("pointerdown",outside);
+    window.addEventListener("keydown",escape);
+    return ()=>{
+      window.removeEventListener("pointerdown",outside);
+      window.removeEventListener("keydown",escape);
+    };
+  },[dispatch]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
@@ -84,7 +107,7 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
       theme==="win11"?" windows-startmenu--win11":"") +
       (allPrograms&&!query?" is-all-programs":"")}
       data-source-start-theme={theme}
-      id="start-menu" data-test-start-menu="" aria-label="Start menu">
+      id="start-menu" ref={menuRef} data-test-start-menu="" aria-label="Start menu">
       {theme==="winxp"&&<header className="windows-startmenu__xp-header"
         data-test-startmenu-xp-header="">
         <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
@@ -141,11 +164,17 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
           onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null); }}>
           {allPrograms ? "‹ Back" : "All Programs ▸"}
         </button>}
-        <label className="windows-startmenu__search">
+        {theme!=="winxp"&&<label className="windows-startmenu__search">
           <input value={query} onChange={e => setQuery(e.target.value)}
-            placeholder="Search programs and files" aria-label="Search programs and files" autoFocus />
+            placeholder="Search programs and files" aria-label="Search programs and files"
+            data-test-startmenu-search="" autoFocus
+            onKeyDown={event=>{
+              if(event.key!=="Enter"||!programs.length)return;
+              event.preventDefault();
+              dispatch({type:"OPEN_APP",app:programs[0]});
+            }}/>
           <span>⌕</span>
-        </label>
+        </label>}
       </div>
       <div className="windows-startmenu__right">
         {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
