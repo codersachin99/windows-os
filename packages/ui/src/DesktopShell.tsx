@@ -10,6 +10,7 @@ import {
   ControlPanelApp,SOURCE_TRAY_ITEMS,sourceTrayVisible,sourceTrayHidden,
   type SourceTrayPreferences
 } from "@windows-os/apps/cpanel";
+import {GamesApp} from "@windows-os/apps/games";
 import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
@@ -133,6 +134,12 @@ function ApplicationContent({
   if (appId === "web_contacts") {
     return <ContactsApp />;
   }
+  if (appId === "games") return <GamesApp theme={theme}
+    isPlayable={gameId=>Boolean(appRegistry.get(gameId))}
+    onLaunchGame={gameId=>{
+      const game=appRegistry.get(gameId);
+      if(game) dispatch({type:"OPEN_APP",app:game});
+    }}/>;
   if (appId === "bin") return <RecycleBinApp theme={theme}
     onClose={() => onRequestCloseWindow(windowId)} />;
   if (appId === "computer") return <ExplorerApp theme={theme} initialPath={filePath}
