@@ -1,3 +1,27 @@
+## Shared original Win7 history navigation extraction — 16 November 2026
+
+The original Win7 27px/27x108 WebP background and Back/Forward state
+sprites previously embedded only in
+`packages/apps/explorer/src/ExplorerApp.css` have been extracted,
+with their source bytes unchanged, into
+`packages/ui/src/sourceWin7HistoryNav.css`.
+`SourceWin7HistoryNav.tsx` renders the same accessible source
+Back/Forward controls for both Explorer and Control Panel. Existing
+`SourceWin7Navigation.tsx` delegates to the generic UI component,
+retaining its public props, `Folder history` navigation role, old
+selector aliases, original pointer states and Win7-only Up-button rule.
+Control Panel now uses the same pinned sprite rather than approximate
+text arrows, keeping Back/Forward history and existing test selectors.
+The shared import uses the dedicated `@windows-os/ui/navigation`
+Vite/TypeScript alias, avoiding package-barrel import cycles.
+
+Standalone component tests and desktop/mobile Control Panel browser
+tests cover sprite/background styles, disabled states, accessible
+navigation labels and Back/Forward actions. These commits occurred
+**after** CI #43808943088's snapshot and are **not yet CI accepted**.
+Full source/React screenshot comparison and alternative-theme navigation
+skins still remain pending.
+
 # Pinned Win7 addressbar search-progress parity
 
 Legacy baseline: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
