@@ -9,6 +9,8 @@
  * destinations below have React screens; settings/program launchers remain
  * visibly disabled rather than invoking host-device operations.
  */
+import {sourceParseSearch,sourceScoreSearch,SOURCE_SEARCH_WEIGHT} from "@windows-os/engine";
+
 export type SourceCpanelTarget="panel"|"program"|"setting";
 export interface SourceCpanelTask{
   readonly label:string;
@@ -573,32 +575,6 @@ export const SOURCE_CPANEL_REGISTRY:readonly SourceCpanelRegistryItem[]=
   }
 ]);
 
-const sourceNormalize=(text:string)=>text.normalize("NFD")
-  .replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase();
-/** Source 5985 words may start after punctuation or spaces; do not match
- * arbitrary middle-of-word fragments. Matches localized names and task keys. */
-function termStartsWord(text:string,term:string):boolean{
-  let pos=text.indexOf(term);
-  while(pos!==-1){
-    if(pos===0||/[^\p{L}\p{N}]/u.test(text[pos-1]))return true;
-    pos=text.indexOf(term,pos+1);
-  }
-  return false;
-}
-function scoreTextFields(fields:readonly {text:string;weight:number}[],terms:readonly string[]):number{
-  if(!terms.length)return 0;
-  const texts=fields.map(field=>sourceNormalize(field.text));
-  let score=0;
-  for(const term of terms){
-    const hits=fields.filter((_,i)=>termStartsWord(texts[i],term));
-    if(!hits.length)return 0;
-    score+=Math.max(...hits.map(hit=>hit.weight));
-  }
-  const heading=texts[0],whole=terms.join(" ");
-  if(heading===whole)score+=1000;
-  else if(heading.startsWith(whole))score+=100;
-  return score;
-}
 export interface SourceCpanelSearchResult{
   readonly item:SourceCpanelRegistryItem;
   readonly tasks:readonly SourceCpanelTask[];
@@ -607,16 +583,16 @@ export interface SourceCpanelSearchResult{
 export function sourceCpanelSearchRegistry(
   query:string,items:readonly SourceCpanelRegistryItem[]=SOURCE_CPANEL_REGISTRY
 ):SourceCpanelSearchResult[]{
-  const terms=sourceNormalize(query).trim().split(/\s+/).filter(Boolean);
-  if(!terms.length)return [];
+  const parsed=sourceParseSearch(query);
+  if(!parsed.terms.length)return [];
   const results:SourceCpanelSearchResult[]=[];
   for(const item of items){
-    let score=scoreTextFields([{text:item.label,weight:10}],terms);
+    let score=sourceScoreSearch([{text:item.label,weight:SOURCE_SEARCH_WEIGHT.Name}],parsed);
     const tasks:SourceCpanelTask[]=[];
     for(const task of item.tasks){
-      const fields=[{text:task.label,weight:10},
-        ...(task.keywords?[{text:task.keywords,weight:1}]:[])];
-      const taskScore=scoreTextFields(fields,terms);
+      const fields=[{text:task.label,weight:SOURCE_SEARCH_WEIGHT.Name},
+        ...(task.keywords?[{text:task.keywords,weight:SOURCE_SEARCH_WEIGHT.Keyword}]:[])];
+      const taskScore=sourceScoreSearch(fields,parsed);
       if(taskScore){
         tasks.push(task);
         score=Math.max(score,taskScore);
