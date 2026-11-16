@@ -104,7 +104,7 @@ test("pinned Computer New submenu creates source folder, TXT and RTF in Guest VF
   });
   expect(paths.some(p=>p.uri.endsWith("/New folder"))).toBe(true);
   expect(paths.some(p=>p.uri.endsWith("/New Rich Text Document.rtf")&&
-    p.content?.startsWith("{\\\\rtf1\\\\ansi"))).toBe(true);
+    p.content?.startsWith("{\\rtf1\\ansi"))).toBe(true);
   expect(paths.some(p=>p.uri.endsWith("/New Text Document.txt")&&p.content===""))
     .toBe(true);
 });
