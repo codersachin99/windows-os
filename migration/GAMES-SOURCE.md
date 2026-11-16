@@ -40,11 +40,18 @@ new game/difficulty/Exit and Games→Minesweeper lifecycle at desktop
 and mobile sizes. Physical input and source audiovisual parity
 have **not** been accepted yet.
 
-**Verification boundary:** this feature was added after CI
-#43813132144's exact snapshot, and requires a fresh opted-in
-combined TypeScript/unit/build/Chromium batch. Neither the initial
-Games library nor the Minesweeper board/UI should be called
-CI-accepted until that run completes.
+**Validated functional checkpoint:** the combined
+[opt-in CI #43814952314](https://github.com/codersachin99/windows-os/actions/runs/43814952314)
+on exact SHA `760fa39a1246d3cb164c2b690157bb6820301967`
+completed **SUCCESS: 450 / 450 desktop+mobile Chromium tests**,
+TypeScript, all Vitest units, original source/Contacts audits and
+Vite build. This validates the initial Games virtual shell pane and
+Minesweeper's core beginner/intermediate gameplay, including
+the real Games→Minesweeper launch, but it does **not** prove visual
+or complete feature parity. The later source PRISTINE-only timer
+fix and mobile Intermediate final-row scroll assertion were
+committed **after** the successful CI snapshot and require another
+deliberate opt-in checkpoint.
 
 # Pinned Games shell:games library — React first slice
 
