@@ -1,3 +1,46 @@
+## First real game engine: Minesweeper source 9538/245c
+
+The original `src/modules/games/minesweeper.js` contains a
+standalone webpack **9538** board engine and a Vue **245c** game.
+`packages/apps/games/src/minesweeper.ts` ports the actual source
+engine (not a generic invented ruleset): rectangular 0/1 mine board
+validation, Fisher–Yates mine layout, coordinates/8-neighbor counts,
+cloned cell snapshots, CLOSED/OPEN states, NONE/EXCLAMATION/QUESTION
+flag cycle, numbered-cell flood fill, LOST/WON board-state semantics.
+The source `9538` Board.WON requires all covered mines correctly
+flagged, whereas the outer `245c` game declares a win after all
+**safe cells are open**. React preserves that separation.
+
+`MinesweeperApp.tsx` supplies the actual playable native game:
+source Beginner **8 rows × 9 columns, 10 mines**; Intermediate
+**12×12, 30 mines**; source 21px square grid; restart, first-click
+mine reroll, timer, right-click source flag cycling, source result
+check, and Exit from Game menu. A visible touch-flag toggle is an
+**accessibility adapter** for mobile devices, not a claimed original
+visual control. Original Advanced mode depends on measured
+`scrollWidth/scrollHeight` at 21px+1 gutters, and remains
+disabled until proper source viewport sizing is ported. Original
+Statistics, sound effects/BGM, exact 21px WebP cell/mine/timer
+artwork, face sprites, rich menus and source screenshot geometry
+remain **pending**; interim neutral CSS/text is visibly not pixel
+parity and uses no invented emoji artwork.
+
+`minesweeper` is registered as an actual native `game` kind in
+the shared AppRegistry; its tile in the Games library launches that
+window while the other six tiles remain safely disabled. Unit tests
+verify the board, source preset sizes, axes, adjacency, flags,
+flood fill, win/loss and deterministic mine generator. Browser
+tests check live gameplay, right-click and touch flag controls,
+new game/difficulty/Exit and Games→Minesweeper lifecycle at desktop
+and mobile sizes. Physical input and source audiovisual parity
+have **not** been accepted yet.
+
+**Verification boundary:** this feature was added after CI
+#43813132144's exact snapshot, and requires a fresh opted-in
+combined TypeScript/unit/build/Chromium batch. Neither the initial
+Games library nor the Minesweeper board/UI should be called
+CI-accepted until that run completes.
+
 # Pinned Games shell:games library — React first slice
 
 Original source revision:
@@ -47,15 +90,17 @@ Original source revision:
   This avoids duplicating the filesystem engine or mapping
   `shell:games` to an unrelated Guest Start-menu folder.
 - Entries only activate when a real React game has been registered.
-  **Currently none of the seven game runtimes is ported**, so each
-  entry is disabled with a truthful tooltip, rather than opening a
-  fake game, performing host execution or claiming working gameplay.
-  The app/game distinction remains modular.
+  **Minesweeper** now has an actual React board/gameplay implementation
+  registered under `minesweeper`. The other **six** original game
+  runtimes remain unported and their entries are disabled with a
+  truthful tooltip. Installed source `.exe` stubs are not mistaken for
+  playable engines. The app/game distinction remains modular.
 - SSR/unit tests verify the virtual URI, exact seven manifest
   entries and publishers, empty online pane, and unavailable action
-  state. Paired desktop/mobile Playwright cases open the Games window
-  from Start in Win7 and XP, check catalog, collapse actions and
-  absence of borrowed Win7 sprite in XP.
+  state when no runtime callback is supplied. Paired desktop/mobile
+  Playwright cases open the Games window from Start in Win7 and XP,
+  check catalog and collapse actions, activate the real Minesweeper
+  window, and check absence of borrowed Win7 sprite in XP.
 
 ## Outstanding parity and acceptance
 
@@ -71,8 +116,11 @@ are tracked source dependencies, **not yet imported in the target**.
 The current source icon adapter consequently uses its established
 generic fallback; this is **not** visual parity.
 
-Gameplay in `src/modules/games/{chess,mahjong,minesweeper,
+Complete gameplay in `src/modules/games/{chess,mahjong,
 purbleplace,solitaire,spidersolitaire,tetris}.js` remains **pending**.
+The separate `minesweeper.js` engine/UI slice is implemented below,
+but is still short of full source feature, audio, artwork and screenshot
+parity.
 Do not label this library first slice a finished game implementation.
 
 The Games work is **after** the exact SHA under
