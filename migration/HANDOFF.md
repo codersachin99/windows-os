@@ -1,3 +1,21 @@
+## Tetris source input fidelity acceptance gate — 17 November 2026
+
+One deliberate `[run-ci]` acceptance is requested for the
+post-88e4895 Tetris improvements: original 22-row game-over wipe,
+source CSS hash checks, exact source keyboard aliases, primary/secondary
+tap direction, non-passive canvas wheel rotation, continuous
+captured-pointer drag and engine-admitted move/rotate sounds.
+New pure Vitest cases and desktop/mobile Chromium browser tests cover
+those inputs including keyed L piece choice and drag before release.
+This CI will also rerun all previous desktop + mobile source contracts.
+It does not trigger visual capture or claim original screenshot
+parity; last target-only 68-scene run remains #43941143525,
+`sourceCaptured=0`, `parityStatus=not-assessed`.
+Do not mark changes accepted until the exact workflow completes.
+Keep PR #1 draft, no release or main merge.
+
+---
+
 ## Verified Tetris baseline and input fidelity follow-up — 17 November 2026
 
 First Tetris playable functional [CI #43939723976](https://github.com/codersachin99/windows-os/actions/runs/43939723976)
