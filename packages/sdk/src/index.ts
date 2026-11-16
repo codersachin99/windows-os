@@ -39,6 +39,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 380, height: 375, resizable: false }
   },
   {
+    id: "solitaire", label: "Solitaire",
+    icon: legacySourceIconArtwork("solitaire").src,
+    kind: "game", desktop: false, showInStart: false,
+    // Original e202 Klondike WindowMain is 660x500 and resizable.
+    window: { width: 660, height: 500 }
+  },
+  {
     id: "shortcut", label: "Shortcut", icon: legacyArt.shortcut,
     kind: "system", desktop: false, showInStart: false,
     window: { width: 550, height: 400, resizable: false, centered: true }
