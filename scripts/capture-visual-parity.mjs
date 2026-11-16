@@ -21,7 +21,10 @@ const TARGET_ONLY_SCENES = [
   // React-only app baselines until original source runtime pairing is proven.
   "calc-initial", "notepad-initial", "chrome-new-tab", "ie-home",
   "player-initial", "snipping-initial", "recorder-initial",
-  "computer-details-metadata", "computer-tiles-metadata", "computer-message-confirm"
+  "computer-details-metadata", "computer-tiles-metadata", "computer-message-confirm",
+  // Source registry, indexed search and working Backup/Action Center views.
+  // Target-only until the private pinned Vue runtime can be captured.
+  "cpanel-root", "cpanel-search", "cpanel-backup", "cpanel-action-center"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -121,6 +124,31 @@ async function prepareScene(page, kind, scene) {
       await page.locator('[data-test-program="' + appId + '"]').click();
       await page.locator('[data-test-window="' + appId + '"]')
         .waitFor({ state: "visible", timeout: 15000 });
+      return;
+    }
+    if (scene.startsWith("cpanel-")) {
+      await page.getByRole("button", { name: "Open Start menu" }).click();
+      await page.locator('[data-test-open-cpanel]').click();
+      const panel = page.locator('[data-test-window="cpanel"] [data-test-cpanel]');
+      await panel.waitFor({ state: "visible", timeout: 15000 });
+      if (scene === "cpanel-search") {
+        await panel.getByRole("searchbox", { name: "Search Control Panel" })
+          .fill('"screen resolution"');
+        // The original 1902 search engine delays results by 300 ms.
+        await panel.locator('[data-test-cpanel-result="display"]')
+          .waitFor({ state: "visible", timeout: 10000 });
+      } else if (scene === "cpanel-backup") {
+        await panel.locator('[data-test-cpanel-item="backup"]').click();
+        await panel.locator('[data-test-cpanel-backup]')
+          .waitFor({ state: "visible", timeout: 10000 });
+      } else if (scene === "cpanel-action-center") {
+        await panel.locator('[data-test-cpanel-item="action-center"]').click();
+        await panel.locator('[data-test-cpanel-action-center]')
+          .waitFor({ state: "visible", timeout: 10000 });
+      } else {
+        await panel.locator('[data-test-cpanel-items]')
+          .waitFor({ state: "visible", timeout: 10000 });
+      }
       return;
     }
     if (scene === "recycle-bin-search-results") {
