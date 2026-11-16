@@ -1,3 +1,17 @@
+## Deliberate Minesweeper dialog/statistics acceptance gate — 16 November 2026
+
+Request one `[run-ci]` gate for the previously committed 245c
+result/statistics UI and pure browser stats model. Verify TypeScript,
+Vitest, source hashes, Contacts audit, Vite build and all paired
+desktop/mobile Playwright contracts including the deterministic
+first-safe-click/loss/restart/Statistics/Reset sequence.
+This handoff opt-in commit has no additional behavior changes.
+**Do not claim success** until the exact linked workflow completes.
+Do not enable `[capture-visual]` by default; private source screenshot
+reference remains unavailable. Keep PR draft and main unchanged.
+
+---
+
 ## Minesweeper source result + statistics slice (16 November 2026)
 
 Latest accepted baseline: [CI #43838335106](https://github.com/codersachin99/windows-os/actions/runs/43838335106)
