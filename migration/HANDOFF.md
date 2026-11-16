@@ -1,3 +1,18 @@
+## One deliberate Advanced visual capture — 16 November 2026
+
+Added three target-only Minesweeper scenes: Advanced fullscreen,
+Statistics dialog, and delayed result dialog, with a strict wait
+for the viewport-sized Advanced grid before any PNG. This commit
+opts in only to **[capture-visual]** to collect 60 React screenshot
+scenes (30 × desktop/mobile). The source Vue comparison remains
+unavailable; screenshot status must stay `not-assessed` until a
+real pinned original-source reference is captured. Inspect the
+run manifest, error count and actual new PNGs before recording
+success. Do not trigger another full CI with this visual commit.
+Advanced functional [run-ci] #43876750158 is a separate earlier SHA.
+
+---
+
 ## Target visual fixture extension — 16 November 2026
 
 Prepared React-only `minesweeper-advanced`,
