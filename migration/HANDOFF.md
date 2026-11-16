@@ -1,3 +1,38 @@
+## Shell context-menu source parity gate — 17 November 2026
+
+At the start of this continuation, first integrated shell acceptance
+[run #43962896634](https://github.com/codersachin99/windows-os/actions/runs/43962896634)
+was **SUCCESS**, pinned to `a0a3100` (before the subsequent
+Computer/Bin context-menu and measured popup commits).
+
+Since then, migrated and committed:
+- Measured edge-clamped source context popup for Desktop, Computer, Bin,
+  including nested popup movement and constrained mobile viewport.
+- Computer/Bin background context View eight modes from existing shared
+  `ExplorerSession`, Copy path, safe file upload, Refresh, Bin Empty
+  guarded by real VFS and no Bin upload/paste.
+- Original Desktop item menu order and file/system/multi selection
+  predicates (`sourceDesktopItemMenu.ts`); source Empty Bin with
+  real Guest trash entry count and confirmation, byte-preserving
+  download, installed-program Send to Desktop .lnk JSON. Unmigrated
+  Pin/Compress/Properties remain disabled.
+- Original Explorer New submenu Folder/RTF/TXT using the shared
+  collision-safe Guest VFS creator. Existing Explorer toolbar New folder
+  remains for historical compatibility.
+- Unit and desktop/mobile browser regression tests for each slice.
+
+**Current acceptance:** this commit opts in once with `[run-ci]`
+to TypeScript, unit tests, original-source audits, build and full browser
+suite. It has not passed until the new exact-SHA run concludes.
+If failing, inspect logs, repair true failures, and repeat only when
+needed. Do not merge PR #1, ship, or claim pixel parity.
+
+**Priority remains:** Themes → Context menus → Desktop → Start menu →
+Computer/Recycle Bin; no additional Games until shell parity improves.
+Primary handoff [SHELL-PRIORITY.md](SHELL-PRIORITY.md).
+
+---
+
 ## Additional prioritized shell context-menu slice — 17 November 2026
 
 After the shell-first integrated `[run-ci]` snapshot, added measured
