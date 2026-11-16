@@ -15,7 +15,12 @@ flagged, whereas the outer `245c` game declares a win after all
 source Beginner **8 rows × 9 columns, 10 mines**; Intermediate
 **12×12, 30 mines**; source 21px square grid; restart, first-click
 mine reroll, timer, right-click source flag cycling, source result
-check, and Exit from Game menu. A visible touch-flag toggle is an
+check, and Exit from Game menu. Specifically, the original `245c.open()`
+starts its interval only if the board is **PRISTINE**. Flagging first
+transitions `9538` to IN_PROGRESS; subsequent opening therefore
+leaves the clock stopped in the original source. The React handler
+now preserves this quirk using `sourceMineShouldStartTimer`, with
+a focused unit test instead of silently starting a generic timer. A visible touch-flag toggle is an
 **accessibility adapter** for mobile devices, not a claimed original
 visual control. Original Advanced mode depends on measured
 `scrollWidth/scrollHeight` at 21px+1 gutters, and remains
