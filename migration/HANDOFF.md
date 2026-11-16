@@ -1,3 +1,18 @@
+## Deliberate source child-window acceptance gate — 17 November 2026
+
+The previous commit `05ffe44` introduces a reusable portal-backed
+`SourceChildWindow` and ports pinned 245c result/stats to independent
+desktop child windows. This follow-up **[run-ci]** marker explicitly
+requests one full GitHub Actions acceptance: TypeScript, Vitest,
+byte-pinned source audits, Vite build, all desktop/mobile browser
+tests, including new parent-instance lock and titlebar-close checks.
+It does NOT initiate visual capture. Wait for the exact CI outcome;
+a successful earlier Advanced snapshot is not sufficient to accept
+this refactor. Normal pushes stay skipped. Source-original vs
+React screenshot pairing remains `not-assessed`.
+
+---
+
 ## Minesweeper child-window port — 17 November 2026
 
 Accepted Advanced functional gate:
