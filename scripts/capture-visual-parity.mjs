@@ -27,7 +27,8 @@ const TARGET_ONLY_SCENES = [
   "cpanel-root", "cpanel-search", "cpanel-backup", "cpanel-action-center",
   // Games shell and first source-backed playable game. React-only until
   // original Vue source runtime can be launched at the pinned SHA.
-  "games-library", "minesweeper-initial", "minesweeper-intermediate"
+  "games-library", "minesweeper-initial", "minesweeper-intermediate",
+  "minesweeper-advanced", "minesweeper-statistics", "minesweeper-result"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -140,10 +141,30 @@ async function prepareScene(page, kind, scene) {
       await games.locator('[data-test-offline-game="minesweeper"]').click();
       const mine=page.locator('[data-test-window="minesweeper"] [data-test-minesweeper]');
       await mine.waitFor({state:"visible",timeout:15000});
-      if(scene==="minesweeper-intermediate"){
+      if(scene==="minesweeper-intermediate"||scene==="minesweeper-advanced"){
         await mine.getByRole("button",{name:"Game",exact:true}).click();
-        await mine.getByRole("menuitemradio",{name:"Intermediate"}).click();
-        await mine.locator("[data-test-mine-cell]").first()
+        await mine.getByRole("menuitemradio",{name:
+          scene==="minesweeper-advanced"?"Advanced":"Intermediate"}).click();
+        if(scene==="minesweeper-advanced"){
+          await page.locator('[data-test-window="minesweeper"].is-maximized')
+            .waitFor({state:"visible",timeout:15000});
+          await mine.locator('[data-test-minesweeper-level="2"] [data-test-mine-cell]')
+            .first().waitFor({state:"visible",timeout:10000});
+        }else{
+          await mine.locator("[data-test-mine-cell]").first()
+            .waitFor({state:"visible",timeout:10000});
+        }
+      }else if(scene==="minesweeper-statistics"){
+        await mine.getByRole("button",{name:"Game",exact:true}).click();
+        await mine.getByRole("menuitem",{name:"Statistics"}).click();
+        await mine.locator("[data-test-minesweeper-statistics]")
+          .waitFor({state:"visible",timeout:10000});
+      }else if(scene==="minesweeper-result"){
+        await page.evaluate(()=>{Math.random=()=>0.5;});
+        await mine.getByRole("button",{name:"New Game"}).click();
+        await mine.locator('[data-test-mine-cell="1:0"]').click();
+        await mine.locator('[data-test-mine-cell="0:0"]').click();
+        await mine.locator("[data-test-minesweeper-result-dialog]")
           .waitFor({state:"visible",timeout:10000});
       }
       return;

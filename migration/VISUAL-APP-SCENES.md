@@ -1,3 +1,28 @@
+## Source Games Advanced/statistics/result screenshot fixtures — 16 November 2026
+
+Added three **React-target-only** source-backed Minesweeper visual
+scenes to `scripts/capture-visual-parity.mjs`:
+
+- `minesweeper-advanced`: select pinned source Advanced level, assert
+  the game-specific fullscreen window, capture the viewport-derived
+  board on both 1920×1080 desktop and Pixel 7 mobile;
+- `minesweeper-statistics`: open the real per-difficulty Statistics
+  dialog from the Game menu, no invented fake static screenshot;
+- `minesweeper-result`: force a reproducible seeded layout
+  (`Math.random=()=>0.5`), open safe `1:0`, lose on mine `0:0`,
+  and wait for the source 1-second result dialog before capture.
+
+The previous verified target screenshot run #43816057643 contained
+54 images (27 scenes × 2). This plan raises the count to
+**60 target images (30 scenes × 2 profiles)**. The exact output
+remains **unexecuted** until an explicit `[capture-visual]` run
+finishes and its artifact/images are inspected. None of these scenes
+is original-source comparison eligible yet: the pinned Vue runtime
+and source screenshot access remain unavailable, and target snapshots
+cannot prove pixel parity.
+
+---
+
 ## Verified target-only Games + Minesweeper screenshots — 16 November 2026
 
 [GitHub Actions visual run #43816057643](https://github.com/codersachin99/windows-os/actions/runs/43816057643)

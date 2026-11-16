@@ -1,3 +1,17 @@
+## Target visual fixture extension — 16 November 2026
+
+Prepared React-only `minesweeper-advanced`,
+`minesweeper-statistics`, and `minesweeper-result` visual capture
+fixtures. These use actual UI flows and deterministic mine placement,
+not hand-authored screenshots. 30 scenes × desktop/mobile = 60
+**planned** PNGs. Original source comparison remains unavailable;
+do not claim a successful capture until the separate
+`[capture-visual]` workflow completes, even if Advanced CI passes.
+See `migration/VISUAL-APP-SCENES.md`.
+Keep draft PR #1 and no main merge.
+
+---
+
 ## Advanced acceptance correction — 16 November 2026
 
 The first Advanced opt-in CI
