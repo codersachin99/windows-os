@@ -1,6 +1,6 @@
 import type { MouseEventHandler } from "react";
 import type { ThemeId } from "@windows-os/contracts";
-import {SourceWin7HistoryNav} from "@windows-os/ui";
+import {SourceWin7HistoryNav} from "@windows-os/ui/navigation";
 
 /**
  * Original Win7 theme navigation controls: paired 27px background sprites,
