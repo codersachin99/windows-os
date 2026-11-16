@@ -31,6 +31,8 @@ export function sourceCpanelUseWin7Nav(theme:ThemeId):boolean{
 export interface ControlPanelAppProps{
   filesystem:VirtualFileStore;
   theme?:ThemeId;
+  /** Source main.js Desktop Display opens cpanel at the Display location. */
+  initialLocation?:SourceControlPanelLocation;
   onClose():void;
   onSwitchUser():void;
   trayPreferences:SourceTrayPreferences;
@@ -43,10 +45,12 @@ export interface ControlPanelAppProps{
  * destinations. Other setting/program targets stay visibly disabled. */
 export function ControlPanelApp({
   onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange,
-  filesystem,theme="win7",messages=[]
+  filesystem,theme="win7",initialLocation=null,messages=[]
 }:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
-    SOURCE_CPANEL_INITIAL_HISTORY);
+    initialLocation===null?SOURCE_CPANEL_INITIAL_HISTORY:{
+      entries:[null,initialLocation],index:1
+    });
   const [query,setQuery]=useState("");
   const [searchedQuery,setSearchedQuery]=useState("");
   const [delayedSearch]=useState(()=>sourceCreateDelayedSearch(setSearchedQuery));
