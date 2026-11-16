@@ -1,3 +1,23 @@
+## Deliberate Solitaire model/assets acceptance — 17 November 2026
+
+One opt-in **[run-ci]** for the source-backed Klondike
+model, card helpers, original sprite renderer and responsive
+layout, and ten imported source card media files. Validate:
+strict TypeScript across all packages, Vitest regression for
+Solitaire's stock, tableau, foundations, undo, scoring,
+2f7e Fisher–Yates and 5ea1 sprites, pinned image/audio/CSS
+integrity audit, production build, and the unchanged full
+desktop+mobile browser suite. Tetris keyboard/pointer CI
+#43945990957 is an earlier SHA and does not include Solitaire.
+The source Solitaire tile remains **disabled**; the board UI,
+drag interactions and source card dialogs remain unported.
+No original source paired screenshot parity can be inferred
+from React-only captures. Only mark accepted if new exact
+run completes successfully. Keep draft PR #1, don't merge
+or release.
+
+---
+
 ## Source Solitaire card sprite/layout — 17 November 2026
 
 Original 949×490 image (13 columns by 5 rows; 73×98 card)
