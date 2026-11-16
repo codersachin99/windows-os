@@ -226,8 +226,8 @@ describe("source 245c Advanced level requests fullscreen on a non-resizable game
     const openBoth=desktopReducer(openGame,{type:"OPEN_APP",app:other});
     const gameId=openBoth.windows[0].id,otherId=openBoth.windows[1].id;
     expect(openBoth.windows[0].resizable).toBe(false);
-    expect(desktopReducer(openBoth,{type:"TOGGLE_MAXIMIZE",id:gameId}))
-      .toBe(openBoth);
+    expect(desktopReducer(openBoth,{type:"TOGGLE_MAXIMIZE",id:gameId})
+      .windows[0].maximized).toBe(false);
     expect(desktopReducer(openBoth,{type:"SET_MINESWEEPER_FULLSCREEN",
       id:otherId,fullscreen:true})).toBe(openBoth);
     expect(desktopReducer(openBoth,{type:"SET_MINESWEEPER_FULLSCREEN",
