@@ -1,6 +1,6 @@
 import type {SourceCard} from "./sourceCards";
 import {
-  sourceSolitaireCanDrop,sourceSolitairePile,sourceSolitaireMovableRun,
+  sourceSolitaireCanDrop,sourceSolitaireMovableRun,
   type SourceSolitairePile,type SourceSolitaireState
 } from "./sourceSolitaire";
 import {
