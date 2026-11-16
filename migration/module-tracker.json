@@ -181,7 +181,7 @@
         "tests/e2e/games.spec.ts",
         "migration/GAMES-SOURCE.md"
       ],
-      "verification": "First pinned 24d9/5401 shell:games library slice in source-backed React: seven c170 offline entries with truthful unported runtime state; zero online entries. Missing source game artwork and all seven gameplay engines, shell chrome and screenshot parity. Full CI gate pending."
+      "verification": "Pinned Games 24d9/5401 virtual shell library and seven c170 offline entries implemented, with source pane / empty online list and installed-program labels. Minesweeper actually launches migrated 9538/245c native board/UI; other six games disabled. Game icons and full source chrome/visual parity pending; latest opt-in CI pending."
     },
     {
       "source": "src/modules/apps/ie.js",
@@ -1164,8 +1164,16 @@
       "source": "src/modules/games/minesweeper.js",
       "sha": "adfe7f694a75d4cb44e77df9b0a8d446cf5ba162",
       "area": "games",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/games/src/minesweeper.ts",
+        "packages/apps/games/src/minesweeper.test.ts",
+        "packages/apps/games/src/MinesweeperApp.tsx",
+        "packages/apps/games/src/MinesweeperApp.css",
+        "tests/e2e/minesweeper.spec.ts",
+        "migration/GAMES-SOURCE.md"
+      ],
+      "verification": "Source 9538 board and 245c beginner/intermediate live game first slice. Advanced viewport, statistics, audio/sprites, original art and full screenshot parity remain pending; CI acceptance after latest source snapshot still needed."
     },
     {
       "source": "src/modules/games/onlinegame.js",
