@@ -86,6 +86,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
   const [renaming, setRenaming] = useState<{id:string;value:string} | null>(null);
   const renameRef = useRef<{id:string;value:string} | null>(null);
   const list = useRef<HTMLDivElement>(null);
+  const uploadInput = useRef<HTMLInputElement>(null);
   const press = useRef<ActivePress | null>(null);
   const bandPress = useRef<ActiveBand | null>(null);
   const anchor = useRef<string | null>(null);
@@ -669,6 +670,42 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
       y: Math.max(0, Math.min(event.clientY - (bounds?.top ?? 0), Math.max(0, area.height - 270)))
     });
   };
+  // Pinned main.js DesktopMenu: Copy path and Upload here operate on
+  // the source-mounted Guest desktop, never on the host filesystem.
+  const copyDesktopPath = () => {
+    setMenu(null);
+    const path = sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if (!path) { setError("The original Guest Desktop is not mounted."); return; }
+    if (!navigator.clipboard?.writeText) {
+      setError("Clipboard permission is unavailable.");
+      return;
+    }
+    void navigator.clipboard.writeText(path).then(() => {
+      setError(null);
+    }).catch(cause => {
+      setError(cause instanceof Error ? cause.message : "Cannot copy Desktop path");
+    });
+  };
+  const importDesktopUploads = (files: FileList | null) => {
+    const batch=Array.from(files ?? []);
+    if (!batch.length) return;
+    const desktop=sourceFilesystemRuntime.snapshot()?.desktopPath;
+    if (!desktop) {setError("The original Guest Desktop is not mounted."); return;}
+    void importDroppedFiles(fileStore,batch,desktop).then(created => {
+      setSelected(created.map(entry => "file:" + entry.uri));
+      setError(null);
+    }).catch(cause => setError(
+      cause instanceof Error ? cause.message : "Cannot import desktop files"
+    ));
+  };
+  const openDisplaySettings = () => {
+    setMenu(null);
+    const panel=appRegistry.get("cpanel");
+    if (!panel) {setError("The original Display settings are not yet available.");return;}
+    dispatch({type:"OPEN_APP",app:panel,file:{path:"display"}});
+    setError(null);
+  };
+
   const changeSettings = (update: () => void) => {
     try {
       update();
@@ -860,6 +897,11 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
           Refresh</button>
         <button role="menuitem" disabled={!clipboardState.paths.length}
           onClick={pasteDesktopFiles}>Paste</button>
+        <button role="menuitem" data-test-desktop-copy-path=""
+          onClick={copyDesktopPath}>Copy path</button>
+        <button role="menuitem" data-test-desktop-upload-here=""
+          onClick={() => {setMenu(null);uploadInput.current?.click();}}>
+          Upload files here</button>
         <button role="menuitem" aria-expanded={menu.newOpen}
           data-test-desktop-new=""
           onClick={() => setMenu({ ...menu, newOpen: !menu.newOpen, view: false })}>
@@ -874,8 +916,21 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
           <button role="menuitem" data-test-desktop-new-text=""
             onClick={() => newDesktopItem("text")}>Text Document</button>
         </>}
+        <button role="menuitem" data-test-desktop-display=""
+          onClick={openDisplaySettings}>Display</button>
+        <button role="menuitem" disabled data-test-desktop-gadgets=""
+          title="Original Gadgets application is not yet migrated">Gadgets</button>
+        <button role="menuitem" disabled data-test-desktop-personalize=""
+          title="Original Personalization application is not yet migrated">
+          Personalize</button>
       </>}
     </div>}
+    <input type="file" multiple hidden ref={uploadInput}
+      aria-label="Upload files to Desktop" data-test-desktop-upload-input=""
+      onChange={event=>{
+        importDesktopUploads(event.currentTarget.files);
+        event.currentTarget.value="";
+      }}/>
     {pendingDelete && <div className="windows-desktop__create-backdrop"
       data-test-desktop-confirm="" role="alertdialog" aria-modal="true"
       aria-label="Confirm desktop deletion"
