@@ -100,3 +100,33 @@ milestones are substantially complete.
 
 Only run GitHub Actions deliberately via `[run-ci]`. Record exact
 commit SHA, successes, failures, skipped sections and remaining blockers.
+
+
+## Subsequent shell menu geometry and Computer/Bin slice
+
+Following the first opt-in integrated CI snapshot, the next independent
+commits add measured source menu geometry and Computer/Bin context actions.
+These changes are **not** in that earlier CI's SHA.
+
+- `sourceDesktopMenuPosition.ts` with source `main.js` measured
+  edge-flip and bounded mobile geometry, pure unit tests. Desktop background
+  menu now repositions after render and after View/New expansion, preserving
+  its original click anchor; CSS limits height so the last item can scroll.
+  Playwright checks the popup bounds after both expansions.
+- Source Computer/Bin Explorer background context menu adds the same original
+  8 View choices (`SOURCE_VIEW_MODES`), keyboard-accessible radio options,
+  Refresh, Copy path via safe browser clipboard, Upload files here via
+  existing `fileInput` and importer, New folder compatibility, and
+  Empty Recycle Bin only on the source Bin. Upload is visibly disabled in
+  Bin and no Bin Paste is exposed. View choices use the existing
+  `ExplorerSession.setViewMode` rather than a duplicate view engine.
+- Explorer's popup uses the same shared `@windows-os/ui/menu-position`
+  geometry and max-height; source Computer and Bin Playwright cases test
+  view changes, Guest path copy, real imported files and bin prohibitions.
+
+**Known remaining mismatch**: the original `main.js` Explorer context
+background has a nested New submenu, while this React compatibility slice
+still offers its existing direct New folder action. Original per-item menus,
+source iconography, theme skin CSS, source popup hover transition, properties,
+complete shortcut creation and paired original screenshots remain pending.
+No assertion that the entire shell has reached source parity is made.
