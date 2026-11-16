@@ -171,8 +171,17 @@
       "source": "src/modules/apps/games.js",
       "sha": "99170e55d7e94e28e146cda8a6f58fbe074439b5",
       "area": "apps",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/apps/games/src/model.ts",
+        "packages/apps/games/src/model.test.tsx",
+        "packages/apps/games/src/GamesApp.tsx",
+        "packages/apps/games/src/GamesApp.css",
+        "packages/apps/games/src/index.ts",
+        "tests/e2e/games.spec.ts",
+        "migration/GAMES-SOURCE.md"
+      ],
+      "verification": "First pinned 24d9/5401 shell:games library slice in source-backed React: seven c170 offline entries with truthful unported runtime state; zero online entries. Missing source game artwork and all seven gameplay engines, shell chrome and screenshot parity. Full CI gate pending."
     },
     {
       "source": "src/modules/apps/ie.js",
