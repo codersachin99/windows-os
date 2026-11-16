@@ -292,3 +292,22 @@ test("source 5985 search supports quoted phrases and filter-only home behavior",
     .getByRole("button",{name:"Backup and Restore"}).click();
   await expect(panel.locator('[data-test-cpanel-backup]')).toBeVisible();
 });
+
+test("original a259 retains indexed search when navigating Back from a matched page",async({page})=>{
+  const win=await openControlPanel(page);
+  const panel=win.locator("[data-test-cpanel]");
+  const search=panel.getByRole("searchbox",{name:"Search Control Panel"});
+  await search.fill("resolution");
+  const item=panel.locator('[data-test-cpanel-result="display"]');
+  await expect(item).toBeVisible();
+  await item.locator("[data-test-cpanel-task]").first().click();
+  await expect(panel.locator("[data-test-cpanel-display]")).toBeVisible();
+  await expect(search).toHaveValue("resolution");
+  await panel.locator("[data-test-cpanel-back]").click();
+  await expect(search).toHaveValue("resolution");
+  await expect(item).toBeVisible();
+  await expect(panel.locator("[data-test-cpanel-items]")).toHaveCount(0);
+  await search.fill("");
+  await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
+  await expect(panel.locator("[data-test-cpanel-results]")).toHaveCount(0);
+});
