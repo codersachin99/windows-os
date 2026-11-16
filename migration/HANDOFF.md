@@ -1,3 +1,28 @@
+## Solitaire/card source audit acceptance correction — 17 November 2026
+
+The initial Solitaire source-model [run #43948813972](https://github.com/codersachin99/windows-os/actions/runs/43948813972)
+stopped at **one new sprite test setup assertion**:
+a freshly shuffled stock card is face-down, so
+`sourceCardSpriteStyle(card,73)` correctly selected the
+source Blue back at `0px -392px`, while the test wrongly
+expected the face of the Queen of Hearts. The exact model
+and sprite semantics are correct. Fix the test to explicitly
+set `faceUp:true` for face sprite verification; no source
+behavior or assets changed. Source Solitaire rules' six
+unit cases and 531/532 unit assertions passed on that
+failed run; browser suite was not reached.
+
+This deliberate `[run-ci]` gate reruns the fixed test,
+the newly added 0510 shared card drag geometry unit tests,
+all existing Tetris/Minesweeper suites, pinned image+audio+
+Solitaire CSS audits and the full desktop/mobile browser
+suite on the current exact commit SHA. Do not mark passed
+until complete. No visual source comparison is possible
+without the pinned source runtime. Keep PR #1 draft, no
+main merge/release.
+
+---
+
 ## Shared original 0510 card dragging model — 17 November 2026
 
 Added `sourceCardDrag.ts` and Vitest coverage for exact
