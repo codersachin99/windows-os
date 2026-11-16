@@ -16,8 +16,10 @@ describe("pinned source 24d9 Games/5401 shell:games",()=>{
       "chess","mahjong","minesweeper","purbleplace",
       "solitaire","spidersolitaire","tetris"
     ]);
-    expect(games.every(game=>game.publisher==="Microsoft Corporation"||
-      game.publisher.length===0)).toBe(true);
+    expect(games.find(game=>game.id==="tetris")?.publisher)
+      .toBe("Albert Lobo");
+    expect(games.filter(game=>game.id!=="tetris")
+      .every(game=>game.publisher==="Microsoft Corporation")).toBe(true);
     expect(games.every(game=>game.available===false)).toBe(true);
     expect(sourceOfflineGames(id=>id==="minesweeper")
       .find(game=>game.id==="minesweeper")?.available).toBe(true);
