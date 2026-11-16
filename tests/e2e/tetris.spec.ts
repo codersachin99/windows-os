@@ -72,3 +72,53 @@ test("Tetris Help and Statistics are parent-locked source child windows",async({
   await expect(page.locator('[data-test-window="tetris"]')).toHaveCount(0);
   await expect(page.locator('[data-test-window="games"]')).toBeVisible();
 });
+
+test("source 13bc Tetris keyboard aliases, wheel direction and secondary tap",async({page})=>{
+  const {game}=await openTetris(page);
+  // Original source chooses one of seven pieces on Play, using Math.random
+  // at game-start; 0.5 selects the four-rotation L tetromino.
+  await page.evaluate(()=>{Math.random=()=>0.5;});
+  await game.locator('[data-test-tetris="play"]').click();
+  await expect(game).toHaveAttribute("data-test-tetris-state","drop");
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","0");
+  await page.keyboard.press("x");
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","1");
+  await page.keyboard.press("z");
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","0");
+  const canvas=game.locator('[data-test-tetris-canvas]');
+  await canvas.hover();
+  await page.mouse.wheel(0,120);
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","1");
+  await page.mouse.wheel(0,-120);
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","0");
+  // Source primary tap rotates clockwise and secondary tap opposite.
+  const bounds=await canvas.boundingBox();
+  expect(bounds).not.toBeNull();
+  const x=bounds!.x+bounds!.width/2;
+  const y=bounds!.y+bounds!.height/2;
+  await page.mouse.click(x,y,{button:"right"});
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","3");
+  await page.mouse.click(x,y,{button:"left"});
+  await expect(game).toHaveAttribute("data-test-tetris-rotation","0");
+});
+
+test("source 13bc captured pointer drag moves a piece before release",async({page})=>{
+  const {game}=await openTetris(page);
+  await page.evaluate(()=>{Math.random=()=>0.5;});
+  await game.locator('[data-test-tetris="play"]').click();
+  await expect(game).toHaveAttribute("data-test-tetris-position",/^[0-9]+:[0-9]+$/);
+  const initial=await game.getAttribute("data-test-tetris-position");
+  const initialX=Number(initial?.split(":")[0]);
+  const canvas=game.locator('[data-test-tetris-canvas]');
+  const box=await canvas.boundingBox();
+  expect(box).not.toBeNull();
+  const y=box!.y+Math.min(box!.height/2,300);
+  await page.mouse.move(box!.x+box!.width/2,y);
+  await page.mouse.down();
+  await page.mouse.move(box!.x+6,y,{steps:18});
+  await expect.poll(async()=>
+    Number((await game.getAttribute("data-test-tetris-position"))?.split(":")[0]),
+    {timeout:5000}).toBeLessThan(initialX);
+  await page.mouse.up();
+  await expect(game).toHaveAttribute("data-test-tetris-state","drop");
+});
