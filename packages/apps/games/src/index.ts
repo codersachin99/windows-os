@@ -1,5 +1,7 @@
 export {GamesApp} from "./GamesApp";
 export {TetrisApp} from "./TetrisApp";
+export {SolitaireApp} from "./SolitaireApp";
+export type {SolitaireAppProps} from "./SolitaireApp";
 export type {TetrisAppProps} from "./TetrisApp";
 export type {GamesAppProps} from "./GamesApp";
 export {SOURCE_GAMES_PATH,SOURCE_ONLINE_GAMES,sourceOfflineGames} from "./model";
