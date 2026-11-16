@@ -1,3 +1,20 @@
+## Deliberate Games graphics acceptance gate — 16 November 2026
+
+After byte-identical restoration of 11 original Games/Minesweeper images
+in `0badbc1`, request exactly one full opt-in **[run-ci]** check.
+The existing `npm run audit:legacy` already independently re-computes
+Git blob SHA-1 plus byte sizes for **every** imported image against
+`migration/legacy-files.tsv`; this includes all 11 newly restored images.
+Also check TypeScript, Vitest artwork routing tests, production build, and
+paired desktop/mobile Playwright Games/Minesweeper artwork selectors.
+Do not record this new code as CI-accepted until its exact workflow
+result is SUCCESS. Earlier accepted snapshot remains
+[CI #43817006528](https://github.com/codersachin99/windows-os/actions/runs/43817006528).
+No automatic CI runs on subsequent ordinary commits; the existing
+`[run-ci]` workflow condition remains unchanged.
+
+---
+
 ## Games original graphics restoration (16 November 2026)
 
 Exact pinned original Games library (eight icons) and Minesweeper
