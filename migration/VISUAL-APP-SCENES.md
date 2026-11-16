@@ -1,3 +1,29 @@
+## Verified target-only Games + Minesweeper screenshots — 16 November 2026
+
+[GitHub Actions visual run #43816057643](https://github.com/codersachin99/windows-os/actions/runs/43816057643)
+at exact code SHA `7320d45e0bdb4e5bc5c0982b3d32fd7734f516c8`
+completed **SUCCESS**, with **54 / 54 target React screenshot captures**
+across 27 desktop scenes (1920×1080) and 27 mobile Pixel 7 scenes,
+**zero capture errors**. New successfully captured scenes:
+`target/{desktop,mobile}/games-library.png`,
+`minesweeper-initial.png`, and `minesweeper-intermediate.png`.
+Artifact ID **14203045417**, name
+`visual-parity-7320d45e0bdb4e5bc5c0982b3d32fd7734f516c8`,
+26,362,331-byte ZIP. The actual artifact was downloaded and all six
+new Games/Minesweeper images visually inspected. The mobile
+Intermediate board extends below the initial window's visible body;
+the new browser reachability regression verifies that the 12×12
+cells can be scrolled inside that window, rather than assuming
+a screenshot's initial viewport makes every cell visible.
+
+The workflow logged **`sourceConfigured=false`, `sourceCaptured=0`,
+`successes=54`, `errors=0`, `parityStatus="not-assessed"`**.
+The missing private legacy read token prevented pinned-source
+runtime pairing, so **no source-vs-React visual parity is claimed**.
+Original game assets and screenshots remain required before
+source pixel-diff acceptance. The old "unexecuted" section below
+is historical planning state superseded by this successful run.
+
 ## Unexecuted Games/Minesweeper screenshot scenes — 16 November 2026
 
 Three additional **target-only** scenes were appended to
