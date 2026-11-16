@@ -42,6 +42,20 @@ describe("pinned 13bc Classic Tetris pure source engine",()=>{
     expect(after.board.flat().some(x=>x>=0)).toBe(true);
     expect(after.score).toBeGreaterThan(0);
   });
+  it("preserves lock-height ARE delay after hard drop instead of immediate spawn",()=>{
+    const game=new SourceTetrisEngine(()=>0.5);
+    game.start();
+    const locked=game.advance({hardDrop:true});
+    expect(locked.state).toBe("are");
+    for(let i=0;i<19;i++)game.advance();
+    // Position remains on the locked piece during the original entry delay.
+    expect(game.snapshot().state).toBe("are");
+    // The source delay is longer than 20 frames for most low locks.
+    for(let i=0;i<60&&game.snapshot().state==="are";i++)game.advance();
+    expect(game.snapshot().state).toBe("drop");
+    expect(game.snapshot().board.flat().filter(x=>x!==-1).length)
+      .toBeGreaterThan(0);
+  });
   it("supports source no-wall-kick rotation, lateral bounds and reversible pause",()=>{
     const game=new SourceTetrisEngine(()=>0.7);
     game.start();

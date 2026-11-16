@@ -110,6 +110,7 @@ export class SourceTetrisEngine{
   private cleared:number[]=[];
   private clearedColumns=-1;
   private areFrames=-1;
+  private lastLockHeight=0;
   constructor(random:()=>number=Math.random){this.random=random;}
   snapshot():SourceTetrisSnapshot{
     return {state:this.status,board:this.board.map(row=>[...row]),
@@ -132,7 +133,7 @@ export class SourceTetrisEngine{
     this.pos=[...SOURCE_TETRIS_PIECES[this.currentId].initial];
     this.rotation=0;this.status="drop";
     this.level=0;this.lines=0;this.score=0;this.downScore=0;
-    this.frame=0;this.areFrames=-1;this.cleared=[];
+    this.frame=0;this.areFrames=-1;this.lastLockHeight=0;this.cleared=[];
     this.clearedColumns=-1;
     // Source _resetParams: first gridcell starts after 36 extra frames.
     this.framesTilDrop=36+sourceTetrisFramesPerGridCell(this.level);
@@ -165,6 +166,7 @@ export class SourceTetrisEngine{
         this.board[this.pos[1]+y][this.pos[0]+x]=this.currentId;
         bottom=Math.max(bottom,this.pos[1]+y);
       }
+    this.lastLockHeight=21-bottom;
     this.cleared=this.board.map((row,y)=>
       row.every(cell=>cell!==-1)?y:-1).filter(y=>y>=0);
     if(this.cleared.length){
@@ -176,7 +178,7 @@ export class SourceTetrisEngine{
       this.status="burn";
     }else{
       this.score+=this.downScore;
-      this.areFrames=2*(10+2*Math.floor((21-bottom+2)/4));
+      this.areFrames=2*(10+2*Math.floor((this.lastLockHeight+2)/4));
       this.status="are";
     }
   }
@@ -198,7 +200,9 @@ export class SourceTetrisEngine{
       sourceTetrisLinesScore(this.cleared.length,this.level);
     this.lines+=this.cleared.length;
     this.level=sourceTetrisLevel(this.lines);
-    this.areFrames=20; // Corrected below by latest lock-height ARE in full parity port.
+    // Source _getARE uses the *locked piece's* last height even after
+    // burning one or four lines, rather than an arbitrary fixed delay.
+    this.areFrames=2*(10+2*Math.floor((this.lastLockHeight+2)/4));
     this.status="are";
   }
   private spawn():void{

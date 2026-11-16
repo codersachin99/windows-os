@@ -24,16 +24,17 @@ sound files and music have separate provenance to clear.
 `packages/apps/games/src/sourceTetris.ts` now ports the original
 shapes, random picker, gravity/level/scoring formulas, board snapshots,
 hard-drop/move/rotate, and foundational state transition frames.
-The complete canvas rendering/layout, game-over animation, exact
-burn-to-ARE timing, audio, pointer controls, statistics, help,
+The complete canvas rendering/layout, game-over animation,
+audio, pointer controls, statistics, help,
 and browser tests are **not implemented**. The Games tile must
 remain disabled until an end-to-end playable/verified port exists.
 This is explicitly an **in-progress source engine**, not a completed
 or playable second game. Unit coverage verifies source constants
 and fundamental transitions.
 
-Next: finish source ARE frame delay after line burn (retain lock
-height), implement responsive original canvas projection, keyboard/
+The engine now retains the source lock-height ARE delay across line
+burn instead of a fixed delay, with a transition regression test.
+Next: implement responsive original canvas projection, keyboard/
 pointer input and animation loop, integrate audio and stats child
 windows, then enable the game via shared app registry only after
 functional Playwright acceptance. Never replace source code rules

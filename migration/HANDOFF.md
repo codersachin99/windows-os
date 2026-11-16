@@ -1,3 +1,23 @@
+## Tetris source engine foundation — 17 November 2026
+
+Started pinned Tetris 13bc pure engine under
+`packages/apps/games/src/sourceTetris.ts` (type-safe 10×22 grid,
+seven original shapes, source gravity/score, piece movement/rotation,
+soft and hard drop, pause, line burn and lock-height ARE delay).
+Added deterministic Vitest cases and exported the reusable pure
+model, documented `migration/TETRIS-SOURCE.md`, and marked
+`src/modules/games/tetris.js` **in-progress** in the module
+tracker. Tetris Games tile stays deliberately disabled because
+the source 60 FPS canvas, keyboard/pointer event handling, assets,
+game-over animation and stats/help windows are not ported.
+This is not a playable implementation or complete source parity.
+The latest child-window [run-ci] #43937165381 began at earlier
+SHA `481babcdfa807d861d405840f88de37f2fbdc8ab`
+and does **not** include the Tetris additions. Batch a later
+opt-in CI acceptance after the next actual Tetris slice.
+
+---
+
 ## Deliberate source child-window acceptance gate — 17 November 2026
 
 The previous commit `05ffe44` introduces a reusable portal-backed
