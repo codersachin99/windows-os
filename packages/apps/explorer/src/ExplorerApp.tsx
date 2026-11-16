@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
 import { legacyArt } from "@windows-os/assets";
 import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
@@ -22,6 +22,8 @@ import { sourceExplorerAddressBreadcrumbs, sourceExplorerSearchPlaceholder } fro
 import { sourceOrganizeItems, type SourceOrganizeCommand } from "./sourceOrganizeMenu";
 import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
+import {SOURCE_VIEW_MODES} from "./sourceViewModes";
+import {sourceDesktopMenuPosition} from "@windows-os/ui/menu-position";
 import {
   sourceComputerDetailsLabelWidth,sourceComputerItemExtras,
   SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH
@@ -103,8 +105,10 @@ export function ExplorerApp({
   const [message, setMessage] = useState("");
   const [confirm, setConfirm] = useState<"recycle" | "permanent" | "empty" | null>(null);
   const [context, setContext] = useState<{
-    kind: "item" | "background"; x: number; y: number; uri?: string
-  } | null>(null);
+    kind:"item"|"background"; x:number;y:number;
+    anchorX:number;anchorY:number;viewOpen:boolean;uri?:string
+  }|null>(null);
+  const contextRef=useRef<HTMLDivElement>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [subfolders, setSubfolders] = useState(
     initialSourceSearch?.subfolders ?? initialFind?.subfolders ?? false);
@@ -470,6 +474,27 @@ export function ExplorerApp({
     };
   }, [context]);
 
+  useLayoutEffect(()=>{
+    const element=contextRef.current;
+    if(!context||!element)return;
+    const position=sourceDesktopMenuPosition(
+      {x:context.anchorX,y:context.anchorY},
+      {width:element.offsetWidth,height:element.offsetHeight},
+      {width:window.innerWidth,height:window.innerHeight});
+    if(context.x===position.x&&context.y===position.y)return;
+    setContext(current=>current?{...current,...position}:current);
+  },[context]);
+  const copyExplorerPath=()=>{
+    const path=state.path;
+    if(!path){setMessage("No mounted folder path is available.");return;}
+    if(!navigator.clipboard?.writeText){
+      setMessage("Clipboard permission is unavailable.");return;
+    }
+    void navigator.clipboard.writeText(path).then(()=>setMessage(""))
+      .catch(cause=>setMessage(cause instanceof Error?
+        cause.message:"Cannot copy folder path"));
+  };
+
   const showContext = (
     event: import("react").MouseEvent<HTMLElement>,
     kind: "item" | "background", uri?: string
@@ -479,9 +504,9 @@ export function ExplorerApp({
     if (kind === "item" && uri && !state.selected.includes(uri)) session.select(uri);
     if (kind === "background") session.clearSelection();
     setContext({
-      kind, uri,
-      x: Math.max(4, Math.min(event.clientX, window.innerWidth - 215)),
-      y: Math.max(4, Math.min(event.clientY, window.innerHeight - 280))
+      kind,uri,viewOpen:false,
+      anchorX:event.clientX,anchorY:event.clientY,
+      x:event.clientX,y:event.clientY
     });
   };
   const contextAction = (action: () => void) => {
@@ -828,7 +853,7 @@ export function ExplorerApp({
       {state.error || message}
       <button aria-label="Dismiss Explorer message" onClick={() => setMessage("")}>×</button>
     </div>}
-    {context && <div role="menu" className="explorer-context-menu"
+    {context && <div ref={contextRef} role="menu" className="explorer-context-menu"
       data-test-explorer-context={context.kind}
       aria-label={context.kind === "item" ? "File actions" : "Folder actions"}
       style={{ left: context.x, top: context.y }}>
@@ -854,18 +879,36 @@ export function ExplorerApp({
         <button role="menuitem" disabled title="Source Properties dialog is not migrated">Properties</button>
       </>}
       {context.kind === "background" && <>
-        {!isBin && <>
-          <button role="menuitem" onClick={() => contextAction(pasteSelection)}
-            disabled={!clipboardState.paths.length}>Paste</button>
-          <button role="menuitem" onClick={() => contextAction(() => {
-            setName(""); setPrompt("folder");
-          })}>New folder</button>
-        </>}
-        {isBin && <button role="menuitem" disabled={!state.items.length}
-          onClick={() => contextAction(() => setConfirm("empty"))}>Empty Recycle Bin</button>}
-        <button role="menuitem" onClick={() => contextAction(
-          () => void execute(() => session.refresh())
+        <button role="menuitem" aria-expanded={context.viewOpen}
+          data-test-explorer-context-view=""
+          onClick={()=>setContext(current=>current?{
+            ...current,viewOpen:!current.viewOpen
+          }:current)}>View ▸</button>
+        {context.viewOpen&&SOURCE_VIEW_MODES.map(mode=>
+          <button key={mode.value} role="menuitemradio"
+            aria-checked={state.viewMode===mode.value}
+            data-test-explorer-context-mode={mode.value}
+            onClick={()=>contextAction(()=>session.setViewMode(mode.value))}>
+            {state.viewMode===mode.value?"✓ ":"　"}{mode.label}
+          </button>)}
+        <button role="menuitem" onClick={()=>contextAction(
+          ()=>void execute(()=>session.refresh())
         )}>Refresh</button>
+        {isBin&&<button role="menuitem" disabled={!state.items.length}
+          onClick={()=>contextAction(()=>setConfirm("empty"))}>
+          Empty Recycle Bin</button>}
+        {!isBin&&<button role="menuitem"
+          onClick={()=>contextAction(pasteSelection)}
+          disabled={!clipboardState.paths.length}>Paste</button>}
+        <button role="menuitem" data-test-explorer-context-copy-path=""
+          onClick={()=>contextAction(copyExplorerPath)}>Copy path</button>
+        <button role="menuitem" data-test-explorer-context-upload=""
+          disabled={isBin}
+          onClick={()=>contextAction(()=>fileInput.current?.click())}>
+          Upload files here</button>
+        {!isBin&&<button role="menuitem" onClick={()=>contextAction(()=>{
+          setName("");setPrompt("folder");
+        })}>New folder</button>}
       </>}
     </div>}
     {showSearchDialog && !isBin && <SearchDialog initialScope={state.path}
