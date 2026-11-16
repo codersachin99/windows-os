@@ -1,3 +1,37 @@
+## Pinned 5985 generic source search + combined full acceptance (16 November 2026)
+
+[Prior opt-in CI #43731878736](https://github.com/codersachin99/windows-os/actions/runs/43731878736)
+completed **FAILURE**: TypeScript, all 469 Vitest tests, source audits
+and Vite build passed; **428 / 430** desktop/mobile Playwright tests passed.
+Both failures were the same new Control Panel Defender results test:
+Playwright strict mode rejected `[data-test-cpanel-result="defender"] button`
+because it matched **two** correctly disabled controls. Commit e6b1ae6
+had already fixed the ambiguous locator by asserting each separately,
+but was after the run's source snapshot. Do not attribute the failure
+to actual host settings or the original source registry.
+
+Implemented original `cpanel.js` webpack **5985** parsing/scoring as
+reusable `packages/engine/src/sourceSearch.ts` and exported its typed
+helpers through `@windows-os/engine`. Source behavior includes NFD accent
+removal, case normalization, complete quoted phrase and `key:value`
+filter grammar, punctuation/Thai/Myanmar/Khmer/CJK word boundaries,
+per-term name 10 / keyword 1 relevance, exact +1000, prefix +100 and
+ordered words +5. `sourceRegistry.ts` now shares this engine instead of
+duplicating a partial whitespace splitter. As in original `a682`,
+filters are recorded but not applied to Control Panel task matching,
+and filter-only searches display the root tiles. Added standalone Vitest,
+Control Panel search tests and paired desktop/mobile Playwright coverage.
+The original `SourceListView variant="tiles"` remains reused from the
+existing engine, with all 24 pinned source icons.
+
+This deliberately opted-in **[run-ci]** acceptance commit covers both
+the known strict-selector correction and the new shared source search,
+all regression tests, Vite build, and desktop/mobile browser suite.
+**Do not claim success until the exact new run completes.** Original
+visual screenshot comparison, native setting/program adapters, source
+search debounce timing, alternate-theme skins and deeper per-app
+functionality are still pending. PR #1 draft; main unchanged.
+
 ## Source ListView reuse and CI acceptance state (15 November 2026)
 
 The source Control Panel 24-tile root now renders using the already
