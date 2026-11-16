@@ -1,3 +1,34 @@
+## Pinned Minesweeper timer correction + source Games visual proof — 16 November 2026
+
+Original `src/modules/games/minesweeper.js` webpack 245c
+starts the 1-second timer only while `9538.Board.state()` is
+`PRISTINE`. The source Board `cycleCellFlag` transitions to
+IN_PROGRESS before a first reveal; opening after an early flag
+therefore does not start the clock. Extracted
+`sourceMineShouldStartTimer` and used it in the React game
+handler; added unit cases preserving that exact source quirk.
+These commits are **after** Games CI #43814952314's code SHA.
+
+Three new source-traced but **React-target-only** visual scenes
+(`games-library`, `minesweeper-initial`,
+`minesweeper-intermediate`) are prepared for full desktop and
+mobile captures, raising expected React images to **54**.
+This explicitly opted-in **[capture-visual]** commit exercises
+those scenes and preserves the resulting artifact. The pinned
+legacy Vue source is still private and lacks a configured read
+token, so no source-pair pixel acceptance is expected or claimed.
+If capture is red, inspect exact logs/fixtures before calling it
+successful. Source game image assets remain missing; screenshots
+are UI evidence, not source parity.
+
+Full opt-in [Games CI #43814952314](https://github.com/codersachin99/windows-os/actions/runs/43814952314)
+on `760fa39` had completed TypeScript, Vitest, both source audits
+and build; Playwright was still running at last poll. Do not
+label Games or Minesweeper CI accepted before completion.
+One newer full `[run-ci]` gate is necessary for the post-snapshot
+timer change; do not trigger it before learning the current run's
+actual browser results. PR #1 remains draft, main untouched, no release.
+
 ## Games visual fixture follow-up — 16 November 2026
 
 Added three **target-only** visual capture scenes for the new
