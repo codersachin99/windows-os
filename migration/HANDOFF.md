@@ -1,3 +1,24 @@
+## Games visual fixture follow-up — 16 November 2026
+
+Added three **target-only** visual capture scenes for the new
+source-backed Games and Minesweeper slices:
+`games-library`, `minesweeper-initial`,
+`minesweeper-intermediate`. They are authored for desktop 1920x1080
+and mobile Pixel 7; the plan is **54** total target PNG captures
+(27 scenes × 2 profiles). This is code/config preparation only,
+**not a successful screenshot capture**. The previous 48-image run
+#43809843426 remains the last actual target capture; private
+source access was absent and original pixel parity not assessed.
+
+[Full opted-in Games CI #43814952314](https://github.com/codersachin99/windows-os/actions/runs/43814952314)
+was in progress on source SHA
+`760fa39a1246d3cb164c2b690157bb6820301967` when last checked:
+TypeScript, units, source/Contacts audits and Vite build passed;
+desktop/mobile Playwright was still running. The visual fixture and
+this handoff commit are **after that CI snapshot**. If CI succeeds,
+review real gameplay test results before deciding whether to opt in
+to one `[capture-visual]` run. Keep PR #1 draft and no release.
+
 ## Source Games library + first playable Minesweeper; combined gate (16 November 2026)
 
 [Previous full CI #43813132144](https://github.com/codersachin99/windows-os/actions/runs/43813132144)
