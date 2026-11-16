@@ -1,6 +1,6 @@
 import {describe,it,expect} from "vitest";
 import {
-  SourceMineBoard,sourceGenerateMineArray,SOURCE_MINE_BEGINNER,
+  SourceMineBoard,sourceGenerateMineArray,sourceMineShouldStartTimer,SOURCE_MINE_BEGINNER,
   SOURCE_MINE_INTERMEDIATE,SOURCE_MINE_BOARD_STATE,
   SOURCE_MINE_CELL_STATE,SOURCE_MINE_CELL_FLAG
 } from "./minesweeper";
@@ -74,5 +74,15 @@ describe("pinned minesweeper.js 9538 source Board",()=>{
     expect(a.every(row=>row.length===9)).toBe(true);
     expect(a.flat().filter(x=>x===1)).toHaveLength(10);
     expect(new SourceMineBoard(a).numMines()).toBe(10);
+  });
+  it("follows source 245c pristine-only timer, even after flag before reveal",()=>{
+    const board=new SourceMineBoard([[1,0],[0,0]]);
+    expect(sourceMineShouldStartTimer(board.state())).toBe(true);
+    board.cycleCellFlag(0,0);
+    expect(sourceMineShouldStartTimer(board.state())).toBe(false);
+    board.openCell(1,1);
+    expect(sourceMineShouldStartTimer(board.state())).toBe(false);
+    expect(sourceMineShouldStartTimer(SOURCE_MINE_BOARD_STATE.WON)).toBe(false);
+    expect(sourceMineShouldStartTimer(SOURCE_MINE_BOARD_STATE.LOST)).toBe(false);
   });
 });
