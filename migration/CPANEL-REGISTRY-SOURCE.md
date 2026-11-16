@@ -40,7 +40,14 @@ at revision `4e63290d783009e1293433c6ccf252abba9c1187`.
 
 - `packages/apps/cpanel/src/sourceRegistry.ts` is the portable typed
   registry with 24 entries, their 66 tasks, category/target/icon metadata,
-  source-backed heading labels and word-start search ranking.
+  and source-backed heading labels. The original weighted search now lives
+  in reusable `packages/engine/src/sourceSearch.ts`, preserving pinned
+  webpack 5985 normalization, quoted phrases, `name:value` and
+  `name:"quoted value"` filters, Unicode/CJK word starts, and relevance
+  scores (10/1 weights, +1000 exact, +100 prefix, +5 ordered words).
+  Control Panel filters are parsed and retained, but source a682 does not
+  use them to filter item results; a filter-only search therefore shows
+  root tiles instead of a fabricated "No items" state.
 - `ControlPanelApp.tsx` renders **all 24** tiles in original source order.
   A root item is enabled only for the six genuinely implemented panel
   destinations: Display, Programs and Features, Guest User Accounts,
@@ -52,13 +59,15 @@ at revision `4e63290d783009e1293433c6ccf252abba9c1187`.
   with source-locked artwork for every entry. Existing source image
   bytes are reused, not synthesized icons.
 - `sourceRegistry.test.ts` checks original order, target metadata,
-  task redirects, icon coverage and keyword/search behavior. Browser tests
-  cover all 24 root tiles, disabled unsupported targets, source artwork,
-  taskbar-to-notification navigation and mobile/desktop layouts.
+  task redirects, icon coverage, keyword/search, filter and phrase behavior.
+  `packages/engine/src/sourceSearch.test.ts` tests the original generic
+  parser and weights independently. Browser tests cover all 24 root tiles,
+  disabled unsupported targets, source artwork, taskbar-to-notification
+  navigation, quoted phrases, filter-only root and mobile/desktop layouts.
 
 **Scope/acceptance:** registry and asset import implemented, but do not mark
 Control Panel visually/source-parity accepted until a successful opted-in
 test run and fixed original/React screenshot comparison. Remaining gaps:
-exact source CSS/listview tile geometry, original complete search grammar and
-timing, translated locales beyond pinned en-US, program/setting host adapters,
+exact source CSS/listview tile geometry, original search debounce timing
+and semantic filter consumers, translated locales beyond pinned en-US, program/setting host adapters,
 theme-specific asset maps, and full screenshot comparison. PR stays draft.
