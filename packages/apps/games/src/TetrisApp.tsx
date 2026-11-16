@@ -8,6 +8,10 @@ import {SourceTetrisEngine,type SourceTetrisInput,
   type SourceTetrisSnapshot} from "./sourceTetris";
 import {sourceTetrisCanvasLayout,drawSourceTetris,
   type SourceTetrisCanvasLayout} from "./sourceTetrisCanvas";
+import {
+  sourceTetrisKeyInput,sourceTetrisTapInput,sourceTetrisWheelInput,
+  sourceTetrisPointerMoveInput
+} from "./sourceTetrisControls";
 import {emptyTetrisStats,loadTetrisStats,saveTetrisStats,
   sourceTetrisStarted,sourceTetrisFinished} from "./tetrisStats";
 import "./TetrisApp.css";
@@ -31,7 +35,8 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
   const canvas=useRef<HTMLCanvasElement|null>(null);
   const audio=useRef<Record<string,HTMLAudioElement>>({});
   const queued=useRef<SourceTetrisInput>({});
-  const drag=useRef<{x:number;y:number;time:number}|null>(null);
+  const drag=useRef<{x:number;y:number;time:number;pointerId:number}|null>(null);
+  const pointerDownEnabled=useRef(false);
   const [snapshot,setSnapshot]=useState<SourceTetrisSnapshot>(()=>engine.snapshot());
   const [layout,setLayout]=useState<SourceTetrisCanvasLayout>(initialLayout);
   const [menu,setMenu]=useState<"game"|"help"|null>(null);
@@ -53,6 +58,12 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
         level:after.level,score:after.score,lines:after.lines});
       statsRef.current=updated;setStats(updated);
     }
+    if(before.state==="drop"&&after.state==="drop"){
+      // Original source plays effects only if the engine actually moved
+      // or rotated a tetromino, not when an input hits a wall.
+      if(before.position[0]!==after.position[0])play(audio.current.move);
+      if(before.rotation!==after.rotation)play(audio.current.rotate);
+    }
     if(before.level!==after.level)play(audio.current.levelup);
     // Source 13bc opens Statistics at GAME_OVER_END, not START.
     if(!before.gameOverComplete&&after.gameOverComplete&&
@@ -71,6 +82,20 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
     }};
   },[]);
   useEffect(()=>{saveTetrisStats(stats);},[stats]);
+  useEffect(()=>{
+    const el=canvas.current;
+    if(!el)return;
+    const wheel=(event:WheelEvent)=>{
+      event.preventDefault();
+      if(engine.snapshot().state==="pause"||help||statsOpen||
+        parentMinimized)return;
+      const input=sourceTetrisWheelInput(event.deltaY);
+      if(input)queued.current={...queued.current,...input};
+    };
+    // Source binds a non-passive wheel listener directly to its canvas.
+    el.addEventListener("wheel",wheel,{passive:false});
+    return ()=>el.removeEventListener("wheel",wheel);
+  },[engine,help,statsOpen,parentMinimized]);
   useEffect(()=>{
     const element=canvas.current;
     if(!element)return;
@@ -131,7 +156,7 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
     return ()=>document.removeEventListener("visibilitychange",onHide);
   },[engine]);
   const start=()=>{
-    engine.start();queued.current={};
+    engine.start();queued.current={};pointerDownEnabled.current=false;
     const latest=sourceTetrisStarted(statsRef.current);
     statsRef.current=latest;setStats(latest);
     setSnapshot(engine.snapshot());
@@ -160,39 +185,59 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
   };
   const key=(event:ReactKeyEvent<HTMLElement>)=>{
     if(event.altKey||event.ctrlKey||event.metaKey||help||statsOpen)return;
-    const controls:Record<string,keyof SourceTetrisInput>={
-      ArrowLeft:"left",KeyA:"left",ArrowRight:"right",KeyD:"right",
-      ArrowDown:"down",KeyS:"down",ArrowUp:"clockwise",KeyW:"clockwise",
-      KeyX:"clockwise",KeyK:"clockwise",KeyZ:"counterClockwise",
-      KeyL:"counterClockwise",Space:"hardDrop"
-    };
-    if(event.code==="KeyP"||event.code==="Escape"){
-      event.preventDefault();
+    const input=sourceTetrisKeyInput(event.code,event.repeat);
+    if(!input){
+      if(event.code==="Space")event.preventDefault();
+      return;
+    }
+    event.preventDefault();
+    if(input.pause){
       if(!event.repeat)togglePlay();
       return;
     }
-    const action=controls[event.code];
-    if(!action)return;
-    event.preventDefault();
-    if(event.repeat&&action==="hardDrop")return;
-    queued.current={...queued.current,[action]:true};
-    if(action==="clockwise"||action==="counterClockwise")
-      play(audio.current.rotate);
-    if(action==="left"||action==="right")play(audio.current.move);
+    // Source input for the next 60fps frame; actual movement/rotation
+    // sounds fire only after the engine accepts a move.
+    queued.current={...queued.current,...input};
   };
   const pointerDown=(event:ReactPointerEvent<HTMLCanvasElement>)=>{
+    if(engine.snapshot().state==="pause"||help||statsOpen||parentMinimized)
+      return;
     root.current?.focus();
-    drag.current={x:event.clientX,y:event.clientY,time:performance.now()};
+    drag.current={x:event.clientX,y:event.clientY,
+      time:performance.now(),pointerId:event.pointerId};
+    pointerDownEnabled.current=false;
     event.currentTarget.setPointerCapture(event.pointerId);
   };
+  const pointerMove=(event:ReactPointerEvent<HTMLCanvasElement>)=>{
+    if(drag.current?.pointerId!==event.pointerId||
+      engine.snapshot().state==="pause")return;
+    event.preventDefault();
+    const bounds=event.currentTarget.getBoundingClientRect();
+    const motion=sourceTetrisPointerMoveInput(
+      engine.snapshot(),layout,
+      event.clientX-bounds.left,event.clientY-bounds.top,
+      pointerDownEnabled.current
+    );
+    pointerDownEnabled.current=motion.downEnabled;
+    // Source dispatches left/right and soft drop each frame while the
+    // pointer moves, not once at pointer release.
+    queued.current={...queued.current,...motion.input,
+      left:motion.input.left===true,right:motion.input.right===true};
+  };
   const pointerUp=(event:ReactPointerEvent<HTMLCanvasElement>)=>{
-    const start=drag.current;drag.current=null;if(!start)return;
-    const dx=event.clientX-start.x,dy=event.clientY-start.y;
-    if(Math.hypot(dx,dy)<=10&&performance.now()-start.time<=500)
-      queued.current={...queued.current,clockwise:true};
-    else if(Math.abs(dx)>Math.abs(dy))
-      queued.current={...queued.current,[dx<0?"left":"right"]:true};
-    else if(dy>0)queued.current={...queued.current,down:true};
+    const start=drag.current;
+    if(!start||start.pointerId!==event.pointerId)return;
+    drag.current=null;pointerDownEnabled.current=false;
+    event.preventDefault();
+    if(engine.snapshot().state==="pause")return;
+    const input=sourceTetrisTapInput(event.button,
+      Math.hypot(event.clientX-start.x,event.clientY-start.y),
+      performance.now()-start.time);
+    if(input)queued.current={...queued.current,...input};
+  };
+  const pointerCancel=(event:ReactPointerEvent<HTMLCanvasElement>)=>{
+    if(drag.current?.pointerId!==event.pointerId)return;
+    drag.current=null;pointerDownEnabled.current=false;
   };
   const styleFor=(name:"play"|"newGame"):CSSProperties=>{
     const rect=layout.buttons[name];
@@ -204,6 +249,8 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
     data-test-tetris-root="" data-test-tetris-state={state}
     data-test-tetris-score={snapshot.score}
     data-test-tetris-lines={snapshot.lines}
+    data-test-tetris-rotation={snapshot.rotation}
+    data-test-tetris-position={snapshot.position.join(":")}
     onKeyDown={key}>
     <nav className="windows-tetris__menu" aria-label="Tetris menus">
       <button type="button" aria-expanded={menu==="game"}
@@ -222,7 +269,8 @@ export function TetrisApp({onClose,parentWindowId,parentMinimized=false}:TetrisA
       style={{backgroundImage:`url("${legacyTetrisArtwork.background}")`}}>
       <canvas ref={canvas} className="windows-tetris__canvas"
         data-test-tetris-canvas="" aria-label="Classic Tetris board"
-        onPointerDown={pointerDown} onPointerUp={pointerUp}
+        onPointerDown={pointerDown} onPointerMove={pointerMove}
+        onPointerUp={pointerUp} onPointerCancel={pointerCancel}
         onContextMenu={event=>event.preventDefault()}/>
       <button type="button" className="windows-tetris__control"
         data-test-tetris="play" aria-label={state==="pause"||state==="game-over"?"Play":"Pause"}

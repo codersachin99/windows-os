@@ -1,3 +1,41 @@
+## Tetris 13bc original input mapping correction — 17 November 2026
+
+The original Tetris engine handles keyboard aliases (A/D/S,
+W/X/K and Z/L), Space once per keydown without repeat, P/Esc
+pause, non-passive canvas wheel with positive delta clockwise
+and negative delta anticlockwise, primary tap clockwise and
+secondary tap opposite, continuous captured pointer drag
+based on bounding boxes of the *current piece* and source
+canvas grid, and a 500ms/10px tap threshold. The original
+move/rotate sound fires inside the game engine **after**
+successfully moving/rotating, not when the key is pressed.
+
+Added reusable pure helpers in `sourceTetrisControls.ts`,
+unit coverage, native non-passive canvas wheel, captured
+pointermove/up/cancel, and state-driven actual movement
+sound. The user-facing game now exposes rotation and position
+test attributes for deterministic browser checks. Pointer
+dragging computes the source same/left/right and down-enable
+from the source piece's cell bounds; simply looking at
+drag-end distance, as the earlier adapter did, was not source
+accurate. Right mouse button tap rotates counterclockwise.
+In the React adaptation inputs are still consumed at next
+60fps tick and the pointer uses capture rather than raw
+document listeners; no absolute input-timing pixel parity
+claim is made.
+
+The accepted Tetris 460/460 browser and 516/516 unit tests
+were from [CI #43939723976](https://github.com/codersachin99/windows-os/actions/runs/43939723976),
+SHA `88e489555c5023a04fc16098336e68034bca2cb4`.
+The 68/68 React-only screenshots from
+[visual #43941143525](https://github.com/codersachin99/windows-os/actions/runs/43941143525)
+had zero errors but `sourceCaptured=0` and parity `not-assessed`.
+This input correction is later than either accepted run and
+requires another explicit opt-in acceptance. No main merge
+or release.
+
+---
+
 ## Byte-locked source Tetris shell styling — 17 November 2026
 
 The original `src/styles/system/tetris.css` (pinned blob

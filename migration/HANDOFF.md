@@ -1,3 +1,27 @@
+## Verified Tetris baseline and input fidelity follow-up — 17 November 2026
+
+First Tetris playable functional [CI #43939723976](https://github.com/codersachin99/windows-os/actions/runs/43939723976)
+completed **SUCCESS** at `88e489555c5023a04fc16098336e68034bca2cb4`:
+**516/516 Vitest**, **460/460 Playwright Chromium desktop/mobile**;
+TypeScript, build, source audio/image asset audits passed.
+Target-only [visual #43941143525](https://github.com/codersachin99/windows-os/actions/runs/43941143525)
+also **SUCCESS** at `edced26de266231e664730ff2aab5ca3a9c9f9a0`:
+**68/68** React screenshots, zero errors, `sourceCaptured=0`,
+`parityStatus=not-assessed`. These do not establish pixel parity.
+
+New source fidelity work in this branch: `sourceTetrisControls.ts`
+plus tests for source keyboard, positive/negative wheel rotation,
+primary/secondary tap, captured pointer drag and source piece
+bounds; engine-admitted move/rotate sounds; per-frame pointer
+motion and explicit rotation/position browser hooks. The
+previous Tetris white game-over wipe and byte-locked original
+source CSS remain later than initial Tetris acceptance too.
+None of the newer behavior is accepted until a new opt-in CI
+tests all relevant source and browser contracts.
+Keep PR #1 in draft, do not merge or release.
+
+---
+
 ## Deliberate 68-scene Tetris visual capture — 17 November 2026
 
 The Tetris canvas, source assets, Help/Stats child windows and
