@@ -55,6 +55,9 @@
       "@windows-os/ui/navigation": [
         "packages/ui/src/SourceWin7HistoryNav.tsx"
       ],
+      "@windows-os/ui/menu-position": [
+        "packages/ui/src/sourceDesktopMenuPosition.ts"
+      ],
       "@windows-os/ui": [
         "packages/ui/src/index.ts"
       ],
