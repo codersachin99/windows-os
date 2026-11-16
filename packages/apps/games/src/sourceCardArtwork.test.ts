@@ -12,7 +12,9 @@ describe("pinned shared cards 5ea1 sprite and Solitaire e202 pile layout",()=>{
     expect(SOURCE_CARD_SPRITE_WIDTH*SOURCE_CARD_COLUMNS).toBe(949);
     expect(SOURCE_CARD_SPRITE_HEIGHT*SOURCE_CARD_ROWS).toBe(490);
     const card=sourceCardsDeck(()=>0.5).find(c=>c.suit==="hearts"&&c.rank===12)!;
-    expect(sourceCardSpriteStyle(card,73)).toMatchObject({
+    // Source deck cards are face-down until exposed in Solitaire.
+    // Face sprite coordinates must use a deliberately opened card.
+    expect(sourceCardSpriteStyle({...card,faceUp:true},73)).toMatchObject({
       width:"73px",height:"98px",
       backgroundSize:"949px 490px",
       backgroundPosition:"-803px -196px"
