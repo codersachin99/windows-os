@@ -1,3 +1,19 @@
+## Byte-locked source Tetris shell styling — 17 November 2026
+
+The original `src/styles/system/tetris.css` (pinned blob
+`fe03219ede8f47a0f74163781e4d25a557fbc9ed`) is now
+preserved byte-for-byte at `migration/source-css/tetris.css`.
+It specifies the game's source `#9edbf2` 3px button border,
+and source Tetris statistics width of 300px, among inherited
+WinUI dialog styles. The React implementation uses the same
+button border and 300px parented child width while retaining
+its own scoped styles. `npm run audit:legacy` now hashes
+the preserved original Tetris CSS independently of Minesweeper's
+existing byte-locked CSS and all original game image/audio files.
+No original-side screenshot parity is claimed by this integrity gate.
+
+---
+
 ## Original 13bc GAME_OVER animation and stats handoff — 17 November 2026
 
 The pinned Classic Tetris engine's `_triggerGameOver()` emits

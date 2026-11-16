@@ -103,6 +103,17 @@ if (!mineSourceCss || mineCssBytes.length !== mineSourceCss.bytes ||
     mineCssSha !== mineSourceCss.sha)
   failures.push("Pinned Minesweeper source CSS bytes changed");
 
+// Preserve original 13bc game shell CSS separately from React adapter rules.
+const tetrisSourceCSS=inventory.find(x=>
+  x.path==="src/styles/system/tetris.css");
+const tetrisCSS=await readFile(resolve(root,"migration/source-css/tetris.css"));
+const tetrisCSSSha=createHash("sha1")
+  .update(`blob ${tetrisCSS.length}\0`)
+  .update(tetrisCSS).digest("hex");
+if(!tetrisSourceCSS||tetrisCSS.length!==tetrisSourceCSS.bytes||
+  tetrisCSSSha!==tetrisSourceCSS.sha)
+  failures.push("Pinned Tetris source CSS bytes changed");
+
 const byStatus = Object.fromEntries(["pending", "in-progress", "implemented", "verified"]
   .map(status => [status, tracker.modules.filter(m => m.status === status).length]));
 console.log(JSON.stringify({
@@ -113,6 +124,7 @@ console.log(JSON.stringify({
   byteCheckedImportedImages: importedImages.length,
   byteCheckedImportedAudio: importedAudio.length,
   byteCheckedMinesweeperSourceCSS: mineCssSha === mineSourceCss?.sha,
+  byteCheckedTetrisSourceCSS: tetrisCSSSha === tetrisSourceCSS?.sha,
   styles: inventory.filter(x => x.path.startsWith("src/styles/")).length,
   byStatus,
   externalApps: externalEntries.length,

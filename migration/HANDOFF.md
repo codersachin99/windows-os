@@ -1,3 +1,16 @@
+## Source CSS integrity for Tetris — 17 November 2026
+
+Copied the exact original Tetris 13bc CSS to
+`migration/source-css/tetris.css` with original/target Git
+blob SHA agreement, and extended `npm run audit:legacy`
+to check it against `migration/legacy-files.tsv`.
+This later batch is beyond Tetris acceptance CI #43939723976;
+do not claim it passed without a new opt-in gate.
+The source 3px cyan button border and 300px statistics width
+remain explicitly traceable. No original screenshot pairing.
+
+---
+
 ## Tetris game-over source animation continuation — 17 November 2026
 
 Source 13bc ends with a white 22-row board wipe, advancing each
