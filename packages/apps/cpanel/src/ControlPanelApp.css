@@ -11,12 +11,8 @@
   background:linear-gradient(#f7fbff,#e2edf8);border-bottom:1px solid #aebac8;
   padding:7px 8px;flex:none;
 }
-.windows-cpanel__navigation{display:flex;gap:3px}
-.windows-cpanel__navigation button{
-  width:25px;height:24px;border:1px solid #8aa4bd;
-  background:linear-gradient(#fff,#d4e2f0);border-radius:3px;
-}
-.windows-cpanel__navigation button:disabled{opacity:.5}
+/* Source Win7 27px state sprites and nav background now live in shared
+ * packages/ui/src/sourceWin7HistoryNav.css (also used by Explorer). */
 .windows-cpanel__breadcrumb{
   display:flex;align-items:center;gap:5px;min-height:26px;padding:0 9px;
   flex:1 1 180px;min-width:0;border:1px solid #adc0d0;background:#fff;
