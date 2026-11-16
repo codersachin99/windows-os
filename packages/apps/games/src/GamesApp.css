@@ -1,0 +1,53 @@
+/* Pinned games.js 24d9 / computer.js pane-games:
+ * virtual Games folder rendered inside a normal Win7 Computer window.
+ * Responsive styles retain source tiles, two collapsible groups and
+ * disabled toolbar when isGamesFolder; gameplay skins are separate. */
+.windows-games{
+  width:100%;height:100%;min-height:0;
+  display:flex;flex-direction:column;background:white;color:#263b4b;
+  font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-games__addressbar{
+  flex:none;display:flex;align-items:center;gap:6px;min-height:36px;
+  padding:3px 7px;background:linear-gradient(#f7fbff,#e2edf8);
+  border-bottom:1px solid #adbed1;
+}
+.windows-games__address-location{
+  min-width:0;min-height:25px;display:flex;align-items:center;flex:1;gap:6px;
+  padding:2px 7px;border:1px solid rgba(0,0,0,.67);border-radius:2px;
+  box-shadow:inset 0 0 0 1px #fff;background:rgba(255,255,255,.67);
+}
+.windows-games__address-location img{width:18px;height:18px;object-fit:contain;flex:none}
+.windows-games__toolbar{
+  flex:none;display:flex;gap:14px;padding:6px 10px;
+  background:#f4f8fb;border-bottom:1px solid #d3dce4;
+}
+.windows-games__toolbar button{
+  border:0;background:none;color:#789;font:inherit;
+}
+.windows-games__body{padding:8px;overflow:auto;min-height:0;flex:1}
+.windows-games__group{margin:0 0 16px}
+.windows-games__group h2{margin:0 0 6px;font-size:14px;font-weight:500}
+.windows-games__group h2 button{
+  display:flex;align-items:center;gap:6px;width:100%;color:#2867a1;
+  text-align:left;background:#eef5fb;border:1px solid #c6d7e6;
+  border-radius:2px;padding:6px 8px;font:inherit;cursor:pointer;
+}
+.windows-games__tiles{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:6px;padding:6px 2px;align-content:start;
+}
+.windows-games__game{
+  display:flex;align-items:center;gap:10px;min-width:0;
+  text-align:left;padding:6px;border:1px solid transparent;
+  background:none;color:#2b5f88;font:inherit;
+}
+.windows-games__game img{flex:none;object-fit:contain;width:40px;height:40px}
+.windows-games__game span{display:flex;min-width:0;flex-direction:column;gap:3px}
+.windows-games__game strong{font-weight:500;overflow-wrap:anywhere}
+.windows-games__game small{font-size:11px;color:#6d7680;overflow-wrap:anywhere}
+.windows-games__game:disabled{cursor:default;opacity:.65}
+.windows-games__game:not(:disabled):hover{border-color:#9dcbe9;background:#e7f4ff}
+@media(max-width:480px){
+  .windows-games__tiles{grid-template-columns:minmax(0,1fr)}
+}
