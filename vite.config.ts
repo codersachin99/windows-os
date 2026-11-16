@@ -17,6 +17,7 @@ export default defineConfig({
       "@windows-os/ui/rename": app("./packages/ui/src/sourceListItemRename.tsx"),
       "@windows-os/ui/listitem": app("./packages/ui/src/sourceListViewItem.tsx"),
       "@windows-os/ui/listview": app("./packages/ui/src/sourceListView.tsx"),
+      "@windows-os/ui/navigation": app("./packages/ui/src/SourceWin7HistoryNav.tsx"),
       "@windows-os/ui": app("./packages/ui/src/index.ts"),
       "@windows-os/sdk": app("./packages/sdk/src/index.ts"),
       "@windows-os/filesystem": app("./packages/filesystem/src/index.ts"),
