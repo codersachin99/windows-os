@@ -43,3 +43,58 @@ test("original Control Panel taskbar program opens its own settings window",asyn
     .getByRole("tab")).toHaveText(["Taskbar","Start Menu","Toolbars"]);
   await expect(win).toBeVisible();
 });
+
+test("source Control Panel Change desktop background opens actual Background view",async({page})=>{
+  const cpanel=await openControlPanel(page);
+  const input=cpanel.getByRole("searchbox",{name:"Search Control Panel"});
+  await input.fill("change desktop background");
+  const result=cpanel.locator('[data-test-cpanel-result="personalize"]');
+  const task=result.getByRole("button",{name:"Change desktop background"});
+  await expect(task).toBeEnabled();
+  await task.click();
+  const personalize=page.locator('[data-test-window="personalize"]');
+  await expect(personalize.locator('[data-personalize-view="background"]'))
+    .toBeVisible();
+  await expect(personalize.locator('[data-test-bg-list="system"] [data-test-bg-item]'))
+    .toHaveCount(7);
+  const background="/assets/images/win7-2.bf7d7452.webp";
+  await personalize.locator('[data-test-bg-item="'+background+'"]').click();
+  await expect(page.locator("[data-test-desktop-background]"))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/default.deccec52.webp");
+  await personalize.locator('[data-test-button="save"]').click();
+  await expect(page.locator("[data-test-desktop-background]"))
+    .toHaveAttribute("data-test-desktop-background",background);
+  await expect(personalize.locator('[data-personalize-view="theme"]'))
+    .toBeVisible();
+  // Search opens another shell program: CPanel navigation remains independent.
+  await expect(cpanel).toBeVisible();
+});
+
+test("source Control Panel does not claim unported appearance and taskbar actions",async({page})=>{
+  const cpanel=await openControlPanel(page);
+  const input=cpanel.getByRole("searchbox",{name:"Search Control Panel"});
+  for(const [search,category,button] of [
+    ["auto-hide the taskbar","taskbar","Auto-hide the taskbar"],
+    ["lock or unlock the taskbar","taskbar","Lock or unlock the taskbar"],
+    ["customize the Start menu","taskbar","Customize the Start menu"],
+    ["change window glass colors","personalize","Change window glass colors"],
+    ["change screen saver","personalize","Change screen saver"]
+  ] as const){
+    await input.fill(search);
+    const result=cpanel.locator('[data-test-cpanel-result="'+category+'"]');
+    await expect(result).toBeVisible();
+    await expect(result.getByRole("button",{name:button,exact:true}))
+      .toBeDisabled();
+    await expect(result.locator(".windows-cpanel__link")).toBeEnabled();
+  }
+  await input.fill("customize icons on the taskbar");
+  const taskbar=cpanel.locator('[data-test-cpanel-result="taskbar"]');
+  await expect(taskbar).toBeVisible();
+  const notification=taskbar.getByRole("button",{
+    name:"Customize icons on the taskbar"
+  });
+  await expect(notification).toBeEnabled();
+  await notification.click();
+  await expect(cpanel.locator("[data-test-cpanel-notification]")).toBeVisible();
+});
