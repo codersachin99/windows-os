@@ -1,5 +1,6 @@
 import {
-  parseSourceShortcut, sourceShortcutIconValue, readSourceShortcutText, sourceFileIconType,
+  parseSourceShortcut, parseSourcePathShortcut,
+  sourceShortcutIconValue, readSourceShortcutText, sourceFileIconType,
   sourceIsShortcutEntry, type FileEntry, type VirtualFileStore
 } from "@windows-os/filesystem";
 import {
@@ -14,6 +15,8 @@ export interface SourceDesktopFile {
   entry: FileEntry;
   /** Existing source .lnk exe ID only; never arbitrary file execution. */
   programId: string | null;
+  /** Source main.js SendToDesktop .lnk references a bounded Guest file path. */
+  targetPath: string | null;
   iconType: string;
   iconOverride: string | null;
   artwork: "original" | "fallback" | "custom";
@@ -36,11 +39,13 @@ export async function listSourceDesktopFiles(
     const isLink=sourceIsShortcutEntry(entry);
     const iconType=sourceFileIconType(entry);
     let programId:string|null=null;
+    let targetPath:string|null=null;
     let iconOverride:string|null=null;
     if(isLink){
       try{
         const text=await readSourceShortcutText(store,entry.uri);
-        programId=parseSourceShortcut(text)?.exe??null;
+        targetPath=parseSourcePathShortcut(text)?.path??null;
+        programId=targetPath?null:parseSourceShortcut(text)?.exe??null;
         iconOverride=sourceShortcutIconValue(text);
       }catch{
         // Corrupt host binary: show the source's generic file icon,
@@ -52,7 +57,7 @@ export async function listSourceDesktopFiles(
     const resolved=legacySourceIconArtwork(iconKey);
     const label=isLink&&/\.lnk$/i.test(entry.name)?entry.name.slice(0,-4):entry.name;
     return {
-      id:"file:"+entry.uri,label,icon:resolved.src,entry,programId,
+      id:"file:"+entry.uri,label,icon:resolved.src,entry,programId,targetPath,
       iconType,iconOverride,
       artwork:resolved.exactSourceArtwork?"original":
         legacySourceCustomIconURL(iconKey)?"custom":"fallback"
