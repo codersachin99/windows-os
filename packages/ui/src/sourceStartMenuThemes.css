@@ -263,3 +263,47 @@
 .windows-startmenu--win11 .windows-startmenu__win11-pages button:focus-visible{
   outline:2px solid #4c93d4;outline-offset:1px;border-radius:4px;
 }
+
+/* Pinned Win11 startmenu-win11 18ee footer: Computer, Games, Control
+ * Panel and Power Options; the last opens Log off / Shut down / Restart.
+ * Reuse the exact imported program art, not unrelated generated icons.
+ */
+.windows-startmenu--win11 .windows-startmenu__win11-actions{
+  display:flex;align-items:center;gap:4px;margin-left:auto;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-actions>button,
+.windows-startmenu--win11 .windows-startmenu__win11-power>button{
+  display:flex;align-items:center;justify-content:center;flex:none;
+  box-sizing:border-box;width:44px;height:44px;padding:7px;
+  border:1px solid transparent;border-radius:6px;background:transparent;
+  color:#273b57;cursor:pointer;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-actions button:hover,
+.windows-startmenu--win11 .windows-startmenu__win11-actions button:focus-visible{
+  background:#dce9f8;border-color:#b5d1e7;outline:none;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-actions img{
+  width:24px;height:24px;object-fit:contain;
+}
+.windows-startmenu--win11 .windows-startmenu__power-glyph{
+  font-family:Arial,sans-serif;font-size:26px;line-height:1;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-power{
+  position:relative;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-power-menu{
+  position:absolute;bottom:calc(100% + 5px);right:0;z-index:10;
+  width:160px;display:flex;flex-direction:column;
+  box-sizing:border-box;padding:5px;
+  border:1px solid #bdc9d7;border-radius:7px;
+  background:#f5f7fc;box-shadow:0 5px 15px #0004;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-power-menu button{
+  display:block;min-height:32px;padding:7px 10px;text-align:left;
+  border:1px solid transparent;border-radius:5px;background:transparent;
+  font:12px "Segoe UI",sans-serif;color:#253752;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-power-menu button:hover,
+.windows-startmenu--win11 .windows-startmenu__win11-power-menu button:focus-visible{
+  background:#dbeaf9;border-color:#9ec5e7;
+}

@@ -54,6 +54,8 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
+  const win11PowerRef=useRef<HTMLDivElement>(null);
+  const [win11PowerOpen,setWin11PowerOpen]=useState(false);
   const [programContext,setProgramContext]=useState<StartProgramContext|null>(null);
   const [contextPosition,setContextPosition]=useState({x:0,y:0});
   const [contextError,setContextError]=useState("");
@@ -121,6 +123,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     if(!appRegistry.get(id))return;
     event.preventDefault();event.stopPropagation();
     setContextError("");
+    setWin11PowerOpen(false);
     setProgramContext({id,x:event.clientX,y:event.clientY});
   };
   const contextProgram=programContext?appRegistry.get(programContext.id):null;
@@ -145,6 +148,15 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     }
   };
   useEffect(()=>{
+    if(!win11PowerOpen)return;
+    const outside=(event:PointerEvent)=>{
+      if(!(event.target instanceof Node)||!win11PowerRef.current?.contains(event.target))
+        setWin11PowerOpen(false);
+    };
+    window.addEventListener("pointerdown",outside);
+    return ()=>window.removeEventListener("pointerdown",outside);
+  },[win11PowerOpen]);
+  useEffect(()=>{
     const outside=(event:PointerEvent)=>{
       if(!(event.target instanceof Node))return;
       if(menuRef.current?.contains(event.target))return;
@@ -168,6 +180,10 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         });
         return;
       }
+      if(win11PowerOpen){
+        setWin11PowerOpen(false);
+        return;
+      }
       // DesktopShell restores taskbar focus after the Start input has
       // actually unmounted, using a commit-time layout effect.
       onEscapeClose();
@@ -178,7 +194,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[dispatch,programContext,onEscapeClose]);
+  },[dispatch,programContext,win11PowerOpen,onEscapeClose]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
@@ -312,6 +328,47 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         </label>}
       </div>
       <div className="windows-startmenu__right">
+        {theme==="win11"&&<div className="windows-startmenu__win11-actions"
+          data-test-win11-start-actions="">
+          <button type="button" aria-label="Open Computer"
+            title="Computer" data-test-win11-start-computer=""
+            onClick={()=>openApp("computer")}>
+            <img src={sourceShellAsset(theme,"computer")??legacyArt.computer}
+              alt="" width={24} height={24} />
+          </button>
+          <button type="button" aria-label="Open Games"
+            title="Games" data-test-startmenu-link="games"
+            onClick={()=>openApp("games")}>
+            <img src={sourceThemeProgramArt(theme,"games")??legacyArt.games}
+              alt="" width={24} height={24}/>
+          </button>
+          <button type="button" aria-label="Open Control Panel"
+            title="Control Panel" data-test-win11-start-cpanel=""
+            onClick={()=>openApp("cpanel")}>
+            <img src={sourceThemeProgramArt(theme,"cpanel")??legacyArt.cpanel}
+              alt="" width={24} height={24}/>
+          </button>
+          <div className="windows-startmenu__win11-power" ref={win11PowerRef}>
+            <button type="button" aria-label="Power Options"
+              title="Power Options" aria-expanded={win11PowerOpen}
+              aria-controls="win11-start-power-menu"
+              data-test-win11-start-power-toggle=""
+              onClick={()=>setWin11PowerOpen(v=>!v)}>
+              <span aria-hidden="true" className="windows-startmenu__power-glyph">⏻</span>
+            </button>
+            {win11PowerOpen&&<div id="win11-start-power-menu" role="menu"
+              className="windows-startmenu__win11-power-menu"
+              data-test-win11-start-power-menu=""
+              aria-label="Power Options">
+              <button type="button" role="menuitem" onClick={()=>dispatch({type:"LOG_OFF"})}
+                data-test-win11-start-power="logoff">Log off</button>
+              <button type="button" role="menuitem" onClick={()=>dispatch({type:"SHUTDOWN"})}
+                data-test-win11-start-power="shutdown">Shut down</button>
+              <button type="button" role="menuitem" onClick={()=>dispatch({type:"RESTART"})}
+                data-test-win11-start-power="restart">Restart</button>
+            </div>}
+          </div>
+        </div>}
         {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
           alt="Guest" className="windows-startmenu__avatar" />}
         {theme!=="winxp"&&<strong>Guest</strong>}
@@ -329,7 +386,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         <hr />
         {theme!=="winxp"&&<button onClick={() => dispatch({ type: "LOG_OFF" })}>
           Log off</button>}
-        {theme!=="winxp"&&<button className="windows-startmenu__power"
+        {theme==="win7"&&<button className="windows-startmenu__power"
           onClick={() => dispatch({ type: "SHUTDOWN" })}>Shut down</button>}
       </div>
       {theme==="winxp"&&<footer className="windows-startmenu__xp-footer"
