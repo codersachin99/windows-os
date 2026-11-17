@@ -11,10 +11,18 @@ test("source Win11 page indicators show twelve program tiles and restore page on
   const pages=menu.locator("[data-test-win11-start-pages]");
   await expect(pages).toBeVisible();
   await expect(menu.locator("[data-test-program]")).toHaveCount(12);
+  const firstPage=await menu.locator("[data-test-program]").evaluateAll(
+    nodes=>nodes.map(node=>node.getAttribute("data-test-program"))
+  );
   await expect(pages.locator('[data-test-win11-start-page="1"]'))
     .toHaveAttribute("aria-current","page");
   await pages.locator('[data-test-win11-start-page="2"]').click();
-  await expect(menu.locator("[data-test-program]")).not.toHaveCount(12);
+  const secondPage=await menu.locator("[data-test-program]").evaluateAll(
+    nodes=>nodes.map(node=>node.getAttribute("data-test-program"))
+  );
+  expect(secondPage.length).toBeGreaterThan(0);
+  expect(secondPage.length).toBeLessThanOrEqual(12);
+  expect(secondPage).not.toEqual(firstPage);
   await expect(pages.locator('[data-test-win11-start-page="2"]'))
     .toHaveAttribute("aria-current","page");
   await menu.locator("[data-test-all-programs]").click();
