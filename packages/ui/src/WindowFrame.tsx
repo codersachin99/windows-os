@@ -1,8 +1,10 @@
 import { useRef, type CSSProperties, type Dispatch, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
-import type { DesktopAction, DesktopWindow } from "@windows-os/contracts";
+import type { DesktopAction, DesktopWindow, ThemeId } from "@windows-os/contracts";
+import { SourceWindowControlGlyph } from "./SourceWindowControlGlyph";
 
 interface WindowFrameProps {
   window: DesktopWindow;
+  theme: ThemeId;
   dispatch: Dispatch<DesktopAction>;
   children: ReactNode;
   onRequestClose?: () => void;
@@ -10,7 +12,7 @@ interface WindowFrameProps {
   active?: boolean;
 }
 
-export function WindowFrame({ window: win, dispatch, children, onRequestClose,active=false }: WindowFrameProps) {
+export function WindowFrame({ window: win, theme, dispatch, children, onRequestClose,active=false }: WindowFrameProps) {
   const drag = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const style: CSSProperties = win.maximized
     ? { inset: "0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
@@ -53,10 +55,23 @@ export function WindowFrame({ window: win, dispatch, children, onRequestClose,ac
         <span className="windows-window__title">{win.title}</span>
         <div className="windows-window__buttons">
           {(win.resizable !== false || win.minimizable === true) &&
-            <button aria-label={`Minimize ${win.title}`} onClick={() => dispatch({ type: "MINIMIZE_WINDOW", id: win.id })}>─</button>}
+            <button aria-label={`Minimize ${win.title}`} data-source-window-control="minimize"
+              onClick={() => dispatch({ type: "MINIMIZE_WINDOW", id: win.id })}>
+              <SourceWindowControlGlyph theme={theme} kind="minimize"/>
+            </button>}
           {win.resizable !== false &&
-            <button aria-label={`Maximize ${win.title}`} onClick={() => dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id })}>□</button>}
-          <button className="windows-window__close" aria-label={`Close ${win.title}`} onClick={() => onRequestClose ? onRequestClose() : dispatch({ type: "CLOSE_WINDOW", id: win.id })}>×</button>
+            <button aria-label={`Maximize ${win.title}`}
+              title={win.maximized?"Restore":"Maximize"}
+              data-source-window-control={win.maximized?"restore":"maximize"}
+              onClick={() => dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id })}>
+              <SourceWindowControlGlyph theme={theme}
+                kind={win.maximized?"restore":"maximize"}/>
+            </button>}
+          <button className="windows-window__close" aria-label={`Close ${win.title}`}
+            data-source-window-control="close"
+            onClick={() => onRequestClose ? onRequestClose() : dispatch({ type: "CLOSE_WINDOW", id: win.id })}>
+            <SourceWindowControlGlyph theme={theme} kind="close"/>
+          </button>
         </div>
       </div>
       <div className="windows-window__body">{children}</div>
