@@ -32,6 +32,8 @@ import {
 } from "./sourceComputerExtras";
 import {sourceComputerIconArtwork,sourceShortcutCustomIconURL} from "./sourceComputerIcons";
 import {sourceBinItemMenu,type SourceBinItemAction} from "./sourceBinItemMenu";
+import {sourceExplorerItemMenu,sourceExplorerDownloadableItems,
+  SOURCE_EXPLORER_SEND_TO,type SourceExplorerItemAction} from "./sourceExplorerItemMenu";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -109,7 +111,8 @@ export function ExplorerApp({
   const [confirm, setConfirm] = useState<"recycle" | "permanent" | "empty" | null>(null);
   const [context, setContext] = useState<{
     kind:"item"|"background"; x:number;y:number;
-    anchorX:number;anchorY:number;viewOpen:boolean;newOpen:boolean;uri?:string
+    anchorX:number;anchorY:number;viewOpen:boolean;newOpen:boolean;
+    sendToOpen:boolean;uri?:string
   }|null>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
@@ -519,7 +522,7 @@ export function ExplorerApp({
     if (kind === "item" && uri && !state.selected.includes(uri)) session.select(uri);
     if (kind === "background") session.clearSelection();
     setContext({
-      kind,uri,viewOpen:false,newOpen:false,
+      kind,uri,viewOpen:false,newOpen:false,sendToOpen:false,
       anchorX:event.clientX,anchorY:event.clientY,
       x:event.clientX,y:event.clientY
     });
@@ -882,12 +885,13 @@ export function ExplorerApp({
         if(sourceMenuArrowFocus(contextRef.current,event.target,event.key)){
           event.preventDefault();return;
         }
-        if(event.key==="ArrowLeft"&&(context.viewOpen||context.newOpen)){
+        if(event.key==="ArrowLeft"&&(context.viewOpen||context.newOpen||context.sendToOpen)){
           event.preventDefault();
-          const parent=context.viewOpen
-            ?"[data-test-explorer-context-view]":"[data-test-explorer-context-new]";
+          const parent=context.viewOpen?"[data-test-explorer-context-view]":
+            context.newOpen?"[data-test-explorer-context-new]":
+              "[data-test-explorer-item-send-to]";
           setContext(current=>current?{
-            ...current,viewOpen:false,newOpen:false
+            ...current,viewOpen:false,newOpen:false,sendToOpen:false
           }:current);
           window.requestAnimationFrame(()=>contextRef.current
             ?.querySelector<HTMLButtonElement>(parent)?.focus({preventScroll:true}));
