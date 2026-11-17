@@ -1,3 +1,47 @@
+## Source Explorer Send to nested side popup — 17 November 2026
+
+Continued top-priority shell/Computer context fidelity from pinned
+`legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+Previously, the Send to child **incorrectly extended the main item
+context menu vertically**; original BaseMenu children open beside their
+parent command, flipping on tight screen edges.
+
+- `061173e` adds pure `sourceExplorerSubmenuPlacement` with parent
+  and trigger rect inputs, horizontal right/left flip and top/bottom
+  viewport clamping. The child is positioned in the menu's local
+  coordinates to tolerate transformed native window shells.
+- `f086299` tests desktop normal/right-edge placement, lower-screen
+  clipping, narrow phone placement and oversized menu bounds.
+- `04b7382` renders the existing source **Send to** actions in their
+  own popup, keeps the original main-menu order/height, isolates
+  child Up/Down keyboard focus, Right Arrow expand/focus and Left
+  Arrow close/restore, Escape via the shared handler; hover across
+  other parent commands closes the child.
+- `38cd757` applies popup-specific source-theme-compatible CSS and
+  overflow only for normal Explorer **item** context menus. Bin and
+  Computer background context retain existing independent handling.
+- `9e6ac91` browser tests real parent geometry, child bounds on
+  desktop/mobile viewport and keyboard focus behavior.
+  `20ee166` updates
+  `migration/EXPLORER-ITEM-MENU-SOURCE.md` with known residual
+  visual/interaction scope.
+
+**Verification:** Earlier path-shortcut
+[CI #44128632442](https://github.com/codersachin99/windows-os/actions/runs/44128632442)
+on `9e0f541` passed TypeScript, units, source/artwork checks, Vite and
+**focused browser suite**. Its **full Chromium run was in progress**
+when last checked; its success must not be invented. The new
+popup/geometry commits are **not included** in that run and require a
+fresh exact-head `[run-ci]` gate. Do not merge or release PR #1.
+Original-source paired pixel comparisons remain unavailable; background
+View/New still use inline children.
+
+**Next:** verify new focused Playwright geometry and earlier full
+suite. Fix any regressions, then continue Win7/XP/11 shell/context
+visual fidelity and Computer/Bin source features, not game migration.
+
+---
+
 ## Corrected Send to Desktop acceptance rerun — 17 November 2026
 
 Initial exact-head [CI #44128175487](https://github.com/codersachin99/windows-os/actions/runs/44128175487)
