@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type Dispatch } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type Dispatch, type MouseEvent as ReactMouseEvent } from "react";
+import {createPortal} from "react-dom";
 import type { DesktopAction, ThemeId } from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
@@ -6,11 +7,19 @@ import {
   parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
   sourceProgramsById, type FileEntry
 } from "@windows-os/filesystem";
-import { appRegistry, fileStore } from "@windows-os/sdk";
+import {appRegistry,fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
+import {createSourceDesktopShortcut} from "./desktopCreate";
+import {sourceDesktopItemMenu,type SourceDesktopItemMenuAction} from "./sourceDesktopItemMenu";
+import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
+import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
+import {taskbarPins} from "./sourceTaskbarPins";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
   theme?:ThemeId;
+}
+interface StartProgramContext{
+  id:string;x:number;y:number;
 }
 interface InstalledShortcut {
   path: string;
@@ -42,6 +51,12 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
   const menuRef=useRef<HTMLElement>(null);
+  const contextRef=useRef<HTMLDivElement>(null);
+  const [programContext,setProgramContext]=useState<StartProgramContext|null>(null);
+  const [contextPosition,setContextPosition]=useState({x:0,y:0});
+  const [contextError,setContextError]=useState("");
+  const [pins,setPins]=useState(()=>taskbarPins.snapshot());
+  useEffect(()=>taskbarPins.subscribe(setPins),[]);
   const [query, setQuery] = useState("");
   const [allPrograms, setAllPrograms] = useState(false);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -75,10 +90,50 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
     return () => { active = false; unsubscribe(); };
   }, [allPrograms, activeFolder]);
 
+  useLayoutEffect(()=>{
+    if(!programContext||!contextRef.current)return;
+    const element=contextRef.current;
+    const align=()=>setContextPosition(sourceDesktopMenuPosition(
+      {x:programContext.x,y:programContext.y},
+      {width:element.offsetWidth,height:element.offsetHeight},
+      {width:window.innerWidth,height:window.innerHeight}));
+    align();
+    window.addEventListener("resize",align);
+    return ()=>window.removeEventListener("resize",align);
+  },[programContext]);
+  const openProgramContext=(event:ReactMouseEvent<HTMLButtonElement>,id:string)=>{
+    if(!appRegistry.get(id))return;
+    event.preventDefault();event.stopPropagation();
+    setContextError("");
+    setProgramContext({id,x:event.clientX,y:event.clientY});
+  };
+  const contextProgram=programContext?appRegistry.get(programContext.id):null;
+  const programActions=contextProgram?sourceDesktopItemMenu({
+    id:contextProgram.id,isFile:false,multiple:false,
+    canPin:true,pinned:pins.includes(contextProgram.id),
+    programInstalled:Boolean(sourceProgramsById.get(contextProgram.id)?.installPath)
+  }):[];
+  const actOnProgram=(action:SourceDesktopItemMenuAction)=>{
+    const app=contextProgram;
+    if(!app){setProgramContext(null);return;}
+    setProgramContext(null);
+    if(action==="open"){dispatch({type:"OPEN_APP",app});return;}
+    if(action==="pin"){taskbarPins.toggle(app.id);return;}
+    if(action==="send-desktop"){
+      const desktop=sourceFilesystemRuntime.snapshot()?.desktopPath;
+      if(!desktop){setContextError("Guest Desktop is not mounted.");return;}
+      void createSourceDesktopShortcut(fileStore,desktop,app.id,app.label)
+        .then(()=>setContextError(""))
+        .catch(error=>setContextError(error instanceof Error
+          ?error.message:"Could not create original Desktop shortcut"));
+    }
+  };
   useEffect(()=>{
     const outside=(event:PointerEvent)=>{
       if(!(event.target instanceof Node))return;
       if(menuRef.current?.contains(event.target))return;
+      if(event.target instanceof Element
+        &&event.target.closest("[data-test-start-program-context]"))return;
       const start=document.querySelector('[data-test-start-button]');
       if(start?.contains(event.target))return;
       dispatch({type:"CLOSE_START"});
@@ -86,6 +141,17 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
     const escape=(event:KeyboardEvent)=>{
       if(event.key!=="Escape")return;
       event.preventDefault();
+      if(programContext){
+        const id=programContext.id;
+        setProgramContext(null);
+        window.requestAnimationFrame(()=>{
+          const escaped=typeof CSS!=="undefined"&&CSS.escape?CSS.escape(id):id;
+          menuRef.current?.querySelector<HTMLButtonElement>(
+            '[data-test-program="'+escaped+'"],[data-test-source-program="'+escaped+'"]'
+          )?.focus({preventScroll:true});
+        });
+        return;
+      }
       dispatch({type:"CLOSE_START"});
       // The focused Search input is removed during the React commit.
       // Restore focus *after* that commit, otherwise browser focus falls
@@ -101,12 +167,12 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[dispatch]);
+  },[dispatch,programContext]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
   };
-  return (
+  return (<>
     <nav className={"windows-startmenu" +
       (theme==="winxp"?" windows-startmenu--winxp":
       theme==="win11"?" windows-startmenu--win11":"") +
@@ -145,7 +211,8 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
                 className="windows-startmenu__program"
                 disabled={!app}
                 title={app ? shortcut.name : shortcut.name + " — migration pending"}
-                onClick={() => openApp(shortcut.programId)}>
+                onClick={() => openApp(shortcut.programId)}
+                onContextMenu={event=>openProgramContext(event,shortcut.programId)}>
                 <img src={sourceThemeProgramArt(theme,shortcut.iconKey)??shortcut.icon}
                   width={30} height={30} alt="" />
                 <span>{shortcut.name}</span>
@@ -157,7 +224,9 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
           </> : <>
             {programs.map(app => (
               <button key={app.id} data-test-program={app.id}
-                className="windows-startmenu__program" onClick={() => dispatch({ type: "OPEN_APP", app })}>
+                className="windows-startmenu__program"
+                onClick={() => dispatch({ type: "OPEN_APP", app })}
+                onContextMenu={event=>openProgramContext(event,app.id)}>
                 <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
                   width={30} height={30} alt="" />
                 <span>{app.label}</span>
@@ -166,6 +235,8 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
             {!programs.length && <p className="windows-startmenu__empty">No items match your search.</p>}
           </>}
         </div>
+        {contextError&&<p role="alert" data-test-start-context-error=""
+          className="windows-startmenu__empty">{contextError}</p>}
         {!query && <button type="button" className="windows-startmenu__all-programs"
           data-test-all-programs=""
           onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null); }}>
@@ -212,5 +283,21 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
           <img src={legacyXpPowerArtwork.shutdown} width={20} height={20} alt="" />Turn off computer</button>
       </footer>}
     </nav>
-  );
+    {programContext&&contextProgram&&createPortal(
+      <div ref={contextRef} role="menu" aria-label={"Program actions for "+contextProgram.label}
+        data-test-start-program-context={contextProgram.id}
+        data-source-start-context-theme={theme}
+        className="windows-startmenu__context"
+        style={{left:contextPosition.x,top:contextPosition.y}}
+        onKeyDown={event=>{
+          if(sourceMenuArrowFocus(contextRef.current,event.target,event.key))
+            event.preventDefault();
+        }}>
+        {programActions.map(action=><button type="button" key={action.id}
+          role="menuitem" disabled={action.disabled}
+          data-test-start-context-action={action.id}
+          title={action.disabled?"Original action not yet migrated":undefined}
+          onClick={()=>actOnProgram(action.id)}>{action.label}</button>)}
+      </div>,document.body)}
+  </>);
 }
