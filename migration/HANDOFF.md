@@ -1,3 +1,49 @@
+## Control Panel original program targets and taskbar background CI repair — 17 November 2026
+
+The requested shell/theme/Start/Computer focus continues on draft PR #1,
+`feat/0001-faithful-react-foundation`; **do not merge or release** while
+original-source paired pixel parity is unavailable. This is a source-backed
+integration, not a claim of complete Control Panel, theme or taskbar parity.
+
+- [CI #44089852404](https://github.com/codersachin99/windows-os/actions/runs/44089852404)
+  at `b29cc69` passed TypeScript, unit tests, source and artwork audits and Vite,
+  but the focused shell browser gate failed **4/58** cases: the new Win7
+  Taskbar Properties helper right-clicked the Start orb rather than empty
+  taskbar background. No application behavior was disabled to work around it.
+- `9c8f521` switched to the Win7 empty running lane. Its opt-in
+  [CI #44090817828](https://github.com/codersachin99/windows-os/actions/runs/44090817828)
+  passed TypeScript, unit tests, audits and Vite; **56/58** focused browser
+  checks passed. The remaining Win11 desktop/mobile cases timed out because
+  the unoccupied Win11 centered taskbar has a *zero-width* running lane.
+  `51dd485` now uses the actual Win11 empty left edge and the original
+  Win7 empty running lane in the shared browser helper.
+- Pinned original `src/modules/system/cpanel.js` registry `3097` has
+  distinct `target:"program"` entries for Personalize and Taskbar/Start.
+  `d796fce` classifies **only** their now-migrated app adapters; it does
+  not misclassify them as in-panel `SourceControlPanelLocation` history pages.
+  `e86a1ef` exposes these two entries and search tasks only when a real
+  program-launch callback exists; `4ce36a2` connects that callback to the
+  shared `OPEN_APP` shell dispatcher, preserving independent CPanel and
+  program windows. All other unported program/host targets stay disabled.
+- `eaf2eac` adds exact original-registry target and negative unit checks.
+  `25ecf92` adds real Guest desktop/mobile browser cases for Control Panel
+  Change the theme → Personalize, theme selection, and Taskbar and Start Menu
+  → its actual three-tab window. `54bc3a2` updates the stale root/search
+  assertions, while `de452d9` uses the normal Guest session for changing a
+  saved theme. No screenshot equivalence is inferred from these tests.
+- [CI #44091717660](https://github.com/codersachin99/windows-os/actions/runs/44091717660)
+  was triggered on `25ecf92` before the Win11 browser helper and old CPanel
+  assertion updates; it must not be counted as acceptance for later changes.
+  This handoff requests a fresh **exact-head** `[run-ci]` gate for the
+  integrated modifications. Record the resulting focused and complete browser
+  counts before marking these slices verified.
+
+**Still pending:** full Personalization/background/appearance pages, original
+window/taskbar skins and resize semantics, remaining Explorer file-properties
+and source-paired screenshots. Main is unchanged; PR #1 remains draft.
+
+---
+
 ## Source taskbar Properties, Start privacy and Win11 obsolete test fix — 17 November 2026
 
 After Personalization first-slice source gallery (the focused browser
