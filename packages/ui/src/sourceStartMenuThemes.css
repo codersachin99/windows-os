@@ -173,3 +173,56 @@
 .windows-startmenu__context[data-source-start-context-theme="win11"] button:not(:disabled):hover{
   background:#e5f3ff;border-radius:4px;
 }
+
+/* Pinned XP source startmenu-winxp: seven recentApps entries at left.
+ * Win11 startmenu-win11 shows at most six recently-opened entries.
+ * The program grid remains until the initial pinned catalog is migrated.
+ */
+.windows-startmenu__recent{
+  display:flex;flex-direction:column;min-height:0;
+  box-sizing:border-box;color:#24354a;
+}
+.windows-startmenu__recent-grid{display:grid;grid-template-columns:1fr;gap:2px}
+.windows-startmenu__recent-grid button{
+  display:flex;align-items:center;gap:8px;min-height:32px;
+  padding:4px 6px;text-align:left;font:12px "Segoe UI",Tahoma,sans-serif;
+  border:1px solid transparent;background:transparent;color:inherit;
+}
+.windows-startmenu__recent-grid button:hover,
+.windows-startmenu__recent-grid button:focus-visible{
+  background:#cce5f8;border-color:#81b9e3;
+}
+.windows-startmenu__recent-grid img{object-fit:contain;flex:none}
+.windows-startmenu--winxp .windows-startmenu__recent{
+  flex:none;max-height:min(245px,40vh);overflow-y:auto;
+  padding:6px 3px;background:white;border-bottom:1px solid #adc5dc;
+}
+.windows-startmenu--winxp .windows-startmenu__recent-grid button{
+  font-family:Tahoma,sans-serif;font-size:12px;min-height:28px;
+}
+.windows-startmenu--win11 .windows-startmenu__recent{
+  order:3;flex:none;max-height:min(180px,34vh);overflow:auto;
+  padding:8px 26px 14px;
+}
+.windows-startmenu--win11 .windows-startmenu__recent>strong{
+  font-size:13px;line-height:24px;margin:0 0 5px;
+}
+.windows-startmenu--win11 .windows-startmenu__recent-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:1px 9px;
+}
+.windows-startmenu--win11 .windows-startmenu__recent-grid button{
+  border-radius:5px;min-width:0;min-height:34px;gap:9px;
+}
+.windows-startmenu--win11 .windows-startmenu__recent-grid img{
+  width:24px;height:24px;
+}
+.windows-startmenu--win11 .windows-startmenu__right{order:4}
+@media(max-width:520px){
+  .windows-startmenu--win11 .windows-startmenu__recent{padding:5px 14px 10px}
+  .windows-startmenu--win11 .windows-startmenu__recent-grid{
+    gap:0 5px;
+  }
+  .windows-startmenu--win11 .windows-startmenu__recent-grid button{
+    min-height:30px;font-size:11px;
+  }
+}

@@ -1,12 +1,19 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { desktopReducer, initialDesktopState } from "@windows-os/engine";
 import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
-import { sourceFilesystemRuntime } from "@windows-os/sdk";
+import {sourceFilesystemRuntime,sourceRecentPrograms} from "@windows-os/sdk";
+import type {DesktopAction} from "@windows-os/contracts";
 import {sourceDefaultTrayPreferences} from "@windows-os/apps/cpanel";
 import {useState} from "react";
 
 export default function App() {
-  const [state, dispatch] = useReducer(desktopReducer, undefined, initialDesktopState);
+  const [state,reduce] = useReducer(desktopReducer, undefined, initialDesktopState);
+  // Source ProgramEvent records launches from any shell surface (Start,
+  // Desktop, Explorer, Run and taskbar), not only from Start menu clicks.
+  const dispatch=useCallback((action:DesktopAction)=>{
+    if(action.type==="OPEN_APP")sourceRecentPrograms.record(action.app.id);
+    reduce(action);
+  },[]);
   const [trayPreferences,setTrayPreferences]=useState(sourceDefaultTrayPreferences);
   const guestLoginPending = useRef(false);
   const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);

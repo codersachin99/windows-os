@@ -182,6 +182,7 @@ export class AppRegistry {
 export const appRegistry = new AppRegistry(builtinApps);
 
 export { browserStorage, fileStore, fileClipboard, fileDragSession } from "./files";
+export {sourceRecentPrograms,SourceRecentPrograms,SOURCE_RECENT_PROGRAMS_KEY} from "./recentPrograms";
 
 export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";
 

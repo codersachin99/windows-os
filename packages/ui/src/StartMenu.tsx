@@ -7,7 +7,7 @@ import {
   parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
   sourceProgramsById, type FileEntry
 } from "@windows-os/filesystem";
-import {appRegistry,fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
+import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms} from "@windows-os/sdk";
 import {createSourceDesktopShortcut} from "./desktopCreate";
 import {sourceDesktopItemMenu,type SourceDesktopItemMenuAction} from "./sourceDesktopItemMenu";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
@@ -57,7 +57,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const [contextPosition,setContextPosition]=useState({x:0,y:0});
   const [contextError,setContextError]=useState("");
   const [pins,setPins]=useState(()=>taskbarPins.snapshot());
+  const [recentIds,setRecentIds]=useState(()=>sourceRecentPrograms.snapshot());
   useEffect(()=>taskbarPins.subscribe(setPins),[]);
+  useEffect(()=>sourceRecentPrograms.subscribe(setRecentIds),[]);
   const [query, setQuery] = useState("");
   const [allPrograms, setAllPrograms] = useState(false);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -67,6 +69,10 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const programs = appRegistry.startMenu().filter(app =>
     app.label.toLowerCase().includes(query.toLowerCase())
   );
+  const recentApps=recentIds.flatMap(id=>{
+    const app=appRegistry.get(id);
+    return app?[app]:[];
+  }).slice(0,theme==="winxp"?7:6);
   useEffect(() => {
     if (!allPrograms) return;
     let active = true;
@@ -168,6 +174,23 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
   };
+  const recentSection=(theme==="winxp"||theme==="win11")&&
+    !allPrograms&&!query&&recentApps.length>0&&
+    <section className="windows-startmenu__recent"
+      aria-label="Recently opened programs" data-test-list-recent="">
+      {theme==="win11"&&<strong>Recently opened</strong>}
+      <div className="windows-startmenu__recent-grid">
+        {recentApps.map(app=><button key={app.id} type="button"
+          data-test-recent-program={app.id}
+          aria-label={"Recently opened "+app.label}
+          onClick={()=>openApp(app.id)}
+          onContextMenu={event=>openProgramContext(event,app.id)}>
+          <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
+            width={28} height={28} alt=""/>
+          <span>{app.label}</span>
+        </button>)}
+      </div>
+    </section>;
   return (<>
     <nav className={"windows-startmenu" +
       (theme==="winxp"?" windows-startmenu--winxp":
@@ -181,6 +204,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         <strong>Guest</strong>
       </header>}
       <div className="windows-startmenu__left">
+        {theme==="winxp"&&recentSection}
         <div className="windows-startmenu__programs">
           {allPrograms && !query ? <>
             <button type="button" className="windows-startmenu__program"
@@ -231,6 +255,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
             {!programs.length && <p className="windows-startmenu__empty">No items match your search.</p>}
           </>}
         </div>
+        {theme==="win11"&&recentSection}
         {contextError&&<p role="alert" data-test-start-context-error=""
           className="windows-startmenu__empty">{contextError}</p>}
         {!query && <button type="button" className="windows-startmenu__all-programs"
