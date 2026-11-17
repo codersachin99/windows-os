@@ -1,3 +1,47 @@
+## First source Personalization/ChangeTheme shell slice — 17 November 2026
+
+This checkpoint extends the priority Desktop, Start, context-menu and XP/Win7/Win11 theme migration. The preceding
+[Bin + Win11 All Apps gate #44085385577](https://github.com/codersachin99/windows-os/actions/runs/44085385577)
+had passed TypeScript, all unit/source/asset checks, Vite, and focused browser tests; the full Chromium run
+was still executing when this section was written. Its SHA `dfea989` predates Personalization.
+
+Pinned source `src/modules/system/main.js` DesktopMenu `showPersonal()` opens
+app `personalize`, and `src/modules/system/personalize.js` ChangeTheme
+groups `aero` / `basic` / `wins` then `select()` immediately saves
+Theme and a theme-specific background. The original has many more
+functions and categories, **not** migrated in this first slice.
+
+- `8949564`: imported exact original source Win7 `personal.ccbfdd3a.webp`
+  and Win11 `personal-win11.76af8a1e.webp`, verified Git blobs.
+  XP `personal-winxp`, XP/Win11 wallpaper previews and default Win7 art
+  were previously imported.
+- `67afe5d`: modular `packages/apps/personalize` first ChangeTheme
+  gallery. Grouped Aero (Win7) / Other Windows (XP, 11) using original
+  imported theme preview art and real source-recognized theme IDs.
+  Unit tests cover catalog categories and exact image paths. Custom
+  themes, background gallery, appearances, cursors, sound, screen saver,
+  theme studio, ad/premium gates and other source skins are **pending**.
+- `4ceaec6`: registered Personalize as a real system app; centralized
+  `sourceShellWallpaper`; source theme selection changes desktop skin
+  and background together and persists the supported shell choice in
+  Guest browser storage. Explicit source testmode `?theme=...` still
+  takes priority.
+- `e681c33`: the source Desktop right-click Personalize action now
+  opens an actual React window. New shell app and Vite/TypeScript
+  aliases preserve modular app architecture.
+- `cf7b111`: added two more pinned Personalization icon checks
+  (64 total original artwork SHA checks, now Win7/XP/Win11), engine
+  persistence unit, Desktop and gallery switching/regression e2e and
+  targeted shell CI gate. This commit adds tests but is not a
+  verified acceptance result.
+
+This handoff commit explicitly opts in `[run-ci]` at the exact integrated
+SHA. Inspect all TypeScript/unit/build/focused/full Chromium results before
+calling this slice accepted. Remain on draft PR #1; main untouched.
+Do not merge or release without complete source-to-React visual/functional parity.
+
+---
+
 ## Verified shell baseline; source Bin item menu + Win11 All Apps — 17 November 2026
 
 The previous full migration gate at
