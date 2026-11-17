@@ -38,7 +38,8 @@ export function parseSourceShortcut(text: string): SourceShortcut | null {
     const parsed: unknown = JSON.parse(text);
     if (!parsed || typeof parsed !== "object") return null;
     const obj = parsed as Record<string, unknown>;
-    if (typeof obj.exe !== "string" || typeof obj.icon !== "string") return null;
+    if (typeof obj.exe !== "string" || typeof obj.icon !== "string"
+      || Object.prototype.hasOwnProperty.call(obj,"path")) return null;
     if (!sourceProgramsById.has(obj.exe)) return null;
     return { exe: obj.exe, icon: obj.icon };
   } catch { return null; }
