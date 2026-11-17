@@ -29,7 +29,7 @@ import {
   sourceComputerDetailsLabelWidth,sourceComputerItemExtras,
   SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH
 } from "./sourceComputerExtras";
-import {sourceComputerIconArtwork} from "./sourceComputerIcons";
+import {sourceComputerIconArtwork,sourceShortcutCustomIconURL} from "./sourceComputerIcons";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -780,8 +780,8 @@ export function ExplorerApp({
             data-source-icon-type={icon?.sourceType}
             data-source-icon-override={sourceIsShortcutEntry(item)
               ?shortcutIcons[item.uri]:undefined}
-            data-source-icon-artwork={icon?(icon.exactSourceArtwork?"original":
-              icon.src===legacyArt.file?"fallback":"custom"):undefined}
+            data-source-icon-artwork={icon.exactSourceArtwork?"original":
+              sourceShortcutCustomIconURL(shortcutIcons[item.uri]??"")?"custom":"fallback"}
             data-windows-os-drop-directory={!isBin && item.type === "directory" ? item.uri : undefined}
             aria-label={item.name}
             onClick={event => session.select(item.uri, event.ctrlKey || event.metaKey)}

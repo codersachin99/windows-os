@@ -73,7 +73,7 @@ describe("XP/Win11 themed source icon classification",()=>{
         "https://example.org/custom.png",theme))
         .toMatchObject({src:"https://example.org/custom.png",exactSourceArtwork:false});
       const unknown=sourceComputerIconArtwork({name:"Editor.lnk",type:"file"},"unknown",theme);
-      expect(unknown.src).toMatch(new RegExp("file-"+theme+"\\\\."));
+      expect(unknown.src).toContain("file-"+theme+".");
       expect(unknown.exactSourceArtwork).toBe(false);
     }
   });
