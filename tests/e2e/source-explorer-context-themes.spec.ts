@@ -42,7 +42,7 @@ const cases=[
 ] as const;
 for(const source of cases){
   test("original "+source.theme+" Explorer context menu and child use source skin",async({page})=>{
-    const {menu}=await openSourceComputerMenu(page,source.theme);
+    const {computer,menu}=await openSourceComputerMenu(page,source.theme);
     await expect(menu).toHaveCSS("background-color",source.surface);
     await expect(menu).toHaveCSS("border-top-color",source.border);
     await expect(menu).toHaveCSS("border-top-left-radius",source.radius);
@@ -74,5 +74,27 @@ for(const source of cases){
     expect(rootRect!.height).toBeLessThan(450);
     await page.keyboard.press("Escape");
     await expect(menu).toHaveCount(0);
+
+    // Source ExplorerItemMenu uses the SAME theme skin as background View.
+    await computer.locator(".explorer-navigation__home")
+      .filter({hasText:"Documents"}).click();
+    await computer.locator('input[type="file"][aria-label="Upload files"]')
+      .setInputFiles({name:"Theme Menu File.txt",mimeType:"text/plain",
+        buffer:Buffer.from("Guest theme source menu")});
+    const item=computer.locator('[data-test-explorer-item="Theme Menu File.txt"]');
+    await expect(item).toBeVisible();
+    await item.click({button:"right"});
+    const itemMenu=computer.locator('[data-test-explorer-context="item"]');
+    await expect(itemMenu).toHaveCSS("background-color",source.surface);
+    await expect(itemMenu).toHaveCSS("border-top-color",source.border);
+    await itemMenu.locator("[data-test-explorer-item-send-to]").click();
+    const itemChild=itemMenu.locator("[data-test-explorer-sendto-submenu]");
+    await expect(itemChild).toBeVisible();
+    await expect(itemChild).toHaveCSS("background-color",source.surface);
+    await expect(itemChild).toHaveCSS("border-top-left-radius",source.radius);
+    await expect(itemChild.locator('[data-test-explorer-item-send-to-kind="desktop"]'))
+      .toBeEnabled();
+    await page.keyboard.press("Escape");
+    await expect(itemMenu).toHaveCount(0);
   });
 }
