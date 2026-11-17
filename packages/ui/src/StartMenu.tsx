@@ -328,6 +328,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         </label>}
       </div>
       <div className="windows-startmenu__right">
+        {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
+          alt="Guest" className="windows-startmenu__avatar" />}
+        {theme!=="winxp"&&<strong>Guest</strong>}
         {theme==="win11"&&<div className="windows-startmenu__win11-actions"
           data-test-win11-start-actions="">
           <button type="button" aria-label="Open Computer"
@@ -369,9 +372,6 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
             </div>}
           </div>
         </div>}
-        {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
-          alt="Guest" className="windows-startmenu__avatar" />}
-        {theme!=="winxp"&&<strong>Guest</strong>}
         <hr />
         <button data-test-open-games="" onClick={() => {
           const games=appRegistry.get("games");
