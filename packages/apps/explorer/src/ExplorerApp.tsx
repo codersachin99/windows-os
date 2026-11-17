@@ -3,7 +3,9 @@ import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeSpecialFolde
 import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
-  parseSourceShortcut, sourcePrograms, sourceIsShortcutEntry, sourceShortcutIconValue,
+  parseSourceShortcut, parseSourcePathShortcut,
+  createSourcePathDesktopShortcuts, sourcePrograms, sourceIsShortcutEntry,
+  sourceShortcutIconValue,
   readSourceShortcutText,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
@@ -248,7 +250,16 @@ export function ExplorerApp({
       else setMessage("Windows Media Player is unavailable.");
     } else if (/\.lnk$/i.test(path)) {
       void execute(async () => {
-        const data = parseSourceShortcut(await fileStore.read(path));
+        const text=await readSourceShortcutText(fileStore,path);
+        const target=parseSourcePathShortcut(text);
+        if(target){
+          const entry=await fileStore.stat(target.path);
+          if(!entry||entry.originalPath)
+            throw new Error("Shortcut target no longer exists in the Guest filesystem.");
+          openEntry(entry.uri,entry.type);
+          return;
+        }
+        const data = parseSourceShortcut(text);
         if (!data) throw new Error("The original Windows shortcut data is invalid.");
         if (!onLaunchSourceProgram?.(data.exe)) {
           throw new Error("The original " + (sourcePrograms.find(p => p.id === data.exe)?.name ?? data.exe)
