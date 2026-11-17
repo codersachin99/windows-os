@@ -956,16 +956,42 @@ export function ExplorerApp({
               if(action.id!=="properties")handlers[action.id]();
             })}>{action.label}</button>)}
       </> : <>
-        <button role="menuitem" onClick={() => contextAction(() => {
-          const item = visible.find(entry => entry.uri === context.uri);
-          if (item) openEntry(item.uri, item.type);
-        })}>Open</button>
-        <button role="menuitem" onClick={() => contextAction(() => copySelection("cut"))}>Cut</button>
-        <button role="menuitem" onClick={() => contextAction(() => copySelection("copy"))}>Copy</button>
-        <button role="menuitem" onClick={() => contextAction(requestRename)}>Rename</button>
-        <button role="menuitem" disabled={!trashPath}
-          onClick={() => contextAction(requestDelete)}>Delete</button>
-        <button role="menuitem" disabled title="Source Properties dialog is not migrated">Properties</button>
+        {contextItemMenu.map(action=><button key={action.id}
+          role="menuitem" type="button"
+          aria-haspopup={action.id==="send-to"?"menu":undefined}
+          aria-expanded={action.id==="send-to"?context.sendToOpen:undefined}
+          data-test-explorer-item-action={action.id}
+          data-test-explorer-item-send-to={action.id==="send-to"?"":undefined}
+          disabled={action.disabled}
+          title={action.disabled?"Original action needs an unavailable source service":undefined}
+          onPointerEnter={()=>{
+            if(action.id==="send-to")setContext(current=>current?{
+              ...current,sendToOpen:true,viewOpen:false,newOpen:false
+            }:current);
+          }}
+          onKeyDown={event=>{
+            if(action.id==="send-to"&&event.key==="ArrowRight"){
+              event.preventDefault();
+              setContext(current=>current?{
+                ...current,sendToOpen:true,viewOpen:false,newOpen:false
+              }:current);
+            }
+          }}
+          onClick={()=>{
+            if(action.id==="send-to"){
+              setContext(current=>current?{
+                ...current,sendToOpen:!current.sendToOpen,
+                viewOpen:false,newOpen:false
+              }:current);
+            }else contextAction(()=>runSourceItemAction(action.id));
+          }}>{action.label}</button>)}
+        {context.sendToOpen&&SOURCE_EXPLORER_SEND_TO.map(action=>
+          <button key={action.id} type="button" role="menuitem"
+            data-test-explorer-item-send-to-kind={action.id}
+            disabled={action.disabled}
+            title="Original archive/shortcut action not yet migrated">
+            {action.label}
+          </button>)}
       </>)}
       {context.kind === "background" && <>
         <button role="menuitem" aria-expanded={context.viewOpen}
