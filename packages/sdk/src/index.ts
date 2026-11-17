@@ -190,6 +190,11 @@ export const appRegistry = new AppRegistry(builtinApps);
 
 export { browserStorage, fileStore, fileClipboard, fileDragSession } from "./files";
 export {sourceRecentPrograms,SourceRecentPrograms,SOURCE_RECENT_PROGRAMS_KEY} from "./recentPrograms";
+export {
+  sourceStartPreferences,SourceStartPreferenceStore,
+  SOURCE_START_PREFERENCES_KEY,SOURCE_DEFAULT_START_PREFERENCES,
+  type SourceStartPreferences,type SourceStartPowerAction
+} from "./sourceStartPreferences";
 
 export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";
 
