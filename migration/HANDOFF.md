@@ -1,3 +1,52 @@
+## Explorer file/folder item menu fidelity — 17 November 2026
+
+Both previous exact-head shell checkpoints **PASSED full GitHub CI**:
+
+- [Taskbar appearance #44116995900](https://github.com/codersachin99/windows-os/actions/runs/44116995900)
+  on `2321f94`: **598** unit / **70** focused shell / **596** complete
+  desktop/mobile Chromium tests; TypeScript/source audits/artwork/build passed.
+- [Control Panel background routing #44118718417](https://github.com/codersachin99/windows-os/actions/runs/44118718417)
+  on `f7f14d6`: **601** unit / **78** focused / **600** complete
+  desktop/mobile Chromium tests; TypeScript/source audits/artwork/build passed.
+- Original-paired pixel capture still **skipped**; green automation is not
+  an assertion of full source look/feel parity.
+
+The new high-priority **Computer item context** slice is sourced from
+pinned `legacy-win7/src/modules/system/main.js` `ExplorerItemMenu`
+`G.items()`. The original normal menu offers Open, archive-only Extract
+here, nested Send to (Compressed (zipped) folder, Desktop/create shortcut),
+Download for eligible files, Cut, Copy, Delete, Rename, and disabled
+Properties; Open/Rename are hidden for multiple selection. The Bin menu
+remains independently Restore/Delete/disabled Properties.
+
+- `a32551c` adds reusable source-ordered item-menu predicate model and
+  explicitly disabled unimplemented archive/shortcut submenu actions.
+  `b6e1b7e` extends Explorer item-context state with accessible nested
+  Send to open state and keyboard Left to close.
+- `1cbcd13` wires a safe Guest byte-backed Download using
+  `VirtualFileStore.readBytes`, Blob URLs, actual original file name
+  and cleanup; Open/Cut/Copy/Delete/Rename reuse the existing Explorer
+  session and real VFS, not fake standalone actions.
+- `cb7e33c` renders the item menu and two source child labels;
+  `2928301` fixes the hover-open/click interaction. `172b09a`
+  hardens the empty selection archive predicate.
+- `07139d0` unit-tests 7 source menu eligibility/order cases;
+  `7375c36` adds browser tests for source order, disabled Send to
+  children, TXT and real binary bytes, multi-selection and directory
+  rules. `d5e3d93` adds the spec to the deliberately opt-in CI focused
+  shell gate.
+- `migration/EXPLORER-ITEM-MENU-SOURCE.md` documents original
+  predicates, limited archive eligibility and remaining unimplemented
+  source path-backed shortcuts / archive services / side-flipped child
+  menu geometry.
+
+**Verification boundary:** This new code needs a fresh exact-head
+`[run-ci]` run. Do not count the earlier green CI for these later
+commits. Keep PR #1 draft, main untouched and no release until paired
+original screenshots and unported functionality are accepted.
+
+---
+
 ## Source Control Panel task deep links and disabled task fidelity — 17 November 2026
 
 Continued the user's themes/context/desktop/Start/Computer priority,
