@@ -17,7 +17,8 @@ export function sourceMenuArrowFocus(
     'button[role="menuitem"]:not(:disabled),'+
     'button[role="menuitemradio"]:not(:disabled),'+
     'button[role="menuitemcheckbox"]:not(:disabled)'
-  )).filter(button=>button.getClientRects().length>0);
+  )).filter(button=>button.getClientRects().length>0 &&
+    button.closest('[role="menu"]')===host);
   const active=target instanceof HTMLElement?target.closest("button"):null;
   const next=sourceMenuArrowIndex(options.indexOf(active as HTMLButtonElement),
     options.length,key);
