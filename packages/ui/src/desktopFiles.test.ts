@@ -37,6 +37,29 @@ describe("legacy main.js file-backed Guest desktop shortcuts",()=>{
     expect(byName.get("random")?.programId).toBeNull();
     expect(byName.get("unsafe")?.programId).toBeNull();
   });
+  it("differentiates original path-backed links from executable program shortcuts",async()=>{
+    const fs=new VirtualFileStore();await fs.mkdir("/Desktop");
+    const root="/EXTERNAL/computer/drive0/Users/Guest/Documents";
+    await fs.write(JSON.stringify({exe:"text",icon:"text",path:root+"/Memo.txt"}),
+      "/Desktop/Memo - Shortcut.lnk");
+    await fs.write(JSON.stringify({exe:"calc",icon:"calc",path:root+"/Other.txt"}),
+      "/Desktop/Other - Shortcut.lnk");
+    await fs.write(JSON.stringify({exe:"calc",icon:"calc",path:"/etc/passwd"}),
+      "/Desktop/Host.lnk");
+    const found=await listSourceDesktopFiles(fs,"/Desktop");
+    const byName=new Map(found.map(f=>[f.label,f]));
+    expect(byName.get("Memo - Shortcut")).toMatchObject({
+      programId:null,targetPath:root+"/Memo.txt",iconOverride:"text"
+    });
+    expect(byName.get("Other - Shortcut")).toMatchObject({
+      programId:null,targetPath:root+"/Other.txt",iconOverride:"calc"
+    });
+    expect(byName.get("Host")).toBeUndefined();
+    expect(byName.get("Host")??byName.get("Host.lnk")).toBeDefined();
+    expect(byName.get("Host")??byName.get("Host.lnk")).toMatchObject({
+      programId:null,targetPath:null
+    });
+  });
   it("reflects changed source VFS inventory only and rejects missing mounted paths",async()=>{
     const fs=new VirtualFileStore();await fs.mkdir("/Mounted");
     expect(await listSourceDesktopFiles(fs,"/Mounted")).toEqual([]);
