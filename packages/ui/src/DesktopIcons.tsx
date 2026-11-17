@@ -21,7 +21,8 @@ import {taskbarPins} from "./sourceTaskbarPins";
 import {
   sourceDesktopItemMenu,type SourceDesktopItemMenuAction
 } from "./sourceDesktopItemMenu";
-import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById } from "@windows-os/filesystem";
+import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
+  sourceFileIconType,type FileEntry } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
@@ -180,6 +181,15 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     };
   }, []);
 
+  const openGuestEntry=(entry:FileEntry)=>{
+    const programId=entry.type==="directory"?"computer":
+      /\.txt$/i.test(entry.name)?"notepad":
+      sourceFileIconType(entry)==="photo"?"photo":
+      sourceFileIconType(entry)==="media"?"player":null;
+    const app=programId?appRegistry.get(programId):undefined;
+    if(app)dispatch({type:"OPEN_APP",app,file:{path:entry.uri}});
+    else setError("No original application association has been migrated for "+entry.name);
+  };
   const openItem = (item: DesktopItem) => {
     if (item.app) {
       dispatch({ type: "OPEN_APP", app: item.app });
@@ -187,20 +197,25 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     }
     const file = item.file;
     if (!file) return;
-    const computer = appRegistry.get("computer");
-    if (file.entry.type === "directory" && computer) {
-      dispatch({ type: "OPEN_APP", app: computer, file: { path: file.entry.uri } });
-    } else if (file.programId) {
+    if(file.targetPath){
+      // Source main.js SendToDesktop: resolve the Guest target, not the exe
+      // hint in the JSON. Never open an unmounted, deleted or host path.
+      void fileStore.stat(file.targetPath).then(target=>{
+        if(!target||target.originalPath)
+          throw new Error("Shortcut target no longer exists in the Guest filesystem.");
+        openGuestEntry(target);
+      }).catch(cause=>setError(cause instanceof Error?cause.message:
+        "Cannot open Guest shortcut target"));
+      return;
+    }
+    if (file.programId) {
       const app = appRegistry.get(file.programId);
       if (app) dispatch({ type: "OPEN_APP", app });
       else setError("The original " + file.label + " program is not yet migrated.");
-    } else if (/\.txt$/i.test(file.entry.name)) {
-      const notepad = appRegistry.get("notepad");
-      if (notepad) dispatch({
-        type: "OPEN_APP", app: notepad, file: { path: file.entry.uri }
-      });
+    } else if (/\.lnk$/i.test(file.entry.name)) {
+      setError("The original shortcut target cannot be opened safely.");
     } else {
-      setError("No original application association has been migrated for " + file.entry.name);
+      openGuestEntry(file.entry);
     }
   };
 
