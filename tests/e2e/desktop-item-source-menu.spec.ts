@@ -19,7 +19,7 @@ async function makeText(page:Page){
   await desktop.click({button:"right",position:{x:270,y:230}});
   const menu=page.locator('[data-test-desktop-menu]');
   await menu.getByRole("menuitem",{name:/New/}).click();
-  await menu.getByRole("menuitem",{name:"Text Document"}).click();
+  await menu.getByRole("menuitem",{name:"Text Document",exact:true}).click();
   const rename=page.locator('[data-test-desktop-rename]');
   await expect(rename).toHaveValue("New Text Document");
   await rename.press("Enter");

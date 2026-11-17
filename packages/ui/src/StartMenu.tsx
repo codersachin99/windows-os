@@ -87,8 +87,13 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
       if(event.key!=="Escape")return;
       event.preventDefault();
       dispatch({type:"CLOSE_START"});
-      document.querySelector<HTMLButtonElement>(
-        '[data-test-start-button]')?.focus();
+      // The focused Search input is removed during the React commit.
+      // Restore focus *after* that commit, otherwise browser focus falls
+      // back to <body> when the input unmounts (XP has no search field).
+      window.requestAnimationFrame(() => {
+        document.querySelector<HTMLButtonElement>(
+          '[data-test-start-button]')?.focus({preventScroll:true});
+      });
     };
     window.addEventListener("pointerdown",outside);
     window.addEventListener("keydown",escape);

@@ -34,11 +34,16 @@ test("Explorer background and item context menus use shared folder commands", as
 
   await explorer.getByRole("region", { name: "Folder contents" }).click({ button: "right", position: { x: 180, y: 80 } });
   const menu = explorer.locator('[data-test-explorer-context="background"]');
-  await expect(menu.getByRole("menuitem", { name: "New folder" })).toBeVisible();
-  await menu.getByRole("menuitem", { name: "New folder" }).click();
-  const create = explorer.getByRole("dialog", { name: "New folder" });
-  await create.getByRole("textbox", { name: "New folder name" }).fill("Archive");
-  await create.getByRole("button", { name: "OK" }).click();
+  // Pinned Computer source uses a nested New > Folder command, unlike
+  // the separate toolbar's backwards-compatible New folder dialog.
+  await menu.locator("[data-test-explorer-context-new]").click();
+  const create=menu.locator('[data-test-explorer-context-new-kind="folder"]');
+  await expect(create).toBeVisible();
+  await create.click();
+  const inline=explorer.locator('[data-test-explorer-item="New folder"] [data-test-source-listview-rename]');
+  await expect(inline).toBeVisible();
+  await inline.fill("Archive");
+  await inline.press("Enter");
   const item = explorer.locator('[data-test-explorer-item="Archive"]');
   await expect(item).toBeVisible();
 

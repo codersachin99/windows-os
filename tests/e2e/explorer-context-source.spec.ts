@@ -90,7 +90,7 @@ test("pinned Computer New submenu creates source folder, TXT and RTF in Guest VF
     const item=computer.locator('[data-test-explorer-item="'+filename+'"]');
     await expect(item).toBeVisible();
     // Win7 source offers immediate inline rename on created items.
-    const editor=item.locator("input");
+    const editor=item.locator("[data-test-source-listview-rename]");
     if(await editor.count())await editor.press("Enter");
     await expect(item).toBeVisible();
   }
