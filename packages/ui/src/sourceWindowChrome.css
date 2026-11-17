@@ -1,0 +1,206 @@
+/*
+ * WindowMain / WindowTitle / WindowControl: pinned legacy-win7
+ * src/modules/themes/theme-win7-scss.js, theme-winxp-scss.js,
+ * theme-win11-scss.js @ 4e63290d783009e1293433c6ccf252abba9c1187.
+ * The original CSS uses .window__main.active and .maximized. React's
+ * WindowFrame emits .windows-window.is-active / .is-maximized.
+ * Only controls/frame styling is adapted here; application bodies,
+ * window lifecycle and host OS remain unaffected.
+ */
+
+/* Windows 7 glass: 6px idle / 7px focused corners, 6px inner stroke
+ * and the exact pinned translucent 140/225-degree border highlights.
+ * The original --theme-color is user-configurable, so the base tint
+ * remains a replaceable token rather than a hardcoded invented accent. */
+.windows-desktop[data-theme="win7"] .windows-window{
+  --source-window-tint:#6a9eb9;
+  padding:6px;
+  border:1px solid #000;
+  border-radius:6px;
+  background:linear-gradient(140deg,rgba(255,255,255,.5333333333),
+    transparent 100px),
+    linear-gradient(225deg,rgba(255,255,255,.5333333333),
+    transparent 100px),
+    var(--source-window-tint);
+  box-shadow:0 0 10px 2px rgba(0,0,0,.3333333333),
+    inset 0 0 0 1px rgba(255,255,255,.6666666667);
+  backdrop-filter:blur(4px);
+}
+.windows-desktop[data-theme="win7"] .windows-window.is-active{
+  border-radius:7px;
+  background:linear-gradient(140deg,rgba(255,255,255,.6666666667),
+    transparent 100px),
+    linear-gradient(225deg,rgba(255,255,255,.6666666667),
+    transparent 100px),
+    linear-gradient(transparent 30px,rgba(255,255,255,.7019607843) 40%,
+      transparent 41%),
+    linear-gradient(135deg,rgba(255,255,255,.3333333333) 70px,
+      transparent 100px),
+    linear-gradient(225deg,rgba(255,255,255,.3333333333) 70px,
+      transparent 100px),
+    var(--source-window-tint);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667),
+    2px 2px 15px 1px rgba(0,0,0,.9333333333);
+}
+.windows-desktop[data-theme="win7"] .windows-window__titlebar{
+  min-height:24px;
+  text-shadow:0 0 8px rgba(255,255,255,.6666666667);
+}
+.windows-desktop[data-theme="win7"] .windows-window__buttons{
+  position:relative;top:-5px;align-self:flex-start;
+  margin:0 2px 0 8px;
+  border:1px solid rgba(0,0,0,.5333333333);
+  border-top:0;
+  border-radius:0 0 5px 5px;
+  box-shadow:0 1px 0 rgba(255,255,255,.3333333333);
+}
+.windows-desktop[data-theme="win7"] .windows-window__buttons button{
+  height:20px;min-height:20px;
+  border-radius:0;
+  border-color:rgba(0,0,0,.5333333333);
+  background:linear-gradient(rgba(244,244,244,.5725490196),
+    rgba(211,211,211,.4549019608) 45%,
+    rgba(0,0,0,.1803921569) 50%,
+    rgba(143,150,173,.3058823529));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667);
+}
+.windows-desktop[data-theme="win7"] .windows-window__buttons button:first-child{
+  border-radius:0 0 0 5px;
+}
+.windows-desktop[data-theme="win7"] .windows-window__buttons button.windows-window__close{
+  width:48px;border-radius:0 0 5px 0;
+  background-color:#d54f36;
+  background-image:linear-gradient(rgba(244,244,244,.5725490196),
+    rgba(211,211,211,.4549019608) 45%,
+    rgba(0,0,0,.1803921569) 50%,
+    rgba(143,150,173,.3058823529));
+}
+.windows-desktop[data-theme="win7"] .windows-window.is-maximized{
+  border:0;border-radius:0;padding:0;
+}
+.windows-desktop[data-theme="win7"] .windows-window.is-maximized .windows-window__buttons{
+  top:0;
+}
+
+/* Windows XP Luna: exact four-layer source frame gradients and 24px
+ * glossy caption buttons (red close, blue minimize/maximize). */
+.windows-desktop[data-theme="winxp"] .windows-window{
+  border:1px solid #688de0;
+  border-radius:8px 8px 0 0;
+  padding:2px 3px 3px;
+  background:linear-gradient(90deg,rgba(0,0,0,.2),transparent 10px),
+    linear-gradient(-90deg,rgba(0,0,0,.2),transparent 10px),
+    linear-gradient(rgba(255,255,255,.4) 2px,transparent 4px,
+      rgba(255,255,255,.2) 35px,rgba(0,0,0,.0509803922) 40px),
+    var(--source-window-bg);
+  box-shadow:inset 0 -1px 3px #000;
+  backdrop-filter:none;
+}
+.windows-desktop[data-theme="winxp"] .windows-window.is-active{
+  border-color:var(--source-window-active-border);
+}
+.windows-desktop[data-theme="winxp"] .windows-window__titlebar{
+  color:#fff;font-weight:bold;
+  padding:2px 3px 3px;
+  box-shadow:inset 0 -1px rgba(0,0,0,.1333333333),
+    inset 0 -2px rgba(0,0,0,.0666666667);
+}
+.windows-desktop[data-theme="winxp"] .windows-window__title{
+  font-weight:bold;text-shadow:1px 1px rgba(0,0,0,.6);
+}
+.windows-desktop[data-theme="winxp"] .windows-window__buttons{
+  gap:3px;margin:0;align-self:center;
+  border:0;
+}
+.windows-desktop[data-theme="winxp"] .windows-window__buttons button{
+  width:24px;height:24px;min-height:24px;
+  color:#fff;border:1px solid #bdcaee;border-radius:3px;
+  background:radial-gradient(at 10% 10%,#9ab7fa 0,
+    rgba(255,255,255,.1333333333) 30%,transparent 60%),
+    radial-gradient(at 85% 40%,#2766f5 0,transparent 50%),#4778f6;
+  box-shadow:inset 2px 2px 3px #7099f8,
+    inset -1px -1px 2px #196df4;
+}
+.windows-desktop[data-theme="winxp"] .windows-window__buttons button:first-child{
+  border-radius:3px;
+}
+.windows-desktop[data-theme="winxp"] .windows-window__buttons button:not(:disabled):hover{
+  background-color:#317aff;
+}
+.windows-desktop[data-theme="winxp"] .windows-window__buttons button.windows-window__close{
+  width:24px;border-radius:3px;border-color:#fff;color:#fff;
+  background:radial-gradient(at 10% 10%,#f1ac9a 0,
+    rgba(255,255,255,.1333333333) 30%,transparent 60%),
+    radial-gradient(at 85% 40%,#e34d22 0,transparent 50%),#e66a4d;
+  box-shadow:inset 2px 2px 3px #ec937c,
+    inset -1px -1px 2px #e34d22;
+}
+.windows-desktop[data-theme="winxp"] .windows-window__buttons button.windows-window__close:hover{
+  background-color:#ff6452;
+}
+.windows-desktop[data-theme="winxp"] .windows-window.is-maximized{
+  border-radius:0;
+}
+
+/* Windows 11 original: 8px neutral inactive frame; source theme-color
+ * may supply a separate active accent. Caption controls are 44×30px
+ * and the close hover uses exact #c42b1c. */
+.windows-desktop[data-theme="win11"] .windows-window{
+  border:1px solid var(--source-border);
+  border-radius:8px;
+  padding:0;
+  background:var(--source-surface);
+  box-shadow:0 0 8px rgba(0,0,0,.1333333333);
+  backdrop-filter:none;
+}
+.windows-desktop[data-theme="win11"] .windows-window.is-active{
+  border-color:var(--theme-color,var(--source-border));
+  background:var(--theme-color,var(--source-surface));
+  box-shadow:0 0 24px rgba(0,0,0,.2);
+}
+.windows-desktop[data-theme="win11"] .windows-window__titlebar{
+  flex:0 0 30px;
+  min-height:30px;
+  margin:0;padding-left:6px;
+  color:var(--source-text);
+  text-shadow:none;
+}
+.windows-desktop[data-theme="win11"] .windows-window__title{
+  color:inherit;text-shadow:none;opacity:.5;
+}
+.windows-desktop[data-theme="win11"] .windows-window.is-active .windows-window__title{
+  opacity:1;
+}
+.windows-desktop[data-theme="win11"] .windows-window__buttons{
+  gap:0;margin:0;align-self:flex-start;
+}
+.windows-desktop[data-theme="win11"] .windows-window__buttons button,
+.windows-desktop[data-theme="win11"] .windows-window__buttons button.windows-window__close{
+  width:44px;height:30px;min-height:30px;
+  color:var(--source-text);
+  border:0;border-radius:0;
+  background:transparent;box-shadow:none;
+  opacity:.5;
+  transition:background-color .1s,opacity .1s;
+}
+.windows-desktop[data-theme="win11"] .windows-window.is-active .windows-window__buttons button,
+.windows-desktop[data-theme="win11"] .windows-window__buttons button:hover{
+  opacity:1;
+}
+.windows-desktop[data-theme="win11"] .windows-window__buttons button:hover{
+  background:rgba(0,0,0,.0666666667);
+}
+.windows-desktop[data-theme="win11"] .windows-window__buttons button.windows-window__close:hover{
+  background:#c42b1c;color:#fff;
+}
+.windows-desktop[data-theme="win11"] .windows-window__body{
+  background:var(--source-surface-bright);
+}
+.windows-desktop[data-theme="win11"] .windows-window.is-maximized{
+  border:0;border-radius:0;
+}
+@media(prefers-reduced-motion:reduce){
+  .windows-desktop[data-theme="win11"] .windows-window__buttons button{
+    transition:none;
+  }
+}
