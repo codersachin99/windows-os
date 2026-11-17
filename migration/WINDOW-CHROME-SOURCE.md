@@ -68,9 +68,10 @@ still switches submenus.
 
 ## Remaining gaps
 
-The original caption glyphs and screenshot-paired titlebar artwork
-are not yet validated; a React text glyph for maximize/minimize is
-not automatically the original's image asset. Win7 and Win11 source
+The next milestone ports the pinned original compiled `ControlItem`
+SVG paths (rather than Unicode glyphs) for Aero/WinXP/Win11, including
+restored-window state. See `migration/WINDOW-CONTROL-GLYPHS-SOURCE.md`.
+Source-vs-React pixel rendering of those glyphs remains unverified. Win7 and Win11 source
 `--theme-color` is configurable, so the style uses a fallback tint
 until the complete original theme token service is migrated.
 Window resizing, RTL theme behavior, source shadow effect preferences
