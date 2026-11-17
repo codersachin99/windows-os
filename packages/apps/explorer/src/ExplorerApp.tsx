@@ -24,6 +24,7 @@ import { SourceOrganizeMenu } from "./SourceOrganizeMenu";
 import { SourceViewMenu } from "./SourceViewMenu";
 import {SOURCE_VIEW_MODES} from "./sourceViewModes";
 import {sourceDesktopMenuPosition} from "@windows-os/ui/menu-position";
+import {sourceMenuArrowFocus} from "@windows-os/ui/menu-keyboard";
 import {createSourceDesktopItem,type DesktopNewItem} from "@windows-os/ui/desktop-create";
 import {
   sourceComputerDetailsLabelWidth,sourceComputerItemExtras,
@@ -871,7 +872,22 @@ export function ExplorerApp({
     {context && <div ref={contextRef} role="menu" className="explorer-context-menu"
       data-test-explorer-context={context.kind}
       aria-label={context.kind === "item" ? "File actions" : "Folder actions"}
-      style={{ left: context.x, top: context.y }}>
+      style={{ left: context.x, top: context.y }}
+      onKeyDown={event=>{
+        if(sourceMenuArrowFocus(contextRef.current,event.target,event.key)){
+          event.preventDefault();return;
+        }
+        if(event.key==="ArrowLeft"&&(context.viewOpen||context.newOpen)){
+          event.preventDefault();
+          const parent=context.viewOpen
+            ?"[data-test-explorer-context-view]":"[data-test-explorer-context-new]";
+          setContext(current=>current?{
+            ...current,viewOpen:false,newOpen:false
+          }:current);
+          window.requestAnimationFrame(()=>contextRef.current
+            ?.querySelector<HTMLButtonElement>(parent)?.focus({preventScroll:true}));
+        }
+      }}>
       {context.kind === "item" && context.uri && <>
         <button role="menuitem" onClick={() => contextAction(() => {
           const item = visible.find(entry => entry.uri === context.uri);
@@ -904,6 +920,9 @@ export function ExplorerApp({
               setContext(current=>current?{
                 ...current,viewOpen:true,newOpen:false
               }:current);
+              window.requestAnimationFrame(()=>contextRef.current
+                ?.querySelector<HTMLButtonElement>('[role="menuitemradio"]')
+                ?.focus({preventScroll:true}));
             }
           }}
           onClick={()=>setContext(current=>current?{
@@ -942,6 +961,9 @@ export function ExplorerApp({
                 setContext(current=>current?{
                   ...current,newOpen:true,viewOpen:false
                 }:current);
+                window.requestAnimationFrame(()=>contextRef.current
+                  ?.querySelector<HTMLButtonElement>('[data-test-explorer-context-new-kind="folder"]')
+                  ?.focus({preventScroll:true}));
               }
             }}
             onClick={()=>setContext(current=>current?{

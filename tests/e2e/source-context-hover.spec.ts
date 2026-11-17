@@ -57,7 +57,13 @@ test("source Desktop and Explorer submenus also open with ArrowRight",async({pag
   const view=menu.locator("[data-test-desktop-view]");
   await view.focus();
   await view.press("ArrowRight");
-  await expect(menu.getByRole("menuitemradio",{name:/Medium icons/})).toBeVisible();
+  const radio=menu.getByRole("menuitemradio",{name:/Large icons/});
+  await expect(radio).toBeFocused();
+  await radio.press("ArrowDown");
+  await expect(menu.getByRole("menuitemradio",{name:/Medium icons/})).toBeFocused();
+  await menu.getByRole("menuitemradio",{name:/Medium icons/}).press("ArrowLeft");
+  await expect(menu.getByRole("menuitemradio")).toHaveCount(0);
+  await expect(view).toBeFocused();
   await page.keyboard.press("Escape");
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
   const explorer=page.locator('[data-test-window="computer"]');
@@ -69,5 +75,13 @@ test("source Desktop and Explorer submenus also open with ArrowRight",async({pag
   const newer=actions.locator("[data-test-explorer-context-new]");
   await newer.focus();
   await newer.press("ArrowRight");
-  await expect(actions.locator('[data-test-explorer-context-new-kind="text"]')).toBeVisible();
+  const folder=actions.locator('[data-test-explorer-context-new-kind="folder"]');
+  await expect(folder).toBeFocused();
+  await folder.press("ArrowDown");
+  await expect(actions.locator('[data-test-explorer-context-new-kind="richtext"]'))
+    .toBeFocused();
+  await actions.locator('[data-test-explorer-context-new-kind="richtext"]')
+    .press("ArrowLeft");
+  await expect(actions.locator('[data-test-explorer-context-new-kind]')).toHaveCount(0);
+  await expect(newer).toBeFocused();
 });

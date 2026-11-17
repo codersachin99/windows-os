@@ -20,6 +20,7 @@ export default defineConfig({
       "@windows-os/ui/listview": app("./packages/ui/src/sourceListView.tsx"),
       "@windows-os/ui/navigation": app("./packages/ui/src/SourceWin7HistoryNav.tsx"),
       "@windows-os/ui/menu-position": app("./packages/ui/src/sourceDesktopMenuPosition.ts"),
+      "@windows-os/ui/menu-keyboard": app("./packages/ui/src/sourceMenuKeyboard.ts"),
       "@windows-os/ui/desktop-create": app("./packages/ui/src/desktopCreate.ts"),
       "@windows-os/ui": app("./packages/ui/src/index.ts"),
       "@windows-os/sdk": app("./packages/sdk/src/index.ts"),

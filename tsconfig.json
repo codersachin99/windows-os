@@ -58,6 +58,9 @@
       "@windows-os/ui/menu-position": [
         "packages/ui/src/sourceDesktopMenuPosition.ts"
       ],
+      "@windows-os/ui/menu-keyboard": [
+        "packages/ui/src/sourceMenuKeyboard.ts"
+      ],
       "@windows-os/ui/desktop-create": [
         "packages/ui/src/desktopCreate.ts"
       ],

@@ -16,6 +16,7 @@ import {
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
+import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
 import {
   sourceDesktopItemMenu,type SourceDesktopItemMenuAction
 } from "./sourceDesktopItemMenu";
@@ -966,7 +967,19 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       style={{ left: band.left, top: band.top, width: band.width, height: band.height }}
       aria-hidden="true" />}
     {menu && <div ref={menuHost} role="menu" className="windows-desktop__menu"
-      data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}>
+      data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}
+      onKeyDown={event=>{
+        if(sourceMenuArrowFocus(menuHost.current,event.target,event.key)){
+          event.preventDefault();return;
+        }
+        if(event.key==="ArrowLeft"&&(menu.view||menu.newOpen)){
+          event.preventDefault();
+          const parent=menu.view?"[data-test-desktop-view]":"[data-test-desktop-new]";
+          setMenu(current=>current?{...current,view:false,newOpen:false}:current);
+          window.requestAnimationFrame(()=>menuHost.current
+            ?.querySelector<HTMLButtonElement>(parent)?.focus({preventScroll:true}));
+        }
+      }}>
       {menu.id ? <>
         {contextItem&&itemActions.map(action=>
           <button key={action.id} role="menuitem"
@@ -985,6 +998,9 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             if(event.key==="ArrowRight"){
               event.preventDefault();
               setMenu(current => current?{...current,view:true,newOpen:false}:current);
+              window.requestAnimationFrame(()=>menuHost.current
+                ?.querySelector<HTMLButtonElement>('[role="menuitemradio"]')
+                ?.focus({preventScroll:true}));
             }
           }}
           onClick={() => setMenu(current => current
@@ -1019,6 +1035,9 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             if(event.key==="ArrowRight"){
               event.preventDefault();
               setMenu(current => current?{...current,newOpen:true,view:false}:current);
+              window.requestAnimationFrame(()=>menuHost.current
+                ?.querySelector<HTMLButtonElement>('[data-test-desktop-new-folder]')
+                ?.focus({preventScroll:true}));
             }
           }}
           onClick={() => setMenu(current => current
