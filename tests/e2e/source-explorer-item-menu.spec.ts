@@ -11,6 +11,10 @@ async function guestComputer(page:Page,theme:"win7"|"win11"="win7"){
 }
 test("pinned ExplorerItemMenu ordinary text file order and original Send to structure",async({page})=>{
   const computer=await guestComputer(page);
+  // Only the mounted source /EXTERNAL/computer disk has a path-backed .lnk
+  // adapter. The virtual Computer root '/' is not a real guest disk path.
+  await computer.locator(".explorer-navigation__home")
+    .filter({hasText:"Documents"}).click();
   await computer.locator('input[type="file"][aria-label="Upload files"]')
     .setInputFiles({name:"Source Menu File.txt",mimeType:"text/plain",
       buffer:Buffer.from("source text file")});
