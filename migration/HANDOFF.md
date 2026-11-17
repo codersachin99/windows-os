@@ -1,3 +1,41 @@
+## Pinned Win11 Start 12-app page layout — 17 November 2026
+
+The previous full original-React migration acceptance completed successfully
+at [CI #44035240545](https://github.com/codersachin99/windows-os/actions/runs/44035240545)
+(commit `9d34182`) and the preceding shell acceptance at
+[CI #44034330475](https://github.com/codersachin99/windows-os/actions/runs/44034330475)
+also passed. These validate the previously migrated source-recentApps,
+Start/Taskbar/Explorer and 62 SHA-verified source XP/Win11 images.
+
+Pinned source `src/modules/shell/startmenu-win11.js` webpack module 18ee
+has `pageItemCount() { return 12 }`, page dots aligned vertically beside
+the six-column/two-row grid, wheel/swipe page selection, and reset to
+page 1 whenever Start reopens. React previously displayed all registered
+apps in one scrolling grid, diverging from the pinned source.
+
+- `42d70f1`: pure, tested `sourceWin11StartPaging` model (12/page,
+  stable slices, clamped page counts and source wheel directions);
+  Win11 Start main program list now uses the paged model without
+  altering Win7/XP or user search (which stays unpaged). React page
+  dots, wheel and swipe selection and return-to-All-Programs reset
+  match source behavior. Includes Chromium acceptance.
+- `f8521b6`: browser page-change acceptance compares actual program
+  IDs across pages, not fragile hard-coded assumptions about the exact
+  total number of registered programs.
+- `102ec63`: moved page indicators *inside the main grid* and aligned
+  them vertically at the grid edge, matching pinned 18ee placement.
+  A small column inset prevents overlap with the last icon column.
+- `d64aecc`: add Win11 page test to the preexisting focused shell
+  Playwright gate, preserving opt-in [run-ci] policy.
+
+Still pending exact source programKeys vs React registry ordering, Win11
+all-programs presentation, full CSS/pixel parity via paired screenshots,
+Properties and taskbar configuration, and remaining Computer/Bin parity.
+The added tests and build must pass before accepting this new slice.
+Keep PR #1 draft, main untouched, and no release.
+
+---
+
 ## XP/Win11 source recentApps history — 17 November 2026
 
 Continuing after the **focused shell browser gate passed** at
