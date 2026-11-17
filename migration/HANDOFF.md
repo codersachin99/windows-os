@@ -1,3 +1,51 @@
+## XP/Win11 image parity and source-proof contract — 17 November 2026
+
+Following shell context-menu commits (see previous section), the exact
+pinned `codersachin99/legacy-win7@4e63290` recursive Git tree was
+audited for all available `assets/images/*winxp*` and `*win11*`
+entries. The target now includes **58** original, SHA-verified theme
+image blobs: 26 from the earlier shell batch and **32** newly imported.
+
+- `f52cd30`: imported 32 byte-identical original icons as actual Git
+  blobs, after reading each original Base64 body with source ref and
+  comparing its SHA to the expected original Git blob. Includes XP
+  camera/magnifier/paint/player/run/display/programs/taskbar and
+  Win11 paint, text/media/executable types, special folder variants
+  and System/Data/CD disk icons. Original image bytes are unchanged.
+- `27f114e`: added all 32 names and pinned SHA hashes to
+  `scripts/import-source-theme-assets.py` and the central theme
+  program/icon manifest in `packages/assets/src/index.ts`.
+  `sourceThemeSpecialFolderArt` selects original theme variants
+  only when present; other labels gracefully retain fallback imagery.
+- `b8607ae`: Computer/Recycle Bin Explorer sources original
+  System/Data/CD drive icons and sidebar special folder artwork for
+  XP/Win11, while VFS list items recognize special art only for
+  actual mounted Guest profile paths, never arbitrary user folders.
+- `618ba80`: unit and Chromium regression contracts for text/media
+  themed file icons, actual Guest Documents path, XP/Win11 drive and
+  known folder image URLs; updated old generic TXT expectations to
+  actual original TXT image assets.
+- `d43aabf`: `--verify-target-only` checks every committed target
+  file's Git blob SHA against the pinned manifest, and the opt-in
+  React Actions workflow now requires this check before production
+  build and browser acceptance. It does not require legacy access
+  or an external repository checkout.
+
+[Prior CI #44029438284](https://github.com/codersachin99/windows-os/actions/runs/44029438284)
+was launched before this image batch. It passed TypeScript, units,
+source audits and production build at `fdacd66`; Chromium was
+running at the time of this checkpoint. It cannot validate these
+newer commits. This handoff deliberately invokes one new `[run-ci]`
+gate at its exact head, not for every ordinary commit.
+
+**Important blockers:** Pinned source still has more theme variants
+and components; CSS parity and original/React paired screenshot
+comparisons are unverified. Source Start pinned/recent semantics,
+taskbar configuration and remaining Computer/Bin context properties
+are incomplete. PR #1 stays draft. No release or merge.
+
+---
+
 ## Source taskbar and Start context-menus — 17 November 2026
 
 Accepted source references: `legacy-win7@4e63290`
