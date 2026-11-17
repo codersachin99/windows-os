@@ -627,3 +627,24 @@ export type SourceCpanelMigratedProgram=typeof SOURCE_CPANEL_MIGRATED_PROGRAMS[n
 export function sourceCpanelIsMigratedProgram(id:string):id is SourceCpanelMigratedProgram{
   return SOURCE_CPANEL_MIGRATED_PROGRAMS.some(program=>program===id);
 }
+
+/** Pinned 3097 task search uses target IDs, not action-specific routes.
+ * React must only enable program tasks whose actual source function exists.
+ * Theme and Background are separate views of the migrated Personalize app;
+ * original taskbar.js still disables Auto-hide and Lock, and Start's
+ * Customize command is not migrated. Other registry task redirects to
+ * already-migrated Control Panel panels continue through their panel IDs.
+ */
+export type SourceCpanelMigratedProgramView="theme"|"background";
+export function sourceCpanelProgramTaskView(
+  task:SourceCpanelTask
+):SourceCpanelMigratedProgramView|null{
+  if(task.id!=="personalize")return null;
+  if(task.label==="Change the theme")return "theme";
+  if(task.label==="Change desktop background")return "background";
+  return null;
+}
+export function sourceCpanelCanOpenTask(task:SourceCpanelTask):boolean{
+  return sourceCpanelIsSupported(task.id)||
+    sourceCpanelProgramTaskView(task)!==null;
+}
