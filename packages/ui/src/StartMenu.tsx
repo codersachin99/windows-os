@@ -4,7 +4,7 @@ import type { DesktopAction, ThemeId } from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
 import {
-  parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
+  parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS, sourcePrograms,
   sourceProgramsById, type FileEntry
 } from "@windows-os/filesystem";
 import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms} from "@windows-os/sdk";
@@ -14,6 +14,7 @@ import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
 import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
 import {taskbarPins} from "./sourceTaskbarPins";
 import {sourceWin11PageCount,sourceWin11StartPage,sourceWin11NextStartPage} from "./sourceWin11StartPaging";
+import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -71,6 +72,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const [folders, setFolders] = useState<FileEntry[]>([]);
   const [installed, setInstalled] = useState<InstalledShortcut[]>([]);
   const [loadError, setLoadError] = useState("");
+  const win11AllApps=sourceWin11AllAppItems(sourcePrograms,appRegistry.list());
   const programs = appRegistry.startMenu().filter(app =>
     app.label.toLowerCase().includes(query.toLowerCase())
   );
@@ -85,7 +87,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     return app?[app]:[];
   }).slice(0,theme==="winxp"?7:6);
   useEffect(() => {
-    if (!allPrograms) return;
+    if (!allPrograms||theme==="win11") return;
     let active = true;
     const load = async () => {
       try {
@@ -106,7 +108,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     void load();
     const unsubscribe = fileStore.subscribe(() => { void load(); });
     return () => { active = false; unsubscribe(); };
-  }, [allPrograms, activeFolder]);
+  }, [allPrograms, activeFolder, theme]);
 
   useLayoutEffect(()=>{
     if(!programContext||!contextRef.current)return;
@@ -253,6 +255,21 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
               <span aria-hidden="true">◀</span>
               {activeFolder ? "Back to All Programs" : "Back"}
             </button>
+            {theme==="win11"? win11AllApps.map(app=>{
+              const registered=appRegistry.get(app.id);
+              return <button key={app.id} type="button"
+                className="windows-startmenu__program"
+                data-test-win11-all-app={app.id}
+                disabled={!app.available||!registered}
+                title={app.available?app.label:app.label+" — migration pending"}
+                onClick={()=>openApp(app.id)}
+                onContextMenu={event=>openProgramContext(event,app.id)}>
+                <img src={sourceThemeProgramArt(theme,app.id)
+                  ??(registered?.icon ?? legacySourceIconArtwork(app.id).src)}
+                  width={30} height={30} alt="" />
+                <span className="windows-startmenu__program-name">{app.label}</span>
+              </button>;
+            }):<>
             {folders.map(folder => <button key={folder.uri}
               type="button" data-test-source-program-folder={folder.name}
               className="windows-startmenu__program"
@@ -281,6 +298,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
             {loadError && <p role="alert" className="windows-startmenu__empty">{loadError}</p>}
             {!loadError && !folders.length && !installed.length &&
               <p className="windows-startmenu__empty">No installed programs in this folder.</p>}
+            </>}
           </> : <>
             {visiblePrograms.map(app => (
               <button key={app.id} data-test-program={app.id}

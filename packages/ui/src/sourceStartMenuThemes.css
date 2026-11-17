@@ -317,3 +317,17 @@
 .windows-startmenu--win11 .windows-startmenu__win11-power-menu button:focus-visible{
   background:#dbeaf9;border-color:#9ec5e7;
 }
+
+/* Source 18ee All Programs is a single, alphabetical, vertically
+ * scrolling list. XP/Win7 preserve the source Guest .lnk folder tree.
+ */
+.windows-startmenu--win11.is-all-programs .windows-startmenu__programs{
+  display:flex;flex-direction:column;min-height:0;overflow-y:auto;
+  align-items:stretch;gap:1px;
+}
+.windows-startmenu--win11.is-all-programs .windows-startmenu__program{
+  flex:none;width:100%;min-height:35px;box-sizing:border-box;
+}
+.windows-startmenu--win11.is-all-programs .windows-startmenu__program:disabled{
+  opacity:.52;cursor:default;
+}
