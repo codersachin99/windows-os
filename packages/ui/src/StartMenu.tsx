@@ -16,6 +16,7 @@ import {taskbarPins} from "./sourceTaskbarPins";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
+  onEscapeClose():void;
   theme?:ThemeId;
 }
 interface StartProgramContext{
@@ -49,7 +50,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 }
 
 /** The original All Programs tree is populated from installed .lnk files. */
-export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
+export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   const [programContext,setProgramContext]=useState<StartProgramContext|null>(null);
@@ -152,14 +153,9 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
         });
         return;
       }
-      dispatch({type:"CLOSE_START"});
-      // The focused Search input is removed during the React commit.
-      // Restore focus *after* that commit, otherwise browser focus falls
-      // back to <body> when the input unmounts (XP has no search field).
-      window.requestAnimationFrame(() => {
-        document.querySelector<HTMLButtonElement>(
-          '[data-test-start-button]')?.focus({preventScroll:true});
-      });
+      // DesktopShell restores taskbar focus after the Start input has
+      // actually unmounted, using a commit-time layout effect.
+      onEscapeClose();
     };
     window.addEventListener("pointerdown",outside);
     window.addEventListener("keydown",escape);
@@ -167,7 +163,7 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[dispatch,programContext]);
+  },[dispatch,programContext,onEscapeClose]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });

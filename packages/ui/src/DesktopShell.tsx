@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type Dispatch } from "react";
+import {useCallback,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
 import { legacyArt,sourceShellAsset,sourceThemeProgramArt } from "@windows-os/assets";
 import { appRegistry,fileStore } from "@windows-os/sdk";
@@ -209,6 +209,17 @@ export function DesktopShell({
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
   const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);
+  const restoreStartFocus=useRef(false);
+  const closeStartOnEscape=useCallback(()=>{
+    restoreStartFocus.current=true;
+    dispatch({type:"CLOSE_START"});
+  },[dispatch]);
+  useLayoutEffect(()=>{
+    if(state.startOpen||!restoreStartFocus.current)return;
+    restoreStartFocus.current=false;
+    document.querySelector<HTMLButtonElement>(
+      '[data-test-start-button]')?.focus({preventScroll:true});
+  },[state.startOpen]);
   useEffect(()=>taskbarPins.subscribe(setPinnedPrograms),[]);
   const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
   const magnifierActive = state.windows.some(win => win.appId === "magnifier");
@@ -324,7 +335,8 @@ export function DesktopShell({
             onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
       ))}
-      {state.startOpen && <StartMenu dispatch={dispatch} theme={state.theme} />}
+      {state.startOpen && <StartMenu dispatch={dispatch}
+        onEscapeClose={closeStartOnEscape} theme={state.theme} />}
       </div>
       {/* The control surface remains independent of the transformed canvas;
           other programs and their windows zoom together with the desktop. */}

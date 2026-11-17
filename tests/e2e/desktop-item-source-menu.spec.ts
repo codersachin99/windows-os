@@ -98,8 +98,10 @@ test("source Desktop multi-select removes Open and Rename from item context",asy
   const menu=await rightClick(page,'[data-test-desktop-file="'+
     DESKTOP+'/New Text Document.txt"]');
   const actions=menu.locator("[data-test-desktop-item-action]");
-  await expect(actions).not.toContainText("Open");
-  await expect(actions).not.toContainText("Rename");
+  // Playwright's text matcher requires a single element. Source menu
+  // multiselect has five commands, so assert the excluded action IDs.
+  await expect(menu.locator('[data-test-desktop-item-action="open"]')).toHaveCount(0);
+  await expect(menu.locator('[data-test-desktop-item-action="rename"]')).toHaveCount(0);
   await expect(menu.locator('[data-test-desktop-item-action="delete"]'))
     .toBeEnabled();
 });
