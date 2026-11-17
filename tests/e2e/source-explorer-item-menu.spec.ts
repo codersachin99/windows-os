@@ -98,3 +98,46 @@ test("source ExplorerItemMenu keeps directory download hidden and Bin actions un
   await expect(menu.locator('[data-test-explorer-item-action="rename"]'))
     .toBeEnabled();
 });
+
+test("source Send to popup opens beside the item menu, stays visible and keeps parent geometry",async({page})=>{
+  const computer=await guestComputer(page);
+  await computer.locator(".explorer-navigation__home")
+    .filter({hasText:"Documents"}).click();
+  await computer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Side Menu.txt",mimeType:"text/plain",
+      buffer:Buffer.from("submenu placement")});
+  await computer.locator('[data-test-explorer-item="Side Menu.txt"]')
+    .click({button:"right"});
+  const menu=computer.locator('[data-test-explorer-context="item"]');
+  const before=await menu.boundingBox();
+  expect(before).not.toBeNull();
+  const trigger=menu.locator("[data-test-explorer-item-send-to]");
+  await trigger.focus();
+  await trigger.press("ArrowRight");
+  const submenu=menu.locator("[data-test-explorer-sendto-submenu]");
+  await expect(submenu).toBeVisible();
+  await expect(submenu).toHaveAttribute("data-side",/^(left|right)$/);
+  const after=await menu.boundingBox();
+  expect(after).not.toBeNull();
+  expect(Math.abs(after!.height-before!.height)).toBeLessThan(2);
+  const child=await submenu.boundingBox();
+  expect(child).not.toBeNull();
+  const viewport=page.viewportSize()!;
+  expect(child!.x).toBeGreaterThanOrEqual(0);
+  expect(child!.x+child!.width).toBeLessThanOrEqual(viewport.width+1);
+  expect(child!.y).toBeGreaterThanOrEqual(0);
+  expect(child!.y+child!.height).toBeLessThanOrEqual(viewport.height+1);
+  if(await submenu.getAttribute("data-side")==="right")
+    expect(child!.x).toBeGreaterThanOrEqual(after!.x-1);
+  else expect(child!.x).toBeLessThanOrEqual(after!.x+after!.width);
+  const desktop=submenu.locator(
+    '[data-test-explorer-item-send-to-kind="desktop"]');
+  await expect(desktop).toBeFocused();
+  await desktop.press("ArrowLeft");
+  await expect(submenu).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.press("ArrowRight");
+  await expect(submenu).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+});
