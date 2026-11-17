@@ -17,6 +17,7 @@ import {
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
 import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
+import {taskbarPins} from "./sourceTaskbarPins";
 import {
   sourceDesktopItemMenu,type SourceDesktopItemMenuAction
 } from "./sourceDesktopItemMenu";
@@ -91,6 +92,8 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
   const [pendingEmptyBin,setPendingEmptyBin]=useState(false);
   const [trashCount,setTrashCount]=useState(0);
+  const [pinned,setPinned]=useState(()=>taskbarPins.snapshot());
+  useEffect(()=>taskbarPins.subscribe(setPinned),[]);
   const [createdId, setCreatedId] = useState<string | null>(null);
   const [renaming, setRenaming] = useState<{id:string;value:string} | null>(null);
   const renameRef = useRef<{id:string;value:string} | null>(null);
@@ -808,6 +811,8 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     programInstalled:Boolean(
       contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
     multiple:contextKeys.length>1,
+    canPin:Boolean(contextItem.app && appRegistry.get(contextItem.id)),
+    pinned:pinned.includes(contextItem.id),
     trashCount
   }):[];
   const runItemAction=(action:SourceDesktopItemMenuAction,item:DesktopItem)=>{
@@ -821,8 +826,13 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       case "copy":prepareDesktopClipboard("copy",contextKeys);break;
       case "delete":requestDesktopDelete(contextKeys);break;
       case "rename":if(item.file)beginRename(item.file);break;
-      // Source Pin/Properties/Compress have no migrated implementation yet.
       case "pin":
+        if(item.app&&appRegistry.get(item.app.id)){
+          taskbarPins.toggle(item.app.id);
+          setMenu(null);
+        }
+        break;
+      // Properties and Compressed Folder await source-backed services.
       case "send-to":
       case "properties":break;
     }

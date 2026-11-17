@@ -17,6 +17,7 @@ export interface SourceDesktopItemMenuInput{
   fileType?:"file"|"directory";
   programInstalled?:boolean;
   pinned?:boolean;
+  canPin?:boolean;
   trashCount?:number;
 }
 export interface SourceDesktopItemMenuEntry{
@@ -39,7 +40,7 @@ export function sourceDesktopItemMenu(
   if(input.id==="bin"&&!input.multiple)
     add("empty-bin","Empty Recycle Bin",!input.trashCount);
   if(!input.multiple&&!input.isFile)
-    add("pin",input.pinned?"Unpin from taskbar":"Pin to taskbar",true);
+    add("pin",input.pinned?"Unpin from taskbar":"Pin to taskbar",!input.canPin);
   if(!input.multiple&&!input.isFile&&!sourceIsSystem&&input.programInstalled)
     add("send-desktop","Send to Desktop");
   if(input.isFile){

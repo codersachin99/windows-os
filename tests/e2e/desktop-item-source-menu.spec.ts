@@ -29,13 +29,13 @@ async function makeText(page:Page){
   return icon;
 }
 
-test("source Desktop system item menu exposes Pin and Bin state without fake controls",async({page})=>{
+test("source Desktop system item menu exposes functional Pin and Bin state",async({page})=>{
   await logon(page);
   let menu=await rightClick(page,'[data-test-desktop-icon="computer"]');
   await expect(menu.locator("[data-test-desktop-item-action]")).toHaveText([
     "Open","Pin to taskbar","Properties"
   ]);
-  await expect(menu.locator('[data-test-desktop-item-action="pin"]')).toBeDisabled();
+  await expect(menu.locator('[data-test-desktop-item-action="pin"]')).toBeEnabled();
   await expect(menu.locator('[data-test-desktop-item-action="properties"]')).toBeDisabled();
   await page.keyboard.press("Escape");
   menu=await rightClick(page,'[data-test-desktop-icon="bin"]');
@@ -102,4 +102,26 @@ test("source Desktop multi-select removes Open and Rename from item context",asy
   await expect(actions).not.toContainText("Rename");
   await expect(menu.locator('[data-test-desktop-item-action="delete"]'))
     .toBeEnabled();
+});
+
+test("source Desktop Pin/Unpin places persistent launcher in the real taskbar",async({page})=>{
+  await logon(page);
+  let menu=await rightClick(page,'[data-test-desktop-icon="computer"]');
+  await expect(menu.locator('[data-test-desktop-item-action="pin"]')).toHaveText(
+    "Pin to taskbar");
+  await menu.locator('[data-test-desktop-item-action="pin"]').click();
+  const pin=page.locator('[data-test-taskbar-pin="computer"]');
+  await expect(pin).toBeVisible();
+  await pin.click();
+  await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+  await expect(pin).toHaveAttribute("data-test-taskbar-pin-running","true");
+  menu=await rightClick(page,'[data-test-desktop-icon="computer"]');
+  await expect(menu.locator('[data-test-desktop-item-action="pin"]')).toHaveText(
+    "Unpin from taskbar");
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-taskbar-pin="computer"]')).toBeVisible();
+  menu=await rightClick(page,'[data-test-desktop-icon="computer"]');
+  await menu.locator('[data-test-desktop-item-action="pin"]').click();
+  await expect(page.locator('[data-test-taskbar-pin="computer"]')).toHaveCount(0);
 });

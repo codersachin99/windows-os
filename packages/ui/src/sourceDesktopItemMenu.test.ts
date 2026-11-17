@@ -3,10 +3,10 @@ import {sourceDesktopItemMenu} from "./sourceDesktopItemMenu";
 
 describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
   it("system Computer has Open/Pin/Properties, without destructive file actions",()=>{
-    expect(sourceDesktopItemMenu({id:"computer",multiple:false,isFile:false}))
+    expect(sourceDesktopItemMenu({id:"computer",multiple:false,isFile:false,canPin:true}))
       .toEqual([
         {id:"open",label:"Open",disabled:false},
-        {id:"pin",label:"Pin to taskbar",disabled:true},
+        {id:"pin",label:"Pin to taskbar",disabled:false},
         {id:"properties",label:"Properties",disabled:true}
       ]);
   });
@@ -50,5 +50,28 @@ describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
     }).map(a=>a.id)).toEqual([
       "send-to","download","cut","copy","delete"
     ]);
+  });
+});
+
+describe("source taskbar Pin/Unpin menu gating",()=>{
+  it("enables registered app entries and flips label after pin",()=>{
+    const first=sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,canPin:true});
+    expect(first.find(a=>a.id==="pin")).toEqual({
+      id:"pin",label:"Pin to taskbar",disabled:false
+    });
+    const second=sourceDesktopItemMenu({
+      id:"computer",isFile:false,multiple:false,canPin:true,pinned:true
+    });
+    expect(second.find(a=>a.id==="pin")).toEqual({
+      id:"pin",label:"Unpin from taskbar",disabled:false
+    });
+  });
+  it("keeps unregistered apps and file-backed shortcut Pins disabled/hidden",()=>{
+    const builtin=sourceDesktopItemMenu({id:"notepad",isFile:false,multiple:false});
+    expect(builtin.find(a=>a.id==="pin")?.disabled).toBe(true);
+    const file=sourceDesktopItemMenu({
+      id:"file:/User/Notepad.lnk",isFile:true,multiple:false,fileName:"Notepad.lnk"
+    });
+    expect(file.find(a=>a.id==="pin")).toBeUndefined();
   });
 });

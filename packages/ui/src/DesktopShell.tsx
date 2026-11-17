@@ -31,6 +31,7 @@ import { WindowFrame } from "./WindowFrame";
 import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
+import {taskbarPins} from "./sourceTaskbarPins";
 import { ShortcutWizard } from "./ShortcutWizard";
 import "./sourceTray.css";
 
@@ -204,6 +205,8 @@ export function DesktopShell({
   const desktop = appRegistry.desktop();
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
+  const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
+  useEffect(()=>taskbarPins.subscribe(setPinnedPrograms),[]);
   const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
   const magnifierActive = state.windows.some(win => win.appId === "magnifier");
   // Original magnifier follows document mousemove while mounted, even at 1x,
@@ -340,7 +343,31 @@ export function DesktopShell({
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
         </button>
         <div className="windows-taskbar__running">
-          {state.windows.map(win => (
+          {pinnedPrograms.map(programId=>{
+            const app=appRegistry.get(programId);
+            if(!app)return null;
+            const running=state.windows.find(win=>win.appId===programId);
+            return <button key={"pin:"+programId}
+              className={"windows-taskbar__application is-pinned"+
+                (running?" is-running":"")}
+              data-test-taskbar-pin={programId}
+              data-test-taskbar-pin-running={Boolean(running)}
+              title={app.label}
+              aria-label={"Open or switch to "+app.label}
+              onClick={()=>{
+                if(running)dispatch({
+                  type:running.minimized?"FOCUS_WINDOW":"MINIMIZE_WINDOW",
+                  id:running.id
+                });
+                else dispatch({type:"OPEN_APP",app});
+              }}>
+              <img src={sourceThemeProgramArt(state.theme,programId)??(
+                programId==="computer"?sourceShellAsset(state.theme,"computer"):
+                programId==="bin"?sourceShellAsset(state.theme,"bin"):null)??app.icon}
+                alt="" width={26} height={26} />
+            </button>;
+          })}
+          {state.windows.filter(win=>!pinnedPrograms.includes(win.appId)).map(win => (
             <button key={win.id} className={`windows-taskbar__application ${win.minimized ? "is-minimized" : ""}`}
               title={win.title} aria-label={`Switch to ${win.title}`} onClick={() => dispatch({
                 type: win.minimized ? "FOCUS_WINDOW" : "MINIMIZE_WINDOW", id: win.id
