@@ -1,3 +1,52 @@
+## Explorer Send to Desktop path-backed shortcuts — 17 November 2026
+
+Continued the user's original-theme/desktop/Computer context priority using
+pinned `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/modules/system/main.js`, `ExplorerItemMenu.sendToDesktop`.
+
+- `465b734` adds `sourcePathShortcuts.ts`: original-style
+  `{exe,icon,path}` data in `<name> - Shortcut.lnk`; bounded canonical
+  `/EXTERNAL/computer` Guest path, no host file commands, no recursive
+  shortcut-to-shortcut path; atomically creates multi-selection links
+  with collision-safe case-insensitive suffixes.
+- `1deb1b2` exposes shared contracts. `fee28af` prevents the
+  executable-only `parseSourceShortcut` from processing ANY
+  path-containing shortcut.
+- `d5630f9` updates the Desktop file-backed list model to track
+  a separate `targetPath` and source icon, never spoof a programId.
+  `99d1d0f` resolves live path-shortcut targets and opens mounted
+  Guest folders/TXT/photos/media through existing registered app
+  adapters. Deleted/missing targets yield an error, not a host operation.
+  `2929aee` adds the same safe path resolver to Computer.
+- `b10cd6a` dynamically enables the original Send to Desktop child
+  while leaving unimplemented Compressed (zipped) folder disabled.
+  `1b6f8bf` wires Explorer item selection to a real atomic VFS
+  creation operation; file/clipboard/desktop remain single shared data.
+- `2e734ce` tests real source JSON, paths, collisions, atomicity,
+  traversal and malicious JSON. `362f45c`/`39d11c8` test the Desktop
+  parser's distinct program vs path semantics. `d503a55` updates
+  item-menu unit conditions, `afecc98` updates browser menu conditions.
+  `ced56ff` adds three Playwright E2E cases: file/folder open,
+  reload persistence, Win11 multi-select and suffix collision.
+  `50e92e4` adds this spec to opt-in focused shell CI.
+- Updated `migration/EXPLORER-ITEM-MENU-SOURCE.md` describes the
+  implementation and remaining icon/appearance gaps. Original byte
+  assets and source inventory remain unchanged.
+
+**Verification boundary:** Latest prior Explorer menu
+[CI #44125386790](https://github.com/codersachin99/windows-os/actions/runs/44125386790)
+passed TypeScript, units, source/asset audits, production build and
+focused shell Playwright, but its **full Chromium job was still executing
+as of this write**. The newly added path shortcut code is **not verified
+by that earlier commit**. A new exact-HEAD `[run-ci]` gate is required
+to accept this milestone. Never claim full parity: source screenshot
+pairing is unconfigured, Compressed ZIP, special file associations,
+exact original icon/exe path mapping, nested context geometry and
+additional theme rendering remain unported. Keep draft PR #1, no
+merge to main or release.
+
+---
+
 ## Explorer file/folder item menu fidelity — 17 November 2026
 
 Both previous exact-head shell checkpoints **PASSED full GitHub CI**:
