@@ -1,6 +1,7 @@
 import {useState} from "react";
 import type {SourceStartPreferences} from "@windows-os/sdk";
-import {sourceStartPreferences} from "@windows-os/sdk";
+import {sourceStartPreferences,sourceTaskbarPreferences,
+  isSourceTaskbarButtonMode} from "@windows-os/sdk";
 import "./TaskbarSettingsApp.css";
 
 export type SourceTaskbarTab="taskbar"|"start"|"toolbars";
@@ -10,9 +11,10 @@ interface Props{
   theme:string;
 }
 /** Original src/modules/shell/taskbar.js window-taskbar: three tabs,
- * live Start power/recent privacy draft with OK/Cancel/Apply. Other
- * source controls retain their original labels and are explicitly
- * disabled until actual button-combining/taskbar layout engines exist.
+ * Start power/recent privacy and source taskbarDraft.type use transactional
+ * OK/Cancel/Apply. The original taskbar-base.js checks type !== "combine"
+ * to render full-size labeled buttons; it does not regroup window ids.
+ * Source-disabled auto-hide, lock and small-icon settings remain disabled.
  */
 export function TaskbarSettingsApp({
   onClose,onCustomizeNotificationArea,theme
@@ -20,11 +22,16 @@ export function TaskbarSettingsApp({
   const [tab,setTab]=useState<SourceTaskbarTab>("taskbar");
   const [draft,setDraft]=useState(()=>sourceStartPreferences.snapshot());
   const [saved,setSaved]=useState(()=>sourceStartPreferences.snapshot());
+  const [taskbarDraft,setTaskbarDraft]=useState(()=>sourceTaskbarPreferences.snapshot());
+  const [taskbarSaved,setTaskbarSaved]=useState(()=>sourceTaskbarPreferences.snapshot());
   const dirty=draft.powerButtonAction!==saved.powerButtonAction||
-    draft.storeRecentApps!==saved.storeRecentApps;
+    draft.storeRecentApps!==saved.storeRecentApps||
+    taskbarDraft.type!==taskbarSaved.type;
   const apply=()=>{
     sourceStartPreferences.apply(draft);
+    sourceTaskbarPreferences.apply(taskbarDraft);
     setSaved({...draft});
+    setTaskbarSaved({...taskbarDraft});
   };
   const pick=(field:keyof SourceStartPreferences,value:string|boolean)=>{
     setDraft(previous=>({
@@ -66,7 +73,12 @@ export function TaskbarSettingsApp({
             </select>
           </label>
           <label>Taskbar buttons:
-            <select disabled value="combine" onChange={()=>{}}>
+            <select value={taskbarDraft.type} data-test-taskbar-settings-buttons=""
+              onChange={event=>{
+                const value=event.currentTarget.value;
+                if(isSourceTaskbarButtonMode(value))
+                  setTaskbarDraft(previous=>({...previous,type:value}));
+              }}>
               <option value="combine">Always combine, hide labels</option>
               <option value="combine-when-full">Combine when taskbar is full</option>
               <option value="no-combine">Never combine</option>
