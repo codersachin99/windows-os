@@ -236,8 +236,15 @@
   overflow:hidden;overscroll-behavior:contain;
 }
 .windows-startmenu--win11 .windows-startmenu__win11-pages{
-  order:3;display:flex;align-items:center;justify-content:center;
-  gap:10px;padding:0 20px 8px;flex:none;
+  position:absolute;z-index:2;top:50%;right:1px;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:4px 0;
+}
+/* 18ee positions page dots beside the two-row pinned grid, not below
+ * the recently-opened section. Keep all six columns visible. */
+.windows-startmenu--win11 .windows-startmenu__programs:has(> .windows-startmenu__win11-pages){
+  padding-right:29px;
 }
 .windows-startmenu--win11 .windows-startmenu__win11-pages button{
   display:flex;align-items:center;justify-content:center;

@@ -278,7 +278,6 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
             ))}
             {!programs.length && <p className="windows-startmenu__empty">No items match your search.</p>}
           </>}
-        </div>
         {win11Paged&&win11PageCount>1&&
           <nav className="windows-startmenu__win11-pages"
             data-test-win11-start-pages="" aria-label="Program pages">
@@ -291,6 +290,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
                 <span aria-hidden="true"/>
               </button>)}
           </nav>}
+        </div>
         {theme==="win11"&&recentSection}
         {contextError&&<p role="alert" data-test-start-context-error=""
           className="windows-startmenu__empty">{contextError}</p>}
