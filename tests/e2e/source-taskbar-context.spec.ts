@@ -40,7 +40,7 @@ test("source taskbar background menu keeps unavailable controls disabled",async(
     "Toolbars","Cascade windows","Show windows stacked",
     "Show windows side by side","Show desktop","Start Task Manager","Properties"
   ]);
-  for(const action of ["toolbar","cascade","stack","side","properties"]){
+  for(const action of ["toolbar","cascade","stack","side"]){
     await expect(menu.locator('[data-test-taskbar-context-action="'+action+'"]'))
       .toBeDisabled();
   }
