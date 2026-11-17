@@ -53,6 +53,7 @@ interface ApplicationContentProps {
   registerClose(id: string, handler: () => void): () => void;
   onMagnifierScale(scale: number): void;
   theme: DesktopState["theme"];
+  wallpaper:DesktopState["wallpaper"];
   windows: DesktopState["windows"];
   onRequestCloseWindow(id: string): void;
   trayPreferences:SourceTrayPreferences;
@@ -60,7 +61,7 @@ interface ApplicationContentProps {
 }
 function ApplicationContent({
   appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
-  windows, onRequestCloseWindow, theme,
+  windows, onRequestCloseWindow, theme,wallpaper,
   trayPreferences,onTrayPreferencesChange
 }: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
@@ -95,8 +96,9 @@ function ApplicationContent({
     trayPreferences={trayPreferences}
     onTrayPreferencesChange={onTrayPreferencesChange}/>;
   if (appId === "personalize") return <PersonalizeApp
-    theme={theme}
-    onSelectTheme={next=>dispatch({type:"SET_THEME",theme:next})}/>;
+    theme={theme} wallpaper={wallpaper}
+    onSelectTheme={next=>dispatch({type:"SET_THEME",theme:next})}
+    onSelectWallpaper={path=>dispatch({type:"SET_WALLPAPER",path})}/>;
   if (appId==="taskbar") return <TaskbarSettingsApp theme={theme}
     onClose={()=>onRequestCloseWindow(windowId)}
     onCustomizeNotificationArea={()=>{
@@ -346,7 +348,7 @@ export function DesktopShell({
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
-            windows={state.windows} onRequestCloseWindow={requestClose}
+            wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
@@ -363,7 +365,7 @@ export function DesktopShell({
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
-            windows={state.windows} onRequestCloseWindow={requestClose}
+            wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
