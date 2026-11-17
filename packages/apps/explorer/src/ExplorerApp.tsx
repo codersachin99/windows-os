@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
-import { legacyArt,sourceShellAsset } from "@windows-os/assets";
+import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeSpecialFolderArt} from "@windows-os/assets";
 import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
@@ -712,7 +712,8 @@ export function ExplorerApp({
             onClick={() => void execute(() => session.open(
               volume.pathConfig.root + "/" + drive.path
             ))} title={drive.label + " (" + drive.letter + ":)"}>
-            <img src={sourceShellAsset(theme,"computer") ?? legacyArt.computer} alt="" />
+            <img src={sourceThemeProgramArt(theme,drive.letter==="C"?"disk-os":"disk-data")
+              ?? sourceShellAsset(theme,"computer") ?? legacyArt.computer} alt="" />
             {drive.label} ({drive.letter}:)
           </button>
         )}
@@ -723,12 +724,15 @@ export function ExplorerApp({
         {shortcuts.map(shortcut =>
           <button key={shortcut.label} className="explorer-navigation__home"
             onClick={() => void execute(() => session.open(shortcut.path))}>
-            <img src={sourceShellAsset(theme,"folder") ?? legacyArt.folder} alt="" /> {shortcut.label}
+            <img src={sourceThemeSpecialFolderArt(theme,shortcut.label)
+              ?? sourceShellAsset(theme,"folder") ?? legacyArt.folder} alt="" /> {shortcut.label}
           </button>
         )}
         {sourceGuest && <button className="explorer-navigation__home" disabled
           title="The source Z: DVD device is not writable or mounted">
-          DVD RW Drive (Z:)
+          <img src={sourceThemeProgramArt(theme,"disk-cd")
+            ?? sourceShellAsset(theme,"computer") ?? legacyArt.computer}
+            alt="" /> DVD RW Drive (Z:)
         </button>}
       </aside>}
       <section className={"explorer-content" +
