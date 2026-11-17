@@ -45,10 +45,13 @@ Bin entries.
 
 ## Remaining discrepancies
 
-- Source BaseMenu displays a **nested side-flipping popup**; React's
-  compatibility menu presently displays child items inline below the
-  opened parent, as with the existing Explorer View/New menu. The
-  submenu geometry and original hover transition are not pixel-verified.
+- Pinned Source BaseMenu displays a **nested side-flipping popup**.
+  The Explorer item **Send to** submenu now uses an actual separately
+  positioned popup that leaves the parent row heights unchanged, flips
+  horizontally at the viewport edge, clamps vertically near the bottom,
+  and supports Arrow Right / Arrow Left keyboard traversal. Win7/XP/11
+  original screenshot parity is still **unverified**, and the separate
+  Explorer background View/New menus retain their earlier inline form.
 - **Extract here** and **Compressed (zipped) folder** require an
   archive engine. Do not enable them until a validated Guest filesystem
   archive adapter is available and tested. `Send to Desktop` now writes
@@ -88,3 +91,24 @@ actually pass.
 - Still unsupported: original source path shortcut icon/executable
   variants beyond the migrated file-kind mapping; shortcut-to-shortcut
   recursion; archive extraction/compression; exact nested popup geometry.
+
+## Source Explorer item submenu geometry checkpoint
+
+- `sourceExplorerSubmenuPlacement.ts` implements side-flipped coordinates
+  from the original menu/row geometry without mutating the primary menu's
+  layout. The returned local-space top/left values clamp to the actual
+  viewport on phone, tablet or desktop.
+- `ExplorerApp` places the **Send to** child in a separately measured
+  absolute popup, tracks mouse hover for the parent, and gives child rows
+  their own Up/Down focus cycle. Right Arrow expands and focuses the
+  first available child; Left Arrow collapses and restores parent focus.
+  Escape still dismisses the whole menu through the shared handler.
+- `ExplorerApp.css` changes overflow only for the **item** menu;
+  Recycle Bin and empty-space Computer context behavior remains separate.
+- Pure tests cover opening right, flipping left, lower-edge clipping and
+  narrow mobile screens. Playwright verifies the popup does not increase
+  the outer menu height, stays within the actual viewport and supports
+  keyboard navigation on desktop and mobile Chromium.
+- Remaining: true source submenu geometry for the **background View/New**
+  menus, original shader/border metrics under all themes, paired visual
+  captures and behavior differences under external filesystem providers.
