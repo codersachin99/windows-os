@@ -428,7 +428,7 @@ export function DesktopShell({
       </footer>
       {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
-        onClose={closeTaskbarContext}/>}
+        onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}/>}
     </main>
   );
 }

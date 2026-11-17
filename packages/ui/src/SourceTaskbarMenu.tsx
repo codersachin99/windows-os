@@ -1,4 +1,4 @@
-import {useEffect,useLayoutEffect,useRef,useState} from "react";
+import {useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
 import type {DesktopAction,DesktopWindow} from "@windows-os/contracts";
 import {appRegistry} from "@windows-os/sdk";
 import {taskbarPins} from "./sourceTaskbarPins";
@@ -14,7 +14,8 @@ interface SourceTaskbarMenuProps{
   context:SourceTaskbarContext;
   windows:readonly DesktopWindow[];
   pinned:readonly string[];
-  dispatch:React.Dispatch<DesktopAction>;
+  dispatch:Dispatch<DesktopAction>;
+  onRequestCloseWindow(id:string):void;
   onClose():void;
 }
 
@@ -34,7 +35,7 @@ export function sourceTaskbarPopupPosition(
 }
 
 export function SourceTaskbarMenu({
-  context,windows,pinned,dispatch,onClose
+  context,windows,pinned,dispatch,onRequestCloseWindow,onClose
 }:SourceTaskbarMenuProps){
   const ref=useRef<HTMLDivElement>(null);
   const [position,setPosition]=useState({left:0,top:0});
@@ -72,7 +73,7 @@ export function SourceTaskbarMenu({
   const act=(id:SourceTaskbarAction)=>{
     if(id==="pin"&&app)taskbarPins.toggle(app.id);
     else if(id==="open"&&app)dispatch({type:"OPEN_APP",app});
-    else if(id==="close"&&running)dispatch({type:"CLOSE_WINDOW",id:running.id});
+    else if(id==="close"&&running)onRequestCloseWindow(running.id);
     else if(id==="show-desktop")for(const win of windows){
       if(!win.minimized)dispatch({type:"MINIMIZE_WINDOW",id:win.id});
     }
