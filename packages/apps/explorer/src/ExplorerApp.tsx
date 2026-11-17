@@ -31,6 +31,7 @@ import {
   SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH
 } from "./sourceComputerExtras";
 import {sourceComputerIconArtwork,sourceShortcutCustomIconURL} from "./sourceComputerIcons";
+import {sourceBinItemMenu,type SourceBinItemAction} from "./sourceBinItemMenu";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -892,27 +893,30 @@ export function ExplorerApp({
             ?.querySelector<HTMLButtonElement>(parent)?.focus({preventScroll:true}));
         }
       }}>
-      {context.kind === "item" && context.uri && <>
+      {context.kind === "item" && context.uri && (isBin ? <>
+        {sourceBinItemMenu(Boolean(selected?.originalPath)).map(action=>
+          <button key={action.id} role="menuitem"
+            data-test-bin-context-action={action.id}
+            disabled={action.disabled}
+            title={action.id==="properties"?"Original Properties is disabled":undefined}
+            onClick={()=>contextAction(()=>{
+              const handlers:Readonly<Record<Exclude<SourceBinItemAction,"properties">,()=>void>>={
+                restore:restoreSelection,delete:requestDelete
+              };
+              if(action.id!=="properties")handlers[action.id]();
+            })}>{action.label}</button>)}
+      </> : <>
         <button role="menuitem" onClick={() => contextAction(() => {
           const item = visible.find(entry => entry.uri === context.uri);
           if (item) openEntry(item.uri, item.type);
-        })}>{isBin ? "Open folder" : "Open"}</button>
-        {isBin
-          ? <>
-              <button role="menuitem" disabled={!selected?.originalPath}
-                onClick={() => contextAction(restoreSelection)}>Restore</button>
-              <button role="menuitem"
-                onClick={() => contextAction(requestDelete)}>Delete permanently</button>
-            </>
-          : <>
-              <button role="menuitem" onClick={() => contextAction(() => copySelection("cut"))}>Cut</button>
-              <button role="menuitem" onClick={() => contextAction(() => copySelection("copy"))}>Copy</button>
-              <button role="menuitem" onClick={() => contextAction(requestRename)}>Rename</button>
-              <button role="menuitem" disabled={!trashPath}
-                onClick={() => contextAction(requestDelete)}>Delete</button>
-            </>}
+        })}>Open</button>
+        <button role="menuitem" onClick={() => contextAction(() => copySelection("cut"))}>Cut</button>
+        <button role="menuitem" onClick={() => contextAction(() => copySelection("copy"))}>Copy</button>
+        <button role="menuitem" onClick={() => contextAction(requestRename)}>Rename</button>
+        <button role="menuitem" disabled={!trashPath}
+          onClick={() => contextAction(requestDelete)}>Delete</button>
         <button role="menuitem" disabled title="Source Properties dialog is not migrated">Properties</button>
-      </>}
+      </>)}
       {context.kind === "background" && <>
         <button role="menuitem" aria-expanded={context.viewOpen}
           aria-haspopup="menu" data-test-explorer-context-view=""
