@@ -443,7 +443,8 @@ export function DesktopShell({
                 });
               }}
               onClick={() => dispatch({
-                type: win.minimized ? "FOCUS_WINDOW" : "MINIMIZE_WINDOW", id: win.id
+                type: win.minimized || win.z!==highestVisibleWindowZ
+                  ? "FOCUS_WINDOW" : "MINIMIZE_WINDOW", id: win.id
               })}>
               <img src={sourceThemeProgramArt(state.theme,win.appId)??win.icon}
                 alt="" width={26} height={26} />
