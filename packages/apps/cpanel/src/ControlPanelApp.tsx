@@ -2,7 +2,8 @@ import {useEffect,useState} from "react";
 import {legacyArt,legacySourceIconArtwork,legacyCpanelTileArtwork} from "@windows-os/assets";
 import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-os/filesystem";
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
-  sourceCpanelAddressIconKey,type SourceCpanelRegistryItem} from "./sourceRegistry";
+  sourceCpanelIsMigratedProgram,sourceCpanelAddressIconKey,
+  type SourceCpanelMigratedProgram,type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
@@ -35,6 +36,8 @@ export interface ControlPanelAppProps{
   initialLocation?:SourceControlPanelLocation;
   onClose():void;
   onSwitchUser():void;
+  /** Launch source registry "program" targets in their own shell windows. */
+  onOpenProgram?(id:SourceCpanelMigratedProgram):void;
   trayPreferences:SourceTrayPreferences;
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
   /** Original Vuex Action Center history when available; no fabricated alerts. */
@@ -44,7 +47,7 @@ export interface ControlPanelAppProps{
  * original 24-tile root, indexed task search and six genuinely migrated
  * destinations. Other setting/program targets stay visibly disabled. */
 export function ControlPanelApp({
-  onClose,onSwitchUser,trayPreferences,onTrayPreferencesChange,
+  onClose,onSwitchUser,onOpenProgram,trayPreferences,onTrayPreferencesChange,
   filesystem,theme="win7",initialLocation=null,messages=[]
 }:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
@@ -72,9 +75,14 @@ export function ControlPanelApp({
   const searchResults=sourceCpanelSearchRegistry(searchedQuery,sourceItems);
   const sourceIcon=(item:SourceCpanelRegistryItem)=>
     legacyCpanelTileArtwork[item.iconKey]??legacySourceIconArtwork(item.iconKey).src;
+  const canOpenSourceItem=(id:string)=>sourceCpanelIsSupported(id)||
+    (Boolean(onOpenProgram)&&sourceCpanelIsMigratedProgram(id));
   const openSourceItem=(item:SourceCpanelRegistryItem)=>{
-    if(!sourceCpanelIsSupported(item.id))return;
-    open(item.id as SourceControlPanelLocation);
+    if(sourceCpanelIsSupported(item.id)){
+      open(item.id as SourceControlPanelLocation);
+    }else if(onOpenProgram&&sourceCpanelIsMigratedProgram(item.id)){
+      onOpenProgram(item.id);
+    }
   };
   const programs=sourceCpanelInstalledPrograms(sourcePrograms);
   const open=(value:SourceControlPanelLocation)=>{
@@ -139,13 +147,13 @@ export function ControlPanelApp({
           <img src={sourceIcon(item)} alt="" width={40} height={40}/>
           <div>
             <button type="button" className="windows-cpanel__link"
-              disabled={!sourceCpanelIsSupported(item.id)}
-              title={!sourceCpanelIsSupported(item.id)?
+              disabled={!canOpenSourceItem(item.id)}
+              title={!canOpenSourceItem(item.id)?
                 "Original target adapter is not migrated":undefined}
               onClick={()=>openSourceItem(item)}>{item.label}</button>
             {tasks.map((task,index)=>{
               const target=sourceItems.find(candidate=>candidate.id===task.id);
-              const enabled=Boolean(target&&sourceCpanelIsSupported(target.id));
+              const enabled=Boolean(target&&canOpenSourceItem(target.id));
               return <button key={index} type="button"
                 className="windows-cpanel__task" data-test-cpanel-task=""
                 disabled={!enabled}
@@ -352,8 +360,8 @@ export function ControlPanelApp({
           {sourceItems.map(item=><button type="button" key={item.id}
             data-test-cpanel-item={item.id}
             className="windows-cpanel__tile"
-            disabled={!sourceCpanelIsSupported(item.id)}
-            title={!sourceCpanelIsSupported(item.id)?
+            disabled={!canOpenSourceItem(item.id)}
+            title={!canOpenSourceItem(item.id)?
               "Original target adapter is not migrated":undefined}
             onClick={()=>openSourceItem(item)}>
             <img src={sourceIcon(item)} alt="" width={44} height={44}/>
