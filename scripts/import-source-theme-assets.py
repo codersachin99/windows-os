@@ -22,6 +22,7 @@ FILES: dict[str, dict[str, str]] = {
     "winxp": {
         "start-button-winxp.a3485adf.webp": "fe20544f4aa319b1019bdd4f177630a0c4d680d2",
         "bin-winxp.7d0403fd.webp": "46c95fdb19ff038c8c733982c5df04322659dcce",
+        "bin-full-winxp.ba3f6193.webp": "e4760bd7367997e2512aa00e07436a172f8574b4",
         "computer-winxp.8cbae9da.webp": "e9f50f48d4a6529e6419ab6e711cd5d1c3fe74cc",
         "folder-winxp.ff1b00c5.webp": "43766e1cc9cf7c9c0470d7df76eb9b67d7177dff",
         "file-winxp.c130b357.webp": "a5ca3121548c50a51cdf28fff9170d16db2355ee",
@@ -32,6 +33,7 @@ FILES: dict[str, dict[str, str]] = {
     "win11": {
         "start-button-win11.e48a735f.webp": "c6249d4c405516bbd49e437145a1df5874cf483e",
         "bin-win11.73608517.webp": "6473d922271876f980454cb842fb96a8c3956acf",
+        "bin-full-win11.de576bf3.webp": "d5c2c4b41ed49a729d4ff40f7dc3951516d9b2e8",
         "computer-win11.fc5b48e4.webp": "9d40da8deb7e1bea560519aab5955ccae74edeec",
         "folder-win11.49360b7d.webp": "565e6998c2e5b189cb81ae0eb92dc3501310a111",
         "file-win11.8b2c3723.webp": "5af256855a2f21dc0d446b8d1046ea00b2a9cdcc",

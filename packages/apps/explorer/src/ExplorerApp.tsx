@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from "react";
-import { legacyArt } from "@windows-os/assets";
+import { legacyArt,sourceShellAsset } from "@windows-os/assets";
 import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
@@ -699,7 +699,9 @@ export function ExplorerApp({
       <aside className="explorer-navigation">
         <button className="explorer-navigation__home"
           onClick={() => void execute(() => session.open(recycleBinPath ?? "/"))}>
-          <img src={isBin ? legacyArt.recycleBin : legacyArt.computer} alt="" />
+          <img src={isBin
+            ? sourceShellAsset(theme,visible.length?"binFull":"bin") ?? legacyArt.recycleBin
+            : sourceShellAsset(theme,"computer") ?? legacyArt.computer} alt="" />
           {isBin ? "Recycle Bin" : "Computer"}
         </button>
         {!isBin && volume?.pathConfig.drives.map(drive =>
@@ -707,18 +709,18 @@ export function ExplorerApp({
             onClick={() => void execute(() => session.open(
               volume.pathConfig.root + "/" + drive.path
             ))} title={drive.label + " (" + drive.letter + ":)"}>
-            <img src={legacyArt.computer} alt="" />
+            <img src={sourceShellAsset(theme,"computer") ?? legacyArt.computer} alt="" />
             {drive.label} ({drive.letter}:)
           </button>
         )}
         {!isBin && volume && <button className="explorer-navigation__home"
           onClick={() => void execute(() => session.open(volume.desktopPath))}>
-          <img src={legacyArt.folder} alt="" /> Desktop
+          <img src={sourceShellAsset(theme,"folder") ?? legacyArt.folder} alt="" /> Desktop
         </button>}
         {shortcuts.map(shortcut =>
           <button key={shortcut.label} className="explorer-navigation__home"
             onClick={() => void execute(() => session.open(shortcut.path))}>
-            <img src={legacyArt.folder} alt="" /> {shortcut.label}
+            <img src={sourceShellAsset(theme,"folder") ?? legacyArt.folder} alt="" /> {shortcut.label}
           </button>
         )}
         {sourceGuest && <button className="explorer-navigation__home" disabled
@@ -790,7 +792,8 @@ export function ExplorerApp({
             onDoubleClick={() => openEntry(item.uri, item.type)}
             onKeyDown={event => { if (event.key === "Enter") openEntry(item.uri, item.type); }}>
             <span className="listview__item-iconbox">
-              <img src={icon?.src ?? (item.type === "directory" ? legacyArt.folder : legacyArt.file)}
+              <img src={icon?.src ?? sourceShellAsset(theme,item.type === "directory"?"folder":"file")
+                ?? (item.type === "directory" ? legacyArt.folder : legacyArt.file)}
                 alt="" draggable={false} />
             </span>
             {state.viewMode === "content"

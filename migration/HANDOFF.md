@@ -1,3 +1,23 @@
+## XP/Win11 source image import and Explorer integration — 17 November 2026
+
+Commit `a55f0ef`: imported 16 original XP/Win11 source images (including
+empty/full Bin), verifying the pinned legacy Git blob hashes against
+their new target repository blob hashes before the commit.
+Commit `15fe6f0`: theme-aware live Desktop Start/Computer/Bin rendering,
+XP Start menu footer art, and unit + desktop/mobile browser contracts.
+This follow-up integrates the exact source themed folder, file,
+Computer/Recycle Bin navigation artwork in Explorer and extends the
+byte-verified importer manifest. Win7 original icon and custom .lnk
+behavior remain untouched. Source audit checks original image bytes.
+
+**Status:** committed to draft PR #1 but no full latest-SHA typecheck,
+Vitest, source audit, build or Chromium run has completed yet.
+Next deliberate action: one combined [run-ci] acceptance gate,
+inspect failures and fix before claiming pass. Original paired visual
+parity not assessed. Do not merge main or release; keep work shell-first.
+
+---
+
 ## Shell context-menu source parity gate — 17 November 2026
 
 At the start of this continuation, first integrated shell acceptance

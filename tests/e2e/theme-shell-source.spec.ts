@@ -51,10 +51,7 @@ test("new theme skin imports do not contaminate the original Win7 shell",async({
 });
 
 test("XP and Win11 shell consume the exact imported source Start/Computer/Bin artwork",async({page})=>{
-  for(const [theme,token] of [
-    ["winxp","winxp.a3485adf"],
-    ["win11","win11.e48a735f"]
-  ] as const){
+  for(const theme of ["winxp","win11"] as const){
     const shell=await guestTheme(page,theme);
     const start=theme==="winxp"
       ? "/assets/images/start-button-winxp.a3485adf.webp"
@@ -93,4 +90,45 @@ test("XP power controls and theme-specific Start folder use original imported ar
   await menu.locator("[data-test-all-programs]").click();
   await expect(menu.locator('[data-test-source-program-folder="Games"] img'))
     .toHaveAttribute("src","/assets/images/folder-win11.49360b7d.webp");
+});
+
+test("source Computer and Bin Explorer show original XP/Win11 folder, file and navigation artwork",async({page})=>{
+  for(const theme of ["winxp","win11"] as const){
+    await guestTheme(page,theme);
+    const names=theme==="winxp"?{
+      computer:"computer-winxp.8cbae9da.webp",
+      bin:"bin-winxp.7d0403fd.webp",
+      folder:"folder-winxp.ff1b00c5.webp",
+      file:"file-winxp.c130b357.webp"
+    }:{
+      computer:"computer-win11.fc5b48e4.webp",
+      bin:"bin-win11.73608517.webp",
+      folder:"folder-win11.49360b7d.webp",
+      file:"file-win11.8b2c3723.webp"
+    };
+    const source=(key:keyof typeof names)=>"/assets/images/"+names[key];
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const computer=page.locator('[data-test-window="computer"]').last();
+    await expect(computer).toBeVisible();
+    await expect(computer.locator(".explorer-navigation__home img").first())
+      .toHaveAttribute("src",source("computer"));
+    await expect(computer.locator(".explorer-navigation__home").filter({hasText:"Desktop"}).locator("img"))
+      .toHaveAttribute("src",source("folder"));
+    await computer.getByRole("button",{name:"New folder"}).click();
+    const dialog=computer.getByRole("dialog",{name:"New folder"});
+    await dialog.getByRole("textbox",{name:"New folder name"}).fill("Theme Folder");
+    await dialog.getByRole("button",{name:"OK"}).click();
+    await expect(computer.locator('[data-test-explorer-item="Theme Folder"] .listview__item-iconbox img'))
+      .toHaveAttribute("src",source("folder"));
+    await computer.locator('input[aria-label="Upload files"]').setInputFiles({
+      name:"Theme File.bin",mimeType:"application/octet-stream",buffer:Buffer.from([1,2,3])
+    });
+    await expect(computer.locator('[data-test-explorer-item="Theme File.bin"] .listview__item-iconbox img'))
+      .toHaveAttribute("src",source("file"));
+    await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+    const bin=page.locator('[data-test-window="bin"]').last();
+    await expect(bin).toBeVisible();
+    await expect(bin.locator(".explorer-navigation__home img").first())
+      .toHaveAttribute("src",source("bin"));
+  }
 });
