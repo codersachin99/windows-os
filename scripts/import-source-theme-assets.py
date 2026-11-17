@@ -121,6 +121,27 @@ def import_files(
     return len(verified), copied
 
 
+def verify_target_files(target: Path, themes: tuple[str, ...]) -> int:
+    """Verify *committed target* bytes against the pinned original Git blobs.
+
+    Unlike source-import mode, this works in a clean CI checkout without
+    the legacy repository or a private source access token.
+    """
+    count = 0
+    for theme in themes:
+        for name, expected in FILES[theme].items():
+            path = target / name
+            if not path.is_file():
+                raise FileNotFoundError(f"Missing original theme asset: {path}")
+            actual = git_blob_sha(path.read_bytes())
+            if actual != expected:
+                raise ValueError(
+                    f"Modified original theme asset {name}: {actual}, expected {expected}"
+                )
+            count += 1
+    return count
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     project = Path(__file__).resolve().parents[1]
@@ -130,7 +151,15 @@ def main() -> None:
     parser.add_argument("--themes", choices=["winxp", "win11"], nargs="+",
                         default=["winxp", "win11"])
     parser.add_argument("--verify-only", action="store_true")
+    parser.add_argument("--verify-target-only", action="store_true",
+                        help="Check committed target bytes without source checkout")
     args = parser.parse_args()
+    if args.verify_target_only:
+        count = verify_target_files(
+            args.target.resolve(), tuple(dict.fromkeys(args.themes))
+        )
+        print(f"Verified {count} exact pinned XP/Win11 Git blobs in target checkout.")
+        return
     count, copied = import_files(
         args.source.resolve(), args.target.resolve(), tuple(dict.fromkeys(args.themes)),
         args.verify_only

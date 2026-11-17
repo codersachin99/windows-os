@@ -40,6 +40,8 @@ jobs:
         run: npm test
       - name: Check original source migration inventory
         run: npm run audit:legacy
+      - name: Verify byte-identical original theme artwork
+        run: python3 scripts/import-source-theme-assets.py --verify-target-only
       - name: Verify original Contacts source style and shortcut fidelity
         run: npm run test:source
       - name: Build Vite application
