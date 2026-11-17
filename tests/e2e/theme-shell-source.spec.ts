@@ -107,6 +107,14 @@ test("source Computer and Bin Explorer show original XP/Win11 folder, file and n
       file:"file-win11.8b2c3723.webp"
     };
     const source=(key:keyof typeof names)=>"/assets/images/"+names[key];
+    const folderName="Theme Folder "+theme;
+    const fileName="Theme File "+theme+".bin";
+    await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+    const bin=page.locator('[data-test-window="bin"]').last();
+    await expect(bin).toBeVisible();
+    await expect(bin.locator(".explorer-navigation__home img").first())
+      .toHaveAttribute("src",source("bin"));
+    await bin.getByRole("button",{name:/^Close /}).click();
     await page.locator('[data-test-desktop-icon="computer"]').dblclick();
     const computer=page.locator('[data-test-window="computer"]').last();
     await expect(computer).toBeVisible();
@@ -116,19 +124,14 @@ test("source Computer and Bin Explorer show original XP/Win11 folder, file and n
       .toHaveAttribute("src",source("folder"));
     await computer.getByRole("button",{name:"New folder"}).click();
     const dialog=computer.getByRole("dialog",{name:"New folder"});
-    await dialog.getByRole("textbox",{name:"New folder name"}).fill("Theme Folder");
+    await dialog.getByRole("textbox",{name:"New folder name"}).fill(folderName);
     await dialog.getByRole("button",{name:"OK"}).click();
-    await expect(computer.locator('[data-test-explorer-item="Theme Folder"] .listview__item-iconbox img'))
+    await expect(computer.locator('[data-test-explorer-item="'+folderName+'"] .listview__item-iconbox img'))
       .toHaveAttribute("src",source("folder"));
     await computer.locator('input[aria-label="Upload files"]').setInputFiles({
-      name:"Theme File.bin",mimeType:"application/octet-stream",buffer:Buffer.from([1,2,3])
+      name:fileName,mimeType:"application/octet-stream",buffer:Buffer.from([1,2,3])
     });
-    await expect(computer.locator('[data-test-explorer-item="Theme File.bin"] .listview__item-iconbox img'))
+    await expect(computer.locator('[data-test-explorer-item="'+fileName+'"] .listview__item-iconbox img'))
       .toHaveAttribute("src",source("file"));
-    await page.locator('[data-test-desktop-icon="bin"]').dblclick();
-    const bin=page.locator('[data-test-window="bin"]').last();
-    await expect(bin).toBeVisible();
-    await expect(bin.locator(".explorer-navigation__home img").first())
-      .toHaveAttribute("src",source("bin"));
   }
 });
