@@ -177,7 +177,9 @@ export function ExplorerApp({
     JSON.stringify([item.uri,item.mtime,item.size])).join("|");
   useEffect(()=>{
     let active=true;
-    if(theme!=="win7"||!sourceShortcutEntries.length){
+    // Every source theme uses the same .lnk JSON icon field; never suppress
+    // source icon discovery solely because the shell skin is XP/Win11.
+    if(!sourceShortcutEntries.length){
       setShortcutIcons(current=>Object.keys(current).length?{}:current);
       return;
     }
