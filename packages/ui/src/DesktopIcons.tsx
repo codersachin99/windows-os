@@ -3,7 +3,7 @@ import {
   type Dispatch, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent
 } from "react";
 import type { AppDefinition, DesktopAction, ThemeId } from "@windows-os/contracts";
-import { sourceShellAsset } from "@windows-os/assets";
+import { sourceShellAsset,sourceThemeProgramArt } from "@windows-os/assets";
 import {
   desktopBand, desktopBandHits, desktopBandSelection,
   type DesktopBand, type DesktopBandModifier
@@ -881,7 +881,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       const artwork = !app.file && (app.id === "computer"
         ? sourceShellAsset(theme, "computer")
         : app.id === "bin" ? sourceShellAsset(theme, trashCount > 0 ? "binFull" : "bin")
-        : null) || app.icon;
+        : sourceThemeProgramArt(theme,app.id)) || app.icon;
       return <button type="button" key={app.id} data-test-desktop-icon={app.id}
         data-test-desktop-file={app.file?.entry.uri}
         data-source-desktop-icon-type={app.file?.iconType}

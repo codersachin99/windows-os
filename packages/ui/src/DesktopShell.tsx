@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
-import { legacyArt, sourceShellAsset } from "@windows-os/assets";
+import { legacyArt,sourceShellAsset,sourceThemeProgramArt } from "@windows-os/assets";
 import { appRegistry,fileStore } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
@@ -307,7 +307,9 @@ export function DesktopShell({
           onClose={() => dispatch({ type: "CLOSE_WINDOW", id: win.id })}
           onFocus={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })} />
       ) : (
-        <WindowFrame key={win.id} window={win} dispatch={dispatch}
+        <WindowFrame key={win.id}
+          window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
+          dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
@@ -321,7 +323,9 @@ export function DesktopShell({
       {/* The control surface remains independent of the transformed canvas;
           other programs and their windows zoom together with the desktop. */}
       {state.windows.filter(win => win.appId === "magnifier").map(win => (
-        <WindowFrame key={win.id} window={win} dispatch={dispatch}
+        <WindowFrame key={win.id}
+          window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
+          dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
@@ -341,7 +345,8 @@ export function DesktopShell({
               title={win.title} aria-label={`Switch to ${win.title}`} onClick={() => dispatch({
                 type: win.minimized ? "FOCUS_WINDOW" : "MINIMIZE_WINDOW", id: win.id
               })}>
-              <img src={win.icon} alt="" width={26} height={26} />
+              <img src={sourceThemeProgramArt(state.theme,win.appId)??win.icon}
+                alt="" width={26} height={26} />
             </button>
           ))}
         </div>

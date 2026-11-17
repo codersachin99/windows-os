@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, ThemeId } from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
-import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork} from "@windows-os/assets";
+import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
 import {
   parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
   sourceProgramsById, type FileEntry
@@ -136,12 +136,13 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
                 data-test-source-program={shortcut.programId}
                 data-source-shortcut-path={shortcut.path}
                 data-source-program-icon-key={shortcut.iconKey}
-                data-source-program-artwork={shortcut.artwork}
+                data-source-program-artwork={sourceThemeProgramArt(theme,shortcut.iconKey)?"original":shortcut.artwork}
                 className="windows-startmenu__program"
                 disabled={!app}
                 title={app ? shortcut.name : shortcut.name + " — migration pending"}
                 onClick={() => openApp(shortcut.programId)}>
-                <img src={shortcut.icon} width={30} height={30} alt="" />
+                <img src={sourceThemeProgramArt(theme,shortcut.iconKey)??shortcut.icon}
+                  width={30} height={30} alt="" />
                 <span>{shortcut.name}</span>
               </button>;
             })}
@@ -152,7 +153,8 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
             {programs.map(app => (
               <button key={app.id} data-test-program={app.id}
                 className="windows-startmenu__program" onClick={() => dispatch({ type: "OPEN_APP", app })}>
-                <img src={app.icon} width={30} height={30} alt="" />
+                <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
+                  width={30} height={30} alt="" />
                 <span>{app.label}</span>
               </button>
             ))}
