@@ -74,7 +74,7 @@ test("XP and Win11 shell consume the exact imported source Start/Computer/Bin ar
     }
   }
 });
-test("XP power controls and theme-specific Start folder use original imported art",async({page})=>{
+test("XP folder art and original Win11 flat All Apps use source theme artwork",async({page})=>{
   const xp=await guestTheme(page,"winxp");
   await page.getByRole("button",{name:"Open Start menu"}).click();
   let menu=xp.locator("[data-test-start-menu]");
@@ -88,8 +88,11 @@ test("XP power controls and theme-specific Start folder use original imported ar
   await page.getByRole("button",{name:"Open Start menu"}).click();
   menu=win11.locator("[data-test-start-menu]");
   await menu.locator("[data-test-all-programs]").click();
-  await expect(menu.locator('[data-test-source-program-folder="Games"] img'))
-    .toHaveAttribute("src","/assets/images/folder-win11.49360b7d.webp");
+  // The pinned Win11 18ee module shows a *flat* allProgramItems list.
+  // Unlike WinXP/Win7, it never renders the Guest .lnk Games folder here.
+  await expect(menu.locator("[data-test-source-program-folder]")).toHaveCount(0);
+  await expect(menu.locator('[data-test-win11-all-app="notepad"] img'))
+    .toHaveAttribute("src","/assets/images/notepad-win11.2e4af294.webp");
 });
 
 test("source Computer and Bin Explorer show original XP/Win11 folder, file and navigation artwork",async({page})=>{
