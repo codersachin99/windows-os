@@ -1,3 +1,33 @@
+## Shell context interaction regression repairs — 17 November 2026
+
+The full earlier [CI #44024842900](https://github.com/codersachin99/windows-os/actions/runs/44024842900)
+at `088cb2a` passed TypeScript, 555 unit tests, source inventory,
+Contacts checks and production build but failed 9 Chromium assertions
+(4 desktop + 5 mobile). All nine were repeatable source test/interaction
+mismatches: ambiguous Text Document versus Rich Text Document selectors
+(4), an obsolete Explorer direct New folder context test (2), mobile
+inline-rename checkbox/field selection (1), and Start-menu Escape focus
+restoration (2). The source menu structure stays intact:
+
+- `f0a7bc4`: exact source menuitem selector, source Explorer New submenu
+  and inline-rename test targeting, plus post-unmount Start Escape focus.
+- `8107d38`: Desktop/Explorer View and New submenus open on pointer hover
+  and with ArrowRight; an idempotent click preserves touch behavior.
+- `35ca7e0`: shared `sourceMenuKeyboard.ts` arrow focus helper with
+  pure unit contracts, Up/Down skipping disabled commands, ArrowRight
+  entering first submenu item and ArrowLeft returning focus to its trigger.
+  Vite/TypeScript aliases and desktop/mobile browser scenarios added.
+
+New behavior has been committed but is NOT yet verified by an
+exact-head full CI. Do not claim parity from the older failed runs.
+Proceed next with source context item actions, desktop, Start and
+Computer/Bin parity and original paired screenshots if source access
+becomes available. **This commit requests the deliberate
+`[run-ci]` contract+desktop/mobile browser gate.** Draft PR #1 must
+remain unmerged; do not release unverified shell work.
+
+---
+
 ### Corrected source icon fallback exactness — 17 November 2026
 
 Opt-in run [#44024675599](https://github.com/codersachin99/windows-os/actions/runs/44024675599)
