@@ -58,6 +58,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
+    id:"personalize",label:"Personalize",icon:legacyArt.personalize,
+    kind:"system",desktop:false,showInStart:false,
+    // personalize.js inherits the standard resizable WindowMain geometry.
+    // Interim size until paired source screenshots can be captured.
+    window:{width:760,height:540}
+  },
+  {
     id: "cmd", label: "Command Prompt", icon: legacySourceIconArtwork("cmd").src,
     kind: "utility", desktop: false, showInStart: true,
     // Source cmd.js Ft=300 minimum height; interim width pending screenshot parity.

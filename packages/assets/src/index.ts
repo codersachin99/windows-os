@@ -26,6 +26,7 @@ export const legacyArt = {
   cmd: "/assets/images/cmd.a2c1d19b.webp",
   // Byte-identical pinned Win7 Control Panel and Display page artwork.
   cpanel: "/assets/images/cpanel.38ffbb1d.webp",
+  personalize: "/assets/images/personal.ccbfdd3a.webp",
   // Original c170 game icons and shell:games folder, verified by pinned Git blob SHA.
   games: "/assets/images/games.e71bd970.webp",
   chess: "/assets/images/chess.92e3ebb6.webp",
@@ -113,11 +114,19 @@ export const legacyShellThemeAssets = Object.freeze({
   }
 } as const);
 
+/** Original source ChangeTheme save() also changes the active background. */
+export function sourceShellWallpaper(theme:string):string{
+  if(theme==="winxp")return legacyShellThemeAssets.winxp.theme;
+  if(theme==="win11")return legacyShellThemeAssets.win11.theme;
+  return legacyArt.wallpaperWin7;
+}
+
 /** Original XP/Win11 application icon variants, all pinned Git blobs. */
 export const legacyThemeProgramArtwork=Object.freeze({
   winxp:Object.freeze({
     notepad:"/assets/images/notepad-winxp.82037fb1.webp",
     games:"/assets/images/games-winxp.7f048588.webp",
+    personalize:"/assets/images/personal-winxp.01949b73.webp",
     cpanel:"/assets/images/cpanel-winxp.1b08f5c8.webp",
     calc:"/assets/images/calc-winxp.f79aee6b.webp",
     cmd:"/assets/images/cmd-winxp.62e75899.webp",
@@ -150,6 +159,7 @@ export const legacyThemeProgramArtwork=Object.freeze({
   win11:Object.freeze({
     notepad:"/assets/images/notepad-win11.2e4af294.webp",
     games:"/assets/images/games-win11.d339e9be.webp",
+    personalize:"/assets/images/personal-win11.76af8a1e.webp",
     cpanel:"/assets/images/cpanel-win11.e7111666.webp",
     photo:"/assets/images/photo-win11.bb63ad2e.webp",
     cmd:"/assets/images/cmd-win11.ecbe89c7.webp",

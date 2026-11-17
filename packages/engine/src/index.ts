@@ -1,5 +1,5 @@
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
-import { legacyArt } from "@windows-os/assets";
+import { legacyArt,sourceShellWallpaper } from "@windows-os/assets";
 
 export const LEGACY_DEFAULTS = Object.freeze({
   skipBoot: false,
@@ -16,18 +16,31 @@ export function sourceTestTheme(search: string): DesktopState["theme"] | null {
     ? theme as DesktopState["theme"] : null;
 }
 
+export const SOURCE_ACTIVE_THEME_KEY="windows-os:guest:active-theme:v1";
+export function sourceSavedTheme(
+  storage:Pick<Storage,"getItem">|undefined
+):DesktopState["theme"]|null{
+  try{
+    const theme=storage?.getItem(SOURCE_ACTIVE_THEME_KEY);
+    return theme==="win7"||theme==="winxp"||theme==="win11"?theme:null;
+  }catch{return null;}
+}
 export function initialDesktopState(): DesktopState {
+  const theme=typeof window!=="undefined"
+    ?sourceTestTheme(window.location.search)
+      ??sourceSavedTheme(window.localStorage)
+      ??LEGACY_DEFAULTS.theme
+    :LEGACY_DEFAULTS.theme;
   return {
     phase: LEGACY_DEFAULTS.skipBoot ? "desktop" : "boot",
-    theme: (typeof window !== "undefined"
-      ? sourceTestTheme(window.location.search) : null) ?? LEGACY_DEFAULTS.theme,
+    theme,
     session: null,
     windows: [],
     nextWindowId: 1,
     topZ: 10,
     startOpen: false,
     selectedIcon: null,
-    wallpaper: legacyArt.wallpaperWin7
+    wallpaper: sourceShellWallpaper(theme)
   };
 }
 
@@ -185,7 +198,8 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
     case "SELECT_ICON":
       return { ...state, selectedIcon: action.id, startOpen: false };
     case "SET_THEME":
-      return { ...state, theme: action.theme };
+      return { ...state, theme: action.theme,
+        wallpaper:sourceShellWallpaper(action.theme) };
     case "SET_WALLPAPER":
       return { ...state, wallpaper: action.path };
   }
