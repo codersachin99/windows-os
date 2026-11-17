@@ -50,8 +50,8 @@ Bin entries.
   positioned popup that leaves the parent row heights unchanged, flips
   horizontally at the viewport edge, clamps vertically near the bottom,
   and supports Arrow Right / Arrow Left keyboard traversal. Win7/XP/11
-  original screenshot parity is still **unverified**, and the separate
-  Explorer background View/New menus retain their earlier inline form.
+  original screenshot parity is still **unverified**. The Computer/Bin
+  background View and Computer New menus now share the side-popup behavior.
 - **Extract here** and **Compressed (zipped) folder** require an
   archive engine. Do not enable them until a validated Guest filesystem
   archive adapter is available and tested. `Send to Desktop` now writes
@@ -109,6 +109,11 @@ actually pass.
   narrow mobile screens. Playwright verifies the popup does not increase
   the outer menu height, stays within the actual viewport and supports
   keyboard navigation on desktop and mobile Chromium.
-- Remaining: true source submenu geometry for the **background View/New**
-  menus, original shader/border metrics under all themes, paired visual
+- Follow-up milestone: Computer and Bin empty-space **View** and Computer
+  **New** now use a shared side-flipping absolute popup, with independent
+  child keyboard focus and unchanged parent menu height. Source New still
+  creates real folder/TXT/RTF Guest files; Bin New remains absent. Pure
+  Send-to geometry tests and targeted desktop/mobile Playwright additionally
+  verify View/New bounds and the original eight choices.
+- Remaining: original shader/border metrics under all themes, paired visual
   captures and behavior differences under external filesystem providers.
