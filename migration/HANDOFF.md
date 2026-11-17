@@ -1,3 +1,20 @@
+### Corrected source icon fallback exactness — 17 November 2026
+
+Opt-in run [#44024675599](https://github.com/codersachin99/windows-os/actions/runs/44024675599)
+again passed TypeScript and 554/555 units. Its single failure
+identified a genuine metadata bug: an unknown .lnk JSON icon key
+correctly displayed the original theme's generic file bitmap but was
+incorrectly reported as an *exact* match for that unknown requested
+artwork. Commit `afaeeee` fixes the source metadata to
+`exactSourceArtwork:false` for unknown shortcut icon keys and keeps
+true only when the source icon key is exactly `file`.
+Existing regression tests already check this behavior and all other
+source cases. This new `[run-ci]` gate validates the semantic fix on
+the latest branch head. The previous browser acceptance is separately
+still in progress. Do not claim complete parity or merge until CI green.
+
+---
+
 ### Corrected 555-case unit test gate — 17 November 2026
 
 Exact prior opt-in run [#44024512186](https://github.com/codersachin99/windows-os/actions/runs/44024512186)
