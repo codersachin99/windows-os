@@ -895,9 +895,19 @@ export function ExplorerApp({
       </>}
       {context.kind === "background" && <>
         <button role="menuitem" aria-expanded={context.viewOpen}
-          data-test-explorer-context-view=""
+          aria-haspopup="menu" data-test-explorer-context-view=""
+          onPointerEnter={()=>setContext(current=>current&&!current.viewOpen
+            ? {...current,viewOpen:true,newOpen:false}:current)}
+          onKeyDown={event=>{
+            if(event.key==="ArrowRight"){
+              event.preventDefault();
+              setContext(current=>current?{
+                ...current,viewOpen:true,newOpen:false
+              }:current);
+            }
+          }}
           onClick={()=>setContext(current=>current?{
-            ...current,viewOpen:!current.viewOpen,newOpen:false
+            ...current,viewOpen:true,newOpen:false
           }:current)}>View ▸</button>
         {context.viewOpen&&SOURCE_VIEW_MODES.map(mode=>
           <button key={mode.value} role="menuitemradio"
@@ -923,9 +933,19 @@ export function ExplorerApp({
           Upload files here</button>
         {!isBin&&<>
           <button role="menuitem" aria-expanded={context.newOpen}
-            data-test-explorer-context-new=""
+            aria-haspopup="menu" data-test-explorer-context-new=""
+            onPointerEnter={()=>setContext(current=>current&&!current.newOpen
+              ? {...current,newOpen:true,viewOpen:false}:current)}
+            onKeyDown={event=>{
+              if(event.key==="ArrowRight"){
+                event.preventDefault();
+                setContext(current=>current?{
+                  ...current,newOpen:true,viewOpen:false
+                }:current);
+              }
+            }}
             onClick={()=>setContext(current=>current?{
-              ...current,newOpen:!current.newOpen,viewOpen:false
+              ...current,newOpen:true,viewOpen:false
             }:current)}>New ▸</button>
           {context.newOpen&&([
             ["folder","Folder"],["richtext","Rich Text Document"],

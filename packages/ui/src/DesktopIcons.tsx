@@ -978,7 +978,17 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           </button>)}
       </> : <>
         <button role="menuitem" aria-expanded={menu.view}
-          onClick={() => setMenu({ ...menu, view: !menu.view, newOpen: false })}>View ▸</button>
+          aria-haspopup="menu" data-test-desktop-view=""
+          onPointerEnter={() => setMenu(current => current && !current.view
+            ? {...current,view:true,newOpen:false} : current)}
+          onKeyDown={event => {
+            if(event.key==="ArrowRight"){
+              event.preventDefault();
+              setMenu(current => current?{...current,view:true,newOpen:false}:current);
+            }
+          }}
+          onClick={() => setMenu(current => current
+            ? {...current,view:true,newOpen:false}:current)}>View ▸</button>
         {menu.view && <>
           {([["lg","Large icons"],["md","Medium icons"],["sm","Small icons"]] as const)
             .map(([value,label]) => <button key={value} role="menuitemradio"
@@ -1002,8 +1012,17 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           onClick={() => {setMenu(null);uploadInput.current?.click();}}>
           Upload files here</button>
         <button role="menuitem" aria-expanded={menu.newOpen}
-          data-test-desktop-new=""
-          onClick={() => setMenu({ ...menu, newOpen: !menu.newOpen, view: false })}>
+          aria-haspopup="menu" data-test-desktop-new=""
+          onPointerEnter={() => setMenu(current => current && !current.newOpen
+            ? {...current,newOpen:true,view:false}:current)}
+          onKeyDown={event => {
+            if(event.key==="ArrowRight"){
+              event.preventDefault();
+              setMenu(current => current?{...current,newOpen:true,view:false}:current);
+            }
+          }}
+          onClick={() => setMenu(current => current
+            ? {...current,newOpen:true,view:false}:current)}>
           New ▸</button>
         {menu.newOpen && <>
           <button role="menuitem" data-test-desktop-new-folder=""
