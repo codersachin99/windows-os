@@ -88,6 +88,10 @@ function ApplicationContent({
       filePath==="notification"?"notification":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
+    onOpenProgram={id=>{
+      const program=appRegistry.get(id);
+      if(program)dispatch({type:"OPEN_APP",app:program});
+    }}
     trayPreferences={trayPreferences}
     onTrayPreferencesChange={onTrayPreferencesChange}/>;
   if (appId === "personalize") return <PersonalizeApp
