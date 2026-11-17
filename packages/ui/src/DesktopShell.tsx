@@ -89,13 +89,15 @@ function ApplicationContent({
       filePath==="notification"?"notification":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
-    onOpenProgram={id=>{
+    onOpenProgram={(id,view)=>{
       const program=appRegistry.get(id);
-      if(program)dispatch({type:"OPEN_APP",app:program});
+      if(program)dispatch({type:"OPEN_APP",app:program,
+        file:view==="background"?{path:"background"}:undefined});
     }}
     trayPreferences={trayPreferences}
     onTrayPreferencesChange={onTrayPreferencesChange}/>;
   if (appId === "personalize") return <PersonalizeApp
+    initialView={filePath==="background"?"background":"theme"}
     theme={theme} wallpaper={wallpaper}
     onSelectTheme={next=>dispatch({type:"SET_THEME",theme:next})}
     onSelectWallpaper={path=>dispatch({type:"SET_WALLPAPER",path})}/>;
