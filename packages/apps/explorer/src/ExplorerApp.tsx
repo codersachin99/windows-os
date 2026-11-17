@@ -1103,7 +1103,7 @@ export function ExplorerApp({
               setContext(current=>current?{
                 ...current,viewOpen:true,newOpen:false
               }:current);
-              window.requestAnimationFrame(()=>contextRef.current
+              window.requestAnimationFrame(()=>backgroundSubmenuRef.current
                 ?.querySelector<HTMLButtonElement>('[role="menuitemradio"]')
                 ?.focus({preventScroll:true}));
             }
@@ -1111,13 +1111,6 @@ export function ExplorerApp({
           onClick={()=>setContext(current=>current?{
             ...current,viewOpen:true,newOpen:false
           }:current)}>View ▸</button>
-        {context.viewOpen&&SOURCE_VIEW_MODES.map(mode=>
-          <button key={mode.value} role="menuitemradio"
-            aria-checked={state.viewMode===mode.value}
-            data-test-explorer-context-mode={mode.value}
-            onClick={()=>contextAction(()=>session.setViewMode(mode.value))}>
-            {state.viewMode===mode.value?"✓ ":"　"}{mode.label}
-          </button>)}
         <button role="menuitem" onClick={()=>contextAction(
           ()=>void execute(()=>session.refresh())
         )}>Refresh</button>
@@ -1144,7 +1137,7 @@ export function ExplorerApp({
                 setContext(current=>current?{
                   ...current,newOpen:true,viewOpen:false
                 }:current);
-                window.requestAnimationFrame(()=>contextRef.current
+                window.requestAnimationFrame(()=>backgroundSubmenuRef.current
                   ?.querySelector<HTMLButtonElement>('[data-test-explorer-context-new-kind="folder"]')
                   ?.focus({preventScroll:true}));
               }
@@ -1152,18 +1145,30 @@ export function ExplorerApp({
             onClick={()=>setContext(current=>current?{
               ...current,newOpen:true,viewOpen:false
             }:current)}>New ▸</button>
-          {context.newOpen&&([
-            ["folder","Folder"],["richtext","Rich Text Document"],
-            ["text","Text Document"]
-          ] as const).map(([kind,label])=>
-            <button key={kind} role="menuitem"
-              data-test-explorer-context-new-kind={kind}
-              onClick={()=>contextAction(()=>createSourceExplorerItem(kind))}>
-              {label}
-            </button>)}
         </>}
         <button role="menuitem" disabled title="Source Explorer Properties not migrated">
           Properties</button>
+        {(context.viewOpen||context.newOpen)&&
+          <div ref={backgroundSubmenuRef} role="menu"
+            className="explorer-context-menu__submenu"
+            data-test-explorer-background-submenu=""
+            aria-label={context.viewOpen?"View":"New"}>
+            {context.viewOpen?SOURCE_VIEW_MODES.map(mode=>
+              <button key={mode.value} role="menuitemradio"
+                aria-checked={state.viewMode===mode.value}
+                data-test-explorer-context-mode={mode.value}
+                onClick={()=>contextAction(()=>session.setViewMode(mode.value))}>
+                {state.viewMode===mode.value?"✓ ":"　"}{mode.label}
+              </button>):([
+                ["folder","Folder"],["richtext","Rich Text Document"],
+                ["text","Text Document"]
+              ] as const).map(([kind,label])=>
+                <button key={kind} role="menuitem"
+                  data-test-explorer-context-new-kind={kind}
+                  onClick={()=>contextAction(()=>createSourceExplorerItem(kind))}>
+                  {label}
+                </button>)}
+          </div>}
       </>}
     </div>}
     {showSearchDialog && !isBin && <SearchDialog initialScope={state.path}
