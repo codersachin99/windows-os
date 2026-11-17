@@ -308,6 +308,27 @@ export function ExplorerApp({
   const pasteSelection = () => void execute(async () => {
     await fileClipboard.paste(fileStore, state.path);
   });
+  /** Original ExplorerItemMenu Download operates only on eligible file bytes.
+   * A directory is not an archive and cannot be downloaded through readBytes.
+   * A temporary browser Blob URL never exposes a host filesystem path. */
+  const downloadSelectedFiles=(entries:readonly FileEntry[])=>{
+    const files=sourceExplorerDownloadableItems(entries);
+    void execute(async()=>{
+      for(const item of files){
+        const bytes=await fileStore.readBytes(item.uri);
+        const url=URL.createObjectURL(new Blob([new Uint8Array(bytes)],{
+          type:"application/octet-stream"
+        }));
+        try{
+          const link=document.createElement("a");
+          link.href=url;link.download=item.name;
+          document.body.append(link);link.click();link.remove();
+        }finally{
+          window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+        }
+      }
+    });
+  };
   /** Native drag state is independent from Cut/Copy clipboard contents. */
   const startDrag = (event: DragEvent<HTMLElement>, uri: string) => {
     if (isBin) { event.preventDefault(); return; }
@@ -575,6 +596,31 @@ export function ExplorerApp({
     }
   };
 
+  const contextSelection=context?.kind==="item"&&context.uri
+    ?(state.selected.includes(context.uri)?state.selected:[context.uri])
+      .map(uri=>visible.find(entry=>entry.uri===uri))
+      .filter((entry):entry is FileEntry=>Boolean(entry))
+    :[];
+  const contextItemMenu=sourceExplorerItemMenu({
+    selected:contextSelection,canRecycle:Boolean(trashPath)
+  });
+  const runSourceItemAction=(action:SourceExplorerItemAction)=>{
+    switch(action){
+      case "open":{
+        const item=contextSelection[0];
+        if(item)openEntry(item.uri,item.type);
+        break;
+      }
+      case "download":downloadSelectedFiles(contextSelection);break;
+      case "cut":copySelection("cut");break;
+      case "copy":copySelection("copy");break;
+      case "delete":requestDelete();break;
+      case "rename":requestRename();break;
+      // Send to is the source parent submenu, not a terminal action.
+      // Archive/extraction/Properties need migrated backing services.
+      case "send-to":case "extract-here":case "properties":break;
+    }
+  };
   const detailsSourceWidth=theme==="win7"?SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH:undefined;
   return <div className={"windows-explorer explorer-stage"+(theme==="win7"?" is-source-win7":"")} data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
