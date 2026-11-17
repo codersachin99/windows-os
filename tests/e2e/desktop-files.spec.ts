@@ -93,7 +93,7 @@ test("malformed host .lnk is displayed but never executed as an arbitrary progra
   await expect(icon).toBeVisible();
   await icon.dblclick();
   await expect(page.locator('#desktop-icons [role="alert"]'))
-    .toContainText("No original application association");
+    .toContainText("shortcut target cannot be opened safely");
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
 });
 
