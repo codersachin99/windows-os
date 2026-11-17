@@ -19,7 +19,7 @@ test("source Win11 recently-opened list follows actual launches and persists",as
   await launchFromStart(page,"notepad");
   await page.locator("[data-test-start-button]").click();
   const recent=page.locator("[data-test-list-recent]");
-  await expect(recent.locator("[data-test-recent-program]")).toHaveAttribute(
+  await expect(recent.locator("[data-test-recent-program]").first()).toHaveAttribute(
     "data-test-recent-program","notepad");
 });
 test("source XP recent history restores without importing host programs",async({page})=>{
@@ -30,7 +30,7 @@ test("source XP recent history restores without importing host programs",async({
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await page.locator("[data-test-start-button]").click();
   const recents=page.locator("[data-test-list-recent]");
-  await expect(recents.locator("[data-test-recent-program]"))
+  await expect(recents.locator("[data-test-recent-program]").first())
     .toHaveAttribute("data-test-recent-program","notepad");
   await expect(recents.locator('[data-test-recent-program="calc"]')).toBeVisible();
   await expect(recents.locator('[data-test-recent-program="notepad"]')).toBeVisible();
