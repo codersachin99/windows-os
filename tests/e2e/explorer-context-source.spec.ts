@@ -108,3 +108,74 @@ test("pinned Computer New submenu creates source folder, TXT and RTF in Guest VF
   expect(paths.some(p=>p.uri.endsWith("/New Text Document.txt")&&p.content===""))
     .toBe(true);
 });
+
+test("source Computer View child opens sideways with stable parent, bounds and keyboard",async({page})=>{
+  const computer=await openFolder(page,"computer");
+  const menu=await openBackgroundMenu(computer);
+  const before=await menu.boundingBox();
+  expect(before).not.toBeNull();
+  const view=menu.locator("[data-test-explorer-context-view]");
+  await view.focus();
+  await view.press("ArrowRight");
+  const child=menu.locator("[data-test-explorer-background-submenu]");
+  await expect(child).toBeVisible();
+  await expect(child).toHaveAttribute("aria-label","View");
+  await expect(child).toHaveAttribute("data-side",/^(right|left)$/);
+  await expect(child.getByRole("menuitemradio")).toHaveCount(8);
+  const after=await menu.boundingBox();
+  expect(after).not.toBeNull();
+  expect(Math.abs(after!.height-before!.height)).toBeLessThan(2);
+  const bounds=await child.boundingBox();
+  expect(bounds).not.toBeNull();
+  const viewport=page.viewportSize()!;
+  expect(bounds!.x).toBeGreaterThanOrEqual(-1);
+  expect(bounds!.y).toBeGreaterThanOrEqual(-1);
+  expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(viewport.width+1);
+  expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(viewport.height+1);
+  const selected=child.locator('[data-test-explorer-context-mode="tiles"]');
+  await expect(selected).toHaveAttribute("aria-checked","true");
+  // Keyboard focus never leaks from this child into the parent main menu.
+  const first=child.locator('[data-test-explorer-context-mode="extra-large-icons"]');
+  await expect(first).toBeFocused();
+  await first.press("ArrowDown");
+  await expect(child.locator('[data-test-explorer-context-mode="large-icons"]'))
+    .toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(child).toHaveCount(0);
+  await expect(view).toBeFocused();
+  await view.click();
+  await menu.locator('[data-test-explorer-context-mode="extra-large-icons"]').click();
+  await expect(computer.locator(".explorer-list")).toHaveClass(/is-extra/);
+});
+test("source Computer New side popup creates a real file; Bin lacks New",async({page})=>{
+  const computer=await openFolder(page,"computer");
+  const menu=await openBackgroundMenu(computer);
+  const before=await menu.boundingBox();
+  const create=menu.locator("[data-test-explorer-context-new]");
+  await create.focus();
+  await create.press("ArrowRight");
+  const child=menu.locator("[data-test-explorer-background-submenu]");
+  await expect(child).toHaveAttribute("aria-label","New");
+  await expect(child.getByRole("menuitem")).toHaveText([
+    "Folder","Rich Text Document","Text Document"
+  ]);
+  await expect(child.locator('[data-test-explorer-context-new-kind="folder"]'))
+    .toBeFocused();
+  const after=await menu.boundingBox();
+  expect(after).not.toBeNull();
+  expect(Math.abs(after!.height-before!.height)).toBeLessThan(2);
+  await child.locator('[data-test-explorer-context-new-kind="text"]').click();
+  await expect(computer.locator('[data-test-explorer-item="New Text Document.txt"]'))
+    .toBeVisible();
+  await expect(menu).toHaveCount(0);
+  await computer.getByRole("button",{name:/^Close /}).click();
+  await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+  const bin=page.locator('[data-test-window="bin"]');
+  const binMenu=await openBackgroundMenu(bin);
+  await expect(binMenu.locator("[data-test-explorer-context-new]")).toHaveCount(0);
+  const view=binMenu.locator("[data-test-explorer-context-view]");
+  await view.click();
+  await expect(binMenu.locator("[data-test-explorer-background-submenu]"))
+    .toHaveAttribute("aria-label","View");
+  await expect(binMenu.getByRole("menuitemradio")).toHaveCount(8);
+});
