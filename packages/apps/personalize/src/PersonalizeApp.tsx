@@ -1,17 +1,36 @@
+import {useState} from "react";
 import type {ThemeId} from "@windows-os/contracts";
-import {SOURCE_PERSONALIZE_THEMES,sourcePersonalizeGroup,type SourcePersonalizeTheme} from "./model";
+import {
+  SOURCE_PERSONALIZE_THEMES,SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS,
+  sourcePersonalizeGroup,type SourcePersonalizeTheme
+} from "./model";
 import "./PersonalizeApp.css";
 
 interface PersonalizeAppProps{
   theme:ThemeId;
+  wallpaper:string;
   onSelectTheme(theme:SourcePersonalizeTheme["id"]):void;
+  onSelectWallpaper(path:string):void;
 }
-/** Source personalize.js first ChangeTheme screen: click theme -> save
- * directly; desktop shell and wallpaper both respond. Premium, ad-gates,
- * Theme Studio, cursor/sound, color and wallpaper customizers are separate
- * original sections, not fabricated here.
+/** Source personalize.js ChangeTheme and first ChangeBackground system gallery.
+ * The source saves ChangeTheme immediately, but ChangeBackground only on Save;
+ * Cancel must discard its draft. User image/video uploads, animations, ads,
+ * appearance/cursor and sounds pages are not yet implemented.
  */
-export function PersonalizeApp({theme,onSelectTheme}:PersonalizeAppProps){
+export function PersonalizeApp({
+  theme,wallpaper,onSelectTheme,onSelectWallpaper
+}:PersonalizeAppProps){
+  const [view,setView]=useState<"theme"|"background">("theme");
+  const [selectedBg,setSelectedBg]=useState(wallpaper);
+  const openBackground=()=>{
+    setSelectedBg(wallpaper);
+    setView("background");
+  };
+  const saveBackground=()=>{
+    if(SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS.includes(selectedBg))
+      onSelectWallpaper(selectedBg);
+    setView("theme");
+  };
   const gallery=(group:SourcePersonalizeTheme["group"],label:string)=>{
     const list=sourcePersonalizeGroup(group);
     return <section className="windows-personalize__group"
@@ -23,7 +42,7 @@ export function PersonalizeApp({theme,onSelectTheme}:PersonalizeAppProps){
           aria-pressed={theme===item.id}
           className={"windows-personalize__theme"+
             (theme===item.id?" is-selected":"")}
-          onClick={()=>onSelectTheme(item.id)}>
+          onClick={()=>{if(item.id!==theme)onSelectTheme(item.id);}}>
           <img src={item.preview} alt="" draggable={false}/>
           <span>{item.label}</span>
         </button>)}
@@ -31,21 +50,55 @@ export function PersonalizeApp({theme,onSelectTheme}:PersonalizeAppProps){
     </section>;
   };
   return <div className="windows-personalize" data-test-personalize=""
-    data-active-theme={theme}>
+    data-active-theme={theme} data-personalize-view={view}>
     <aside className="windows-personalize__sidebar">
       <strong>Personalize</strong>
       <span>Change the visuals and sounds on your computer</span>
+      <button type="button" className="windows-personalize__navigation"
+        data-test-personalize-open-background=""
+        onClick={openBackground}>Desktop Background</button>
     </aside>
     <div className="windows-personalize__main">
-      <h2>Change the visuals and sounds on your computer</h2>
-      <p>Click a theme to change the desktop visuals.</p>
-      {gallery("aero","Aero Themes")}
-      {gallery("wins","Other Windows Themes")}
-      <div className="windows-personalize__preview">
-        <span>Selected theme</span>
-        <strong>{SOURCE_PERSONALIZE_THEMES.find(item=>item.id===theme)?.label
-          ??"Another original theme"}</strong>
-      </div>
+      {view==="background"?<>
+        <h2>Desktop Background</h2>
+        <p>Choose a background for your desktop.</p>
+        <section className="windows-personalize__group"
+          aria-label="System backgrounds">
+          <h3>System ({SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS.length})</h3>
+          <div className="windows-personalize__backgrounds"
+            data-test-bg-list="system">
+            {SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS.map((path,index)=>
+              <button type="button" key={path}
+                className={"windows-personalize__background"+
+                  (selectedBg===path?" is-selected":"")}
+                data-test-bg-item={path}
+                aria-label={`System background ${index+1}`}
+                aria-pressed={selectedBg===path}
+                onClick={()=>setSelectedBg(path)}>
+                <img src={path} alt="" draggable={false} loading="lazy"/>
+              </button>)}
+          </div>
+        </section>
+        <div className="windows-personalize__actions">
+          <button type="button" data-test-button="save"
+            onClick={saveBackground}>Save</button>
+          <button type="button" data-test-button="cancel"
+            onClick={()=>setView("theme")}>Cancel</button>
+        </div>
+      </>:<>
+        <h2>Change the visuals and sounds on your computer</h2>
+        <p>Click a theme to change the desktop visuals.</p>
+        {gallery("aero","Aero Themes")}
+        {gallery("wins","Other Windows Themes")}
+        <div className="windows-personalize__preview">
+          <span>Selected theme</span>
+          <strong>{SOURCE_PERSONALIZE_THEMES.find(item=>item.id===theme)?.label
+            ??"Another original theme"}</strong>
+          <button type="button" className="windows-personalize__navigation"
+            data-test-personalize-background-link=""
+            onClick={openBackground}>Desktop Background</button>
+        </div>
+      </>}
     </div>
   </div>;
 }
