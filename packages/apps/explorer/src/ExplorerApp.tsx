@@ -35,7 +35,7 @@ import {
 import {sourceComputerIconArtwork,sourceShortcutCustomIconURL} from "./sourceComputerIcons";
 import {sourceBinItemMenu,type SourceBinItemAction} from "./sourceBinItemMenu";
 import {sourceExplorerItemMenu,sourceExplorerDownloadableItems,
-  SOURCE_EXPLORER_SEND_TO,type SourceExplorerItemAction} from "./sourceExplorerItemMenu";
+  sourceExplorerSendToMenu,type SourceExplorerItemAction} from "./sourceExplorerItemMenu";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -615,6 +615,18 @@ export function ExplorerApp({
   const contextItemMenu=sourceExplorerItemMenu({
     selected:contextSelection,canRecycle:Boolean(trashPath)
   });
+  const sourceDesktopPath=volume?.desktopPath??null;
+  const canSendToDesktop=Boolean(!isBin&&sourceDesktopPath&&contextSelection.length&&
+    contextSelection.every(item=>item.uri.startsWith(SOURCE_COMPUTER_ROOT+"/")&&
+      !item.originalPath&&!sourceIsShortcutEntry(item)));
+  const sendToItems=sourceExplorerSendToMenu(canSendToDesktop);
+  const sendSelectionToDesktop=()=>{
+    if(!sourceDesktopPath)return;
+    const paths=contextSelection.map(entry=>entry.uri);
+    void execute(async()=>{
+      await createSourcePathDesktopShortcuts(fileStore,sourceDesktopPath,paths);
+    });
+  };
   const runSourceItemAction=(action:SourceExplorerItemAction)=>{
     switch(action){
       case "open":{
@@ -996,11 +1008,15 @@ export function ExplorerApp({
               }:current);
             }else contextAction(()=>runSourceItemAction(action.id));
           }}>{action.label}</button>)}
-        {context.sendToOpen&&SOURCE_EXPLORER_SEND_TO.map(action=>
+        {context.sendToOpen&&sendToItems.map(action=>
           <button key={action.id} type="button" role="menuitem"
             data-test-explorer-item-send-to-kind={action.id}
             disabled={action.disabled}
-            title="Original archive/shortcut action not yet migrated">
+            title={action.disabled?"Original action requires unavailable source service":undefined}
+            onClick={()=>{
+              if(!action.disabled&&action.id==="desktop")
+                contextAction(sendSelectionToDesktop);
+            }}>
             {action.label}
           </button>)}
       </>)}
