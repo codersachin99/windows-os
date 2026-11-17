@@ -1,3 +1,30 @@
+## Win11 Start All Programs regression isolation — 17 November 2026
+
+[Paging gate #44044951437](https://github.com/codersachin99/windows-os/actions/runs/44044951437)
+at `54c187d` finished static checks and then failed **only**
+the two new desktop/mobile paging browser tests (32 other focused tests
+passed). Playwright's trace shows `data-test-all-programs-back` was
+visually covered by the "Games" folder button after changing to All
+Programs. The root cause was a CSS
+`grid-template-rows:repeat(2,minmax(0,1fr))` accidentally inherited
+from the new 12-app pinned grid into the **different** scrolling
+All Programs pane.
+
+- `955f7f7` restricts the two-row overflow-clipped grid to
+  `:not(.is-all-programs)`, and applies source-like auto-sized rows and
+  vertical scrolling to `.is-all-programs`. The existing browser
+  test clicks Back and verifies a return to page 1, so its earlier
+  failure is no longer hidden or worked around.
+- The newer [footer run #44045301939](https://github.com/codersachin99/windows-os/actions/runs/44045301939)
+  was still running the focused gate at this handoff and predates
+  `955f7f7`. The new exact-SHA opt-in CI must confirm the fix and
+  all Win11 Power Options browser tests.
+- Keep main and draft PR #1 unchanged. No release or pixel-perfect
+  acceptance until source screenshot comparison and remaining shell
+  features have been verified.
+
+---
+
 ## Win11 Start footer: source Power Options and quick launcher — 17 November 2026
 
 After the pinned Win11 18ee 12-program page control work,
