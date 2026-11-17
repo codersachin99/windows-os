@@ -1,3 +1,35 @@
+## Win11 Start footer: source Power Options and quick launcher — 17 November 2026
+
+After the pinned Win11 18ee 12-program page control work,
+`src/modules/shell/startmenu-win11.js` shows a true footer with the
+Guest account on the left and four actions on the right:
+Computer, Games, Control Panel, and Power Options. The last opens
+a popup with Log off / Shut down / Restart. Previously React showed
+a direct "Shut down" action in the Win11 footer, with no restart
+choice or quick-launch controls.
+
+- `558433c` adds source-ordered footer quick launch actions and a
+  controlled Power Options popup, click-outside and Escape submenu
+  dismissal, and real original engine LOG_OFF / SHUTDOWN / RESTART
+  dispatch. Existing Win7 direct power and XP footer are untouched.
+  The popup and launcher assets use imported source themed icons.
+  Browser acceptance tests exercise the menu choices, Escape,
+  launching Calculator, actual Shutdown, and opening Computer.
+- `f483d55` positions the Guest avatar/name on the left *before*
+  the source quick action row, as in original module 18ee.
+- `9493110` adds power/footer regressions to the focused shell
+  acceptance gate.
+
+Previous [Win11 paging gate #44044951437](https://github.com/codersachin99/windows-os/actions/runs/44044951437)
+at `54c187d` had TypeScript, units, source audits, 62 image checks and
+Vite build green, with focused browser testing still in progress at
+the time these new footer commits were added. That gate cannot
+validate the new footer. Run an opt-in exact-head gate here and
+inspect all failures. Do not merge draft PR #1 or create a release
+until screenshot and source behavior acceptance are complete.
+
+---
+
 ## Pinned Win11 Start 12-app page layout — 17 November 2026
 
 The previous full original-React migration acceptance completed successfully
