@@ -539,7 +539,8 @@
 /* Pinned main.js ExplorerItemMenu -> BaseMenu children:
  * the child popup sits beside the trigger row, NOT in the parent list.
  * Keep the normal background/Bin context scrolling unchanged. */
-.explorer-context-menu[data-test-explorer-context="item"] {
+.explorer-context-menu[data-test-explorer-context="item"],
+.explorer-context-menu[data-test-explorer-context="background"] {
   overflow:visible;
 }
 .explorer-context-menu__submenu {
