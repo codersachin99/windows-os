@@ -1,3 +1,44 @@
+## Source Start Escape, XP notification artwork and quick shell gate — 17 November 2026
+
+This checkpoint **fixes the root cause** of persistent browser acceptance
+failures in the prior two runs:
+
+- [Full CI #44030623990](https://github.com/codersachin99/windows-os/actions/runs/44030623990)
+  at `0c9045b`: **542 passed, 4 failed** on Chromium desktop/mobile.
+  The two duplicate failures each were XP Start program-context Escape
+  erroneously closing the entire Start menu and normal Start Escape
+  failing to restore focus to the taskbar Start button. TypeScript,
+  all unit tests, the 58 image SHA audit, source audits and Vite build
+  already passed. [Earlier #44029438284](https://github.com/codersachin99/windows-os/actions/runs/44029438284)
+  had the same 4 failures with 540 passed.
+- `c5eeb5c` **root-cause fix**: top-level `apps/web/src/App.tsx`
+  attached an Escape key listener to `window` before the more-specific
+  StartMenu listener. It unconditionally dispatched CLOSE_START first,
+  preempting Start program-menu Escape and making parent focus restoration
+  unreliable. Removed that *duplicate* Escape action, while preserving
+  Ctrl+Escape/Meta Start shortcuts. StartMenu owns Start/context Escape
+  now and DesktopShell restores Start focus on its committed unmount.
+  Existing source browser tests cover both desktop/mobile cases.
+- `e3dd150`: imported four additional **byte-identical** pinned XP
+  tray/date image blobs (Action Center, Network, Battery and datetime).
+- `3c32279`: registered the new images in central theme artwork and
+  pinned hash verification manifest; `sourceThemeTrayArtwork` selects
+  only exact provided XP notification variants for visible and hidden
+  tray icons, retaining Win7 fallback for non-imported Volume/Win11.
+  Added unit/browser icon tests. All **62 XP/Win11 image blobs** now have
+  an exact Git-SHA verifier independent of the legacy-source token.
+- `3c32279`: workflow now runs a focused shell browser subset first
+  (Start Escape, XP context, taskbar context and Desktop item menus),
+  followed by the exhaustive acceptance suite. Opt-in checks still
+  require `[run-ci]`; ordinary commits skip CI.
+
+This explicit checkpoint is to run the focused and full gate at one
+SHA, not to merge. Keep PR #1 draft, main unchanged, no release.
+Future: source recent/pinned Start lists, remaining Computer/Bin
+actions and original screenshot visual parity still need work.
+
+---
+
 ## XP/Win11 image parity and source-proof contract — 17 November 2026
 
 Following shell context-menu commits (see previous section), the exact
