@@ -2,7 +2,8 @@ import {describe,it,expect} from "vitest";
 import {sourceProgramsById} from "@windows-os/filesystem";
 import {legacyCpanelTileArtwork} from "@windows-os/assets";
 import {
-  SOURCE_CPANEL_REGISTRY,sourceCpanelIsSupported,sourceCpanelSearchRegistry,
+  SOURCE_CPANEL_REGISTRY,sourceCpanelIsSupported,sourceCpanelIsMigratedProgram,
+  SOURCE_CPANEL_MIGRATED_PROGRAMS,sourceCpanelSearchRegistry,
   sourceCpanelAddressIconKey
 } from "./sourceRegistry";
 
@@ -48,6 +49,18 @@ describe("pinned source 3097/a97a Control Panel registry",()=>{
     expect(legacyCpanelTileArtwork.backup).toContain("backup.5e4eb80c.webp");
     expect(legacyCpanelTileArtwork["action-center-headline"])
       .toContain("action-center-headline.27cc6d83.webp");
+  });
+  it("distinguishes the two migrated program windows from Control Panel pages",()=>{
+    expect(SOURCE_CPANEL_MIGRATED_PROGRAMS).toEqual(["personalize","taskbar"]);
+    for(const id of SOURCE_CPANEL_MIGRATED_PROGRAMS){
+      expect(sourceCpanelIsMigratedProgram(id)).toBe(true);
+      expect(SOURCE_CPANEL_REGISTRY.find(item=>item.id===id)?.target).toBe("program");
+      // These must not be misclassified as in-panel history destinations.
+      expect(sourceCpanelIsSupported(id)).toBe(false);
+    }
+    for(const id of ["defender","gadgets","display","notification"]){
+      expect(sourceCpanelIsMigratedProgram(id)).toBe(false);
+    }
   });
   it("keeps unavailable program/settings visible, but not falsely executable",()=>{
     expect(sourceCpanelIsSupported("display")).toBe(true);
