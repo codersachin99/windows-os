@@ -1,4 +1,4 @@
-import {legacyArt,legacySourceCustomIconURL,legacySourceIconArtwork,sourceShellAsset,sourceThemeProgramArt} from "@windows-os/assets";
+import {legacySourceCustomIconURL,sourceThemeFileIconArtwork} from "@windows-os/assets";
 import type {ThemeId} from "@windows-os/contracts";
 import {sourceFileIconType,type FileEntry} from "@windows-os/filesystem";
 
@@ -19,23 +19,5 @@ export function sourceComputerIconArtwork(
   entry:Pick<FileEntry,"name"|"type">,shortcutIcon?:string|null,theme:ThemeId="win7"
 ):SourceComputerIconArtwork{
   const sourceType=sourceFileIconType(entry);
-  const key=shortcutIcon??sourceType;
-  const themedProgram=sourceThemeProgramArt(theme,key);
-  if(themedProgram)return {sourceType,src:themedProgram,exactSourceArtwork:true};
-  const original=legacySourceIconArtwork(key);
-  const sourceGeneric=sourceShellAsset(theme,sourceType==="folder"&&!shortcutIcon
-    ?"folder":"file");
-  // Original JSON icon keys and custom image URLs win over generic theme art.
-  if(shortcutIcon && original.exactSourceArtwork && key!=="file"){
-    return {sourceType,...original};
-  }
-  if(sourceType==="folder"&&!shortcutIcon&&sourceGeneric){
-    return {sourceType,src:sourceGeneric,exactSourceArtwork:true};
-  }
-  if((key==="file"||!original.exactSourceArtwork&&original.src===legacyArt.file)
-    && sourceGeneric){
-    return {sourceType,src:sourceGeneric,
-      exactSourceArtwork:key==="file"};
-  }
-  return {sourceType,...original};
+  return {sourceType,...sourceThemeFileIconArtwork(theme,sourceType,shortcutIcon)};
 }

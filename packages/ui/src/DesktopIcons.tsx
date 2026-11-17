@@ -9,7 +9,7 @@ import {
   type DesktopBand, type DesktopBandModifier
 } from "./desktopSelection";
 import { appRegistry, browserStorage, fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
-import { listSourceDesktopFiles, type SourceDesktopFile } from "./desktopFiles";
+import {listSourceDesktopFiles,sourceDesktopFileArtwork,type SourceDesktopFile} from "./desktopFiles";
 import { desktopEditableName, renameSourceDesktopFile } from "./desktopRename";
 import {
   createSourceDesktopItem,createSourceDesktopShortcut,type DesktopNewItem
@@ -879,15 +879,17 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     {options.showIcons && items.map((app,index) => {
       const position = layout.placement(app.id, index, area);
       const offset = drag?.keys.includes(app.id) ? drag.offset : null;
-      const artwork = !app.file && (app.id === "computer"
-        ? sourceShellAsset(theme, "computer")
-        : app.id === "bin" ? sourceShellAsset(theme, trashCount > 0 ? "binFull" : "bin")
-        : sourceThemeProgramArt(theme,app.id)) || app.icon;
+      const fileArtwork=app.file?sourceDesktopFileArtwork(app.file,theme):null;
+      const artwork=fileArtwork?.icon??(
+        (!app.file && (app.id === "computer"
+          ? sourceShellAsset(theme, "computer")
+          : app.id === "bin" ? sourceShellAsset(theme, trashCount > 0 ? "binFull" : "bin")
+          : sourceThemeProgramArt(theme,app.id))) || app.icon);
       return <button type="button" key={app.id} data-test-desktop-icon={app.id}
         data-test-desktop-file={app.file?.entry.uri}
         data-source-desktop-icon-type={app.file?.iconType}
         data-source-desktop-icon-override={app.file?.iconOverride??undefined}
-        data-source-desktop-artwork={app.file?.artwork}
+        data-source-desktop-artwork={fileArtwork?.artwork}
         data-test-desktop-x={position.x} data-test-desktop-y={position.y}
         data-test-desktop-selected={selected.includes(app.id)}
         className={"desktop__icon-item windows-desktop__shortcut" +

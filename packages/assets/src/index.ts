@@ -268,3 +268,24 @@ export function legacySourceIconArtwork(iconKey:string):LegacySourceIconArtwork{
     ?sourceLegacyIconMap[iconKey]:undefined;
   return {src:imported??legacyArt.file,exactSourceArtwork:imported!==undefined};
 }
+
+/** Shared original 4cca + 0f35 icon selection for Desktop and Explorer.
+ * Keep the per-shortcut JSON override; missing themed image types are fallbacks.
+ */
+export function sourceThemeFileIconArtwork(
+  theme:string,sourceType:string,shortcutIcon?:string|null
+):LegacySourceIconArtwork{
+  const key=shortcutIcon??sourceType;
+  const themed=sourceThemeProgramArt(theme,key);
+  if(themed)return {src:themed,exactSourceArtwork:true};
+  const original=legacySourceIconArtwork(key);
+  const generic=sourceShellAsset(theme,
+    sourceType==="folder"&&!shortcutIcon?"folder":"file");
+  if(shortcutIcon&&original.exactSourceArtwork&&key!=="file")return original;
+  if(sourceType==="folder"&&!shortcutIcon&&generic)
+    return {src:generic,exactSourceArtwork:true};
+  if((key==="file"||(!original.exactSourceArtwork&&original.src===legacyArt.file))
+    &&generic)return {src:generic,exactSourceArtwork:key==="file"};
+  return original;
+}
+

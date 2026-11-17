@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { VirtualFileStore } from "@windows-os/filesystem";
 import { legacyArt } from "@windows-os/assets";
-import { listSourceDesktopFiles } from "./desktopFiles";
+import {listSourceDesktopFiles,sourceDesktopFileArtwork} from "./desktopFiles";
 
 describe("legacy main.js file-backed Guest desktop shortcuts",()=>{
   it("lists real filesystem entries without fabricated desktop defaults",async()=>{
@@ -86,5 +86,41 @@ describe("pinned desktop source 4cca filename and 0f35 shortcut display icons",(
     expect(byName.get("Broken")).toMatchObject({
       programId:null,iconOverride:"file",icon:legacyArt.file,artwork:"original"
     });
+  });
+});
+
+describe("shared original theme Desktop and Explorer artwork",()=>{
+  it("selects original XP/Win11 file and folder imagery without breaking Win7",async()=>{
+    const fs=new VirtualFileStore();await fs.mkdir("/Desktop");
+    await fs.mkdir("/Desktop/Folder");
+    await fs.write("hello","/Desktop/notes.txt");
+    await fs.writeBytes(new Uint8Array([1]),"/Desktop/raw.bin");
+    const found=await listSourceDesktopFiles(fs,"/Desktop");
+    const byName=new Map(found.map(f=>[f.label,f]));
+    expect(sourceDesktopFileArtwork(byName.get("Folder")!,"winxp")).toEqual({
+      icon:"/assets/images/folder-winxp.ff1b00c5.webp",artwork:"original"});
+    expect(sourceDesktopFileArtwork(byName.get("notes.txt")!,"win11")).toEqual({
+      icon:"/assets/images/file-win11.8b2c3723.webp",artwork:"fallback"});
+    expect(sourceDesktopFileArtwork(byName.get("raw.bin")!,"winxp")).toEqual({
+      icon:"/assets/images/file-winxp.c130b357.webp",artwork:"original"});
+    expect(sourceDesktopFileArtwork(byName.get("Folder")!,"win7")).toEqual({
+      icon:legacyArt.folder,artwork:"original"});
+  });
+  it("preserves shortcut program icon overrides, custom URLs and fallback state",async()=>{
+    const fs=new VirtualFileStore();await fs.mkdir("/Desktop");
+    await fs.write('{"exe":"notepad","icon":"notepad"}',"/Desktop/Notepad.lnk");
+    await fs.write('{"exe":"notepad","icon":"https://example.org/icon.png"}',
+      "/Desktop/Custom.lnk");
+    await fs.write('{"exe":"missing","icon":"unknown"}',"/Desktop/Unknown.lnk");
+    const found=await listSourceDesktopFiles(fs,"/Desktop");
+    const byName=new Map(found.map(f=>[f.label,f]));
+    expect(sourceDesktopFileArtwork(byName.get("Notepad")!,"winxp")).toEqual({
+      icon:"/assets/images/notepad-winxp.82037fb1.webp",artwork:"original"});
+    expect(sourceDesktopFileArtwork(byName.get("Notepad")!,"win11")).toEqual({
+      icon:"/assets/images/notepad-win11.2e4af294.webp",artwork:"original"});
+    expect(sourceDesktopFileArtwork(byName.get("Custom")!,"win11")).toEqual({
+      icon:"https://example.org/icon.png",artwork:"custom"});
+    expect(sourceDesktopFileArtwork(byName.get("Unknown")!,"winxp")).toEqual({
+      icon:"/assets/images/file-winxp.c130b357.webp",artwork:"fallback"});
   });
 });

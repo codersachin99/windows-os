@@ -152,3 +152,20 @@ test("XP and Win11 Start and taskbar use byte-verified original program artwork"
       .toHaveAttribute("src",expected);
   }
 });
+
+test("XP and Win11 Desktop file icons use original theme artwork like Explorer",async({page})=>{
+  for(const theme of ["winxp","win11"] as const){
+    await guestTheme(page,theme);
+    const name="Source Theme "+theme+".bin";
+    await page.locator("[data-test-desktop-upload-input]").setInputFiles({
+      name,mimeType:"application/octet-stream",buffer:Buffer.from([1,2,3])
+    });
+    const entry=page.locator('[data-test-desktop-file="/EXTERNAL/computer/drive0/Users/Guest/Desktop/'+name+'"]');
+    await expect(entry).toBeVisible();
+    await expect(entry.locator("img.desktop__icon-icon")).toHaveAttribute(
+      "src",theme==="winxp"
+        ?"/assets/images/file-winxp.c130b357.webp"
+        :"/assets/images/file-win11.8b2c3723.webp");
+    await expect(entry).toHaveAttribute("data-source-desktop-artwork","original");
+  }
+});

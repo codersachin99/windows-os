@@ -2,7 +2,10 @@ import {
   parseSourceShortcut, sourceShortcutIconValue, readSourceShortcutText, sourceFileIconType,
   sourceIsShortcutEntry, type FileEntry, type VirtualFileStore
 } from "@windows-os/filesystem";
-import { legacySourceIconArtwork, legacySourceCustomIconURL } from "@windows-os/assets";
+import {
+  legacySourceIconArtwork,legacySourceCustomIconURL,sourceThemeFileIconArtwork
+} from "@windows-os/assets";
+import type {ThemeId} from "@windows-os/contracts";
 
 export interface SourceDesktopFile {
   id: string;
@@ -55,4 +58,15 @@ export async function listSourceDesktopFiles(
         legacySourceCustomIconURL(iconKey)?"custom":"fallback"
     };
   }));
+}
+
+/** Use the same source theme icon rule as Computer for VFS-backed Desktop
+ * entries; user JSON .lnk icons stay authoritative over theme generic art.
+ */
+export function sourceDesktopFileArtwork(
+  file:SourceDesktopFile,theme:ThemeId="win7"
+):Pick<SourceDesktopFile,"icon"|"artwork">{
+  const resolved=sourceThemeFileIconArtwork(theme,file.iconType,file.iconOverride);
+  return {icon:resolved.src,artwork:resolved.exactSourceArtwork?"original":
+    legacySourceCustomIconURL(file.iconOverride??"")?"custom":"fallback"};
 }
