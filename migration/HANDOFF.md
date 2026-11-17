@@ -1,3 +1,59 @@
+## Source window chrome and titlebar controls — 17 November 2026
+
+Continued the user's Windows 7/XP/11 themes and shell-first migration.
+Pinned original `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/modules/themes/theme-win7-scss.js`,
+`theme-winxp-scss.js`, and `theme-win11-scss.js`.
+
+- `62407fd` extends shared `WindowFrame` with a source
+  `is-active`/data attribute and a maximized taskbar inset based on
+  `--taskbar-height` (40px Win7/XP, 48px Win11), instead of always
+  reserving only 40px.
+- `94bf5d1` derives focus from highest visible desktop window z-index
+  in `DesktopShell`; minimized windows remain mounted but cannot
+  hold active frame styling.
+- `522c0dd` creates `sourceWindowChrome.css`: Win7 original
+  layered Aero frame and 20px/48px caption controls, XP Luna
+  frame/24px control gloss/white bold title, Win11 8px framed,
+  44×30px controls and #c42b1c close hover. Maximized radius,
+  padding and shadows follow each original theme, within current
+  dynamic theme accent limitations.
+- `f11e504` loads the chrome **after** old
+  `windows7.css` and `sourceShellTheme.css` so source metrics
+  override the earlier generalized CSS.
+- `1af5356` adds browser tests for actual computed frame
+  radii, colors, button measurements, active state, maximize/restore,
+  taskbar inset and close for all three themes, plus focus transfer
+  between Computer and Bin. `6d4dda8` adds them to opt-in focused CI.
+- `e0d9337` adds pinned
+  `migration/WINDOW-CHROME-SOURCE.md` for original source values,
+  user-configurable accent caveat and remaining glyph/pixel-parity work.
+
+**Previous CI finding and correction:** Original Computer icon-geometry
+[CI #44135610739](https://github.com/codersachin99/windows-os/actions/runs/44135610739)
+**failed** one of 628 full Chromium tests: after a keyboard ArrowRight
+on background **View**, the submenu could be replaced by **New** because
+a pointer-entry event fired during layout. Its 619 unit and 124 focused
+browser tests did pass. `0584895` fixes the actual interaction:
+background context hover switching now requires real pointer
+movement, not pointer enter/reflow. This fix is included in the
+new chrome validation branch but **not** in the failed old run.
+
+The previous Explorer theme-skin
+[CI #44139175165](https://github.com/codersachin99/windows-os/actions/runs/44139175165)
+passed focused browser tests but its full run was still executing
+when checked. These new chrome/focus edits require a **new exact-head
+`[run-ci]` gate**, and cannot inherit either older result.
+Original-vs-React screenshots remain unavailable. Keep PR #1 draft,
+do not merge or release.
+
+**Next:** inspect exact-head CI failure logs and fix any regressions;
+then original titlebar glyph assets, settings-controlled shadows and
+pixel-matched visual captures, while continuing priority desktop,
+Start, Computer and Bin functionality rather than games.
+
+---
+
 ## Explorer context theme skins — 17 November 2026
 
 Continued exact original Windows 7/XP/11 shell theme fidelity while
