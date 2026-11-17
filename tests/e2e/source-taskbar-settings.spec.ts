@@ -4,12 +4,20 @@ async function guest(page:Page,theme:"win7"|"win11"="win7"){
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
 }
 async function openProperties(page:Page){
-  // The Win7 Start orb covers taskbar x=12; the shell correctly ignores
-  // background-menu requests originating on that button. Right-click the
-  // empty running-app lane, as in the existing source context regression.
-  await page.locator(".windows-taskbar__running").click({
-    button:"right",position:{x:15,y:5}
-  });
+  // Win7's Start orb occupies the left edge. Win11 centers Start and has
+  // a zero-width running lane until a window opens; the left edge is blank.
+  // Exercise a real taskbar-background surface in each original theme.
+  const win11=(await page.locator("[data-test-main-screen]")
+    .getAttribute("data-theme"))==="win11";
+  if(win11){
+    await page.locator(".windows-taskbar").click({
+      button:"right",position:{x:12,y:10}
+    });
+  }else{
+    await page.locator(".windows-taskbar__running").click({
+      button:"right",position:{x:15,y:5}
+    });
+  }
   const menu=page.locator('[data-test-taskbar-context="background"]');
   await expect(menu).toBeVisible();
   const action=menu.locator('[data-test-taskbar-context-action="properties"]');
