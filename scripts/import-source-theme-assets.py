@@ -19,6 +19,9 @@ from pathlib import Path
 LEGACY_SHA = "4e63290d783009e1293433c6ccf252abba9c1187"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
+    "win7": {
+        "personal.ccbfdd3a.webp": "1c1649d47ab3c405afb49ce2fa45e3a9cd937725",
+    },
     "winxp": {
         "action-center-winxp.52f44912.webp": "56cc03e77b7ce0097db3addd9463d0d8b22c502f",
         "network-winxp.744648d4.webp": "17a20ab4a2949d8d146c61eef931f741eb714d89",
@@ -61,6 +64,7 @@ FILES: dict[str, dict[str, str]] = {
         "shutdown-winxp.f3312ea0.webp": "26ffb2c4eb3e05ad056edf14111bac54d2f46007",
     },
     "win11": {
+        "personal-win11.76af8a1e.webp": "758c1959c286e169051e211b680ae26fb959bc95",
         "paint-win11.ea557c33.webp": "d3d4f5425084975325c92ffd67ef31fdf11a2059",
         "text-win11.d9d08eae.webp": "bf37ae9cea570e36831fa33fca9f494aec53ede0",
         "executable-win11.2b4d4283.webp": "75c863e243f2e38bf1ca158a774073a14ad3231b",
@@ -152,8 +156,8 @@ def main() -> None:
     parser.add_argument("--source", type=Path, default=project.parent / "legacy-win7")
     parser.add_argument("--target", type=Path,
                         default=project / "apps/web/public/assets/images")
-    parser.add_argument("--themes", choices=["winxp", "win11"], nargs="+",
-                        default=["winxp", "win11"])
+    parser.add_argument("--themes", choices=["win7", "winxp", "win11"], nargs="+",
+                        default=["win7", "winxp", "win11"])
     parser.add_argument("--verify-only", action="store_true")
     parser.add_argument("--verify-target-only", action="store_true",
                         help="Check committed target bytes without source checkout")

@@ -25,10 +25,10 @@ test("pinned main.js Desktop background menu restores its source actions",async(
   await expect(menu.locator("[data-test-desktop-copy-path]")).toBeEnabled();
   await expect(menu.locator("[data-test-desktop-upload-here]")).toBeEnabled();
   await expect(menu.locator("[data-test-desktop-display]")).toBeEnabled();
-  // Gadgets/Personalization are authentic legacy entries but their
-  // original settings implementations must not be fabricated.
+  // Gadgets remains unported; source Personalization ChangeTheme now
+  // has a real first slice reachable through the original context menu.
   await expect(menu.locator("[data-test-desktop-gadgets]")).toBeDisabled();
-  await expect(menu.locator("[data-test-desktop-personalize]")).toBeDisabled();
+  await expect(menu.locator("[data-test-desktop-personalize]")).toBeEnabled();
 });
 test("source Desktop Copy path uses Guest virtual filesystem, not host disk",async({page})=>{
   await page.addInitScript(()=>{

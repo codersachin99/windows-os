@@ -1,5 +1,5 @@
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
-import { legacyArt,sourceShellWallpaper } from "@windows-os/assets";
+import {sourceShellWallpaper} from "@windows-os/assets";
 
 export const LEGACY_DEFAULTS = Object.freeze({
   skipBoot: false,
