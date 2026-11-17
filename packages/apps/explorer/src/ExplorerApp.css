@@ -63,24 +63,33 @@
 .explorer-list.has-details .explorer-item .listview__item-label { grid-column:1; grid-row:1; padding-left:29px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 .explorer-list.has-details .explorer-item > span:nth-child(n + 3) { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .explorer-list.has-list .explorer-item { width:220px; }
-.explorer-list.has-icons .explorer-item { flex-direction:column; justify-content:flex-start; text-align:center; width:104px; min-height:100px; padding:5px; }
-.explorer-list.has-icons.is-small .explorer-item { flex-direction:row; width:180px; min-height:26px; text-align:left; }
+.explorer-list.has-icons .explorer-item { flex-direction:column; justify-content:flex-start; text-align:center; width:96px; min-height:0; padding:2px 4px 4px; }
+.explorer-list.has-icons.is-small .explorer-item { flex-direction:row; width:30%; min-width:160px; min-height:0; padding:2px; text-align:left; }
 .explorer-list.has-icons.is-small .explorer-item .listview__item-iconbox { width:16px; height:16px; flex-basis:16px; }
-.explorer-list.has-icons.is-medium .explorer-item .listview__item-iconbox { width:64px; height:64px; flex-basis:64px; }
-.explorer-list.has-icons.is-large .explorer-item { width:152px; min-height:150px; }
-.explorer-list.has-icons.is-large .explorer-item .listview__item-iconbox { width:112px; height:112px; flex-basis:112px; }
-.explorer-list.has-icons.is-extra .explorer-item { width:192px; min-height:190px; }
+.explorer-list.has-icons.is-medium .explorer-item .listview__item-iconbox { width:88px; height:88px; flex-basis:88px; }
+.explorer-list.has-icons.is-large .explorer-item { width:144px; min-height:0; padding:2px 8px 8px; }
+.explorer-list.has-icons.is-large .explorer-item .listview__item-iconbox { width:128px; height:128px; flex-basis:128px; }
+.explorer-list.has-icons.is-extra .explorer-item { width:212px; min-height:0; padding:2px 8px 8px; }
 .explorer-list.has-icons.is-extra .explorer-item .listview__item-iconbox {
-  width:160px; height:160px; flex-basis:160px;
+  width:196px; height:196px; flex-basis:196px;
+}
+/* Pinned legacy src/styles/apps/computer.css: medium/large/extra icon
+ * labels wrap to four lines. Earlier shared Explorer ellipsis clipped them
+ * to one line, making all three original icon views visually shorter. */
+.explorer-list.has-icons.is-medium .explorer-item .listview__item-label,
+.explorer-list.has-icons.is-large .explorer-item .listview__item-label,
+.explorer-list.has-icons.is-extra .explorer-item .listview__item-label {
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
+  white-space:normal;overflow:hidden;text-align:center;
 }
 .explorer-list.has-tiles .explorer-item {
-  display:grid;grid-template-columns:36px minmax(0,1fr);
-  grid-template-rows:auto auto auto;align-content:center;column-gap:5px;
-  width:230px;min-height:55px;padding:4px 5px;
+  display:grid;grid-template-columns:52px minmax(0,1fr);
+  grid-template-rows:auto auto auto;align-content:center;column-gap:8px;
+  min-width:256px;width:calc(20% - 8px);min-height:0;padding:4px;
 }
 .explorer-list.has-tiles .explorer-item .listview__item-iconbox {
-  grid-column:1;grid-row:1 / span 3;width:32px;height:32px;
-  align-self:center;
+  grid-column:1;grid-row:1 / span 3;width:48px;height:48px;
+  flex:0 0 48px;align-self:center;
 }
 .explorer-list.has-tiles .explorer-item .listview__item-label {
   grid-column:2;grid-row:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
