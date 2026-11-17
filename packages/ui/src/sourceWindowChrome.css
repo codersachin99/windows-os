@@ -204,3 +204,13 @@
     transition:none;
   }
 }
+
+/* The pinned ControlItem renders one centered SVG in each caption button.
+ * Prevent inherited text baseline/line-height from shifting 12/14px art. */
+.windows-desktop .windows-window__buttons button{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:0;line-height:0;
+}
+.windows-desktop .windows-window__control-glyph{
+  display:block;flex:none;pointer-events:none;overflow:visible;
+}
