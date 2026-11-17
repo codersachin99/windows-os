@@ -17,7 +17,8 @@ async function personalize(page:Page){
   return win;
 }
 async function backgroundView(page:Page){
-  const win=await personalize(page);
+  let win=page.locator('[data-test-window="personalize"]').last();
+  if(await win.count()===0)win=await personalize(page);
   await win.locator("[data-test-personalize-background-link]").click();
   const content=win.locator('[data-personalize-view="background"]');
   await expect(content).toBeVisible();
