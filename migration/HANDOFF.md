@@ -1,3 +1,53 @@
+## Explorer context theme skins — 17 November 2026
+
+Continued exact original Windows 7/XP/11 shell theme fidelity while
+preserving the existing Computer/Bin functional context commands and
+previously migrated outward side submenus. Pinned source remains
+`codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+
+Previous original-icon-geometry
+[CI #44135610739](https://github.com/codersachin99/windows-os/actions/runs/44135610739)
+passed TypeScript, units, source/artwork checks, production Vite and
+focused Chromium; its full browser suite was **still running** when
+last checked. Independently, the corrected Computer/Bin side-menu
+[CI #44133299513](https://github.com/codersachin99/windows-os/actions/runs/44133299513)
+**completed success**: 619 Vitest unit tests, 118 focused browser
+tests and 620 full browser tests.
+
+- `f15cb8b` adds `sourceExplorerContextTheme.css`, scoped to
+  `data-theme`, with real source `winui-menu` palette for root and
+  separate nested menus. Win7: #f1f1f1 surface, #979797 border,
+  double inset stroke/gutter and source hover gradient with
+  #aaddfa edge. WinXP: white inherited Vue menu surface,
+  #aca899 border, blue #316ac5 hover/white text, original square
+  corners and menu shadow. Win11: #f9f9f9 surface, #0001 bright
+  border, 6px radius/padding, #f0f0f0 hover and #0003 shadow.
+- `01520c7` imports the palette after `ExplorerApp.css` so the
+  previously hardcoded generic blue/gray React context styles
+  cannot override source theme selection.
+- `f2af6a9` adds computed-style desktop/mobile browser tests for
+  source background and View submenu palette/hover/shape.
+  `dd44779` expands them to file-item menus and Send to side
+  popup for all three themes, including real active Guest
+  Desktop action.
+- `4fd13e6` adds this spec to the **opt-in focused browser
+  test gate**, and `bb9aa03` pins source CSS and caveats in
+  `migration/EXPLORER-CONTEXT-THEME-SOURCE.md`.
+- No change to VFS operations, app associations, original import
+  assets, existing context command order or shell routing.
+
+**Acceptance boundary:** New palette/source tests are **not**
+covered by prior CI runs. Trigger exact-head `[run-ci]`,
+inspect TypeScript, units, source/asset audits, production Vite,
+focused desktop/mobile Playwright and full suite separately. No
+source-paired original screenshots, no validated pixel-parity claim.
+Remaining menu differences: original Vue DOM, radio/checkmark icon
+gutter, submenu arrow glyph and exact font metrics. Keep PR #1 draft,
+main unchanged, no release. Next slice: original window chrome and
+theme titlebar controls, followed by source-vs-React visual captures.
+
+---
+
 ## Source Computer icon geometry for Win7 / XP / Win11 — 17 November 2026
 
 Continued shell-first theme and Computer fidelity. Pinned reference:
