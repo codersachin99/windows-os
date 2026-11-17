@@ -1,3 +1,47 @@
+## Computer / Recycle Bin background side submenu parity — 17 November 2026
+
+Continued the original shell and Computer/Bin priority, pinned to
+`codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+Original Explorer background `View` (8 view modes) and `New` (Folder,
+Rich Text Document, Text Document) children were incorrectly rendered
+inline, enlarging the parent context menu rather than showing a real
+side-flipping popup.
+
+- `ec6513a` adds dedicated nested Computer/Bin background submenu
+  measurement and side-placement using the same bounded geometry engine
+  as the already-migrated Send to. Opening children no longer changes
+  the parent command list height or menu position.
+- `8a1c873` renders View and New in their own accessible `role=menu`
+  popup; preserves each source command, checked view modes, real Guest
+  folder/TXT/RTF creation, Bin's View options and absence of Bin New.
+  Right opens/focuses children; Left returns focus to the parent; Escape
+  dismisses. Pointer moving to a different command closes the child.
+- `2c1da3c` allows this background submenu to render outside its
+  parent without changing the Recycle Bin item menu. `fb4f1a2`
+  limits shared arrow focus to the nearest `role=menu`, preventing
+  parent navigation from selecting children or vice versa.
+- `ddf04cb` adds Playwright desktop/mobile coverage for fixed
+  parent geometry, viewport bounds, eight original view modes,
+  independent child navigation, real New text creation and Bin
+  options. `75e5271` includes `explorer-context-source.spec.ts`
+  in opt-in focused shell CI. `4d3224d` updates the pinned source
+  behavior note.
+
+**Verification:** Earlier [path shortcut CI #44128632442](https://github.com/codersachin99/windows-os/actions/runs/44128632442)
+and [item-menu popup CI #44131229628](https://github.com/codersachin99/windows-os/actions/runs/44131229628)
+had passed their focused shell gates at this checkpoint; both full
+desktop/mobile suites were still running and have not been accepted as
+complete. These **new** View/New changes require their **own exact-head
+[run-ci] commit**, not the earlier SHAs. Original-paired screenshots
+still unavailable, no pixel parity claim. Draft PR #1, main untouched,
+no release.
+
+**Next:** inspect the exact-head focused/browser test results, fix
+failures; then prioritize Windows XP/7/11 visual/theme geometry and
+remaining original shell behavior before games.
+
+---
+
 ## Source Explorer Send to nested side popup — 17 November 2026
 
 Continued top-priority shell/Computer context fidelity from pinned
