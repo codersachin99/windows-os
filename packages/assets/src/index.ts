@@ -121,6 +121,17 @@ export function sourceShellWallpaper(theme:string):string{
   return legacyArt.wallpaperWin7;
 }
 
+/** The subset of original system backgrounds actually byte-imported from
+ * the pinned legacy source. Do not add guessed URLs or unported user uploads. */
+export const sourceSystemWallpapers:readonly string[]=Object.freeze([
+  ...legacyArt.wallpaperChoices,
+  legacyShellThemeAssets.winxp.theme,
+  legacyShellThemeAssets.win11.theme
+]);
+export function sourceIsSystemWallpaper(path:string):boolean{
+  return sourceSystemWallpapers.includes(path);
+}
+
 /** Original XP/Win11 application icon variants, all pinned Git blobs. */
 export const legacyThemeProgramArtwork=Object.freeze({
   winxp:Object.freeze({
