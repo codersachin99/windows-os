@@ -35,7 +35,7 @@ export function sourceComputerIconArtwork(
   if((key==="file"||!original.exactSourceArtwork&&original.src===legacyArt.file)
     && sourceGeneric){
     return {sourceType,src:sourceGeneric,
-      exactSourceArtwork:key==="file"||sourceType==="file"};
+      exactSourceArtwork:key==="file"};
   }
   return {sourceType,...original};
 }
