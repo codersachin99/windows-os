@@ -4,6 +4,7 @@ import {legacyCpanelTileArtwork} from "@windows-os/assets";
 import {
   SOURCE_CPANEL_REGISTRY,sourceCpanelIsSupported,sourceCpanelIsMigratedProgram,
   SOURCE_CPANEL_MIGRATED_PROGRAMS,sourceCpanelSearchRegistry,
+  sourceCpanelCanOpenTask,sourceCpanelProgramTaskView,
   sourceCpanelAddressIconKey
 } from "./sourceRegistry";
 
@@ -122,5 +123,43 @@ describe("source a259 addressIcon and a97a current-location art",()=>{
   });
   it("falls back to root artwork for unknown/corrupt historical locations",()=>{
     expect(sourceCpanelAddressIconKey("missing-panel")).toBe("cpanel");
+  });
+});
+
+describe("source Control Panel program task fidelity",()=>{
+  const personalize=SOURCE_CPANEL_REGISTRY.find(item=>item.id==="personalize")!;
+  const taskbar=SOURCE_CPANEL_REGISTRY.find(item=>item.id==="taskbar")!;
+  const task=(item:typeof personalize,label:string)=>{
+    const result=item.tasks.find(value=>value.label===label);
+    expect(result).toBeDefined();
+    return result!;
+  };
+  it("deep-links the only implemented original Personalize tasks",()=>{
+    expect(sourceCpanelProgramTaskView(task(personalize,"Change the theme")))
+      .toBe("theme");
+    expect(sourceCpanelProgramTaskView(task(personalize,"Change desktop background")))
+      .toBe("background");
+    for(const label of ["Change the theme","Change desktop background"])
+      expect(sourceCpanelCanOpenTask(task(personalize,label))).toBe(true);
+  });
+  it("does not enable unimplemented color, screen saver or source-disabled taskbar controls",()=>{
+    for(const label of ["Change window glass colors","Change screen saver",
+      "Change sound effects","Change mouse pointers"]){
+      const original=task(personalize,label);
+      expect(sourceCpanelProgramTaskView(original)).toBeNull();
+      expect(sourceCpanelCanOpenTask(original)).toBe(false);
+    }
+    for(const label of ["Customize the Start menu","Auto-hide the taskbar",
+      "Lock or unlock the taskbar"]){
+      const original=task(taskbar,label);
+      expect(sourceCpanelProgramTaskView(original)).toBeNull();
+      expect(sourceCpanelCanOpenTask(original)).toBe(false);
+    }
+  });
+  it("preserves pinned source task redirect to implemented Notification Area",()=>{
+    const notification=task(taskbar,"Customize icons on the taskbar");
+    expect(notification.id).toBe("notification");
+    expect(sourceCpanelCanOpenTask(notification)).toBe(true);
+    expect(sourceCpanelProgramTaskView(notification)).toBeNull();
   });
 });
