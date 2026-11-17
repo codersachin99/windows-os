@@ -60,7 +60,7 @@ describe("XP/Win11 themed source icon classification",()=>{
         src:"/assets/images/folder-winxp.ff1b00c5.webp",exactSourceArtwork:true});
     expect(sourceComputerIconArtwork({name:"readme.txt",type:"file"},null,"win11"))
       .toEqual({sourceType:"text",
-        src:"/assets/images/file-win11.8b2c3723.webp",exactSourceArtwork:false});
+        src:"/assets/images/text-win11.d9d08eae.webp",exactSourceArtwork:true});
     expect(sourceComputerIconArtwork({name:"unknown.bin",type:"file"},null,"winxp"))
       .toEqual({sourceType:"file",
         src:"/assets/images/file-winxp.c130b357.webp",exactSourceArtwork:true});
@@ -94,5 +94,34 @@ describe("original theme-specific installed program art",()=>{
       .toMatchObject({src:"https://example.org/icon.webp",exactSourceArtwork:false});
     expect(sourceComputerIconArtwork({name:"Notepad.lnk",type:"file"},"notepad","win7"))
       .toMatchObject({src:legacyArt.notepad,exactSourceArtwork:true});
+  });
+});
+
+describe("verified original source XP/Win11 known folder/file icons",()=>{
+  it("uses exact text and media image variants instead of generic fallbacks",()=>{
+    for(const theme of ["winxp","win11"] as const){
+      expect(sourceComputerIconArtwork({name:"readme.txt",type:"file"},null,theme))
+        .toMatchObject({sourceType:"text",exactSourceArtwork:true,
+          src:theme==="winxp"
+            ?"/assets/images/text-winxp.35e970dd.webp"
+            :"/assets/images/text-win11.d9d08eae.webp"});
+      expect(sourceComputerIconArtwork({name:"track.mp3",type:"file"},null,theme))
+        .toMatchObject({sourceType:"media",exactSourceArtwork:true});
+    }
+  });
+  it("uses special Documents art only for actual mounted Guest profile path",()=>{
+    for(const theme of ["winxp","win11"] as const){
+      const profile=sourceComputerIconArtwork({
+        name:"Documents",type:"directory",
+        uri:"/EXTERNAL/computer/drive0/Users/Guest/Documents"
+      },null,theme);
+      expect(profile.src).toBe(theme==="winxp"
+        ?"/assets/images/folder-docs-winxp.a303ce2a.webp"
+        :"/assets/images/folder-docs-win11.18b5729b.webp");
+      const elsewhere=sourceComputerIconArtwork({
+        name:"Documents",type:"directory",uri:"/Other/Documents"
+      },null,theme);
+      expect(elsewhere.src).toContain("folder-"+theme+".");
+    }
   });
 });

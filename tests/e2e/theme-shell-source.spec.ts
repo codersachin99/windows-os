@@ -169,3 +169,28 @@ test("XP and Win11 Desktop file icons use original theme artwork like Explorer",
     await expect(entry).toHaveAttribute("data-source-desktop-artwork","original");
   }
 });
+
+test("XP and Win11 Computer sidebar shows pinned source drive and Guest folder art",async({page})=>{
+  for(const theme of ["winxp","win11"] as const){
+    await guestTheme(page,theme);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const computer=page.locator('[data-test-window="computer"]');
+    const nav=computer.locator(".explorer-navigation__home");
+    const icons=theme==="winxp"?{
+      system:"disk-os-winxp.e3c2a016.webp",
+      dvd:"disk-cd-winxp.83ac2166.webp",
+      docs:"folder-docs-winxp.a303ce2a.webp"
+    }:{
+      system:"disk-os-win11.4aee0d0a.webp",
+      dvd:"disk-cd-win11.84d9e496.webp",
+      docs:"folder-docs-win11.18b5729b.webp"
+    };
+    await expect(nav.filter({hasText:"System (C:)"}).locator("img"))
+      .toHaveAttribute("src","/assets/images/"+icons.system);
+    await expect(nav.filter({hasText:"Documents"}).locator("img"))
+      .toHaveAttribute("src","/assets/images/"+icons.docs);
+    await expect(nav.filter({hasText:"DVD RW Drive (Z:)"}).locator("img"))
+      .toHaveAttribute("src","/assets/images/"+icons.dvd);
+    await expect(nav.filter({hasText:"DVD RW Drive (Z:)"})).toBeDisabled();
+  }
+});

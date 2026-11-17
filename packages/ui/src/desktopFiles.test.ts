@@ -100,7 +100,7 @@ describe("shared original theme Desktop and Explorer artwork",()=>{
     expect(sourceDesktopFileArtwork(byName.get("Folder")!,"winxp")).toEqual({
       icon:"/assets/images/folder-winxp.ff1b00c5.webp",artwork:"original"});
     expect(sourceDesktopFileArtwork(byName.get("notes.txt")!,"win11")).toEqual({
-      icon:"/assets/images/file-win11.8b2c3723.webp",artwork:"fallback"});
+      icon:"/assets/images/text-win11.d9d08eae.webp",artwork:"original"});
     expect(sourceDesktopFileArtwork(byName.get("raw.bin")!,"winxp")).toEqual({
       icon:"/assets/images/file-winxp.c130b357.webp",artwork:"original"});
     expect(sourceDesktopFileArtwork(byName.get("Folder")!,"win7")).toEqual({
