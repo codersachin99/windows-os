@@ -1,3 +1,17 @@
+### Combined final XP/Win11 source-art acceptance — 17 November 2026
+
+This opt-in `[run-ci]` commit is the consolidated gate for 26 verified
+original XP/Win11 image blobs, typed program/icon resolvers,
+Desktop/Start/taskbar/window/Explorer integration, the fixed source
+.lnk icon loader across themes and desktop/mobile E2E Bin full/empty
+lifecycle. Run typecheck, unit tests, original source byte audit,
+source Contacts checks, Vite build and all Playwright cases on this
+exact commit. Earlier CI snapshots verify only earlier commits;
+neither screenshot/pixel parity nor full migration parity is claimed.
+Do not merge or publish a release on a failing/incomplete gate.
+
+---
+
 ## Verified original XP/Win11 program artwork — 17 November 2026
 
 Ten more pinned original blobs imported byte-identically into the React
