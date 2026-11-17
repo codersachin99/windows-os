@@ -119,6 +119,7 @@ export function ExplorerApp({
   }|null>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   const sendToRef=useRef<HTMLDivElement>(null);
+  const backgroundSubmenuRef=useRef<HTMLDivElement>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [subfolders, setSubfolders] = useState(
     initialSourceSearch?.subfolders ?? initialFind?.subfolders ?? false);
@@ -545,6 +546,26 @@ export function ExplorerApp({
     child.style.top=placement.top+"px";
     child.dataset.side=placement.side;
   },[context?.kind,context?.sendToOpen,context?.x,context?.y]);
+  // The original Computer/Bin background View and Computer New commands use
+  // the same separate side-flipping BaseMenu as item Send to. Position it
+  // against its trigger after layout, without changing root menu height.
+  useLayoutEffect(()=>{
+    if(context?.kind!=="background"||(!context.viewOpen&&!context.newOpen))return;
+    const parent=contextRef.current,child=backgroundSubmenuRef.current;
+    const selector=context.viewOpen?"[data-test-explorer-context-view]":
+      "[data-test-explorer-context-new]";
+    const trigger=parent?.querySelector<HTMLElement>(selector);
+    if(!parent||!child||!trigger)return;
+    const bounds=parent.getBoundingClientRect();
+    const row=trigger.getBoundingClientRect();
+    const placement=sourceExplorerSubmenuPlacement(
+      {left:bounds.left,top:bounds.top,width:bounds.width,height:bounds.height},
+      {top:row.top},{width:child.offsetWidth,height:child.offsetHeight},
+      {width:window.innerWidth,height:window.innerHeight});
+    child.style.left=placement.left+"px";
+    child.style.top=placement.top+"px";
+    child.dataset.side=placement.side;
+  },[context?.kind,context?.viewOpen,context?.newOpen,context?.x,context?.y]);
   const copyExplorerPath=()=>{
     const path=state.path;
     if(!path){setMessage("No mounted folder path is available.");return;}
@@ -971,11 +992,25 @@ export function ExplorerApp({
       data-test-explorer-context={context.kind}
       aria-label={context.kind === "item" ? "File actions" : "Folder actions"}
       style={{ left: context.x, top: context.y }}
+      onPointerOver={event=>{
+        if(context.kind!=="background")return;
+        const button=event.target instanceof Element?
+          event.target.closest("button"):null;
+        if(!button||button.parentElement!==contextRef.current)return;
+        if(button.hasAttribute("data-test-explorer-context-view")||
+          button.hasAttribute("data-test-explorer-context-new"))return;
+        if(context.viewOpen||context.newOpen)setContext(current=>current?{
+          ...current,viewOpen:false,newOpen:false
+        }:current);
+      }}
       onKeyDown={event=>{
         const inSendTo=event.target instanceof Element &&
           Boolean(event.target.closest("[data-test-explorer-sendto-submenu]"));
-        if(sourceMenuArrowFocus(inSendTo?sendToRef.current:contextRef.current,
-          event.target,event.key)){
+        const inBackgroundSubmenu=event.target instanceof Element &&
+          Boolean(event.target.closest("[data-test-explorer-background-submenu]"));
+        const focusHost=inSendTo?sendToRef.current:
+          inBackgroundSubmenu?backgroundSubmenuRef.current:contextRef.current;
+        if(sourceMenuArrowFocus(focusHost,event.target,event.key)){
           event.preventDefault();return;
         }
         if(event.key==="ArrowLeft"&&(context.viewOpen||context.newOpen||context.sendToOpen)){
