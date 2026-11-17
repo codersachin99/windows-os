@@ -30,8 +30,8 @@ Bin entries.
   TXT, folder, archive, .lnk and multiple-selection cases.
 - `ExplorerApp` now maps source item-menu IDs to real existing open,
   clipboard, recycle-confirmation and rename session methods, with a
-  keyboard/pointer-expandable Send to submenu. The original two children
-  are **disabled**, not fake archive/shortcut actions.
+  keyboard/pointer-expandable Send to submenu. The archive child remains
+  disabled; the Desktop child now creates real path-backed Guest shortcuts.
 - **Download** operates on actual Guest `VirtualFileStore.readBytes`
   data and emits browser Blob downloads. It uses the filename from
   `FileEntry`, never arbitrary host paths, and revokes temporary
@@ -51,10 +51,13 @@ Bin entries.
   submenu geometry and original hover transition are not pixel-verified.
 - **Extract here** and **Compressed (zipped) folder** require an
   archive engine. Do not enable them until a validated Guest filesystem
-  archive adapter is available and tested. Original `Send to Desktop`
-  creates path-backed shortcuts whose `path` fields must be opened
-  safely and faithfully; source `.lnk` parser currently supports
-  installed program shortcuts only, so the child stays disabled.
+  archive adapter is available and tested. `Send to Desktop` now writes
+  atomic source-style text-backed `{exe,icon,path}` shortcuts for live
+  canonical Guest files and folders, resolves the actual target at open,
+  and never executes `exe` as an arbitrary host program. The currently
+  generated `exe` and `icon` use the pinned file-type contract; exact
+  legacy executable mapping and original shortcut graphics still need
+  source-paired parity verification.
 - Android document-provider URLs, live archive-container paths, remote
   mounts, multi-item download scheduling, and the exact eligibility
   predicates for all special file types remain unported.
@@ -64,3 +67,24 @@ Bin entries.
 Original source binaries/images must be preserved unchanged. Main
 remains untouched until source-level feature and visual parity gates
 actually pass.
+
+## Path-backed Send to Desktop sub-milestone
+
+- Pinned `main.js` `sendToDesktop` creates `.lnk` source records
+  `{exe, icon, path}`, basename `<name> - Shortcut.lnk`, one per
+  selected item. It is distinct from the source installed-program
+  `{exe, icon}` shortcut used by Start Menu and Shortcut Wizard.
+- `packages/filesystem/src/sourcePathShortcuts.ts` validates original
+  EXTERNAL/computer Guest paths, rejects traversal/host paths, shortcut
+  loops and deleted/missing entries, then atomically writes collision-safe
+  filename suffixes for multi-selection. `parseSourceShortcut` rejects
+  records with any `path` field, preventing the wrong executable launch.
+- `DesktopIcons` and `ExplorerApp` resolve the actual VFS target of a
+  path shortcut, dispatching only registered Guest-compatible file/folder
+  associations; nonexistent or invalid targets fail visibly and safely.
+- Pure filesystem and desktop tests cover safe contents, security and
+  Guest Desktop persistence; browser tests cover the active submenu,
+  TXT/folder double-click and reload plus Win11 multi-selection.
+- Still unsupported: original source path shortcut icon/executable
+  variants beyond the migrated file-kind mapping; shortcut-to-shortcut
+  recursion; archive extraction/compression; exact nested popup geometry.
