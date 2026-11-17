@@ -135,3 +135,20 @@ test("source Computer and Bin Explorer show original XP/Win11 folder, file and n
       .toHaveAttribute("src",source("file"));
   }
 });
+
+test("XP and Win11 Start and taskbar use byte-verified original program artwork",async({page})=>{
+  for(const theme of ["winxp","win11"] as const){
+    await guestTheme(page,theme);
+    const expected=theme==="winxp"
+      ?"/assets/images/notepad-winxp.82037fb1.webp"
+      :"/assets/images/notepad-win11.2e4af294.webp";
+    await page.getByRole("button",{name:"Open Start menu"}).click();
+    const start=page.locator("[data-test-start-menu]");
+    await expect(start.locator('[data-test-program="notepad"] img'))
+      .toHaveAttribute("src",expected);
+    await start.locator('[data-test-program="notepad"]').click();
+    await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+    await expect(page.locator(".windows-taskbar__application img").first())
+      .toHaveAttribute("src",expected);
+  }
+});

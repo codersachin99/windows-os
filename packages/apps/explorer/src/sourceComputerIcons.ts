@@ -1,4 +1,4 @@
-import {legacyArt,legacySourceCustomIconURL,legacySourceIconArtwork,sourceShellAsset} from "@windows-os/assets";
+import {legacyArt,legacySourceCustomIconURL,legacySourceIconArtwork,sourceShellAsset,sourceThemeProgramArt} from "@windows-os/assets";
 import type {ThemeId} from "@windows-os/contracts";
 import {sourceFileIconType,type FileEntry} from "@windows-os/filesystem";
 
@@ -20,6 +20,8 @@ export function sourceComputerIconArtwork(
 ):SourceComputerIconArtwork{
   const sourceType=sourceFileIconType(entry);
   const key=shortcutIcon??sourceType;
+  const themedProgram=sourceThemeProgramArt(theme,key);
+  if(themedProgram)return {sourceType,src:themedProgram,exactSourceArtwork:true};
   const original=legacySourceIconArtwork(key);
   const sourceGeneric=sourceShellAsset(theme,sourceType==="folder"&&!shortcutIcon
     ?"folder":"file");

@@ -78,3 +78,19 @@ describe("XP/Win11 themed source icon classification",()=>{
     }
   });
 });
+
+describe("original theme-specific installed program art",()=>{
+  it("uses pinned source application images but preserves unknown custom shortcut URLs",()=>{
+    expect(sourceComputerIconArtwork({name:"Notepad.lnk",type:"file"},"notepad","winxp"))
+      .toMatchObject({src:"/assets/images/notepad-winxp.82037fb1.webp",exactSourceArtwork:true});
+    expect(sourceComputerIconArtwork({name:"Notepad.lnk",type:"file"},"notepad","win11"))
+      .toMatchObject({src:"/assets/images/notepad-win11.2e4af294.webp",exactSourceArtwork:true});
+    expect(sourceComputerIconArtwork({name:"Calculator.lnk",type:"file"},"calc","winxp"))
+      .toMatchObject({src:"/assets/images/calc-winxp.f79aee6b.webp",exactSourceArtwork:true});
+    expect(sourceComputerIconArtwork({name:"Link.lnk",type:"file"},
+      "https://example.org/icon.webp","win11"))
+      .toMatchObject({src:"https://example.org/icon.webp",exactSourceArtwork:false});
+    expect(sourceComputerIconArtwork({name:"Notepad.lnk",type:"file"},"notepad","win7"))
+      .toMatchObject({src:legacyArt.notepad,exactSourceArtwork:true});
+  });
+});

@@ -1,3 +1,23 @@
+## Verified original XP/Win11 program artwork — 17 November 2026
+
+Ten more pinned original blobs imported byte-identically into the React
+project (XP Notepad, Games, Control Panel, Calculator, CMD; Win11 Notepad,
+Games, Control Panel, Photo, CMD). Their exact source filenames are
+tracked in the importer and source image audit, and the theme-aware
+shared asset registry now powers Start program tiles and installed
+shortcut entries, registered Desktop icons, taskbar buttons/window
+chrome and Explorer source program images. Arbitrary valid custom .lnk
+URL artwork retains precedence and Win7 original artwork is unchanged.
+
+Regression coverage includes shared asset-map tests, Explorer icon
+classification with custom URL precedence, desktop/mobile Start/taskbar,
+and real Guest trash empty/full state. Other XP/Win11 original program
+artwork and screenshot parity are still pending, not claimed complete.
+Full exact-head acceptance `[run-ci]` must be run after the previous
+running snapshot completes before safe merge/release.
+
+---
+
 ### Combined source XP/Win11 image acceptance gate — 17 November 2026
 
 After the three theme implementation commits, this opt-in `[run-ci]`
