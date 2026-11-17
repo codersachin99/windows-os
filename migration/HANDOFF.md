@@ -1,3 +1,54 @@
+## Source taskbar and Start context-menus — 17 November 2026
+
+Accepted source references: `legacy-win7@4e63290`
+`src/modules/shell/taskbar-base.js` (taskbar-menu + 2ae5 item menu),
+`src/modules/shell/startmenu-base.js` and `startmenu-winxp.js`
+(`openMenu` forwarding to DesktopItemMenu), and
+`src/modules/system/main.js` DesktopItemMenu.
+
+The prior [CI #44027070596](https://github.com/codersachin99/windows-os/actions/runs/44027070596)
+completed 524 browser tests passing, 4 failing (desktop/mobile):
+two Playwright strict-mode failures caused by `not.toContainText` on five
+multi-select menu elements, and two Start Escape focus regressions.
+The duplicate test assertions were replaced by exact action ID absence
+assertions in `6faccd4`; parent `DesktopShell` now restores Start
+button focus *after* the Start menu is unmounted using a guarded layout
+effect rather than an unreliable RAF within its own disappearing input.
+This new focus behavior is not in the earlier failed run. The subsequent
+[CI #44028127261](https://github.com/codersachin99/windows-os/actions/runs/44028127261)
+was still running at time of this handoff, and predates the context menus.
+
+- `91ce2ce`: source taskbar background menu (Toolbars, Cascade,
+  Stacked, Side by Side, Show Desktop, Task Manager, Properties) and
+  source taskbar item menu (Open, Pin/Unpin, Close window). Working
+  actions use existing shell state and `SourceTaskbarPins`, while
+  unported arrangement/Taskbar Properties remain disabled. Shared
+  pointer/keyboard/viewport geometry, unit + browser acceptance.
+- `b1bf55a`: Close window now calls the parent request-close handler
+  to honor apps with unsaved document and media confirmation guards.
+- `75179e3`: source Start-menu tiles invoke original DesktopItemMenu
+  action contracts on right-click (including All Programs installed
+  shortcuts), with real taskbar Pin/Unpin and collision-safe, actual
+  Guest Desktop `.lnk` JSON creation. Context portal prevents Win11
+  overflow/transform clipping; keyboard Escape/outside behaviors and
+  mobile positioning are covered by browser tests.
+- `6faccd4`: commit-ordered Start Escape focus and exact multi-select
+  menu action assertions, addressing the four earlier failures.
+- `b0858e0`: Win11 empty taskbar background Playwright fixture targets
+  the real nonzero taskbar surface, avoiding the zero-width empty
+  centered running-items lane.
+
+This commit intentionally requests a new combined exact-SHA full gate
+with `[run-ci]`. It is NOT yet accepted by browser verification.
+The original XP/7/11 source-vs-React pixel comparison remains blocked
+without paired source capture. Other outstanding priorities are
+Source Theme completeness, source pinned/recent Start lists,
+Computer/Bin Properties/context extensions, original taskbar layout
+configuration, taskbar default pins/reordering, and all untouched
+system menu functions. Do not release or merge draft PR #1 yet.
+
+---
+
 ## Shell-first incremental follow-up — 17 November 2026
 
 The `1931a05` opt-in CI #44027070596 was triggered *before* the
