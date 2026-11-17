@@ -1,3 +1,34 @@
+## Desktop unsafe-shortcut full-suite regression correction — 17 November 2026
+
+The older [path-backed shortcut CI #44128632442](https://github.com/codersachin99/windows-os/actions/runs/44128632442)
+on `9e0f541` completed **FAILURE**, although TypeScript,
+614 units, source/art checks, Vite and the focused shell suite passed.
+Full Chromium detected **two test failures** (desktop and mobile) in
+`tests/e2e/desktop-files.spec.ts` for one stale assertion: untrusted
+imported `Unsafe.lnk` is still rendered but correctly blocked from
+launching; the app now displays the *more specific* rejection
+`The original shortcut target cannot be opened safely.` rather
+than the older generic `No original application association`.
+No `cmd` window was opened. This is a test expectation mismatch,
+not evidence of arbitrary shortcut execution.
+
+- `0e07683` updates the exact expected safe rejection message
+  without weakening either the valid program shortcut path or the
+  Guest path shortcut validator. `811625f` includes
+  `desktop-files.spec.ts` in the source-shell **focused CI gate**
+  to catch this class of regression before the expensive full suite.
+- These updates are **newer than** both earlier
+  [Send to popup CI #44131229628](https://github.com/codersachin99/windows-os/actions/runs/44131229628)
+  and new View/New
+  [CI #44132734259](https://github.com/codersachin99/windows-os/actions/runs/44132734259).
+  Need one new exact-head `[run-ci]` rerun after committing
+  this corrected acceptance checkpoint. Never label the earlier
+  failing run green or assume older tests accept newer commits.
+- Keep PR #1 draft and main unchanged; no release, no original
+  source-paired pixel-parity claim.
+
+---
+
 ## Computer / Recycle Bin background side submenu parity — 17 November 2026
 
 Continued the original shell and Computer/Bin priority, pinned to
