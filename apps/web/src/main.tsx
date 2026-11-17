@@ -4,6 +4,7 @@ import App from "./App";
 import "../../../packages/ui/src/windows7.css";
 import "../../../packages/ui/src/DesktopIcons.css";
 import "../../../packages/ui/src/sourceShellTheme.css";
+import "../../../packages/ui/src/sourceWindowChrome.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>
