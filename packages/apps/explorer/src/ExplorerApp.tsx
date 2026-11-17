@@ -45,6 +45,7 @@ import type { ThemeId } from "@windows-os/contracts";
 import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
 import "./ExplorerApp.css";
+import "./sourceExplorerContextTheme.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
