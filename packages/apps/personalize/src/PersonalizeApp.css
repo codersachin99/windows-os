@@ -55,3 +55,53 @@
   .windows-personalize__theme{width:112px}
   .windows-personalize__theme img{width:98px;height:62px}
 }
+
+/* First source ChangeBackground pane: the original system list uses 160x96
+ * thumbnails and a separate Save/Cancel footer, not instant preview commits. */
+.windows-personalize__navigation{
+  padding:4px 0;border:0;background:none;color:#1764a3;
+  text-align:left;text-decoration:underline;cursor:pointer;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-personalize__navigation:focus-visible{
+  outline:2px solid #3279af;outline-offset:2px;
+}
+.windows-personalize__backgrounds{
+  display:flex;flex-wrap:wrap;gap:12px;padding:13px;
+}
+.windows-personalize__background{
+  display:block;width:176px;height:112px;padding:6px;
+  border:1px solid transparent;background:transparent;
+  box-sizing:border-box;cursor:pointer;
+}
+.windows-personalize__background img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  border:1px solid #afbac8;box-sizing:border-box;
+  box-shadow:2px 2px 3px 1px #0003;
+}
+.windows-personalize__background:hover,
+.windows-personalize__background:focus-visible{
+  background:#e4f2fc;border-color:#8db7db;
+}
+.windows-personalize__background.is-selected{
+  background:#c9e4f9;border-color:#5e97ca;
+  box-shadow:inset 0 0 0 1px #fff;
+}
+.windows-personalize__actions{
+  display:flex;justify-content:flex-end;gap:10px;margin-top:15px;
+}
+.windows-personalize__actions button{
+  min-width:74px;min-height:27px;
+  border:1px solid #899eae;border-radius:2px;
+  background:linear-gradient(#fff,#e2e8f0);color:#182b43;
+  cursor:pointer;font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-personalize__actions button:hover,
+.windows-personalize__actions button:focus-visible{
+  background:#d9edff;border-color:#4d98cb;
+}
+@media(max-width:530px){
+  .windows-personalize__backgrounds{gap:5px;padding:7px}
+  .windows-personalize__background{width:130px;height:85px;padding:4px}
+  .windows-personalize__actions{position:sticky;bottom:0;padding:10px 0;background:#fff}
+}
