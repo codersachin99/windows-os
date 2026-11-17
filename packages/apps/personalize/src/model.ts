@@ -1,5 +1,5 @@
 import type {ThemeId} from "@windows-os/contracts";
-import {legacyArt,legacyShellThemeAssets} from "@windows-os/assets";
+import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers} from "@windows-os/assets";
 
 /** Original pinned personalize.js ChangeTheme, _getThemes:
  * classes aero/basic/wins, theme selection immediately applies Theme and
@@ -21,3 +21,8 @@ export const SOURCE_PERSONALIZE_THEMES:readonly SourcePersonalizeTheme[]=[
 export function sourcePersonalizeGroup(group:SourcePersonalizeTheme["group"]):SourcePersonalizeTheme[]{
   return SOURCE_PERSONALIZE_THEMES.filter(theme=>theme.group===group);
 }
+
+/** Original ChangeBackground reads assetStore.bgs. This subset consists only
+ * of the pinned system backgrounds already imported into React as real bytes.
+ * Uploaded images/videos and animated sources require their own adapters. */
+export const SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS:readonly string[]=sourceSystemWallpapers;
