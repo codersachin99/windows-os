@@ -15,6 +15,7 @@ import { RunApp } from "@windows-os/apps/run";
 import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { AboutApp } from "@windows-os/apps/about";
+import {PersonalizeApp} from "@windows-os/apps/personalize";
 import { PhotoApp } from "@windows-os/apps/photo";
 import { RecorderApp } from "@windows-os/apps/recorder";
 import { CameraApp } from "@windows-os/apps/camera";
@@ -87,6 +88,9 @@ function ApplicationContent({
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     trayPreferences={trayPreferences}
     onTrayPreferencesChange={onTrayPreferencesChange}/>;
+  if (appId === "personalize") return <PersonalizeApp
+    theme={theme}
+    onSelectTheme={next=>dispatch({type:"SET_THEME",theme:next})}/>;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

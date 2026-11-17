@@ -30,6 +30,7 @@ export default defineConfig({
       "@windows-os/apps/calculator": app("./packages/apps/calculator/src/index.ts"),
       "@windows-os/apps/cmd": app("./packages/apps/cmd/src/index.ts"),
       "@windows-os/apps/cpanel": app("./packages/apps/cpanel/src/index.ts"),
+      "@windows-os/apps/personalize": app("./packages/apps/personalize/src/index.ts"),
       "@windows-os/apps/games": app("./packages/apps/games/src/index.ts"),
       "@windows-os/apps/run": app("./packages/apps/run/src/index.ts"),
       "@windows-os/apps/sticky": app("./packages/apps/sticky/src/index.ts"),

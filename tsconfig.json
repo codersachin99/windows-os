@@ -94,6 +94,9 @@
       "@windows-os/apps/cpanel": [
         "packages/apps/cpanel/src/index.ts"
       ],
+      "@windows-os/apps/personalize": [
+        "packages/apps/personalize/src/index.ts"
+      ],
       "@windows-os/apps/games": [
         "packages/apps/games/src/index.ts"
       ],

@@ -789,6 +789,14 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     setError(null);
   };
 
+  const openPersonalization = () => {
+    setMenu(null);
+    const app=appRegistry.get("personalize");
+    if(!app){setError("The original Personalization program is unavailable.");return;}
+    dispatch({type:"OPEN_APP",app});
+    setError(null);
+  };
+
   const changeSettings = (update: () => void) => {
     try {
       update();
@@ -1069,9 +1077,8 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           onClick={openDisplaySettings}>Display</button>
         <button role="menuitem" disabled data-test-desktop-gadgets=""
           title="Original Gadgets application is not yet migrated">Gadgets</button>
-        <button role="menuitem" disabled data-test-desktop-personalize=""
-          title="Original Personalization application is not yet migrated">
-          Personalize</button>
+        <button role="menuitem" data-test-desktop-personalize=""
+          onClick={openPersonalization}>Personalize</button>
       </>}
     </div>}
     <input type="file" multiple hidden ref={uploadInput}
