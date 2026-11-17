@@ -1,3 +1,56 @@
+## Source taskbar Properties, Start privacy and Win11 obsolete test fix — 17 November 2026
+
+After Personalization first-slice source gallery (the focused browser
+gate passed at
+[CI #44087981638](https://github.com/codersachin99/windows-os/actions/runs/44087981638),
+full desktop/mobile suite was still executing when this change began),
+continued the requested taskbar/context/Start priorities.
+
+- `36a3d56` adds a shared source `startmenuDraft` preferences store
+  in SDK for the original `src/modules/shell/taskbar.js` Start tab:
+  `powerButtonAction` (Switch user / Log off / Restart / Shut down,
+  source default Shut down), and `storeRecentApps` (default true).
+  Validated local Guest persistence, subscriptions, restricted-storage
+  fallback, and unit tests.
+- `11862d9` wires Start's actual Win7 power button to that selected
+  engine action; keeps XP and Win11 explicit native source power controls.
+  Shared App dispatcher does not record recent launches when Start
+  recent-app privacy is off; XP/11 recent sections hide accordingly.
+- `9860ac9` adds a modular source `taskbar.js` three-tab
+  **Taskbar and Start Menu Properties** React window (Taskbar,
+  Start Menu, Toolbars), with working power/recent preferences,
+  transactional Apply/OK/Cancel. Original nonported taskbar sizing,
+  centering, combining, toolbars and Aero Peek controls remain
+  disabled rather than being falsely claimed as working.
+- `fcf03af` registers source taskbar settings (original w=450,
+  h=490, nonresizable bottom-left) and enables right-click taskbar
+  background **Properties** to open it. Notification area
+  **Customize** opens the existing source Control Panel Notification
+  settings via `file.path="notification"`.
+- `21fe12a` updates source taskbar menu unit/browser expectations
+  and adds Playwright for taskbar Properties tabs, Start power/recent,
+  Apply, Cancel, local reload and CPanel notification Customize.
+  Included in focused shell CI.
+- The earlier full [CI #44085385577](https://github.com/codersachin99/windows-os/actions/runs/44085385577)
+  at `dfea989` finished **568 passed / 2 failed**, but those failures
+  were the **same obsolete Win11 assertion** in desktop and mobile
+  `tests/e2e/theme-shell-source.spec.ts`: it still expected a Games
+  `.lnk` folder in Win11 All Programs, which is now correctly the
+  pinned `startmenu-win11.js` flat alphabetical app list.
+  `b8fa46a` updates the old browser check to keep the XP Games-folder
+  original-art check, and assert Win11's flat list and original Notepad
+  themed art instead. No source behavior is reverted or bypassed.
+
+This handoff is the exact-head opt-in `[run-ci]` for the new
+Taskbar/Start/Personalization integration and obsolete test repair.
+The last accepted full CI baseline is `1c4a454` run #44045584638.
+Do **not** merge draft PR #1, change main or create a release until new
+checks pass and original-paired screenshot parity is proven.
+Remaining source differences include complete Personalization,
+taskbar layout/combining and full Explorer file-properties modules.
+
+---
+
 ## First source Personalization/ChangeTheme shell slice — 17 November 2026
 
 This checkpoint extends the priority Desktop, Start, context-menu and XP/Win7/Win11 theme migration. The preceding
