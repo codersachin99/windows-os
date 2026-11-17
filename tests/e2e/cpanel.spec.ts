@@ -242,11 +242,11 @@ test("pinned source Control Panel root exposes 24 tile targets without fake host
     .toHaveAttribute("src",/backup\.5e4eb80c\.webp/);
   await expect(panel.locator('[data-test-cpanel-item="action-center"] img'))
     .toHaveAttribute("src",/action-center-headline\.27cc6d83\.webp/);
-  for(const id of ["defender","update","data","taskbar","gadgets"]){
+  for(const id of ["defender","update","data","gadgets"]){
     await expect(panel.locator('[data-test-cpanel-item="'+id+'"]'))
       .toBeDisabled();
   }
-  for(const id of ["display","accounts","programs","notification","action-center","backup"]){
+  for(const id of ["display","accounts","programs","notification","action-center","backup","personalize","taskbar"]){
     await expect(panel.locator('[data-test-cpanel-item="'+id+'"]'))
       .toBeEnabled();
   }
@@ -266,7 +266,7 @@ test("original Control Panel indexed tasks route only migrated destinations",asy
   await search.fill("customize icons");
   const taskbar=panel.locator('[data-test-cpanel-result="taskbar"]');
   await expect(taskbar).toBeVisible();
-  await expect(taskbar.locator(".windows-cpanel__link")).toBeDisabled();
+  await expect(taskbar.locator(".windows-cpanel__link")).toBeEnabled();
   await taskbar.getByRole("button",{name:"Customize icons on the taskbar"}).click();
   await expect(panel.locator("[data-test-cpanel-notification]")).toBeVisible();
   await panel.locator("[data-test-cpanel-back]").click();
