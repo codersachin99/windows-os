@@ -1,3 +1,45 @@
+## XP/Win11 source recentApps history — 17 November 2026
+
+Continuing after the **focused shell browser gate passed** at
+[CI #44034330475](https://github.com/codersachin99/windows-os/actions/runs/44034330475)
+(the complete desktop/mobile suite was still running when these later
+changes were added).
+
+The pinned original `src/modules/shell/startmenu-winxp.js` renders
+`recentPrograms.slice(0,7)`, and
+`src/modules/shell/startmenu-win11.js` renders
+`recentPrograms.slice(0,6)`. Both derive from the shared
+`recentApps` history instead of hard-coded UI labels.
+
+- `eee2f70`: added `SourceRecentPrograms` to the shared SDK with
+  local Guest-scoped, validated unique app IDs; newest-first launches,
+  persistence, restricted-browser fallback, subscriber lifecycle and
+  explicit capped retention. No host commands or paths are stored.
+  App.tsx intercepts the existing `OPEN_APP` dispatch to record launches
+  from **every** shell surface (Start, Desktop, Explorer, Run, taskbar)
+  instead of tracking only Start tile clicks.
+- `eee2f70`: XP and Win11 Start menus subscribe to that source
+  history and show the first 7/6 apps respectively with original
+  registered program IDs, themed source icons, relaunch and the shared
+  source right-click menu. Win11 includes a Recently opened section;
+  XP shows a recent program strip. All Programs still uses actual
+  installed Guest `.lnk` data. Source initial pinned app catalog and
+  exact screenshot layouts remain separate and **not accepted**.
+- `3fd398c`: corrected source recent browser acceptance to target
+  the first recent item without strict locator ambiguity.
+- `8cb3e0b`: added the XP/Win11 history browser spec to the **focused**
+  shell CI gate before the costly full Chromium suite. Unit tests cover
+  persistence, sorting, validation, deduplication, retention and
+  storage-denied behavior.
+
+This handoff commit explicitly opts in `[run-ci]` at the latest
+source history SHA. The previous full gate does not verify this change.
+Do not merge PR #1 or release until the new unit, focused browser and
+full acceptance suites pass. Continue source style and Windows XP/7/11
+Start-menu exactness, taskbar properties and Computer/Bin menu parity.
+
+---
+
 ## Source Start Escape, XP notification artwork and quick shell gate — 17 November 2026
 
 This checkpoint **fixes the root cause** of persistent browser acceptance
