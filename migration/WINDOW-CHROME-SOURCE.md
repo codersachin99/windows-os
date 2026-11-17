@@ -36,6 +36,12 @@ Source files:
   the highest nonminimized Guest desktop window `z` in
   `DesktopShell`, instead of accidentally painting every open window
   as selected. Minimized programs remain mounted but never active.
+- `DesktopShell` taskbar button handling now focuses a visible **background**
+  window instead of minimizing it. Clicking the already-active visible
+  window minimizes it, and clicking a minimized button restores/focuses
+  it. This prevents taskbar focus indicators from conflicting with the
+  source active-window frame. The source chrome browser test exercises
+  Computer/Bin z-order through this real taskbar behavior.
 - A maximized `WindowFrame` now reserves
   `var(--taskbar-height, 40px)`. This preserves Windows 7/XP's 40px
   and Windows 11's 48px taskbar and avoids swallowing the last 8px of
