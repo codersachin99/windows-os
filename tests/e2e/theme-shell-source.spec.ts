@@ -49,3 +49,48 @@ test("new theme skin imports do not contaminate the original Win7 shell",async({
   const start=shell.locator('[data-test-start-menu]');
   await expect(start).not.toHaveClass(/windows-startmenu--winxp|windows-startmenu--win11/);
 });
+
+test("XP and Win11 shell consume the exact imported source Start/Computer/Bin artwork",async({page})=>{
+  for(const [theme,token] of [
+    ["winxp","winxp.a3485adf"],
+    ["win11","win11.e48a735f"]
+  ] as const){
+    const shell=await guestTheme(page,theme);
+    const start=theme==="winxp"
+      ? "/assets/images/start-button-winxp.a3485adf.webp"
+      : "/assets/images/start-button-win11.e48a735f.webp";
+    const computer=theme==="winxp"
+      ? "/assets/images/computer-winxp.8cbae9da.webp"
+      : "/assets/images/computer-win11.fc5b48e4.webp";
+    const bin=theme==="winxp"
+      ? "/assets/images/bin-winxp.7d0403fd.webp"
+      : "/assets/images/bin-win11.73608517.webp";
+    await expect(shell.locator("[data-test-start-button] img")).toHaveAttribute("src",start);
+    await expect(shell.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon'))
+      .toHaveAttribute("src",computer);
+    await expect(shell.locator('[data-test-desktop-icon="bin"] .desktop__icon-icon'))
+      .toHaveAttribute("src",bin);
+    for(const path of [start,computer,bin]){
+      const response=await page.request.get(path);
+      expect(response.ok(),theme+" source artwork "+path).toBe(true);
+      expect((await response.body()).byteLength).toBeGreaterThan(0);
+    }
+  }
+});
+test("XP power controls and theme-specific Start folder use original imported art",async({page})=>{
+  const xp=await guestTheme(page,"winxp");
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  let menu=xp.locator("[data-test-start-menu]");
+  await expect(menu.locator('[data-test-startmenu-xp-footer] img')).toHaveCount(2);
+  await expect(menu.locator('[data-test-startmenu-xp-footer] img').first())
+    .toHaveAttribute("src","/assets/images/logoff-winxp.71dc5ab2.webp");
+  await menu.locator("[data-test-all-programs]").click();
+  await expect(menu.locator('[data-test-source-program-folder="Games"] img'))
+    .toHaveAttribute("src","/assets/images/folder-winxp.ff1b00c5.webp");
+  const win11=await guestTheme(page,"win11");
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  menu=win11.locator("[data-test-start-menu]");
+  await menu.locator("[data-test-all-programs]").click();
+  await expect(menu.locator('[data-test-source-program-folder="Games"] img'))
+    .toHaveAttribute("src","/assets/images/folder-win11.49360b7d.webp");
+});

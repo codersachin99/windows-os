@@ -90,6 +90,41 @@ export const legacyArt = {
   contacts: "/apps/contacts/icon.webp"
 } as const;
 
+// Original XP/Win11 shell image names and bytes were imported from the
+// pinned legacy-win7 revision. Never use generated substitute graphics.
+export const legacyShellThemeAssets = Object.freeze({
+  winxp: {
+    start: "/assets/images/start-button-winxp.a3485adf.webp",
+    computer: "/assets/images/computer-winxp.8cbae9da.webp",
+    bin: "/assets/images/bin-winxp.7d0403fd.webp",
+    binFull: "/assets/images/bin-full-winxp.ba3f6193.webp",
+    folder: "/assets/images/folder-winxp.ff1b00c5.webp",
+    file: "/assets/images/file-winxp.c130b357.webp",
+    theme: "/assets/images/winxp.3e41719f.webp"
+  },
+  win11: {
+    start: "/assets/images/start-button-win11.e48a735f.webp",
+    computer: "/assets/images/computer-win11.fc5b48e4.webp",
+    bin: "/assets/images/bin-win11.73608517.webp",
+    binFull: "/assets/images/bin-full-win11.de576bf3.webp",
+    folder: "/assets/images/folder-win11.49360b7d.webp",
+    file: "/assets/images/file-win11.8b2c3723.webp",
+    theme: "/assets/images/win11.fc00c43d.webp"
+  }
+} as const);
+export const legacyXpPowerArtwork = Object.freeze({
+  logoff: "/assets/images/logoff-winxp.71dc5ab2.webp",
+  shutdown: "/assets/images/shutdown-winxp.f3312ea0.webp"
+});
+export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
+/** Other legacy theme IDs must keep their existing original fallback artwork. */
+export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if (theme === "winxp") return legacyShellThemeAssets.winxp[kind];
+  if (theme === "win11") return legacyShellThemeAssets.win11[kind];
+  return null;
+}
+
+
 
 /** Source-pinned shared card-game art and sound used by source
  * Solitaire e202, Spider 6b74 and shared card 5ea1. These are

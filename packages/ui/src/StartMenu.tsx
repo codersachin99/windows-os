@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, ThemeId } from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
-import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL} from "@windows-os/assets";
+import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork} from "@windows-os/assets";
 import {
   parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS,
   sourceProgramsById, type FileEntry
@@ -126,7 +126,7 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
               type="button" data-test-source-program-folder={folder.name}
               className="windows-startmenu__program"
               onClick={() => setActiveFolder(folder.uri)}>
-              <img src={legacyArt.folder} width={30} height={30} alt="" />
+              <img src={sourceShellAsset(theme,"folder") ?? legacyArt.folder} width={30} height={30} alt="" />
               <span>{folder.name}</span>
               <span className="windows-startmenu__chevron" aria-hidden="true">▸</span>
             </button>)}
@@ -200,9 +200,9 @@ export function StartMenu({ dispatch,theme="win7" }: StartMenuProps) {
       {theme==="winxp"&&<footer className="windows-startmenu__xp-footer"
         data-test-startmenu-xp-footer="">
         <button type="button" onClick={() => dispatch({type:"LOG_OFF"})}>
-          Log off</button>
+          <img src={legacyXpPowerArtwork.logoff} width={20} height={20} alt="" />Log off</button>
         <button type="button" onClick={() => dispatch({type:"SHUTDOWN"})}>
-          Turn off computer</button>
+          <img src={legacyXpPowerArtwork.shutdown} width={20} height={20} alt="" />Turn off computer</button>
       </footer>}
     </nav>
   );

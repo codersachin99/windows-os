@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type Dispatch } from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
-import { legacyArt } from "@windows-os/assets";
+import { legacyArt, sourceShellAsset } from "@windows-os/assets";
 import { appRegistry,fileStore } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
@@ -297,7 +297,7 @@ export function DesktopShell({
         style={{ backgroundImage: `url("${state.wallpaper}")` }} />
       <div id="desktop" className="desktop__wrapper windows-desktop__workspace"
         onClick={() => dispatch({ type: "SELECT_ICON", id: null })}>
-        <DesktopIcons apps={desktop} dispatch={dispatch} />
+        <DesktopIcons apps={desktop} dispatch={dispatch} theme={state.theme} />
       </div>
       {state.windows.filter(win => win.appId !== "magnifier").map(win => win.appId === "sticky" ? (
         // The pinned source renders sticky notes as multiple floating panels,
@@ -333,7 +333,7 @@ export function DesktopShell({
       <footer className="windows-taskbar" data-test-taskbar="base">
         <button className="windows-taskbar__start" data-test-start-button="" aria-label="Open Start menu"
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
-          <img src={legacyArt.startOrb} alt="" draggable={false} />
+          <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
         </button>
         <div className="windows-taskbar__running">
           {state.windows.map(win => (

@@ -2,7 +2,8 @@ import {
   useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,
   type Dispatch, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent
 } from "react";
-import type { AppDefinition, DesktopAction } from "@windows-os/contracts";
+import type { AppDefinition, DesktopAction, ThemeId } from "@windows-os/contracts";
+import { sourceShellAsset } from "@windows-os/assets";
 import {
   desktopBand, desktopBandHits, desktopBandSelection,
   type DesktopBand, type DesktopBandModifier
@@ -30,6 +31,7 @@ import {
 interface DesktopIconsProps {
   apps: readonly AppDefinition[];
   dispatch: Dispatch<DesktopAction>;
+  theme?: ThemeId;
 }
 interface DesktopItem {
   id: string;
@@ -58,7 +60,7 @@ interface ActiveBand {
   moved: boolean;
 }
 
-export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
+export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsProps) {
   const layout = useMemo(() => new DesktopPositionStore(browserStorage()), []);
   const [options, setOptions] = useState(() => layout.snapshot());
   const [area, setArea] = useState<DesktopArea>({
@@ -876,6 +878,10 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
     {options.showIcons && items.map((app,index) => {
       const position = layout.placement(app.id, index, area);
       const offset = drag?.keys.includes(app.id) ? drag.offset : null;
+      const artwork = !app.file && (app.id === "computer"
+        ? sourceShellAsset(theme, "computer")
+        : app.id === "bin" ? sourceShellAsset(theme, trashCount > 0 ? "binFull" : "bin")
+        : null) || app.icon;
       return <button type="button" key={app.id} data-test-desktop-icon={app.id}
         data-test-desktop-file={app.file?.entry.uri}
         data-source-desktop-icon-type={app.file?.iconType}
@@ -925,7 +931,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
         }}
         aria-label={app.label} title={app.label}>
         <span className="desktop__icon-box"><img className="desktop__icon-icon"
-          src={app.icon} draggable={false} alt="" /></span>
+          src={artwork} draggable={false} alt="" /></span>
         <span className="desktop__icon-name">
           {app.file && renaming?.id === app.id
             ? <input className="windows-desktop__rename-input" autoFocus
@@ -951,7 +957,7 @@ export function DesktopIcons({ apps, dispatch }: DesktopIconsProps) {
             transform: "translate(" + offset.x + "px," + offset.y + "px)"
           }}>
           <span className="desktop__icon-box"><img className="desktop__icon-icon"
-            src={app.icon} draggable={false} alt="" /></span>
+            src={artwork} draggable={false} alt="" /></span>
           <span className="desktop__icon-name">{app.label}</span>
         </span>}
       </button>;
