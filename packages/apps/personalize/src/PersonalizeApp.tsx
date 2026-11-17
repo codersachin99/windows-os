@@ -7,6 +7,8 @@ import {
 import "./PersonalizeApp.css";
 
 interface PersonalizeAppProps{
+  /** Search from the original Control Panel can enter Background directly. */
+  initialView?:"theme"|"background";
   theme:ThemeId;
   wallpaper:string;
   onSelectTheme(theme:SourcePersonalizeTheme["id"]):void;
@@ -18,9 +20,9 @@ interface PersonalizeAppProps{
  * appearance/cursor and sounds pages are not yet implemented.
  */
 export function PersonalizeApp({
-  theme,wallpaper,onSelectTheme,onSelectWallpaper
+  theme,wallpaper,onSelectTheme,onSelectWallpaper,initialView="theme"
 }:PersonalizeAppProps){
-  const [view,setView]=useState<"theme"|"background">("theme");
+  const [view,setView]=useState<"theme"|"background">(initialView);
   const [selectedBg,setSelectedBg]=useState(wallpaper);
   const openBackground=()=>{
     setSelectedBg(wallpaper);
