@@ -350,7 +350,7 @@ export function DesktopShell({
           onClose={() => dispatch({ type: "CLOSE_WINDOW", id: win.id })}
           onFocus={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })} />
       ) : (
-        <WindowFrame key={win.id}
+        <WindowFrame key={win.id} theme={state.theme}
           window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
           active={!win.minimized&&win.z===highestVisibleWindowZ}
           dispatch={dispatch}
@@ -368,7 +368,7 @@ export function DesktopShell({
       {/* The control surface remains independent of the transformed canvas;
           other programs and their windows zoom together with the desktop. */}
       {state.windows.filter(win => win.appId === "magnifier").map(win => (
-        <WindowFrame key={win.id}
+        <WindowFrame key={win.id} theme={state.theme}
           window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
           active={!win.minimized&&win.z===highestVisibleWindowZ}
           dispatch={dispatch}
