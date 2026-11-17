@@ -1,5 +1,5 @@
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
-import {sourceShellWallpaper} from "@windows-os/assets";
+import {sourceShellWallpaper,sourceIsSystemWallpaper} from "@windows-os/assets";
 
 export const LEGACY_DEFAULTS = Object.freeze({
   skipBoot: false,
@@ -17,6 +17,23 @@ export function sourceTestTheme(search: string): DesktopState["theme"] | null {
 }
 
 export const SOURCE_ACTIVE_THEME_KEY="windows-os:guest:active-theme:v1";
+export const SOURCE_ACTIVE_WALLPAPER_KEY="windows-os:guest:wallpaper:v1";
+/** The original Background selection is profile-scoped, independent of theme.
+ * A subsequent ChangeTheme replaces it with that theme's original wallpaper. */
+export function sourceSavedWallpaper(
+  storage:Pick<Storage,"getItem">|undefined,theme:DesktopState["theme"]
+):string|null{
+  try{
+    const raw=storage?.getItem(SOURCE_ACTIVE_WALLPAPER_KEY);
+    if(!raw)return null;
+    const data:unknown=JSON.parse(raw);
+    if(!data||typeof data!=="object")return null;
+    const saved=data as {theme?:unknown;path?:unknown};
+    return saved.theme===theme&&typeof saved.path==="string"&&
+      sourceIsSystemWallpaper(saved.path)?saved.path:null;
+  }catch{return null;}
+}
+
 export function sourceSavedTheme(
   storage:Pick<Storage,"getItem">|undefined
 ):DesktopState["theme"]|null{
@@ -40,7 +57,9 @@ export function initialDesktopState(): DesktopState {
     topZ: 10,
     startOpen: false,
     selectedIcon: null,
-    wallpaper: sourceShellWallpaper(theme)
+    wallpaper: typeof window!=="undefined"
+      ?sourceSavedWallpaper(window.localStorage,theme)??sourceShellWallpaper(theme)
+      :sourceShellWallpaper(theme)
   };
 }
 
