@@ -47,6 +47,13 @@ export const SOURCE_EXPLORER_SEND_TO:readonly SourceExplorerSendToEntry[]=[
   {id:"compress",label:"Compressed (zipped) folder",disabled:true},
   {id:"desktop",label:"Desktop (create shortcut)",disabled:true}
 ];
+/** The original Send to Desktop action becomes enabled only while an actual
+ * Guest Desktop and a supported live source path are available. The archive
+ * command stays disabled; it has no migrated service. */
+export function sourceExplorerSendToMenu(canCreateDesktop:boolean):SourceExplorerSendToEntry[]{
+  return SOURCE_EXPLORER_SEND_TO.map(entry=>entry.id==="desktop"
+    ?{...entry,disabled:!canCreateDesktop}:entry);
+}
 export function sourceExplorerItemMenu(
   input:SourceExplorerItemMenuInput
 ):SourceExplorerItemMenuEntry[]{
