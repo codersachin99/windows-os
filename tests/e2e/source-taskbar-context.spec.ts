@@ -29,7 +29,10 @@ test("source pinned app item context can Open/Unpin and running app can Close",a
 });
 test("source taskbar background menu keeps unavailable controls disabled",async({page})=>{
   await logon(page,"win11");
-  await page.locator(".windows-taskbar__running").click({
+  // Source Win11 centers its Start and running items; with no running
+  // windows, the running-items lane has zero width. Right-click the actual
+  // empty taskbar background instead.
+  await page.locator(".windows-taskbar").click({
     button:"right",position:{x:12,y:10}
   });
   let menu=page.locator('[data-test-taskbar-context="background"]');
@@ -44,7 +47,10 @@ test("source taskbar background menu keeps unavailable controls disabled",async(
   await menu.locator('[data-test-taskbar-context-action="taskmgr"]').click();
   await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
   await expect(menu).toHaveCount(0);
-  await page.locator(".windows-taskbar__running").click({
+  // Source Win11 centers its Start and running items; with no running
+  // windows, the running-items lane has zero width. Right-click the actual
+  // empty taskbar background instead.
+  await page.locator(".windows-taskbar").click({
     button:"right",position:{x:12,y:10}
   });
   menu=page.locator('[data-test-taskbar-context="background"]');
