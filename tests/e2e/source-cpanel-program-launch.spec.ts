@@ -1,7 +1,7 @@
 import {expect,test,type Page} from "@playwright/test";
 
 async function openControlPanel(page:Page){
-  await page.goto("/?theme=win7");
+  await page.goto("/");
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await page.getByRole("button",{name:"Open Start menu"}).click();
   await page.locator("[data-test-open-cpanel]").click();
