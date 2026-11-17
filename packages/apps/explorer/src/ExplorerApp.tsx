@@ -36,6 +36,7 @@ import {sourceComputerIconArtwork,sourceShortcutCustomIconURL} from "./sourceCom
 import {sourceBinItemMenu,type SourceBinItemAction} from "./sourceBinItemMenu";
 import {sourceExplorerItemMenu,sourceExplorerDownloadableItems,
   sourceExplorerSendToMenu,type SourceExplorerItemAction} from "./sourceExplorerItemMenu";
+import {sourceExplorerSubmenuPlacement} from "./sourceExplorerSubmenuPlacement";
 import { SourceListView, SourceListViewExtra, SourceListViewHeader } from "@windows-os/ui/listview";
 import { SourceListViewItem, sourceListItemHighlightParts } from "@windows-os/ui/listitem";
 import { SourceListItemRename } from "@windows-os/ui/rename";
@@ -117,6 +118,7 @@ export function ExplorerApp({
     sendToOpen:boolean;uri?:string
   }|null>(null);
   const contextRef=useRef<HTMLDivElement>(null);
+  const sendToRef=useRef<HTMLDivElement>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [subfolders, setSubfolders] = useState(
     initialSourceSearch?.subfolders ?? initialFind?.subfolders ?? false);
@@ -524,6 +526,25 @@ export function ExplorerApp({
     if(context.x===position.x&&context.y===position.y)return;
     setContext(current=>current?{...current,...position}:current);
   },[context]);
+  // Source ExplorerMenu's nested BaseMenu is positioned to the side of
+  // the row and flips across the desktop edge. Keep it out of the parent
+  // flex layout so opening Send to never changes parent item height.
+  useLayoutEffect(()=>{
+    if(context?.kind!=="item"||!context.sendToOpen)return;
+    const parent=contextRef.current,child=sendToRef.current;
+    const trigger=parent?.querySelector<HTMLElement>(
+      "[data-test-explorer-item-send-to]");
+    if(!parent||!child||!trigger)return;
+    const a=parent.getBoundingClientRect();
+    const b=trigger.getBoundingClientRect();
+    const placement=sourceExplorerSubmenuPlacement(
+      {left:a.left,top:a.top,width:a.width,height:a.height},
+      {top:b.top},{width:child.offsetWidth,height:child.offsetHeight},
+      {width:window.innerWidth,height:window.innerHeight});
+    child.style.left=placement.left+"px";
+    child.style.top=placement.top+"px";
+    child.dataset.side=placement.side;
+  },[context?.kind,context?.sendToOpen,context?.x,context?.y]);
   const copyExplorerPath=()=>{
     const path=state.path;
     if(!path){setMessage("No mounted folder path is available.");return;}
@@ -951,7 +972,10 @@ export function ExplorerApp({
       aria-label={context.kind === "item" ? "File actions" : "Folder actions"}
       style={{ left: context.x, top: context.y }}
       onKeyDown={event=>{
-        if(sourceMenuArrowFocus(contextRef.current,event.target,event.key)){
+        const inSendTo=event.target instanceof Element &&
+          Boolean(event.target.closest("[data-test-explorer-sendto-submenu]"));
+        if(sourceMenuArrowFocus(inSendTo?sendToRef.current:contextRef.current,
+          event.target,event.key)){
           event.preventDefault();return;
         }
         if(event.key==="ArrowLeft"&&(context.viewOpen||context.newOpen||context.sendToOpen)){
@@ -988,9 +1012,14 @@ export function ExplorerApp({
           disabled={action.disabled}
           title={action.disabled?"Original action needs an unavailable source service":undefined}
           onPointerEnter={()=>{
-            if(action.id==="send-to")setContext(current=>current?{
-              ...current,sendToOpen:true,viewOpen:false,newOpen:false
-            }:current);
+            setContext(current=>{
+              if(!current)return current;
+              const open=action.id==="send-to";
+              return current.sendToOpen===open?current:{
+                ...current,sendToOpen:open,
+                viewOpen:false,newOpen:false
+              };
+            });
           }}
           onKeyDown={event=>{
             if(action.id==="send-to"&&event.key==="ArrowRight"){
@@ -998,6 +1027,9 @@ export function ExplorerApp({
               setContext(current=>current?{
                 ...current,sendToOpen:true,viewOpen:false,newOpen:false
               }:current);
+              window.requestAnimationFrame(()=>sendToRef.current
+                ?.querySelector<HTMLButtonElement>('button:not(:disabled)')
+                ?.focus({preventScroll:true}));
             }
           }}
           onClick={()=>{
@@ -1008,8 +1040,12 @@ export function ExplorerApp({
               }:current);
             }else contextAction(()=>runSourceItemAction(action.id));
           }}>{action.label}</button>)}
-        {context.sendToOpen&&sendToItems.map(action=>
-          <button key={action.id} type="button" role="menuitem"
+        {context.sendToOpen&&<div ref={sendToRef} role="menu"
+          aria-label="Send to" className="explorer-context-menu__submenu"
+          data-test-explorer-sendto-submenu=""
+          onPointerEnter={event=>event.stopPropagation()}>
+          {sendToItems.map(action=><button key={action.id} type="button"
+            role="menuitem"
             data-test-explorer-item-send-to-kind={action.id}
             disabled={action.disabled}
             title={action.disabled?"Original action requires unavailable source service":undefined}
@@ -1019,6 +1055,7 @@ export function ExplorerApp({
             }}>
             {action.label}
           </button>)}
+        </div>}
       </>)}
       {context.kind === "background" && <>
         <button role="menuitem" aria-expanded={context.viewOpen}
