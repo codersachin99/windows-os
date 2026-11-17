@@ -231,9 +231,19 @@
  * with vertical page-indicator dots beside the grid.
  */
 .windows-startmenu--win11 .windows-startmenu__programs{
-  position:relative;flex:none;
+  position:relative;flex:none;overscroll-behavior:contain;
+}
+/* Source 18ee has two distinct panes. The pinned grid is two rows,
+ * but All Programs is an independent vertically scrolling list.
+ * Never apply fixed grid rows or overflow clipping to the latter. */
+.windows-startmenu--win11:not(.is-all-programs) .windows-startmenu__programs{
   grid-template-rows:repeat(2,minmax(0,1fr));
-  overflow:hidden;overscroll-behavior:contain;
+  overflow:hidden;
+}
+.windows-startmenu--win11.is-all-programs .windows-startmenu__programs{
+  grid-template-rows:none;
+  grid-auto-rows:minmax(34px,auto);
+  overflow-y:auto;align-content:start;
 }
 .windows-startmenu--win11 .windows-startmenu__win11-pages{
   position:absolute;z-index:2;top:50%;right:1px;
