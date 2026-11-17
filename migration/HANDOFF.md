@@ -1,3 +1,15 @@
+### Combined source XP/Win11 image acceptance gate — 17 November 2026
+
+After the three theme implementation commits, this opt-in `[run-ci]`
+requests exact-SHA TypeScript, Vitest (including original icon map),
+source byte integrity/Contacts audits, production build and all desktop
+and mobile Chromium cases for Desktop, themed Start, Computer/Bin,
+plus existing programs. Ordinary pushes remain skipped. If any gate
+fails, inspect the actual logs and fix instead of claiming verified.
+No original-source paired screenshot/pixel parity is implied.
+
+---
+
 ## XP/Win11 source image import and Explorer integration — 17 November 2026
 
 Commit `a55f0ef`: imported 16 original XP/Win11 source images (including
