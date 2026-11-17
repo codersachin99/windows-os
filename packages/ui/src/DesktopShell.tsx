@@ -1,7 +1,7 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
 import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
-import { appRegistry,fileStore } from "@windows-os/sdk";
+import { appRegistry,fileStore,sourceTaskbarPreferences } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
@@ -225,6 +225,7 @@ export function DesktopShell({
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
+  const [buttonMode,setButtonMode]=useState(()=>sourceTaskbarPreferences.snapshot().type);
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
   const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);
   const restoreStartFocus=useRef(false);
@@ -239,6 +240,7 @@ export function DesktopShell({
       '[data-test-start-button]')?.focus({preventScroll:true});
   },[state.startOpen]);
   useEffect(()=>taskbarPins.subscribe(setPinnedPrograms),[]);
+  useEffect(()=>sourceTaskbarPreferences.subscribe(value=>setButtonMode(value.type)),[]);
   const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
   const magnifierActive = state.windows.some(win => win.appId === "magnifier");
   // Original magnifier follows document mousemove while mounted, even at 1x,
@@ -371,6 +373,7 @@ export function DesktopShell({
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base"
+        data-taskbar-button-type={buttonMode}
         onContextMenu={event=>{
           if((event.target as HTMLElement).closest("button,[data-test-tray-icon]"))
             return;
@@ -390,7 +393,8 @@ export function DesktopShell({
             const running=state.windows.find(win=>win.appId===programId);
             return <button key={"pin:"+programId}
               className={"windows-taskbar__application is-pinned"+
-                (running?" is-running":"")}
+                (running?" is-running":"")+
+                (buttonMode!=="combine"?" is-full-size":"")}
               data-test-taskbar-pin={programId}
               data-test-taskbar-pin-running={Boolean(running)}
               onContextMenu={event=>{
@@ -414,10 +418,13 @@ export function DesktopShell({
                 programId==="computer"?sourceShellAsset(state.theme,"computer"):
                 programId==="bin"?sourceShellAsset(state.theme,"bin"):null)??app.icon}
                 alt="" width={26} height={26} />
+              {buttonMode!=="combine"&&<span className="windows-taskbar__item-label"
+                aria-hidden="true">{app.label}</span>}
             </button>;
           })}
           {state.windows.filter(win=>!pinnedPrograms.includes(win.appId)).map(win => (
-            <button key={win.id} className={`windows-taskbar__application ${win.minimized ? "is-minimized" : ""}`}
+            <button key={win.id} className={`windows-taskbar__application ${win.minimized ? "is-minimized" : ""}`+
+              (buttonMode!=="combine"?" is-full-size":"")}
               title={win.title} aria-label={`Switch to ${win.title}`}
               onContextMenu={event=>{
                 event.preventDefault();event.stopPropagation();
@@ -432,6 +439,8 @@ export function DesktopShell({
               })}>
               <img src={sourceThemeProgramArt(state.theme,win.appId)??win.icon}
                 alt="" width={26} height={26} />
+              {buttonMode!=="combine"&&<span className="windows-taskbar__item-label"
+                aria-hidden="true">{win.title}</span>}
             </button>
           ))}
         </div>
