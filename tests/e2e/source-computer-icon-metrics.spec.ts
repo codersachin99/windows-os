@@ -81,3 +81,19 @@ test("Win7 Computer small icons and Tiles retain source width/icon proportions",
   if(page.viewportSize()!.width>580)expect(tile.width).toBeGreaterThanOrEqual(256);
   expect(tile.icon).toBe(48);
 });
+
+test("WinXP and Win11 keep the original Computer large-icon geometry across themes",async({page})=>{
+  for(const theme of ["winxp","win11"] as const){
+    const computer=await openGuestDocuments(page,theme);
+    await setSourceViewMode(computer,"large-icons");
+    const item=computer.locator(
+      '[data-test-explorer-item="Legacy Original Icon Dimensions and Caption.txt"]');
+    await expect(item).toBeVisible();
+    const dimensions=await item.evaluate(element=>{
+      const box=element.querySelector<HTMLElement>(".listview__item-iconbox")!;
+      return {item:parseFloat(getComputedStyle(element).width),
+        icon:parseFloat(getComputedStyle(box).width)};
+    });
+    expect(dimensions).toEqual({item:144,icon:128});
+  }
+});
