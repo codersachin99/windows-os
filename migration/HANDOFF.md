@@ -1,3 +1,53 @@
+## Source Taskbar button labels and green Personalize baseline — 17 November 2026
+
+[Exact-head CI #44112519193](https://github.com/codersachin99/windows-os/actions/runs/44112519193) on
+`110b83d` **PASSED**: 595 unit tests, 62 focused source-shell browser tests,
+588 complete desktop/mobile Chromium tests, TypeScript, source inventory/
+artwork audits and Vite build. This verifies the earlier ChangeBackground
+Save/Cancel + reload slice. The separate original-source screenshot
+equivalence gate was intentionally **skipped / not configured**; do not
+claim pixel parity from that success.
+
+Now continuing the user's theme/taskbar/desktop priority using the pinned
+original `legacy-win7@4e63290`:
+
+- Source `src/modules/shell/taskbar.js` binds the **Taskbar buttons**
+  selector to `taskbarDraft.type` with `combine`,
+  `combine-when-full` and `no-combine`; the dropdown is enabled.
+  The source `src/modules/shell/taskbar-base.js` checks
+  `"combine" !== buttonType` to add `is-full-size` and render a
+  `taskbar__main-label` per button. Importantly, its
+  `loadItems()` still derives item keys from pins and window IDs:
+  the selector does **not** perform React-style program grouping. A
+  source-accurate first slice should change label/size without claiming
+  a rewritten multi-instance window manager.
+- `84df120` adds a validated, observable Guest taskbar button-mode
+  preference store with safe restricted-storage fallback. `e3d0266`
+  exports it through the modular SDK.
+- `39ca7eb` enables only the source Taskbar buttons selector in the
+  three-tab Taskbar settings app and saves it using the existing
+  transactional OK/Apply/Cancel model.
+- `be3ce0f` subscribes DesktopShell to mode changes and adds
+  source `is-full-size` button semantics plus labels for both pinned
+  and running applications; `5527ab4` adds responsive widths/ellipsis
+  without disrupting Win11's centered taskbar structure.
+- `6e353cf` unit-tests three source IDs, persistence, malformed data,
+  no redundant notifications and denied browser storage.
+  `d6429e8` browser-tests Win7/11 Apply, Cancel, full-size labels,
+  icon-only mode and reload. `d59d159` includes these browser cases
+  in the deliberately opt-in focused shell CI.
+- The original Taskbar **Lock**, **Auto-hide** and **Use small icons**
+  checkboxes are explicitly disabled in `taskbar.js` itself, and stay
+  disabled in React. No fake effect is introduced.
+  Source-backed exact pixel widths, taskbar overflow paging and
+  original per-window ID presentation remain pending.
+
+**Acceptance gate:** all code after `110b83d` is unverified until the
+new exact-HEAD opt-in `[run-ci]` run finishes. Keep PR #1 draft;
+do not merge, release, mark complete parity, or change `main`.
+
+---
+
 ## Source Desktop Background chooser and verified Control Panel gate — 17 November 2026
 
 The earlier integrated Control Panel/Taskbar [CI #44092169140](https://github.com/codersachin99/windows-os/actions/runs/44092169140)
