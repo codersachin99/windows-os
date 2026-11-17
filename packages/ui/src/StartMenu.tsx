@@ -7,7 +7,7 @@ import {
   parseSourceShortcut, readSourceShortcutText, SOURCE_START_MENU_PROGRAMS, sourcePrograms,
   sourceProgramsById, type FileEntry
 } from "@windows-os/filesystem";
-import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms} from "@windows-os/sdk";
+import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
 import {createSourceDesktopShortcut} from "./desktopCreate";
 import {sourceDesktopItemMenu,type SourceDesktopItemMenuAction} from "./sourceDesktopItemMenu";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
@@ -62,8 +62,10 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const [contextError,setContextError]=useState("");
   const [pins,setPins]=useState(()=>taskbarPins.snapshot());
   const [recentIds,setRecentIds]=useState(()=>sourceRecentPrograms.snapshot());
+  const [startPreferences,setStartPreferences]=useState(()=>sourceStartPreferences.snapshot());
   useEffect(()=>taskbarPins.subscribe(setPins),[]);
   useEffect(()=>sourceRecentPrograms.subscribe(setRecentIds),[]);
+  useEffect(()=>sourceStartPreferences.subscribe(setStartPreferences),[]);
   const [query, setQuery] = useState("");
   const [allPrograms, setAllPrograms] = useState(false);
   const [win11Page,setWin11Page]=useState(1);
@@ -201,7 +203,8 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
   };
-  const recentSection=(theme==="winxp"||theme==="win11")&&
+  const recentSection=startPreferences.storeRecentApps&&
+    (theme==="winxp"||theme==="win11")&&
     !allPrograms&&!query&&recentApps.length>0&&
     <section className="windows-startmenu__recent"
       aria-label="Recently opened programs" data-test-list-recent="">
@@ -405,7 +408,17 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         {theme!=="winxp"&&<button onClick={() => dispatch({ type: "LOG_OFF" })}>
           Log off</button>}
         {theme==="win7"&&<button className="windows-startmenu__power"
-          onClick={() => dispatch({ type: "SHUTDOWN" })}>Shut down</button>}
+          data-test-startmenu-power-action={startPreferences.powerButtonAction}
+          onClick={() => {
+            const actions={
+              switchuser:"SWITCH_USER",logoff:"LOG_OFF",
+              restart:"RESTART",shutdown:"SHUTDOWN"
+            } as const;
+            dispatch({type:actions[startPreferences.powerButtonAction]});
+          }}>{({
+            switchuser:"Switch user",logoff:"Log off",
+            restart:"Restart",shutdown:"Shut down"
+          } as const)[startPreferences.powerButtonAction]}</button>}
       </div>
       {theme==="winxp"&&<footer className="windows-startmenu__xp-footer"
         data-test-startmenu-xp-footer="">

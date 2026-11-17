@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { desktopReducer, initialDesktopState,SOURCE_ACTIVE_THEME_KEY } from "@windows-os/engine";
 import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
-import {sourceFilesystemRuntime,sourceRecentPrograms} from "@windows-os/sdk";
+import {sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
 import type {DesktopAction} from "@windows-os/contracts";
 import {sourceDefaultTrayPreferences} from "@windows-os/apps/cpanel";
 import {useState} from "react";
@@ -11,7 +11,8 @@ export default function App() {
   // Source ProgramEvent records launches from any shell surface (Start,
   // Desktop, Explorer, Run and taskbar), not only from Start menu clicks.
   const dispatch=useCallback((action:DesktopAction)=>{
-    if(action.type==="OPEN_APP")sourceRecentPrograms.record(action.app.id);
+    if(action.type==="OPEN_APP"&&sourceStartPreferences.snapshot().storeRecentApps)
+      sourceRecentPrograms.record(action.app.id);
     if(action.type==="SET_THEME"){
       try{window.localStorage.setItem(SOURCE_ACTIVE_THEME_KEY,action.theme);}
       catch{/* restricted browsers retain active theme only for session */}
