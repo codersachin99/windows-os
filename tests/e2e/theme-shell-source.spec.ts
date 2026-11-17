@@ -194,3 +194,21 @@ test("XP and Win11 Computer sidebar shows pinned source drive and Guest folder a
     await expect(nav.filter({hasText:"DVD RW Drive (Z:)"})).toBeDisabled();
   }
 });
+
+test("source XP notification tray uses pinned theme images, leaving unported icons honest",async({page})=>{
+  const xp=await guestTheme(page,"winxp");
+  const tray=xp.locator("[data-test-taskbar='base']");
+  for(const [id,path] of [
+    ["TaskbarActionCenter","action-center-winxp.52f44912.webp"],
+    ["TaskbarNetwork","network-winxp.744648d4.webp"],
+    ["TaskbarBattery","battery-winxp.af8edd8a.webp"]
+  ] as const){
+    await expect(tray.locator('[data-test-tray-icon="'+id+'"] img'))
+      .toHaveAttribute("src","/assets/images/"+path);
+  }
+  await expect(tray.locator('[data-test-tray-icon="TaskbarVolume"] img'))
+    .toHaveAttribute("src","/assets/images/volume-100.fb90d926.webp");
+  const win11=await guestTheme(page,"win11");
+  await expect(win11.locator('[data-test-tray-icon="TaskbarNetwork"] img'))
+    .toHaveAttribute("src","/assets/images/network.21b75845.webp");
+});

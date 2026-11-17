@@ -48,6 +48,10 @@ jobs:
         run: npm run build
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      # Catch focus, source menu and pin regressions before the expensive
+      # complete desktop + mobile Chromium acceptance suite.
+      - name: Source shell targeted browser regressions
+        run: npx playwright test tests/e2e/startmenu-keyboard-source.spec.ts tests/e2e/source-start-program-context.spec.ts tests/e2e/source-taskbar-context.spec.ts tests/e2e/desktop-item-source-menu.spec.ts
       - name: Test boot, Guest desktop, windows and Contacts interactions
         run: npm run test:e2e
       - name: Preserve test failure artifacts

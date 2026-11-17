@@ -20,6 +20,10 @@ LEGACY_SHA = "4e63290d783009e1293433c6ccf252abba9c1187"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
     "winxp": {
+        "action-center-winxp.52f44912.webp": "56cc03e77b7ce0097db3addd9463d0d8b22c502f",
+        "network-winxp.744648d4.webp": "17a20ab4a2949d8d146c61eef931f741eb714d89",
+        "battery-winxp.af8edd8a.webp": "bcb8e090d5fbac02dd8fdb707903c124d479a349",
+        "datetime-winxp.d62f4ef6.webp": "67745543f884f62c379708cbd6bc647fe9ab5e94",
         "camera-winxp.b21fe0fe.webp": "f81802b9facc12408511a6b36ce441d8e660c5f1",
         "magnifier-winxp.24194bc4.webp": "90a6126fb40d3cf8a4809b5cb2336a33c40723e1",
         "paint-winxp.7e4e5dac.webp": "1b4d283a4f8377c0349e1656b50d38c8560cbcc0",

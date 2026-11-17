@@ -121,6 +121,10 @@ export const legacyThemeProgramArtwork=Object.freeze({
     cpanel:"/assets/images/cpanel-winxp.1b08f5c8.webp",
     calc:"/assets/images/calc-winxp.f79aee6b.webp",
     cmd:"/assets/images/cmd-winxp.62e75899.webp",
+    "action-center":"/assets/images/action-center-winxp.52f44912.webp",
+    "network":"/assets/images/network-winxp.744648d4.webp",
+    "battery":"/assets/images/battery-winxp.af8edd8a.webp",
+    "datetime":"/assets/images/datetime-winxp.d62f4ef6.webp",
     "camera":"/assets/images/camera-winxp.b21fe0fe.webp",
     "magnifier":"/assets/images/magnifier-winxp.24194bc4.webp",
     "paint":"/assets/images/paint-winxp.7e4e5dac.webp",
@@ -172,6 +176,19 @@ export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
     return icons[iconKey]??null;
   }
   return null;
+}
+
+/** Theme-specific notification icons present in the pinned XP image catalog.
+ * Do not pretend Win11 or unsupported Volume variants have exact theme art.
+ */
+export function sourceThemeTrayArtwork(theme:string,trayId:string):string|null{
+  const keys:Readonly<Record<string,string>>={
+    TaskbarActionCenter:"action-center",
+    TaskbarNetwork:"network",
+    TaskbarBattery:"battery"
+  };
+  const iconKey=keys[trayId];
+  return iconKey?sourceThemeProgramArt(theme,iconKey):null;
 }
 
 /** Exact source special-folder themed art, not for arbitrary user folders. */

@@ -1,6 +1,6 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
 import type { DesktopAction, DesktopState } from "@windows-os/contracts";
-import { legacyArt,sourceShellAsset,sourceThemeProgramArt } from "@windows-os/assets";
+import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
@@ -424,14 +424,14 @@ export function DesktopShell({
             <div className="windows-taskbar__hidden-items" data-test-tray-hidden-items=""
               role="group" aria-label="Hidden notification area icons">
               {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayHidden(trayPreferences).includes(item.id))
-                .map(item=><img key={item.id} src={legacyArt[item.asset]}
+                .map(item=><img key={item.id} src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]}
                   width={16} height={16} title={item.label}
                   data-test-tray-hidden-icon={item.id} alt={item.label}/>)}
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
             .map(item=><span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
-              <img src={legacyArt[item.asset]} width={16} height={16}
+              <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
           {trayPreferences.showClockIcon&&<div data-test-tray-clock=""><Clock/></div>}
         </div>
