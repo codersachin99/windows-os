@@ -1,3 +1,51 @@
+## Source Computer icon geometry for Win7 / XP / Win11 — 17 November 2026
+
+Continued shell-first theme and Computer fidelity. Pinned reference:
+`codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/styles/apps/computer.css` (already copied unchanged to
+`packages/apps/explorer/src/source.css`).
+
+Original source uses small icon 16px/min 160px width, medium item
+96px/icon 88px, large item 144px/icon 128px, extra item 212px/icon
+196px, Tiles minimum 256px/icon 48px, and Content icon 48px.
+The later React `ExplorerApp.css` overrides had incorrectly shrunk
+medium to 64px, large to 112px, extra to 160px and default Tiles to
+32px; captions were also clipped to one line rather than the source
+four-line clamp.
+
+- `3dbce2c` restores source sizes and padding in the shared
+  `ExplorerApp.css` for Win7, XP and Win11, including normal
+  4-line medium/large/extra captions. Existing source-native
+  Win7 Tiles/Details/List/Content geometry overrides are preserved;
+  narrow mobile modes retain responsive bounds.
+- `3cd6efb` adds desktop/mobile Playwright computed layout checks
+  for original medium/large/extra, Small and Tiles size constants.
+  `fa90ed5` checks large icons in both XP and Win11. `5782658`
+  reuses a persisted Guest VFS fixture when cycling between themes,
+  avoiding false duplicate uploads.
+- `5721ae9` adds icon layout regression tests to the opt-in
+  focused CI gate. `a9b355c` adds
+  `migration/EXPLORER-ICON-METRICS-SOURCE.md` with pinned
+  source dimensions, previous discrepancies and explicit limits.
+
+At this checkpoint earlier focused shell suites
+[#44131229628](https://github.com/codersachin99/windows-os/actions/runs/44131229628),
+[#44132734259](https://github.com/codersachin99/windows-os/actions/runs/44132734259)
+and corrected
+[#44133299513](https://github.com/codersachin99/windows-os/actions/runs/44133299513)
+were **success** for their respective older commits. Their full
+Chromium stages remained in progress when last checked.
+**Do not attribute those statuses to these new geometry commits.**
+Run a new exact-head `[run-ci]` for the CSS geometry change, fix
+failures from actual logs and report full outcome only when confirmed.
+
+Source-paired screenshots remain unconfigured, and matching source CSS
+dimensions alone does not establish pixel parity. Keep draft PR #1,
+main untouched, no release. Next: theme-specific popup/menu palettes,
+window chrome and source artwork checks across XP/Win7/Win11.
+
+---
+
 ## Desktop unsafe-shortcut full-suite regression correction — 17 November 2026
 
 The older [path-backed shortcut CI #44128632442](https://github.com/codersachin99/windows-os/actions/runs/44128632442)
