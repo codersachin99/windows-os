@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { desktopReducer, initialDesktopState,SOURCE_ACTIVE_THEME_KEY } from "@windows-os/engine";
+import { desktopReducer, initialDesktopState,SOURCE_ACTIVE_THEME_KEY,
+  SOURCE_ACTIVE_WALLPAPER_KEY } from "@windows-os/engine";
+import {sourceIsSystemWallpaper} from "@windows-os/assets";
 import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
 import {sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
 import type {DesktopAction} from "@windows-os/contracts";
@@ -14,11 +16,22 @@ export default function App() {
     if(action.type==="OPEN_APP"&&sourceStartPreferences.snapshot().storeRecentApps)
       sourceRecentPrograms.record(action.app.id);
     if(action.type==="SET_THEME"){
-      try{window.localStorage.setItem(SOURCE_ACTIVE_THEME_KEY,action.theme);}
-      catch{/* restricted browsers retain active theme only for session */}
+      try{
+        window.localStorage.setItem(SOURCE_ACTIVE_THEME_KEY,action.theme);
+        // Source ChangeTheme replaces a previously chosen Background.
+        window.localStorage.removeItem(SOURCE_ACTIVE_WALLPAPER_KEY);
+      }catch{/* restricted browsers retain the choice for this session */}
+    }
+    if(action.type==="SET_WALLPAPER"){
+      // Only byte-imported original system backgrounds are supported in this
+      // slice. Uploaded files/URLs must not be persisted as trusted wallpaper.
+      if(!sourceIsSystemWallpaper(action.path))return;
+      try{window.localStorage.setItem(SOURCE_ACTIVE_WALLPAPER_KEY,
+        JSON.stringify({theme:state.theme,path:action.path}));}
+      catch{/* restricted browsers retain the in-memory background */}
     }
     reduce(action);
-  },[]);
+  },[state.theme]);
   const [trayPreferences,setTrayPreferences]=useState(sourceDefaultTrayPreferences);
   const guestLoginPending = useRef(false);
   const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);
