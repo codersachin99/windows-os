@@ -1,7 +1,8 @@
 import {describe,it,expect} from "vitest";
 import type {FileEntry} from "@windows-os/filesystem";
 import {
-  sourceExplorerItemMenu,sourceExplorerDownloadableItems,SOURCE_EXPLORER_SEND_TO
+  sourceExplorerItemMenu,sourceExplorerDownloadableItems,
+  SOURCE_EXPLORER_SEND_TO,sourceExplorerSendToMenu
 } from "./sourceExplorerItemMenu";
 
 const file=(name:string,type:"file"|"directory"="file"):FileEntry=>({
@@ -17,10 +18,12 @@ describe("pinned main.js ExplorerItemMenu, ordinary Computer files",()=>{
     expect(menu.filter(item=>item.disabled).map(item=>item.id))
       .toEqual(["properties"]);
   });
-  it("keeps original Send to children in source order but safety-disabled",()=>{
+  it("keeps Send to source order and enables Desktop only for valid Guest mount",()=>{
     expect(SOURCE_EXPLORER_SEND_TO.map(item=>item.id))
       .toEqual(["compress","desktop"]);
-    expect(SOURCE_EXPLORER_SEND_TO.every(item=>item.disabled)).toBe(true);
+    expect(sourceExplorerSendToMenu(false).every(item=>item.disabled)).toBe(true);
+    expect(sourceExplorerSendToMenu(true).map(item=>[item.id,item.disabled]))
+      .toEqual([["compress",true],["desktop",false]]);
   });
   it("does not download a directory or shortcut binary",()=>{
     expect(sourceExplorerItemMenu({
