@@ -1,3 +1,43 @@
+## Source Desktop Background chooser and verified Control Panel gate — 17 November 2026
+
+The earlier integrated Control Panel/Taskbar [CI #44092169140](https://github.com/codersachin99/windows-os/actions/runs/44092169140)
+**PASSED** at `57da241`: **591/591 unit**, **58/58 focused source-shell Chromium**,
+**584/584 full desktop/mobile Chromium** tests, TypeScript, original-source
+inventory/artwork audits, Contacts checks and production Vite build.
+This is React behavioral acceptance, **not source-paired pixel parity**.
+
+The new source-backed Personalization slice follows the user's priority on
+XP/Win7/Win11 themes, desktop and context menu before finishing games:
+
+- `60db1ec`: catalog of 7 original byte-imported system backgrounds;
+  reject unknown image paths and remote wallpaper URLs.
+- `273189b`: Guest wallpaper storage validation by active theme and
+  exact path, safe malformed-storage fallback.
+- `138dacb`: shell dispatch persists supported wallpaper choices and
+  clears previous wallpaper override on theme selection, matching original
+  ChangeTheme replacing Background. Restricted storage remains safe.
+- `c18bfdf`, `e57bf59`, `9917a8c`: new separate source ChangeBackground
+  system thumbnail gallery with selected draft, Save and Cancel, responsive
+  layout, original image bytes and no fabricated upload/video features.
+- `7b83af9`: both desktop window layers pass the active background through
+  to Personalize and dispatch its Save action.
+- `ad6bf02`, `d3b0ea7`, `71f7f2c`, `6e4334d`: exact image whitelist,
+  safe storage/Theme reset unit tests and desktop/mobile Playwright cases
+  for Cancel/Save/reload/theme reset; old window reused after Cancel.
+- `abfb947`: opt-in focused shell browser gate now includes the background
+  integration. Detailed source evidence and known differences are in
+  [PERSONALIZE-BACKGROUND-SOURCE.md](PERSONALIZE-BACKGROUND-SOURCE.md).
+
+The next commit explicitly opts in to one `[run-ci]` exact-head check.
+Do **not** mark the new Personalization slice accepted before checking all
+TypeScript, unit, source/audit, focused and full browser results. Keep
+PR #1 draft, main untouched. No release or original pixel-parity claim.
+Still pending: remaining source backgrounds/uploads, full theme/appearance,
+context-menu skin visuals, taskbar combining/geometry, Computer/Bin file
+properties and original-source paired screenshots.
+
+---
+
 ## Control Panel original program targets and taskbar background CI repair — 17 November 2026
 
 The requested shell/theme/Start/Computer focus continues on draft PR #1,
