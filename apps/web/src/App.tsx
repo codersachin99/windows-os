@@ -13,7 +13,9 @@ export default function App() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (state.phase !== "desktop") return;
-      if (event.key === "Escape") dispatch({ type: "CLOSE_START" });
+      // Do not close Start globally on Escape. Original shell popups own
+      // Escape dismissal in z-order (Start program context first, then Start).
+      // StartMenu delegates focus restoration to DesktopShell after unmount.
       if ((event.key === "Meta" || (event.ctrlKey && event.key === "Escape")) && !event.repeat) {
         event.preventDefault();
         dispatch({ type: "TOGGLE_START" });
