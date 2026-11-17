@@ -52,3 +52,29 @@ describe("original .lnk JSON icon override",()=>{
     expect(sourceShortcutCustomIconURL("data:text/html;base64,PHNjcmlwdD4=")).toBeNull();
   });
 });
+
+describe("XP/Win11 themed source icon classification",()=>{
+  it("uses the exact imported folder and generic file art without losing source type",()=>{
+    expect(sourceComputerIconArtwork({name:"Documents",type:"directory"},null,"winxp"))
+      .toMatchObject({sourceType:"folder",
+        src:"/assets/images/folder-winxp.ff1b00c5.webp",exactSourceArtwork:true});
+    expect(sourceComputerIconArtwork({name:"readme.txt",type:"file"},null,"win11"))
+      .toEqual({sourceType:"text",
+        src:"/assets/images/file-win11.8b2c3723.webp",exactSourceArtwork:false});
+    expect(sourceComputerIconArtwork({name:"unknown.bin",type:"file"},null,"winxp"))
+      .toEqual({sourceType:"file",
+        src:"/assets/images/file-winxp.c130b357.webp",exactSourceArtwork:true});
+  });
+  it("preserves installed/custom shortcut art and uses themed generic for unknown keys",()=>{
+    for(const theme of ["winxp","win11"] as const){
+      expect(sourceComputerIconArtwork({name:"Editor.lnk",type:"file"},"calc",theme))
+        .toMatchObject({src:legacyArt.calculator,exactSourceArtwork:true});
+      expect(sourceComputerIconArtwork({name:"Editor.lnk",type:"file"},
+        "https://example.org/custom.png",theme))
+        .toMatchObject({src:"https://example.org/custom.png",exactSourceArtwork:false});
+      const unknown=sourceComputerIconArtwork({name:"Editor.lnk",type:"file"},"unknown",theme);
+      expect(unknown.src).toMatch(new RegExp("file-"+theme+"\\\\."));
+      expect(unknown.exactSourceArtwork).toBe(false);
+    }
+  });
+});

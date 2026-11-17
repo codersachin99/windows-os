@@ -758,10 +758,10 @@ export function ExplorerApp({
           className={"explorer-list " +
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] : "")}>
           {visible.map(item => {
-            const icon=theme==="win7"?sourceComputerIconArtwork(item,shortcutIcons[item.uri]):null;
+            const icon=sourceComputerIconArtwork(item,shortcutIcons[item.uri],theme);
             return <SourceListViewItem key={item.uri}
             itemKey={item.uri}
-            itemType={theme==="win7"&&sourceIsShortcutEntry(item)?"shortcut":item.type}
+            itemType={sourceIsShortcutEntry(item)?"shortcut":item.type}
             itemLabel={item.name}
             active={state.selected.includes(item.uri)}
             toggle={showSourceCheckboxes ? () => session.select(item.uri,true) : undefined}
@@ -778,7 +778,7 @@ export function ExplorerApp({
               (dropTarget === item.uri ? "is-drop-target" : "")}
             data-test-explorer-item={item.name}
             data-source-icon-type={icon?.sourceType}
-            data-source-icon-override={theme==="win7"&&sourceIsShortcutEntry(item)
+            data-source-icon-override={sourceIsShortcutEntry(item)
               ?shortcutIcons[item.uri]:undefined}
             data-source-icon-artwork={icon?(icon.exactSourceArtwork?"original":
               icon.src===legacyArt.file?"fallback":"custom"):undefined}
@@ -792,8 +792,7 @@ export function ExplorerApp({
             onDoubleClick={() => openEntry(item.uri, item.type)}
             onKeyDown={event => { if (event.key === "Enter") openEntry(item.uri, item.type); }}>
             <span className="listview__item-iconbox">
-              <img src={icon?.src ?? sourceShellAsset(theme,item.type === "directory"?"folder":"file")
-                ?? (item.type === "directory" ? legacyArt.folder : legacyArt.file)}
+              <img src={icon.src}
                 alt="" draggable={false} />
             </span>
             {state.viewMode === "content"
