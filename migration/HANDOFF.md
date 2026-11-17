@@ -1,3 +1,49 @@
+## Verified shell baseline; source Bin item menu + Win11 All Apps — 17 November 2026
+
+The previous full migration gate at
+[GitHub Actions #44045584638](https://github.com/codersachin99/windows-os/actions/runs/44045584638)
+**passed** at commit `1c4a454`: TypeScript, unit tests, source/contact
+audits, all 62 original XP/Win11 theme Git blob SHA checks, Vite build,
+focused shell browser tests, and the complete desktop/mobile Chromium
+acceptance suite. Source-paired screenshot capture remains skipped because
+`LEGACY_SOURCE_READ_TOKEN` is not configured; a passing CI is **not**
+pixel-perfect original-source acceptance.
+
+Next source-backed commits:
+
+- `c1c02bc` corrected the Recycle Bin **item** right-click menu against
+  pinned `src/modules/system/main.js` ExplorerItemMenu `host==="bin"`.
+  Original order is **Restore**, **Delete**, disabled **Properties**.
+  The React menu previously advertised a nonexistent "Open folder" and
+  "Delete permanently" label. Restore still checks Guest VFS
+  originalPath metadata and Delete still shows permanent-delete
+  confirmation. This uses `sourceBinItemMenu` as a small pure contract
+  plus unit and browser tests for restore and permanent-delete flows.
+  Computer's normal file item menu is unaffected.
+- `f6f8c26` separates the pinned `startmenu-win11.js` **All
+  Programs** flat alphabetical list (`allProgramItems`) from the
+  older XP/Win7 filesystem-backed Guest `.lnk` folder tree. The new
+  pure `sourceWin11AllAppItems` combines the pinned c170 manifest
+  (excluding hidden system helpers) with separately registered
+  device apps and uses `localeCompare` for original ordering.
+  Unported original programs (e.g. WordPad) appear disabled rather
+  than claiming fake functionality; migrated apps launch normally and
+  support the shared original right-click menu. The view scrolls as
+  a vertical list. Win11's pinned twelve-app grid stays separate.
+- `665a64b` tightened the browser acceptance to assert a real
+  expanded Win11 app catalog. Added unit tests for ordering, hidden
+  entries, duplicate IDs and disabled unported items; added desktop
+  and mobile browser tests to the focused shell gate.
+
+Run exact-head opt-in CI before considering either new slice verified.
+Keep draft PR #1 open and do not modify `main` or create a release.
+Priority after acceptance: desktop/context-menu fidelity, more exact
+Computer/Bin actions, missing Win11 pinned-program source order, XP and
+Win7 theme screenshot parity. Source is pinned at
+`4e63290d783009e1293433c6ccf252abba9c1187`.
+
+---
+
 ## Win11 Start All Programs regression isolation — 17 November 2026
 
 [Paging gate #44044951437](https://github.com/codersachin99/windows-os/actions/runs/44044951437)
