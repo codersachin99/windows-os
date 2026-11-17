@@ -226,3 +226,33 @@
     min-height:30px;font-size:11px;
   }
 }
+
+/* Original Win11 18ee: fixed 12 apps per page, six columns/two rows,
+ * with vertical page-indicator dots beside the grid.
+ */
+.windows-startmenu--win11 .windows-startmenu__programs{
+  position:relative;flex:none;
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  overflow:hidden;overscroll-behavior:contain;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-pages{
+  order:3;display:flex;align-items:center;justify-content:center;
+  gap:10px;padding:0 20px 8px;flex:none;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-pages button{
+  display:flex;align-items:center;justify-content:center;
+  width:20px;height:18px;padding:0;border:0;
+  background:transparent;color:#7c8390;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-pages button span{
+  display:block;width:5px;height:5px;border-radius:50%;background:currentColor;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-pages button[aria-current="page"]{
+  color:#205faf;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-pages button[aria-current="page"] span{
+  width:7px;height:7px;
+}
+.windows-startmenu--win11 .windows-startmenu__win11-pages button:focus-visible{
+  outline:2px solid #4c93d4;outline-offset:1px;border-radius:4px;
+}

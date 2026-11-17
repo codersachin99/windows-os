@@ -13,6 +13,7 @@ import {sourceDesktopItemMenu,type SourceDesktopItemMenuAction} from "./sourceDe
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
 import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
 import {taskbarPins} from "./sourceTaskbarPins";
+import {sourceWin11PageCount,sourceWin11StartPage,sourceWin11NextStartPage} from "./sourceWin11StartPaging";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -62,6 +63,8 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   useEffect(()=>sourceRecentPrograms.subscribe(setRecentIds),[]);
   const [query, setQuery] = useState("");
   const [allPrograms, setAllPrograms] = useState(false);
+  const [win11Page,setWin11Page]=useState(1);
+  const win11TouchY=useRef<number|null>(null);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
   const [folders, setFolders] = useState<FileEntry[]>([]);
   const [installed, setInstalled] = useState<InstalledShortcut[]>([]);
@@ -69,6 +72,12 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const programs = appRegistry.startMenu().filter(app =>
     app.label.toLowerCase().includes(query.toLowerCase())
   );
+  const win11PageCount=sourceWin11PageCount(programs.length);
+  const win11Paged=theme==="win11"&&!query&&!allPrograms;
+  const visiblePrograms=win11Paged?sourceWin11StartPage(programs,win11Page):programs;
+  const changeWin11Page=(delta:number)=>{
+    setWin11Page(page=>sourceWin11NextStartPage(page,win11PageCount,delta));
+  };
   const recentApps=recentIds.flatMap(id=>{
     const app=appRegistry.get(id);
     return app?[app]:[];
@@ -205,7 +214,22 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
       </header>}
       <div className="windows-startmenu__left">
         {theme==="winxp"&&recentSection}
-        <div className="windows-startmenu__programs">
+        <div className="windows-startmenu__programs"
+          onWheel={event=>{
+            if(!win11Paged||event.deltaY===0)return;
+            event.preventDefault();
+            changeWin11Page(event.deltaY>0?1:-1);
+          }}
+          onTouchStart={event=>{
+            if(!win11Paged)return;
+            win11TouchY.current=event.touches[0]?.clientY??null;
+          }}
+          onTouchEnd={event=>{
+            if(!win11Paged||win11TouchY.current===null)return;
+            const delta=win11TouchY.current-(event.changedTouches[0]?.clientY??win11TouchY.current);
+            win11TouchY.current=null;
+            if(Math.abs(delta)>45)changeWin11Page(delta>0?1:-1);
+          }}>
           {allPrograms && !query ? <>
             <button type="button" className="windows-startmenu__program"
               onClick={() => activeFolder ? setActiveFolder(null) : setAllPrograms(false)}
@@ -242,7 +266,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
             {!loadError && !folders.length && !installed.length &&
               <p className="windows-startmenu__empty">No installed programs in this folder.</p>}
           </> : <>
-            {programs.map(app => (
+            {visiblePrograms.map(app => (
               <button key={app.id} data-test-program={app.id}
                 className="windows-startmenu__program"
                 onClick={() => dispatch({ type: "OPEN_APP", app })}
@@ -255,12 +279,24 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
             {!programs.length && <p className="windows-startmenu__empty">No items match your search.</p>}
           </>}
         </div>
+        {win11Paged&&win11PageCount>1&&
+          <nav className="windows-startmenu__win11-pages"
+            data-test-win11-start-pages="" aria-label="Program pages">
+            {Array.from({length:win11PageCount},(_,index)=>index+1)
+              .map(page=><button key={page} type="button"
+                aria-label={"Program page "+page}
+                aria-current={page===win11Page?"page":undefined}
+                data-test-win11-start-page={page}
+                onClick={()=>setWin11Page(page)}>
+                <span aria-hidden="true"/>
+              </button>)}
+          </nav>}
         {theme==="win11"&&recentSection}
         {contextError&&<p role="alert" data-test-start-context-error=""
           className="windows-startmenu__empty">{contextError}</p>}
         {!query && <button type="button" className="windows-startmenu__all-programs"
           data-test-all-programs=""
-          onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null); }}>
+          onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null);setWin11Page(1); }}>
           {allPrograms ? "‹ Back" : "All Programs ▸"}
         </button>}
         {theme!=="winxp"&&<label className="windows-startmenu__search">
