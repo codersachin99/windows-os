@@ -1,3 +1,31 @@
+## Corrected Send to Desktop acceptance rerun — 17 November 2026
+
+Initial exact-head [CI #44128175487](https://github.com/codersachin99/windows-os/actions/runs/44128175487)
+on `d212fee` **FAILED at unit tests** (613 passed, 1 failed).
+TypeScript passed. This was a *test assertion error*, not a runtime
+shortcut defect: the negative case mistakenly asserted that valid
+installed-program JSON `{exe:"calc",icon:"calc"}` with no `path`
+must be rejected. The original build supports that program-only form.
+
+- `02827f0` fixes the test: malformed/untrusted **path-containing**
+  JSON remains rejected by both parsers; the valid pathless installed
+  program form correctly remains executable by the existing Guest app
+  registry.
+- `60807ea` corrects the item-menu browser precondition: the
+  synthetic Computer root `/` is not an EXTERNAL/computer Guest disk
+  path, so source Send to Desktop must remain disabled there. The
+  positive test now opens the actual mounted Guest Documents folder.
+- New exact-head opt-in `[run-ci]` is required after these edits.
+  The earlier failed run never reached browser tests. Only claim
+  acceptance after TypeScript, 614+ units, focused Playwright and
+  full suite have each passed on the same exact commit.
+
+Preserve draft PR #1, no main merge/release, no original pixel parity
+claim. This note supersedes the stale acceptance status in the
+chronological checkpoint below.
+
+---
+
 ## Explorer Send to Desktop path-backed shortcuts — 17 November 2026
 
 Continued the user's original-theme/desktop/Computer context priority using
