@@ -120,14 +120,46 @@ export const legacyThemeProgramArtwork=Object.freeze({
     games:"/assets/images/games-winxp.7f048588.webp",
     cpanel:"/assets/images/cpanel-winxp.1b08f5c8.webp",
     calc:"/assets/images/calc-winxp.f79aee6b.webp",
-    cmd:"/assets/images/cmd-winxp.62e75899.webp"
+    cmd:"/assets/images/cmd-winxp.62e75899.webp",
+    "camera":"/assets/images/camera-winxp.b21fe0fe.webp",
+    "magnifier":"/assets/images/magnifier-winxp.24194bc4.webp",
+    "paint":"/assets/images/paint-winxp.7e4e5dac.webp",
+    "player":"/assets/images/player-winxp.e1b486dd.webp",
+    "run":"/assets/images/run-winxp.63d23fb9.webp",
+    "display":"/assets/images/display-winxp.da9a9b48.webp",
+    "programs":"/assets/images/programs-winxp.f148b05d.webp",
+    "personal":"/assets/images/personal-winxp.01949b73.webp",
+    "taskbar":"/assets/images/taskbar-winxp.46a225c9.webp",
+    "wordpad":"/assets/images/wordpad-winxp.1bde3c38.webp",
+    "text":"/assets/images/text-winxp.35e970dd.webp",
+    "executable":"/assets/images/executable-winxp.b1d9ded4.webp",
+    "media":"/assets/images/media-winxp.c7e33e88.webp",
+    "folder-docs":"/assets/images/folder-docs-winxp.a303ce2a.webp",
+    "folder-pics":"/assets/images/folder-pics-winxp.05398ea9.webp",
+    "folder-music":"/assets/images/folder-music-winxp.dc009194.webp",
+    "folder-videos":"/assets/images/folder-videos-winxp.c38aba27.webp",
+    "disk-os":"/assets/images/disk-os-winxp.e3c2a016.webp",
+    "disk-cd":"/assets/images/disk-cd-winxp.83ac2166.webp",
+    "disk-data":"/assets/images/disk-data-winxp.225dcc03.webp",
+    "default":"/assets/images/default-winxp.4351048b.webp"
   }),
   win11:Object.freeze({
     notepad:"/assets/images/notepad-win11.2e4af294.webp",
     games:"/assets/images/games-win11.d339e9be.webp",
     cpanel:"/assets/images/cpanel-win11.e7111666.webp",
     photo:"/assets/images/photo-win11.bb63ad2e.webp",
-    cmd:"/assets/images/cmd-win11.ecbe89c7.webp"
+    cmd:"/assets/images/cmd-win11.ecbe89c7.webp",
+    "paint":"/assets/images/paint-win11.ea557c33.webp",
+    "text":"/assets/images/text-win11.d9d08eae.webp",
+    "executable":"/assets/images/executable-win11.2b4d4283.webp",
+    "media":"/assets/images/media-win11.a4cd83eb.webp",
+    "folder-docs":"/assets/images/folder-docs-win11.18b5729b.webp",
+    "folder-pics":"/assets/images/folder-pics-win11.76e995dc.webp",
+    "folder-downloads":"/assets/images/folder-downloads-win11.f675795b.webp",
+    "disk-os":"/assets/images/disk-os-win11.4aee0d0a.webp",
+    "disk-cd":"/assets/images/disk-cd-win11.84d9e496.webp",
+    "disk-data":"/assets/images/disk-data-win11.a389fbb1.webp",
+    "default":"/assets/images/default-win11.fdf9b988.webp"
   })
 } as const);
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
@@ -140,6 +172,15 @@ export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
     return icons[iconKey]??null;
   }
   return null;
+}
+
+/** Exact source special-folder themed art, not for arbitrary user folders. */
+export function sourceThemeSpecialFolderArt(theme:string,label:string):string|null{
+  const keys:Readonly<Record<string,string>>={
+    Documents:"folder-docs",Downloads:"folder-downloads",
+    Pictures:"folder-pics",Music:"folder-music",Videos:"folder-videos"
+  };
+  return sourceThemeProgramArt(theme,keys[label]??"");
 }
 
 export const legacyXpPowerArtwork = Object.freeze({
