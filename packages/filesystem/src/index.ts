@@ -543,6 +543,10 @@ export * from "./sourceGuest";
 export * from "./sourceBackup";
 
 export * from "./sourcePrograms";
+export {
+  parseSourcePathShortcut,sourcePathShortcutContent,
+  createSourcePathDesktopShortcuts,type SourcePathShortcut
+} from "./sourcePathShortcuts";
 
 export { transferFiles } from "./transfer";
 export type { FileTransferMode } from "./transfer";
