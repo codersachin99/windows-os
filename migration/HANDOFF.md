@@ -1,3 +1,55 @@
+## Source Control Panel task deep links and disabled task fidelity — 17 November 2026
+
+Continued the user's themes/context/desktop/Start/Computer priority,
+without resuming game work. Reference remains pinned to
+`legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+This is a **small source-backed integration, not complete Control Panel parity**.
+
+Original `src/modules/system/cpanel.js` registry `3097` sends its
+**Change desktop background** task to program `personalize`; React now
+implements a separate system-only Background view. Other tasks targeting
+that same program ID (glass color, screen saver) have not been implemented.
+Original `src/modules/shell/taskbar.js` actually disables Lock, Auto-hide,
+Small icons and Start Customize in its own settings, so those Control
+Panel tasks must not falsely advertise a working action.
+
+- `79be874` adds pure exact-label program-task destination mapping and
+  enabled/disabled predicates. Theme and Desktop Background are the only
+  currently implemented `personalize` task destinations; unsupported
+  appearance and taskbar actions remain visible but disabled. Supported
+  original task redirect `taskbar → notification` stays enabled.
+- `13720cc` changes search-task clicking to dispatch the proper
+  destination instead of blindly opening any task with an installed program
+  ID. The parent program root tile remains clickable.
+- `ecf6323` adds an optional initial pane to the existing Personalize
+  component, maintaining a single reusable theme/background implementation.
+  `12c5f6c` carries the source task through the shared
+  `OPEN_APP` window dispatcher using a safe bounded file-path marker.
+  CPanel and Personalize remain independent shell windows.
+- `d38dd95` adds unit assertions for the two enabled Personalize
+  tasks, unavailable glass/saver/Start Customize/Lock/Auto-hide and the
+  existing Notification Area redirect. `58be8ad` adds real Guest
+  desktop/mobile tests for direct Background view, staged Save,
+  independent windows, disabled search actions and Notification routing.
+  `77cbd1b` includes those browser tests in the opt-in focused shell gate.
+
+Previous verified Personalize baseline:
+[CI #44112519193](https://github.com/codersachin99/windows-os/actions/runs/44112519193)
+**SUCCESS** — 595 unit, 62 focused shell browser and 588 complete
+desktop/mobile browser tests; original paired screenshots **not verified**.
+The independent Taskbar button-mode gate
+[CI #44116995900](https://github.com/codersachin99/windows-os/actions/runs/44116995900)
+passed TypeScript, unit/source/artwork checks, Vite and its focused shell
+browser suite; its full Chromium run was still executing at this checkpoint.
+Do not attribute later commits to those earlier SHAs.
+
+**Next:** trigger one exact-HEAD `[run-ci]` gate for the new CPanel
+integration. Record its actual complete result, fix failures if any,
+and keep PR #1 **draft** until original-paired pixel parity and unported
+functional scope are accounted for. No release or merge to main.
+
+---
+
 ## Source Taskbar button labels and green Personalize baseline — 17 November 2026
 
 [Exact-head CI #44112519193](https://github.com/codersachin99/windows-os/actions/runs/44112519193) on
