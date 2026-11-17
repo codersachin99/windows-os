@@ -197,3 +197,38 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 @media (max-width: 650px) {
   .windows-window { min-width: 0; }
 }
+
+/* Original taskbar-base.js: separate item and background popup menus.
+ * Render outside the taskbar overflow container for small screens.
+ */
+.windows-taskbar__context{
+  position:fixed;z-index:4800;min-width:188px;width:240px;
+  max-width:calc(100vw - 8px);max-height:calc(100dvh - 8px);
+  overflow-y:auto;display:flex;flex-direction:column;
+  box-sizing:border-box;padding:5px 3px;
+  border:1px solid #6b98b8;border-radius:3px;
+  box-shadow:2px 4px 12px #0006;
+  background:linear-gradient(#fafcff,#eaf1fa);
+  font:12px "Segoe UI",Tahoma,sans-serif;color:#203447;
+}
+.windows-taskbar__context button{
+  text-align:left;min-height:28px;
+  border:1px solid transparent;background:transparent;
+  padding:5px 12px;font:inherit;color:inherit;
+}
+.windows-taskbar__context button:not(:disabled):hover,
+.windows-taskbar__context button:not(:disabled):focus-visible{
+  background:linear-gradient(#e7f4fd,#b8d8f2);
+  border-color:#85b5d6;
+}
+.windows-taskbar__context button:disabled{opacity:.52;cursor:default}
+.windows-desktop[data-theme="winxp"] .windows-taskbar__context{
+  border-color:#4e5fa1;background:#fff;color:#111;font-family:Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__context{
+  border-color:#0003;border-radius:8px;background:#f9f9f9;
+  color:#1a1a1a;box-shadow:0 5px 16px #0003;
+}
+.windows-desktop[data-theme="win11"] .windows-taskbar__context button:not(:disabled):hover{
+  background:#e5f3ff;border-radius:4px;
+}

@@ -31,6 +31,7 @@ import { WindowFrame } from "./WindowFrame";
 import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
+import {SourceTaskbarMenu,type SourceTaskbarContext} from "./SourceTaskbarMenu";
 import {taskbarPins} from "./sourceTaskbarPins";
 import { ShortcutWizard } from "./ShortcutWizard";
 import "./sourceTray.css";
@@ -206,6 +207,8 @@ export function DesktopShell({
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
+  const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
+  const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);
   useEffect(()=>taskbarPins.subscribe(setPinnedPrograms),[]);
   const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
   const magnifierActive = state.windows.some(win => win.appId === "magnifier");
@@ -337,7 +340,15 @@ export function DesktopShell({
             onTrayPreferencesChange={onTrayPreferencesChange} />
         </WindowFrame>
       ))}
-      <footer className="windows-taskbar" data-test-taskbar="base">
+      <footer className="windows-taskbar" data-test-taskbar="base"
+        onContextMenu={event=>{
+          if((event.target as HTMLElement).closest("button,[data-test-tray-icon]"))
+            return;
+          event.preventDefault();
+          setTaskbarContext({
+            kind:"background",x:event.clientX,y:event.clientY
+          });
+        }}>
         <button className="windows-taskbar__start" data-test-start-button="" aria-label="Open Start menu"
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
@@ -352,6 +363,14 @@ export function DesktopShell({
                 (running?" is-running":"")}
               data-test-taskbar-pin={programId}
               data-test-taskbar-pin-running={Boolean(running)}
+              onContextMenu={event=>{
+                event.preventDefault();event.stopPropagation();
+                const rect=event.currentTarget.getBoundingClientRect();
+                setTaskbarContext({
+                  kind:"item",id:programId,
+                  x:rect.left+rect.width/2,y:rect.top
+                });
+              }}
               title={app.label}
               aria-label={"Open or switch to "+app.label}
               onClick={()=>{
@@ -369,7 +388,16 @@ export function DesktopShell({
           })}
           {state.windows.filter(win=>!pinnedPrograms.includes(win.appId)).map(win => (
             <button key={win.id} className={`windows-taskbar__application ${win.minimized ? "is-minimized" : ""}`}
-              title={win.title} aria-label={`Switch to ${win.title}`} onClick={() => dispatch({
+              title={win.title} aria-label={`Switch to ${win.title}`}
+              onContextMenu={event=>{
+                event.preventDefault();event.stopPropagation();
+                const rect=event.currentTarget.getBoundingClientRect();
+                setTaskbarContext({
+                  kind:"item",id:win.appId,
+                  x:rect.left+rect.width/2,y:rect.top
+                });
+              }}
+              onClick={() => dispatch({
                 type: win.minimized ? "FOCUS_WINDOW" : "MINIMIZE_WINDOW", id: win.id
               })}>
               <img src={sourceThemeProgramArt(state.theme,win.appId)??win.icon}
@@ -398,6 +426,9 @@ export function DesktopShell({
         <button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           onClick={() => state.windows.forEach(win => dispatch({ type: "MINIMIZE_WINDOW", id: win.id }))} />
       </footer>
+      {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
+        windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
+        onClose={closeTaskbarContext}/>}
     </main>
   );
 }
