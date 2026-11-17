@@ -97,6 +97,9 @@
       "@windows-os/apps/personalize": [
         "packages/apps/personalize/src/index.ts"
       ],
+      "@windows-os/apps/taskbar-settings": [
+        "packages/apps/taskbar-settings/src/index.ts"
+      ],
       "@windows-os/apps/games": [
         "packages/apps/games/src/index.ts"
       ],

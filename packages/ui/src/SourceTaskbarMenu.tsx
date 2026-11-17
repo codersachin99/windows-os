@@ -81,6 +81,10 @@ export function SourceTaskbarMenu({
       const manager=appRegistry.get("taskmgr");
       if(manager)dispatch({type:"OPEN_APP",app:manager});
     }
+    else if(id==="properties"){
+      const settings=appRegistry.get("taskbar");
+      if(settings)dispatch({type:"OPEN_APP",app:settings});
+    }
     onClose();
   };
   return <div ref={ref} className="windows-taskbar__context"

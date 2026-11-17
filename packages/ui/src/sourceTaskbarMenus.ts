@@ -26,6 +26,6 @@ export function sourceTaskbarBackgroundMenu():SourceTaskbarMenuItem[]{
     {id:"side",label:"Show windows side by side",disabled:true},
     {id:"show-desktop",label:"Show desktop",disabled:false},
     {id:"taskmgr",label:"Start Task Manager",disabled:false},
-    {id:"properties",label:"Properties",disabled:true}
+    {id:"properties",label:"Properties",disabled:false}
   ];
 }

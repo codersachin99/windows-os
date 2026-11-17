@@ -16,6 +16,7 @@ import { StickyNotesApp } from "@windows-os/apps/sticky";
 import { MagnifierApp, sourceMagnifierOrigin, sourceMagnifierTransform } from "@windows-os/apps/magnifier";
 import { AboutApp } from "@windows-os/apps/about";
 import {PersonalizeApp} from "@windows-os/apps/personalize";
+import {TaskbarSettingsApp} from "@windows-os/apps/taskbar-settings";
 import { PhotoApp } from "@windows-os/apps/photo";
 import { RecorderApp } from "@windows-os/apps/recorder";
 import { CameraApp } from "@windows-os/apps/camera";
@@ -83,7 +84,8 @@ function ApplicationContent({
     }} />;
   if (appId === "cpanel") return <ControlPanelApp
     filesystem={fileStore} theme={theme}
-    initialLocation={filePath==="display"?"display":null}
+    initialLocation={filePath==="display"?"display":
+      filePath==="notification"?"notification":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     trayPreferences={trayPreferences}
@@ -91,6 +93,12 @@ function ApplicationContent({
   if (appId === "personalize") return <PersonalizeApp
     theme={theme}
     onSelectTheme={next=>dispatch({type:"SET_THEME",theme:next})}/>;
+  if (appId==="taskbar") return <TaskbarSettingsApp theme={theme}
+    onClose={()=>onRequestCloseWindow(windowId)}
+    onCustomizeNotificationArea={()=>{
+      const panel=appRegistry.get("cpanel");
+      if(panel)dispatch({type:"OPEN_APP",app:panel,file:{path:"notification"}});
+    }}/>;
   if (appId === "calc") return <CalculatorApp />;
   if (appId === "about") return <AboutApp />;
   if (appId === "find") return <FindApp initialScope={filePath} onFind={path => {

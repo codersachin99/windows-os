@@ -65,6 +65,13 @@ const builtinApps: AppDefinition[] = [
     window:{width:760,height:540}
   },
   {
+    id:"taskbar",label:"Taskbar and Start Menu Properties",icon:legacyArt.trayClock,
+    kind:"system",desktop:false,showInStart:false,
+    // Original taskbar.js WindowMain w=450 h=490, resizable=false,
+    // location="bottom left".
+    window:{width:450,height:490,resizable:false,location:"bottom-left"}
+  },
+  {
     id: "cmd", label: "Command Prompt", icon: legacySourceIconArtwork("cmd").src,
     kind: "utility", desktop: false, showInStart: true,
     // Source cmd.js Ft=300 minimum height; interim width pending screenshot parity.
