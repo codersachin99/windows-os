@@ -55,8 +55,8 @@ export function sourceExplorerItemMenu(
   const multiple=count>1;
   const inArchive=Boolean(input.inArchive);
   const first=input.selected[0];
-  const isArchiveFile=first.type==="file"&&
-    /\.(zip|rar|7z|tar|gz)$/i.test(first.name);
+  const isArchiveFile=Boolean(first&&first.type==="file"&&
+    /\.(zip|rar|7z|tar|gz)$/i.test(first.name));
   const downloadable=sourceExplorerDownloadableItems(
     input.selected,input.isAndroidFile
   ).length>0;
