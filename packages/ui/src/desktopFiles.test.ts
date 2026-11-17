@@ -54,9 +54,7 @@ describe("legacy main.js file-backed Guest desktop shortcuts",()=>{
     expect(byName.get("Other - Shortcut")).toMatchObject({
       programId:null,targetPath:root+"/Other.txt",iconOverride:"calc"
     });
-    expect(byName.get("Host")).toBeUndefined();
-    expect(byName.get("Host")??byName.get("Host.lnk")).toBeDefined();
-    expect(byName.get("Host")??byName.get("Host.lnk")).toMatchObject({
+    expect(byName.get("Host")).toMatchObject({
       programId:null,targetPath:null
     });
   });
