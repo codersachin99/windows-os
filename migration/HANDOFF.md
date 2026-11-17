@@ -1,3 +1,20 @@
+### Corrected 555-case unit test gate — 17 November 2026
+
+Exact prior opt-in run [#44024512186](https://github.com/codersachin99/windows-os/actions/runs/44024512186)
+completed with TypeScript success and 554/555 passing unit assertions.
+Its sole failure was an outdated expectation in
+`sourceComputerIcons.test.ts` for the XP Calculator shortcut: the
+implementation correctly returns the newly imported original
+`calc-winxp.f79aee6b.webp`, not the old Win7
+`calc.1733a9a0.webp`. Commit `64b8acf` adjusts this expectation
+while preserving Win11/Win7 fallbacks. Later build/browser steps on
+that failed SHA were correctly skipped. This deliberate `[run-ci]`
+requests the entire gate on the corrected head; its result remains
+to be inspected, especially desktop/mobile Playwright and screenshot
+parity, before any release/merge.
+
+---
+
 ### Combined final XP/Win11 source-art acceptance — 17 November 2026
 
 This opt-in `[run-ci]` commit is the consolidated gate for 26 verified
