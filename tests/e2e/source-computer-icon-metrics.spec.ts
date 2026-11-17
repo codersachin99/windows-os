@@ -10,9 +10,14 @@ async function openGuestDocuments(page:Page,theme:"win7"|"winxp"|"win11"){
   await expect(computer).toBeVisible();
   await computer.locator(".explorer-navigation__home")
     .filter({hasText:"Documents"}).click();
-  await computer.locator('input[type="file"][aria-label="Upload files"]')
-    .setInputFiles({name:"Legacy Original Icon Dimensions and Caption.txt",
-      mimeType:"text/plain",buffer:Buffer.from("source icon fidelity")});
+  const item=computer.locator(
+    '[data-test-explorer-item="Legacy Original Icon Dimensions and Caption.txt"]');
+  if(await item.count()===0){
+    await computer.locator('input[type="file"][aria-label="Upload files"]')
+      .setInputFiles({name:"Legacy Original Icon Dimensions and Caption.txt",
+        mimeType:"text/plain",buffer:Buffer.from("source icon fidelity")});
+  }
+  await expect(item).toBeVisible();
   return computer;
 }
 async function setSourceViewMode(computer:ReturnType<Page["locator"]>,mode:string){
