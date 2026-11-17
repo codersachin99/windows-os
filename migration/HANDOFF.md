@@ -1,3 +1,61 @@
+## Original Win7 Aero / WinXP / Win11 titlebar SVG controls — 17 November 2026
+
+Continued the shell-first window chrome milestone with exact compiled
+source icons rather than approximate Unicode window titlebar symbols.
+Pinned original `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+Webpack `ControlItem` module `e863` in
+`src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~40bd2819.js`.
+
+Original control variants: Win7 Aero original `isVariant1`,
+XP original `isVariant2`, Win11 original default. On maximize, the
+original replaces the maximize icon with an independent **restore**
+SVG; prior React had shown the same empty-square Unicode symbol.
+
+- `ec2990b` ports all 4 controls × 3 theme variants into
+  `SourceWindowControlGlyph.tsx`, reusing exact original viewBoxes,
+  SVG `path` / `rect` commands and Aero gradient stops. Unique
+  `useId` IDs prevent cross-window gradient collisions.
+- `4aa6125` replaces `─`/`□`/`×` text in `WindowFrame`
+  with source SVGs; original button actions and tested accessible
+  names remain stable; `data-source-window-control` distinguishes
+  minimize/maximize/restore/close; titlebar maximize now swaps to
+  source restore glyph when maximized.
+- `3321c68` passes selected `ThemeId` from both normal desktop
+  and Magnifier window hosts to `WindowFrame`.
+- `1933943` centers source SVG artwork with flex and zero line
+  height while preserving original caption button sizes.
+- `8bd28e2` adds Playwright cases for exact source SVG viewBoxes,
+  path attributes and Aero gradient stops, maximize→restore→maximize,
+  plus accessible keyboard close on desktop/mobile in each theme.
+  `4391258` adds this spec to opt-in focused CI.
+- `190bd76` adds
+  `migration/WINDOW-CONTROL-GLYPHS-SOURCE.md`; `9e03bdd`
+  updates window chrome source notes.
+
+**Prior CI:** Explorer source theme skins
+[CI #44139175165](https://github.com/codersachin99/windows-os/actions/runs/44139175165)
+completed **success** on `31444d5` (619 units, 130 focused,
+632 full browser passing, two full skipped). The older
+window-chrome
+[CI #44141024625](https://github.com/codersachin99/windows-os/actions/runs/44141024625)
+on `3dc9ffe` **failed focused browser** (background taskbar
+click incorrectly minimized the Computer window; also a mobile
+Win7 context-menu test timed out). Background taskbar semantics were
+corrected in `8fce354`. The later corrected-window-chrome
+[CI #44141690244](https://github.com/codersachin99/windows-os/actions/runs/44141690244)
+on `2ecfa7f` passed its focused gate; full desktop/mobile browser
+suite was **still running** when checked.
+
+**Acceptance:** This titlebar SVG addition is **newer than** all
+the above runs. Do not infer green CI. Trigger one exact-head
+`[run-ci]` gate, inspect actual TS, unit, source/artwork, Vite,
+focused Playwright and full browser outcomes separately. Keep
+PR #1 draft, main untouched, no release or source-paired pixel
+parity claim. Next: original configurable window colors,
+theme shadow effects, RTL and source-vs-React screenshot matching.
+
+---
+
 ## Taskbar activation correction and exact-head rerun — 17 November 2026
 
 During the new source window chrome/browser focus audit, a real
