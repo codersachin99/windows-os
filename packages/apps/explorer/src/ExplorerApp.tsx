@@ -993,7 +993,7 @@ export function ExplorerApp({
       data-test-explorer-context={context.kind}
       aria-label={context.kind === "item" ? "File actions" : "Folder actions"}
       style={{ left: context.x, top: context.y }}
-      onPointerOver={event=>{
+      onPointerMove={event=>{
         if(context.kind!=="background")return;
         const button=event.target instanceof Element?
           event.target.closest("button"):null;
@@ -1096,7 +1096,7 @@ export function ExplorerApp({
       {context.kind === "background" && <>
         <button role="menuitem" aria-expanded={context.viewOpen}
           aria-haspopup="menu" data-test-explorer-context-view=""
-          onPointerEnter={()=>setContext(current=>current&&!current.viewOpen
+          onPointerMove={()=>setContext(current=>current&&!current.viewOpen
             ? {...current,viewOpen:true,newOpen:false}:current)}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
@@ -1130,7 +1130,7 @@ export function ExplorerApp({
         {!isBin&&<>
           <button role="menuitem" aria-expanded={context.newOpen}
             aria-haspopup="menu" data-test-explorer-context-new=""
-            onPointerEnter={()=>setContext(current=>current&&!current.newOpen
+            onPointerMove={()=>setContext(current=>current&&!current.newOpen
               ? {...current,newOpen:true,viewOpen:false}:current)}
             onKeyDown={event=>{
               if(event.key==="ArrowRight"){
