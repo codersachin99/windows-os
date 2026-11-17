@@ -224,6 +224,10 @@ export function DesktopShell({
   state,dispatch,trayPreferences,onTrayPreferencesChange
 }:DesktopShellProps) {
   const desktop = appRegistry.desktop();
+  // Pinned source window__main.active follows the topmost nonminimized
+  // desktop window; z-order is the single Guest focus authority.
+  const highestVisibleWindowZ=state.windows.reduce((highest,win)=>
+    win.minimized?highest:Math.max(highest,win.z),-Infinity);
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
@@ -348,6 +352,7 @@ export function DesktopShell({
       ) : (
         <WindowFrame key={win.id}
           window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
+          active={!win.minimized&&win.z===highestVisibleWindowZ}
           dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
@@ -365,6 +370,7 @@ export function DesktopShell({
       {state.windows.filter(win => win.appId === "magnifier").map(win => (
         <WindowFrame key={win.id}
           window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
+          active={!win.minimized&&win.z===highestVisibleWindowZ}
           dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
