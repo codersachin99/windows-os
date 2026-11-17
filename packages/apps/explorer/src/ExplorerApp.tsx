@@ -980,7 +980,7 @@ export function ExplorerApp({
           onClick={()=>{
             if(action.id==="send-to"){
               setContext(current=>current?{
-                ...current,sendToOpen:!current.sendToOpen,
+                ...current,sendToOpen:true,
                 viewOpen:false,newOpen:false
               }:current);
             }else contextAction(()=>runSourceItemAction(action.id));
