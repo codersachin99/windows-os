@@ -203,6 +203,13 @@ export {
   type SourceStartPreferences,type SourceStartPowerAction
 } from "./sourceStartPreferences";
 
+export {
+  sourceTaskbarPreferences,SourceTaskbarPreferenceStore,
+  SOURCE_TASKBAR_PREFERENCES_KEY,SOURCE_DEFAULT_TASKBAR_PREFERENCES,
+  isSourceTaskbarButtonMode,
+  type SourceTaskbarPreferences,type SourceTaskbarButtonMode
+} from "./sourceTaskbarPreferences";
+
 export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";
 
 export { SOURCE_EMBED_VERSION,SOURCE_EMBED_PREFIX,sourceEmbedOrigins,sourceEmbedUrl,sourceEmbedAppId,sourceEmbedCommand,sourceWebAppWindow } from "./embed";
