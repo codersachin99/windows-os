@@ -3,7 +3,9 @@ import {legacyArt,legacySourceIconArtwork,legacyCpanelTileArtwork} from "@window
 import {sourcePrograms,sourceProgramsById,type VirtualFileStore} from "@windows-os/filesystem";
 import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupported,
   sourceCpanelIsMigratedProgram,sourceCpanelAddressIconKey,
-  type SourceCpanelMigratedProgram,type SourceCpanelRegistryItem} from "./sourceRegistry";
+  sourceCpanelCanOpenTask,sourceCpanelProgramTaskView,
+  type SourceCpanelMigratedProgram,type SourceCpanelMigratedProgramView,
+  type SourceCpanelTask,type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
@@ -37,7 +39,8 @@ export interface ControlPanelAppProps{
   onClose():void;
   onSwitchUser():void;
   /** Launch source registry "program" targets in their own shell windows. */
-  onOpenProgram?(id:SourceCpanelMigratedProgram):void;
+  onOpenProgram?(id:SourceCpanelMigratedProgram,
+    view?:SourceCpanelMigratedProgramView):void;
   trayPreferences:SourceTrayPreferences;
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
   /** Original Vuex Action Center history when available; no fabricated alerts. */
@@ -83,6 +86,14 @@ export function ControlPanelApp({
     }else if(onOpenProgram&&sourceCpanelIsMigratedProgram(item.id)){
       onOpenProgram(item.id);
     }
+  };
+  const openSourceTask=(task:SourceCpanelTask)=>{
+    if(sourceCpanelIsSupported(task.id)){
+      open(task.id as SourceControlPanelLocation);
+      return;
+    }
+    const view=sourceCpanelProgramTaskView(task);
+    if(view&&onOpenProgram)onOpenProgram("personalize",view);
   };
   const programs=sourceCpanelInstalledPrograms(sourcePrograms);
   const open=(value:SourceControlPanelLocation)=>{
@@ -152,13 +163,13 @@ export function ControlPanelApp({
                 "Original target adapter is not migrated":undefined}
               onClick={()=>openSourceItem(item)}>{item.label}</button>
             {tasks.map((task,index)=>{
-              const target=sourceItems.find(candidate=>candidate.id===task.id);
-              const enabled=Boolean(target&&canOpenSourceItem(target.id));
+              const enabled=sourceCpanelCanOpenTask(task)&&
+                (sourceCpanelIsSupported(task.id)||Boolean(onOpenProgram));
               return <button key={index} type="button"
                 className="windows-cpanel__task" data-test-cpanel-task=""
                 disabled={!enabled}
                 title={!enabled?"Original target adapter is not migrated":undefined}
-                onClick={()=>{if(target)openSourceItem(target);}}>{task.label}</button>;
+                onClick={()=>openSourceTask(task)}>{task.label}</button>;
             })}
           </div>
         </article>)}
