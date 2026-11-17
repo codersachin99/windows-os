@@ -81,12 +81,14 @@ describe("pinned main.js ExplorerItemMenu.sendToDesktop .lnk",()=>{
       {...source,path:"C:\\Users\\Guest\\readme.txt"},
       {...source,exe:"../cmd"},
       {...source,icon:""},
-      {...source,path:42},
-      {exe:"calc",icon:"calc"}
+      {...source,path:42}
     ]){
       const json=JSON.stringify(candidate);
       expect(parseSourcePathShortcut(json)).toBeNull();
       expect(parseSourceShortcut(json)).toBeNull();
     }
+    const installed='{"exe":"calc","icon":"calc"}';
+    expect(parseSourcePathShortcut(installed)).toBeNull();
+    expect(parseSourceShortcut(installed)).toEqual({exe:"calc",icon:"calc"});
   });
 });
