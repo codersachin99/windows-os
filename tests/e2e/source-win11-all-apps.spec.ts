@@ -7,7 +7,7 @@ test("source Win11 All Programs is sorted flat, not legacy .lnk folder tree",asy
   await start.locator("[data-test-all-programs]").click();
   const items=start.locator("[data-test-win11-all-app]");
   await expect(items.first()).toBeVisible();
-  await expect(items).toHaveCount(await items.count());
+  expect(await items.count()).toBeGreaterThan(12);
   const names=await items.evaluateAll(nodes=>nodes.map(node=>
     node.querySelector(".windows-startmenu__program-name")?.textContent??""));
   expect(names).toEqual([...names].sort((a,b)=>a.localeCompare(b)));
