@@ -1,3 +1,31 @@
+## Taskbar activation correction and exact-head rerun — 17 November 2026
+
+During the new source window chrome/browser focus audit, a real
+shell interaction gap was found: clicking an **inactive, visible**
+taskbar window entry dispatched `MINIMIZE_WINDOW` instead of
+bringing it to the front. This conflicted with the newly explicit
+source `.window__main.active` frame and typical original shell
+focus semantics.
+
+- `8fce354` corrects the taskbar click policy:
+  * minimized button → `FOCUS_WINDOW` (restore);
+  * visible but background window → `FOCUS_WINDOW` (activate);
+  * visible topmost window → `MINIMIZE_WINDOW` (toggle).
+  The existing source-window-chrome Playwright test covers two-window
+  Computer/Bin focus, minimize and restore.
+- `727fed7` documents the behavior in
+  `migration/WINDOW-CHROME-SOURCE.md`.
+- Earlier chrome [CI #44141024625](https://github.com/codersachin99/windows-os/actions/runs/44141024625)
+  began on `3dc9ffe` **before** the taskbar correction; its status
+  must **not** be presented as validation of the newer commit.
+  This handoff triggers a fresh exact-head `[run-ci]` opt-in gate.
+  Check unit, TypeScript, artwork/source inventory, build, focused
+  browser and full browser results separately, and fix actual
+  failures. Preserve draft PR #1; main untouched, no release
+  or pixel-parity claim.
+
+---
+
 ## Source window chrome and titlebar controls — 17 November 2026
 
 Continued the user's Windows 7/XP/11 themes and shell-first migration.
