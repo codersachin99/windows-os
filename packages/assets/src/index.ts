@@ -112,6 +112,36 @@ export const legacyShellThemeAssets = Object.freeze({
     theme: "/assets/images/win11.fc00c43d.webp"
   }
 } as const);
+
+/** Original XP/Win11 application icon variants, all pinned Git blobs. */
+export const legacyThemeProgramArtwork=Object.freeze({
+  winxp:Object.freeze({
+    notepad:"/assets/images/notepad-winxp.82037fb1.webp",
+    games:"/assets/images/games-winxp.7f048588.webp",
+    cpanel:"/assets/images/cpanel-winxp.1b08f5c8.webp",
+    calc:"/assets/images/calc-winxp.f79aee6b.webp",
+    cmd:"/assets/images/cmd-winxp.62e75899.webp"
+  }),
+  win11:Object.freeze({
+    notepad:"/assets/images/notepad-win11.2e4af294.webp",
+    games:"/assets/images/games-win11.d339e9be.webp",
+    cpanel:"/assets/images/cpanel-win11.e7111666.webp",
+    photo:"/assets/images/photo-win11.bb63ad2e.webp",
+    cmd:"/assets/images/cmd-win11.ecbe89c7.webp"
+  })
+} as const);
+export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="winxp"){
+    const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.winxp;
+    return icons[iconKey]??null;
+  }
+  if(theme==="win11"){
+    const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win11;
+    return icons[iconKey]??null;
+  }
+  return null;
+}
+
 export const legacyXpPowerArtwork = Object.freeze({
   logoff: "/assets/images/logoff-winxp.71dc5ab2.webp",
   shutdown: "/assets/images/shutdown-winxp.f3312ea0.webp"

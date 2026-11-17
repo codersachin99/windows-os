@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {legacyArt,legacyShellThemeAssets,legacyXpPowerArtwork,sourceShellAsset} from "./index";
+import {legacyArt,legacyShellThemeAssets,legacyXpPowerArtwork,sourceShellAsset,sourceThemeProgramArt} from "./index";
 
 describe("pinned source XP/Win11 shell artwork mapping",()=>{
   it("binds each source theme to its own immutable Start, Computer, empty and full Bin",()=>{
@@ -22,5 +22,19 @@ describe("pinned source XP/Win11 shell artwork mapping",()=>{
   it("uses pinned XP logoff/shutdown artwork instead of generated icons",()=>{
     expect(legacyXpPowerArtwork.logoff).toMatch(/logoff-winxp\.71dc5ab2\.webp$/);
     expect(legacyXpPowerArtwork.shutdown).toMatch(/shutdown-winxp\.f3312ea0\.webp$/);
+  });
+});
+
+describe("verified XP/Win11 installed program art",()=>{
+  it("maps exactly the source theme images without leaking into Win7",()=>{
+    for(const theme of ["winxp","win11"] as const){
+      for(const key of ["notepad","games","cpanel","cmd"]){
+        expect(sourceThemeProgramArt(theme,key)).toContain(key+"-"+theme+".");
+      }
+      expect(sourceThemeProgramArt(theme,"unported")).toBeNull();
+    }
+    expect(sourceThemeProgramArt("winxp","calc")).toContain("calc-winxp.");
+    expect(sourceThemeProgramArt("win11","photo")).toContain("photo-win11.");
+    expect(sourceThemeProgramArt("win7","notepad")).toBeNull();
   });
 });

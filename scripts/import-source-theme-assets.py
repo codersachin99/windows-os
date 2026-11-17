@@ -20,6 +20,11 @@ LEGACY_SHA = "4e63290d783009e1293433c6ccf252abba9c1187"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
     "winxp": {
+        "notepad-winxp.82037fb1.webp": "0a1d5d150fab025ed264212c213abc1d001b8450",
+        "games-winxp.7f048588.webp": "6208de3f4b06b387cd338d53f7d933e56b1f1303",
+        "cpanel-winxp.1b08f5c8.webp": "a4ff8ce54a41ae32af097c1c3b0f7dc769c671e9",
+        "calc-winxp.f79aee6b.webp": "20b7bff157662612fc19e05d6cc0e5486776a3f6",
+        "cmd-winxp.62e75899.webp": "7531295043ea9a9b18b22a5443e0e07f780afa9b",
         "start-button-winxp.a3485adf.webp": "fe20544f4aa319b1019bdd4f177630a0c4d680d2",
         "bin-winxp.7d0403fd.webp": "46c95fdb19ff038c8c733982c5df04322659dcce",
         "bin-full-winxp.ba3f6193.webp": "e4760bd7367997e2512aa00e07436a172f8574b4",
@@ -31,6 +36,11 @@ FILES: dict[str, dict[str, str]] = {
         "shutdown-winxp.f3312ea0.webp": "26ffb2c4eb3e05ad056edf14111bac54d2f46007",
     },
     "win11": {
+        "notepad-win11.2e4af294.webp": "55fdede37d9b89dec6d71325066eded54b404ce9",
+        "games-win11.d339e9be.webp": "d0a99d6867a8781711ad581f3e9f8ec3ddfc10fd",
+        "cpanel-win11.e7111666.webp": "eb550ab6dfa69343eab2180cb1ca7c66dc6bd6a8",
+        "photo-win11.bb63ad2e.webp": "e9da2bd74504bc1387dedfb27bf14088233ba741",
+        "cmd-win11.ecbe89c7.webp": "d84f8f4e59a15ccb3baa70d9895b13415966a0d6",
         "start-button-win11.e48a735f.webp": "c6249d4c405516bbd49e437145a1df5874cf483e",
         "bin-win11.73608517.webp": "6473d922271876f980454cb842fb96a8c3956acf",
         "bin-full-win11.de576bf3.webp": "d5c2c4b41ed49a729d4ff40f7dc3951516d9b2e8",
