@@ -1,3 +1,32 @@
+## Shell-first incremental follow-up — 17 November 2026
+
+The `1931a05` opt-in CI #44027070596 was triggered *before* the
+following changes. Its completed TypeScript, unit, source, Contacts and Vite
+build stages passed; desktop/mobile browser results were still pending
+when work moved to the next verifiable slice.
+
+- `9de1ac1`: exported `sourceThemeFileIconArtwork` as one shared
+  source 4cca/0f35 resolver for Explorer and VFS-backed Desktop file icons.
+  This preserves custom JSON .lnk images, original XP/Win11
+  program/folder/file art and honest unknown-type fallback metadata. Added
+  exact-source unit checks and Desktop XP/Win11 browser fixture.
+- `0d0e2f6`: migrated the original `taskbar-base.js`
+  `pinnedPrograms`/ProgramPin/ProgramUnpin lifecycle as a browser-local,
+  persisted `SourceTaskbarPins` service. Enabled source Desktop item Pin
+  and Unpin for registered apps; taskbar now renders pinned launchers,
+  runs a pinned app on click and avoids duplicate running-window buttons.
+  Original host OS taskbar remains untouched. Added unit and Chromium
+  regression cases. Unported source taskbar context menu, default pin
+  catalog, pinned program ordering by drag, full source screenshot parity,
+  Explorer/Start Properties, Compressed Folder, and XP/Win11 image completeness
+  remain explicit blockers. Do NOT treat them as migrated.
+
+This checkpoint requests deliberate `[run-ci]` verification of the
+two new source theme/taskbar slices. Keep PR #1 draft and `main`
+untouched until full acceptance is demonstrated.
+
+---
+
 ## Shell context interaction regression repairs — 17 November 2026
 
 The full earlier [CI #44024842900](https://github.com/codersachin99/windows-os/actions/runs/44024842900)
