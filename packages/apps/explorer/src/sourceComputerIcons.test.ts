@@ -68,7 +68,9 @@ describe("XP/Win11 themed source icon classification",()=>{
   it("preserves installed/custom shortcut art and uses themed generic for unknown keys",()=>{
     for(const theme of ["winxp","win11"] as const){
       expect(sourceComputerIconArtwork({name:"Editor.lnk",type:"file"},"calc",theme))
-        .toMatchObject({src:legacyArt.calculator,exactSourceArtwork:true});
+        .toMatchObject({src:theme==="winxp"
+          ?"/assets/images/calc-winxp.f79aee6b.webp":legacyArt.calculator,
+          exactSourceArtwork:true});
       expect(sourceComputerIconArtwork({name:"Editor.lnk",type:"file"},
         "https://example.org/custom.png",theme))
         .toMatchObject({src:"https://example.org/custom.png",exactSourceArtwork:false});
