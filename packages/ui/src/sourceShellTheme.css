@@ -167,3 +167,35 @@
     min-width:55px;font-size:10px;
   }
 }
+
+/* Original taskbar-base.js: taskbarDraft.type !== "combine" adds
+ * is-full-size and a translated taskbar__main-label to each button.
+ * The source does not regroup its window ID list for these choices.
+ * Keep the Win11 centered lane scrollable when long labels are selected. */
+.windows-desktop .windows-taskbar__application.is-full-size{
+  display:flex;align-items:center;justify-content:flex-start;
+  gap:7px;width:156px;flex:0 0 156px;padding:0 9px;
+  white-space:nowrap;overflow:hidden;
+}
+.windows-desktop .windows-taskbar__application.is-full-size img{
+  flex:none;object-fit:contain;
+}
+.windows-desktop .windows-taskbar__item-label{
+  display:block;flex:1;min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;text-align:left;
+  font-size:12px;line-height:1.35;
+}
+.windows-desktop .windows-taskbar[data-taskbar-button-type="no-combine"] .windows-taskbar__running,
+.windows-desktop .windows-taskbar[data-taskbar-button-type="combine-when-full"] .windows-taskbar__running{
+  overflow-x:auto;scrollbar-width:none;
+}
+.windows-desktop .windows-taskbar[data-taskbar-button-type="no-combine"] .windows-taskbar__running::-webkit-scrollbar,
+.windows-desktop .windows-taskbar[data-taskbar-button-type="combine-when-full"] .windows-taskbar__running::-webkit-scrollbar{
+  display:none;
+}
+@media(max-width:530px){
+  .windows-desktop .windows-taskbar__application.is-full-size{
+    width:112px;flex-basis:112px;gap:4px;padding:0 5px;
+  }
+  .windows-desktop .windows-taskbar__item-label{font-size:11px}
+}
