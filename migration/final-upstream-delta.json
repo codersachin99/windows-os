@@ -1,0 +1,1485 @@
+{
+  "repository": "codersachin99/legacy-win7",
+  "previousReference": "4e63290d783009e1293433c6ccf252abba9c1187",
+  "finalReference": "26b9f0ce7a1665dee89a7c81824bec09e2c75776",
+  "mergeBase": "4e63290d783009e1293433c6ccf252abba9c1187",
+  "status": "ahead",
+  "commits": [
+    {
+      "sha": "7ff0a1cbcb19ac7a774cbf9060a6c0d440f69e73",
+      "subject": "Added PWA Support"
+    },
+    {
+      "sha": "dfec1cffb5f0336dc156b96a3b175dbcbcac5dd3",
+      "subject": "Adde PWA Fix"
+    },
+    {
+      "sha": "734901f5630b38f6aa99949b48b9fedbf070bf9b",
+      "subject": "feat(power): add interactive hardware power switch overlay, fullscreen reconnect handler, and powerScreen config"
+    },
+    {
+      "sha": "cd5a63ddd8c7f47537004f0d3ea58526dcc59cfb",
+      "subject": "feat(power): implement circular hold-to-power-on gauge, quick reconnect, and in-place BIOS reboot"
+    },
+    {
+      "sha": "2f3bda05f2d6d32192394a589638f1307e9e1277",
+      "subject": "feat: add Sort by with Ascending/Descending, fix desktop icon grid sorting, add taskbar live peek previews, and separate displayDisconnected config"
+    },
+    {
+      "sha": "05dc723830cd694463dc9380ac5365d2a4c5345e",
+      "subject": "fix: multi-window instance grouping, taskbar hover peek, and window controls"
+    },
+    {
+      "sha": "50a670fbebed42ee27e3a255c3f2e2379617e2aa",
+      "subject": "feat: add feature flags in app.config.json for multiple windows, peek previews, and stacked taskbar icons"
+    },
+    {
+      "sha": "e1304c4deeba8fc7c80c87ca46eda96e20eb5bb0",
+      "subject": "style: align task manager tree arrows and preserve status column alignment on nested items"
+    },
+    {
+      "sha": "44b67a1f3d70c611e95e141d56644215765a2d51",
+      "subject": "feat: add network mapped directory explorer integration and context menu feature flags"
+    },
+    {
+      "sha": "55a54b46600c78553a89fd9b80a796022978b997",
+      "subject": "feat: add storage.folder.json and desktop.shortcut.json configuration files with dynamic loaders"
+    },
+    {
+      "sha": "bfc8ab45c1706121675161db67375e0285912863",
+      "subject": "feat: add app.registry.json to configure application registry and install paths"
+    },
+    {
+      "sha": "61a223e57867b16f66b5a2a75bd2009780293d78",
+      "subject": "refactor: consolidate app.registry.json with category headers and alphabetical ordering"
+    },
+    {
+      "sha": "0441682ae7ce65671aa18ba870a046d37dafd2bd",
+      "subject": "fix: sanitize storage folder config mapping and remove [object Object] folders from storage"
+    },
+    {
+      "sha": "a01688365fa123b8e495d1da3c37f2470dec85f7",
+      "subject": "feat: add app.shortcut.json to configure application start menu .lnk shortcuts"
+    },
+    {
+      "sha": "6c430b46843acbe50b09fafc68890e2d14a6c006",
+      "subject": "feat: show shortcut arrow on desktop icons with type shortcut or shortcut: true"
+    },
+    {
+      "sha": "2a60a3bc1ba454a19d398cebf7628fb6397f9b88",
+      "subject": "refactor: remove legacy apps.shortcut.json and consolidate into src/config/desktop.shortcut.json"
+    },
+    {
+      "sha": "a8b64a6f40f68435a867df0913883bde986a268f",
+      "subject": "Revert \"refactor: remove legacy apps.shortcut.json and consolidate into src/config/desktop.shortcut.json\""
+    },
+    {
+      "sha": "396b5901620c7909dc5f6462fd8f9982dad8009b",
+      "subject": "docs: add shortcut configuration reference guide in apps/README.md"
+    },
+    {
+      "sha": "f6d6d8c29651f604b9bfd605aa609637e926103f",
+      "subject": "feat: support width, height, resizable, maximized, and headerless window options in app.registry.json"
+    },
+    {
+      "sha": "9faba0cb95c14351a7394d2d290b1c0ee6065be2",
+      "subject": "docs: add built-in app window configuration section to README.md"
+    },
+    {
+      "sha": "7b2fc75cd6f9e17151c83ae4606e5c7b2f29b7d5",
+      "subject": "docs: add guide on creating new built-in applications in apps/README.md"
+    },
+    {
+      "sha": "6f17c1e85bd26d9725394d80d6a594865bbd6726",
+      "subject": "feat(icons): add src/config/icons.registry.json and dynamic theme icon resolution"
+    },
+    {
+      "sha": "ce7a0e9e07d1b0a8aaefd000663ff003c2791b8f",
+      "subject": "feat(icons): support theme-specific icon overrides and global fallbacks in icons.registry.json"
+    },
+    {
+      "sha": "f4d412063183cbef74a66c3eca59a69520e06cdd",
+      "subject": "feat(icons): map all default system icons and theme overrides in icons.registry.json"
+    },
+    {
+      "sha": "b61c3b64c7a3dcec060bc1ac70dbc8ae5d8b677d",
+      "subject": "feat(sounds): add src/config/sounds.registry.json and dynamic schemes loader"
+    },
+    {
+      "sha": "a378eb48a4e52524bd09990a92e3f3bd90a25ce4",
+      "subject": "feat(sounds): filter sound schemes dropdown theme-wise via sounds.registry.json themes mapping"
+    },
+    {
+      "sha": "9dbd09dfb8c1a2c3c47680224210a93935bd720b",
+      "subject": "fix(assets): ensure root-relative paths in icon and sound registries and prevent SW response conversion errors"
+    },
+    {
+      "sha": "78b59f071215ae5ca1654a31cc8df1585df59799",
+      "subject": "fix(sound): remove shadowed soundSchemes data property and improve current theme detection"
+    },
+    {
+      "sha": "d41397336ead336c14ced3e226cdf5e90e5ee764",
+      "subject": "feat(windows): add maxWindowsPerApp limit with error dialog, fix dock stacking and peek preview"
+    },
+    {
+      "sha": "8b658d9cb7f637a50ee7a98407da6c35daea6c29",
+      "subject": "chore(config): update default window close effect settings in app.config.json"
+    },
+    {
+      "sha": "c79bbb817b633cc8f1643ba126e0fcc73f333797",
+      "subject": "feat(shell): add taskbar right-click context menu to macOS and Ubuntu top bars, and add configurable online status check"
+    },
+    {
+      "sha": "46272f843365ed321a356cb4242b4ade19f668a6",
+      "subject": "feat(windows): support maximized/fullscreen and frameless on webapps, add title and control button toggles, and add item checkbox config with touch selection"
+    },
+    {
+      "sha": "c9924026cd933ee7db7f99a24e8d53edc05805a7",
+      "subject": "feat(backend): migrate Python backend to PHP Slim 4, archive legacy api, update style/module index exports and server runners"
+    },
+    {
+      "sha": "fda3ec5c7ec2cb86d7580a9d5442ac4e1ddb3d99",
+      "subject": "feat(window): distinguish strict fullscreen from default maximized and enable titlebar double-click toggle"
+    },
+    {
+      "sha": "19a3ae058d8ca7c444e5b6f6f69a9508e2886c05",
+      "subject": "fix(webapp): prevent iframe pointer capture and cloning flicker during window drag and resize"
+    },
+    {
+      "sha": "ea1c63e8cb1de41fc40a015aecdae1be6e25016c",
+      "subject": "fix(window): remove redundant dblclick listener to prevent race condition with tap directive on titlebar"
+    },
+    {
+      "sha": "5432135bd90c2ee0e97cfbb4fe56cca456e7dd9c",
+      "subject": "feat(window-manager): fix multi-window singleton configuration and alias matching, update architecture docs"
+    },
+    {
+      "sha": "809992c88c90e9e49ba295f35bc8f39b938161e7",
+      "subject": "docs(apps): document allowMultipleWindows and maxWindowsPerApp in apps/README.md"
+    },
+    {
+      "sha": "5fcf024f01034822b72c93ee092cecb2fae21fa3",
+      "subject": "docs: remove multi-window section from ARCHITECTURE.md"
+    },
+    {
+      "sha": "26b9f0ce7a1665dee89a7c81824bec09e2c75776",
+      "subject": "style(shell): update startmenu-win31 selectors to match rendered DOM elements"
+    }
+  ],
+  "files": [
+    {
+      "path": ".gitignore",
+      "status": "modified",
+      "added": 3,
+      "removed": 0
+    },
+    {
+      "path": ".htaccess",
+      "status": "added",
+      "added": 38,
+      "removed": 0
+    },
+    {
+      "path": "apache.conf.example",
+      "status": "added",
+      "added": 23,
+      "removed": 0
+    },
+    {
+      "path": "app.config.json",
+      "status": "modified",
+      "added": 98,
+      "removed": 16
+    },
+    {
+      "path": "apps/README.md",
+      "status": "added",
+      "added": 434,
+      "removed": 0
+    },
+    {
+      "path": "apps/apps.shortcut.json",
+      "status": "modified",
+      "added": 1,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/__init__.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/__init__.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/auth_controller.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/auth_controller.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/base_controller.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/base_controller.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/contact_controller.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/contact_controller.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/feed_controller.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/feed_controller.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/store_controller.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/store_controller.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/controllers/theme_controller.py",
+      "status": "renamed",
+      "previousPath": "api/controllers/theme_controller.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/core/__init__.py",
+      "status": "renamed",
+      "previousPath": "api/core/__init__.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/core/config.py",
+      "status": "renamed",
+      "previousPath": "api/core/config.py",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "archive/api/core/path_resolver.py",
+      "status": "renamed",
+      "previousPath": "api/core/path_resolver.py",
+      "added": 12,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/database/__init__.py",
+      "status": "renamed",
+      "previousPath": "api/database/__init__.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/database/connection.py",
+      "status": "renamed",
+      "previousPath": "api/database/connection.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/database/db_client.py",
+      "status": "renamed",
+      "previousPath": "api/database/db_client.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/handlers/__init__.py",
+      "status": "renamed",
+      "previousPath": "api/handlers/__init__.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/handlers/request_handler.py",
+      "status": "renamed",
+      "previousPath": "api/handlers/request_handler.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/models/__init__.py",
+      "status": "renamed",
+      "previousPath": "api/models/__init__.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/models/base_model.py",
+      "status": "renamed",
+      "previousPath": "api/models/base_model.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/models/contact.py",
+      "status": "renamed",
+      "previousPath": "api/models/contact.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/models/store.py",
+      "status": "renamed",
+      "previousPath": "api/models/store.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/models/theme.py",
+      "status": "renamed",
+      "previousPath": "api/models/theme.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/models/user.py",
+      "status": "renamed",
+      "previousPath": "api/models/user.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/router.py",
+      "status": "renamed",
+      "previousPath": "api/router.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/api/server.py",
+      "status": "renamed",
+      "previousPath": "api/server.py",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "archive/start.py",
+      "status": "renamed",
+      "previousPath": "start.py",
+      "added": 3,
+      "removed": 1
+    },
+    {
+      "path": "assets/BMW/brush.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/BMW/claws.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/BMW/dust.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/BMW/matrixFont.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/BMW/shards.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/icons/icon-512.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/images/folder-mapped.png",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/images/folder-mapped.webp",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/images/network-connection.webp",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "assets/locales/ar-SA.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/bn-BD.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/ca-ES.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/de-DE.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/en-US.json",
+      "status": "modified",
+      "added": 9,
+      "removed": 4
+    },
+    {
+      "path": "assets/locales/es-ES.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/fa-IR.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/fr-FR.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/hi-IN.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/id-ID.json",
+      "status": "modified",
+      "added": 8,
+      "removed": 3
+    },
+    {
+      "path": "assets/locales/it-IT.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/ja-JP.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/pl-PL.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/pt-PT.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/ru-RU.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/th-TH.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/tr-TR.json",
+      "status": "modified",
+      "added": 8,
+      "removed": 3
+    },
+    {
+      "path": "assets/locales/uk-UA.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/vi-VN.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/zh-CN.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/locales/zh-TW.json",
+      "status": "modified",
+      "added": 7,
+      "removed": 2
+    },
+    {
+      "path": "assets/manifest/app.webmanifest",
+      "status": "modified",
+      "added": 39,
+      "removed": 1
+    },
+    {
+      "path": "assets/shaders/bmw/broken-glass.frag",
+      "status": "added",
+      "added": 75,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/common.glsl",
+      "status": "added",
+      "added": 739,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/doom.frag",
+      "status": "added",
+      "added": 66,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/energize-a.frag",
+      "status": "added",
+      "added": 95,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/energize-b.frag",
+      "status": "added",
+      "added": 119,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/fire.frag",
+      "status": "added",
+      "added": 163,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/glitch.frag",
+      "status": "added",
+      "added": 65,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/gschema.xml",
+      "status": "added",
+      "added": 1378,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/hexagon.frag",
+      "status": "added",
+      "added": 121,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/incinerate.frag",
+      "status": "added",
+      "added": 159,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/matrix.frag",
+      "status": "added",
+      "added": 109,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/paint-brush.frag",
+      "status": "added",
+      "added": 62,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/pixel-wipe.frag",
+      "status": "added",
+      "added": 52,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/pixelate.frag",
+      "status": "added",
+      "added": 37,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/portal.frag",
+      "status": "added",
+      "added": 209,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/rgbwarp.frag",
+      "status": "added",
+      "added": 74,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/snap.frag",
+      "status": "added",
+      "added": 97,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/team-rocket.frag",
+      "status": "added",
+      "added": 163,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/trex.frag",
+      "status": "added",
+      "added": 130,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/tv.frag",
+      "status": "added",
+      "added": 70,
+      "removed": 0
+    },
+    {
+      "path": "assets/shaders/bmw/wisps.frag",
+      "status": "added",
+      "added": 118,
+      "removed": 0
+    },
+    {
+      "path": "assets/vendor/html-to-image.js",
+      "status": "added",
+      "added": 1,
+      "removed": 0
+    },
+    {
+      "path": "data/news/feed.json",
+      "status": "modified",
+      "added": 21,
+      "removed": 21
+    },
+    {
+      "path": "data/win7simu.sqlite",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "db.config.json",
+      "status": "modified",
+      "added": 2,
+      "removed": 2
+    },
+    {
+      "path": "index.html",
+      "status": "modified",
+      "added": 468,
+      "removed": 4
+    },
+    {
+      "path": "nginx.conf.example",
+      "status": "added",
+      "added": 70,
+      "removed": 0
+    },
+    {
+      "path": "service-worker.js",
+      "status": "added",
+      "added": 84,
+      "removed": 0
+    },
+    {
+      "path": "service/api/composer.json",
+      "status": "added",
+      "added": 15,
+      "removed": 0
+    },
+    {
+      "path": "service/api/composer.lock",
+      "status": "added",
+      "added": 699,
+      "removed": 0
+    },
+    {
+      "path": "service/api/public/index.php",
+      "status": "added",
+      "added": 46,
+      "removed": 0
+    },
+    {
+      "path": "service/api/server.php",
+      "status": "added",
+      "added": 200,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/AuthController.php",
+      "status": "added",
+      "added": 136,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/BaseController.php",
+      "status": "added",
+      "added": 37,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/ContactController.php",
+      "status": "added",
+      "added": 86,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/FeedController.php",
+      "status": "added",
+      "added": 26,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/StaticController.php",
+      "status": "added",
+      "added": 56,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/StoreController.php",
+      "status": "added",
+      "added": 83,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Controllers/ThemeController.php",
+      "status": "added",
+      "added": 54,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Core/Config.php",
+      "status": "added",
+      "added": 137,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Database/Connection.php",
+      "status": "added",
+      "added": 198,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Database/DBClient.php",
+      "status": "added",
+      "added": 34,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Models/BaseModel.php",
+      "status": "added",
+      "added": 40,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Models/ContactModel.php",
+      "status": "added",
+      "added": 68,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Models/StoreModel.php",
+      "status": "added",
+      "added": 91,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Models/ThemeModel.php",
+      "status": "added",
+      "added": 188,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Models/UserModel.php",
+      "status": "added",
+      "added": 90,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/Server/PathResolver.php",
+      "status": "added",
+      "added": 276,
+      "removed": 0
+    },
+    {
+      "path": "service/api/src/routes.php",
+      "status": "added",
+      "added": 53,
+      "removed": 0
+    },
+    {
+      "path": "src/ARCHITECTURE.md",
+      "status": "modified",
+      "added": 1,
+      "removed": 0
+    },
+    {
+      "path": "src/config/app.registry.json",
+      "status": "added",
+      "added": 317,
+      "removed": 0
+    },
+    {
+      "path": "src/config/app.shortcut.json",
+      "status": "added",
+      "added": 186,
+      "removed": 0
+    },
+    {
+      "path": "src/config/closeEffectBundle.json",
+      "status": "added",
+      "added": 1,
+      "removed": 0
+    },
+    {
+      "path": "src/config/config.js",
+      "status": "modified",
+      "added": 263,
+      "removed": 0
+    },
+    {
+      "path": "src/config/desktop.shortcut.json",
+      "status": "added",
+      "added": 14,
+      "removed": 0
+    },
+    {
+      "path": "src/config/icons.registry.json",
+      "status": "added",
+      "added": 1538,
+      "removed": 0
+    },
+    {
+      "path": "src/config/sounds.registry.json",
+      "status": "added",
+      "added": 615,
+      "removed": 0
+    },
+    {
+      "path": "src/config/storage.folder.json",
+      "status": "added",
+      "added": 30,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/apps/about.js",
+      "status": "modified",
+      "added": 2,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/apps/bin.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/apps/computer.js",
+      "status": "modified",
+      "added": 247,
+      "removed": 12
+    },
+    {
+      "path": "src/modules/apps/ie.js",
+      "status": "modified",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/apps/index.js",
+      "status": "modified",
+      "added": 8,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/apps/notepad.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/apps/paint.js",
+      "status": "modified",
+      "added": 5,
+      "removed": 4
+    },
+    {
+      "path": "src/modules/apps/player.js",
+      "status": "modified",
+      "added": 4,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/apps/stickynotes.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/apps/taskmgr.js",
+      "status": "modified",
+      "added": 73,
+      "removed": 15
+    },
+    {
+      "path": "src/modules/apps/webapp.js",
+      "status": "modified",
+      "added": 33,
+      "removed": 4
+    },
+    {
+      "path": "src/modules/apps/wordpad.js",
+      "status": "modified",
+      "added": 4,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/chunks/index.js",
+      "status": "modified",
+      "added": 13,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~40bd2819.js",
+      "status": "modified",
+      "added": 94,
+      "removed": 13
+    },
+    {
+      "path": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~573b2c8a.js",
+      "status": "modified",
+      "added": 33,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~m~dcfced3e.js",
+      "status": "modified",
+      "added": 104,
+      "removed": 24
+    },
+    {
+      "path": "src/modules/chunks/shared~about~boot~bsod~chess~chrome~dock-macos~dock-ubuntu~find~gadgets~games~ie~installer-screen~lo~d493ad97.js",
+      "status": "modified",
+      "added": 178,
+      "removed": 14
+    },
+    {
+      "path": "src/modules/chunks/shared~about~boot~bsod~chess~chrome~find~gadgets~games~ie~logon~logon-aeronoir~logon-chromeos~logon-~936669a0.js",
+      "status": "modified",
+      "added": 134,
+      "removed": 4
+    },
+    {
+      "path": "src/modules/chunks/shared~billing~boot~bsod~chess~games~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-ma~8b2c8930.js",
+      "status": "modified",
+      "added": 28,
+      "removed": 4
+    },
+    {
+      "path": "src/modules/chunks/shared~bin~bsod~camera~computer~cpanel~games~installer-screen~notepad~paint~player~recorder~shortcut~49e2ebd6.js",
+      "status": "modified",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/chunks/shared~bin~bsod~camera~computer~games~notepad~paint~player~recorder~snipping~sound~wordpad.js",
+      "status": "modified",
+      "added": 7,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/chunks/shared~bsod~games~main.js",
+      "status": "modified",
+      "added": 99,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/chunks/shared~device~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
+      "status": "modified",
+      "added": 13,
+      "removed": 9
+    },
+    {
+      "path": "src/modules/chunks/shared~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-macos~logon-onebit~logon-oxygen~~1fba687f.js",
+      "status": "modified",
+      "added": 39,
+      "removed": 4
+    },
+    {
+      "path": "src/modules/chunks/shared~mime-types~player.js",
+      "status": "modified",
+      "added": 10702,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
+      "status": "modified",
+      "added": 488,
+      "removed": 11
+    },
+    {
+      "path": "src/modules/chunks/shared~plugin-embed~sandbox~vue-app~vue-i18n~vue-store.js",
+      "status": "modified",
+      "added": 1752,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/chunks/shared~taskbar-macos~taskbar-ubuntu.js",
+      "status": "modified",
+      "added": 60,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/gadgets/g-clock.js",
+      "status": "modified",
+      "added": 274,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/gadgets/g-currency.js",
+      "status": "modified",
+      "added": 35,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/gadgets/index.js",
+      "status": "modified",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/games/chess.js",
+      "status": "modified",
+      "added": 5,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/games/index.js",
+      "status": "modified",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/games/mahjong.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/games/minesweeper.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/games/onlinegame.js",
+      "status": "modified",
+      "added": 11,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/games/purbleplace.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/games/solitaire.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/games/spidersolitaire.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/games/tetris.js",
+      "status": "modified",
+      "added": 4,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/plugins/index.js",
+      "status": "modified",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/plugins/plugin-iconify.js",
+      "status": "modified",
+      "added": 383,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/runtime/index.js",
+      "status": "modified",
+      "added": 11,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/runtime/vue-app.js",
+      "status": "modified",
+      "added": 38,
+      "removed": 5
+    },
+    {
+      "path": "src/modules/runtime/vue-i18n.js",
+      "status": "modified",
+      "added": 29,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/shell/dock-macos.js",
+      "status": "modified",
+      "added": 423,
+      "removed": 22
+    },
+    {
+      "path": "src/modules/shell/dock-ubuntu.js",
+      "status": "modified",
+      "added": 447,
+      "removed": 17
+    },
+    {
+      "path": "src/modules/shell/index.js",
+      "status": "modified",
+      "added": 3,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/shell/sound.js",
+      "status": "modified",
+      "added": 20,
+      "removed": 6
+    },
+    {
+      "path": "src/modules/shell/taskbar-base.js",
+      "status": "modified",
+      "added": 408,
+      "removed": 15
+    },
+    {
+      "path": "src/modules/shell/taskbar-macos.js",
+      "status": "modified",
+      "added": 44,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/shell/taskbar-ubuntu.js",
+      "status": "modified",
+      "added": 44,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/system/bios.js",
+      "status": "modified",
+      "added": 5,
+      "removed": 2
+    },
+    {
+      "path": "src/modules/system/close-effects.js",
+      "status": "added",
+      "added": 698,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/system/index.js",
+      "status": "modified",
+      "added": 4,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/system/locale-names.js",
+      "status": "modified",
+      "added": 473,
+      "removed": 3
+    },
+    {
+      "path": "src/modules/system/main.js",
+      "status": "modified",
+      "added": 480,
+      "removed": 62
+    },
+    {
+      "path": "src/modules/themes/index.js",
+      "status": "modified",
+      "added": 42,
+      "removed": 1
+    },
+    {
+      "path": "src/modules/themes/theme-aeroNoir-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-chromeos-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-kubuntu-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-macos-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-onebit-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-oxygen-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-ubuntu-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win10-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win11-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win31-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win7-classic-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win7-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win8-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-win9x-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-winW-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-winlonghorn-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-winvista-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/themes/theme-winxp-scss.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/modules/workers/index.js",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/apps/computer.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/apps/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/apps/webapp.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/chunks/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/gadgets/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/games/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/global.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/shell/dock-macos.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/shell/dock-ubuntu.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/shell/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/shell/startmenu-win31.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/shell/taskbar-macos.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/system/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/system/main.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/system/personalize.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/system/vue-app.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "src/styles/themes/index.css",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "start.bat",
+      "status": "modified",
+      "added": 0,
+      "removed": 0
+    },
+    {
+      "path": "start.php",
+      "status": "added",
+      "added": 0,
+      "removed": 0
+    }
+  ]
+}
