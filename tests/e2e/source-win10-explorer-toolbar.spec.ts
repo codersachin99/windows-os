@@ -14,7 +14,7 @@ async function openExplorer(page:Page,app:"computer"|"bin"){
   return win;
 }
 
-async function expectMenuSourceSkin(win:Locator){
+async function expectMenuSourceSkin(win:Locator,page:Page){
   const bar=win.locator(".explorer-command");
   await expect(bar).toHaveCSS("background-color","rgb(255, 255, 255)");
   await expect(bar).toHaveCSS("border-bottom-color","rgb(226, 227, 228)");
@@ -32,7 +32,7 @@ async function expectMenuSourceSkin(win:Locator){
   const close=menu.getByRole("menuitem",{name:"Close",exact:true});
   await close.hover();
   await expect(close).toHaveCSS("background-color","rgb(144, 200, 246)");
-  await pagePressEscape(win);
+  await pagePressEscape(page,win);
   await expect(menu).toHaveCount(0);
 
   await view.click();
@@ -57,29 +57,29 @@ async function expectMenuSourceSkin(win:Locator){
   await view.click();
   await expect(popup.getByRole("menuitemradio",{name:"Details"}))
     .toHaveAttribute("aria-checked","true");
-  await pagePressEscape(win);
+  await pagePressEscape(page,win);
   await expect(popup).toHaveCount(0);
   await expect(view).toBeFocused();
 }
 
 /** WindowFrame keyboard handler also watches Escape. Use the menu's focused
  * child to verify the source popup consumes it without closing Explorer. */
-async function pagePressEscape(win:Locator){
-  await win.page().keyboard.press("Escape");
+async function pagePressEscape(page:Page,win:Locator){
+  await page.keyboard.press("Escape");
   await expect(win).toBeVisible();
 }
 
 test("Win10 Computer has original Organize / icon View toolbar and functional choices",async({page})=>{
   const computer=await openExplorer(page,"computer");
   await expect(computer.locator(".explorer-stage")).toHaveClass(/is-source-win10/);
-  await expectMenuSourceSkin(computer);
+  await expectMenuSourceSkin(computer,page);
   await expect(computer.getByRole("button",{name:"New folder"})).toBeEnabled();
 });
 
 test("Win10 Bin inherits identical Computer toolbar, real view actions and safe disabled controls",async({page})=>{
   const bin=await openExplorer(page,"bin");
   await expect(bin.locator(".explorer-stage")).toHaveClass(/is-source-win10/);
-  await expectMenuSourceSkin(bin);
+  await expectMenuSourceSkin(bin,page);
   await expect(bin.getByRole("button",{name:"Empty Recycle Bin"})).toBeDisabled();
   await expect(bin.getByRole("button",{name:"Restore",exact:true})).toBeDisabled();
 });
