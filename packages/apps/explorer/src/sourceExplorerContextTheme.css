@@ -79,3 +79,27 @@
     transition:none;
   }
 }
+
+
+/* Source theme-win10-scss.js .win10 .winui-menu:
+ * #eee panel, 1px #a0a0a0 border, flat square corners and 4x4 shadow.
+ * The white hover (#fff) is distinct from the dark #2c2c2c Start sidebar.
+ * Explorer renders detached submenu nodes, so both must inherit this style. */
+.windows-desktop[data-theme="win10"] .explorer-context-menu,
+.windows-desktop[data-theme="win10"] .explorer-context-menu__submenu{
+  color:#000;background:#eee;border:1px solid #a0a0a0;
+  border-radius:0;padding:4px 2px;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5333333333);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win10"] .explorer-context-menu button{
+  color:#000;background:transparent;
+  border:1px solid transparent;border-radius:0;
+}
+.windows-desktop[data-theme="win10"] .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win10"] .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#000;background:#fff;border-color:transparent;
+}
+.windows-desktop[data-theme="win10"] .explorer-context-menu button:disabled{
+  color:#808080;opacity:1;
+}

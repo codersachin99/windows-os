@@ -4,7 +4,7 @@ import {expect,test,type Page} from "@playwright/test";
  * theme-win7-scss / theme-winxp-scss / theme-win11-scss at 4e63290d.
  * Test computed colors for actual Computer context + its side View popup,
  * not just presence of theme CSS selectors in the bundle. */
-async function openSourceComputerMenu(page:Page,theme:"win7"|"winxp"|"win11"){
+async function openSourceComputerMenu(page:Page,theme:"win7"|"winxp"|"win10"|"win11"){
   await page.goto("/?theme="+theme);
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
@@ -32,6 +32,12 @@ const cases=[
     surface:"rgb(255, 255, 255)",
     border:"rgb(172, 168, 153)",radius:"0px",
     hover:"rgb(49, 106, 197)"
+  },
+  {
+    theme:"win10",
+    surface:"rgb(238, 238, 238)",
+    border:"rgb(160, 160, 160)",radius:"0px",
+    hover:"rgb(255, 255, 255)"
   },
   {
     theme:"win11",
