@@ -13,7 +13,8 @@
  * The original --theme-color is user-configurable, so the base tint
  * remains a replaceable token rather than a hardcoded invented accent. */
 .windows-desktop[data-theme="win7"] .windows-window{
-  --source-window-tint:#6a9eb9;
+  --source-window-tint:var(--theme-color, #6a9eb9);
+  --source-window-tint--inactive:var(--theme-color--inactive, #6a9eb9);
   padding:6px;
   border:1px solid #000;
   border-radius:6px;
@@ -21,10 +22,9 @@
     transparent 100px),
     linear-gradient(225deg,rgba(255,255,255,.5333333333),
     transparent 100px),
-    var(--source-window-tint);
-  box-shadow:0 0 10px 2px rgba(0,0,0,.3333333333),
-    inset 0 0 0 1px rgba(255,255,255,.6666666667);
-  backdrop-filter:blur(4px);
+    var(--source-window-tint--inactive);
+  box-shadow:none;
+  backdrop-filter:none;
 }
 .windows-desktop[data-theme="win7"] .windows-window.is-active{
   border-radius:7px;
@@ -39,8 +39,48 @@
     linear-gradient(225deg,rgba(255,255,255,.3333333333) 70px,
       transparent 100px),
     var(--source-window-tint);
+}
+/* The pinned Win7 theme gates glass and shadows behind original
+ * data-effect-enable-glass / data-effect-show-window-shadows flags.
+ * DesktopShell enables both source defaults until Performance Options
+ * is migrated; flag removal already has exact source behavior. */
+.windows-desktop[data-theme="win7"][data-effect-enable-glass] .windows-window{
+  backdrop-filter:blur(4px);
+}
+.windows-desktop[data-theme="win7"][data-effect-show-window-shadows] .windows-window{
+  box-shadow:0 0 10px 2px rgba(0,0,0,.3333333333),
+    inset 0 0 0 1px rgba(255,255,255,.6666666667);
+}
+.windows-desktop[data-theme="win7"][data-effect-show-window-shadows] .windows-window.is-active{
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667),
     2px 2px 15px 1px rgba(0,0,0,.9333333333);
+}
+/* Source [dir=rtl] mirrors both Aero highlight diagonals and active
+ * window shadow; :dir(rtl) also works with inherited document direction. */
+.windows-desktop[data-theme="win7"]:dir(rtl) .windows-window{
+  background:linear-gradient(-140deg,rgba(255,255,255,.5333333333),
+    transparent 100px),
+    linear-gradient(-225deg,rgba(255,255,255,.5333333333),
+      transparent 100px),
+    var(--source-window-tint--inactive);
+}
+.windows-desktop[data-theme="win7"]:dir(rtl) .windows-window.is-active{
+  background:linear-gradient(-140deg,rgba(255,255,255,.6666666667),
+    transparent 100px),
+    linear-gradient(-225deg,rgba(255,255,255,.6666666667),
+    transparent 100px),
+    linear-gradient(transparent 30px,rgba(255,255,255,.7019607843) 40%,
+    transparent 41%),
+    linear-gradient(-135deg,rgba(255,255,255,.3333333333) 70px,
+    transparent 100px),
+    linear-gradient(-225deg,rgba(255,255,255,.3333333333) 70px,
+    transparent 100px),
+    var(--source-window-tint);
+}
+.windows-desktop[data-theme="win7"][data-effect-show-window-shadows]:dir(rtl)
+.windows-window.is-active{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667),
+    -2px 2px 15px 1px rgba(0,0,0,.9333333333);
 }
 .windows-desktop[data-theme="win7"] .windows-window__titlebar{
   min-height:24px;
