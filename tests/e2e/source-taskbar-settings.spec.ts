@@ -80,3 +80,52 @@ test("source Taskbar Start Cancel discards draft and Toolbars remain source-disa
   await expect(tools.locator('input[type="checkbox"]')).toHaveCount(4);
   await expect(tools.locator('input[type="checkbox"]:enabled')).toHaveCount(0);
 });
+
+test("source Win7 Aero Peek previews then restores windows without minimizing, while click minimizes",async({page})=>{
+  await guest(page);
+  const win=await openProperties(page);
+  const setting=win.locator("[data-test-taskbar-settings-aero-peek]");
+  await expect(setting).toBeEnabled();
+  await expect(setting).not.toBeChecked();
+  const desktop=page.locator("[data-test-main-screen]");
+  const showDesktop=page.locator("[data-test-show-desktop]");
+  await showDesktop.hover();
+  await expect(desktop).not.toHaveAttribute("data-source-aero-peeking","true");
+  await setting.check();
+  await expect(win.locator("[data-test-taskbar-settings-apply]")).toBeEnabled();
+  // Source taskbar property edits have transactional Apply/Cancel behavior.
+  await expect(desktop).not.toHaveAttribute("data-source-aero-peeking","true");
+  await win.locator("[data-test-taskbar-settings-apply]").click();
+  await expect(win.locator("[data-test-taskbar-settings-apply]")).toBeDisabled();
+  await showDesktop.hover();
+  await expect(desktop).toHaveAttribute("data-source-aero-peeking","true");
+  await expect(win.locator(".windows-window__body")).toHaveCSS("opacity","0");
+  await expect(win).toBeVisible();
+  await page.mouse.move(180,140);
+  await expect(desktop).not.toHaveAttribute("data-source-aero-peeking","true");
+  await expect(win.locator(".windows-window__body")).toHaveCSS("opacity","1");
+  await showDesktop.click();
+  await expect(desktop).not.toHaveAttribute("data-source-aero-peeking","true");
+  await expect(win).toHaveCount(0);
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const reopened=await openProperties(page);
+  await expect(reopened.locator("[data-test-taskbar-settings-aero-peek]")).toBeChecked();
+});
+
+test("source Aero Peek Cancel drops draft and unsupported Win11 remains disabled",async({page})=>{
+  await guest(page);
+  let win=await openProperties(page);
+  const setting=win.locator("[data-test-taskbar-settings-aero-peek]");
+  await setting.check();
+  await win.getByRole("button",{name:"Cancel"}).click();
+  win=await openProperties(page);
+  await expect(win.locator("[data-test-taskbar-settings-aero-peek]")).not.toBeChecked();
+  await win.getByRole("button",{name:"Cancel"}).click();
+  // Only Win7's original Aero Peek style and hit-testing bridge is migrated.
+  await page.goto("/?theme=win11");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const win11=await openProperties(page);
+  await expect(win11.locator("[data-test-taskbar-settings-aero-peek]"))
+    .toBeDisabled();
+});
