@@ -57,8 +57,11 @@ even though `win7` itself is not a key in the final source
   still requires Guest authentication. The React Guest logon now dispatches to source-derived **WinXP**
   (three blue regions, 150×89 logo, Guest account tile) and **Win11**
   (source wallpaper, dark overlay, original 150px guest-win10 avatar)
-  renderers. The existing **Win7** login remains intact. The Win31, Win95, Win98 and Win2k logons use an incremental shared classic
-  window and form adapter. Other unported screen families expose
+  renderers. The existing **Win7** login remains intact. Win31, Win95, Win98 and Win2k use a shared classic Guest logon;
+  Win8 and Win8.1 share a source-purple screen and Win10 reuses the
+  source-modern account structure with its own background and CSS.
+  **9 of 19** logon families now have at least an incremental renderer;
+  the other **10** screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
   renderer still needs source-family implementations. A recognized
