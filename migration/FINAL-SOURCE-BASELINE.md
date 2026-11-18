@@ -41,6 +41,24 @@ the opted-in visual CI checkout now point to the new SHA.
 | New WebGL window-close effect engine/shaders, default feature flags disabled | Default disabled state recorded; no unapproved WebGL engine introduced | Should be implemented only when feature is explicitly enabled and source behavior/worker performance can be tested |
 | Other fixes: Task Manager column arrows, sounds, clock/currency gadgets, window dock stacking, audio/online states | Tracked as changed source modules, no false verification | App-by-app acceptance after higher-priority desktop, menus, Start and Computer/Bin |
 
+## Win7 Start menu recent-program reconciliation — 18 November 2026
+
+Source `src/modules/shell/startmenu-base.js` renders
+`data-test-list-recent` when not searching or showing All Programs.
+The React Start menu previously omitted the section for Win7, showing it
+only for XP/Win11. The Win7 Start menu now uses the existing Guest-local
+`sourceRecentPrograms` history store and source-theme program artwork,
+shows a bounded recent section above the compatibility launcher grid, and
+hides the section during All Programs or search. The Win7 entry order,
+persisted session history, click-to-launch and All Programs separation
+are exercised in desktop/mobile Playwright.
+
+This is an incremental functional migration, **not full pixel/structure
+parity**: the existing compatibility launcher list remains alongside the
+recent list until the pinned Win7 original Start layout, source-installed
+shortcuts and search results are fully reconciled. CSS style values are
+explicit interim adapters pending side-by-side source screenshots.
+
 ## Accepted priorities after rebaseline
 
 1. Stabilize **new exact-head CI** (TypeScript, unit, fixed source inventory,
