@@ -29,7 +29,13 @@ const TARGET_ONLY_SCENES = [
   // original Vue source runtime can be launched at the pinned SHA.
   "games-library", "minesweeper-initial", "minesweeper-intermediate",
   "minesweeper-advanced", "minesweeper-statistics", "minesweeper-result",
-  "tetris-initial", "tetris-playing", "tetris-help", "tetris-statistics"
+  "tetris-initial", "tetris-playing", "tetris-help", "tetris-statistics",
+  // Theme-scoped React screenshot evidence: not yet paired with the
+  // original private Vue theme-specific desktop/login runtime.
+  "winxp-guest-desktop", "winxp-start-menu",
+  "win10-guest-desktop", "win10-start-menu", "win10-context-menu",
+  "win10-computer", "win10-recycle-bin",
+  "win11-guest-desktop", "win11-start-menu"
 ];
 const SCENES = [...SHARED_SCENES, ...TARGET_ONLY_SCENES];
 const FIXED_CLOCK = "2026-11-11T12:00:00.000Z";
@@ -81,9 +87,15 @@ const manifest = {
 };
 await mkdir(outputRoot, { recursive: true });
 
-async function enterDesktop(page, kind, origin) {
-  // Both versions expose the original Win7 Guest avatar marker.
-  await page.goto(origin + "/?theme=win7", { waitUntil: "domcontentloaded", timeout: 60000 });
+async function enterDesktop(page, kind, origin, scene) {
+  // Source-paired scenes remain immutable Win7; per-theme React previews
+  // are explicitly target-only until the pinned Vue fixture is validated.
+  const theme=kind==="target"&&scene.startsWith("winxp-")?"winxp":
+    kind==="target"&&scene.startsWith("win10-")?"win10":
+    kind==="target"&&scene.startsWith("win11-")?"win11":"win7";
+  // All mapped React logon families retain explicit Guest selection.
+  await page.goto(origin + "/?theme="+theme,
+    {waitUntil:"domcontentloaded",timeout:60000});
   const avatar = page.locator('[data-test-avatar="win7"]');
   await avatar.waitFor({ state: "visible", timeout: 60000 });
   await avatar.click();
@@ -110,6 +122,32 @@ async function openWindow(page, kind, app) {
 
 async function prepareScene(page, kind, scene) {
   if (scene === "guest-desktop") return;
+
+  // Bounded screenshot fixtures for source-theme shell personalities.
+  // These are TARGET ONLY: no unsupported visual parity conclusion is
+  // drawn without the pinned original theme's own screenshot.
+  if(kind==="target" && /^(winxp|win10|win11)-/.test(scene)){
+    if(scene.endsWith("guest-desktop"))return;
+    if(scene.endsWith("start-menu")){
+      await page.getByRole("button",{name:"Open Start menu"}).click();
+      await page.locator("[data-test-start-menu]")
+        .waitFor({state:"visible",timeout:15000});
+      return;
+    }
+    if(scene==="win10-context-menu"){
+      await page.locator("#desktop-icons").click({
+        button:"right",position:{x:250,y:185}
+      });
+      await page.locator("[data-test-desktop-menu]")
+        .waitFor({state:"visible",timeout:15000});
+      return;
+    }
+    if(scene.endsWith("-computer")||scene.endsWith("-recycle-bin")){
+      await openWindow(page,kind,scene.endsWith("-computer")?"computer":"bin");
+      return;
+    }
+    throw new Error("Unmapped target-only theme scene: "+scene);
+  }
 
   // Source selectors and source filesystem mutations require an actual pinned
   // legacy run. Until tested, these additional fixtures are React-only.
@@ -357,7 +395,7 @@ try {
         manifest.captures.push(record);
         try {
           await page.clock.setFixedTime(new Date(FIXED_CLOCK));
-          await enterDesktop(page, kind, origin);
+          await enterDesktop(page, kind, origin, scene);
           await prepareScene(page, kind, scene);
           const directory = join(outputRoot, kind, name);
           await mkdir(directory, { recursive: true });
