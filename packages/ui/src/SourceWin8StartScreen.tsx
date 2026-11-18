@@ -39,6 +39,7 @@ export function SourceWin8StartScreen({
   const [accountOpen,setAccountOpen]=useState(false);
   const [searching,setSearching]=useState(false);
   const [query,setQuery]=useState("");
+  const [selectedResult,setSelectedResult]=useState(-1);
   const inputRef=useRef<HTMLInputElement>(null);
   const accountRef=useRef<HTMLDivElement>(null);
   const groupsRef=useRef<HTMLDivElement>(null);
@@ -121,6 +122,7 @@ export function SourceWin8StartScreen({
       if(event.key.length===1&&!event.ctrlKey&&!event.metaKey&&!event.altKey
         &&!(event.target instanceof Element&&event.target.closest("input, textarea"))){
         event.preventDefault();setQuery(text=>text+event.key);
+        setSelectedResult(-1);
         setSearching(true);
       }
     }}>
@@ -201,15 +203,28 @@ export function SourceWin8StartScreen({
       <input id="win8-start-query" type="search" ref={inputRef}
         aria-label="Search programs and files" data-test-startmenu-search=""
         placeholder="Search apps" value={query}
-        onChange={event=>setQuery(event.target.value)}
+        onChange={event=>{
+          setQuery(event.target.value);
+          setSelectedResult(-1);
+        }}
         onKeyDown={event=>{
-          if(event.key==="Enter"&&matches.length){
-            event.preventDefault();onLaunch(matches[0]!.id);
+          if((event.key==="ArrowDown"||event.key==="ArrowUp")&&matches.length){
+            event.preventDefault();
+            setSelectedResult(index=>event.key==="ArrowDown"
+              ?(index+1)%matches.length
+              :index<=0?matches.length-1:index-1);
+          }else if(event.key==="Enter"&&matches.length){
+            event.preventDefault();
+            onLaunch(matches[selectedResult>=0&&selectedResult<matches.length
+              ?selectedResult:0]!.id);
           }
         }}/>
       <div className="win8-start__results">
-        {query?matches.map(app=><button key={app.id} type="button"
+        {query?matches.map((app,index)=><button key={app.id} type="button"
           data-test-win8-start-result={app.id}
+          data-test-win8-start-result-selected={selectedResult===index?"":undefined}
+          className={selectedResult===index?"is-selected":undefined}
+          onMouseEnter={()=>setSelectedResult(index)}
           onClick={()=>onLaunch(app.id)}
           onContextMenu={event=>onContext(event,app.id)}>
           <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
