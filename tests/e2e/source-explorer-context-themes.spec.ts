@@ -62,7 +62,8 @@ for(const source of cases){
       await expect(refresh).toHaveCSS("background-color",source.hover);
       if(source.theme==="winxp")
         await expect(refresh).toHaveCSS("color","rgb(255, 255, 255)");
-      else await expect(refresh).toHaveCSS("color","rgb(26, 26, 26)");
+      else await expect(refresh).toHaveCSS("color",
+        source.theme==="win10"?"rgb(0, 0, 0)":"rgb(26, 26, 26)");
     }
 
     await menu.locator("[data-test-explorer-context-view]").click();
