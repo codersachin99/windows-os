@@ -58,6 +58,13 @@ const builtinApps: AppDefinition[] = [
     window: { width: 760, height: 490 }
   },
   {
+    id:"system",label:"System Properties",
+    icon:legacySourceIconArtwork("system").src,
+    kind:"system",desktop:false,showInStart:false,
+    // Pinned system.js WindowMain fixed 500×500 and advanced tab default.
+    window:{width:500,height:500,resizable:false,centered:true}
+  },
+  {
     id:"personalize",label:"Personalize",icon:legacyArt.personalize,
     kind:"system",desktop:false,showInStart:false,
     // personalize.js inherits the standard resizable WindowMain geometry.
