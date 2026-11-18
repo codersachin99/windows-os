@@ -1,3 +1,57 @@
+## Source-final startup defaults (skipBoot true, nativeCursor true) — 18 November 2026
+
+**Source remains immutable and pinned:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+Verified source `app.config.json` `defaults.skipBoot=true` and
+`defaults.nativeCursor=true`. `src/modules/shell/boot.js` explicitly
+uses `shouldSkipBoot` to suppress `showBooting` and accelerate `bootup()`,
+which finally emits `changeView: Logon` (unless installer). **It does
+not authenticate Guest or skip the login screen.**
+
+- `9985dc5`: `packages/engine/src/index.ts` final configuration
+  `LEGACY_DEFAULTS.skipBoot=true,nativeCursor=true`; independent
+  `sourceInitialPhase(skipBoot)` correctly chooses `logon` when
+  skipping the animation and `boot` when disabled, **never desktop**.
+  `initialDesktopState({skipBoot:false})` preserves an explicit
+  animated-boot path. React browser UI already uses the system/native
+  cursor (no fabricated cursor implementation).
+- `add9efb`, `727f00f`: Vitest covers final unauthenticated
+  Logon startup, normal BootComplete when boot is enabled, inability
+  to launch an app before Guest authentication, and BSOD/restart landing
+  back at Logon without bypassing the profile.
+- `087d540`, `91ed46d`: desktop/mobile browser shell tests enforce
+  final default without BootScreen and no early Desktop, exact Guest
+  original wallpaper/shell after selecting Guest, and restart from
+  shutdown requiring another explicit Guest login.
+- `c63426c`: shell startup test is now in focused opt-in CI; the
+  complete desktop/mobile suite continues afterward.
+- `f3bc985`: migration reference matrix reflects implemented skip
+  and native-cursor defaults while retaining clear remaining gaps.
+
+**Original Win7/XP/11 theme screen mapping still unverified.**
+The final `themeScreens` dictionary maps Win7 → Win7, XP → XP,
+Win11 → Win11 boot/logon views, but React's visual LogonScreen is
+still the prior Win7 shell for all supported themes. Do not call
+the theme visual migration complete without separately porting
+`src/modules/themes/logon-winxp.js`,
+`src/modules/themes/logon-win11.js`, their original CSS/assets,
+screen mapping and paired source-vs-target screenshot tests.
+The optional animated React BootScreen remains an existing adapter,
+not the complete original per-theme animation.
+
+**CI:** [previous exact-head Win7 recent Start run #44278251054](https://github.com/codersachin99/windows-os/actions/runs/44278251054)
+had passed typecheck, unit, integrity, artwork and focused browser
+tests, with its complete browser suite still in progress at the
+point of this handoff. **This `[run-ci]` commit requests a new
+exact-head run** to verify startup changes; check full results
+before accepting the new SHA. Avoid CI on ordinary commits.
+
+**Next:** fix any new CI failures first; finish XP/11 source logon and
+boot-theme view mapping, then Start/search, desktop context menus,
+Computer/Bin, and permissioned mapped directories. Draft PR #1
+unmerged, WindowsOS main and legacy source unchanged, no release.
+
+---
+
 ## Verified previous milestone and Win7 Start recent-app source reconciliation — 18 November 2026
 
 **Previous exact-head milestone accepted by automated CI:**
