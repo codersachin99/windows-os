@@ -99,9 +99,10 @@ export function TaskbarSettingsApp({
           <p>Preview the desktop by moving your mouse to the Show desktop button at the end of the taskbar.</p>
           <label><input type="checkbox" data-test-taskbar-settings-aero-peek=""
             disabled={theme!=="win7"} checked={taskbarDraft.useAeroPeek}
-            onChange={event=>setTaskbarDraft(previous=>({
-              ...previous,useAeroPeek:event.currentTarget.checked
-            }))}/> Use Aero Peek to preview the desktop</label>
+            onChange={event=>{
+              const checked=event.currentTarget.checked;
+              setTaskbarDraft(previous=>({...previous,useAeroPeek:checked}));
+            }}/> Use Aero Peek to preview the desktop</label>
         </fieldset>
       </>:tab==="start"?<>
         <p>To customize how links, icons and menus look and behave in the Start menu, click Customize.</p>
