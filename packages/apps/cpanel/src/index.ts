@@ -11,3 +11,10 @@ export {
   sourceCpanelInstalledPrograms,sourceCpanelProgramsMatch,
   sourceCpanelBackupMatch
 } from "./model";
+export {SystemPropertiesApp} from "./SystemPropertiesApp";
+export {
+  SOURCE_VISUAL_EFFECTS_KEY,SOURCE_DEFAULT_VISUAL_EFFECTS,
+  sourceVisualEffectsPreset,sourceVisualEffectsToggle,
+  sourceVisualEffectsRead,sourceVisualEffectsSave,
+  type SourceVisualEffects,type SourceVisualEffectsPreset
+} from "./sourceVisualEffects";
