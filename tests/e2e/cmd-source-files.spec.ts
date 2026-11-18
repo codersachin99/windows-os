@@ -391,7 +391,7 @@ test("original CMD SYSTEMINFO prints the source web-device configuration",async(
 });
 
 
-test("source CMD BSOD opens the Win7 stop screen and click restarts the Guest simulator",async({page})=>{
+test("source CMD BSOD opens the Win7 stop screen and restart honors final skipBoot Guest logon",async({page})=>{
   const {input}=await launchSourceCommandPrompt(page);
   await execute(input,"bsod");
   const screen=page.locator("[data-test-bsod-screen]");
@@ -402,7 +402,14 @@ test("source CMD BSOD opens the Win7 stop screen and click restarts the Guest si
   await expect(screen).toContainText("*** STOP: 0x000000000");
   await expect(page.locator('[data-test-window="cmd"]')).toHaveCount(0);
   await screen.click({position:{x:8,y:8}});
-  await expect(page.locator("[data-test-boot-screen]")).toBeVisible();
+  // Final source app.config.json skipBoot=true skips only the animation.
+  // The prior assertion expected an obsolete BootScreen and failed on
+  // desktop and mobile in CI #44279822077 despite correct logon behavior.
+  await expect(page.locator("[data-test-boot-screen]")).toHaveCount(0);
+  await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
+  await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
+  await page.locator('[data-test-avatar="win7"]').click();
+  await expect(page.locator("[data-test-main-screen]")).toBeVisible();
 });
 
 
