@@ -116,3 +116,26 @@ was still in progress. The new grouping is **not included in that run**.
 Source-installed-program inventory and presentation still require
 side-by-side pixel/interaction acceptance; do not mark Win8 or Win81
 fully verified or merge draft PR #1.
+
+
+## Pinned horizontal Start grid wheel semantics — 19 November 2026
+
+The original `startmenu-win8.js` `mounted()` handler attaches a
+native wheel listener to the tiled pose grid, cancels the default
+wheel scrolling and invokes `scrollBy({left: deltaY + deltaX})`.
+The React Start previously handled only vertical deltas with delegated
+`onWheel`, losing trackpad-horizontal input and page-scroll
+cancellation.
+
+[`e4884ec`](https://github.com/codersachin99/windows-os/commit/e4884ec22e0dab24e36ae62c000b35d576eeaffa)
+restores a scoped **non-passive native wheel listener** with source
+`deltaY + deltaX` horizontal scrolling and effect cleanup.
+[`2bd8e12`](https://github.com/codersachin99/windows-os/commit/2bd8e122b23fb09e340d80b2b7a05e0424a5925c)
+adds a browser regression verifying both wheel directions move the
+original tile grid at a narrow viewport. No additional GitHub Actions
+run was triggered while the earlier clickout acceptance
+[#44375432800](https://github.com/codersachin99/windows-os/actions/runs/44375432800)
+was active. **The program/app separation and native wheel changes
+are not part of that earlier CI commit SHA**, and remain unverified
+until a subsequent deliberately opted-in exact-head run. The source
+rendered screenshots and all-theme parity gate remain open.
