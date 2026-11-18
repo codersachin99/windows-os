@@ -25,7 +25,7 @@ entry is intentionally omitted.
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Pending theme-specific implementation |
 | `win8` | `win8`, `win81` | 2 | Source-shaped purple Win8 Guest logon and exact avatar; shell/boot/pixel parity pending |
-| `win10` | `win10` | 1 | Source-shaped Win10 Guest logon with original wallpaper/avatar; shell/boot/pixel parity pending |
+| `win10` | `win10` | 1 | Original Win10 Guest logon + source shell artwork, dark taskbar, square windows, Start rail/list/tiles; complete boot/pixel parity pending |
 | `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
 | `chromeos` | `chromeos` | 1 | Pending theme-specific implementation |
@@ -166,3 +166,8 @@ even though `win7` itself is not a key in the final source
 - Pinned `src/modules/themes/logon-win8.js` and `src/styles/themes/logon-win8.css` map BOTH `win8` and `win81` to the identical `win8` screen family: purple `#180053` backdrop, 150px `guest-win8` avatar, 20px horizontal guest pane spacing, grouped Guest label, arrow form submit and themed focus. New `SourceWin8Logon` React adapter preserves Guest login and source CSS motifs with explicit account-authentication boundary and responsive stacked layout.
 - Original binary `guest-win8.265e68f5.webp` added with exact source Git blob SHA `060bcb7d2327f85c3f51bc33d2704072e86df578` and source art audit.
 - Browser acceptance covers both exact theme IDs, original purple, avatar URL/size, guest vs unported account auth, power menu, and active selected desktop theme. This **does not certify** original login pixel parity, Win8/8.1 Start screen, desktop/taskbar/icon visual functionality, boot animation, audio or other Win8 shell behavior. Both remain `pending`.
+
+## Windows 10 desktop, Start and window shell — 18 November 2026
+
+- The pinned original `icons.registry.json` `win10` artwork, taskbar/window rules in `theme-win10-scss.js`, and Start structure in `startmenu-win10.js` / `startmenu-win10.css` are now partially rebuilt in React. **8 new original byte-identical images** supplement the earlier Win10 wallpaper and shared Guest avatar. See [WIN10-SOURCE-SHELL.md](WIN10-SOURCE-SHELL.md) for exact original Git blob SHAs, dedicated UI widgets and tests.
+- Core Desktop, taskbar, Start, Computer/Bin visuals now select Win10-specific originals rather than Win7 fallback. This does **not** mean the complete original Win10 theme, original rendered screenshot equivalence, touch animation/entire app art inventory or boot/account backends are finished. Win10 shell status remains `pending`.

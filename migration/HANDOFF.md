@@ -1,3 +1,19 @@
+## Windows 10 desktop, taskbar, window controls, Computer/Bin, Start menu — 18 November 2026
+
+**Immutable source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; original repository, target `main`, existing PR draft and release history untouched.
+
+- [`ed1fa17`](https://github.com/codersachin99/windows-os/commit/ed1fa179c3dafb920bce3a755fcdb043efd3b241) imports 8 **byte-identical original** Win10 images from source `icons.registry.json`, including the surprising official Win10 mapping `start-button-win8.2e5214cc.svg`, plus Computer, both Bin states, folder, file, Games and Control Panel. Wallpapers and visual asset registries now select the Win10 originals for Desktop/Explorer and Start programs.
+- [`c0411ef`](https://github.com/codersachin99/windows-os/commit/c0411ef872855b2b18205e3f666a87cb7e42e04a) adds source theme Win10 dark `#101010` taskbar, top-window active button/underline based on live Guest z-order, Win10 desktop selection rules, and source-white square windows with **44×28** controls and `#e81123` close hover; new browser source chrome/Computer/Bin test in the targeted gate.
+- [`6485fd3`](https://github.com/codersachin99/windows-os/commit/6485fd346f275991f81214e22fd867ca2b052ba1) adds source `startmenu-win10.js` rail/list/tiles organization with 430px dark panel, hover/touch-expand 48/200px sidebar, real Guest account/power/computer/games/cpanel actions and recent-app tiles, plus responsive adaptation and two new browser tests.
+- [`2e86a8f`](https://github.com/codersachin99/windows-os/commit/2e86a8fb2bb23ff454048548fa9ce5e5d2826a3c) fixes original Computer/Bin art used in Start tiles/program list. Tests cover active program launches and inherited original icon URLs.
+- Detailed source references, original blob SHA table, CSS values and explicit acceptance gaps: [`migration/WIN10-SOURCE-SHELL.md`](https://github.com/codersachin99/windows-os/blob/feat/0001-faithful-react-foundation/migration/WIN10-SOURCE-SHELL.md).
+
+**Verification:** previous [exact-head CI #44312389355](https://github.com/codersachin99/windows-os/actions/runs/44312389355) was **SUCCESS** (TypeScript, unit, source inventory, original artwork, Vite, focused and full browser desktop/mobile) for the earlier Photo/Win8/Win10-*logon* checkpoint `9e47848`. That green result **does not cover** the new Win10 Desktop/Start commits. This deliberately triggered `[run-ci]` checkpoint tests the new exact head including two new targeted desktop/mobile browser specs and whole suite; report any failures without claiming success until completion.
+
+**Priority after CI:** fix any new regression, then resume original-versus-React screenshots of taskbar, Desktop, Start, Explorer/Bin and source theme families. Win10 visual/app/audio/power animation parity remains pending, as do XP/11 and all other themes. Keep PR #1 draft, never release/merge docs-only or failed work.
+
+---
+
 ## Win8/8.1 and Win10 original source logon adapters — 18 November 2026
 
 **Source lock unchanged:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; source and `windows-os/main` untouched. PR #1 stays draft, no release.
