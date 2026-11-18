@@ -12,7 +12,8 @@ import {
   SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
   matchesSourceKind, type FileEntry, type SourceSearchHighlight
 } from "@windows-os/filesystem";
-import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime } from "@windows-os/sdk";
+import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime,
+  SOURCE_FINAL_DESKTOP_MENU_FLAGS } from "@windows-os/sdk";
 import { ExplorerSession, type ExplorerViewMode } from "./model";
 import { SearchDialog } from "@windows-os/apps/search-dialog";
 import { SearchCompanion } from "@windows-os/apps/search-companion";
@@ -1121,12 +1122,18 @@ export function ExplorerApp({
         {!isBin&&<button role="menuitem"
           onClick={()=>contextAction(pasteSelection)}
           disabled={!clipboardState.paths.length}>Paste</button>}
-        <button role="menuitem" data-test-explorer-context-copy-path=""
-          onClick={()=>contextAction(copyExplorerPath)}>Copy path</button>
-        <button role="menuitem" data-test-explorer-context-upload=""
-          disabled={isBin}
-          onClick={()=>contextAction(()=>fileInput.current?.click())}>
-          Upload files here</button>
+        {SOURCE_FINAL_DESKTOP_MENU_FLAGS.showMenuCopyPath&&
+          <button role="menuitem" data-test-explorer-context-copy-path=""
+            onClick={()=>contextAction(copyExplorerPath)}>Copy Path</button>}
+        {SOURCE_FINAL_DESKTOP_MENU_FLAGS.showUploadFiles&&
+          <button role="menuitem" data-test-explorer-context-upload=""
+            disabled={isBin}
+            onClick={()=>contextAction(()=>fileInput.current?.click())}>
+            Upload Files</button>}
+        {SOURCE_FINAL_DESKTOP_MENU_FLAGS.showMapDirectory&&
+          <button role="menuitem" data-test-explorer-context-map-directory=""
+            disabled title="Mapped directory host-permission adapter is not yet migrated">
+            Map Directory</button>}
         {!isBin&&<>
           <button role="menuitem" aria-expanded={context.newOpen}
             aria-haspopup="menu" data-test-explorer-context-new=""
