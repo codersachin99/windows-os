@@ -37,13 +37,15 @@ export default function App() {
   // Source Guest visual effects persist separately from window geometry and
   // theme. Storage denial keeps the settings for this running session.
   const [visualEffects,setVisualEffects]=useState<SourceVisualEffects>(()=>{
-    return sourceVisualEffectsRead(
-      typeof window==="undefined"?undefined:window.localStorage);
+    try{return sourceVisualEffectsRead(
+      typeof window==="undefined"?undefined:window.localStorage);}
+    catch{return sourceVisualEffectsRead(undefined);}
   });
   const updateVisualEffects=useCallback((next:SourceVisualEffects)=>{
     setVisualEffects(next);
-    sourceVisualEffectsSave(
-      typeof window==="undefined"?undefined:window.localStorage,next);
+    try{sourceVisualEffectsSave(
+      typeof window==="undefined"?undefined:window.localStorage,next);}
+    catch{/* restricted browser storage: keep Guest session state only */}
   },[]);
   const guestLoginPending = useRef(false);
   const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);
