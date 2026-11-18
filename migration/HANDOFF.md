@@ -1,3 +1,9 @@
+## Source-backed Win8 and Win8.1 selectable Personalize themes — 18 November 2026
+
+[Commit `5e6dd2a`](https://github.com/codersachin99/windows-os/commit/5e6dd2a28a3904f373a52911fb7ab053609eb524) adds real Win8/Win8.1 theme cards to the existing Personalize app with source-pinned distinct wallpaper previews, `SET_THEME` and reload persistence; five source-backed cards now shown (Win7, XP, Win8, Win8.1, Win11), not a false 37-complete-theme claim. New unit and desktop/mobile browser test is in `model.test.ts` and `source-personalize-theme.spec.ts`. Previous Win8 [CI #44363167728](https://github.com/codersachin99/windows-os/actions/runs/44363167728) **passed typecheck/unit/assets/build and focused browser** at `b7a30d2`; its full browser suite was still running at documentation time. That run **predates this Personalize commit**. A new exact-head `[run-ci]` is required after the prior full browser suite resolves. Do not claim new card tests passed prematurely. Keep draft PR, pinned original and target main unchanged.
+
+---
+
 ## Win8 exact-head CI checkpoint — 18 November 2026
 
 - First Win8 opt-in [CI #44362853105](https://github.com/codersachin99/windows-os/actions/runs/44362853105) at `50b010e9` stopped at **TypeScript**, before unit/asset/build/browser: `packages/ui/src/DesktopShell.tsx:459 Cannot find name 'wallpaper'`. This was a real new-integration bug; do not describe that run as green or claim its unrun suites passed.

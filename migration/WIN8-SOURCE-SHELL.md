@@ -41,3 +41,9 @@ Pinned `src/modules/themes/theme-win8-scss.js` defines:
 - **Not complete:** original `appItems`/installed-program tile grouping, per-tile image/icon parity, animated background preview, Start drag gestures, source optional theme color and control settings, original keyboard/search file categories, all original context-menu palettes, source screenshots, exact mobile gestures/animation transitions, Win8 Explorer and remaining 15+ theme family shells. Screenshot-perfect and whole-theme parity cannot be claimed.
 
 Keep PR #1 **draft**, pinned source and `windows-os/main` unchanged, no release; address CI failures and visual comparisons before expanding further.
+
+## Working Personalize theme switcher
+
+[Commit `5e6dd2a`](https://github.com/codersachin99/windows-os/commit/5e6dd2a28a3904f373a52911fb7ab053609eb524) extends `packages/apps/personalize/src/model.ts` from the three previously selectable source-backed shells (Win7, XP, Win11) to **five**: Win7, XP, **Win8**, **Win8.1**, Win11. These exact IDs use their byte-imported original wallpaper previews, and the existing real `SET_THEME` action changes shell theme and wallpaper immediately, persisting on reload; no source-family reduction from Win8.1 to Win8 in the selected desktop identity. `sourceThemeScreens` still correctly aliases both to the original common Win8 boot/logon family.
+
+Updated `packages/apps/personalize/src/model.test.ts` requires the five IDs and exact original previews, and `tests/e2e/source-personalize-theme.spec.ts` now validates choosing Win8 → Win8.1, different original images, start button image, reload and full-screen Start. This is **additional work after the initial Win8 CI checkpoint**, so a new exact-head `[run-ci]` run must verify it. Keep the rest of the source 37-theme catalog recognized but unexposed in Personalize until their individual shell personalities are sufficiently implemented.
