@@ -16,6 +16,11 @@ import {
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
+import {SOURCE_FINAL_DESKTOP_MENU_FLAGS} from "./sourceDesktopMenuFlags";
+import {
+  SOURCE_DESKTOP_DEFAULT_SORT,sourceNextDesktopSort,sourceSortDesktopItems,
+  type SourceDesktopSortKey
+} from "./sourceDesktopSort";
 import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
 import {taskbarPins} from "./sourceTaskbarPins";
 import {
@@ -55,7 +60,7 @@ interface ActivePress {
   narrowTo: string | null;
   dragToken: string | null;
 }
-type DesktopMenu = { x: number; y: number; anchorX:number; anchorY:number; id: string | null; view: boolean; newOpen: boolean };
+type DesktopMenu = { x: number; y: number; anchorX:number; anchorY:number; id: string | null; view: boolean; sortOpen:boolean; newOpen: boolean };
 interface ActiveBand {
   start: DesktopPoint;
   previous: string[];
@@ -88,6 +93,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const [nativeIconDropHover, setNativeIconDropHover] = useState<string | null>(null);
   const [band, setBand] = useState<DesktopBand | null>(null);
   const [menu, setMenu] = useState<DesktopMenu | null>(null);
+  const [sortChoice,setSortChoice]=useState(SOURCE_DESKTOP_DEFAULT_SORT);
   const [error, setError] = useState<string | null>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
@@ -757,7 +763,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     const y=event.clientY-(bounds?.top??0);
     // The source measures the real popup before deciding its edge flip.
     // Initial anchor is corrected in a layout effect after mount.
-    setMenu({id,view:false,newOpen:false,anchorX:x,anchorY:y,x,y});
+    setMenu({id,view:false,sortOpen:false,newOpen:false,anchorX:x,anchorY:y,x,y});
   };
   useLayoutEffect(()=>{
     const element=menuHost.current;
@@ -822,6 +828,21 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       setError(cause instanceof Error ? cause.message : "Desktop preferences could not be saved");
     }
   };
+  /** Source DesktopMenu B.sortDesktop/setDesktopSortDirection.
+   * Changes the Guest VFS icon positions, not the host filesystem. */
+  const applyDesktopSort=(key:SourceDesktopSortKey,asc?:boolean)=>{
+    const next=asc===undefined
+      ?sourceNextDesktopSort(sortChoice,key):{key,asc};
+    const sorted=sourceSortDesktopItems(items.map(item=>({
+      id:item.id,label:item.label,
+      type:item.file?.entry.type??item.app?.kind??"",
+      size:item.file?.entry.size??0,
+      mtime:item.file?.entry.mtime??0
+    })),next);
+    changeSettings(()=>layout.arrange(sorted.map(item=>item.id),area));
+    setSortChoice(next);
+  };
+
   const size = SOURCE_DESKTOP_ICON_SIZES[options.iconSize];
   const contextItem=items.find(item=>item.id===menu?.id);
   const contextKeys=menu?.id&&selected.includes(menu.id)?selected:
@@ -1007,10 +1028,10 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         if(sourceMenuArrowFocus(menuHost.current,event.target,event.key)){
           event.preventDefault();return;
         }
-        if(event.key==="ArrowLeft"&&(menu.view||menu.newOpen)){
+        if(event.key==="ArrowLeft"&&(menu.view||menu.sortOpen||menu.newOpen)){
           event.preventDefault();
-          const parent=menu.view?"[data-test-desktop-view]":"[data-test-desktop-new]";
-          setMenu(current=>current?{...current,view:false,newOpen:false}:current);
+          const parent=menu.view?"[data-test-desktop-view]":menu.sortOpen?"[data-test-desktop-sort]":"[data-test-desktop-new]";
+          setMenu(current=>current?{...current,view:false,sortOpen:false,newOpen:false}:current);
           window.requestAnimationFrame(()=>menuHost.current
             ?.querySelector<HTMLButtonElement>(parent)?.focus({preventScroll:true}));
         }
@@ -1028,7 +1049,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         <button role="menuitem" aria-expanded={menu.view}
           aria-haspopup="menu" data-test-desktop-view=""
           onPointerEnter={() => setMenu(current => current && !current.view
-            ? {...current,view:true,newOpen:false} : current)}
+            ? {...current,view:true,sortOpen:false,newOpen:false} : current)}
           onKeyDown={event => {
             if(event.key==="ArrowRight"){
               event.preventDefault();
@@ -1039,7 +1060,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             }
           }}
           onClick={() => setMenu(current => current
-            ? {...current,view:true,newOpen:false}:current)}>View ▸</button>
+            ? {...current,view:true,sortOpen:false,newOpen:false}:current)}>View ▸</button>
         {menu.view && <>
           {([["lg","Large icons"],["md","Medium icons"],["sm","Small icons"]] as const)
             .map(([value,label]) => <button key={value} role="menuitemradio"
@@ -1053,19 +1074,57 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             onClick={() => changeSettings(() => layout.setShowIcons(!options.showIcons))}>
             {options.showIcons ? "✓ " : "　"}Show desktop icons</button>
         </>}
+        <button role="menuitem" aria-expanded={menu.sortOpen}
+          aria-haspopup="menu" data-test-desktop-sort=""
+          onPointerEnter={() => setMenu(current=>current&&!current.sortOpen
+            ?{...current,sortOpen:true,view:false,newOpen:false}:current)}
+          onKeyDown={event=>{
+            if(event.key==="ArrowRight"){
+              event.preventDefault();
+              setMenu(current=>current?{...current,sortOpen:true,view:false,newOpen:false}:current);
+              window.requestAnimationFrame(()=>menuHost.current
+                ?.querySelector<HTMLButtonElement>('[data-test-desktop-sort-name]')
+                ?.focus({preventScroll:true}));
+            }
+          }}
+          onClick={()=>setMenu(current=>current
+            ?{...current,sortOpen:true,view:false,newOpen:false}:current)}>Sort by ▸</button>
+        {menu.sortOpen&&<>
+          {([
+            ["name","Name"],["size","Size"],["type","Item type"],["date","Date modified"]
+          ] as const).map(([key,label])=>
+            <button key={key} role="menuitemradio"
+              data-test-desktop-sort-name={key==="name"?"":undefined}
+              data-test-desktop-sort-key={key}
+              aria-checked={sortChoice.key===key}
+              onClick={()=>applyDesktopSort(key)}>
+              {sortChoice.key===key?"✓ ":"　"}{label}</button>)}
+          {([["asc","Ascending"],["desc","Descending"]] as const)
+            .map(([direction,label])=><button key={direction}
+              role="menuitemradio" data-test-desktop-sort-direction={direction}
+              aria-checked={sortChoice.asc===(direction==="asc")}
+              onClick={()=>applyDesktopSort(sortChoice.key,direction==="asc")}>
+              {sortChoice.asc===(direction==="asc")?"✓ ":"　"}{label}</button>)}
+        </>}
         <button role="menuitem" onClick={() => {setMenu(null);setOptions(layout.snapshot());}}>
           Refresh</button>
         <button role="menuitem" disabled={!clipboardState.paths.length}
           onClick={pasteDesktopFiles}>Paste</button>
-        <button role="menuitem" data-test-desktop-copy-path=""
-          onClick={copyDesktopPath}>Copy path</button>
-        <button role="menuitem" data-test-desktop-upload-here=""
-          onClick={() => {setMenu(null);uploadInput.current?.click();}}>
-          Upload files here</button>
+        {SOURCE_FINAL_DESKTOP_MENU_FLAGS.showMenuCopyPath&&
+          <button role="menuitem" data-test-desktop-copy-path=""
+            onClick={copyDesktopPath}>Copy Path</button>}
+        {SOURCE_FINAL_DESKTOP_MENU_FLAGS.showUploadFiles&&
+          <button role="menuitem" data-test-desktop-upload-here=""
+            onClick={() => {setMenu(null);uploadInput.current?.click();}}>
+            Upload Files</button>}
+        {SOURCE_FINAL_DESKTOP_MENU_FLAGS.showMapDirectory&&
+          <button role="menuitem" data-test-desktop-map-directory=""
+            disabled title="Mapped directory host-permission adapter is not yet migrated">
+            Map Directory</button>}
         <button role="menuitem" aria-expanded={menu.newOpen}
           aria-haspopup="menu" data-test-desktop-new=""
           onPointerEnter={() => setMenu(current => current && !current.newOpen
-            ? {...current,newOpen:true,view:false}:current)}
+            ? {...current,newOpen:true,view:false,sortOpen:false}:current)}
           onKeyDown={event => {
             if(event.key==="ArrowRight"){
               event.preventDefault();
@@ -1076,7 +1135,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             }
           }}
           onClick={() => setMenu(current => current
-            ? {...current,newOpen:true,view:false}:current)}>
+            ? {...current,newOpen:true,view:false,sortOpen:false}:current)}>
           New ▸</button>
         {menu.newOpen && <>
           <button role="menuitem" data-test-desktop-new-folder=""
