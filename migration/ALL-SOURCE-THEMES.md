@@ -179,3 +179,7 @@ even though `win7` itself is not a key in the final source
 
 - **11 of the 19 source boot families** now render source-shaped original boot images or spinner views: Win31, Win95, Win98, Win2k, XP variants, Vista, Win8/8.1, Win10 (original Win8 logo), Win11 variants, WinLS/LP, WinW. The **ten unique original binary images/GIFs have matching source and target Git SHA**. The other eight retain the explicit source-catalog fallback.
 - Original source `defaults.skipBoot:true` remains unchanged; only the opt-in boot phase shows these images. The full original boot timing and paired screenshots remain unverified. Detailed [SOURCE-BOOT-FAMILIES.md](SOURCE-BOOT-FAMILIES.md).
+
+## XP/10/11 context-menu source skins — 18 November 2026
+
+The original `theme-win10-scss.js` defines a **light `#eee` Win10 context menu with white hover**, independent of the **dark** Win10 Start menu. This has now been ported to React Desktop, taskbar and Explorer root/child popups. Original XP white/blue/Tahoma and Win11 bright rounded menu skins were also scoped to Desktop/Taskbar without affecting Win7. Playwright CSS/functional acceptance is added to the focused desktop/mobile CI gate. These are individual source-exact palette/motion slices, not screenshot-perfect complete theme coverage. See [SOURCE-CONTEXT-MENUS.md](SOURCE-CONTEXT-MENUS.md).

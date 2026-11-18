@@ -1,3 +1,13 @@
+## Source XP / Win10 / Win11 Desktop, Taskbar and Explorer context skins — 18 November 2026
+
+**Previous completed evidence:** Full [CI #44327673276](https://github.com/codersachin99/windows-os/actions/runs/44327673276) **SUCCESS** for original source boot mapping on `c61ed7d` (TypeScript, unit, original source/assets verification, Vite, focused and full desktop/mobile browser tests). [Visual capture #44328456992](https://github.com/codersachin99/windows-os/actions/runs/44328456992) **SUCCESS** at `b5006e5`: **86 target-only screenshots, zero errors, no source images** (optional private-source token missing); artifact `visual-parity-b5006e5c954af026265425348f8139ebe5aec2c4`. Do NOT declare visual comparison/pixel parity achieved.
+
+**New source-backed work:** [`6f190c5`](https://github.com/codersachin99/windows-os/commit/6f190c52559a66663b49521874126564aa48a93f), [`de4fc44`](https://github.com/codersachin99/windows-os/commit/de4fc44595f9e245799b57af898bb43336282261), [`3da1c8f`](https://github.com/codersachin99/windows-os/commit/3da1c8f5d6697969de19bc00d31f048fd2186779), [`dfa7934`](https://github.com/codersachin99/windows-os/commit/dfa79346eac04816e5cf13483bd71e497555bf4e). Match original **XP/Win10/Win11 Desktop and taskbar context skins** and **Win10 Explorer background/item, View/Send-To child menus**. The source `theme-win10-scss.js` demands *light `#eee` / `#a0a0a0` / white hover*, never dark Start palette; original XP white with `#316ac5` hover and Win11 bright/rounded menu scoped. New browser specs check rendered computed CSS and actual menu commands for desktop/mobile. All other family shells remain pending. Detailed evidence in [`migration/SOURCE-CONTEXT-MENUS.md`](https://github.com/codersachin99/windows-os/blob/feat/0001-faithful-react-foundation/migration/SOURCE-CONTEXT-MENUS.md).
+
+**New exact-head `[run-ci]` checkpoint required**, do not call new menus browser-verified yet. Keep user priority: desktop/Start/context/Computer/Bin and all source themes. PR #1 draft, pinned `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; no edit to `main` or source; no release.
+
+---
+
 ## Original boot renderer families / source artwork — 18 November 2026
 
 **Previous exact-head verification:** Full [GitHub CI #44323413550](https://github.com/codersachin99/windows-os/actions/runs/44323413550) **SUCCESS** at `a918d6c9cf19e70c6dac277515ab648e42b74ba2`, including TypeScript, unit, original inventory, source image SHA, Vite build, **focused browser** and **complete desktop/mobile browser** suites. That successful run predates the newly committed source boot visuals and cannot certify them.
