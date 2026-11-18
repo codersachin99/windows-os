@@ -1,23 +1,24 @@
 {
-  "referenceSha": "4e63290d783009e1293433c6ccf252abba9c1187",
-  "note": "A tracked source file is not proof of parity. 'implemented' means a React module with code/test evidence exists; 'verified' is reserved for full accepted original-source functional and visual parity.",
+  "referenceSha": "26b9f0ce7a1665dee89a7c81824bec09e2c75776",
+  "note": "Immutable final source reference; changed modules previously marked implemented or verified have been downgraded to in-progress for review. Original evidence is retained, not re-approved.",
   "modules": [
     {
       "source": "src/modules/apps/about.js",
-      "sha": "bad9a14576e16a55b14cb0b6ecf11fc2214c9fb8",
+      "sha": "a383e3ba141e056fc3027fb835ea423016b6e3b3",
       "area": "apps",
-      "status": "implemented",
+      "status": "in-progress",
       "evidence": [
         "packages/apps/about/src/AboutApp.tsx",
         "packages/apps/about/src/model.test.ts",
         "tests/e2e/about.spec.ts",
         "migration/ABOUT-SOURCE.md"
       ],
-      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending",
+      "rebaseReview": "New pinned source changed since the previous verification; re-accept before claiming implemented."
     },
     {
       "source": "src/modules/apps/bin.js",
-      "sha": "c23d256403c1c37812c61bdeef9a0f4edaef6c39",
+      "sha": "3d7cc838853aa588dff18f2a6803353985cfc6c8",
       "area": "apps",
       "status": "in-progress",
       "evidence": [
@@ -98,7 +99,7 @@
     },
     {
       "source": "src/modules/apps/computer.js",
-      "sha": "47aa521237c10f5e6763df37a1d8dcd73330f84f",
+      "sha": "aa24d001770ffb3dc20e98486980385772eccd60",
       "area": "apps",
       "status": "in-progress",
       "evidence": [
@@ -185,7 +186,7 @@
     },
     {
       "source": "src/modules/apps/ie.js",
-      "sha": "9cf202d89e270465e75467b0c127f87c296ff07b",
+      "sha": "c9d94e9123d4037b208e43ebf7a38012a1001050",
       "area": "apps",
       "status": "in-progress",
       "evidence": [
@@ -202,7 +203,7 @@
     },
     {
       "source": "src/modules/apps/index.js",
-      "sha": "de7b013391d9ea1a9d9165e5ba1594ef8a2622c3",
+      "sha": "1efbe9ef122b4d31643c25e6f139603d04423eb1",
       "area": "apps",
       "status": "pending",
       "evidence": []
@@ -291,7 +292,7 @@
     },
     {
       "source": "src/modules/apps/notepad.js",
-      "sha": "f373cdc2dd1b1e77b7495d450fa464d829671384",
+      "sha": "2a3a22ca61eb1834a9777128830dca9b7411f853",
       "area": "apps",
       "status": "in-progress",
       "evidence": [
@@ -304,7 +305,7 @@
     },
     {
       "source": "src/modules/apps/paint.js",
-      "sha": "565af433694dcb0b31ced2363f81a7cdb9174ae2",
+      "sha": "8f7ddb1cde4b78dc6c3f7ba8bb215d7cbe22a8f6",
       "area": "apps",
       "status": "pending",
       "evidence": []
@@ -328,7 +329,7 @@
     },
     {
       "source": "src/modules/apps/player.js",
-      "sha": "bea751030d06d2fa11558b6487d99a8ae2383c33",
+      "sha": "9477ad9e1901ec96c46fff688954bd039f21761f",
       "area": "apps",
       "status": "in-progress",
       "evidence": [
@@ -439,29 +440,31 @@
     },
     {
       "source": "src/modules/apps/stickynotes.js",
-      "sha": "2a4ad3cd5cbb927858d60c4cc1358239984a4e5c",
+      "sha": "eaa947321ee838350ae60afdca140ca2067d23a5",
       "area": "apps",
-      "status": "implemented",
+      "status": "in-progress",
       "evidence": [
         "packages/apps/sticky/src/StickyNotesApp.tsx",
         "packages/apps/sticky/src/model.test.ts",
         "tests/e2e/sticky-notes.spec.ts",
         "migration/STICKY-NOTES-SOURCE.md"
       ],
-      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending",
+      "rebaseReview": "New pinned source changed since the previous verification; re-accept before claiming implemented."
     },
     {
       "source": "src/modules/apps/taskmgr.js",
-      "sha": "a91ca8347299b4b4432252726d864689e734ffb0",
+      "sha": "5e687422bb50ff016947020f2d0bc7458882fa62",
       "area": "apps",
-      "status": "implemented",
+      "status": "in-progress",
       "evidence": [
         "packages/apps/taskmgr/src/TaskManagerApp.tsx",
         "packages/apps/taskmgr/src/model.test.ts",
         "tests/e2e/taskmgr.spec.ts",
         "migration/TASKMGR-SOURCE.md"
       ],
-      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending"
+      "verification": "tested-source-backed-slice; remaining-original-visual-and-functional-parity-pending",
+      "rebaseReview": "New pinned source changed since the previous verification; re-accept before claiming implemented."
     },
     {
       "source": "src/modules/apps/testbox.js",
@@ -472,7 +475,7 @@
     },
     {
       "source": "src/modules/apps/webapp.js",
-      "sha": "3cda3df47565e774bc07eb5ef04b3d3d2e8280f8",
+      "sha": "3a13c85377201fbef8ddb6a7a1b6cd440f0f141c",
       "area": "apps",
       "status": "in-progress",
       "evidence": [
@@ -486,7 +489,7 @@
     },
     {
       "source": "src/modules/apps/wordpad.js",
-      "sha": "6432d40fc6344e284986dd659e1c073b92c52f0b",
+      "sha": "1d78f0f5b37b2f6b47b494a8f9c371126c6ac2f8",
       "area": "apps",
       "status": "pending",
       "evidence": []
@@ -675,7 +678,7 @@
     },
     {
       "source": "src/modules/chunks/index.js",
-      "sha": "2c255ac88d59d167a3e2990362d20400203894a3",
+      "sha": "87a06f8b967b6d578d5be88d31be22e69f5271a8",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -696,35 +699,35 @@
     },
     {
       "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~40bd2819.js",
-      "sha": "b0e9fe10e61ccfc12a42bca44c2c35b729dac5be",
+      "sha": "d00eef1bf2d0d22ded98b66d887a226338e48ffb",
       "area": "chunks",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~573b2c8a.js",
-      "sha": "be036b6a7ca6d5966fbc7c4f651314a331426e56",
+      "sha": "55dd97b31e6912543d6a712218e43086a21740e3",
       "area": "chunks",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~m~dcfced3e.js",
-      "sha": "07e127c02d67e84cd5efd5367ba0c67223149c17",
+      "sha": "09588ae42fb3e505c0656eef02ecb10817f43048",
       "area": "chunks",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/chunks/shared~about~boot~bsod~chess~chrome~dock-macos~dock-ubuntu~find~gadgets~games~ie~installer-screen~lo~d493ad97.js",
-      "sha": "628ab627a5df31ff4271e9289c0a1c73de70a227",
+      "sha": "b02d83223aa4b96d6476ee23e82d74b0e75799d6",
       "area": "chunks",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/chunks/shared~about~boot~bsod~chess~chrome~find~gadgets~games~ie~logon~logon-aeronoir~logon-chromeos~logon-~936669a0.js",
-      "sha": "568f7cf02c96921a7a7b4682323c0c26492a7d47",
+      "sha": "42c9e6b970062a59abee5381477effa863db76dd",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -738,7 +741,7 @@
     },
     {
       "source": "src/modules/chunks/shared~billing~boot~bsod~chess~games~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-ma~8b2c8930.js",
-      "sha": "35c59fd862a38cc7d691b7a4b808b01420ba6d13",
+      "sha": "049165d9486880a4677fdd7c10ea3d645297ed60",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -773,7 +776,7 @@
     },
     {
       "source": "src/modules/chunks/shared~bin~bsod~camera~computer~cpanel~games~installer-screen~notepad~paint~player~recorder~shortcut~49e2ebd6.js",
-      "sha": "ed3b984138eed7c830b5fbe4a8be08d58328cb35",
+      "sha": "1dfee4b9bdeb520ca5de3c5a2d5a29b05a21cd57",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -794,7 +797,7 @@
     },
     {
       "source": "src/modules/chunks/shared~bin~bsod~camera~computer~games~notepad~paint~player~recorder~snipping~sound~wordpad.js",
-      "sha": "1bd493881498af653684cd8bcd252fcc5d4def9c",
+      "sha": "82c69b64f64fe497224b8e45d8635cd9826f9fed",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -836,7 +839,7 @@
     },
     {
       "source": "src/modules/chunks/shared~bsod~games~main.js",
-      "sha": "ecca9d786763c6be07df543e94701fe057e545ad",
+      "sha": "b36f5589f37e2d4dbcbf93c7b84487685fdb3711",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -906,7 +909,7 @@
     },
     {
       "source": "src/modules/chunks/shared~device~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
-      "sha": "77353e1e361784196e71b69a216f5bb4a1293671",
+      "sha": "4fa1926147fb5d15a86cfd98358386ee0218780e",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -927,7 +930,7 @@
     },
     {
       "source": "src/modules/chunks/shared~logon-aeronoir~logon-base~logon-chromeos~logon-kubuntu~logon-macos~logon-onebit~logon-oxygen~~1fba687f.js",
-      "sha": "2f8d95bc42069aec789fadc485f58aa23ef8b461",
+      "sha": "9c7b06dc00e07cd29dc4f0e0372c3d4d2c523f2d",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -955,7 +958,7 @@
     },
     {
       "source": "src/modules/chunks/shared~mime-types~player.js",
-      "sha": "90a1ec32f7401de6c3d60fc05dfe249c1e95cefb",
+      "sha": "2e6bdfdb06290268136bf44e0ea11824d2bf9ae4",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -1025,7 +1028,7 @@
     },
     {
       "source": "src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
-      "sha": "a3edd490a0f4e23052f2a3a74a694c8991911c56",
+      "sha": "f12dc55969c79b004fc1b23a38945dada11d27f2",
       "area": "chunks",
       "status": "in-progress",
       "evidence": [
@@ -1036,7 +1039,7 @@
     },
     {
       "source": "src/modules/chunks/shared~plugin-embed~sandbox~vue-app~vue-i18n~vue-store.js",
-      "sha": "b3614c2b8f89b8312ec839a78ebf130e7d4f36ac",
+      "sha": "9b6e1e30a15aa0c15f24c1e85b628d078f9e74d2",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -1085,7 +1088,7 @@
     },
     {
       "source": "src/modules/chunks/shared~taskbar-macos~taskbar-ubuntu.js",
-      "sha": "95ca19d8f560451485e7dee2cc238cc894bb4db7",
+      "sha": "4f66f4e9e696aebaf3ca55c459d0cdd0bbcdeefa",
       "area": "chunks",
       "status": "pending",
       "evidence": []
@@ -1106,14 +1109,14 @@
     },
     {
       "source": "src/modules/gadgets/g-clock.js",
-      "sha": "c2e0e1634041a9ca0e73f3eeb49d2f53ce544942",
+      "sha": "31a9202f8259ec13eff36586fd48fc80abeaef37",
       "area": "gadgets",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/gadgets/g-currency.js",
-      "sha": "f7b38194571dafde6de76971bef042a3a07dfb55",
+      "sha": "2a572fe88ffb69adfd7fefb8461aa2d8a23096fc",
       "area": "gadgets",
       "status": "pending",
       "evidence": []
@@ -1134,35 +1137,35 @@
     },
     {
       "source": "src/modules/gadgets/index.js",
-      "sha": "69e117632de3f692c645df2b2aaef7db44c8c5cf",
+      "sha": "cf4f0613cc5e54aad415776e0df11a8419c5d577",
       "area": "gadgets",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/chess.js",
-      "sha": "61b274afc72bd013755dd7ad899cb05004a3abab",
+      "sha": "6f68f9aa3000e6687c098c64b520634c5ad8025b",
       "area": "games",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/index.js",
-      "sha": "f8df5c554b4624f8d2cd3cfd4272e16b0e21f1a3",
+      "sha": "70221023db21cd3777a2d0ddc33c3af3897687da",
       "area": "games",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/mahjong.js",
-      "sha": "ad223d63bc194f368683686c919857c636580c7d",
+      "sha": "90507f2227ebb33982c9b1c6e164f3610f3e7f48",
       "area": "games",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/minesweeper.js",
-      "sha": "adfe7f694a75d4cb44e77df9b0a8d446cf5ba162",
+      "sha": "6d9214a77e731033fd2e4aba967904e4349edf7e",
       "area": "games",
       "status": "in-progress",
       "evidence": [
@@ -1177,21 +1180,21 @@
     },
     {
       "source": "src/modules/games/onlinegame.js",
-      "sha": "6b7e227dbeac43268c327165842eca0fb4f2f322",
+      "sha": "099706df361afd12516c2d6a567547695c44ba79",
       "area": "games",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/purbleplace.js",
-      "sha": "913115fe1dbc14b3747bc910f1a9a1cd7c71dfd0",
+      "sha": "0d16e5456f27b9fd2f79617ffe65f63f3798d1df",
       "area": "games",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/solitaire.js",
-      "sha": "517c3786537ce265f288dd91c5ce6a215b4cb7cf",
+      "sha": "304f8aba651374cab59bffc9e93d03e29818bb02",
       "area": "games",
       "status": "in-progress",
       "evidence": [
@@ -1217,14 +1220,14 @@
     },
     {
       "source": "src/modules/games/spidersolitaire.js",
-      "sha": "3292dc5caeac2689b1bfadca618cd7bc2de9136f",
+      "sha": "0ea05e829b6c2bbb8b7defb9c0307597dc42872e",
       "area": "games",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/games/tetris.js",
-      "sha": "e9d2c95f9ce215ffb12d3645db88b90fba2dd1a3",
+      "sha": "aef18f8a016befb0277b2445acfe6558a43ebec8",
       "area": "games",
       "status": "in-progress",
       "evidence": [
@@ -1256,7 +1259,7 @@
     },
     {
       "source": "src/modules/plugins/index.js",
-      "sha": "92db30f521ecef91563de1a46a4865a3d0a31d11",
+      "sha": "1be30f69a8f69a923c175ba124bfe7f4b7f99cc0",
       "area": "plugins",
       "status": "pending",
       "evidence": []
@@ -1301,7 +1304,7 @@
     },
     {
       "source": "src/modules/plugins/plugin-iconify.js",
-      "sha": "bbe6d2a929d5ecd2942268856a2dec6f46c7b88e",
+      "sha": "da36357d2a4e5f555565ef9481f23cd3fb5d8fab",
       "area": "plugins",
       "status": "pending",
       "evidence": []
@@ -1406,7 +1409,7 @@
     },
     {
       "source": "src/modules/runtime/index.js",
-      "sha": "90f2311c72875e7ae680ad185fbe4d54ec58bf45",
+      "sha": "8bce395ddede7d273b4d21bee15782b9ba427cb8",
       "area": "runtime",
       "status": "pending",
       "evidence": []
@@ -1476,7 +1479,7 @@
     },
     {
       "source": "src/modules/runtime/vue-app.js",
-      "sha": "69982bdf9dce4de2242b5c27a1a2cef9268e7dc4",
+      "sha": "31a2c529f0523ac8ffdf61793665ff2bfd2a21e1",
       "area": "runtime",
       "status": "pending",
       "evidence": []
@@ -1507,7 +1510,7 @@
     },
     {
       "source": "src/modules/runtime/vue-i18n.js",
-      "sha": "aa34bcfb5c0a383191d4c4ace485a8b680ab0e75",
+      "sha": "58a99e9ca56561f1b5a22b0a2ec48d1a6c840dc3",
       "area": "runtime",
       "status": "pending",
       "evidence": []
@@ -1542,14 +1545,14 @@
     },
     {
       "source": "src/modules/shell/dock-macos.js",
-      "sha": "80bcaf2599879ad06d83d4ada14641fad0a65b95",
+      "sha": "87da916697133ca5943c592e6511a9366d3050c5",
       "area": "shell",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/shell/dock-ubuntu.js",
-      "sha": "83260cc48f312597f8f823ebd656c7c9fac4b0c6",
+      "sha": "ef0dee72df4d5f03ff39c7d1cd5ffb7d4b8ff9a6",
       "area": "shell",
       "status": "pending",
       "evidence": []
@@ -1575,7 +1578,7 @@
     },
     {
       "source": "src/modules/shell/index.js",
-      "sha": "fd0b9442c412889d87d9352cc4f783d20b19cf9f",
+      "sha": "cb11e2f66d3a51ec2fdbb8566a0ee6794da6cec8",
       "area": "shell",
       "status": "pending",
       "evidence": []
@@ -1661,7 +1664,7 @@
     },
     {
       "source": "src/modules/shell/sound.js",
-      "sha": "334d1c5b8e7fb2e4b5041b3484668a6a16b8aad4",
+      "sha": "81f872cb81a707178b719cf8aaed666c745b86d1",
       "area": "shell",
       "status": "pending",
       "evidence": []
@@ -1745,14 +1748,14 @@
     },
     {
       "source": "src/modules/shell/taskbar-base.js",
-      "sha": "74e14446e3ce189ea741604878ec0e1d7af92838",
+      "sha": "eb18afce38d7f508ba179c59e8d6414bb5278870",
       "area": "shell",
       "status": "in-progress",
       "evidence": []
     },
     {
       "source": "src/modules/shell/taskbar-macos.js",
-      "sha": "f0b1d949fa282bb6d1918c115d01a3967022e7cc",
+      "sha": "ac343dc1f2be3b3e3e042483dd703c366370a8b7",
       "area": "shell",
       "status": "pending",
       "evidence": []
@@ -1766,7 +1769,7 @@
     },
     {
       "source": "src/modules/shell/taskbar-ubuntu.js",
-      "sha": "af9ed04d19df2c7534f4d6f846636cccfab45511",
+      "sha": "c404a94ee0561efcaa4fbf916beefe0a28d9dc85",
       "area": "shell",
       "status": "pending",
       "evidence": []
@@ -1815,10 +1818,18 @@
     },
     {
       "source": "src/modules/system/bios.js",
-      "sha": "5fdc82b675dfcc01719e77f282c7a1464711d242",
+      "sha": "82b4083a2c0766fc9e5819080c2aa3296f6e4268",
       "area": "system",
       "status": "pending",
       "evidence": []
+    },
+    {
+      "source": "src/modules/system/close-effects.js",
+      "sha": "cdfb52373c37981d2cf5e58b12a42073d1a47e7e",
+      "area": "system",
+      "status": "pending",
+      "evidence": [],
+      "note": "Added in final baseline; not yet migrated."
     },
     {
       "source": "src/modules/system/device.js",
@@ -1836,7 +1847,7 @@
     },
     {
       "source": "src/modules/system/index.js",
-      "sha": "dfd94009f763e595bb564cfec4d62fc5e816528a",
+      "sha": "4a8b72effda5676f29d35548efe33e94e4bfc6cc",
       "area": "system",
       "status": "pending",
       "evidence": []
@@ -1857,14 +1868,14 @@
     },
     {
       "source": "src/modules/system/locale-names.js",
-      "sha": "4b9abdc9da27a7acc0bc4a484498888f9a5eceba",
+      "sha": "f4b08507ce1c3d9b30d810a5dfe62d8878f32a45",
       "area": "system",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/system/main.js",
-      "sha": "dc9f6cde12815fd43ccac78bb698cc2685db68cd",
+      "sha": "a374be126986c1a29ee512eb028d45552d3420b8",
       "area": "system",
       "status": "in-progress",
       "evidence": [
@@ -2039,7 +2050,7 @@
     },
     {
       "source": "src/modules/themes/index.js",
-      "sha": "e731b562780be7e977cddd54a7f05f00b20f9b4f",
+      "sha": "2d6b6427af20c83a772ff32108329055e000a333",
       "area": "themes",
       "status": "pending",
       "evidence": []
@@ -2235,42 +2246,42 @@
     },
     {
       "source": "src/modules/themes/theme-aeroNoir-scss.js",
-      "sha": "a8a06cc7509b62fc5a8046b9102f4447b2480c5b",
+      "sha": "be07ef24d8856dc6a1ae440eca2367f3a4f840cf",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-chromeos-scss.js",
-      "sha": "4c6b9cf8d8d34b3f2eb9826727afa2311499bcad",
+      "sha": "6304fbd07c3e1ef30bfd676e99a086b39ecf203f",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-kubuntu-scss.js",
-      "sha": "499cb3fcd3dbe95061fe85fdaf5ea261835bc7ea",
+      "sha": "90752cf44a7f9a900c03d1d3c6ead072e0ae5da9",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-macos-scss.js",
-      "sha": "29392de13b0fa623ef93e3c232a435e568b81511",
+      "sha": "830ffcc0b17505f054600b627fcbbd1e750148b4",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-onebit-scss.js",
-      "sha": "f235214ade2b88c0f76bff3ae5afa7a390969c7f",
+      "sha": "3ee21a61d5c698d2ea159ddf3a1ea8532c3ce77f",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-oxygen-scss.js",
-      "sha": "adf12d465c37e8b59a47ee0a2ec1568613272be7",
+      "sha": "4051735c0490bfda4ee855dbaab3e3cf8b0a6dac",
       "area": "themes",
       "status": "pending",
       "evidence": []
@@ -2284,84 +2295,84 @@
     },
     {
       "source": "src/modules/themes/theme-ubuntu-scss.js",
-      "sha": "dc002e248190ebb13344f85f9128c3b553808fd5",
+      "sha": "00654095a7527b6b15e2c0ac55ca07f233dfaccf",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win10-scss.js",
-      "sha": "c8996582b7ca4a8e333469d5c9a4407bdc06fa53",
+      "sha": "413fbad695d0456139e0765a50a0e21fe8fa4b13",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win11-scss.js",
-      "sha": "e4d1d7b4e247702312d5aab976ba6f8f0c5105d7",
+      "sha": "6a38151cd37419e69e58192a8ff487c9fd09bf14",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win31-scss.js",
-      "sha": "2a2ef0a63d802bebd2db121b646bd51b8c11c8ac",
+      "sha": "2ba7974836ae3548c7c695520f116ae776f2d787",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win7-classic-scss.js",
-      "sha": "217e87cfa1768db730d2b04a542d6e6e9fcbc1c3",
+      "sha": "d8527d0e2a6c68d8b68c8c55d6bc6d7994b0f36a",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win7-scss.js",
-      "sha": "a92d0190d5e8991e7ffa2e5ed052af552580017a",
+      "sha": "c15e3758a1756d2ac2d7a5cef014f906f92d29b2",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win8-scss.js",
-      "sha": "563c9498f203f3b364ec43a35e78b88e665e0679",
+      "sha": "0dc922912536e42a43bcc6ce86a199c38e6ce0a6",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-win9x-scss.js",
-      "sha": "93f4373b496c6419aa879f61cd923e539ab951f1",
+      "sha": "59bac54409dd719400245d35268882ae321bbc5c",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-winW-scss.js",
-      "sha": "60f84751e9e1a3022310aa13555b76f0c8e49d63",
+      "sha": "70bf83d82d033065c1458bb6b73a96bf9e2a4a69",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-winlonghorn-scss.js",
-      "sha": "a4f41ec2c6f8986108395b5415346bf44609667b",
+      "sha": "16222a96acbeb3e4645dfc31689e412f3754eeb4",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-winvista-scss.js",
-      "sha": "85016821afaba625cf138e7ee26f2a4ef6becbdc",
+      "sha": "0ab2f2627a079c4c557d6507c0f6394ddf83e31c",
       "area": "themes",
       "status": "pending",
       "evidence": []
     },
     {
       "source": "src/modules/themes/theme-winxp-scss.js",
-      "sha": "617359f6dc7a33b3e838c78e6c392b53015ffdc4",
+      "sha": "780085761632998d6ad003b3f2b754ab7fcab6ea",
       "area": "themes",
       "status": "pending",
       "evidence": []
@@ -2396,7 +2407,7 @@
     },
     {
       "source": "src/modules/workers/index.js",
-      "sha": "53680d39deb64084596ae9e6d2cf3233b379b88a",
+      "sha": "9b27bffa3e0d3df2eb8048b88b551a2b4d6be937",
       "area": "workers",
       "status": "pending",
       "evidence": []
