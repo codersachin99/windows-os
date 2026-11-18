@@ -263,3 +263,39 @@
 .windows-desktop .windows-window__control-glyph{
   display:block;flex:none;pointer-events:none;overflow:visible;
 }
+
+/* Pinned Win7 taskbar-base.js SetIsAeroPeeking + theme-win7-scss.js:
+ * Preview windows remain mounted at their original z/geometry.
+ * Original WindowMain hides children other than window__background
+ * (opacity 0, .3s), removes the Aero backdrop and ignores pointer input.
+ * React WindowFrame has no separate background layer; keep its outline
+ * and fade title/body, without minimizing or closing Guest windows. */
+.windows-desktop[data-theme="win7"] .windows-window__titlebar,
+.windows-desktop[data-theme="win7"] .windows-window__body{
+  transition:opacity .3s;
+}
+.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-window{
+  pointer-events:none;
+  backdrop-filter:none;
+}
+.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-window:not(.is-maximized){
+  background:linear-gradient(140deg,rgba(255,255,255,.5333333333),
+    transparent 100px),
+    linear-gradient(225deg,rgba(255,255,255,.5333333333),
+    transparent 100px);
+}
+.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]:dir(rtl)
+.windows-window:not(.is-maximized){
+  background:linear-gradient(-140deg,rgba(255,255,255,.5333333333),
+    transparent 100px),
+    linear-gradient(-225deg,rgba(255,255,255,.5333333333),
+    transparent 100px);
+}
+.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-window.is-maximized{background:none}
+.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-window__titlebar,
+.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-window__body{opacity:0}
