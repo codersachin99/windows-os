@@ -361,3 +361,60 @@
 .windows-desktop[data-theme="win10"] .windows-window.is-maximized{
   border-radius:0;
 }
+
+
+/* Pinned theme-win8-scss.js WindowMain, WindowTitle and ControlItem;
+ * applies to win8 and win81 while preserving their shared renderer family.
+ * Actual native Guest window drag/focus/control engine remains untouched. */
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window{
+  background:#ebebeb;border:1px solid rgba(0,0,0,.2);
+  border-radius:0;padding:3px 6px 6px;
+  box-shadow:none;backdrop-filter:none;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window.is-active{
+  background:var(--source-win8-tint);
+  box-shadow:0 0 2px rgba(0,0,0,.4);
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window.is-maximized{
+  padding:0;border-radius:0;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__titlebar{
+  flex:0 0 20px;min-height:20px;height:20px;
+  color:#222;padding:0;position:relative;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window.is-active .windows-window__titlebar{
+  color:#fff;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__title{
+  font-size:18px;font-weight:400;text-align:center;
+  color:inherit;text-shadow:none;opacity:1;
+  margin-left:-20px;padding:0;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]):dir(rtl) .windows-window__title{
+  margin-left:0;margin-right:-20px;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__buttons{
+  gap:1px;margin:0;align-self:flex-start;
+  position:relative;top:-2px;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__buttons button{
+  height:20px;min-height:20px;width:28px;
+  color:inherit;border:0;border-radius:0;
+  background:transparent;box-shadow:none;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__buttons button:not(:disabled):hover{
+  color:#fff;background:#3665b3;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__buttons button.windows-window__close{
+  width:42px;color:#fff;background:#bcbcbc;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window.is-active .windows-window__buttons button.windows-window__close{
+  background:#c75050;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__buttons button.windows-window__close:hover,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window.is-active .windows-window__buttons button.windows-window__close:hover{
+  background:#e04343;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-window__body{
+  background:#fff;border:0;
+}
