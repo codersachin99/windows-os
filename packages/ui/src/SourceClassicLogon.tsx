@@ -4,7 +4,8 @@ import type {ThemeId} from "@windows-os/contracts";
 import "./sourceClassicLogon.css";
 
 /** Source logon-win31.js and logon-win9x.js both mount logon-window.
- * This Guest-only adapter preserves their different classic-window positions
+ * Win2k uses the same base with a source-pinned banner. This Guest-only
+ * adapter preserves their different classic-window positions
  * and form entry points. Real account authentication is not yet migrated. */
 export type SourceClassicLogonFamily="win31"|"win95"|"win98"|"win2k";
 

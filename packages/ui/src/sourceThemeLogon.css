@@ -3,7 +3,8 @@
  * src/modules/themes/logon-winxp.js + src/styles/themes/logon-winxp.css
  * src/modules/themes/logon-win11.js + src/styles/themes/logon-win11.css.
  * Source art is byte-imported; external account auth is deliberately unavailable.
- * Full CSS screenshot parity and other 17 screen families are still pending.
+ * Full CSS screenshot parity remains pending for every family; all other
+ * original screen families require independent migration and acceptance.
  */
 .windows-logon.source-xp-logon{
   display:flex;flex-direction:column;align-items:stretch;justify-content:stretch;

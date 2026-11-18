@@ -1,3 +1,18 @@
+## Classic Win31/Win95/Win98/Win2k source Guest logons — 18 November 2026
+
+**Active pinned reference remains** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; original source and `windows-os/main` are unchanged. Existing draft PR #1 remains intentionally unmerged and no release has been published.
+
+- [`5fdb65b`](https://github.com/codersachin99/windows-os/commit/5fdb65bd46096d8276107c144fea3e1e02294f4a): introduced a reusable `SourceClassicLogon` React family adapter for **Win31, Win95 and Win98**, matching pinned source `logon-window` / `logon-form-win9x` screen routing, source Win31 grey backdrop / 40% window placement, Win9x 30% placement, 500px classic pane, authentic existing Guest entry and honest unavailable-account login panel. Added source-ID/Guest/power/responsive Playwright coverage and targeted CI inclusion.
+- [`f67b24a`](https://github.com/codersachin99/windows-os/commit/f67b24a129e7e1ea8146c51b0480853c54089397): extended same shared adapter to **Windows 2000**: original `src/modules/themes/logon-win2k.js` banner / hidden avatar, `logon-win2k.css` blue `#3b6ea4` backdrop, top 20% / 32rem window, six-pixel blue gradient. Original `logo2k.15140c8b.webp` imported binary-identical to source Git blob `028a0e1cd4f9eab7c472482312189eeecd0fc0df`, and added to source artwork verification.
+- The active 36-config-entry/19-family theme catalog plus canonical Win7 is retained. The new 4 original logon families are **incremental Guest adapters**, not complete source-parity themes. Other screen families still use explicitly labelled Win7 fallback; source-specific boot animations, all old-family desktop/taskbar/Start/Explorer styles and source-paired screenshot measurements are not accepted.
+- The final Win9x `--logon-bg` variable value still needs to be traced from the pinned compiled theme config; the current teal background is an explicitly provisional classic adapter, **not confirmed color accuracy**. Account registration/authentication and any social provider are likewise not faked.
+- Prior exact-head [CI #44283674420](https://github.com/codersachin99/windows-os/actions/runs/44283674420) **completed success** on previous `d9972e8`, including typecheck, unit, immutable source/art audits, build and browser tests. That result **does not verify** the new Win31/95/98/2k commits.
+- **This checkpoint commit carries `[run-ci]`** to opt in to TypeScript, unit, source/asset audit, Vite build, focused desktop/mobile classic screen browser tests, then complete browser suite. Read the exact resulting run conclusion before claiming the new head is green. Never run always-on Actions.
+
+**Next highest priority:** repair any new CI failure first. Then capture side-by-side **pinned legacy vs React** logon screenshots on desktop/mobile, reconcile Win9x configured background and original form/active-window state; continue Win7 Desktop/Start/context/Computer/Bin priority alongside other original boot/logon families and eventually every desktop theme. Keep PR draft, preserve all themes and functionality, no premature main merge or release.
+
+---
+
 ## Exact source login artwork audit added — 18 November 2026
 
 - `26457dd` extends `scripts/import-source-theme-assets.py`
