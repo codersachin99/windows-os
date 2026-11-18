@@ -27,6 +27,7 @@ export function PhotoApp({
   const [src,setSrc] = useState("");
   const [files,setFiles] = useState<FileEntry[]>([]);
   const [loading,setLoading] = useState(false);
+  const [saving,setSaving] = useState(false);
   const [error,setError] = useState("");
   const [angle,setAngle] = useState(0);
   const [zoom,setZoom] = useState(100);
@@ -38,6 +39,7 @@ export function PhotoApp({
   const frameRef=useRef<HTMLDivElement|null>(null);
   const urlRef=useRef("");
   const loadEpoch=useRef(0);
+  const navigationPending=useRef(false);
   // Shell dispatch updates must not re-open the same file or reset rotation.
   const titleChanged=useRef(onTitleChange);
   titleChanged.current=onTitleChange;
@@ -92,20 +94,34 @@ export function PhotoApp({
     if(!angle)return true;
     const mime=sourceWritablePhotoMime(filePath);
     const img=imageRef.current;
-    if(!mime || !img || !imageSize){
+    if(!mime || !img){
       setError("The original file format cannot be safely rotated and saved.");
+      return false;
+    }
+    // A responsive <img> can expose naturalWidth before the onLoad state
+    // update is committed. Read its intrinsic size at the exact save point
+    // rather than treating a stale imageSize render as a failed operation.
+    if(!img.complete || !img.naturalWidth){
+      try{await img.decode();}catch{
+        setError("Unable to decode this picture before saving.");
+        return false;
+      }
+    }
+    const width=img.naturalWidth||imageSize?.width||0;
+    const height=img.naturalHeight||imageSize?.height||0;
+    if(!width||!height){
+      setError("Unable to determine this picture's size.");
       return false;
     }
     const sideways=Math.abs(angle)%180!==0;
     const canvas=document.createElement("canvas");
-    canvas.width=sideways?imageSize.height:imageSize.width;
-    canvas.height=sideways?imageSize.width:imageSize.height;
+    canvas.width=sideways?height:width;
+    canvas.height=sideways?width:height;
     const context=canvas.getContext("2d");
     if(!context){setError("Unable to edit this picture");return false;}
     context.translate(canvas.width/2,canvas.height/2);
     context.rotate(angle*Math.PI/180);
-    context.drawImage(img,-imageSize.width/2,-imageSize.height/2,
-      imageSize.width,imageSize.height);
+    context.drawImage(img,-width/2,-height/2,width,height);
     try{
       const blob=await new Promise<Blob>((resolve,reject)=>
         canvas.toBlob(value=>value?resolve(value):reject(new Error("Image encoding failed")),mime,0.92));
@@ -123,11 +139,20 @@ export function PhotoApp({
   },[angle,filePath,imageSize]);
 
   const navigate=useCallback(async (delta:-1|1)=>{
-    if(loading)return;
+    // Canvas encoding and guest file writes are asynchronous. A second
+    // mobile tap must not start another save using the same old path/angle.
+    if(loading||navigationPending.current)return;
     const next=sourcePhotoNextPath(files,filePath,delta);
     if(!next)return;
-    if(!await saveRotation())return;
-    await load(next);
+    navigationPending.current=true;
+    setSaving(true);
+    try{
+      if(!await saveRotation())return;
+      await load(next);
+    }finally{
+      navigationPending.current=false;
+      setSaving(false);
+    }
   },[files,filePath,loading,saveRotation,load]);
 
   const requestClose=useCallback(async()=>{
@@ -197,7 +222,7 @@ export function PhotoApp({
     </div>
     {error&&src&&<div className="source-photo__error" role="alert">{error}</div>}
     <footer className="source-photo__footer">
-      <fieldset className="source-photo__controls" disabled={loading}>
+      <fieldset className="source-photo__controls" disabled={loading||saving}>
         <label className="source-photo__zoom" title="Zoom">
           <span aria-hidden="true">⌕</span>
           <input type="range" aria-label="Zoom" min={100} max={800} step={20}

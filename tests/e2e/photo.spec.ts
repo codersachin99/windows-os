@@ -34,11 +34,17 @@ test("source Windows Photo Viewer opens actual Computer pictures, navigates, rot
   await photo.getByRole("button",{name:"Rotate clockwise"}).click();
   await expect(photo.locator('[data-test-photo-image]')).toHaveAttribute("style",/rotate\(90deg\)/);
   await photo.getByRole("button",{name:"Next picture"}).click();
+  // The click performs a real async canvas write before switching pictures.
+  // A late mobile image decode or save failure must not be hidden by a
+  // stale a.png DOM node or by simply extending the global test timeout.
   await expect(photo.locator('[data-test-photo-image]')).toHaveAttribute("alt","b.png");
+  await expect(photo.locator('[data-test-photo-image]')).toHaveJSProperty("naturalWidth",3);
+  await expect(photo.locator('[role="alert"]')).toHaveCount(0);
   await photo.getByRole("button",{name:"Next picture"}).click(); // source wraps to first
   await expect(photo.locator('[data-test-photo-image]')).toHaveAttribute("alt","a.png");
   await expect(photo.locator('[data-test-photo-image]')).toHaveJSProperty("naturalWidth",2);
   await expect(photo.locator('[data-test-photo-image]')).toHaveJSProperty("naturalHeight",3);
+  await expect(photo.locator('[role="alert"]')).toHaveCount(0);
 
   const zoom=photo.getByRole("slider",{name:"Zoom"});
   await zoom.focus();
