@@ -1,3 +1,81 @@
+## XP/Win11 source-backed Guest logon renderers and CMD restart regression — 18 November 2026
+
+**Source pin:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+All **36 original `defaults.themeScreens` entries / 19 families**
+remain pinned in the shared catalog and documented in
+`migration/ALL-SOURCE-THEMES.md` (plus canonical `win7`).
+No source repository or WindowsOS main-branch changes.
+
+### Actual migrated source code and artwork
+
+- `dea81a7`: copied original `assets/images/logoxp.9b034658.png`
+  (source Git blob SHA `33b3bca96d3c07994b096bf13d2a87a6a05b1196`)
+  and `assets/images/guest-win10.a110df5a.webp`
+  (source Git blob SHA `57caee256e62a46271db867a088f49b1981bbc7d`)
+  into `apps/web/public/assets/images` with **byte-identical
+  Git hashes**. No generated/substitute art.
+- `f71b8e9`, `f4b7184`: real React source XP login structure
+  from `src/modules/themes/logon-winxp.js`:
+  two 13%-height dark blue regions, radial blue middle background,
+  logo and prompt on left, divider, clickable Guest row on right;
+  responsive narrow viewports. Dedicated Win11 login structure from
+  `src/modules/themes/logon-win11.js` and `logon-base.js`:
+  original Win11 wallpaper, original 150px guest-win10 avatar,
+  black/50 overlay, centered Guest and login action; source-like
+  translucent buttons and mobile-safe dimensions. Source login
+  family routing also covers XP color variants and Win11-dark.
+- `41c1948`, `76d8892`, `7ef17e4`: centralize source art in
+  `sourceThemeLogonArtwork`, use it in React and test exact asset
+  contract. Retain `data-test-avatar="win7"` as a compatibility
+  action selector; `data-source-logon-renderer` now reports
+  `winxp`/`win11` for actually implemented views and
+  `win7-fallback` for the other original screen families.
+- `ff5353a`: desktop/mobile Playwright checks source XP logo,
+  three-band CSS, Win11 source guest/wallpaper/overlay, selected
+  theme passing through explicit Guest login, power options and
+  honest unsupported account backend behavior.
+- `c13ae2e`, `7add53d`: source theme matrix and complete theme
+  inventory updated with concrete implementation status and remaining
+  screenshot/boot/auth parity gaps.
+
+### CI regression discovered and fixed
+
+- Previous [source startup CI #44279822077](https://github.com/codersachin99/windows-os/actions/runs/44279822077)
+  passed TypeScript, unit/source/artwork/production build and **208
+  targeted browser tests**, but failed the full browser suite with
+  **682 passed, 2 failed, 2 skipped**. Both failures occurred in
+  `tests/e2e/cmd-source-files.spec.ts` (desktop/mobile): after clicking
+  simulated BSOD, the test still expected a boot screen, contradicting
+  final `skipBoot=true`. This is an obsolete expectation, not a
+  request to reintroduce the old boot animation.
+- `c82bedb` changes the source CMD BSOD click test to assert
+  **BootScreen absent, Guest Logon present, Desktop absent before
+  authentication**, then explicitly click Guest to enter desktop.
+  `f2397a0` includes CMD source tests in focused opt-in CI.
+- [Previous catalog CI #44281267348](https://github.com/codersachin99/windows-os/actions/runs/44281267348)
+  already passed TypeScript, unit, source audit, Vite build and
+  focused browser; full suite was in progress at note time.
+  [Recent Start CI #44278251054](https://github.com/codersachin99/windows-os/actions/runs/44278251054)
+  is complete **success** on its older head.
+
+**This handoff `[run-ci]` commit triggers a NEW exact-head gate**
+covering original XP/Win11 login, source art, safe theme catalog,
+corrected CMD/BSOD restart, Vitest, TypeScript, Vite, 2D browser
+desktop/mobile focused then full. Do not claim successful verification
+until the new run completes. Screenshot reference parity, original
+per-theme boot animations and 16 other login families remain pending.
+No merge, tag or release; draft PR #1 continues.
+
+### Next task
+
+Fix any exact-head CI failures first; compare source/React XP and Win11
+login screenshots at desktop/mobile sizes, then migrate source-specific
+remaining login/boot families. Maintain original desktop/context,
+Start menu and Computer/Recycle Bin highest priorities. Avoid
+always-on CI; only deliberate `[run-ci]` commits.
+
+---
+
 ## Full final-source theme catalog and screen routing — 18 November 2026
 
 **User clarified: WindowsOS must migrate ALL original themes, not just XP/Win7/Win11.** Source remains pinned to
