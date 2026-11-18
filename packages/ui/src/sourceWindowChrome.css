@@ -200,8 +200,8 @@
   backdrop-filter:none;
 }
 .windows-desktop[data-theme="win11"] .windows-window.is-active{
-  border-color:var(--theme-color,var(--source-border));
-  background:var(--theme-color,var(--source-surface));
+  border-color:var(--theme-accent,var(--theme-color,var(--source-border)));
+  background:var(--theme-accent,var(--theme-color,var(--source-surface)));
   box-shadow:0 0 24px rgba(0,0,0,.2);
 }
 .windows-desktop[data-theme="win11"] .windows-window__titlebar{
