@@ -224,3 +224,38 @@ test("source Win8 tile grids scroll horizontally from vertical and horizontal wh
   await expect.poll(()=>grid.evaluate(el=>el.scrollLeft)).toBeGreaterThan(afterVertical);
   await expect(start).toBeVisible();
 });
+
+
+for(const theme of ["win8","win81"] as const){
+  test("source "+theme+" Search keyboard navigation selects and launches results",async({page})=>{
+    await guest(page,theme);
+    const start=await openStart(page);
+    await start.locator('[data-test-start-search-button]').click();
+    const flyout=start.locator('[data-test-win8-start-flyout]');
+    const input=flyout.getByRole("searchbox",{name:"Search programs and files"});
+    const all=flyout.locator('[data-test-win8-start-result]');
+    const selected=flyout.locator('[data-test-win8-start-result-selected]');
+    await input.fill("e");
+    expect(await all.count()).toBeGreaterThan(1);
+    await expect(selected).toHaveCount(0);
+    await input.press("ArrowDown");
+    await expect(selected).toHaveCount(1);
+    await expect(all.first()).toHaveAttribute("data-test-win8-start-result-selected","");
+    await input.press("ArrowDown");
+    await expect(all.nth(1)).toHaveAttribute("data-test-win8-start-result-selected","");
+    await input.press("ArrowUp");
+    await expect(all.first()).toHaveAttribute("data-test-win8-start-result-selected","");
+    await input.press("ArrowUp");
+    await expect(all.last()).toHaveAttribute("data-test-win8-start-result-selected","");
+    // Changing the search query resets selection rather than opening a
+    // stale index from the previous result list.
+    await input.fill("notepad");
+    await expect(selected).toHaveCount(0);
+    await input.press("ArrowDown");
+    await expect(flyout.locator('[data-test-win8-start-result="notepad"]'))
+      .toHaveAttribute("data-test-win8-start-result-selected","");
+    await input.press("Enter");
+    await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+    await expect(start).toHaveCount(0);
+  });
+}
