@@ -6,16 +6,19 @@ import type {SourceRecentStorage} from "./recentPrograms";
  * full-size button with a label. The source does not actually change
  * loadItems() when selecting these options: it keeps each window id.
  * Lock, auto-hide and small-icon checkboxes are source-disabled.
+ * The source taskbar store defaults useAeroPeek=false; taskbar.js exposes
+ * the setting for Aero Peek-capable themes. Only Win7 is rendered here.
  */
 export type SourceTaskbarButtonMode=
   "combine"|"combine-when-full"|"no-combine";
 export interface SourceTaskbarPreferences{
   type:SourceTaskbarButtonMode;
+  useAeroPeek:boolean;
 }
 export const SOURCE_TASKBAR_PREFERENCES_KEY=
   "windows-os:guest:taskbar-preferences:v1";
 export const SOURCE_DEFAULT_TASKBAR_PREFERENCES:SourceTaskbarPreferences=
-  Object.freeze({type:"combine"});
+  Object.freeze({type:"combine",useAeroPeek:false});
 export function isSourceTaskbarButtonMode(value:unknown):value is SourceTaskbarButtonMode{
   return value==="combine"||value==="combine-when-full"||value==="no-combine";
 }
@@ -27,7 +30,10 @@ export class SourceTaskbarPreferenceStore{
     let parsed:unknown=null;
     try{parsed=JSON.parse(storage?.getItem(key)??"null");}catch{parsed=null;}
     const cfg=parsed&&typeof parsed==="object"?parsed as Record<string,unknown>:{};
-    this.value={type:isSourceTaskbarButtonMode(cfg.type)?cfg.type:"combine"};
+    this.value={
+      type:isSourceTaskbarButtonMode(cfg.type)?cfg.type:"combine",
+      useAeroPeek:typeof cfg.useAeroPeek==="boolean"?cfg.useAeroPeek:false
+    };
   }
   snapshot():SourceTaskbarPreferences{return {...this.value};}
   subscribe(listener:(value:SourceTaskbarPreferences)=>void):()=>void{
@@ -36,8 +42,9 @@ export class SourceTaskbarPreferenceStore{
   }
   apply(value:SourceTaskbarPreferences):void{
     const type=isSourceTaskbarButtonMode(value.type)?value.type:"combine";
-    if(this.value.type===type)return;
-    this.value={type};
+    const useAeroPeek=value.useAeroPeek===true;
+    if(this.value.type===type&&this.value.useAeroPeek===useAeroPeek)return;
+    this.value={type,useAeroPeek};
     try{this.storage?.setItem(this.key,JSON.stringify(this.value));}
     catch{/* The active Guest session continues in private-storage mode. */}
     for(const listener of this.listeners)listener(this.snapshot());
