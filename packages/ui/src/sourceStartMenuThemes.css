@@ -331,3 +331,29 @@
 .windows-startmenu--win11.is-all-programs .windows-startmenu__program:disabled{
   opacity:.52;cursor:default;
 }
+
+
+/* Final Win7 source startmenu-base.js: its default left column shows
+ * recentPrograms (data-test-list-recent), separate from All Programs
+ * and search results. Use the existing Guest-only recent program store
+ * and preserve the initial launcher grid until the full original
+ * Win7 item/catalog composition is captured and accepted. */
+.windows-startmenu[data-source-start-theme="win7"] .windows-startmenu__recent{
+  flex:none;min-height:0;max-height:min(218px,40vh);
+  overflow-y:auto;padding:5px 4px 7px;margin:0 4px 3px;
+  border-bottom:1px solid #bdc9d5;
+  color:#172c40;background:transparent;
+}
+.windows-startmenu[data-source-start-theme="win7"] .windows-startmenu__recent-grid button{
+  min-height:34px;padding:3px 7px;gap:8px;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+  border:1px solid transparent;border-radius:2px;
+}
+.windows-startmenu[data-source-start-theme="win7"] .windows-startmenu__recent-grid button:hover,
+.windows-startmenu[data-source-start-theme="win7"] .windows-startmenu__recent-grid button:focus-visible{
+  color:#1b364d;background:linear-gradient(#e1f3fe,#b4d8f2);
+  border-color:#76abcb;outline:none;
+}
+.windows-startmenu[data-source-start-theme="win7"] .windows-startmenu__recent-grid img{
+  width:28px;height:28px;object-fit:contain;
+}
