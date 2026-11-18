@@ -1,3 +1,56 @@
+## Full final-source theme catalog and screen routing — 18 November 2026
+
+**User clarified: WindowsOS must migrate ALL original themes, not just XP/Win7/Win11.** Source remains pinned to
+`codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+Exact `app.config.json defaults.themeScreens` has **36 named entries
+grouped into 19 boot/logon screen families**, plus the canonical
+React/original shell `win7` ID, for 37 recognized runtime IDs.
+The full list and family breakdown is in
+`migration/ALL-SOURCE-THEMES.md` (including all Aero/Basic/XP variants,
+Win31/95/98/2k/Vista/8/8.1/10/11dark, macOS, ChromeOS,
+Ubuntu/Kubuntu, winLS/winLP, Aero Noir, Oxygen, winW, OneBit).
+
+**Source-backed code committed on this feature branch:**
+- `dab82d5`, `95cfb9e`: exact source screen map plus a complete,
+  typed `ThemeId` contract; no collapsing of variants; explicit
+  `sourceThemeShellStatus` distinguishes partial (Win7/XP/11) from
+  pending themes. The catalog is **not** a visual parity claim.
+- `ec0c187`: source testmode theme selection and persisted values
+  now validate against all literal known IDs, never arbitrary strings,
+  URL paths or unsafe object property names.
+- `dba683f`, `265ed9c`, `8efbae8`: unit tests for source
+  36-entry map, 19-family aliases, exact variant casing, invalid
+  theme protection, and persisted/testmode theme handling.
+- `cd86490`, `0c235ee`, `328d4a1`: Boot, Guest Logon, Switch User
+  now receive the selected original source theme and its configured
+  `boot`/`logon` screen family. **Until source-specific view
+  components/assets are migrated**, the existing Win7 markup remains
+  the visual renderer; `data-source-*-renderer="win7-fallback"`
+  explicitly reveals this gap. No pretend XP/Win11/macOS UI.
+- `3c3c464`: desktop/mobile Playwright checks original family mapping,
+  honest fallback state, canonical Win7 logon, arbitrary-ID rejection,
+  and explicit Guest authentication for Win11-dark source theme.
+- `ee00a6a`, `c154844`, `d1ab919`: theme inventory, focused
+  browser gate, and final-source parity matrix updated.
+
+**This handoff commit uses `[run-ci]` to request the new exact-head
+TypeScript, unit, source integrity, byte-identical source artwork, Vite
+and focused/full desktop/mobile browser tests.** The earlier source
+Win7 recent Start [#44278251054](https://github.com/codersachin99/windows-os/actions/runs/44278251054)
+and startup [#44279822077](https://github.com/codersachin99/windows-os/actions/runs/44279822077)
+were still running the full browser suite at the time this entry
+was written. Do not call this new head accepted until its run
+concludes successfully.
+
+**Next priority:** fix CI regressions, then port exact source
+boot/login views and assets for XP/11 and all other theme screen
+families via reusable adapters; preserve Win7 Desktop/Start/context
+and Computer/Bin priority. Run source-vs-React screenshots before
+claiming pixel perfection. No original-source changes, no
+main merge/release, PR #1 stays draft.
+
+---
+
 ## Source-final startup defaults (skipBoot true, nativeCursor true) — 18 November 2026
 
 **Source remains immutable and pinned:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
