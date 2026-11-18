@@ -73,3 +73,24 @@ test("final source thumbnail closes one instance without closing the group",asyn
   await expect(page.locator('[data-test-window="computer"]')).toHaveCount(1);
   await expect(group).toHaveAttribute("data-test-taskbar-group-size","1");
 });
+
+test("singleton running label retains unsaved window title; grouped label is program name",async({page})=>{
+  await guest(page);
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await page.locator('[data-test-program="notepad"]').click();
+  const win=page.locator('[data-test-window="notepad"]');
+  await expect(win).toBeVisible();
+  await win.locator(".cm-content").fill("Unsaved draft");
+  await expect(win.locator(".windows-window__title"))
+    .toHaveText("*Untitled - Notepad");
+  const group=page.locator('[data-test-taskbar-running-group="notepad"]');
+  await expect(group).toHaveAttribute("data-test-taskbar-group-size","1");
+  await expect(group).toHaveAttribute("aria-label","Switch to *Untitled - Notepad");
+  await win.getByRole("button",{name:/^Minimize /}).click();
+  await group.click();
+  await expect(win).toBeVisible();
+  await expect(win.locator(".cm-content")).toContainText("Unsaved draft");
+  await win.getByRole("button",{name:/^Close /}).click();
+  const prompt=win.getByRole("alertdialog",{name:"Save changes"});
+  await prompt.getByRole("button",{name:"No"}).click();
+});
