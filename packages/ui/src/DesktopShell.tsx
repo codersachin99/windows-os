@@ -30,6 +30,7 @@ import { TaskManagerApp } from "@windows-os/apps/taskmgr";
 import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
+import {SourceMessageDialog} from "./sourceMessage";
 import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
@@ -514,6 +515,11 @@ export function DesktopShell({
       {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
         onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}/>}
+      {state.windowLimitError&&
+        <div className="windows-desktop__limit-alert" data-test-window-limit-alert="">
+          <SourceMessageDialog data={{type:"error",message:state.windowLimitError}}
+            onClose={()=>dispatch({type:"CLEAR_WINDOW_LIMIT_ERROR"})}/>
+        </div>}
     </main>
   );
 }

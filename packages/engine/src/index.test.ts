@@ -263,3 +263,37 @@ describe("pinned Tetris fullscreen but non-resizable WindowMain contract",()=>{
       .windows[0].maximized).toBe(true);
   });
 });
+
+describe("final source global and per-app multi-window limits",()=>{
+  it("allows three windows, then focuses an existing one and shows original error",()=>{
+    const logged=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const app=appRegistry.get("computer")!;
+    const first=desktopReducer(logged,{type:"OPEN_APP",app});
+    const second=desktopReducer(first,{type:"OPEN_APP",app});
+    const third=desktopReducer(second,{type:"OPEN_APP",app});
+    expect(third.windows).toHaveLength(3);
+    const capped=desktopReducer(third,{type:"OPEN_APP",app});
+    expect(capped.windows).toHaveLength(3);
+    expect(capped.windowLimitError).toBe("You have already opened too many windows");
+    expect(capped.topZ).toBe(third.topZ+1);
+    const cleared=desktopReducer(capped,{type:"CLEAR_WINDOW_LIMIT_ERROR"});
+    expect(cleared.windowLimitError).toBeNull();
+    const closed=desktopReducer(cleared,{type:"CLOSE_WINDOW",id:first.windows[0].id});
+    expect(desktopReducer(closed,{type:"OPEN_APP",app}).windows).toHaveLength(3);
+  });
+  it("honors source overrides for unlimited and single-window applications",()=>{
+    const logged=desktopReducer(desktopReducer(initialDesktopState(),
+      {type:"BOOT_COMPLETE"}),{type:"GUEST_LOGIN"});
+    const base=appRegistry.get("computer")!;
+    let state=logged;
+    for(let i=0;i<5;i++)
+      state=desktopReducer(state,{type:"OPEN_APP",app:{...base,maxWindowsPerApp:0}});
+    expect(state.windows).toHaveLength(5);
+    const singleton={...base,id:"single-view",allowMultipleWindows:false};
+    const one=desktopReducer(logged,{type:"OPEN_APP",app:singleton});
+    const again=desktopReducer(one,{type:"OPEN_APP",app:singleton});
+    expect(again.windows).toHaveLength(1);
+    expect(again.windowLimitError).toBeUndefined();
+  });
+});

@@ -91,11 +91,19 @@ export function sourceWindowPlacement(
   return { x, y, width, height };
 }
 
+/** Final source app.config.json maxWindowsPerApp=3; zero disables cap. */
+export const SOURCE_FINAL_MAX_WINDOWS_PER_APP=3;
+export function sourceWindowLimit(app:AppDefinition):number{
+  const cap=app.maxWindowsPerApp;
+  return cap===undefined?SOURCE_FINAL_MAX_WINDOWS_PER_APP:
+    Number.isInteger(cap)&&cap>=0?cap:SOURCE_FINAL_MAX_WINDOWS_PER_APP;
+}
 function openWindow(state: DesktopState, app: AppDefinition, file?: { path: string }): DesktopState {
   if (state.phase !== "desktop") return state;
   // Source Sticky Notes and Magnifier each address a single shell window
   // by their original fixed program IDs, even across repeated Start/Run opens.
-  const singleton = app.id === "sticky" || app.id === "magnifier"
+  const singleton = app.allowMultipleWindows===false
+    || app.id === "sticky" || app.id === "magnifier"
     || app.id === "about" || app.id === "taskmgr" || app.id === "find";
   const alreadyOpen = singleton
     ? state.windows.find(window => window.appId === app.id) : undefined;
@@ -104,6 +112,15 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
     windows: state.windows.map(window => window.id === alreadyOpen.id
       ? { ...window, z: state.topZ + 1, minimized: false } : window)
   };
+  const instances=state.windows.filter(win=>win.appId===app.id);
+  const cap=sourceWindowLimit(app);
+  if(cap>0&&instances.length>=cap){
+    const front=instances.reduce((a,b)=>a.z>b.z?a:b);
+    return {...state,startOpen:false,topZ:state.topZ+1,
+      windowLimitError:"You have already opened too many windows",
+      windows:state.windows.map(win=>win.id===front.id
+        ?{...win,minimized:false,z:state.topZ+1}:win)};
+  }
   const ordinal = state.nextWindowId;
   const window = {
     id: `${app.id}-${ordinal}`,
@@ -161,6 +178,8 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
     }
     case "OPEN_APP":
       return openWindow(state, action.app, action.file);
+    case "CLEAR_WINDOW_LIMIT_ERROR":
+      return state.windowLimitError?{...state,windowLimitError:null}:state;
     case "FOCUS_WINDOW": {
       if (!state.windows.some(window => window.id === action.id)) return state;
       return {

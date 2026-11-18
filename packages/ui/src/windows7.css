@@ -232,3 +232,6 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .windows-desktop[data-theme="win11"] .windows-taskbar__context button:not(:disabled):hover{
   background:#e5f3ff;border-radius:4px;
 }
+
+/* Final legacy source maxWindowsPerApp: Guest error above taskbar/windows. */
+.windows-desktop__limit-alert{position:fixed;inset:0;z-index:5500;pointer-events:auto}

@@ -7,6 +7,10 @@ export interface AppDefinition {
   label: string;
   icon: string;
   kind: AppKind;
+  /** Original registry/shortcut per-app multiwindow override. */
+  allowMultipleWindows?:boolean;
+  /** 0 means unlimited; undefined inherits source global cap 3. */
+  maxWindowsPerApp?:number;
   window: { width: number; height: number; resizable?: boolean; centered?: boolean;
     /** Pinned fullscreen WindowMain can be fixed-size while maximized. */
     fullscreen?:boolean;
@@ -45,6 +49,7 @@ export interface DesktopState {
   startOpen: boolean;
   selectedIcon: string | null;
   wallpaper: string;
+  windowLimitError?:string|null;
 }
 
 export type DesktopAction =
@@ -57,6 +62,7 @@ export type DesktopAction =
   | { type: "BSOD"; code: string }
   | { type: "RESTART" }
   | { type: "OPEN_APP"; app: AppDefinition; file?: { path: string } }
+  | { type: "CLEAR_WINDOW_LIMIT_ERROR" }
   | { type: "FOCUS_WINDOW"; id: string }
   | { type: "MOVE_WINDOW"; id: string; x: number; y: number }
   | { type: "MINIMIZE_WINDOW"; id: string }
