@@ -10,9 +10,11 @@ interface WindowFrameProps {
   onRequestClose?: () => void;
   /** Highest visible Guest window, mirrors source window__main.active. */
   active?: boolean;
+  /** Final source taskbar thumbnail hover isolates this Guest window. */
+  peekTarget?:boolean;
 }
 
-export function WindowFrame({ window: win, theme, dispatch, children, onRequestClose,active=false }: WindowFrameProps) {
+export function WindowFrame({ window: win, theme, dispatch, children, onRequestClose,active=false,peekTarget=false }: WindowFrameProps) {
   const drag = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const style: CSSProperties = win.maximized
     ? { inset: "0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
@@ -43,6 +45,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     <section role="dialog" aria-label={win.title} aria-hidden={win.minimized || undefined}
       data-test-window={win.minimized ? undefined : win.appId}
       data-test-window-id={win.id}
+      data-source-taskbar-peek-active={peekTarget?"true":undefined}
       className={`windows-window${active?" is-active":""}${win.maximized?" is-maximized":""}`}
       data-source-window-active={active?"true":"false"}
       style={win.minimized ? { ...style, display: "none" } : style} onPointerDown={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })}>
