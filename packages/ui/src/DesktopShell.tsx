@@ -499,6 +499,7 @@ export function DesktopShell({
             return <button key={"pin:"+programId}
               className={"windows-taskbar__application is-pinned"+
                 (running?" is-running":"")+
+                (instances.some(win=>!win.minimized&&win.z===highestVisibleWindowZ)?" is-active":"")+
                 (instances.length>1?" is-stacked":"")+
                 (buttonMode!=="combine"?" is-full-size":"")}
               data-test-taskbar-pin={programId}
@@ -538,6 +539,7 @@ export function DesktopShell({
               data-test-taskbar-group-size={windows.length}
               className={"windows-taskbar__application"+
                 (windows.every(item=>item.minimized)?" is-minimized":"")+
+                (windows.some(item=>!item.minimized&&item.z===highestVisibleWindowZ)?" is-active":"")+
                 (windows.length>1?" is-stacked":"")+
                 (buttonMode!=="combine"?" is-full-size":"")}
               title={windows.length>1?(app?.label??win.appId):win.title}

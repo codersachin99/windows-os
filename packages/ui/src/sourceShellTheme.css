@@ -199,3 +199,107 @@
   }
   .windows-desktop .windows-taskbar__item-label{font-size:11px}
 }
+
+
+/* Pinned legacy-win7 theme-win10-scss.js: source desktop selection and
+ * Win10 taskbar__wrapper/main-item/tray/startbutton. This is a bounded
+ * shell adapter, not the full source Win10 Start menu or theme parity. */
+.windows-desktop[data-theme="win10"]{
+  --source-win10-accent:var(--theme-accent,var(--theme-color,#0078d7));
+  --source-win10-taskbar:#101010;
+  font-family:"Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar{
+  height:40px;gap:1px;padding:0 4px;
+  color:#fff;background:#101010;
+  border-top:0;box-shadow:none;backdrop-filter:none;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__start{
+  flex:0 0 40px;width:40px;height:40px;margin:0;
+  border:0;border-radius:0;background:transparent;
+  display:grid;place-items:center;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__start:hover{
+  background:#272727;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__start:active{
+  background:#1b1b1b;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__start img{
+  width:20px;height:20px;filter:none;object-fit:contain;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__running{
+  gap:1px;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application{
+  position:relative;flex-basis:40px;width:40px;height:40px;
+  border:0;border-radius:0;background:transparent;box-shadow:none;color:#fff;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application:hover{
+  background:#272727;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application:active{
+  background:#1b1b1b;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application.is-active{
+  background:#333;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application.is-active:hover{
+  background:#474747;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application.is-active:active{
+  background:#3d3d3d;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application::after{
+  content:"";position:absolute;left:5px;right:5px;bottom:0;height:3px;
+  transition:left .2s,right .2s;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application.is-running::after,
+.windows-desktop[data-theme="win10"] .windows-taskbar__application[data-test-taskbar-running-group]::after{
+  background:var(--theme-color--light,#60a5fa);
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__application:hover::after,
+.windows-desktop[data-theme="win10"] .windows-taskbar__application.is-active::after{
+  left:0;right:0;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__tray{
+  color:#fff;gap:7px;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__tray>button,
+.windows-desktop[data-theme="win10"] .windows-taskbar__clock{
+  color:#fff;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__tray>button:hover{
+  background:#272727;
+}
+.windows-desktop[data-theme="win10"] .windows-taskbar__show-desktop{
+  width:5px;height:40px;flex:0 0 5px;
+  background:none;border:0;border-left:1px solid #707070;
+  box-shadow:none;
+}
+.windows-desktop[data-theme="win10"] .windows-desktop__shortcut:hover{
+  background:rgba(57,142,211,.2);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1333333333);
+}
+.windows-desktop[data-theme="win10"] .windows-desktop__shortcut.is-active{
+  background:rgba(57,142,211,.5333333333);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1333333333);
+}
+.windows-desktop[data-theme="win10"] .windows-desktop__shortcut.is-active:hover{
+  background:rgba(57,142,211,.4);
+}
+.windows-desktop[data-theme="win10"] .desktop__icon-name:not(.is-input){
+  color:#fff;text-shadow:1px 1px 1px #000;
+}
+.windows-desktop[data-theme="win10"]:dir(rtl)
+.desktop__icon-name:not(.is-input){
+  text-shadow:-1px 1px 1px #000;
+}
+@media(max-width:530px){
+  .windows-desktop[data-theme="win10"] .windows-taskbar__tray{
+    gap:3px;
+  }
+  .windows-desktop[data-theme="win10"] .windows-taskbar__clock{
+    min-width:55px;font-size:10px;
+  }
+}

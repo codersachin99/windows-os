@@ -299,3 +299,65 @@
 .windows-window__titlebar,
 .windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
 .windows-window__body{opacity:0}
+
+
+/* Pinned legacy-win7 theme-win10-scss.js WindowMain / ControlItem.
+ * White square frame, 44×28 caption controls and the original
+ * #e81123 close hover. Existing WindowFrame still owns Guest window
+ * focus/resize/close; the complete source window UX remains pending. */
+.windows-desktop[data-theme="win10"] .windows-window{
+  border:1px solid #aaa;border-radius:0;padding:0;
+  background:#fff;backdrop-filter:none;
+  box-shadow:0 0 6px rgba(0,0,0,.2);
+}
+.windows-desktop[data-theme="win10"] .windows-window.is-active{
+  border-color:var(--source-win10-accent);
+  box-shadow:0 0 12px 1px rgba(0,0,0,.3333333333);
+}
+.windows-desktop[data-theme="win10"] .windows-window__titlebar{
+  flex:0 0 28px;min-height:28px;padding-left:8px;
+  margin:0;color:#222;background:#fff;
+}
+.windows-desktop[data-theme="win10"]:dir(rtl) .windows-window__titlebar{
+  padding-left:0;padding-right:8px;
+}
+.windows-desktop[data-theme="win10"] .windows-window.is-active .windows-window__titlebar{
+  color:#fff;background:var(--source-win10-accent);
+}
+.windows-desktop[data-theme="win10"] .windows-window__titlebar>img{
+  width:22px;height:22px;
+}
+.windows-desktop[data-theme="win10"] .windows-window__title{
+  color:inherit;text-shadow:none;opacity:.6;
+}
+.windows-desktop[data-theme="win10"] .windows-window.is-active .windows-window__title{
+  opacity:1;
+}
+.windows-desktop[data-theme="win10"] .windows-window__buttons{
+  gap:0;margin:0;align-self:flex-start;
+}
+.windows-desktop[data-theme="win10"] .windows-window__buttons button,
+.windows-desktop[data-theme="win10"] .windows-window__buttons button.windows-window__close{
+  width:44px;height:28px;min-height:28px;
+  border:0;border-radius:0;color:inherit;
+  background:transparent;box-shadow:none;
+  transition:background-color .1s;
+}
+.windows-desktop[data-theme="win10"] .windows-window__buttons button:hover{
+  background:rgba(0,0,0,.15);
+}
+.windows-desktop[data-theme="win10"] .windows-window__buttons button:active{
+  background:rgba(0,0,0,.2);
+}
+.windows-desktop[data-theme="win10"] .windows-window__buttons button.windows-window__close:hover{
+  color:#fff;background:#e81123;
+}
+.windows-desktop[data-theme="win10"] .windows-window__buttons button.windows-window__close:active{
+  background:#f1707a;
+}
+.windows-desktop[data-theme="win10"] .windows-window__body{
+  border:0;background:#fff;
+}
+.windows-desktop[data-theme="win10"] .windows-window.is-maximized{
+  border-radius:0;
+}
