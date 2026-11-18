@@ -31,7 +31,11 @@ test("source ChangeBackground system tiles stage changes until Save and Cancel",
   await expect(desktop).toHaveAttribute("data-test-desktop-background",fallback);
   let view=await backgroundView(page);
   const system=view.locator('[data-test-bg-list="system"]');
-  await expect(system.locator("[data-test-bg-item]")).toHaveCount(7);
+  // The original Win10 wallpaper is now byte-imported, so the source
+  // system-background gallery grows by one without changing save/cancel.
+  await expect(system.locator("[data-test-bg-item]")).toHaveCount(8);
+  await expect(system.locator('[data-test-bg-item="/assets/images/win10.743e8c13.webp"] img'))
+    .toHaveAttribute("src","/assets/images/win10.743e8c13.webp");
   const chosen=system.locator('[data-test-bg-item="'+alternate+'"]');
   await expect(chosen.locator("img")).toHaveAttribute("src",alternate);
   await chosen.click();
