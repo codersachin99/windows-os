@@ -1,3 +1,11 @@
+## Windows 8/8.1 Personalize and context menus — verification checkpoint, 18 November 2026
+
+- First Win8 Fullscreen Start/desktop/window source run [CI #44363167728](https://github.com/codersachin99/windows-os/actions/runs/44363167728) verified TypeScript, unit, source inventory, exact image SHA, Vite and focused desktop/mobile browser; full suite was still in progress when this checkpoint was initiated. That run is on `b7a30d2` and **does not** certify the new work below.
+- Later code [`5e6dd2a`](https://github.com/codersachin99/windows-os/commit/5e6dd2a28a3904f373a52911fb7ab053609eb524) adds selectable Win8 and Win8.1 Personalize cards (original source wallpapers, theme switch persistence, tests); [`176923e`](https://github.com/codersachin99/windows-os/commit/176923e3bb0ab33f07f584367548679251b331d8) applies original Win8 `.winui-menu` style to Desktop, taskbar and Explorer; [`7c88bc4`](https://github.com/codersachin99/windows-os/commit/7c88bc4e41de17d78c6da80f2a9946957ce8457d) adds focused desktop/mobile computed-CSS and real action browser tests; [`e50c218`](https://github.com/codersachin99/windows-os/commit/e50c218ad87704c998f61c32f665d2fc7021764e) records source audit.
+- New exact-head `[run-ci]` is being triggered for all these additional changes. Do not assume success; inspect jobs/logs and correct actual regressions, then update PR #1 draft. Maintain original immutable `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` and target main unchanged; never merge/release or claim complete pixel parity.
+
+---
+
 ## Original Win8/8.1 Desktop, taskbar and Explorer context palettes — 18 November 2026
 
 - Original pinned `legacy-win7@26b9f0ce` **`theme-win8-scss.js .win8 .winui-menu`** uses `var(--theme-surface)`, **1px `rgba(0,0,0,.4)`** border, flat corners, **`4px 4px 3px -2px rgba(0,0,0,.5333333333)`** shadow, 1px **`#d7d7d7`** left gutter and **`rgba(146,200,253,.2)`** hover with **`0 0 0 1px #8acfff`** outline. Win81 uses the same Win8 popup family.
