@@ -1,3 +1,36 @@
+## Exact-browser regression repaired; Desktop submenu keyboard parity — 18 November 2026
+
+- Exact pinned source is still `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; no source-branch modification.
+- [CI #44247665104](https://github.com/codersachin99/windows-os/actions/runs/44247665104)
+  **failed 1 of 184 targeted desktop/mobile Chromium tests (183 passed)**
+  after TypeScript/Vitest/source-inventory/theme art/Vite all passed.
+  Root cause: new `cloneNode(true)` thumbnail accidentally duplicated the
+  real `data-test-window-id` selector and semantic `role=dialog` identity,
+  so the peek assertion matched both real and inert cloned windows.
+  Full suite skipped after focused gate failed. Do not call it green.
+- `b353511`: sanitize cloned thumbnail tree: remove duplicated
+  `id`, `name`, `role`, `aria-label`, `data-test-*`.
+  Preserve the real Guest window selectors and accessibility.
+- `7eff7f2`: use source theme-specific program icons in hover cards;
+  click on the entire card, including its title bar, activates the original
+  mounted Guest window; close button stops bubbling as in final source.
+- `f1cc1e0`: Playwright regression verifies exactly **one**
+  `data-test-window-id` element for each running window during preview.
+- `4f4cc82`, `aa3d2ef`: Desktop View, Sort by, and New
+  keyboard ArrowRight/ArrowLeft submenus remain mutually exclusive;
+  browser test verifies original menu focused child and restored parent
+  after ArrowLeft without mixing options. Prior menu layout and
+  rename/Explorer behavior are preserved.
+- This handoff `[run-ci]` commit requests **exact-head**
+  typecheck, Vitest, original-source inventory/artwork, Vite,
+  focused browser and full desktop/mobile browser.
+  Read its full conclusion before claiming accepted status.
+- Draft PR #1 remains unmerged; no release. Next work remains
+  Win7/XP/11 source CSS screenshot alignment and original
+  desktop/context/Start/Computer/Bin parity.
+
+---
+
 ## Final pinned taskbar grouped thumbnails — 18 November 2026
 
 **Source remains frozen only by SHA:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
