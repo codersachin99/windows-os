@@ -117,3 +117,7 @@ actually pass.
   verify View/New bounds and the original eight choices.
 - Remaining: original shader/border metrics under all themes, paired visual
   captures and behavior differences under external filesystem providers.
+
+## Mobile Send-To pointer interception and source layout fallback
+
+In [CI #44363167728](https://github.com/codersachin99/windows-os/actions/runs/44363167728), 747 full browser tests passed but Win7 mobile `Send to Desktop` timed out. The archived Playwright trace shows the child submenu auto-opened on hover, then overlaid the parent `Send to` trigger and repeatedly intercepted its pointer click in narrow viewports. [`1ad5ae9`](https://github.com/codersachin99/windows-os/commit/1ad5ae9db300ae0bd2b82360d98a3d40c3238e41) fixes the actual layout: preserve side-flipping on normal screens, but when neither horizontal side fits, place the child wholly below or above the root menu when possible, so the parent remains pointer-interactable. Added unit geometry and a 375×667 actual browser regression, retaining full shortcut creation and storage checks. No test is disabled or relaxed. Need exact-head CI verification.
