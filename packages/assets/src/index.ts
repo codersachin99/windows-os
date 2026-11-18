@@ -172,6 +172,8 @@ export function sourceIsSystemWallpaper(path:string):boolean{
 /** Original XP/Win11 application icon variants, all pinned Git blobs. */
 export const legacyThemeProgramArtwork=Object.freeze({
   win10:Object.freeze({
+    computer:"/assets/images/computer-win10.2212df79.webp",
+    bin:"/assets/images/bin-win10.e0f739cc.webp",
     games:"/assets/images/games-win10.63f82076.webp",
     cpanel:"/assets/images/cpanel-win10.d3d1d446.webp"
   }),
