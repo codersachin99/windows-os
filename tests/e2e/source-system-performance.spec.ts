@@ -74,3 +74,35 @@ test("source System Performance unsupported host controls remain visibly unavail
   await expect(dialog.locator("[data-test-vfx-enableGlass]")).toBeEnabled();
   await expect(dialog.locator("[data-test-vfx-showWindowShadows]")).toBeEnabled();
 });
+
+test("source System Properties switches all five original tabs without enabling host operations",async({page})=>{
+  const {system,dialog}=await openSourcePerformance(page);
+  await dialog.locator("[data-test-vfx-cancel]").click();
+  const tabs=system.getByRole("navigation",{name:"System Properties tabs"});
+  await expect(tabs.locator('[data-test-system-tab="advanced"]'))
+    .toHaveAttribute("aria-current","page");
+  await tabs.locator('[data-test-system-tab="computerName"]').click();
+  await expect(system.locator('[data-test-system-page="computerName"]'))
+    .toContainText("Windows uses the following information");
+  await expect(system.getByRole("button",{name:"Network ID..."})).toBeDisabled();
+  await expect(system.getByRole("button",{name:"Change..."})).toBeDisabled();
+  await tabs.locator('[data-test-system-tab="hardware"]').click();
+  await expect(system.locator('[data-test-system-page="hardware"]'))
+    .toContainText("The Device Manager lists all the hardware devices");
+  await expect(system.getByRole("button",{name:"Device Manager",exact:true}))
+    .toBeDisabled();
+  await tabs.locator('[data-test-system-tab="systemProtection"]').click();
+  await expect(system.locator('[data-test-system-page="systemProtection"]'))
+    .toContainText("Protection Settings");
+  await expect(system.getByRole("button",{name:"Create..."})).toBeDisabled();
+  await tabs.locator('[data-test-system-tab="remote"]').click();
+  await expect(system.locator('[data-test-system-page="remote"]'))
+    .toContainText("Remote Desktop");
+  await expect(system.getByRole("button",{name:"Select Users..."}))
+    .toBeDisabled();
+  await tabs.locator('[data-test-system-tab="advanced"]').click();
+  await expect(system.locator('[data-test-system-page="advanced"]'))
+    .toContainText("Visual effects, processor scheduling");
+  await system.locator("[data-test-system-performance-open]").click();
+  await expect(system.locator("[data-test-performance-options]")).toBeVisible();
+});
