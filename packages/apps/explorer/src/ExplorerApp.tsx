@@ -214,12 +214,13 @@ export function ExplorerApp({
     });
     return ()=>{active=false;};
   },[theme,sourceShortcutSignature]);
-  // The pinned Computer source only displays item.toggle checkboxes on
-  // a touch device after one or more items are selected.
+  // Final pinned Computer source additionally gates touch checkboxes on
+  // app.config.json features.showItemCheckboxes, which is false by default.
   const sourceIsTouch = typeof window !== "undefined" && (
     window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0
   );
   const showSourceCheckboxes = theme === "win7" &&
+    SOURCE_FINAL_DESKTOP_MENU_FLAGS.showItemCheckboxes &&
     sourceIsTouch && state.selected.length > 0;
   const selected = state.items.find(item => item.uri === state.selected[0])
     ?? found?.find(item => item.uri === state.selected[0]);
