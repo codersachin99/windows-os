@@ -1,18 +1,26 @@
 import { useState } from "react";
+import {sourceThemeScreens,sourceThemeShellStatus,type ThemeId} from "@windows-os/contracts";
 import { legacyArt } from "@windows-os/assets";
 
 interface LogonScreenProps {
+  theme?:ThemeId;
   onGuest: () => void;
   onShutdown: () => void;
   onRestart: () => void;
 }
 
-export function LogonScreen({ onGuest, onShutdown, onRestart }: LogonScreenProps) {
+export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: LogonScreenProps) {
+  const sourceScreens=sourceThemeScreens(theme);
+  const status=sourceThemeShellStatus(theme);
   const [showAccount, setShowAccount] = useState(false);
   const [showPower, setShowPower] = useState(false);
 
   return (
-    <main className="windows-logon is-win7" data-test-logon-screen style={{ backgroundImage: `url("${legacyArt.logonBackground}")` }}>
+    <main className="windows-logon is-win7" data-test-logon-screen
+      data-source-theme-id={theme} data-source-logon-theme={sourceScreens.logon}
+      data-source-shell-status={status}
+      data-source-logon-renderer={sourceScreens.logon==="win7"?"win7":"win7-fallback"}
+      style={{ backgroundImage: `url("${legacyArt.logonBackground}")` }}>
       <div className="windows-logon__centre logon__pane">
         <div className="windows-logon__guest-area">
           <span className="windows-logon__hint windows-logon__hint--guest logon__instruction is-guest">
