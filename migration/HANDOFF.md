@@ -1,3 +1,24 @@
+## Exact source login artwork audit added — 18 November 2026
+
+- `26457dd` extends `scripts/import-source-theme-assets.py`
+  source SHA table with `logoxp.9b034658.png` Git blob
+  `33b3bca96d3c07994b096bf13d2a87a6a05b1196` and
+  `guest-win10.a110df5a.webp` Git blob
+  `57caee256e62a46271db867a088f49b1981bbc7d`.
+  Now the existing CI **Verify byte-identical original theme artwork**
+  step checks the newly imported login assets too, not just
+  the previous XP/Win11 icons.
+- This `[run-ci]` checkpoint revalidates the current exact head after
+  the artwork audit was strengthened. Check TypeScript/Vitest/hash
+  audits/build/focused browser and full browser status. No releases,
+  PR draft. Earlier source login CI
+  [#44283291889](https://github.com/codersachin99/windows-os/actions/runs/44283291889)
+  passed TypeScript/unit/art audits/Vite through Chromium install
+  at the time of writing; it did **not** contain this audit-table
+  addition.
+
+---
+
 ## XP/Win11 source-backed Guest logon renderers and CMD restart regression — 18 November 2026
 
 **Source pin:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
