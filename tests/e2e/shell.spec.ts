@@ -57,3 +57,18 @@ test("Guest logoff returns to login and clears running windows", async ({ page }
   await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
   await expect(page.locator('[data-test-window="computer"]')).toHaveCount(0);
 });
+
+
+test("final skipBoot restart never bypasses Guest and never flashes BootScreen",async({page})=>{
+  // Shutdown from logon is an unauthenticated source power transition.
+  await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
+  await page.locator('[data-test-logon-shutdown]').click();
+  await expect(page.getByText("Windows is shutting down")).toBeVisible();
+  await page.getByRole("button",{name:"Restart WindowsOS"}).click();
+  await expect(page.locator("[data-test-boot-screen]")).toHaveCount(0);
+  await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
+  await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
+  // Explicit Guest login is still the sole entry into desktop.
+  await page.locator('[data-test-avatar="win7"]').click();
+  await expect(page.locator("[data-test-main-screen]")).toBeVisible();
+});
