@@ -53,10 +53,12 @@ test("Win10 Desktop, Computer and Bin use byte-pinned original artwork and sourc
   await expect(win).toHaveCount(0);
   await start.click();
   await expect(page.locator("[data-test-start-menu]")).toBeVisible();
-  // Start program icons now resolve through the original Win10 icon registry,
-  // although the final Win10 sidebar/tile layout is still pending.
-  await expect(page.locator('[data-test-program="cpanel"] img')).toHaveAttribute(
+  // Original Start lists Games and Settings in the Win10 rail.
+  // Neither app appears in the registered Start *program* list, so the
+  // artwork contract must inspect the actual source-derived sidebar.
+  const menu=page.locator("[data-test-start-menu]");
+  await expect(menu.locator('[data-test-win10-start-settings] img')).toHaveAttribute(
     "src","/assets/images/cpanel-win10.d3d1d446.webp");
-  await expect(page.locator('[data-test-program="games"] img')).toHaveAttribute(
+  await expect(menu.locator('[data-test-win10-start-games] img')).toHaveAttribute(
     "src","/assets/images/games-win10.63f82076.webp");
 });
