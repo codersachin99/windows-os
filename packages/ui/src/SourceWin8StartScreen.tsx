@@ -40,6 +40,8 @@ export function SourceWin8StartScreen({
   const [query,setQuery]=useState("");
   const inputRef=useRef<HTMLInputElement>(null);
   const accountRef=useRef<HTMLDivElement>(null);
+  const searchRef=useRef<HTMLElement>(null);
+  const searchButtonRef=useRef<HTMLButtonElement>(null);
   const startWallpaper=wallpaper??sourceShellWallpaper(theme);
   const matches=programs.filter(app=>app.label.toLowerCase()
     .includes(query.toLowerCase()));
@@ -59,6 +61,22 @@ export function SourceWin8StartScreen({
     document.addEventListener("pointerdown",outside);
     return ()=>document.removeEventListener("pointerdown",outside);
   },[accountOpen]);
+  // The pinned Win8 flyout uses v-clickout + closeSearch(): clicking the
+  // screen outside the search pane clears its query and restores Start focus.
+  // The Search trigger is exempt: source openSearch() is idempotent.
+  useEffect(()=>{
+    if(!searching)return;
+    const outside=(event:PointerEvent)=>{
+      if(!(event.target instanceof Node))return;
+      if(searchRef.current?.contains(event.target)||
+        searchButtonRef.current?.contains(event.target))return;
+      setSearching(false);
+      setQuery("");
+      rootRef.current?.focus({preventScroll:true});
+    };
+    document.addEventListener("pointerdown",outside);
+    return ()=>document.removeEventListener("pointerdown",outside);
+  },[searching,rootRef]);
 
   return <nav ref={rootRef} id="start-screen" tabIndex={-1}
     className="windows-startmenu windows-startmenu--win8"
@@ -74,7 +92,7 @@ export function SourceWin8StartScreen({
         return;
       }
       if(event.key.length===1&&!event.ctrlKey&&!event.metaKey&&!event.altKey
-        &&!(event.target instanceof HTMLInputElement)){
+        &&!(event.target instanceof Element&&event.target.closest("input, textarea"))){
         event.preventDefault();setQuery(text=>text+event.key);
         setSearching(true);
       }
@@ -105,10 +123,10 @@ export function SourceWin8StartScreen({
         </div>}
       </div>
       <button type="button" className="win8-start__search-button"
-        aria-label="Search" data-test-start-search-button=""
+        ref={searchButtonRef} aria-label="Search" data-test-start-search-button=""
         aria-expanded={searching}
         onClick={()=>{
-          setSearching(open=>!open);
+          setSearching(true);
           setAccountOpen(false);
         }}>
         <span aria-hidden="true">⌕</span>
@@ -152,7 +170,7 @@ export function SourceWin8StartScreen({
         </button>)}
       </section>)}
     </div>
-    {searching&&<aside className="win8-start__flyout"
+    {searching&&<aside ref={searchRef} className="win8-start__flyout"
       role="search" data-test-win8-start-flyout="">
       <h3>Search</h3>
       <label htmlFor="win8-start-query">Everywhere</label>
