@@ -23,6 +23,7 @@ FILES: dict[str, dict[str, str]] = {
         "personal.ccbfdd3a.webp": "1c1649d47ab3c405afb49ce2fa45e3a9cd937725",
     },
     "winxp": {
+        "logoxp.9b034658.png": "33b3bca96d3c07994b096bf13d2a87a6a05b1196",
         "action-center-winxp.52f44912.webp": "56cc03e77b7ce0097db3addd9463d0d8b22c502f",
         "network-winxp.744648d4.webp": "17a20ab4a2949d8d146c61eef931f741eb714d89",
         "battery-winxp.af8edd8a.webp": "bcb8e090d5fbac02dd8fdb707903c124d479a349",
@@ -64,6 +65,7 @@ FILES: dict[str, dict[str, str]] = {
         "shutdown-winxp.f3312ea0.webp": "26ffb2c4eb3e05ad056edf14111bac54d2f46007",
     },
     "win11": {
+        "guest-win10.a110df5a.webp": "57caee256e62a46271db867a088f49b1981bbc7d",
         "personal-win11.76af8a1e.webp": "758c1959c286e169051e211b680ae26fb959bc95",
         "paint-win11.ea557c33.webp": "d3d4f5425084975325c92ffd67ef31fdf11a2059",
         "text-win11.d9d08eae.webp": "bf37ae9cea570e36831fa33fca9f494aec53ede0",
