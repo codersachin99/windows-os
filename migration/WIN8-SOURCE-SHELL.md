@@ -55,3 +55,33 @@ Updated `packages/apps/personalize/src/model.test.ts` requires the five IDs and 
 ## Win8/8.1 Computer and Bin source View toolbar
 
 The pinned `src/modules/apps/computer.js` renders `window-menubar asToolbar` and icon-only eight-mode `winui-menu.is-view` in **all themes**, including Win8/Win8.1; it is neither a full ribbon nor a native `select`. [`a9631a0`](https://github.com/codersachin99/windows-os/commit/a9631a0b0397a52636d38ec41adfa475acf28f4b) ports the same existing functional source View menu to Win8/Win81 Computer and Bin, with separate `is-source-win8` CSS matching `theme-win8-scss.js`: `var(--theme-surface)` menubar, `rgba(146,200,253,.2)` hover `#8acfff` outline, `.4` focused `#58b1fc`, alpha-black menu border and original white 6px address. [`9ea38b4`](https://github.com/codersachin99/windows-os/commit/9ea38b4ea8aa059f0b1280eb75dea1613c385dd0) covers real Computer + Bin, exact icon and menu modes, slider 0–7, keyboard, original skin and functional selection on desktop/mobile in focused CI. Complete source screenshots still pending.
+
+
+## Source Search flyout clickout and repeat-open correction — 19 November 2026
+
+Pinned `src/modules/shell/startmenu-win8.js` declares `v-clickout=closeSearch`
+on the 420px Search flyout. Its `closeSearch()` clears the query and
+restores focus to the Start root; `openSearch()` is idempotent and never
+toggles an active flyout closed. The migrated Start screen previously
+left the pane open after an outside click and treated a repeat Search
+trigger as a toggle.
+
+[`7f8340c`](https://github.com/codersachin99/windows-os/commit/7f8340c04d717065c3131a9dc05c2c967dd7e014)
+adds a scoped pointerdown clickout listener excluding the flyout and
+its Search trigger. Outside click dismisses and clears the query and
+refocuses the Start root; the Search button now opens instead of
+toggling; source keyboard typing ignores both inputs and textareas.
+[`234484f`](https://github.com/codersachin99/windows-os/commit/234484f241d3b511aef4414852f7c5112892e509)
+adds Win8/Win81 browser regressions for Escape/reset/reopen and
+repeat-open on desktop/mobile, plus physical backdrop clickout at
+viewport widths where the pane does not cover the entire screen.
+Narrow-phone clickout is intentionally not a reachable mouse action:
+the flyout occupies the full viewport and Escape remains available.
+
+This handoff commit opts into a single `[run-ci]` checkpoint. No
+new source/runtime test pass is claimed until its exact-head TypeScript,
+unit, source-art, production build and desktop/mobile Playwright jobs
+finish successfully. The 37-theme source catalog remains partially
+implemented; source-paired screenshots, original installed-program tile
+grouping, broader search results and all-theme fidelity remain pending.
+Draft PR #1 stays open, and `main` is unchanged.
