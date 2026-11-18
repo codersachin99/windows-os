@@ -57,6 +57,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   const contextRef=useRef<HTMLDivElement>(null);
   const win11PowerRef=useRef<HTMLDivElement>(null);
   const [win11PowerOpen,setWin11PowerOpen]=useState(false);
+  const [win10SidebarExpanded,setWin10SidebarExpanded]=useState(false);
+  const [win10PowerOpen,setWin10PowerOpen]=useState(false);
+  const [win10AccountOpen,setWin10AccountOpen]=useState(false);
   const [programContext,setProgramContext]=useState<StartProgramContext|null>(null);
   const [contextPosition,setContextPosition]=useState({x:0,y:0});
   const [contextError,setContextError]=useState("");
@@ -188,6 +191,11 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         setWin11PowerOpen(false);
         return;
       }
+      if(win10PowerOpen||win10AccountOpen){
+        setWin10PowerOpen(false);
+        setWin10AccountOpen(false);
+        return;
+      }
       // DesktopShell restores taskbar focus after the Start input has
       // actually unmounted, using a commit-time layout effect.
       onEscapeClose();
@@ -198,7 +206,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[dispatch,programContext,win11PowerOpen,onEscapeClose]);
+  },[dispatch,programContext,win11PowerOpen,win10PowerOpen,win10AccountOpen,onEscapeClose]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
@@ -226,8 +234,10 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
   return (<>
     <nav className={"windows-startmenu" +
       (theme==="winxp"?" windows-startmenu--winxp":
-      theme==="win11"?" windows-startmenu--win11":"") +
-      (allPrograms&&!query?" is-all-programs":"")}
+      theme==="win11"?" windows-startmenu--win11":
+      theme==="win10"?" windows-startmenu--win10":"") +
+      (allPrograms&&!query?" is-all-programs":"")+
+      (theme==="win10"&&win10SidebarExpanded?" is-win10-sidebar-expanded":"")}
       data-source-start-theme={theme}
       id="start-menu" ref={menuRef} data-test-start-menu="" aria-label="Start menu">
       {theme==="winxp"&&<header className="windows-startmenu__xp-header"
@@ -235,6 +245,78 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
         <strong>Guest</strong>
       </header>}
+      {theme==="win10"&&<aside className="windows-startmenu__win10-sidebar"
+        data-test-win10-start-sidebar=""
+        data-expanded={win10SidebarExpanded?"true":"false"}
+        onPointerEnter={event=>{
+          if(event.pointerType!=="touch")setWin10SidebarExpanded(true);
+        }}
+        onPointerLeave={()=>setWin10SidebarExpanded(false)}>
+        <button type="button" className="windows-startmenu__win10-hamburger"
+          data-test-win10-start-expand=""
+          aria-label="Toggle Start sidebar"
+          aria-expanded={win10SidebarExpanded}
+          onClick={()=>setWin10SidebarExpanded(v=>!v)}>
+          <span className="windows-startmenu__win10-rail-icon" aria-hidden="true">☰</span>
+          <strong>START</strong>
+        </button>
+        <div className="windows-startmenu__win10-sidebar-bottom">
+          <div className="windows-startmenu__win10-rail-group">
+            <button type="button" aria-label="Guest account options"
+              data-test-win10-start-account-toggle=""
+              aria-expanded={win10AccountOpen}
+              onClick={()=>{
+                setWin10PowerOpen(false);setWin10AccountOpen(v=>!v);
+              }}>
+              <img src={legacyArt.guestAvatar} alt="" width={20} height={20}/>
+              <span>Guest</span>
+            </button>
+            {win10AccountOpen&&<div className="windows-startmenu__win10-flyout"
+              role="menu" data-test-win10-start-account-menu=""
+              aria-label="Guest account options">
+              <button type="button" role="menuitem"
+                onClick={()=>dispatch({type:"SWITCH_USER"})}>Switch user</button>
+              <button type="button" role="menuitem"
+                onClick={()=>dispatch({type:"LOG_OFF"})}>Log off</button>
+            </div>}
+          </div>
+          <button type="button" data-test-win10-start-documents=""
+            aria-label="Open Documents" onClick={()=>openApp("computer")}>
+            <img src={sourceShellAsset(theme,"computer")??legacyArt.computer}
+              width={20} height={20} alt=""/><span>Documents</span>
+          </button>
+          <button type="button" data-test-win10-start-games=""
+            aria-label="Open Games" onClick={()=>openApp("games")}>
+            <img src={sourceThemeProgramArt(theme,"games")??legacyArt.games}
+              width={20} height={20} alt=""/><span>Games</span>
+          </button>
+          <button type="button" data-test-win10-start-settings=""
+            aria-label="Open Settings" onClick={()=>openApp("cpanel")}>
+            <img src={sourceThemeProgramArt(theme,"cpanel")??legacyArt.cpanel}
+              width={20} height={20} alt=""/><span>Settings</span>
+          </button>
+          <div className="windows-startmenu__win10-rail-group">
+            <button type="button" data-test-win10-start-power-toggle=""
+              aria-label="Power options" aria-expanded={win10PowerOpen}
+              onClick={()=>{
+                setWin10AccountOpen(false);setWin10PowerOpen(v=>!v);
+              }}>
+              <span className="windows-startmenu__win10-rail-icon" aria-hidden="true">⏻</span>
+              <span>Power</span>
+            </button>
+            {win10PowerOpen&&<div className="windows-startmenu__win10-flyout"
+              role="menu" data-test-win10-start-power-menu=""
+              aria-label="Power options">
+              <button role="menuitem" type="button" data-test-win10-start-power="logoff"
+                onClick={()=>dispatch({type:"LOG_OFF"})}>Log off</button>
+              <button role="menuitem" type="button" data-test-win10-start-power="shutdown"
+                onClick={()=>dispatch({type:"SHUTDOWN"})}>Shut down</button>
+              <button role="menuitem" type="button" data-test-win10-start-power="restart"
+                onClick={()=>dispatch({type:"RESTART"})}>Restart</button>
+            </div>}
+          </div>
+        </div>
+      </aside>}
       <div className="windows-startmenu__left">
         {(theme==="winxp"||theme==="win7")&&recentSection}
         <div className="windows-startmenu__programs"
@@ -351,6 +433,18 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         </label>}
       </div>
       <div className="windows-startmenu__right">
+        {theme==="win10"&&<section className="windows-startmenu__win10-tiles"
+          data-test-win10-start-tiles="" aria-label="Recently opened apps">
+          {recentApps.map(app=><button type="button" key={app.id}
+            data-test-win10-start-tile={app.id}
+            onClick={()=>openApp(app.id)}
+            onContextMenu={event=>openProgramContext(event,app.id)}
+            title={app.label} aria-label={"Open recent "+app.label}>
+            <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
+              width={32} height={32} alt=""/>
+            <span>{app.label}</span>
+          </button>)}
+        </section>}
         {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
           alt="Guest" className="windows-startmenu__avatar" />}
         {theme!=="winxp"&&<strong>Guest</strong>}

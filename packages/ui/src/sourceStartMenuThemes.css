@@ -357,3 +357,167 @@
 .windows-startmenu[data-source-start-theme="win7"] .windows-startmenu__recent-grid img{
   width:28px;height:28px;object-fit:contain;
 }
+
+
+/* Original pinned src/modules/shell/startmenu-win10.js (53e9) and
+ * src/styles/shell/startmenu-win10.css:
+ * 430px dark #1f1f1f wrapper, 48px collapsing/200px expanded rail,
+ * 300px installed program list, 100×100 recent program tiles.
+ * React uses real Guest program registry and preserves shared search,
+ * shortcuts and right-click actions. Complete pixel capture pending.
+ */
+.windows-desktop[data-theme="win10"] .windows-startmenu--win10{
+  display:grid;grid-template-columns:48px minmax(0,300px) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);
+  width:min(650px,calc(100vw - 8px));height:430px;
+  min-height:0;max-height:calc(100dvh - 45px);
+  left:0;bottom:40px;padding:16px 8px 0 0;
+  box-sizing:border-box;gap:0;border:0;border-radius:0;
+  color:#fff;background:#1f1f1f;box-shadow:0 5px 20px #0008;
+  overflow:hidden;font-family:"Segoe UI",Tahoma,sans-serif;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar{
+  position:absolute;z-index:4;top:0;left:0;bottom:0;
+  width:48px;box-sizing:border-box;padding-top:8px;
+  display:flex;flex-direction:column;overflow:visible;
+  background:#1f1f1f;white-space:nowrap;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar[data-expanded="true"]{
+  width:200px;background:#2c2c2c;box-shadow:2px 0 2px #0003;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button{
+  width:100%;min-width:0;box-sizing:border-box;display:flex;
+  align-items:center;gap:16px;text-align:left;white-space:nowrap;
+  color:#fff;background:transparent;border:0;border-radius:0;
+  padding:12px 14px;font:14px "Segoe UI",Tahoma,sans-serif;
+  cursor:pointer;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button:hover,
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button:focus-visible{
+  background:rgba(255,255,255,.1333333333);
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button:active{
+  background:rgba(255,255,255,.2666666667);
+}
+.windows-startmenu--win10 .windows-startmenu__win10-rail-icon{
+  width:20px;height:20px;flex:none;display:flex;justify-content:center;
+  align-items:center;font-size:16px;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button img{
+  width:20px;height:20px;flex:none;object-fit:contain;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button span:not(.windows-startmenu__win10-rail-icon),
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar button strong{
+  overflow:hidden;text-overflow:ellipsis;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-hamburger{
+  min-height:48px;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-hamburger strong{
+  font-size:20px;line-height:24px;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-sidebar-bottom{
+  margin-top:auto;display:flex;flex-direction:column;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-rail-group{
+  position:relative;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-flyout{
+  position:absolute;z-index:5;left:100%;bottom:0;min-width:155px;
+  display:flex;flex-direction:column;padding:6px 0;
+  border:1px solid #080808;background:#2c2c2c;
+  box-shadow:0 5px 15px #0008;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-flyout button{
+  min-height:32px;font-size:13px;padding:6px 12px;
+}
+.windows-startmenu--win10 .windows-startmenu__left{
+  grid-column:2;grid-row:1;min-height:0;min-width:0;
+  box-sizing:border-box;padding-right:8px;
+  overflow:hidden;background:transparent;border:0;
+}
+.windows-startmenu--win10 .windows-startmenu__programs{
+  min-height:0;overflow-y:auto;padding:0 0 0 4px;
+  scrollbar-width:thin;scrollbar-color:#333 transparent;
+}
+.windows-startmenu--win10 .windows-startmenu__program{
+  min-height:34px;padding:6px;gap:8px;color:#fff;
+  font:14px "Segoe UI",Tahoma,sans-serif;
+  background:transparent;border:0;border-radius:0;
+}
+.windows-startmenu--win10 .windows-startmenu__program img{
+  width:24px;height:24px;object-fit:contain;flex:none;
+}
+.windows-startmenu--win10 .windows-startmenu__program:hover,
+.windows-startmenu--win10 .windows-startmenu__program:focus-visible{
+  color:#fff;background:rgba(255,255,255,.1333333333);
+}
+.windows-startmenu--win10 .windows-startmenu__all-programs{
+  color:#fff;border:0;background:transparent;padding:6px 10px;
+}
+.windows-startmenu--win10 .windows-startmenu__all-programs:hover{
+  background:rgba(255,255,255,.1333333333);
+}
+.windows-startmenu--win10 .windows-startmenu__search{
+  margin:5px 2px 7px;background:#2c2c2c;border:1px solid #666;
+}
+.windows-startmenu--win10 .windows-startmenu__search input{
+  background:transparent;color:#fff;padding:7px;
+}
+.windows-startmenu--win10 .windows-startmenu__search input::placeholder{
+  color:#dadada;
+}
+.windows-startmenu--win10 .windows-startmenu__search span{color:#ddd}
+.windows-startmenu--win10 .windows-startmenu__right{
+  grid-column:3;grid-row:1;min-width:0;min-height:0;
+  overflow-y:auto;align-items:stretch;color:#fff;
+  border:0;padding:0;gap:0;
+}
+.windows-startmenu--win10 .windows-startmenu__right>:not(.windows-startmenu__win10-tiles){
+  display:none;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-tiles{
+  display:grid;grid-template-columns:repeat(2,minmax(0,100px));
+  grid-auto-rows:100px;align-content:start;gap:4px;
+  overflow:auto;min-height:0;padding:0 8px 8px 0;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-tiles button{
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-width:0;height:100px;width:100px;box-sizing:border-box;
+  padding:9px;color:#fff;text-align:left;
+  background:#353535;border:0;border-radius:0;cursor:pointer;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-tiles button:hover,
+.windows-startmenu--win10 .windows-startmenu__win10-tiles button:focus-visible{
+  background:#353535;box-shadow:inset 0 0 0 2px #fff9;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-tiles button:active{
+  box-shadow:none;transform:scale(.97);
+}
+.windows-startmenu--win10 .windows-startmenu__win10-tiles img{
+  width:32px;height:32px;object-fit:contain;
+}
+.windows-startmenu--win10 .windows-startmenu__win10-tiles span{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  font-size:12px;line-height:1.2;overflow:hidden;
+}
+.windows-startmenu__context[data-source-start-context-theme="win10"]{
+  border-color:#444;border-radius:0;background:#2c2c2c;
+  color:#fff;box-shadow:0 5px 15px #0008;
+}
+.windows-startmenu__context[data-source-start-context-theme="win10"]
+button:not(:disabled):hover{
+  color:#fff;background:#414141;border-color:transparent;
+}
+@media(max-width:560px){
+  .windows-desktop[data-theme="win10"] .windows-startmenu--win10{
+    width:calc(100vw - 5px);max-width:100vw;
+    grid-template-columns:48px minmax(0,1fr);
+    height:min(430px,calc(100dvh - 44px));
+  }
+  .windows-startmenu--win10 .windows-startmenu__right{display:none}
+  .windows-startmenu--win10 .windows-startmenu__left{padding-right:4px}
+  .windows-startmenu--win10 .windows-startmenu__win10-sidebar[data-expanded="true"]{
+    max-width:min(200px,calc(100vw - 16px));
+  }
+}
