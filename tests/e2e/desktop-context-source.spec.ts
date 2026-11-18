@@ -117,3 +117,32 @@ test("source measured desktop menu flips inside viewport as View/New expand",asy
   await expect(menu.locator("[data-test-desktop-new-text]")).toBeVisible();
   await inDesktop();
 });
+
+
+test("final source Desktop View, Sort by, New keyboard children stay exclusive",async({page})=>{
+  await desktopGuest(page);
+  const menu=await desktopMenu(page);
+  const sort=menu.locator("[data-test-desktop-sort]");
+  await sort.focus();
+  await sort.press("ArrowRight");
+  await expect(menu.locator('[data-test-desktop-sort-key="name"]'))
+    .toBeFocused();
+  await expect(menu.locator("[data-test-desktop-view]"))
+    .toHaveAttribute("aria-expanded","false");
+  await expect(menu.locator("[data-test-desktop-new]"))
+    .toHaveAttribute("aria-expanded","false");
+  await page.keyboard.press("ArrowLeft");
+  await expect(sort).toBeFocused();
+  await expect(sort).toHaveAttribute("aria-expanded","false");
+  const view=menu.locator("[data-test-desktop-view]");
+  await view.focus();
+  await view.press("ArrowRight");
+  await expect(menu.getByRole("menuitemradio",{name:/Small icons/})).toBeVisible();
+  await expect(sort).toHaveAttribute("aria-expanded","false");
+  const news=menu.locator("[data-test-desktop-new]");
+  await news.focus();
+  await news.press("ArrowRight");
+  await expect(menu.locator("[data-test-desktop-new-folder]")).toBeFocused();
+  await expect(view).toHaveAttribute("aria-expanded","false");
+  await expect(sort).toHaveAttribute("aria-expanded","false");
+});
