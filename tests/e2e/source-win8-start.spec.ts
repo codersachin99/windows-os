@@ -28,7 +28,8 @@ for(const theme of ["win8","win81"] as const){
     const startButtonNode=page.locator('[data-test-start-button]');
     await expect(startButtonNode.locator("img")).toHaveAttribute("src",startButton);
     if(theme==="win8"){
-      await expect(startButtonNode).toHaveCSS("width","14px");
+      const noHover=await page.evaluate(()=>window.matchMedia("(hover: none)").matches);
+      await expect(startButtonNode).toHaveCSS("width",noHover?"26px":"14px");
       await expect(startButtonNode.locator("img")).toBeHidden();
     }else{
       await expect(startButtonNode).toHaveCSS("width","48px");
