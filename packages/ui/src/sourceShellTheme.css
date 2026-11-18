@@ -273,7 +273,10 @@
   background:#272727;
 }
 .windows-desktop[data-theme="win10"] .windows-taskbar__show-desktop{
-  width:5px;height:40px;flex:0 0 5px;
+  /* A native button has UA padding and min-content sizing; explicitly clear
+   * both so the original thin Win10 Show Desktop divider is actually 5px. */
+  box-sizing:border-box;width:5px;min-width:5px;max-width:5px;
+  height:40px;flex:0 0 5px;padding:0;
   background:none;border:0;border-left:1px solid #707070;
   box-shadow:none;
 }

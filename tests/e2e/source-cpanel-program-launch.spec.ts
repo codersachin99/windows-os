@@ -56,7 +56,9 @@ test("source Control Panel Change desktop background opens actual Background vie
   await expect(personalize.locator('[data-personalize-view="background"]'))
     .toBeVisible();
   await expect(personalize.locator('[data-test-bg-list="system"] [data-test-bg-item]'))
-    .toHaveCount(7);
+    .toHaveCount(8);
+  await expect(personalize.locator('[data-test-bg-item="/assets/images/win10.743e8c13.webp"] img'))
+    .toHaveAttribute("src","/assets/images/win10.743e8c13.webp");
   const background="/assets/images/win7-2.bf7d7452.webp";
   await personalize.locator('[data-test-bg-item="'+background+'"]').click();
   await expect(page.locator("[data-test-desktop-background]"))

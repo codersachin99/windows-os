@@ -60,5 +60,11 @@ test("Win10 Start recent tiles are backed by opened apps and share program actio
     await expect(page.locator('[data-test-start-program-context="computer"]')).toHaveCount(0);
   }
   await menu.getByRole("button",{name:"Open Documents"}).click();
-  await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+  // Original source Computer supports multiple independent windows.
+  // Opening the Start shortcut must create/focus a new actual Guest window,
+  // not silently convert the previous instance to a singleton.
+  const windows=page.locator('[data-test-window="computer"]');
+  await expect(windows).toHaveCount(2);
+  await expect(windows.last()).toBeVisible();
+  await expect(windows.last()).toHaveAttribute("data-source-window-active","true");
 });
