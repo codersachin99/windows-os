@@ -1,3 +1,12 @@
+## Win10 imported wallpaper — browser acceptance correction — 18 November 2026
+
+- The second exact-head [CI #44321719275](https://github.com/codersachin99/windows-os/actions/runs/44321719275) at `efc652b` already passed TypeScript, all unit tests, original source inventory, byte-identity source-art audits and Vite build. Browser suites were running at the time of this note; that head's `tests/e2e/source-personalize-background.spec.ts` still expected **7** backgrounds despite importing an eighth exact original Win10 wallpaper.
+- [`040cc40`](https://github.com/codersachin99/windows-os/commit/040cc4070e1b75624dccced16bf6c5f360e7fcaa) corrects the *browser* contract to demand **8** byte-imported system background options, including exact `win10.743e8c13.webp`, while retaining source Save/Cancel behavior and the existing Win7/XP cases.
+- This deliberate `[run-ci]` exact-head checkpoint verifies Win10 shell and Start browser interactions, source artwork, Guest desktop and existing application tests **after** all test expectations have been updated. This is not a claim of full original visual parity or completed Win10 theme.
+- Next: fix any remaining focused/mobile/full browser failure, make source-paired screenshots for Win7/XP/11/10 Desktop, Start, context menus, Computer/Bin; verify the 19 boot screen families. PR #1 remains draft; no source or main edits, no release.
+
+---
+
 ## Win10 exact-head CI unit contract follow-up — 18 November 2026
 
 The first Win10 Desktop/Start [CI #44321034075](https://github.com/codersachin99/windows-os/actions/runs/44321034075), exact-head `47e482d`, passed TypeScript but **failed two outdated unit expectations**; source/art audits, Vite, and browser steps were skipped (not a code-build verification). Both failures arose from deliberately migrated **original** source assets: `sourceShellArtwork.test.ts` incorrectly still treated Win10's Start/Computer/Bin artwork as unported, and `personalize/src/model.test.ts` expected the gallery to omit the newly imported byte-identical original Win10 wallpaper.
