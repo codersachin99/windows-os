@@ -52,7 +52,7 @@ describe("pinned source 3097/a97a Control Panel registry",()=>{
       .toContain("action-center-headline.27cc6d83.webp");
   });
   it("distinguishes the two migrated program windows from Control Panel pages",()=>{
-    expect(SOURCE_CPANEL_MIGRATED_PROGRAMS).toEqual(["personalize","taskbar"]);
+    expect(SOURCE_CPANEL_MIGRATED_PROGRAMS).toEqual(["personalize","taskbar","system"]);
     for(const id of SOURCE_CPANEL_MIGRATED_PROGRAMS){
       expect(sourceCpanelIsMigratedProgram(id)).toBe(true);
       expect(SOURCE_CPANEL_REGISTRY.find(item=>item.id===id)?.target).toBe("program");
