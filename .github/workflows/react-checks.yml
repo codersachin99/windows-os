@@ -102,7 +102,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: codersachin99/legacy-win7
-          ref: 4e63290d783009e1293433c6ccf252abba9c1187
+          ref: 26b9f0ce7a1665dee89a7c81824bec09e2c75776
           path: legacy-reference
           token: ${{ secrets.LEGACY_SOURCE_READ_TOKEN }}
           persist-credentials: false
@@ -141,8 +141,8 @@ jobs:
             SOURCE_PID=$!
             ready http://127.0.0.1:8099/
             # This SHA is checked out by actions/checkout, not merely assumed.
-            test "$(git -C legacy-reference rev-parse HEAD)" = "4e63290d783009e1293433c6ccf252abba9c1187"
-            node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420 --source-url http://127.0.0.1:8099 --source-sha 4e63290d783009e1293433c6ccf252abba9c1187
+            test "$(git -C legacy-reference rev-parse HEAD)" = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
+            node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420 --source-url http://127.0.0.1:8099 --source-sha 26b9f0ce7a1665dee89a7c81824bec09e2c75776
             python scripts/compare-visual-parity.py
           else
             node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420

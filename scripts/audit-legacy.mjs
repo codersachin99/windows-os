@@ -12,7 +12,7 @@ const sourceModules = inventory.filter(x => x.path.startsWith("src/modules/"));
 const uniquePaths = new Set(tracker.modules.map(x => x.source));
 const sourcePaths = new Set(sourceModules.map(x => x.path));
 const failures = [];
-if (tracker.referenceSha !== "4e63290d783009e1293433c6ccf252abba9c1187") failures.push("Wrong reference SHA");
+if (tracker.referenceSha !== "26b9f0ce7a1665dee89a7c81824bec09e2c75776") failures.push("Wrong reference SHA");
 if (uniquePaths.size !== tracker.modules.length) failures.push("Duplicate module paths");
 for (const src of sourceModules) {
   const entry = tracker.modules.find(x => x.source === src.path);

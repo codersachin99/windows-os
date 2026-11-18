@@ -11,7 +11,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join } from "node:path";
 
-const SOURCE_SHA = "4e63290d783009e1293433c6ccf252abba9c1187";
+const SOURCE_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776";
 const SHARED_SCENES = ["guest-desktop", "computer-root", "computer-organize", "computer-view", "recycle-bin"];
 // Source-side fixture actions for these scenarios have not been verified against
 // pinned Vue runtime. Capture React evidence now, never fabricate source pairs.

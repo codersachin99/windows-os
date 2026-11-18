@@ -3,7 +3,7 @@
 
 This is an explicit, verified source import, NOT generated replacement artwork.
 The pinned source repository is codersachin99/legacy-win7 at
-4e63290d783009e1293433c6ccf252abba9c1187.
+26b9f0ce7a1665dee89a7c81824bec09e2c75776.
 
 Examples:
   python scripts/import-source-theme-assets.py --source ../legacy-win7 --verify-only
@@ -16,7 +16,7 @@ import argparse
 import hashlib
 from pathlib import Path
 
-LEGACY_SHA = "4e63290d783009e1293433c6ccf252abba9c1187"
+LEGACY_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
     "win7": {
