@@ -26,7 +26,7 @@ export interface SourceTaskbarGroup{
  * so group by the stable appId, never split the generated window ID. */
 export function sourceTaskbarGroups(
   windows:readonly DesktopWindow[],pinned:readonly string[],
-  stacked=SOURCE_TASKBAR_FINAL_FEATURES.showStackedIcons
+  stacked:boolean=SOURCE_TASKBAR_FINAL_FEATURES.showStackedIcons
 ):SourceTaskbarGroup[]{
   const result:SourceTaskbarGroup[]=pinned.map(appId=>({
     key:"pin:"+appId,appId,pinned:true,
