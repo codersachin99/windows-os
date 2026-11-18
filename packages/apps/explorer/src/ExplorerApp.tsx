@@ -47,6 +47,7 @@ import type { SourceFindQuery } from "@windows-os/filesystem";
 import "./source.css";
 import "./ExplorerApp.css";
 import "./sourceExplorerContextTheme.css";
+import "./sourceWin10ComputerToolbar.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
@@ -690,7 +691,7 @@ export function ExplorerApp({
     }
   };
   const detailsSourceWidth=theme==="win7"?SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH:undefined;
-  return <div className={"windows-explorer explorer-stage"+(theme==="win7"?" is-source-win7":"")} data-test-explorer="" onKeyDown={handleKeys}>
+  return <div className={"windows-explorer explorer-stage"+(theme==="win7"?" is-source-win7":theme==="win10"?" is-source-win10":"")} data-test-explorer="" onKeyDown={handleKeys}>
     <div className="explorer-address">
       {theme === "win7"
         ? <SourceWin7Navigation
@@ -804,7 +805,7 @@ export function ExplorerApp({
           title={trashPath ? "Move selected items to the Recycle Bin" : "Source trashPath not mounted"}>Delete</button>
       </>}
       <button onClick={() => void execute(() => session.refresh())}>Refresh</button>
-      {theme === "win7"
+      {(theme === "win7" || theme === "win10")
         ? <SourceViewMenu value={state.viewMode} onChange={view => session.setViewMode(view)} />
         : <label>View:
             <select aria-label="Explorer view" value={state.viewMode}
