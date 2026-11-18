@@ -27,6 +27,7 @@ describe("source ChangeBackground imported system gallery",()=>{
       "/assets/images/win7-2.bf7d7452.webp",
       "/assets/images/win7-3.64168120.webp",
       "/assets/images/win7-4.53fed3fd.webp",
+      "/assets/images/win10.743e8c13.webp",
       "/assets/images/winxp.3e41719f.webp",
       "/assets/images/win11.fc00c43d.webp"
     ]);
