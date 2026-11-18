@@ -123,6 +123,24 @@ export class DesktopPositionStore {
     this.storage?.setItem(this.key, JSON.stringify({ version: 1, ...next }));
     this.state = next;
   }
+  /** Final source main.js DesktopMenu.applyDesktopSort:
+   * sort writes each icon's Guest pixel x/y in column-major grid order.
+   * A manual sort exits automatic placement so new persisted coordinates
+   * remain visible even when autoArrange was previously on.
+   */
+  arrange(ids:readonly string[],area:DesktopArea):void{
+    const size=SOURCE_DESKTOP_ICON_SIZES[this.state.iconSize];
+    const rows=Math.max(1,Math.floor(Math.max(0,area.height)/size)-1);
+    const positions={...this.state.positions};
+    ids.forEach((id,index)=>{
+      if(id==="__proto__"||id==="constructor")return;
+      positions[id]={
+        x:Math.floor(index/rows)*size,
+        y:(index%rows)*size
+      };
+    });
+    this.commit({...this.state,autoArrange:false,positions});
+  }
   setIconSize(iconSize: DesktopIconSize): void {
     if (!(iconSize in SOURCE_DESKTOP_ICON_SIZES)) return;
     this.commit({ ...this.state, iconSize });
