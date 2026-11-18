@@ -50,9 +50,19 @@ export function SourceTaskbarPreviewCard({
       Math.max(80,win.height);
     const scale=Math.min(206/winWidth,125/winHeight,0.35);
     const clone=source.cloneNode(true) as HTMLElement;
-    clone.removeAttribute("id");
-    clone.querySelectorAll<HTMLElement>("[id]").forEach(node=>node.removeAttribute("id"));
-    clone.querySelectorAll<HTMLElement>("[name]").forEach(node=>node.removeAttribute("name"));
+    // The original window remains the only semantic dialog and only element
+    // discoverable by app/engine test hooks. A DOM clone must not duplicate
+    // IDs, programmatic window selectors, accessibility roles or form names.
+    for(const element of [clone,...clone.querySelectorAll<HTMLElement>("*")]){
+      element.removeAttribute("id");
+      element.removeAttribute("name");
+      element.removeAttribute("role");
+      element.removeAttribute("aria-label");
+      for(const attribute of [...element.attributes]){
+        if(attribute.name.startsWith("data-test-"))
+          element.removeAttribute(attribute.name);
+      }
+    }
     clone.querySelectorAll<HTMLElement>("iframe,video,audio,script,object,embed")
       .forEach(node=>{
         const placeholder=document.createElement("div");
