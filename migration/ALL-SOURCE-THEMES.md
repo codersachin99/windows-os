@@ -18,23 +18,23 @@ entry is intentionally omitted.
 | Source boot/logon family | Exact source theme IDs | Count | React migration status |
 | --- | --- | ---: | --- |
 | `win7` | `base`, `aero-1`, `aero-2`, `aero-3`, `aero-4`, `basic-1`, `basic-2`, `basic-3`, `basic-4` | 9 | Win7 logon renderer retained; Aero/Basic variants pending |
-| `win31` | `win31` | 1 | Source-shaped classic Guest logon adapter; shell/boot/pixel parity pending |
-| `win95` | `win95` | 1 | Source-shaped Win9x Guest logon adapter; shell/boot/pixel parity pending |
-| `win98` | `win98` | 1 | Source-shaped Win9x Guest logon adapter; shell/boot/pixel parity pending |
-| `win2k` | `win2k` | 1 | Source-shaped classic Guest logon, byte-identical 2000 logo; shell/boot/pixel parity pending |
+| `win31` | `win31` | 1 | Original boot artwork/view + classic Guest logon; shell/pixel parity pending |
+| `win95` | `win95` | 1 | Original boot GIF/view + Win9x Guest logon; shell/pixel parity pending |
+| `win98` | `win98` | 1 | Original boot GIF/view + Win9x Guest logon; shell/pixel parity pending |
+| `win2k` | `win2k` | 1 | Original boot GIF/view + classic Guest logon; 2000 logo; shell/pixel parity pending |
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
-| `winvista` | `winvista` | 1 | Pending theme-specific implementation |
-| `win8` | `win8`, `win81` | 2 | Source-shaped purple Win8 Guest logon and exact avatar; shell/boot/pixel parity pending |
-| `win10` | `win10` | 1 | Original Win10 Guest logon + source shell artwork, dark taskbar, square windows, Start rail/list/tiles; complete boot/pixel parity pending |
+| `winvista` | `winvista` | 1 | Original boot GIF/view migrated; logon/shell/pixel parity pending |
+| `win8` | `win8`, `win81` | 2 | Original Win8 boot logo/spinner + purple Guest logon; shell/pixel parity pending |
+| `win10` | `win10` | 1 | Original Win8-reused boot logo/spinner + Win10 logon, dark taskbar, windows, Start; complete shell/pixel parity pending |
 | `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
 | `chromeos` | `chromeos` | 1 | Pending theme-specific implementation |
 | `ubuntu` | `ubuntu` | 1 | Pending theme-specific implementation |
 | `kubuntu` | `kubuntu` | 1 | Pending theme-specific implementation |
-| `winLS` | `winLS`, `winLP` | 2 | Pending theme-specific implementation |
+| `winLS` | `winLS`, `winLP` | 2 | Original shared winL boot GIF/view; logon/shell/pixel parity pending |
 | `aeroNoir` | `aeroNoir` | 1 | Pending theme-specific implementation |
 | `oxygen` | `oxygen` | 1 | Pending theme-specific implementation |
-| `winW` | `winW` | 1 | Pending theme-specific implementation |
+| `winW` | `winW` | 1 | Original boot WinW image/view; logon/shell/pixel parity pending |
 | `onebit` | `onebit` | 1 | Pending theme-specific implementation |
 
 **Separate canonical ID:** `win7` maps to `{boot:"win7",logon:"win7"}`
@@ -64,8 +64,11 @@ even though `win7` itself is not a key in the final source
   the other **10** screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
-  renderer still needs source-family implementations. A recognized
-  theme ID is **not** a fully ported theme.
+  renderer now supports **11 of the 19 configured boot families**
+  using ten original Git-blob-identical images and source layout/spinner
+  families. The other eight retain an explicit Win7 fallback.
+  See [SOURCE-BOOT-FAMILIES.md](SOURCE-BOOT-FAMILIES.md).
+  A recognized theme ID is **not** a fully ported theme.
 - **Visual fidelity:** Win7/XP/Win11 shell skins are partially ported.
   No theme is currently certified pixel-perfect. Other theme IDs
   remain source-catalogued, with existing Win7 fallback shell artwork.
@@ -171,3 +174,8 @@ even though `win7` itself is not a key in the final source
 
 - The pinned original `icons.registry.json` `win10` artwork, taskbar/window rules in `theme-win10-scss.js`, and Start structure in `startmenu-win10.js` / `startmenu-win10.css` are now partially rebuilt in React. **8 new original byte-identical images** supplement the earlier Win10 wallpaper and shared Guest avatar. See [WIN10-SOURCE-SHELL.md](WIN10-SOURCE-SHELL.md) for exact original Git blob SHAs, dedicated UI widgets and tests.
 - Core Desktop, taskbar, Start, Computer/Bin visuals now select Win10-specific originals rather than Win7 fallback. This does **not** mean the complete original Win10 theme, original rendered screenshot equivalence, touch animation/entire app art inventory or boot/account backends are finished. Win10 shell status remains `pending`.
+
+## Original boot renderers — 18 November 2026
+
+- **11 of the 19 source boot families** now render source-shaped original boot images or spinner views: Win31, Win95, Win98, Win2k, XP variants, Vista, Win8/8.1, Win10 (original Win8 logo), Win11 variants, WinLS/LP, WinW. The **ten unique original binary images/GIFs have matching source and target Git SHA**. The other eight retain the explicit source-catalog fallback.
+- Original source `defaults.skipBoot:true` remains unchanged; only the opt-in boot phase shows these images. The full original boot timing and paired screenshots remain unverified. Detailed [SOURCE-BOOT-FAMILIES.md](SOURCE-BOOT-FAMILIES.md).

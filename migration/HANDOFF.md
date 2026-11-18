@@ -1,3 +1,17 @@
+## Original boot renderer families / source artwork — 18 November 2026
+
+**Previous exact-head verification:** Full [GitHub CI #44323413550](https://github.com/codersachin99/windows-os/actions/runs/44323413550) **SUCCESS** at `a918d6c9cf19e70c6dac277515ab648e42b74ba2`, including TypeScript, unit, original inventory, source image SHA, Vite build, **focused browser** and **complete desktop/mobile browser** suites. That successful run predates the newly committed source boot visuals and cannot certify them.
+
+**New actual source changes** on `feat/0001-faithful-react-foundation`, original `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` pinned:
+- [`ea22849`](https://github.com/codersachin99/windows-os/commit/ea228491a7f12b1504a039727342103eb41c970d) imported **10 byte-for-byte original boot assets** (Win31, Win95, Win98, Win2k, XP, Vista, Win8, Win11, WinL and WinW) by verifying and reusing identical Git blob SHA. `scripts/import-source-theme-assets.py --verify-target-only` now includes the `boot` family by default.
+- [`ffb4749`](https://github.com/codersachin99/windows-os/commit/ffb47496dae667ffbcd438cd3e85722f3ba1c949) rebuilt `BootScreen` with **four source-derived original renderer shapes**: Win31 5/6-height image; Win9x/2k/XP full-screen animated GIF; Vista/WinLS/WinW contained image; Win8/10/11 original 100px logo and 25px five-ball orbiter including source 4.4-second CSS keyframes/delays. Source `win10` uses the original **Win8 boot art**; theme aliases use `sourceThemeScreens(theme).boot`.
+- [`54e0859`](https://github.com/codersachin99/windows-os/commit/54e085993a54ebe566d0a50d60bd1268019b57df) adds React SSR unit contracts for **all 11 supported source boot family IDs**, original URL mapping, Win81/XP subvariants/Win11dark/WinLP aliases, five spinner elements and explicit fallback.
+- Full source SHA table, original module references, supported/unported families and remaining pixel/timing gaps: [`migration/SOURCE-BOOT-FAMILIES.md`](https://github.com/codersachin99/windows-os/blob/feat/0001-faithful-react-foundation/migration/SOURCE-BOOT-FAMILIES.md).
+- **Source default unchanged:** `app.config.json defaults.skipBoot:true`, so regular browser runs still start at unauthenticated Guest **logon**; enabling the optional animated boot cannot bypass Guest login. Retained existing 1,800ms React completion timer is not declared source-equivalent. Original paired screenshots and other eight boot families remain pending.
+- **New exact-head `[run-ci]` required**, no fabricated test success or visual parity. Keep PR #1 draft; no main edits or release. Next original source-paired Desktop/Start/context/Explorer/Bin screenshot parity and remaining theme UI work.
+
+---
+
 ## Win10 focused desktop/mobile browser findings and repairs — 18 November 2026
 
 **Actual verification evidence:** earlier [CI #44321719275](https://github.com/codersachin99/windows-os/actions/runs/44321719275) was **TypeScript/units/source inventory/artwork/Vite success, focused browser failure: 8 tests failed**. [CI #44322185627](https://github.com/codersachin99/windows-os/actions/runs/44322185627) was **TypeScript/units/source inventory/artwork/Vite success, focused browser 276 passed/6 failed** after the first gallery-spec update, with full browser suite skipped. Do not claim these runs green.
