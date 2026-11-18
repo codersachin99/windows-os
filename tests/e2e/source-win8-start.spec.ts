@@ -131,3 +131,44 @@ test("source Win8 Start program right-click still uses real shared pin and launc
   await tile.click();
   await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
 });
+
+
+for(const theme of ["win8","win81"] as const){
+  test("source "+theme+" Search flyout clears its query when dismissed and reopened",async({page})=>{
+    await guest(page,theme);
+    const start=await openStart(page);
+    await start.locator('[data-test-start-search-button]').click();
+    const flyout=start.locator('[data-test-win8-start-flyout]');
+    const input=flyout.getByRole("searchbox",{name:"Search programs and files"});
+    await input.fill("notepad");
+    await expect(flyout.locator('[data-test-win8-start-result="notepad"]')).toBeVisible();
+    await input.press("Escape");
+    await expect(flyout).toHaveCount(0);
+    await expect(start).toBeVisible();
+    await start.locator('[data-test-start-search-button]').click();
+    await expect(input).toHaveValue("");
+    await expect(flyout).toBeVisible();
+    // Pinned source openSearch() only opens the pane; repeated opening
+    // cannot toggle it closed while an active search is in progress.
+    await start.locator('[data-test-start-search-button]').evaluate(button=>
+      (button as HTMLButtonElement).click());
+    await expect(flyout).toBeVisible();
+  });
+
+  test("source "+theme+" Search clickout returns to Start without closing it",async({page})=>{
+    test.skip((page.viewportSize()?.width??0)<=520,
+      "On a narrow phone, the source 420px/100% search pane covers Start; Escape is the visible dismissal.");
+    await guest(page,theme);
+    const start=await openStart(page);
+    await start.locator('[data-test-start-search-button]').click();
+    const flyout=start.locator('[data-test-win8-start-flyout]');
+    await flyout.getByRole("searchbox",{name:"Search programs and files"}).fill("calc");
+    await start.getByRole("heading",{name:"Start"}).click();
+    await expect(flyout).toHaveCount(0);
+    await expect(start).toBeVisible();
+    await expect(start).toBeFocused();
+    await start.locator('[data-test-start-search-button]').click();
+    await expect(flyout.getByRole("searchbox",{name:"Search programs and files"}))
+      .toHaveValue("");
+  });
+}
