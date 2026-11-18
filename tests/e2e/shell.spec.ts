@@ -5,7 +5,11 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
-test("preserves legacy default boot then source-style Guest login", async ({ page }) => {
+test("final source skipBoot defaults directly to unauthenticated Guest logon", async ({ page }) => {
+  // The pinned source skips only the boot animation, never login or
+  // initialization of the mounted Guest filesystem.
+  await expect(page.locator("[data-test-boot-screen]")).toHaveCount(0);
+  await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
   await expect(page.locator("[data-test-logon-screen]")).toBeVisible({ timeout: 12000 });
   await expect(page.locator('[data-test-avatar="win7"]')).toBeVisible();
   await expect(page.getByText("Guest", { exact: true })).toBeVisible();
