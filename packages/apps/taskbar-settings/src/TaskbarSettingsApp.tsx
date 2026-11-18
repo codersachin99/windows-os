@@ -15,6 +15,8 @@ interface Props{
  * OK/Cancel/Apply. The original taskbar-base.js checks type !== "combine"
  * to render full-size labeled buttons; it does not regroup window ids.
  * Source-disabled auto-hide, lock and small-icon settings remain disabled.
+ * Win7 exposes the original default-off taskbarDraft.useAeroPeek; themes
+ * without a verified Aero Peek rendering adapter keep this disabled.
  */
 export function TaskbarSettingsApp({
   onClose,onCustomizeNotificationArea,theme
@@ -26,7 +28,8 @@ export function TaskbarSettingsApp({
   const [taskbarSaved,setTaskbarSaved]=useState(()=>sourceTaskbarPreferences.snapshot());
   const dirty=draft.powerButtonAction!==saved.powerButtonAction||
     draft.storeRecentApps!==saved.storeRecentApps||
-    taskbarDraft.type!==taskbarSaved.type;
+    taskbarDraft.type!==taskbarSaved.type||
+    taskbarDraft.useAeroPeek!==taskbarSaved.useAeroPeek;
   const apply=()=>{
     sourceStartPreferences.apply(draft);
     sourceTaskbarPreferences.apply(taskbarDraft);
@@ -93,7 +96,12 @@ export function TaskbarSettingsApp({
         </fieldset>
         <fieldset>
           <legend>Aero Peek</legend>
-          <label><input type="checkbox" disabled/> Use Aero Peek to preview the desktop</label>
+          <p>Preview the desktop by moving your mouse to the Show desktop button at the end of the taskbar.</p>
+          <label><input type="checkbox" data-test-taskbar-settings-aero-peek=""
+            disabled={theme!=="win7"} checked={taskbarDraft.useAeroPeek}
+            onChange={event=>setTaskbarDraft(previous=>({
+              ...previous,useAeroPeek:event.currentTarget.checked
+            }))}/> Use Aero Peek to preview the desktop</label>
         </fieldset>
       </>:tab==="start"?<>
         <p>To customize how links, icons and menus look and behave in the Start menu, click Customize.</p>
