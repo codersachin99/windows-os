@@ -7,8 +7,8 @@ import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
 import { CmdApp } from "@windows-os/apps/cmd";
 import {
-  ControlPanelApp,SOURCE_TRAY_ITEMS,sourceTrayVisible,sourceTrayHidden,
-  type SourceTrayPreferences
+  ControlPanelApp,SystemPropertiesApp,SOURCE_TRAY_ITEMS,sourceTrayVisible,sourceTrayHidden,
+  type SourceTrayPreferences,type SourceVisualEffects
 } from "@windows-os/apps/cpanel";
 import {GamesApp,MinesweeperApp,TetrisApp,SolitaireApp} from "@windows-os/apps/games";
 import { RunApp } from "@windows-os/apps/run";
@@ -43,6 +43,8 @@ interface DesktopShellProps {
   dispatch: Dispatch<DesktopAction>;
   trayPreferences:SourceTrayPreferences;
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
+  visualEffects:SourceVisualEffects;
+  onVisualEffectsChange(value:SourceVisualEffects):void;
 }
 
 interface ApplicationContentProps {
@@ -58,11 +60,13 @@ interface ApplicationContentProps {
   onRequestCloseWindow(id: string): void;
   trayPreferences:SourceTrayPreferences;
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
+  visualEffects:SourceVisualEffects;
+  onVisualEffectsChange(value:SourceVisualEffects):void;
 }
 function ApplicationContent({
   appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
   windows, onRequestCloseWindow, theme,wallpaper,
-  trayPreferences,onTrayPreferencesChange
+  trayPreferences,onTrayPreferencesChange,visualEffects,onVisualEffectsChange
 }: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
@@ -83,6 +87,9 @@ function ApplicationContent({
       else if(view==="Shutdown")dispatch({type:"SHUTDOWN"});
       else dispatch({type:"BSOD",code:"DUMMY_BSOD"});
     }} />;
+  if (appId === "system") return <SystemPropertiesApp
+    visualEffects={visualEffects} onVisualEffectsChange={onVisualEffectsChange}
+    onClose={()=>dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
   if (appId === "cpanel") return <ControlPanelApp
     filesystem={fileStore} theme={theme}
     initialLocation={filePath==="display"?"display":
@@ -221,7 +228,8 @@ function Clock() {
 }
 
 export function DesktopShell({
-  state,dispatch,trayPreferences,onTrayPreferencesChange
+  state,dispatch,trayPreferences,onTrayPreferencesChange,
+  visualEffects,onVisualEffectsChange
 }:DesktopShellProps) {
   const desktop = appRegistry.desktop();
   // Pinned source window__main.active follows the topmost nonminimized
@@ -323,7 +331,8 @@ export function DesktopShell({
 
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
-      data-effect-enable-glass="" data-effect-show-window-shadows="">
+      data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
+      data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}>
       <SourceEmbedBridge windows={state.windows} dispatch={dispatch}/>
       {/* In the legacy build the magnifier transforms the desktop container.
           Keep taskbar and Magnifier toolbar outside the scaled canvas so they
@@ -360,7 +369,9 @@ export function DesktopShell({
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
             wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
-            onTrayPreferencesChange={onTrayPreferencesChange} />
+            onTrayPreferencesChange={onTrayPreferencesChange}
+            visualEffects={visualEffects}
+            onVisualEffectsChange={onVisualEffectsChange} />
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch}
@@ -378,7 +389,9 @@ export function DesktopShell({
             registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
             wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
-            onTrayPreferencesChange={onTrayPreferencesChange} />
+            onTrayPreferencesChange={onTrayPreferencesChange}
+            visualEffects={visualEffects}
+            onVisualEffectsChange={onVisualEffectsChange} />
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base"
