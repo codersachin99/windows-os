@@ -1,3 +1,50 @@
+## Final pinned taskbar grouped thumbnails — 18 November 2026
+
+**Source remains frozen only by SHA:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+`src/modules/shell/taskbar-base.js`, `app.config.json`:
+`showStackedIcons=true`, `showPeekPreviews=true`, 200 ms
+show / 450 ms hide, 220 px thumbnail / 8 px gap, 206×125 scaled DOM.
+Do not conflate this with earlier `useAeroPeek=false` Show desktop.
+
+- `e16d4d3`, `22fad76`: source grouping model,
+  grouped pinned/unpinned app IDs, exact preview timings, viewport
+  position clamping and unit tests.
+- `5e7ff9c`, `0c15d30`: scaled inert Guest DOM snapshot of
+  original live windows in taskbar popup, per-window title and icon,
+  close/activate controls; browser network security prevents cloning
+  iframes/media/scripts into active duplicate content.
+- `83c30ea`, `46e2080`: React `WindowFrame` target
+  marker, grouped taskbar rendering, hover preview (delayed) and
+  source group toggle/restore behavior; no duplicate program launch.
+- `14689c3`: exclude inert preview clones from CSS that hides
+  unrelated source windows during one-window peek.
+- `38a7b4c`: Playwright: groups two Computer windows under one
+  running button, group minimize/restore, hover preview cards,
+  clone, peek, target-specific activate/close. Mobile touch checks
+  avoid artificial hover.
+- `a6cdaa1`: deliberate focused CI includes the new taskbar suite;
+  extended the entire job from 25 to 48 min because
+  [prior CI #44243971212](https://github.com/codersachin99/windows-os/actions/runs/44243971212)
+  **passed typecheck, unit, original inventory/theme asset/build,
+  focused Playwright** but **cancelled at its 25-min job cap
+  while running full desktop/mobile Chromium**. No full green
+  acceptance can be claimed from that run.
+- `c7967c9`: source contract, preview evidence and explicit
+  theme/Sticky/iframe/screenshot limitations recorded in
+  `migration/TASKBAR-LIVE-PREVIEWS-FINAL.md`.
+
+**New verification:** this handoff commit includes `[run-ci]`
+to deliberately run typecheck, Vitest, original source/image audits,
+build, focused browser and full browser on the exact pinned branch
+head. Check all results and fix failures before acceptance.
+No source repository modification, no merge, no release.
+
+**Next:** confirm new CI and repair real failures; then match
+Win7/XP/11 original preview pixels, continue shell context menu,
+Start, Computer/Bin and safe source map-directory implementation.
+
+---
+
 ## Final legacy-win7 source locked at 26b9f0c — 18 November 2026
 
 **Authoritative immutable source reference:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
