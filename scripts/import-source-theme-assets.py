@@ -72,6 +72,14 @@ FILES: dict[str, dict[str, str]] = {
     },
     "win10": {
         "win10.743e8c13.webp": "988278e48d41f10f2f701c748d73595f700b75c0",
+        "start-button-win8.2e5214cc.svg": "4fee2569b36836b595b0f13d429ad4ed967127af",
+        "computer-win10.2212df79.webp": "0e57037ee2ec589556c6a0ab80509c7c979666cd",
+        "bin-win10.e0f739cc.webp": "4a68a6a3958748018640f1b9cd7fc9b55137d098",
+        "bin-full-win10.857c2cab.webp": "6b9a1f6d1b3fede8661f201e940cc881db6bed09",
+        "folder-win10.294665f0.webp": "096e033bf55aaf5a8c98472d21fbd8d4c748acf0",
+        "file-win10.036601ed.webp": "cd0a20cbb1099f61e7028a1c315b585d616208f6",
+        "cpanel-win10.d3d1d446.webp": "a960a2939446c2ef6901dc9acdca55ddfcfdbaf6",
+        "games-win10.63f82076.webp": "05104c19549b3579db2eb3f31b1b9af5bb4d7377",
     },
     "win11": {
         "guest-win10.a110df5a.webp": "57caee256e62a46271db867a088f49b1981bbc7d",

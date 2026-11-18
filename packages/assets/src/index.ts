@@ -94,6 +94,17 @@ export const legacyArt = {
 // Original XP/Win11 shell image names and bytes were imported from the
 // pinned legacy-win7 revision. Never use generated substitute graphics.
 export const legacyShellThemeAssets = Object.freeze({
+  // Pinned original icons.registry.json win10 group; the source uses the
+  // Win8 Start button SVG for Win10, not the Win7 glass orb.
+  win10: {
+    start: "/assets/images/start-button-win8.2e5214cc.svg",
+    computer: "/assets/images/computer-win10.2212df79.webp",
+    bin: "/assets/images/bin-win10.e0f739cc.webp",
+    binFull: "/assets/images/bin-full-win10.857c2cab.webp",
+    folder: "/assets/images/folder-win10.294665f0.webp",
+    file: "/assets/images/file-win10.036601ed.webp",
+    theme: "/assets/images/win10.743e8c13.webp"
+  },
   winxp: {
     start: "/assets/images/start-button-winxp.a3485adf.webp",
     computer: "/assets/images/computer-winxp.8cbae9da.webp",
@@ -125,7 +136,7 @@ export const sourceThemeLogonArtwork=Object.freeze({
   }),
   win10:Object.freeze({
     guest:"/assets/images/guest-win10.a110df5a.webp",
-    background:"/assets/images/win10.743e8c13.webp"
+    background:legacyShellThemeAssets.win10.theme
   }),
   win2k:Object.freeze({banner:"/assets/images/logo2k.15140c8b.webp"}),
   winxp:Object.freeze({
@@ -140,6 +151,7 @@ export const sourceThemeLogonArtwork=Object.freeze({
 
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
+  if(theme==="win10")return legacyShellThemeAssets.win10.theme;
   if(theme==="winxp")return legacyShellThemeAssets.winxp.theme;
   if(theme==="win11")return legacyShellThemeAssets.win11.theme;
   return legacyArt.wallpaperWin7;
@@ -149,6 +161,7 @@ export function sourceShellWallpaper(theme:string):string{
  * the pinned legacy source. Do not add guessed URLs or unported user uploads. */
 export const sourceSystemWallpapers:readonly string[]=Object.freeze([
   ...legacyArt.wallpaperChoices,
+  legacyShellThemeAssets.win10.theme,
   legacyShellThemeAssets.winxp.theme,
   legacyShellThemeAssets.win11.theme
 ]);
@@ -158,6 +171,10 @@ export function sourceIsSystemWallpaper(path:string):boolean{
 
 /** Original XP/Win11 application icon variants, all pinned Git blobs. */
 export const legacyThemeProgramArtwork=Object.freeze({
+  win10:Object.freeze({
+    games:"/assets/images/games-win10.63f82076.webp",
+    cpanel:"/assets/images/cpanel-win10.d3d1d446.webp"
+  }),
   winxp:Object.freeze({
     notepad:"/assets/images/notepad-winxp.82037fb1.webp",
     games:"/assets/images/games-winxp.7f048588.webp",
@@ -212,6 +229,10 @@ export const legacyThemeProgramArtwork=Object.freeze({
   })
 } as const);
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="win10"){
+    const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win10;
+    return icons[iconKey]??null;
+  }
   if(theme==="winxp"){
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.winxp;
     return icons[iconKey]??null;
@@ -252,6 +273,7 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if (theme === "win10") return legacyShellThemeAssets.win10[kind];
   if (theme === "winxp") return legacyShellThemeAssets.winxp[kind];
   if (theme === "win11") return legacyShellThemeAssets.win11[kind];
   return null;
