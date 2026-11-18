@@ -1,3 +1,11 @@
+## Win8 exact-head CI checkpoint — 18 November 2026
+
+- First Win8 opt-in [CI #44362853105](https://github.com/codersachin99/windows-os/actions/runs/44362853105) at `50b010e9` stopped at **TypeScript**, before unit/asset/build/browser: `packages/ui/src/DesktopShell.tsx:459 Cannot find name 'wallpaper'`. This was a real new-integration bug; do not describe that run as green or claim its unrun suites passed.
+- [`9d8f72d`](https://github.com/codersachin99/windows-os/commit/9d8f72d6ce42bc201caaac02755f8a5a46749d14) passes **`state.wallpaper`**, the actual mounted Guest desktop background, into `StartMenu` rather than an out-of-scope identifier. This preserves original source Desktop preview showing current selected background.
+- New exact-head opt-in **`[run-ci]` checkpoint pending**. Need review TypeScript + asset/gallery changes, 7 added Win8/Win81 browser tests across desktop/mobile, then full suite; fix remaining findings. Keep draft PR #1, pinned source, no release/merge.
+
+---
+
 ## Windows 8 / Windows 8.1 full-screen Start, exact art and shell personality — 18 November 2026
 
 **Previous checkpoint verified:** [CI #44351174157](https://github.com/codersachin99/windows-os/actions/runs/44351174157) **SUCCESS** on `c7c79e0`, including full TypeScript/unit/source inventory/artwork/Vite, focused browser and full desktop/mobile browser. That verification predates the following Win8 changes.
