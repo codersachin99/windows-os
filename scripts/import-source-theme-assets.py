@@ -19,6 +19,18 @@ from pathlib import Path
 LEGACY_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
+    "boot": {
+        "boot-win31.7bac4ac4.webp": "45c51183da1be81aed459cce5b499e2137bd9f29",
+        "boot-win95.9bf06d7a.gif": "c8ef1f453edb0e25a9bb8d1cb7f802716e2c3384",
+        "boot-win98.36ae413e.gif": "92bbf71f5a62d394d9d2b29db5dcecf2db955961",
+        "boot-win2k.2870262d.gif": "6355fd992e8d60c19612df37e8e499d063f7a76e",
+        "boot-winxp.c42ee019.gif": "91d8eda88f2c022cedceb94e056c25b396e1ed45",
+        "boot-winvista.f7526b81.gif": "1c18b94eef48368ea02a6cefe77bb3186b82ea48",
+        "boot-win8.1a6acdfd.webp": "70a378a2198fb25ab23f4007a89b90e0f11e0aae",
+        "boot-win11.120bb3b3.webp": "f92ad078c0fa36ad8347fb582511fe36745b654a",
+        "boot-winL.934ea74a.gif": "e5fa6198492b9065dcd58e07ac975dd41a9ce670",
+        "boot-winW.052f504e.webp": "3f27d7236654d969a99c3300b283a27973e0c156",
+    },
     "win7": {
         "personal.ccbfdd3a.webp": "1c1649d47ab3c405afb49ce2fa45e3a9cd937725",
     },
@@ -175,8 +187,8 @@ def main() -> None:
     parser.add_argument("--source", type=Path, default=project.parent / "legacy-win7")
     parser.add_argument("--target", type=Path,
                         default=project / "apps/web/public/assets/images")
-    parser.add_argument("--themes", choices=["win7", "win2k", "winxp", "win8", "win10", "win11"], nargs="+",
-                        default=["win7", "win2k", "winxp", "win8", "win10", "win11"])
+    parser.add_argument("--themes", choices=["boot", "win7", "win2k", "winxp", "win8", "win10", "win11"], nargs="+",
+                        default=["boot", "win7", "win2k", "winxp", "win8", "win10", "win11"])
     parser.add_argument("--verify-only", action="store_true")
     parser.add_argument("--verify-target-only", action="store_true",
                         help="Check committed target bytes without source checkout")

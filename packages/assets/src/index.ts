@@ -169,6 +169,39 @@ export function sourceIsSystemWallpaper(path:string):boolean{
   return sourceSystemWallpapers.includes(path);
 }
 
+
+/** Byte-identical pinned boot images from legacy-win7/src/modules/themes:
+ * boot-win31.js: portrait-ish 5/6-height image
+ * boot-win9x.js: stretched fullscreen GIF for 95/98/2k/XP
+ * boot-win-mixed.js: contained source image for Vista, winLS/LP, WinW
+ * boot-win-x.js: 100px logo + five-orbit 25px spinner for Win8/10/11.
+ * Source 'win10' deliberately reuses 'boot-win8'; 'winLP' maps to 'winLS'
+ * in app.config.json, which uses the original 'boot-winL' image.
+ */
+export const sourceBootOriginalArtwork=Object.freeze({
+  win31:{renderer:"win31",src:"/assets/images/boot-win31.7bac4ac4.webp"},
+  win95:{renderer:"win9x",src:"/assets/images/boot-win95.9bf06d7a.gif"},
+  win98:{renderer:"win9x",src:"/assets/images/boot-win98.36ae413e.gif"},
+  win2k:{renderer:"win9x",src:"/assets/images/boot-win2k.2870262d.gif"},
+  winxp:{renderer:"win9x",src:"/assets/images/boot-winxp.c42ee019.gif"},
+  winvista:{renderer:"win-mixed",src:"/assets/images/boot-winvista.f7526b81.gif"},
+  win8:{renderer:"win-x",src:"/assets/images/boot-win8.1a6acdfd.webp"},
+  win10:{renderer:"win-x",src:"/assets/images/boot-win8.1a6acdfd.webp"},
+  win11:{renderer:"win-x",src:"/assets/images/boot-win11.120bb3b3.webp"},
+  winLS:{renderer:"win-mixed",src:"/assets/images/boot-winL.934ea74a.gif"},
+  winW:{renderer:"win-mixed",src:"/assets/images/boot-winW.052f504e.webp"}
+} as const);
+export type SourceBootOriginalRenderer=
+  (typeof sourceBootOriginalArtwork)[keyof typeof sourceBootOriginalArtwork]["renderer"];
+/** Strict source family lookup: unported boot screens retain the Win7
+ * fallback, never derive an asset path from arbitrary theme strings. */
+export function sourceBootOriginalArt(screen:string):
+  {readonly renderer:SourceBootOriginalRenderer;readonly src:string}|null{
+  return Object.prototype.hasOwnProperty.call(sourceBootOriginalArtwork,screen)
+    ?sourceBootOriginalArtwork[screen as keyof typeof sourceBootOriginalArtwork]
+    :null;
+}
+
 /** Original XP/Win11 application icon variants, all pinned Git blobs. */
 export const legacyThemeProgramArtwork=Object.freeze({
   win10:Object.freeze({
