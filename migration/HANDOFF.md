@@ -1,3 +1,70 @@
+## Final legacy-win7 source locked at 26b9f0c — 18 November 2026
+
+**Authoritative immutable source reference:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Previous, now historical:** `4e63290d783009e1293433c6ccf252abba9c1187`.
+Source `main` is **not locked/modified**; WindowsOS reproducibly pins
+this exact commit regardless of future source pushes.
+
+Read `migration/FINAL-SOURCE-BASELINE.md` **first** for the complete
+reconciliation matrix, source/target caveats and next priorities.
+`migration/final-upstream-delta.json` records all 40 new source commits
+and 215 changed paths, including PHP Slim4 backend, PWA, window-manager,
+per-app registry, taskbar preview/stack, Desktop Sort by, feature flags,
+network map, icons/sounds, shader effects, and boot/logon mappings.
+`migration/legacy-files.tsv` is rebuilt from the final source Git tree:
+3414 Git blobs, 291 JavaScript modules, 76 changed module objects and
+one new `src/modules/system/close-effects.js`. `module-tracker.json`
+preserves the prior evidence but downgrades source-changed
+verified/implemented entries until re-accepted.
+
+**Implemented during this rebaseline:**
+- `876c0f5`: rebuilt pinned source inventory and tracker.
+- `7412f07`: retargeted strict reference audits, theme art and source
+  visual capture SHA plus opt-in CI to new SHA.
+- `6891fad`, `7c09ea7`, `0c965a6`, `82d99d4`: final source
+  Desktop Sort by Name/Size/Type/Modified, Ascending/Descending;
+  persisted Guest-only column-major grid. New source flags hide
+  Copy Path, rename Upload Files and expose disabled host-dependent
+  Map Directory. Unit and Playwright test coverage added.
+- `c0c54d8`, `74a1bc1`, `104ac98`, `47da4f3`, `b252c66`:
+  single SDK menu flag source shared by Desktop and Computer/Bin Explorer;
+  updated final source context expectations/Playwright tests.
+- `783bc02`: detailed machine-readable 40-commit/215-file delta.
+- `1c7ddd3`: optional source visual capture now boots pinned legacy
+  via PHP router and composer instead of missing Python `start.py`.
+- `ca30112`, `24bf58a`, `714e5b3`: window-engine three-instance
+  global default limit, per-app override hooks, source error dialog
+  focusing frontmost existing window, engine and desktop/mobile browser
+  tests added to deliberate focused CI gate. Full source per-shortcut
+  override precedence remains pending.
+- `b768491`: curated immutable baseline and pending-parity matrix.
+
+**Not finished:** final source introduces grouped taskbar instances/live
+thumbnail previews, map/disconnect permissioned folders, feature flag
+config source, exact app/shortcut/icon/sound declarative registries,
+webapp fullscreen/header controls, source PHP/PWA integration, and
+boot defaults `skipBoot=true`/`nativeCursor=true`. These are
+tracked pending and MUST NOT be reported as migrated. In particular,
+the older Show Desktop Aero Peek is separate from final live taskbar
+window thumbnails. Updated source changes do not magically validate
+old screenshot evidence. Preserve React Guest login until new boot
+skip semantics can be migrated without bypassing authentication.
+
+**Validation:** this `[run-ci]` handoff push deliberately starts
+full TypeScript/unit/source-inventory/artwork/build/focused browser/full
+desktop+mobile tests for the exact new head. The old source SHA's CI
+is historical. Check exact run SHA/results and fix failures with a
+new deliberate CI run before labeling acceptance. Keep draft PR #1;
+no main merge, no release.
+
+**Next:** repair new exact-head CI regressions, complete final-source
+desktop context and Explorer source feature flag behavior, then taskbar
+group/live previews, source registry and theme/frame visual parity.
+Follow `migration/SHELL-PRIORITY.md`, updated by the new
+`FINAL-SOURCE-BASELINE.md` source freeze.
+
+---
+
 ## Win7 taskbar Aero Peek preview — 18 November 2026
 
 Continued **themes/taskbar shell-first** migration after System
