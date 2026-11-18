@@ -19,10 +19,11 @@ test("pinned main.js Desktop background menu restores its source actions",async(
   const menu=await desktopMenu(page);
   const labels=await menu.locator(':scope > button').allTextContents();
   expect(labels.map(label=>label.trim())).toEqual([
-    "View ▸","Refresh","Paste","Copy path","Upload files here","New ▸",
-    "Display","Gadgets","Personalize"
+    "View ▸","Sort by ▸","Refresh","Paste","Upload Files",
+    "Map Directory","New ▸","Display","Gadgets","Personalize"
   ]);
-  await expect(menu.locator("[data-test-desktop-copy-path]")).toBeEnabled();
+  await expect(menu.locator("[data-test-desktop-copy-path]")).toHaveCount(0);
+  await expect(menu.locator("[data-test-desktop-map-directory]")).toBeDisabled();
   await expect(menu.locator("[data-test-desktop-upload-here]")).toBeEnabled();
   await expect(menu.locator("[data-test-desktop-display]")).toBeEnabled();
   // Gadgets remains unported; source Personalization ChangeTheme now
@@ -30,21 +31,33 @@ test("pinned main.js Desktop background menu restores its source actions",async(
   await expect(menu.locator("[data-test-desktop-gadgets]")).toBeDisabled();
   await expect(menu.locator("[data-test-desktop-personalize]")).toBeEnabled();
 });
-test("source Desktop Copy path uses Guest virtual filesystem, not host disk",async({page})=>{
-  await page.addInitScript(()=>{
-    Object.defineProperty(navigator,"clipboard",{configurable:true,value:{
-      writeText:async(text:string)=>{
-        (window as unknown as {copiedDesktopPath?:string}).copiedDesktopPath=text;
-      }
-    }});
-  });
+test("final source menu hides Copy Path by app.config flag",async({page})=>{
   await desktopGuest(page);
   const menu=await desktopMenu(page);
-  await menu.locator("[data-test-desktop-copy-path]").click();
+  await expect(menu.locator("[data-test-desktop-copy-path]")).toHaveCount(0);
+  await expect(menu.locator("[data-test-desktop-upload-here]")).toBeEnabled();
+  await expect(menu.locator("[data-test-desktop-map-directory]")).toBeDisabled();
+});
+
+test("final source Sort by supports all columns, ascending and descending",async({page})=>{
+  await desktopGuest(page);
+  const menu=await desktopMenu(page);
+  await menu.locator("[data-test-desktop-sort]").click();
+  await expect(menu.locator("[data-test-desktop-sort-key]")).toHaveCount(4);
+  await expect(menu.locator("[data-test-desktop-sort-direction]")).toHaveCount(2);
+  await expect(menu.locator('[data-test-desktop-sort-key="name"]'))
+    .toHaveAttribute("aria-checked","true");
+  await menu.locator('[data-test-desktop-sort-key="size"]').click();
   await expect(menu).toHaveCount(0);
-  expect(await page.evaluate(()=>
-    (window as unknown as {copiedDesktopPath?:string}).copiedDesktopPath
-  )).toBe(DESKTOP);
+  const next=await desktopMenu(page);
+  await next.locator("[data-test-desktop-sort]").click();
+  await expect(next.locator('[data-test-desktop-sort-key="size"]'))
+    .toHaveAttribute("aria-checked","true");
+  await next.locator('[data-test-desktop-sort-direction="desc"]').click();
+  const finalMenu=await desktopMenu(page);
+  await finalMenu.locator("[data-test-desktop-sort]").click();
+  await expect(finalMenu.locator('[data-test-desktop-sort-direction="desc"]'))
+    .toHaveAttribute("aria-checked","true");
 });
 test("source Desktop Upload here writes actual imported files to Guest folder",async({page})=>{
   await desktopGuest(page);
