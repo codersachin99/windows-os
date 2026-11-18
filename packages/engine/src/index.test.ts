@@ -1,18 +1,27 @@
 import { describe, expect, it } from "vitest";
-import { desktopReducer, initialDesktopState, LEGACY_DEFAULTS, sourceWindowPlacement } from "./index";
+import { desktopReducer, initialDesktopState, LEGACY_DEFAULTS, sourceInitialPhase, sourceWindowPlacement } from "./index";
 import { appRegistry } from "@windows-os/sdk";
 
 describe("legacy state transitions", () => {
-  it("does not skip boot or fake a signed-in account", () => {
+  it("honors final skipBoot/nativeCursor defaults without bypassing Guest logon", () => {
     const initial = initialDesktopState();
-    expect(LEGACY_DEFAULTS.skipBoot).toBe(false);
-    expect(LEGACY_DEFAULTS.nativeCursor).toBe(false);
-    expect(initial.phase).toBe("boot");
+    expect(LEGACY_DEFAULTS.skipBoot).toBe(true);
+    expect(LEGACY_DEFAULTS.nativeCursor).toBe(true);
+    expect(sourceInitialPhase(true)).toBe("logon");
+    expect(sourceInitialPhase(false)).toBe("boot");
+    expect(initial.phase).toBe("logon");
     expect(initial.session).toBeNull();
-    expect(desktopReducer(initial, { type: "GUEST_LOGIN" }).phase).toBe("boot");
+    expect(initial.windows).toHaveLength(0);
+    // No boot animation does not imply a signed-in Guest or live filesystem.
+    expect(desktopReducer(initial, { type: "OPEN_APP", app: appRegistry.get("computer")! }).phase)
+      .toBe("logon");
+    const explicitlyAnimated=initialDesktopState({skipBoot:false});
+    expect(explicitlyAnimated.phase).toBe("boot");
+    expect(desktopReducer(explicitlyAnimated, { type: "GUEST_LOGIN" }).phase)
+      .toBe("boot");
   });
   it("runs boot -> Guest login -> desktop -> logoff", () => {
-    const boot = initialDesktopState();
+    const boot = initialDesktopState({skipBoot:false});
     const logon = desktopReducer(boot, { type: "BOOT_COMPLETE" });
     expect(logon.phase).toBe("logon");
     const desktop = desktopReducer(logon, { type: "GUEST_LOGIN" });
