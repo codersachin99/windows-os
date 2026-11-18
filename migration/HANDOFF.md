@@ -1,3 +1,18 @@
+## Windows 8 / Windows 8.1 full-screen Start, exact art and shell personality — 18 November 2026
+
+**Previous checkpoint verified:** [CI #44351174157](https://github.com/codersachin99/windows-os/actions/runs/44351174157) **SUCCESS** on `c7c79e0`, including full TypeScript/unit/source inventory/artwork/Vite, focused browser and full desktop/mobile browser. That verification predates the following Win8 changes.
+
+**New source-backed commits:**
+- [`b59aded`](https://github.com/codersachin99/windows-os/commit/b59aded0295c5bac15113267c378096104dbc66a) adds **3 original Git-blob-identical Win8/Win81 images**, separate desktop wallpapers and Start-screen background, source asset audit, 10-photo gallery contracts.
+- [`a8f22ac`](https://github.com/codersachin99/windows-os/commit/a8f22aceac4830981aa35a61549ddcf617e0755c) adds full-screen Win8/Win8.1 original source Start heading, double-wide Desktop, Computer/Games/Control Panel and up to six-app tile groups, Guest account and 420px dark Search flyout with actual Guest session actions.
+- [`bd51ec5`](https://github.com/codersachin99/windows-os/commit/bd51ec56816015609bbc6419d49709767988b4e2) wires the separate full-screen `SourceWin8StartScreen` into existing Start/window lifecycle (real program context retained), passes active desktop wallpaper; no Win7/XP/Win10/Win11 rendering changes.
+- [`8949bf0`](https://github.com/codersachin99/windows-os/commit/8949bf040bbfc8af21ed2329f4147ee898d54f2e) source Win8/81 desktop selection, theme-colored taskbar, **Win8 hidden 14px/26px touch Start** vs **Win8.1 visible 48px** with pinned SVG, flat 20px window caption/42px close.
+- [`3aa7613`](https://github.com/codersachin99/windows-os/commit/3aa76138f0c82ede044365271b1b6b67751db3f6) and [`379dbad`](https://github.com/codersachin99/windows-os/commit/379dbadacdd3f3437d1c4a5ae8de0bb8b6b5d15f) desktop/mobile acceptance for Win8/81 actual Start/Shell and touch-aware corner size.
+
+**Exact original source modules/SHAs/CSS values, test evidence, and explicit incomplete functionality** documented in [`migration/WIN8-SOURCE-SHELL.md`](https://github.com/codersachin99/windows-os/blob/feat/0001-faithful-react-foundation/migration/WIN8-SOURCE-SHELL.md). New `[run-ci]` required for this head. Keep PR #1 draft, legacy source pin `26b9f0ce`, main and release unchanged. Fix real CI failures and source-paired screenshots; do not imply pixel-perfect theme parity.
+
+---
+
 ## Windows 10 source Organize/View toolbar rather than nonexistent Computer ribbon — 18 November 2026
 
 - Previous full [CI #44346504203](https://github.com/codersachin99/windows-os/actions/runs/44346504203) **SUCCESS** at `ee92f99` (TypeScript, unit, source inventory and SHA, Vite, focused + full desktop/mobile browser) for context menus and original Win10 Computer/Bin art. This green run does **not** cover the following toolbar changes.

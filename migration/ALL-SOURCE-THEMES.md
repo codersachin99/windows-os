@@ -24,7 +24,7 @@ entry is intentionally omitted.
 | `win2k` | `win2k` | 1 | Original boot GIF/view + classic Guest logon; 2000 logo; shell/pixel parity pending |
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Original boot GIF/view migrated; logon/shell/pixel parity pending |
-| `win8` | `win8`, `win81` | 2 | Original Win8 boot logo/spinner + purple Guest logon; shell/pixel parity pending |
+| `win8` | `win8`, `win81` | 2 | Original boot/logon, Win8 fullscreen tile Start, source wallpaper/taskbar/flat windows; full shell/pixel parity pending |
 | `win10` | `win10` | 1 | Original Win8-reused boot logo/spinner + Win10 logon, dark taskbar, windows, Start; complete shell/pixel parity pending |
 | `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
@@ -187,3 +187,7 @@ The original `theme-win10-scss.js` defines a **light `#eee` Win10 context menu w
 ## Win10 Computer / Recycle Bin original toolbar — 18 November 2026
 
 The pinned `computer.js` does **not** use a full File/Home/Share/View ribbon; its original `window-menubar asToolbar` uses Organize and an icon-only View menu. React Win10 now shows that shared eight-mode/0–7 slider source menu in Computer and Bin, and scopes the original white menubar, light Organize/View menu colors and blue hover to Win10. See [WIN10-EXPLORER-TOOLBAR.md](WIN10-EXPLORER-TOOLBAR.md). Complete screenshot/functional parity still pending.
+
+## Windows 8 and Windows 8.1 Start / desktop personalities — 18 November 2026
+
+Both themes now have their original separate **byte-identical desktop wallpapers**, common Win8 Start-screen background, responsive **full-screen Start with 120px tile groups**, Desktop/Computer/Games/Control Panel tiles, account/search flyouts, and theme-scoped **Win8 hidden 14px (26px touch) Start corner vs Win8.1 visible 48px Start**. The source-based desktop/taskbar/flat 20px-window-caption skins supplement earlier purple Guest login and boot. **Still pending full fidelity** in the original program tile/app grouping, Explorer, context-menu variants, source-paired screenshots and remaining themes. See [WIN8-SOURCE-SHELL.md](WIN8-SOURCE-SHELL.md).
