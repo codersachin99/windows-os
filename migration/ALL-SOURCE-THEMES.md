@@ -18,9 +18,9 @@ entry is intentionally omitted.
 | Source boot/logon family | Exact source theme IDs | Count | React migration status |
 | --- | --- | ---: | --- |
 | `win7` | `base`, `aero-1`, `aero-2`, `aero-3`, `aero-4`, `basic-1`, `basic-2`, `basic-3`, `basic-4` | 9 | Win7 logon renderer retained; Aero/Basic variants pending |
-| `win31` | `win31` | 1 | Pending theme-specific implementation |
-| `win95` | `win95` | 1 | Pending theme-specific implementation |
-| `win98` | `win98` | 1 | Pending theme-specific implementation |
+| `win31` | `win31` | 1 | Source-shaped classic Guest logon adapter; shell/boot/pixel parity pending |
+| `win95` | `win95` | 1 | Source-shaped Win9x Guest logon adapter; shell/boot/pixel parity pending |
+| `win98` | `win98` | 1 | Source-shaped Win9x Guest logon adapter; shell/boot/pixel parity pending |
 | `win2k` | `win2k` | 1 | Pending theme-specific implementation |
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Pending theme-specific implementation |
@@ -57,8 +57,8 @@ even though `win7` itself is not a key in the final source
   still requires Guest authentication. The React Guest logon now dispatches to source-derived **WinXP**
   (three blue regions, 150×89 logo, Guest account tile) and **Win11**
   (source wallpaper, dark overlay, original 150px guest-win10 avatar)
-  renderers. The existing **Win7** login remains intact. All other
-  16 screen families expose
+  renderers. The existing **Win7** login remains intact. The Win31, Win95 and Win98 logons use an incremental shared classic
+  window and form adapter. Other unported screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
   renderer still needs source-family implementations. A recognized
@@ -137,3 +137,11 @@ even though `win7` itself is not a key in the final source
 - Browser: `tests/e2e/source-final-theme-catalog.spec.ts`.
 - Existing theme and file tests remain unchanged and must still pass.
   A new `[run-ci]` commit is required to verify all these changes.
+
+## Classic Win31/Win95/Win98 Guest logon slice — 18 November 2026
+
+- `SourceClassicLogon.tsx` reconstructs the shared `logon-window` / `logon-form-win9x` family from immutable original `src/modules/themes/logon-win31.js`, `logon-win9x.js`, and `src/modules/chunks/shared~logon-win2k~logon-win31~logon-win9x.js`.
+- Original `logon-win31.css` background `#bfbdc0`, window top 40%, and `logon-win9x.css` window top 30% and 500px width are represented in `sourceClassicLogon.css`. Win9x's runtime `--logon-bg` is currently a static interim teal adapter and is **not** source color proof.
+- Classic form displays source-inspired username/password/Guest Logon/Options; Guest enters the real existing Guest filesystem, while account submit/create requests explicitly report unavailable authentication. Shut down/restart remain functional.
+- `source-classic-logon.spec.ts` and the theme catalog test cover all three families, narrow viewport bounds, Guest authorization and account/power boundaries. The focused `[run-ci]` browser gate includes the new regression suite.
+- **Not certified**: Win31/Win9x pixel screenshots, original forms and social login fidelity, audio, all boot animations, shell skins. Theme status is still `pending` for all three.

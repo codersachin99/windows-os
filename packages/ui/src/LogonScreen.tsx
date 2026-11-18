@@ -2,6 +2,7 @@ import { useState } from "react";
 import {sourceThemeScreens,sourceThemeShellStatus,type ThemeId} from "@windows-os/contracts";
 import { legacyArt,sourceThemeLogonArtwork } from "@windows-os/assets";
 import "./sourceThemeLogon.css";
+import {SourceClassicLogon} from "./SourceClassicLogon";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -15,6 +16,13 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
   const status=sourceThemeShellStatus(theme);
   const [showAccount, setShowAccount] = useState(false);
   const [showPower, setShowPower] = useState(false);
+  // The source Win31 and Win9x screens share the classic logon-window.
+  // The shell skin remains pending; this is a source-shaped Guest adapter.
+  if(sourceScreens.logon==="win31"||sourceScreens.logon==="win95"||
+    sourceScreens.logon==="win98")return <SourceClassicLogon
+      theme={theme} family={sourceScreens.logon} shellStatus={status}
+      onGuest={onGuest} onShutdown={onShutdown} onRestart={onRestart}/>;
+
   // The original WinXP source uses a three-region blue login screen,
   // 150×89 XP logo and a Guest row. Only the guest/account backend behavior
   // is adapted here; unavailable account auth is never faked.
