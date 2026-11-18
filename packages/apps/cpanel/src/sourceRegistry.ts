@@ -622,7 +622,7 @@ export function sourceCpanelIsSupported(id:string):boolean{
 
 /** Source 3097 registry "program" targets whose React shell adapters now
  * exist. They open independent windows; they are not Control Panel pages. */
-export const SOURCE_CPANEL_MIGRATED_PROGRAMS=["personalize","taskbar"] as const;
+export const SOURCE_CPANEL_MIGRATED_PROGRAMS=["personalize","taskbar","system"] as const;
 export type SourceCpanelMigratedProgram=typeof SOURCE_CPANEL_MIGRATED_PROGRAMS[number];
 export function sourceCpanelIsMigratedProgram(id:string):id is SourceCpanelMigratedProgram{
   return SOURCE_CPANEL_MIGRATED_PROGRAMS.some(program=>program===id);
