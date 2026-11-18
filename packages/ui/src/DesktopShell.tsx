@@ -455,7 +455,8 @@ export function DesktopShell({
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch}
-        onEscapeClose={closeStartOnEscape} theme={state.theme} />}
+        onEscapeClose={closeStartOnEscape} theme={state.theme}
+        wallpaper={wallpaper} />}
       </div>
       {/* The control surface remains independent of the transformed canvas;
           other programs and their windows zoom together with the desktop. */}

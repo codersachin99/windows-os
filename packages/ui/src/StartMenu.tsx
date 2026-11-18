@@ -15,11 +15,13 @@ import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
 import {taskbarPins} from "./sourceTaskbarPins";
 import {sourceWin11PageCount,sourceWin11StartPage,sourceWin11NextStartPage} from "./sourceWin11StartPaging";
 import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
+import {SourceWin8StartScreen} from "./SourceWin8StartScreen";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
   onEscapeClose():void;
   theme?:ThemeId;
+  wallpaper?:string;
 }
 interface StartProgramContext{
   id:string;x:number;y:number;
@@ -52,7 +54,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 }
 
 /** The original All Programs tree is populated from installed .lnk files. */
-export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
+export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   const win11PowerRef=useRef<HTMLDivElement>(null);
@@ -232,6 +234,12 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
       </div>
     </section>;
   return (<>
+    {(theme==="win8"||theme==="win81")?
+      <SourceWin8StartScreen theme={theme} rootRef={menuRef}
+        wallpaper={wallpaper} programs={appRegistry.startMenu()}
+        onLaunch={openApp} onContext={openProgramContext}
+        onClose={()=>dispatch({type:"CLOSE_START"})}
+        onPower={type=>dispatch({type})}/>:
     <nav className={"windows-startmenu" +
       (theme==="winxp"?" windows-startmenu--winxp":
       theme==="win11"?" windows-startmenu--win11":
@@ -523,7 +531,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         <button type="button" onClick={() => dispatch({type:"SHUTDOWN"})}>
           <img src={legacyXpPowerArtwork.shutdown} width={20} height={20} alt="" />Turn off computer</button>
       </footer>}
-    </nav>
+    </nav>}
     {programContext&&contextProgram&&createPortal(
       <div ref={contextRef} role="menu" aria-label={"Program actions for "+contextProgram.label}
         data-test-start-program-context={contextProgram.id}

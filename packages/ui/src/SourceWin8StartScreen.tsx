@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState,type MouseEvent as ReactMouseEvent,type RefObject} from "react";
 import type {AppDefinition} from "@windows-os/contracts";
 import {
-  sourceShellWallpaper,sourceThemeLogonArtwork,sourceThemeProgramArt,
+  legacyArt,sourceShellWallpaper,sourceThemeLogonArtwork,sourceThemeProgramArt,
   sourceWin8ShellArtwork
 } from "@windows-os/assets";
 import "./sourceWin8StartScreen.css";
@@ -133,7 +133,7 @@ export function SourceWin8StartScreen({
           onClick={()=>onLaunch(tile.id)}>
           <img src={sourceThemeProgramArt(theme,tile.id)
             ??programs.find(app=>app.id===tile.id)?.icon
-            ??("/assets/images/"+tile.id+".webp")}
+            ??({computer:legacyArt.computer,games:legacyArt.games,cpanel:legacyArt.cpanel} as const)[tile.id]}
             width={44} height={44} alt=""/>
           <span className="win8-start__tile-label">{tile.label}</span>
         </button>)}
