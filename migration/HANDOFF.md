@@ -1,3 +1,55 @@
+## Win7 taskbar Aero Peek preview — 18 November 2026
+
+Continued **themes/taskbar shell-first** migration after System
+Properties tab navigation. Exact source checkpoint:
+`legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/modules/shell/taskbar-base.js`, `taskbar.js`,
+`src/modules/themes/theme-win7-scss.js`, and original
+`assets/locales/en-US.json`.
+
+- `8c3587c`, `053cfe6`: extend original Guest taskbar preferences
+  with strict default-off `useAeroPeek`; preserve legacy v1 type-only
+  settings, persist boolean with notifications and safe storage denial;
+  expanded unit tests.
+- `9521c5a`, `aee17fb`, `ad4434d`: original-source-labeled
+  Taskbar Properties Aero Peek checkbox; live Apply/OK, Cancel discard,
+  capture checkbox value before queued React updater; Win7 enabled,
+  other theme behavior gated pending evidence.
+- `93ecaea`, `9ac216c`: Show desktop hover and touch-press
+  previews Win7 Guest windows without minimizing them, while click
+  still minimizes only visible windows. Source outline/RTL gradients,
+  noninteracting window frame and .3s title/body fade; pointer leave
+  restores original window state.
+- `202640e`: desktop/mobile Playwright coverage for default-off,
+  committed hover, no window mutation, show-desktop click, Cancel,
+  reload, and Win11 unsupported-theme gating.
+- `570bd6a`: pinned original source findings, distinction between
+  source `window__background` and React adapter, unsupported exact
+  feature matrix and unfinished screenshot parity at
+  `migration/TASKBAR-AERO-PEEK-SOURCE.md`.
+
+**Verification:** The earlier System Properties tab
+[CI #44239204644](https://github.com/codersachin99/windows-os/actions/runs/44239204644)
+passed TS, Vitest, source/artwork audit, Vite build and focused
+Playwright but was **still running its complete browser suite**
+when inspected. It predates every Aero Peek change and cannot
+validate them. Even older Performance Options
+[CI #44237513268](https://github.com/codersachin99/windows-os/actions/runs/44237513268)
+was **cancelled** during its full browser step, not green.
+
+This handoff's opt-in `[run-ci]` push starts the **new exact-head**
+TypeScript/Vitest/source/asset/build/focused/full desktop+mobile
+browser gates. Check failures before acceptance; record any fix and
+rerun only when necessary. Keep PR #1 draft, main untouched, no
+release/pixel-parity claim.
+
+**Next:** confirm full CI then improve original Win7 peek frame
+background, validate all theme Aero Peek capability flags before
+enabling XP/Win11, continue source-vs-React visual captures, context
+menu, desktop, Start and Computer/Bin fidelity ahead of optional apps.
+
+---
+
 ## System Properties source tab navigation — 18 November 2026
 
 Next shell-first source milestone, continuing from the 18 November
