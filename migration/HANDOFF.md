@@ -1,3 +1,48 @@
+## System Properties source tab navigation — 18 November 2026
+
+Next shell-first source milestone, continuing from the 18 November
+Performance Options bridge. Pinned reference remains
+`legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/modules/shell/system.js` module `508f` and
+`assets/locales/en-US.json`.
+
+- `f538611`: all five original System Properties tabs in source order
+  (Computer Name, Hardware, Advanced, System Protection, Remote)
+  are **navigable**, default Advanced, with source English instructions.
+  Computer Name is explicitly Guest-scoped. Unavailable host hardware,
+  network joining, restore points and Remote Desktop controls remain
+  disabled and no fake device/drives are supplied. Advanced retains
+  original Performance Options access.
+- `52f057f`: scoped classic layout for source group boxes, fields,
+  system protection section dividers and an intentionally empty drive
+  column layout.
+- `f91a3c5`: desktop/mobile Playwright navigation assertion covering
+  every tab, visible original text, unavailable host operations and
+  returning to Advanced → Performance. Existing Visual Effects
+  Cancel/Apply/persistence browser coverage is retained.
+- `612604c`: source audit and explicit unsupported art/host scope in
+  `migration/SYSTEM-PERFORMANCE-SOURCE.md`.
+
+**Verification boundary:** previous original-effects
+[CI #44237513268](https://github.com/codersachin99/windows-os/actions/runs/44237513268)
+ran on `ddf8537` and had passed TS, unit, source/artwork, Vite and
+focused browser checks; its full suite was still running when last
+inspected. It does **not** cover these newer tab commits. This
+`[run-ci]` handoff push triggers a **new exact-head validation**.
+Read its logs separately for TS, units, source audits, production build,
+focused browser and full desktop/mobile suite. If failing, fix real
+regressions on branch and rerun deliberately; don't claim green while
+in progress. Do not merge draft PR #1 into main or tag a release.
+
+**Next:** extract the original Vuex `554d` Visual Effects inventory
+and exact presets, port only effects that can run in the Guest shell;
+import missing source tab illustrations; original-vs-React fixed-size
+screen captures/pixel comparisons for Win7/XP/Win11. Continue
+priority themes, context menu, desktop, Start and Computer/Bin parity,
+not optional games.
+
+---
+
 ## System Properties → Performance Options Visual Effects slice — 18 November 2026
 
 Continued shell-first functional fidelity from original
