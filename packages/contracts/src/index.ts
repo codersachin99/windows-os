@@ -1,4 +1,9 @@
-export type ThemeId = "win7" | "winxp" | "win11" | "win10" | "winvista" | "win31" | "win95" | "win98";
+import type {SourceThemeId} from "./sourceThemeCatalog";
+export type ThemeId = SourceThemeId;
+export {SOURCE_THEME_SCREENS,SOURCE_THEME_CATALOG_IDS,SOURCE_THEME_SCREEN_DEFAULTS,
+  sourceIsKnownTheme,sourceThemeScreens,sourceThemeShellStatus,
+  type SourceThemeConfigId,type SourceThemeScreenId,type SourceThemeScreens}
+  from "./sourceThemeCatalog";
 export type SessionPhase = "boot" | "logon" | "switch" | "desktop" | "shutdown" | "bsod";
 export type AppKind = "system" | "utility" | "media" | "game" | "web";
 
