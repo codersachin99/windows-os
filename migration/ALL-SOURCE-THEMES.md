@@ -183,3 +183,7 @@ even though `win7` itself is not a key in the final source
 ## XP/10/11 context-menu source skins — 18 November 2026
 
 The original `theme-win10-scss.js` defines a **light `#eee` Win10 context menu with white hover**, independent of the **dark** Win10 Start menu. This has now been ported to React Desktop, taskbar and Explorer root/child popups. Original XP white/blue/Tahoma and Win11 bright rounded menu skins were also scoped to Desktop/Taskbar without affecting Win7. Playwright CSS/functional acceptance is added to the focused desktop/mobile CI gate. These are individual source-exact palette/motion slices, not screenshot-perfect complete theme coverage. See [SOURCE-CONTEXT-MENUS.md](SOURCE-CONTEXT-MENUS.md).
+
+## Win10 Computer / Recycle Bin original toolbar — 18 November 2026
+
+The pinned `computer.js` does **not** use a full File/Home/Share/View ribbon; its original `window-menubar asToolbar` uses Organize and an icon-only View menu. React Win10 now shows that shared eight-mode/0–7 slider source menu in Computer and Bin, and scopes the original white menubar, light Organize/View menu colors and blue hover to Win10. See [WIN10-EXPLORER-TOOLBAR.md](WIN10-EXPLORER-TOOLBAR.md). Complete screenshot/functional parity still pending.

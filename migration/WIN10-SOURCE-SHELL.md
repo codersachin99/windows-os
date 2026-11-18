@@ -44,3 +44,7 @@ The original Win10 wallpaper `win10.743e8c13.webp` (SHA `988278e48d41f10f2f701c7
 ## Win10 Recycle Bin and file-artwork functional regression extension
 
 [`32bb659`](https://github.com/codersachin99/windows-os/commit/32bb659cda2d5c3a9d76931f083bc9499d8ea66d) adds Win10 to the real XP/Win11 Recycle Bin image-state browser test. It now requires the exact original Win10 `bin-win10.e0f739cc.webp` and `bin-full-win10.857c2cab.webp` through Guest file deletion, opening Explorer Bin and Empty Bin. [`b1334e5`](https://github.com/codersachin99/windows-os/commit/b1334e5800dcc8ef1a81feaef0af6bd0cfb2ab90) adds a real Computer/Desktop VFS test for original Win10 generic folder/file image URLs and multiple independent Computer windows. These are behavioral acceptance checks, not screenshot-paired parity.
+
+## Original source Computer is a toolbar, not a full ribbon
+
+Source audit on the immutable original `src/modules/apps/computer.js` shows **`window-menubar asToolbar`** and real Organize/View nested menus, not the full ribbon UI used by other apps. The React Win10 Computer/Bin now uses the shared eight-mode source View popup instead of the fallback select and applies original `#fff` toolbar / `#eee` popup styling. Source details, exact values, test coverage and remaining gaps: [WIN10-EXPLORER-TOOLBAR.md](WIN10-EXPLORER-TOOLBAR.md). No new claim of complete theme parity.
