@@ -1,4 +1,5 @@
 import {useLayoutEffect,useRef} from "react";
+import {sourceThemeProgramArt} from "@windows-os/assets";
 import type {DesktopWindow,ThemeId} from "@windows-os/contracts";
 import {SOURCE_TASKBAR_PEEK_CARD_WIDTH,SOURCE_TASKBAR_PEEK_CARD_GAP}
   from "./sourceTaskbarGroups";
@@ -23,9 +24,10 @@ interface SourceTaskbarLivePreviewProps{
  * explicitly replaced so hover cannot make another network connection.
  */
 export function SourceTaskbarPreviewCard({
-  win,onPeek,onActivate,onClose
+  win,theme,onPeek,onActivate,onClose
 }:{
   win:DesktopWindow;
+  theme:ThemeId;
   onPeek(id:string|null):void;
   onActivate(id:string):void;
   onClose(id:string):void;
@@ -94,9 +96,11 @@ export function SourceTaskbarPreviewCard({
   return <article className="windows-taskbar__preview-card"
       data-test-taskbar-preview-window={win.id}
       onMouseEnter={()=>onPeek(win.id)}
-      onMouseLeave={()=>onPeek(null)}>
+      onMouseLeave={()=>onPeek(null)}
+      onClick={()=>onActivate(win.id)}>
     <div className="windows-taskbar__preview-titlebar">
-      <img src={win.icon} alt="" width={16} height={16} draggable={false}/>
+      <img src={sourceThemeProgramArt(theme,win.appId)??win.icon}
+        alt="" width={16} height={16} draggable={false}/>
       <span title={win.title}>{win.title}</span>
       <button type="button" className="windows-taskbar__preview-close"
         data-test-taskbar-preview-close={win.id}
@@ -107,7 +111,6 @@ export function SourceTaskbarPreviewCard({
       aria-label={"Switch to "+win.title}
       className="windows-taskbar__preview-body"
       data-test-taskbar-preview-activate={win.id}
-      onClick={()=>onActivate(win.id)}
       onKeyDown={event=>{
         if(event.key==="Enter"||event.key===" "){
           event.preventDefault();onActivate(win.id);
@@ -131,6 +134,6 @@ export function SourceTaskbarLivePreview({
       style={{left,maxWidth:"min("+maxWidth+"px,calc(100vw - 20px))"}}
       onMouseEnter={onStay} onMouseLeave={onLeave}>
     {windows.map(win=><SourceTaskbarPreviewCard key={win.id} win={win}
-      onPeek={onPeek} onActivate={onActivate} onClose={onClose}/>)}
+      theme={theme} onPeek={onPeek} onActivate={onActivate} onClose={onClose}/>)}
   </div>;
 }
