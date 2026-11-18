@@ -17,16 +17,16 @@ entry is intentionally omitted.
 
 | Source boot/logon family | Exact source theme IDs | Count | React migration status |
 | --- | --- | ---: | --- |
-| `win7` | `base`, `aero-1`, `aero-2`, `aero-3`, `aero-4`, `basic-1`, `basic-2`, `basic-3`, `basic-4` | 9 | Win7 partial; variants pending |
+| `win7` | `base`, `aero-1`, `aero-2`, `aero-3`, `aero-4`, `basic-1`, `basic-2`, `basic-3`, `basic-4` | 9 | Win7 logon renderer retained; Aero/Basic variants pending |
 | `win31` | `win31` | 1 | Pending theme-specific implementation |
 | `win95` | `win95` | 1 | Pending theme-specific implementation |
 | `win98` | `win98` | 1 | Pending theme-specific implementation |
 | `win2k` | `win2k` | 1 | Pending theme-specific implementation |
-| `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP partial; other XP variants pending |
+| `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Pending theme-specific implementation |
 | `win8` | `win8`, `win81` | 2 | Pending theme-specific implementation |
 | `win10` | `win10` | 1 | Pending theme-specific implementation |
-| `win11` | `win11`, `win11dark` | 2 | Win11 partial; dark variant pending |
+| `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
 | `chromeos` | `chromeos` | 1 | Pending theme-specific implementation |
 | `ubuntu` | `ubuntu` | 1 | Pending theme-specific implementation |
@@ -54,11 +54,15 @@ even though `win7` itself is not a key in the final source
   import an untrusted query parameter.
 - **Boot/logon lifecycle:** the selected source family propagates to
   `BootScreen`, `LogonScreen`, and Switch User, while the engine
-  still requires Guest authentication. The React logon view is
-  currently implemented with the **Win7 renderer** and explicitly
-  exposes `data-source-logon-renderer="win7-fallback"` when the
-  requested screen has no dedicated renderer. The same transparency
-  applies to animated boot. A mapped ID is **not** a fully ported theme.
+  still requires Guest authentication. The React Guest logon now dispatches to source-derived **WinXP**
+  (three blue regions, 150×89 logo, Guest account tile) and **Win11**
+  (source wallpaper, dark overlay, original 150px guest-win10 avatar)
+  renderers. The existing **Win7** login remains intact. All other
+  16 screen families expose
+  `data-source-logon-renderer="win7-fallback"` and do not pretend to
+  use their unported original screen. The optional animated Boot
+  renderer still needs source-family implementations. A recognized
+  theme ID is **not** a fully ported theme.
 - **Visual fidelity:** Win7/XP/Win11 shell skins are partially ported.
   No theme is currently certified pixel-perfect. Other theme IDs
   remain source-catalogued, with existing Win7 fallback shell artwork.
@@ -73,11 +77,45 @@ even though `win7` itself is not a key in the final source
   listed in `migration/legacy-files.tsv`. Do not invent missing
   theme files or derive binary artwork from filenames alone.
 
+## WinXP and Win11 original Guest logon slice — 18 November 2026
+
+- Source `src/modules/themes/logon-winxp.js` and
+  `src/styles/themes/logon-winxp.css`: 13%-height top/bottom
+  blue regions, thin gradient dividers, radial blue middle section,
+  left logo/label, center divider and right clickable Guest account.
+  Source asset `assets/images/logoxp.9b034658.png` displays 150×89.
+- Source `src/modules/themes/logon-win11.js`,
+  `src/modules/shell/logon-base.js` and
+  `src/styles/themes/logon-win11.css`: original Win11 background,
+  black half-opacity overlay, centered 150px rounded guest-win10
+  avatar. Win11-dark shares the original Win11 logon *family*.
+- Imported binary source blobs into `apps/web/public/assets/images`
+  with **matching immutable Git blob IDs**:
+  `logoxp.9b034658.png` → `33b3bca96d3c07994b096bf13d2a87a6a05b1196`;
+  `guest-win10.a110df5a.webp` →
+  `57caee256e62a46271db867a088f49b1981bbc7d`.
+  The art and original existing Win11 background are referenced through
+  `sourceThemeLogonArtwork` in the shared asset package.
+- `LogonScreen.tsx` selects the original screen family with
+  `sourceThemeScreens(theme).logon`. Native Guest login and source
+  logout/restart actions remain wired, while unsupported account
+  authentication displays the existing honest backend limitation.
+  XP and Win11 layouts respond to smaller viewports.
+- `sourceThemeLogon.css` transcribes key XP region, background,
+  avatar hover and Win11 translucent button/overlay rules;
+  it is an **incremental rendering migration**, not confirmed
+  pixel-perfect across all original viewport dimensions and states.
+- Browser acceptance in `source-final-theme-catalog.spec.ts`
+  covers XP/Win11 variants, original asset URLs, screen selectors,
+  visual CSS properties, power/account boundaries and Guest entry.
+  Original vs React screenshot comparisons and original authentication
+  backend parity remain pending. Do not mark any whole theme complete.
+
 ## Execution sequence
 
 1. Keep the Win7 desktop/Start/context/Explorer/Bin source parity gate
-   as a priority and finish XP/Win11 source screenshots and login
-   renderers, with the exact configured boot/logon family.
+   as a priority and verify XP/Win11 source-paired login screenshots and interactions,
+   then implement the still-missing original boot animation families.
 2. Migrate **families and derivatives**, not isolated hardcoded
    `if(theme==="winxp")` branches. The shared contracts and reusable
    themed UI/engine components should drive variant selection.
