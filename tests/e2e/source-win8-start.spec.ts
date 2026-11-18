@@ -172,3 +172,34 @@ for(const theme of ["win8","win81"] as const){
       .toHaveValue("");
   });
 }
+
+
+for(const theme of ["win8","win81"] as const){
+  test("source "+theme+" separates installed program grids from app shortcut grids",async({page})=>{
+    await guest(page,theme);
+    const start=await openStart(page);
+    const groups=start.locator('[data-test-win8-start-group-kind]');
+    const kinds=await groups.evaluateAll(nodes=>nodes.map(node=>
+      node.getAttribute("data-test-win8-start-group-kind")));
+    expect(kinds[0]).toBe("programs");
+    expect(kinds.at(-1)).toBe("apps");
+    expect(kinds.indexOf("apps")).toBeGreaterThan(0);
+    expect(kinds.slice(kinds.indexOf("apps")).every(kind=>kind==="apps")).toBe(true);
+    const counts=await groups.evaluateAll(nodes=>nodes.map(node=>
+      node.querySelectorAll('[data-test-program]').length));
+    expect(counts.every(count=>count>0&&count<=6)).toBe(true);
+    await expect(start.locator('[data-test-program="notepad"]').locator("xpath=.."))
+      .toHaveAttribute("data-test-win8-start-group-kind","programs");
+    const external=start.locator('[data-test-program="web_contacts"]');
+    await expect(external.locator("xpath=.."))
+      .toHaveAttribute("data-test-win8-start-group-kind","apps");
+    // Original Win8 appItems have click only; programItems additionally
+    // offer the shared program context menu on right-click.
+    await external.click({button:"right"});
+    await expect(page.locator('[data-test-start-program-context="web_contacts"]'))
+      .toHaveCount(0);
+    await start.locator('[data-test-program="notepad"]').click({button:"right"});
+    await expect(page.locator('[data-test-start-program-context="notepad"]'))
+      .toBeVisible();
+  });
+}
