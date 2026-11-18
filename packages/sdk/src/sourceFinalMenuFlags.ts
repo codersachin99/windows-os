@@ -8,5 +8,7 @@ export const SOURCE_FINAL_DESKTOP_MENU_FLAGS=Object.freeze({
   showMenuCopyPath:false,
   showUploadFiles:true,
   showMapDirectory:true,
+  /** Final source Computer showCheckboxes config, default false. */
+  showItemCheckboxes:false,
   showWindowsCloseEffect:false
 });
