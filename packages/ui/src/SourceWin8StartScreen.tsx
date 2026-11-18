@@ -41,6 +41,7 @@ export function SourceWin8StartScreen({
   const [query,setQuery]=useState("");
   const inputRef=useRef<HTMLInputElement>(null);
   const accountRef=useRef<HTMLDivElement>(null);
+  const groupsRef=useRef<HTMLDivElement>(null);
   const searchRef=useRef<HTMLElement>(null);
   const searchButtonRef=useRef<HTMLButtonElement>(null);
   const startWallpaper=wallpaper??sourceShellWallpaper(theme);
@@ -60,6 +61,21 @@ export function SourceWin8StartScreen({
     ...makeGroups(tiles.filter(app=>!isInstalled(app)),"apps")
   ];
   useEffect(()=>{rootRef.current?.focus({preventScroll:true});},[rootRef]);
+  // Source startmenu-win8 mounts a native wheel listener on the pose grid:
+  // prevent vertical page scroll and move horizontally by deltaY + deltaX.
+  // A native non-passive listener is required: React wheel listeners are
+  // delegated/passive in supported browsers and cannot cancel page scrolling.
+  useEffect(()=>{
+    const grid=groupsRef.current;
+    if(!grid)return;
+    const wheel=(event:WheelEvent)=>{
+      if(event.deltaX===0&&event.deltaY===0)return;
+      event.preventDefault();
+      grid.scrollBy({left:event.deltaY+event.deltaX});
+    };
+    grid.addEventListener("wheel",wheel,{passive:false});
+    return ()=>grid.removeEventListener("wheel",wheel);
+  },[]);
   useEffect(()=>{
     if(searching)inputRef.current?.focus({preventScroll:true});
   },[searching]);
@@ -143,11 +159,7 @@ export function SourceWin8StartScreen({
         <span aria-hidden="true">⌕</span>
       </button>
     </header>
-    <div className="win8-start__groups" data-test-win8-start-groups=""
-      onWheel={event=>{
-        if(event.deltaY!==0&&event.currentTarget.scrollWidth>event.currentTarget.clientWidth)
-          event.currentTarget.scrollLeft+=event.deltaY;
-      }}>
+    <div ref={groupsRef} className="win8-start__groups" data-test-win8-start-groups="">
       <section className="win8-start__group win8-start__group--core"
         aria-label="System tiles" data-test-win8-start-core="">
         <button type="button" className="win8-start__tile win8-start__tile--desktop"
