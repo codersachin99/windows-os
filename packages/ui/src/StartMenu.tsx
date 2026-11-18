@@ -203,8 +203,10 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
   };
+  // Source startmenu-base.js also renders a recent-program list on Win7.
+  // Preserve the existing launch grid pending complete Win7 structural parity.
   const recentSection=startPreferences.storeRecentApps&&
-    (theme==="winxp"||theme==="win11")&&
+    (theme==="win7"||theme==="winxp"||theme==="win11")&&
     !allPrograms&&!query&&recentApps.length>0&&
     <section className="windows-startmenu__recent"
       aria-label="Recently opened programs" data-test-list-recent="">
@@ -234,7 +236,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7"}:StartMenuProps){
         <strong>Guest</strong>
       </header>}
       <div className="windows-startmenu__left">
-        {theme==="winxp"&&recentSection}
+        {(theme==="winxp"||theme==="win7")&&recentSection}
         <div className="windows-startmenu__programs"
           onWheel={event=>{
             if(!win11Paged||event.deltaY===0)return;
