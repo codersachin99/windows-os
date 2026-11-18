@@ -44,3 +44,41 @@ test("source selected theme restores on login and explicit theme URL overrides i
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await expect(page.locator("[data-test-main-screen]")).toHaveAttribute("data-theme","win7");
 });
+
+
+test("source Personalize chooses Win8 and Win8.1 separately with original wallpaper",async({page})=>{
+  const win=await openPersonalize(page);
+  const chooser=win.locator('[data-test-personalize]');
+  const eight=chooser.locator('[data-test-personalize-theme="win8"]');
+  const eightOne=chooser.locator('[data-test-personalize-theme="win81"]');
+  await expect(eight.locator("img")).toHaveAttribute(
+    "src","/assets/images/win8.3a5f11f3.webp");
+  await expect(eightOne.locator("img")).toHaveAttribute(
+    "src","/assets/images/win81.7b80787e.webp");
+  await eight.click();
+  await expect(page.locator('[data-test-main-screen]'))
+    .toHaveAttribute("data-theme","win8");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win8.3a5f11f3.webp");
+  await expect(eight).toHaveAttribute("aria-pressed","true");
+  await eightOne.click();
+  await expect(page.locator('[data-test-main-screen]'))
+    .toHaveAttribute("data-theme","win81");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win81.7b80787e.webp");
+  await expect(eightOne).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator('[data-test-start-button] img'))
+    .toHaveAttribute("src","/assets/images/start-button-win8.2e5214cc.svg");
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-main-screen]'))
+    .toHaveAttribute("data-theme","win81");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win81.7b80787e.webp");
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await expect(page.locator('[data-test-win8-start-screen]'))
+    .toHaveAttribute("data-source-start-theme","win81");
+});
