@@ -24,7 +24,7 @@ migration to **shell fidelity before additional games/apps**, in this order:
    clipboard, drag/drop, search, file properties, recycle/restore/empty
    lifecycle, error paths and mobile scrollability.
 
-Exact source checkpoint: `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+Historical source checkpoint for the original shell work in this document: `legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`. **Active immutable source reference is now `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`**. See `migration/FINAL-SOURCE-BASELINE.md` for the 40-commit reconciliation. Retain earlier sections as historical work descriptions, not current acceptance proof.
 Target: `codersachin99/windows-os` draft PR #1, branch
 `feat/0001-faithful-react-foundation`. PR remains draft, do not merge
 or release while source functionality or source-vs-target pixel parity is
