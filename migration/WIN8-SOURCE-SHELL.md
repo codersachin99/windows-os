@@ -85,3 +85,34 @@ finish successfully. The 37-theme source catalog remains partially
 implemented; source-paired screenshots, original installed-program tile
 grouping, broader search results and all-theme fidelity remain pending.
 Draft PR #1 stays open, and `main` is unchanged.
+
+
+## Separate source installed-program and external application tile grids — 19 November 2026
+
+The original `startmenu-win8.js` renders two *different* grid-list loops
+after the Desktop/Computer/Games/Control Panel system group:
+`programItems.slice(6*(n-1),6*n)` with both click and contextmenu, then
+`appItems.slice(6*(n-1),6*n)` with click-only. It must not split
+these source categories merely by taking batches of six from a single
+combined registry list.
+
+[`4d86c47`](https://github.com/codersachin99/windows-os/commit/4d86c4726ed44bdf2476ce68059e63142df20add)
+uses the already pinned `sourceProgramsById` install-path manifest to
+partition the real React app registry into executable-backed programs
+and external application shortcuts, preserving each source array's
+existing order and creating groups of at most six within each category.
+This avoids inventing a second program registry or duplicating tile
+implementations. Context menu callbacks only attach to program tiles,
+matching the source's distinct original handlers; core system tiles
+retain their existing separate actions.
+
+[`04d8d6f`](https://github.com/codersachin99/windows-os/commit/04d8d6f91387c92cbee964c39ef2e81ee5dab1de)
+adds browser tests for both Win8 and Win8.1, verifying source group
+order/size, real Notepad program context and the click-only
+`web_contacts` external shortcut. These commits intentionally omit
+`[run-ci]` while the prior Source Search clickout verification run
+[#44375432800](https://github.com/codersachin99/windows-os/actions/runs/44375432800)
+was still in progress. The new grouping is **not included in that run**.
+Source-installed-program inventory and presentation still require
+side-by-side pixel/interaction acceptance; do not mark Win8 or Win81
+fully verified or merge draft PR #1.
