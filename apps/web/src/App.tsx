@@ -5,7 +5,8 @@ import {sourceIsSystemWallpaper} from "@windows-os/assets";
 import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
 import {sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
 import type {DesktopAction} from "@windows-os/contracts";
-import {sourceDefaultTrayPreferences} from "@windows-os/apps/cpanel";
+import {sourceDefaultTrayPreferences,sourceVisualEffectsRead,
+  sourceVisualEffectsSave,type SourceVisualEffects} from "@windows-os/apps/cpanel";
 import {useState} from "react";
 
 export default function App() {
@@ -33,6 +34,17 @@ export default function App() {
     reduce(action);
   },[state.theme]);
   const [trayPreferences,setTrayPreferences]=useState(sourceDefaultTrayPreferences);
+  // Source Guest visual effects persist separately from window geometry and
+  // theme. Storage denial keeps the settings for this running session.
+  const [visualEffects,setVisualEffects]=useState<SourceVisualEffects>(()=>{
+    return sourceVisualEffectsRead(
+      typeof window==="undefined"?undefined:window.localStorage);
+  });
+  const updateVisualEffects=useCallback((next:SourceVisualEffects)=>{
+    setVisualEffects(next);
+    sourceVisualEffectsSave(
+      typeof window==="undefined"?undefined:window.localStorage,next);
+  },[]);
   const guestLoginPending = useRef(false);
   const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);
   useEffect(() => {
@@ -76,5 +88,7 @@ export default function App() {
   </main>;
   return <DesktopShell state={state} dispatch={dispatch}
     trayPreferences={trayPreferences}
-    onTrayPreferencesChange={setTrayPreferences}/>;
+    onTrayPreferencesChange={setTrayPreferences}
+    visualEffects={visualEffects}
+    onVisualEffectsChange={updateVisualEffects}/>;
 }
