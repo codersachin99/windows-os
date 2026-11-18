@@ -45,6 +45,10 @@ test("final source taskbar hover shows safe scaled thumbnails, peeks and switche
   await expect(cards).toHaveCount(2);
   await expect(preview.locator(".is-preview-clone")).toHaveCount(2);
   const target=await cards.first().getAttribute("data-test-taskbar-preview-window");
+  expect(target).not.toBeNull();
+  // DOM clones must never duplicate running Guest window selectors or
+  // accessible dialogs: Playwright and real window actions target one node.
+  await expect(page.locator('[data-test-window-id="'+target+'"]')).toHaveCount(1);
   await cards.first().hover();
   await expect(page.locator('[data-test-main-screen]'))
     .toHaveAttribute("data-source-taskbar-peeking","true");
