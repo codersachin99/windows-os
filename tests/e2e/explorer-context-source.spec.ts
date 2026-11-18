@@ -37,22 +37,13 @@ test("source Computer background View context uses shared eight mode contract",a
   await expect(computer.locator(".explorer-list")).toHaveClass(/is-extra/);
   await expect(menu).toHaveCount(0);
 });
-test("source Computer Copy path and Upload use virtual mounted directory",async({page})=>{
-  await page.addInitScript(()=>{
-    Object.defineProperty(navigator,"clipboard",{configurable:true,value:{
-      writeText:async(text:string)=>{
-        (window as unknown as {copiedExplorerPath?:string}).copiedExplorerPath=text;
-      }
-    }});
-  });
+test("final source Computer hides Copy Path, uploads Guest files and guards Map Directory",async({page})=>{
   const computer=await openFolder(page,"computer");
-  let menu=await openBackgroundMenu(computer);
-  await menu.locator("[data-test-explorer-context-copy-path]").click();
-  expect(await page.evaluate(()=>
-    (window as unknown as {copiedExplorerPath?:string}).copiedExplorerPath
-  )).toBe("/");
-  menu=await openBackgroundMenu(computer);
+  const menu=await openBackgroundMenu(computer);
+  await expect(menu.locator("[data-test-explorer-context-copy-path]")).toHaveCount(0);
+  await expect(menu.locator("[data-test-explorer-context-map-directory]")).toBeDisabled();
   await expect(menu.locator("[data-test-explorer-context-upload]")).toBeEnabled();
+  await expect(menu.locator("[data-test-explorer-context-upload]")).toHaveText("Upload Files");
   await menu.locator("[data-test-explorer-context-upload]").click();
   await computer.locator('input[type="file"][aria-label="Upload files"]')
     .setInputFiles({name:"Explorer Context Note.txt",mimeType:"text/plain",
@@ -60,10 +51,11 @@ test("source Computer Copy path and Upload use virtual mounted directory",async(
   await expect(computer.locator('[data-test-explorer-item="Explorer Context Note.txt"]'))
     .toBeVisible();
 });
-test("source Bin context retains View/Copy path but forbids upload and paste",async({page})=>{
+test("final source Bin context retains View but hides Copy Path and forbids upload and paste",async({page})=>{
   const bin=await openFolder(page,"bin");
   const menu=await openBackgroundMenu(bin);
-  await expect(menu.locator("[data-test-explorer-context-copy-path]")).toBeEnabled();
+  await expect(menu.locator("[data-test-explorer-context-copy-path]")).toHaveCount(0);
+  await expect(menu.locator("[data-test-explorer-context-map-directory]")).toBeDisabled();
   await expect(menu.locator("[data-test-explorer-context-upload]")).toBeDisabled();
   await expect(menu.getByRole("menuitem",{name:"Paste"})).toHaveCount(0);
   await expect(menu.getByRole("menuitem",{name:"New folder"})).toHaveCount(0);
