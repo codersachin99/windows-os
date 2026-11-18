@@ -11,6 +11,8 @@ export interface AppDefinition {
   allowMultipleWindows?:boolean;
   /** 0 means unlimited; undefined inherits source global cap 3. */
   maxWindowsPerApp?:number;
+  /** Original src/config/app.registry.json command aliases for known apps. */
+  aliases?:readonly string[];
   window: { width: number; height: number; resizable?: boolean; centered?: boolean;
     /** Pinned fullscreen WindowMain can be fixed-size while maximized. */
     fullscreen?:boolean;
