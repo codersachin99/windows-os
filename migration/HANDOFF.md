@@ -1,3 +1,18 @@
+## Win10 focused desktop/mobile browser findings and repairs — 18 November 2026
+
+**Actual verification evidence:** earlier [CI #44321719275](https://github.com/codersachin99/windows-os/actions/runs/44321719275) was **TypeScript/units/source inventory/artwork/Vite success, focused browser failure: 8 tests failed**. [CI #44322185627](https://github.com/codersachin99/windows-os/actions/runs/44322185627) was **TypeScript/units/source inventory/artwork/Vite success, focused browser 276 passed/6 failed** after the first gallery-spec update, with full browser suite skipped. Do not claim these runs green.
+
+Six failures (three per desktop/mobile) at `3220ea4` were grounded by the actual browser job log:
+1. `source-cpanel-program-launch.spec.ts` still expected 7, now source-added eighth original Win10 system wallpaper; [`fa922fa`](https://github.com/codersachin99/windows-os/commit/fa922fa71e21b77f5014e8e838895e5d2b5e1138) updates this **additional** browser contract to 8 and checks exact Win10 image URL.
+2. `source-win10-shell.spec.ts` expected a 5px Show Desktop divider, but Chromium measured 13px because native button padding/min-content survived despite a CSS width declaration; [`fa922fa`](https://github.com/codersachin99/windows-os/commit/fa922fa71e21b77f5014e8e838895e5d2b5e1138) fixes the **actual layout** with explicit `box-sizing:border-box`, `min-width`, `max-width`, `padding:0` plus source 5px flex basis. Test remains strict about 5px.
+3. `source-win10-start.spec.ts` erroneously expected only one Computer window after opening Documents via Win10 Start; original runtime explicitly allows independent multiple Explorer windows and the UI correctly rendered two. Same commit corrects test to assert **two** real Computer windows, with the new one active rather than weakening or changing the real Guest window behavior.
+
+The prior [`299498a`](https://github.com/codersachin99/windows-os/commit/299498a6090a92e1af8b74a2454bdb886454f327) source-backed Start icon test update also reflects that Games and Control Panel are **sidebar commands** (not Start program-list registrations), so it tests those actual original positions. `source-personalize-background.spec.ts` now validates 8 original system wallpapers (previous [`040cc40`](https://github.com/codersachin99/windows-os/commit/040cc4070e1b75624dccced16bf6c5f360e7fcaa)).
+
+**This single deliberate `[run-ci]` exact-head checkpoint** tests *all* corrected source assertions and the Win10 Desktop/Start work; wait for TypeScript, all unit, asset SHA/audit, Vite, focused desktop/mobile 280+ browser tests and the full desktop/mobile suite. Report any further failures accurately and fix before calling the new source shell CI-verified. No source/main modification or release; PR #1 remains draft. Pixel-paired original screenshot tests, all Win10 taskbar popups and other variants' boot/Start/desktop skins are still pending.
+
+---
+
 ## Win10 imported wallpaper — browser acceptance correction — 18 November 2026
 
 - The second exact-head [CI #44321719275](https://github.com/codersachin99/windows-os/actions/runs/44321719275) at `efc652b` already passed TypeScript, all unit tests, original source inventory, byte-identity source-art audits and Vite build. Browser suites were running at the time of this note; that head's `tests/e2e/source-personalize-background.spec.ts` still expected **7** backgrounds despite importing an eighth exact original Win10 wallpaper.
