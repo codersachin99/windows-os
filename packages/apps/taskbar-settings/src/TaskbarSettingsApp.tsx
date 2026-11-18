@@ -95,8 +95,8 @@ export function TaskbarSettingsApp({
             data-test-taskbar-settings-customize="">Customize...</button>
         </fieldset>
         <fieldset>
-          <legend>Aero Peek</legend>
-          <p>Preview the desktop by moving your mouse to the Show desktop button at the end of the taskbar.</p>
+          <legend>Preview desktop with Aero Peek</legend>
+          <p>Temporarily view the desktop when you move your mouse to the Show desktop button at the end of the taskbar.</p>
           <label><input type="checkbox" data-test-taskbar-settings-aero-peek=""
             disabled={theme!=="win7"} checked={taskbarDraft.useAeroPeek}
             onChange={event=>{
