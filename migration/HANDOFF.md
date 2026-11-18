@@ -1,3 +1,47 @@
+## Verified previous milestone and Win7 Start recent-app source reconciliation — 18 November 2026
+
+**Previous exact-head milestone accepted by automated CI:**
+[CI #44256365987](https://github.com/codersachin99/windows-os/actions/runs/44256365987)
+on `95bf7ce34ba5834d3137c6fc6fc380c7ee03888e` completed **success**:
+TypeScript, unit tests, source-inventory integrity, original byte-identical
+artwork, Contacts source audit, Vite build, focused desktop/mobile browser
+suite and complete desktop/mobile browser suite. That acceptance **does not
+mean pixel-perfect themes/screenshots or full functional migration**.
+
+**Current Win7 Start source slice:** final source pinned to
+`codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+Original `src/modules/shell/startmenu-base.js` renders
+`data-test-list-recent` while not searching or showing All Programs.
+Existing React Start menu only exposed its recent history on XP and Win11.
+
+- `bc33bcf`: enable source Guest recent-program section in Win7 Start,
+  reusing the already migrated `sourceRecentPrograms` (no host-program
+  history, no new storage schema). Existing source-installed app launcher
+  compatibility grid retained to prevent temporary loss of working apps
+  while the original Win7 Start composition is still incomplete.
+- `67f621b`: scoped Win7 recent area, source-like hover/focus, icons,
+  bounded scroll area and separator; remains an interim CSS adapter until
+  source-paired screenshots for XP/Win7/Win11 are accepted.
+- `81064df`: desktop/mobile browser test verifies Win7 empty-to-recent
+  history, Notepad-before-Calculator order, All Programs separation,
+  profile persistence across browser reload, and clicking a real recent
+  app to reopen it.
+- `0db1310`: `migration/FINAL-SOURCE-BASELINE.md` updated with
+  explicit newly migrated behavior and remaining Start pixel gaps.
+
+**This commit is deliberately `[run-ci]`:** check the exact new head's
+unit, type, inventory, Vite, focused browser including recent/start and full
+desktop/mobile browser conclusions. Any failure requires a repair before
+an acceptance claim. The old baseline is historical only and original
+`legacy-win7` source was not changed.
+
+**Next priority:** verify CI; continue Win7/XP/11 original Start
+visual contracts, desktop/context menu, Computer/Bin source behaviors,
+and permissioned mapped-directory integration. Draft PR #1 remains
+unmerged, WindowsOS main unchanged, no release.
+
+---
+
 ## Final source taskbar singleton title regression and app alias registry — 18 November 2026
 
 **Active reference remains locked** at `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
