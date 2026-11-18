@@ -239,7 +239,11 @@ export function DesktopShell({
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
-  const [buttonMode,setButtonMode]=useState(()=>sourceTaskbarPreferences.snapshot().type);
+  const [taskbarConfig,setTaskbarConfig]=useState(()=>sourceTaskbarPreferences.snapshot());
+  const [aeroPeeking,setAeroPeeking]=useState(false);
+  const buttonMode=taskbarConfig.type;
+  const canAeroPeek=state.theme==="win7"&&taskbarConfig.useAeroPeek;
+  const previewDesktop=canAeroPeek&&aeroPeeking;
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
   const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);
   const restoreStartFocus=useRef(false);
@@ -254,7 +258,7 @@ export function DesktopShell({
       '[data-test-start-button]')?.focus({preventScroll:true});
   },[state.startOpen]);
   useEffect(()=>taskbarPins.subscribe(setPinnedPrograms),[]);
-  useEffect(()=>sourceTaskbarPreferences.subscribe(value=>setButtonMode(value.type)),[]);
+  useEffect(()=>sourceTaskbarPreferences.subscribe(setTaskbarConfig),[]);
   const [magnifierOrigin, setMagnifierOrigin] = useState({x: 0, y: 0});
   const magnifierActive = state.windows.some(win => win.appId === "magnifier");
   // Original magnifier follows document mousemove while mounted, even at 1x,
@@ -332,7 +336,8 @@ export function DesktopShell({
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
       data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
-      data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}>
+      data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}
+      data-source-aero-peeking={previewDesktop?"true":undefined}>
       <SourceEmbedBridge windows={state.windows} dispatch={dispatch}/>
       {/* In the legacy build the magnifier transforms the desktop container.
           Keep taskbar and Magnifier toolbar outside the scaled canvas so they
@@ -486,7 +491,25 @@ export function DesktopShell({
           {trayPreferences.showClockIcon&&<div data-test-tray-clock=""><Clock/></div>}
         </div>
         <button className="windows-taskbar__show-desktop" aria-label="Show desktop"
-          onClick={() => state.windows.forEach(win => dispatch({ type: "MINIMIZE_WINDOW", id: win.id }))} />
+          data-test-show-desktop=""
+          onPointerEnter={event=>{
+            if(event.pointerType!=="touch"&&canAeroPeek)setAeroPeeking(true);
+          }}
+          onPointerLeave={()=>setAeroPeeking(false)}
+          onPointerDown={event=>{
+            // The legacy taskbar also supports a touch long-press preview.
+            if(event.pointerType==="touch"&&canAeroPeek)setAeroPeeking(true);
+          }}
+          onPointerUp={()=>setAeroPeeking(false)}
+          onPointerCancel={()=>setAeroPeeking(false)}
+          onClick={()=>{
+            setAeroPeeking(false);
+            // Source MinimizeAll is irreversible by hovering: only explicit
+            // click minimizes, while preview leaves all windows mounted.
+            for(const win of state.windows){
+              if(!win.minimized)dispatch({type:"MINIMIZE_WINDOW",id:win.id});
+            }
+          }} />
       </footer>
       {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
