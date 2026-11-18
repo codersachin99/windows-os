@@ -4481,3 +4481,34 @@ The preserved backend contains legacy account/security behavior, including non-p
 - [Simulated window process support 9c2c6b2](https://github.com/codersachin99/windows-os/commit/9c2c6b23a55c4f734805ff82849fa2634648c0db): original source PIDs, source-specified tasklist column formatting, TASKKILL /PID and /IM through existing DesktopShell window close request. Unit tests and desktop/mobile tests added for live CMD task listing and self-termination. Underlying host OS processes are never observed or terminated.
 - This commit opts in to one [run-ci] combined test batch for the new source simulated task commands. Other source command changes (DIR, WHERE, START) were already submitted in earlier separate opt-in batches and remain subject to their own browser conclusions. This run verifies the latest complete feature branch including them.
 - Do not claim source, unit, build or browser passes before this new workflow reports. Keep PR #1 draft, main untouched, and no premature release or full parity claim.
+
+
+## 19 November 2026 — Win8 source Search result keyboard selection and full-check request
+
+The last finished exact-source [CI #44375432800](https://github.com/codersachin99/windows-os/actions/runs/44375432800)
+passed on `c561149`, before subsequent independent Win8 Start group,
+native wheel and Search navigation improvements. The current source is
+still pinned to `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+and PR #1 remains **DRAFT**; neither `main` nor the reference is touched.
+
+The original Win8/Win81 Start flyout's `start-search-results` has a
+selected index and keyboard handling; the React slice previously
+launched the first result regardless of ArrowUp/ArrowDown.
+[7ede461](https://github.com/codersachin99/windows-os/commit/7ede461eab0bd3d77b90e1099a7227b7503c3ae7)
+restores selected-result keyboard and pointer behavior;
+[f52dd18](https://github.com/codersachin99/windows-os/commit/f52dd182cdeb378236691343b102e221e9101d60)
+adds the original selected color; and
+[5b63146](https://github.com/codersachin99/windows-os/commit/5b6314627781cdcf74770d7564a7ef8400bb6357)
+adds actual browser regressions in `source-win8-start.spec.ts` for
+Win8 and Win8.1. The immediately preceding tile-group and horizontal
+wheel commits also remain outside the older green run.
+
+**Action now:** inspect the opt-in CI result of this handoff commit
+(`[run-ci]`). Check TypeScript, unit/source/artwork/build, focused
+and full desktop/mobile Chromium. Fix genuine failures rather than
+relaxing tests. Source-paired visual capture remains blocked if the
+private original is not accessible in runner; do not report pixel
+parity. Continue unimplemented theme families and desktop/menu/
+Computer/Bin source parity after verification. Never auto-trigger CI
+without the explicit marker; do not merge the draft PR or release
+while acceptance is incomplete.
