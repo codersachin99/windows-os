@@ -63,8 +63,8 @@ export default function App() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [state.phase]);
-  if (state.phase === "boot") return <BootScreen onComplete={finishBoot} />;
-  if (state.phase === "logon") return <LogonScreen onGuest={() => {
+  if (state.phase === "boot") return <BootScreen theme={state.theme} onComplete={finishBoot} />;
+  if (state.phase === "logon") return <LogonScreen theme={state.theme} onGuest={() => {
     if (guestLoginPending.current) return;
     guestLoginPending.current = true;
     // Source g.init() creates drive0/System C: and g.ensureUser(null) creates
@@ -79,7 +79,7 @@ export default function App() {
     onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
   if (state.phase === "bsod") return <SourceBsodScreen
     code={state.bsodCode??"DUMMY_BSOD"} onRestart={() => dispatch({type:"RESTART"})}/>;
-  if (state.phase === "switch") return <LogonScreen
+  if (state.phase === "switch") return <LogonScreen theme={state.theme}
     onGuest={() => dispatch({type:"RESUME_SESSION"})}
     onShutdown={() => dispatch({type:"SHUTDOWN"})}
     onRestart={() => dispatch({type:"RESTART"})}/>;
