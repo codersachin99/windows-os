@@ -81,6 +81,9 @@ FILES: dict[str, dict[str, str]] = {
     },
     "win8": {
         "guest-win8.265e68f5.webp": "060bcb7d2327f85c3f51bc33d2704072e86df578",
+        "win8-startscreen.844bc8df.webp": "018e7ce006174771f2bf24e4a18c77596cf26b01",
+        "win8.3a5f11f3.webp": "02d9561be738dca78f8af8f67b2cbccf0390c48c",
+        "win81.7b80787e.webp": "e2b46add76737836683dfe48fb13532615acc2b7",
     },
     "win10": {
         "win10.743e8c13.webp": "988278e48d41f10f2f701c748d73595f700b75c0",

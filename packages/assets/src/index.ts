@@ -125,6 +125,18 @@ export const legacyShellThemeAssets = Object.freeze({
   }
 } as const);
 
+/** Immutable Win8/Win8.1 native wallpaper and fullscreen Start art from
+ * pinned legacy-win7 source. Unlike Windows 10, Win8/Win81 have no
+ * distinct Computer/Bin icon overrides in icons.registry.json.
+ * The source Win8 Start button SVG was already byte-imported for Win10.
+ */
+export const sourceWin8ShellArtwork=Object.freeze({
+  win8Wallpaper:"/assets/images/win8.3a5f11f3.webp",
+  win81Wallpaper:"/assets/images/win81.7b80787e.webp",
+  startScreen:"/assets/images/win8-startscreen.844bc8df.webp",
+  start:"/assets/images/start-button-win8.2e5214cc.svg"
+});
+
 /** Source logon-winxp.js / logon-win11.js exact original artwork.
  * These two new binary assets were imported with Git blob SHA equality
  * against pinned legacy-win7@26b9f0c, not redrawn/generated.
@@ -151,6 +163,8 @@ export const sourceThemeLogonArtwork=Object.freeze({
 
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
+  if(theme==="win8")return sourceWin8ShellArtwork.win8Wallpaper;
+  if(theme==="win81")return sourceWin8ShellArtwork.win81Wallpaper;
   if(theme==="win10")return legacyShellThemeAssets.win10.theme;
   if(theme==="winxp")return legacyShellThemeAssets.winxp.theme;
   if(theme==="win11")return legacyShellThemeAssets.win11.theme;
@@ -161,6 +175,8 @@ export function sourceShellWallpaper(theme:string):string{
  * the pinned legacy source. Do not add guessed URLs or unported user uploads. */
 export const sourceSystemWallpapers:readonly string[]=Object.freeze([
   ...legacyArt.wallpaperChoices,
+  sourceWin8ShellArtwork.win8Wallpaper,
+  sourceWin8ShellArtwork.win81Wallpaper,
   legacyShellThemeAssets.win10.theme,
   legacyShellThemeAssets.winxp.theme,
   legacyShellThemeAssets.win11.theme
@@ -308,6 +324,8 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if ((theme === "win8" || theme === "win81") && kind === "start")
+    return sourceWin8ShellArtwork.start;
   if (theme === "win10") return legacyShellThemeAssets.win10[kind];
   if (theme === "winxp") return legacyShellThemeAssets.winxp[kind];
   if (theme === "win11") return legacyShellThemeAssets.win11[kind];
