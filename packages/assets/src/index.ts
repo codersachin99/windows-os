@@ -114,6 +114,22 @@ export const legacyShellThemeAssets = Object.freeze({
   }
 } as const);
 
+/** Source logon-winxp.js / logon-win11.js exact original artwork.
+ * These two new binary assets were imported with Git blob SHA equality
+ * against pinned legacy-win7@26b9f0c, not redrawn/generated.
+ * Windows XP source avatar is from original account store's Guest icon.
+ */
+export const sourceThemeLogonArtwork=Object.freeze({
+  winxp:Object.freeze({
+    logo:"/assets/images/logoxp.9b034658.png",
+    guest:legacyArt.guestAvatar
+  }),
+  win11:Object.freeze({
+    guest:"/assets/images/guest-win10.a110df5a.webp",
+    background:legacyShellThemeAssets.win11.theme
+  })
+});
+
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
   if(theme==="winxp")return legacyShellThemeAssets.winxp.theme;
