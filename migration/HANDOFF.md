@@ -1,3 +1,66 @@
+## Original Aero/XP/Win11 visual effect and RTL bridge — 18 November 2026
+
+Continued priority themes/window-chrome fidelity against original
+`codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+Pinned rules are in `src/modules/themes/theme-win7-scss.js`,
+`theme-winxp-scss.js` and `theme-win11-scss.js`.
+
+Prior SVG window control
+[CI #44144175118](https://github.com/codersachin99/windows-os/actions/runs/44144175118)
+on `0915bc7` passed 619 unit and 144 focused browser tests, as well
+as TypeScript, source/artwork checks and production Vite, but its
+648-case full browser suite was **cancelled**, not accepted.
+Earlier window-chrome
+[CI #44141690244](https://github.com/codersachin99/windows-os/actions/runs/44141690244)
+on `2ecfa7f` likewise passed focused browser and was cancelled during
+its full suite. Do not present either as fully green. The older
+theme-skin
+[CI #44139175165](https://github.com/codersachin99/windows-os/actions/runs/44139175165)
+on `31444d5` did complete successfully (619 unit, 130 focused,
+632 full browser, 2 full skipped).
+
+**Actual changes this milestone:**
+
+- `8382d83`: original Win7 active `--theme-color` vs inactive
+  `--theme-color--inactive` dynamic tint; independent source
+  `data-effect-enable-glass` and
+  `data-effect-show-window-shadows` CSS gates. Restore pinned
+  RTL `-140/-225/-135deg` Aero highlights and negative focused
+  shadow offset.
+- `0f5ccba`: expose both source effect flags on the desktop root
+  with current enabled visual defaults. Removing either attribute
+  now switches off only its corresponding glass/shadow rendering.
+- `0fee3c0`: mirror Win7 control group, XP titlebar text shadow
+  and Win11 titlebar padding under original RTL direction.
+- `4991de8`: Win11 active frame uses source
+  `--theme-accent` token with existing safe fallbacks.
+- `c757460`: focused Playwright tests use actual browser computed
+  styles for independent glass/shadows, two-window active/inactive
+  color, RTL Aero gradient/shadow, XP/Win11 titlebar layout, and
+  Win11 custom accent. `90bfba5` adds this spec to the
+  **opt-in** focused shell CI gate.
+- `bcc41cf`: new pinned audit:
+  `migration/WINDOW-APPEARANCE-EFFECTS-SOURCE.md`.
+
+**Scope boundary:** This is a rendering/attribute effects bridge
+only. The original source System Properties → Advanced →
+Performance Options dialog in
+`src/modules/shell/system.js` is not yet migrated; the flags
+are enabled by default and not user-editable. Do not claim a complete
+settings migration or original-vs-React pixel matching.
+
+**Verification:** Trigger an exact-head `[run-ci]`, check
+TypeScript, Vitest, source/artwork audits, Vite and focused desktop/
+mobile Chromium; full suite is a separate acceptance gate. Fix
+real errors. Keep PR #1 draft, main unchanged, no release.
+
+**Next:** migrate original Visual Effects/Performance Options
+controls and settings persistence in a source-matched Control Panel
+surface; keep themes, desktop, context menus, Start and Explorer
+ahead of optional games.
+
+---
+
 ## Original Win7 Aero / WinXP / Win11 titlebar SVG controls — 17 November 2026
 
 Continued the shell-first window chrome milestone with exact compiled
