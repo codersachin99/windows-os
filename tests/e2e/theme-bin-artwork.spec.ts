@@ -56,3 +56,41 @@ for(const theme of ["winxp","win10","win11"] as const){
     await expect(image).toHaveAttribute("src",artwork[theme].empty);
   });
 }
+
+
+test("original Win10 Computer and Desktop files use theme-specific folder/generic-file artwork",async({page})=>{
+  await sourceThemeDesktop(page,"win10");
+  const computerIcon=page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon');
+  await expect(computerIcon).toHaveAttribute("src",
+    "/assets/images/computer-win10.2212df79.webp");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+  await explorer.getByRole("button",{name:"Desktop",exact:true}).click();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP);
+  await explorer.getByRole("button",{name:"New folder"}).click();
+  const dialog=explorer.getByRole("dialog",{name:"New folder"});
+  await dialog.getByRole("textbox",{name:"New folder name"})
+    .fill("Win10 Source Folder");
+  await dialog.getByRole("button",{name:"OK"}).click();
+  const folder=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Win10 Source Folder"]');
+  await expect(folder).toBeVisible();
+  await expect(folder.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/folder-win10.294665f0.webp");
+
+  await explorer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Source Unknown.abc",
+      mimeType:"application/octet-stream",
+      buffer:Buffer.from([0x31,0x32,0x33])});
+  const unknown=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Source Unknown.abc"]');
+  await expect(unknown).toBeVisible();
+  await expect(unknown.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/file-win10.036601ed.webp");
+
+  await folder.dblclick();
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
+  const opened=page.locator('[data-test-window="computer"]').last();
+  await expect(opened.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP+"/Win10 Source Folder");
+});
