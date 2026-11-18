@@ -182,7 +182,7 @@ describe("responsive native window cascade", () => {
 
 
 describe("source Win7 shell BSOD virtual view transition",()=>{
-  it("enters a simulated BSOD from desktop and restarts via existing boot flow",()=>{
+  it("enters a simulated BSOD and restarts into final source Guest logon",()=>{
     const boot=initialDesktopState();
     expect(desktopReducer(boot,{type:"BSOD",code:"DUMMY_BSOD"})).toBe(boot);
     const logon=desktopReducer(boot,{type:"BOOT_COMPLETE"});
@@ -194,7 +194,9 @@ describe("source Win7 shell BSOD virtual view transition",()=>{
     expect(bsod.windows).toHaveLength(0);
     expect(bsod.startOpen).toBe(false);
     const restarted=desktopReducer(bsod,{type:"RESTART"});
-    expect(restarted.phase).toBe("boot");
+    // Final source skipBoot skips boot animation, not authentication.
+    expect(restarted.phase).toBe("logon");
+    expect(restarted.session).toBeNull();
     expect(restarted.bsodCode).toBeUndefined();
     expect(restarted.windows).toHaveLength(0);
   });
