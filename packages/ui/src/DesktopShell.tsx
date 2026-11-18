@@ -322,7 +322,8 @@ export function DesktopShell({
   }, [state.windows, state.phase, requestClose, dispatch]);
 
   return (
-    <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}>
+    <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
+      data-effect-enable-glass="" data-effect-show-window-shadows="">
       <SourceEmbedBridge windows={state.windows} dispatch={dispatch}/>
       {/* In the legacy build the magnifier transforms the desktop container.
           Keep taskbar and Magnifier toolbar outside the scaled canvas so they
