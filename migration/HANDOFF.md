@@ -1,3 +1,63 @@
+## System Properties → Performance Options Visual Effects slice — 18 November 2026
+
+Continued shell-first functional fidelity from original
+`codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/modules/shell/system.js` (SystemProperties `500×500`,
+SystemPerformance child `420×500`), Control Panel 3097 registry
+and original Win7 glass/shadow selectors.
+
+- `53cc2d9`: source `auto/appearance/performance/custom` visual
+  preset model, strict versioned Guest storage and independently
+  editable original `enableGlass`/`showWindowShadows` values.
+  `6e72e0d` adds pure unit tests for presets, storage,
+  corrupt records and storage denial.
+- `9c6e066`/`1d10ccb`: actual System Properties Advanced page
+  and nested `Performance Options` child dialog. Real Visual Effects
+  radios and checkbox state, source Apply/OK/Cancel semantics.
+  Unsupported host processor, DEP, memory and other panels remain
+  disabled, not fabricated.
+- `429660a` exports the System app/model from CPanel;
+  `c56e8cb` enables original source CPanel program target `system`
+  only after the adapter exists; `ad174f4` updates original-registry
+  unit acceptance. `33423ef` registers source hidden
+  `sysdm.cpl` System Properties Guest program with source 500×500
+  fixed/centered frame.
+- `c84b3ef` loads/commits Guest effects under
+  `windows-os:guest:visual-effects:v1`. `dbaee13` handles
+  restricted localStorage getters by retaining session state.
+  `9db6acf` wires actual state into both DesktopShell app host paths
+  and source `data-effect-enable-glass`/
+  `data-effect-show-window-shadows` attributes.
+- `a73d46c` covers CPanel System launch, source Visual Effects
+  Cancel discard, Apply/OK and reload persistence, and disabled
+  host-only controls in desktop/mobile Chromium. `c4b1606`
+  includes the spec in **opt-in** focused browser CI.
+  `b0816b6` pins source values, implemented behavior and the
+  incomplete Vuex preset/hardware/platform scope in
+  `migration/SYSTEM-PERFORMANCE-SOURCE.md`.
+
+**Previous CI:** appearance-effects
+[CI #44235649209](https://github.com/codersachin99/windows-os/actions/runs/44235649209)
+on `5b8347a` passed TypeScript, 619 units, art/source checks,
+production build and focused Playwright; the full suite was still
+**running** on its older SHA when checked. This new CPanel/
+System Properties milestone must **not** inherit that result.
+
+**New acceptance:** this commit triggers fresh exact-head `[run-ci]`.
+Inspect TS, units, source/artwork, Vite build, focused browser and
+full suite separately. If any fail, fix on branch, document exact
+logs and rerun as needed. Do not claim source pixel parity from
+component layout alone. Keep draft PR #1 and main unchanged,
+no release.
+
+**Next:** implement and pair-verify the broader original Visual
+Effects Vuex inventory/presets and System Properties tabs;
+then other XP/Win7/Win11 shell visuals, context menus, desktop,
+Start and Computer/Bin screenshot parity. Avoid optional games
+until these priorities are sound.
+
+---
+
 ## Original Aero/XP/Win11 visual effect and RTL bridge — 18 November 2026
 
 Continued priority themes/window-chrome fidelity against original
