@@ -14,6 +14,8 @@ test("source theme variants select exact login screen families and report fallba
     ["win98","win98","win98","pending"],
     ["win2k","win2k","win2k","pending"],
     ["win10","win10","win10","pending"],
+    ["win8","win8","win8","pending"],
+    ["win81","win8","win8","pending"],
     ["win11dark","win11","win11","pending"],
     ["winLP","winLS","win7-fallback","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
@@ -137,4 +139,30 @@ test("Windows 10 logon uses pinned original Win10 wallpaper and shared guest-win
   const desktop=page.locator("[data-test-main-screen]");
   await expect(desktop).toBeVisible();
   await expect(desktop).toHaveAttribute("data-theme","win10");
+});
+
+test("original Windows 8/8.1 Guest logon uses purple source screen and 150px avatar",async({page})=>{
+  for(const theme of ["win8","win81"] as const){
+    await page.goto("/?theme="+theme);
+    const login=page.locator("[data-test-logon-screen]");
+    await expect(login).toHaveAttribute("data-source-theme-id",theme);
+    await expect(login).toHaveAttribute("data-source-logon-theme","win8");
+    await expect(login).toHaveAttribute("data-source-logon-renderer","win8");
+    await expect(login).toHaveAttribute("data-source-shell-status","pending");
+    await expect(login).toHaveCSS("background-color","rgb(24, 0, 83)");
+    const avatar=login.locator('[data-test-source-logon-avatar="win8"]');
+    await expect(avatar.locator("img")).toHaveAttribute(
+      "src","/assets/images/guest-win8.265e68f5.webp");
+    await expect(avatar.locator("img")).toHaveAttribute("width","150");
+    await expect(login.getByRole("button",{name:"Sign in as Guest"})).toBeVisible();
+    await login.getByRole("button",{name:"Switch user"}).click();
+    await expect(login.getByRole("dialog",{name:"Account login"})).toBeVisible();
+    await login.getByRole("button",{name:"Back"}).click();
+    await login.getByRole("button",{name:"Power options"}).click();
+    await expect(login.locator("[data-test-logon-restart]")).toBeVisible();
+    await avatar.click();
+    const desktop=page.locator("[data-test-main-screen]");
+    await expect(desktop).toBeVisible();
+    await expect(desktop).toHaveAttribute("data-theme",theme);
+  }
 });

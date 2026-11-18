@@ -1,0 +1,99 @@
+/*
+ * Pinned src/modules/themes/logon-win8.js / logon-win8.css.
+ * Guest-only shared layout for win8 + win81. Original login form and
+ * complete Windows 8 desktop screen are not asserted as pixel-perfect.
+ */
+.windows-logon.source-win8-logon{
+  background:#180053;background-image:none;color:#fff;
+  font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-win8-logon__pane{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  display:flex;flex-direction:row;align-items:flex-start;gap:20px;
+  min-width:min(540px,calc(100vw - 24px));
+}
+.source-win8-logon__avatar{
+  padding:0;width:150px;height:150px;flex:none;
+  border:0;border-radius:0;background:transparent;
+  cursor:pointer;
+}
+.source-win8-logon__avatar img{
+  display:block;width:150px;height:150px;object-fit:cover;
+}
+.source-win8-logon__avatar:hover,
+.source-win8-logon__avatar:focus-visible{
+  outline:4px solid rgba(255,255,255,.2);outline-offset:2px;
+}
+.source-win8-logon__details{
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+}
+.source-win8-logon__details h1{
+  font-size:32px;font-weight:400;line-height:1.2;margin:0 0 16px;
+}
+.source-win8-logon__signin{
+  min-width:150px;display:flex;align-items:center;justify-content:space-between;
+  color:#fff;font:16px "Segoe UI",Tahoma,sans-serif;
+  background:transparent;border:2px solid #fff;border-radius:0;
+  padding:7px 9px;cursor:pointer;
+}
+.source-win8-logon__signin:hover,.source-win8-logon__signin:focus-visible{
+  background:rgba(255,255,255,.1333333333);
+  box-shadow:0 0 0 4px rgba(255,255,255,.2);
+}
+.source-win8-logon__arrow{
+  width:24px;height:24px;display:block;background-position:center;
+  background-repeat:no-repeat;background-size:contain;
+  /* Source logon-win8.css original 48x48 white directional path. */
+  background-image:url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMjh2LThoMzFMMTggN2gxMmwxNyAxNy0xNyAxN0gxOGwxMy0xM3oiIGZpbGw9IiNmZmYiLz48L3N2Zz4=");
+}
+.source-win8-logon__switch{
+  appearance:none;border:0;background:transparent;color:#fff;
+  font:14px "Segoe UI",Tahoma,sans-serif;text-decoration:underline;
+  text-underline-offset:2px;cursor:pointer;padding:4px 0;
+}
+.source-win8-logon__power{
+  display:flex;gap:5px;position:absolute;bottom:19px;right:24px;
+}
+.source-win8-logon__power>button{
+  color:#fff;background:transparent;border:2px solid #fff;
+  padding:5px 9px;min-width:34px;min-height:34px;cursor:pointer;
+}
+.source-win8-logon__power>button:hover{
+  background:rgba(255,255,255,.13);
+}
+.source-win8-logon__power-menu{
+  position:absolute;right:0;bottom:calc(100% + 5px);z-index:4;
+  min-width:135px;background:#e9e9f1;color:#180053;
+  padding:4px;border:1px solid #777;box-shadow:0 4px 10px #0006;
+}
+.source-win8-logon__power-menu button{
+  width:100%;display:block;padding:6px 8px;border:0;
+  color:#180053;background:transparent;text-align:left;
+  cursor:pointer;
+}
+.source-win8-logon__power-menu button:hover{
+  background:#cdd2ea;
+}
+.source-win8-logon__unavailable{
+  position:absolute;left:50%;top:50%;z-index:5;
+  transform:translate(-50%,-50%);width:min(390px,calc(100vw - 24px));
+  padding:16px 18px;background:#37108c;border:1px solid #bfb3e6;
+  box-shadow:0 6px 22px #0008;color:#fff;text-align:center;
+}
+.source-win8-logon__unavailable button{
+  background:#fff;color:#180053;border:0;padding:6px 14px;cursor:pointer;
+}
+@media(max-width:600px){
+  .source-win8-logon__pane{flex-direction:column;align-items:center;
+    gap:15px;min-width:0;width:calc(100vw - 32px);text-align:center}
+  .source-win8-logon__details{align-items:center;gap:9px}
+  .source-win8-logon__details h1{margin:0;font-size:28px}
+  .source-win8-logon__power{bottom:10px;right:12px}
+}
+@media(max-height:440px){
+  .source-win8-logon__avatar,.source-win8-logon__avatar img{
+    width:92px;height:92px}
+  .source-win8-logon__details{gap:5px}
+  .source-win8-logon__details h1{font-size:24px}
+}

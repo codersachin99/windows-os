@@ -120,6 +120,9 @@ export const legacyShellThemeAssets = Object.freeze({
  * Windows XP source avatar is from original account store's Guest icon.
  */
 export const sourceThemeLogonArtwork=Object.freeze({
+  win8:Object.freeze({
+    guest:"/assets/images/guest-win8.265e68f5.webp"
+  }),
   win10:Object.freeze({
     guest:"/assets/images/guest-win10.a110df5a.webp",
     background:"/assets/images/win10.743e8c13.webp"

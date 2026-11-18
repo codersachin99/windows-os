@@ -24,7 +24,7 @@ entry is intentionally omitted.
 | `win2k` | `win2k` | 1 | Source-shaped classic Guest logon, byte-identical 2000 logo; shell/boot/pixel parity pending |
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Pending theme-specific implementation |
-| `win8` | `win8`, `win81` | 2 | Pending theme-specific implementation |
+| `win8` | `win8`, `win81` | 2 | Source-shaped purple Win8 Guest logon and exact avatar; shell/boot/pixel parity pending |
 | `win10` | `win10` | 1 | Source-shaped Win10 Guest logon with original wallpaper/avatar; shell/boot/pixel parity pending |
 | `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
@@ -157,3 +157,9 @@ even though `win7` itself is not a key in the final source
 - The pinned `src/modules/themes/logon-win10.js` uses the same `logon-base` account icon `guest-win10`, 150px round avatar and half-transparent black overlay as Win11, but loads `bgs.win10` and has different CSS for login buttons/avatar focus. Shared React modern logon rendering now dispatches by exact screen family (`win10` or `win11`) instead of falling back to Win7.
 - Exact original `assets/images/win10.743e8c13.webp` imported with source/target Git blob SHA `988278e48d41f10f2f701c748d73595f700b75c0`, and registered in `sourceThemeLogonArtwork.win10`; the already pinned `guest-win10.a110df5a.webp` avatar is shared intentionally. The original-source artwork audit now includes the Win10 wallpaper.
 - Theme catalog browser acceptance checks Win10 wallpaper URL, source avatar, translucent overlay, square login button, unported backend limitation, power controls, Guest authorization and active theme identity. `win10` shell status remains `pending`: complete Windows 10 taskbar/desktop/Start/window/Explorer/boot visual personalities, sound, screenshots and authentic login-form pixel parity are still not certified.
+
+## Windows 8 and Windows 8.1 original Guest logon slice — 18 November 2026
+
+- Pinned `src/modules/themes/logon-win8.js` and `src/styles/themes/logon-win8.css` map BOTH `win8` and `win81` to the identical `win8` screen family: purple `#180053` backdrop, 150px `guest-win8` avatar, 20px horizontal guest pane spacing, grouped Guest label, arrow form submit and themed focus. New `SourceWin8Logon` React adapter preserves Guest login and source CSS motifs with explicit account-authentication boundary and responsive stacked layout.
+- Original binary `guest-win8.265e68f5.webp` added with exact source Git blob SHA `060bcb7d2327f85c3f51bc33d2704072e86df578` and source art audit.
+- Browser acceptance covers both exact theme IDs, original purple, avatar URL/size, guest vs unported account auth, power menu, and active selected desktop theme. This **does not certify** original login pixel parity, Win8/8.1 Start screen, desktop/taskbar/icon visual functionality, boot animation, audio or other Win8 shell behavior. Both remain `pending`.

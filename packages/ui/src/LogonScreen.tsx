@@ -3,6 +3,7 @@ import {sourceThemeScreens,sourceThemeShellStatus,type ThemeId} from "@windows-o
 import { legacyArt,sourceThemeLogonArtwork } from "@windows-os/assets";
 import "./sourceThemeLogon.css";
 import {SourceClassicLogon} from "./SourceClassicLogon";
+import {SourceWin8Logon} from "./SourceWin8Logon";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -22,6 +23,11 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
     sourceScreens.logon==="win98"||sourceScreens.logon==="win2k")return <SourceClassicLogon
       theme={theme} family={sourceScreens.logon} shellStatus={status}
       onGuest={onGuest} onShutdown={onShutdown} onRestart={onRestart}/>;
+
+  // Both win8 and win81 select the pinned Windows 8 screen family.
+  if(sourceScreens.logon==="win8")return <SourceWin8Logon
+    theme={theme} onGuest={onGuest} onShutdown={onShutdown}
+    onRestart={onRestart}/>;
 
   // The original WinXP source uses a three-region blue login screen,
   // 150×89 XP logo and a Guest row. Only the guest/account backend behavior
