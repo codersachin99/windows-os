@@ -1,3 +1,14 @@
+## Final source Computer checkbox reconciliation — 18 November 2026
+
+- Pinned source `legacy-win7@26b9f0c` has `features.showItemCheckboxes=false`; source `src/modules/apps/computer.js` explicitly gates touch-selection checkbox rendering on this flag.
+- `bdc5a38`, `17d947b`: shared final source SDK flag and React Computer/Bin Explorer suppression, preserving normal file selection.
+- `6423a1b`, `bf33057`: replaced obsolete touch-checkbox Playwright expectations and added desktop/mobile regression to focused CI.
+- `6265eca`: updated `FINAL-SOURCE-BASELINE.md`.
+- [CI #44247665104](https://github.com/codersachin99/windows-os/actions/runs/44247665104) had **183/184 focused browser tests passing**, with one real-window selector collision from the thumbnail DOM clone; fixed in `b353511` plus `f1cc1e0` browser assertion. [Follow-up #44248902140](https://github.com/codersachin99/windows-os/actions/runs/44248902140) is historical for the previous head. This `[run-ci]` commit verifies the **new** exact head including Explorer changes.
+- Next: verify exact-head CI; source theme previews, context/Start/Computer/Bin, then permissioned mapped directories. No main merge/release; PR #1 stays draft.
+
+---
+
 ## Exact-browser regression repaired; Desktop submenu keyboard parity — 18 November 2026
 
 - Exact pinned source is still `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; no source-branch modification.
