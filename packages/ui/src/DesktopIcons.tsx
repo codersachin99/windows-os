@@ -1053,7 +1053,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           onKeyDown={event => {
             if(event.key==="ArrowRight"){
               event.preventDefault();
-              setMenu(current => current?{...current,view:true,newOpen:false}:current);
+              setMenu(current => current?{...current,view:true,sortOpen:false,newOpen:false}:current);
               window.requestAnimationFrame(()=>menuHost.current
                 ?.querySelector<HTMLButtonElement>('[role="menuitemradio"]')
                 ?.focus({preventScroll:true}));
@@ -1128,7 +1128,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           onKeyDown={event => {
             if(event.key==="ArrowRight"){
               event.preventDefault();
-              setMenu(current => current?{...current,newOpen:true,view:false}:current);
+              setMenu(current => current?{...current,newOpen:true,view:false,sortOpen:false}:current);
               window.requestAnimationFrame(()=>menuHost.current
                 ?.querySelector<HTMLButtonElement>('[data-test-desktop-new-folder]')
                 ?.focus({preventScroll:true}));
