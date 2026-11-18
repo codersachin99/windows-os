@@ -38,3 +38,9 @@ The original `photo.js#save()` attempts `image/<extension>` encoding for all sou
 ## Acceptance boundary
 
 This is a **working source-backed functional slice**; it is not full legacy equivalence. Source window geometry and media-control glyphs, image-save behavior for other formats, source original slideshow placement, all theme variants, and original-versus-React screenshot parity remain unverified. The newly implemented functional slice is CI-verified as recorded above; original visual/format parity is not. PR stays draft and `main` is unchanged.
+
+## 18 November 2026 mobile end-to-end follow-up
+
+- [Exact-head opt-in #44289346899](https://github.com/codersachin99/windows-os/actions/runs/44289346899): 270 focused browser tests passed; full browser 699 passed, one mobile Photo navigation failure, two skipped. This is a real open regression, **not a passing CI result**.
+- [Fix `1dc5fdd`](https://github.com/codersachin99/windows-os/commit/1dc5fdd75e2a78d66d17dbe96fd8a137f5d14aed) reads decoded DOM image dimensions at save time, serializes the asynchronous image-write/navigation transition and tests the rotated-file save path more explicitly. The precise cause of the one mobile-only failure is not conclusively proven from the test log; the patch addresses unsafe transient-image-state and multi-tap boundaries without suppressing errors.
+- Added Photo desktop/mobile browser scenario to targeted GitHub Actions checks. New full CI acceptance is pending, and original Photo GUI screenshot equivalence remains pending.

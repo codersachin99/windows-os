@@ -1,3 +1,19 @@
+## Photo Viewer mobile save/navigation regression repair — 18 November 2026
+
+**Source remains pinned** at `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. The previous classic-theme exact-head opt-in [CI #44289346899](https://github.com/codersachin99/windows-os/actions/runs/44289346899) **failed** after: TypeScript, Vitest, immutable source/art audits, Vite and **270/270 focused browser tests all passed**; full desktop/mobile Chromium ended **699 passed / 1 failed / 2 skipped**. The sole failure was mobile `tests/e2e/photo.spec.ts:37`: after rotating `a.png` 90° then clicking Next, Photo Viewer stayed on `a.png` rather than navigating to `b.png`. No claim that the prior exact head was fully green.
+
+[`1dc5fdd`](https://github.com/codersachin99/windows-os/commit/1dc5fdd75e2a78d66d17dbe96fd8a137f5d14aed) repairs a real risk in the asynchronous photo navigation path:
+- Save rotated canvas using the currently mounted HTMLImageElement's **actual intrinsic width/height**, waiting for decode when necessary, instead of depending exclusively on the last asynchronous React `onLoad` state snapshot.
+- Serialize pending navigation with a ref, temporarily disable image controls while canvas encoding and Guest file write are in flight, and prevent repeated mobile taps from starting conflicting writes to the same image.
+- Preserve safe abort when image decoding/format conversion fails: never silently replace an original unsupported-format file with mismatched image data; after a successful save, next/wrapped photo navigation and title still proceed.
+- Browser test now verifies next image intrinsic size and absence of save error, as well as the existing rotated 2×3 result when returning to the original file.
+
+**This `[run-ci]` checkpoint** adds `tests/e2e/photo.spec.ts` to the fast focused desktop/mobile gate before the full suite. All new Photo changes require TypeScript, unit, source/art, Vite, focused browser and full browser success before acceptance. This addresses a plausible load/save race from evidence; it **does not yet establish** which browser asynchronous step caused the observed one-off mobile failure. Keep the PR draft until verification. No changes to `legacy-win7` or `windows-os/main`, no release.
+
+**Next priority:** fix any further CI failures. Then compare original source-vs-target theme screenshots and complete Win7/XP/11 desktop, Start/context and Computer/Bin interactions, while migrating all catalogued themes. Avoid repeated always-on CI.
+
+---
+
 ## Classic Win31/Win95/Win98/Win2k source Guest logons — 18 November 2026
 
 **Active pinned reference remains** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; original source and `windows-os/main` are unchanged. Existing draft PR #1 remains intentionally unmerged and no release has been published.
