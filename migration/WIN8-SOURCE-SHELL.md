@@ -139,3 +139,31 @@ was active. **The program/app separation and native wheel changes
 are not part of that earlier CI commit SHA**, and remain unverified
 until a subsequent deliberately opted-in exact-head run. The source
 rendered screenshots and all-theme parity gate remain open.
+
+
+## Source Win8/8.1 Search result keyboard selection — 19 November 2026
+
+Pinned original `src/modules/shell/startmenu-win8.js` passes `selected`
+to `start-search-results`, updates it on pointer entry, and delegates
+flyout keyboard events to the shared `handleSearchKey`. React's previous
+flyout always launched the first match on Enter, with no keyboard
+selection or selected-result highlight.
+
+[7ede461](https://github.com/codersachin99/windows-os/commit/7ede461eab0bd3d77b90e1099a7227b7503c3ae7)
+adds ArrowDown/ArrowUp cycling, Enter launching the selected match,
+pointer-hover selection, and clearing selection on query changes or
+typed-from-Start search. [f52dd18](https://github.com/codersachin99/windows-os/commit/f52dd182cdeb378236691343b102e221e9101d60)
+uses the original Win8 selected start-button background
+`rgba(255,255,255,.2)`.
+[5b63146](https://github.com/codersachin99/windows-os/commit/5b6314627781cdcf74770d7564a7ef8400bb6357)
+adds both Win8 and Win81 Playwright coverage for arrow selection,
+wraparound, query reset and launching actual Notepad.
+
+These changes plus the newer source program/app tile grouping and
+native horizontal-wheel fixes all postdate the previously successful
+[CI #44375432800](https://github.com/codersachin99/windows-os/actions/runs/44375432800)
+on `c561149`. The following single opt-in `[run-ci]` handoff commit
+requests exact-head verification. Do **not** record a successful run
+until every required job completes. File/category search, screenshots,
+source transitions, dark/profile variants and full theme parity remain
+open. The locked original and target main are unchanged.
