@@ -1,9 +1,12 @@
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
 import {sourceShellWallpaper,sourceIsSystemWallpaper} from "@windows-os/assets";
 
+/** Final pinned legacy-win7 app.config.json defaults. skipBoot skips only
+ * the animated boot view: source boot.js bootup() still routes to Logon and
+ * never authenticates the Guest automatically. */
 export const LEGACY_DEFAULTS = Object.freeze({
-  skipBoot: false,
-  nativeCursor: false,
+  skipBoot: true,
+  nativeCursor: true,
   theme: "win7" as const,
   soundVolume: 1
 });
@@ -42,14 +45,19 @@ export function sourceSavedTheme(
     return theme==="win7"||theme==="winxp"||theme==="win11"?theme:null;
   }catch{return null;}
 }
-export function initialDesktopState(): DesktopState {
+/** Keep the optional animated boot path for source config overrides and
+ * acceptance tests; skipping it must NOT bypass Guest authentication. */
+export function sourceInitialPhase(skipBoot:boolean):DesktopState["phase"]{
+  return skipBoot?"logon":"boot";
+}
+export function initialDesktopState(config?:{skipBoot?:boolean}): DesktopState {
   const theme=typeof window!=="undefined"
     ?sourceTestTheme(window.location.search)
       ??sourceSavedTheme(window.localStorage)
       ??LEGACY_DEFAULTS.theme
     :LEGACY_DEFAULTS.theme;
   return {
-    phase: LEGACY_DEFAULTS.skipBoot ? "desktop" : "boot",
+    phase: sourceInitialPhase(config?.skipBoot??LEGACY_DEFAULTS.skipBoot),
     theme,
     session: null,
     windows: [],
