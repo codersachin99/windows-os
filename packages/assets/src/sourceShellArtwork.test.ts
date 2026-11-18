@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {legacyArt,legacyShellThemeAssets,legacyXpPowerArtwork,sourceShellAsset,sourceThemeProgramArt} from "./index";
+import {legacyArt,legacyShellThemeAssets,legacyXpPowerArtwork,sourceShellAsset,sourceThemeProgramArt,sourceThemeLogonArtwork} from "./index";
 
 describe("pinned source XP/Win11 shell artwork mapping",()=>{
   it("binds each source theme to its own immutable Start, Computer, empty and full Bin",()=>{
@@ -36,5 +36,20 @@ describe("verified XP/Win11 installed program art",()=>{
     expect(sourceThemeProgramArt("winxp","calc")).toContain("calc-winxp.");
     expect(sourceThemeProgramArt("win11","photo")).toContain("photo-win11.");
     expect(sourceThemeProgramArt("win7","notepad")).toBeNull();
+  });
+});
+
+
+describe("byte-identical original WinXP/Win11 login artwork contracts",()=>{
+  it("uses the source logo and guest-win10 avatar, not substitute theme icons",()=>{
+    expect(sourceThemeLogonArtwork.winxp.logo)
+      .toBe("/assets/images/logoxp.9b034658.png");
+    expect(sourceThemeLogonArtwork.winxp.guest).toBe(legacyArt.guestAvatar);
+    expect(sourceThemeLogonArtwork.win11.guest)
+      .toBe("/assets/images/guest-win10.a110df5a.webp");
+    expect(sourceThemeLogonArtwork.win11.background)
+      .toBe(legacyShellThemeAssets.win11.theme);
+    expect(sourceThemeLogonArtwork.win11.guest)
+      .not.toBe(sourceThemeLogonArtwork.winxp.guest);
   });
 });
