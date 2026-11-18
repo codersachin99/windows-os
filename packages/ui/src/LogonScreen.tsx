@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {sourceThemeScreens,sourceThemeShellStatus,type ThemeId} from "@windows-os/contracts";
-import { legacyArt,legacyShellThemeAssets } from "@windows-os/assets";
+import { legacyArt,sourceThemeLogonArtwork } from "@windows-os/assets";
 import "./sourceThemeLogon.css";
 
 interface LogonScreenProps {
@@ -25,7 +25,7 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
       <div className="source-xp-logon__top" aria-hidden="true"/>
       <div className="source-xp-logon__body">
         <section className="source-xp-logon__intro" aria-label="Windows XP">
-          <img src="/assets/images/logoxp.9b034658.png" width={150} height={89}
+          <img src={sourceThemeLogonArtwork.winxp.logo} width={150} height={89}
             alt="Windows XP" data-test-source-logon-logo="winxp"/>
           <span>To begin, click your user name</span>
         </section>
@@ -34,7 +34,7 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
           <button className="source-xp-logon__guest avatar-button can-click"
             onClick={onGuest} data-test-avatar="win7"
             data-test-source-logon-avatar="winxp" aria-label="Log in as Guest">
-            <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
+            <img src={sourceThemeLogonArtwork.winxp.guest} alt="" width={48} height={48}/>
             <span>Guest</span>
           </button>
         </section>
@@ -69,13 +69,13 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
     <main className="windows-logon source-win11-logon" data-test-logon-screen
       data-source-theme-id={theme} data-source-logon-theme="win11"
       data-source-shell-status={status} data-source-logon-renderer="win11"
-      style={{backgroundImage:`url("${legacyShellThemeAssets.win11.theme}")`}}>
+      style={{backgroundImage:`url("${sourceThemeLogonArtwork.win11.background}")`}}>
       <div className="source-win11-logon__overlay" aria-hidden="true"/>
       <section className="source-win11-logon__account" aria-label="Guest account">
         <button className="source-win11-logon__avatar avatar-button can-click"
           onClick={onGuest} data-test-avatar="win7"
           data-test-source-logon-avatar="win11" aria-label="Log in as Guest">
-          <img src="/assets/images/guest-win10.a110df5a.webp"
+          <img src={sourceThemeLogonArtwork.win11.guest}
             width={150} height={150} alt="Guest avatar"/>
         </button>
         <h1>Guest</h1>
