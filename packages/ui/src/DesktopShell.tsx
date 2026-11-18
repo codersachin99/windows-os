@@ -541,7 +541,7 @@ export function DesktopShell({
                 (windows.length>1?" is-stacked":"")+
                 (buttonMode!=="combine"?" is-full-size":"")}
               title={windows.length>1?(app?.label??win.appId):win.title}
-              aria-label={"Switch to "+(app?.label??win.title)}
+              aria-label={"Switch to "+(windows.length===1?win.title:(app?.label??win.appId))}
               onMouseEnter={event=>showTaskbarPreview(group.appId,event.currentTarget)}
               onMouseLeave={schedulePreviewHide}
               onContextMenu={event=>{
