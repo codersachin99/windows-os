@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {sourceThemeScreens,sourceThemeShellStatus,type ThemeId} from "@windows-os/contracts";
-import { legacyArt } from "@windows-os/assets";
+import { legacyArt,legacyShellThemeAssets } from "@windows-os/assets";
+import "./sourceThemeLogon.css";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -14,6 +15,94 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
   const status=sourceThemeShellStatus(theme);
   const [showAccount, setShowAccount] = useState(false);
   const [showPower, setShowPower] = useState(false);
+  // The original WinXP source uses a three-region blue login screen,
+  // 150×89 XP logo and a Guest row. Only the guest/account backend behavior
+  // is adapted here; unavailable account auth is never faked.
+  if(sourceScreens.logon==="winxp")return (
+    <main className="windows-logon source-xp-logon" data-test-logon-screen
+      data-source-theme-id={theme} data-source-logon-theme="winxp"
+      data-source-shell-status={status} data-source-logon-renderer="winxp">
+      <div className="source-xp-logon__top" aria-hidden="true"/>
+      <div className="source-xp-logon__body">
+        <section className="source-xp-logon__intro" aria-label="Windows XP">
+          <img src="/assets/images/logoxp.9b034658.png" width={150} height={89}
+            alt="Windows XP" data-test-source-logon-logo="winxp"/>
+          <span>To begin, click your user name</span>
+        </section>
+        <div className="source-xp-logon__divider" aria-hidden="true"/>
+        <section className="source-xp-logon__accounts" aria-label="User accounts">
+          <button className="source-xp-logon__guest avatar-button can-click"
+            onClick={onGuest} data-test-avatar="win7"
+            data-test-source-logon-avatar="winxp" aria-label="Log in as Guest">
+            <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
+            <span>Guest</span>
+          </button>
+        </section>
+      </div>
+      <footer className="source-xp-logon__bottom">
+        <div className="source-theme-logon__power">
+          <button data-test-logon-shutdown="" onClick={onShutdown}
+            aria-label="Shut down">⏻ <span>Turn off computer</span></button>
+          <button aria-label="Power options" onClick={()=>setShowPower(!showPower)}
+            aria-expanded={showPower}>▴</button>
+          {showPower&&<div className="source-theme-logon__power-menu" role="menu">
+            <button role="menuitem" data-test-logon-restart="" onClick={onRestart}>Restart</button>
+            <button role="menuitem" onClick={onShutdown}>Shut down</button>
+          </div>}
+        </div>
+        <button className="source-xp-logon__create" onClick={()=>setShowAccount(true)}>
+          Create a new account
+        </button>
+      </footer>
+      {showAccount&&<div className="source-theme-logon__unavailable"
+        role="dialog" aria-label="Account login">
+        <p>Account sign-in requires the original authentication backend.</p>
+        <button onClick={()=>setShowAccount(false)}>Back</button>
+      </div>}
+    </main>
+  );
+
+  // Original logon-win11.js delegates the full-screen background, 150px
+  // rounded guest-win10 avatar, and black overlay to logon-base. Keep this
+  // renderer available to win11dark through the source themeScreens map.
+  if(sourceScreens.logon==="win11")return (
+    <main className="windows-logon source-win11-logon" data-test-logon-screen
+      data-source-theme-id={theme} data-source-logon-theme="win11"
+      data-source-shell-status={status} data-source-logon-renderer="win11"
+      style={{backgroundImage:`url("${legacyShellThemeAssets.win11.theme}")`}}>
+      <div className="source-win11-logon__overlay" aria-hidden="true"/>
+      <section className="source-win11-logon__account" aria-label="Guest account">
+        <button className="source-win11-logon__avatar avatar-button can-click"
+          onClick={onGuest} data-test-avatar="win7"
+          data-test-source-logon-avatar="win11" aria-label="Log in as Guest">
+          <img src="/assets/images/guest-win10.a110df5a.webp"
+            width={150} height={150} alt="Guest avatar"/>
+        </button>
+        <h1>Guest</h1>
+        <button className="source-win11-logon__signin" onClick={onGuest}>
+          Sign in
+        </button>
+        <button className="source-win11-logon__other" onClick={()=>setShowAccount(true)}>
+          Other user
+        </button>
+      </section>
+      <div className="source-win11-logon__power">
+        <button data-test-logon-shutdown="" aria-label="Shut down"
+          onClick={onShutdown}>⏻</button>
+        <button aria-label="Power options" aria-expanded={showPower}
+          onClick={()=>setShowPower(!showPower)}>▴</button>
+        {showPower&&<div className="source-theme-logon__power-menu" role="menu">
+          <button role="menuitem" data-test-logon-restart="" onClick={onRestart}>Restart</button>
+          <button role="menuitem" onClick={onShutdown}>Shut down</button>
+        </div>}
+      </div>
+      {showAccount&&<div className="source-theme-logon__unavailable"
+        role="dialog" aria-label="Account login">
+        <p>Account sign-in requires the original authentication backend.</p>
+        <button onClick={()=>setShowAccount(false)}>Back</button>
+      </div>}
+    </main>
+  );
 
   return (
     <main className="windows-logon is-win7" data-test-logon-screen
