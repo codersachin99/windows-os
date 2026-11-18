@@ -1,5 +1,5 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
-import type { DesktopAction, DesktopState } from "@windows-os/contracts";
+import type { DesktopAction, DesktopState, DesktopWindow } from "@windows-os/contracts";
 import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
@@ -35,6 +35,9 @@ import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
 import {SourceTaskbarMenu,type SourceTaskbarContext} from "./SourceTaskbarMenu";
+import {SourceTaskbarLivePreview} from "./SourceTaskbarLivePreview";
+import {sourceTaskbarGroups,sourceTaskbarPreviewLeft,SOURCE_TASKBAR_FINAL_FEATURES,
+  SOURCE_TASKBAR_PEEK_SHOW_DELAY_MS,SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS} from "./sourceTaskbarGroups";
 import {taskbarPins} from "./sourceTaskbarPins";
 import { ShortcutWizard } from "./ShortcutWizard";
 import "./sourceTray.css";
@@ -242,11 +245,80 @@ export function DesktopShell({
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
   const [taskbarConfig,setTaskbarConfig]=useState(()=>sourceTaskbarPreferences.snapshot());
   const [aeroPeeking,setAeroPeeking]=useState(false);
+  const [livePreview,setLivePreview]=useState<{appId:string;left:number}|null>(null);
+  const [peekWindowId,setPeekWindowId]=useState<string|null>(null);
+  const previewShowTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const previewHideTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const taskbarGroups=sourceTaskbarGroups(state.windows,pinnedPrograms);
   const buttonMode=taskbarConfig.type;
   const canAeroPeek=state.theme==="win7"&&taskbarConfig.useAeroPeek;
   const previewDesktop=canAeroPeek&&aeroPeeking;
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
   const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);
+  const cancelPreviewShow=()=>{
+    if(previewShowTimer.current!==null){
+      clearTimeout(previewShowTimer.current);previewShowTimer.current=null;
+    }
+  };
+  const cancelPreviewHide=()=>{
+    if(previewHideTimer.current!==null){
+      clearTimeout(previewHideTimer.current);previewHideTimer.current=null;
+    }
+  };
+  const dismissLivePreview=()=>{
+    cancelPreviewShow();cancelPreviewHide();
+    setLivePreview(null);setPeekWindowId(null);
+  };
+  const schedulePreviewHide=()=>{
+    cancelPreviewShow();cancelPreviewHide();
+    previewHideTimer.current=setTimeout(()=>{
+      setLivePreview(null);setPeekWindowId(null);
+      previewHideTimer.current=null;
+    },SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS);
+  };
+  const showTaskbarPreview=(appId:string,button:HTMLElement)=>{
+    if(!SOURCE_TASKBAR_FINAL_FEATURES.showPeekPreviews||
+      window.matchMedia?.("(hover: none)").matches)return;
+    const running=state.windows.filter(win=>win.appId===appId);
+    if(!running.length)return;
+    cancelPreviewShow();cancelPreviewHide();
+    const box=button.getBoundingClientRect();
+    const left=sourceTaskbarPreviewLeft(box,running.length,window.innerWidth);
+    previewShowTimer.current=setTimeout(()=>{
+      setPeekWindowId(null);
+      setLivePreview({appId,left});
+      previewShowTimer.current=null;
+    },SOURCE_TASKBAR_PEEK_SHOW_DELAY_MS);
+  };
+  const activateTaskbarGroup=(group:readonly DesktopWindow[])=>{
+    dismissLivePreview();
+    if(!group.length)return;
+    if(group.length===1){
+      const win=group[0];
+      dispatch({type:win.minimized||win.z!==highestVisibleWindowZ
+        ?"FOCUS_WINDOW":"MINIMIZE_WINDOW",id:win.id});
+      return;
+    }
+    // Source taskbar-base.toggle: front group window -> minimize all;
+    // otherwise restore all instances (retaining their relative order).
+    const frontInGroup=group.some(win=>!win.minimized&&win.z===highestVisibleWindowZ);
+    for(const win of [...group].sort((a,b)=>a.z-b.z)){
+      if(frontInGroup){
+        if(!win.minimized)dispatch({type:"MINIMIZE_WINDOW",id:win.id});
+      }else dispatch({type:"FOCUS_WINDOW",id:win.id});
+    }
+  };
+  useEffect(()=>{
+    return ()=>{
+      if(previewShowTimer.current!==null)clearTimeout(previewShowTimer.current);
+      if(previewHideTimer.current!==null)clearTimeout(previewHideTimer.current);
+    };
+  },[]);
+  useEffect(()=>{
+    if(livePreview&&!state.windows.some(win=>win.appId===livePreview.appId)){
+      setLivePreview(null);setPeekWindowId(null);
+    }
+  },[state.windows,livePreview]);
   const restoreStartFocus=useRef(false);
   const closeStartOnEscape=useCallback(()=>{
     restoreStartFocus.current=true;
@@ -338,7 +410,8 @@ export function DesktopShell({
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
       data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
       data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}
-      data-source-aero-peeking={previewDesktop?"true":undefined}>
+      data-source-aero-peeking={previewDesktop?"true":undefined}
+      data-source-taskbar-peeking={peekWindowId?"true":undefined}>
       <SourceEmbedBridge windows={state.windows} dispatch={dispatch}/>
       {/* In the legacy build the magnifier transforms the desktop container.
           Keep taskbar and Magnifier toolbar outside the scaled canvas so they
@@ -367,6 +440,7 @@ export function DesktopShell({
           onFocus={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })} />
       ) : (
         <WindowFrame key={win.id} theme={state.theme}
+          peekTarget={peekWindowId===win.id}
           window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
           active={!win.minimized&&win.z===highestVisibleWindowZ}
           dispatch={dispatch}
@@ -387,6 +461,7 @@ export function DesktopShell({
           other programs and their windows zoom together with the desktop. */}
       {state.windows.filter(win => win.appId === "magnifier").map(win => (
         <WindowFrame key={win.id} theme={state.theme}
+          peekTarget={peekWindowId===win.id}
           window={{...win,icon:sourceThemeProgramArt(state.theme,win.appId)??win.icon}}
           active={!win.minimized&&win.z===highestVisibleWindowZ}
           dispatch={dispatch}
@@ -418,13 +493,19 @@ export function DesktopShell({
           {pinnedPrograms.map(programId=>{
             const app=appRegistry.get(programId);
             if(!app)return null;
-            const running=state.windows.find(win=>win.appId===programId);
+            const group=taskbarGroups.find(item=>item.appId===programId);
+            const instances=group?.windows??[];
+            const running=instances.find(win=>!win.minimized)??instances[0];
             return <button key={"pin:"+programId}
               className={"windows-taskbar__application is-pinned"+
                 (running?" is-running":"")+
+                (instances.length>1?" is-stacked":"")+
                 (buttonMode!=="combine"?" is-full-size":"")}
               data-test-taskbar-pin={programId}
               data-test-taskbar-pin-running={Boolean(running)}
+              data-test-taskbar-group-size={instances.length}
+              onMouseEnter={event=>showTaskbarPreview(programId,event.currentTarget)}
+              onMouseLeave={schedulePreviewHide}
               onContextMenu={event=>{
                 event.preventDefault();event.stopPropagation();
                 const rect=event.currentTarget.getBoundingClientRect();
@@ -436,11 +517,8 @@ export function DesktopShell({
               title={app.label}
               aria-label={"Open or switch to "+app.label}
               onClick={()=>{
-                if(running)dispatch({
-                  type:running.minimized?"FOCUS_WINDOW":"MINIMIZE_WINDOW",
-                  id:running.id
-                });
-                else dispatch({type:"OPEN_APP",app});
+                if(instances.length)activateTaskbarGroup(instances);
+                else {dismissLivePreview();dispatch({type:"OPEN_APP",app});}
               }}>
               <img src={sourceThemeProgramArt(state.theme,programId)??(
                 programId==="computer"?sourceShellAsset(state.theme,"computer"):
@@ -450,28 +528,38 @@ export function DesktopShell({
                 aria-hidden="true">{app.label}</span>}
             </button>;
           })}
-          {state.windows.filter(win=>!pinnedPrograms.includes(win.appId)).map(win => (
-            <button key={win.id} className={`windows-taskbar__application ${win.minimized ? "is-minimized" : ""}`+
-              (buttonMode!=="combine"?" is-full-size":"")}
-              title={win.title} aria-label={`Switch to ${win.title}`}
+          {taskbarGroups.filter(group=>!group.pinned).map(group=>{
+            const windows=group.windows;
+            const win=windows.find(item=>!item.minimized)??windows[0];
+            if(!win)return null;
+            const app=appRegistry.get(win.appId);
+            return <button key={group.key}
+              data-test-taskbar-running-group={group.appId}
+              data-test-taskbar-group-size={windows.length}
+              className={"windows-taskbar__application"+
+                (windows.every(item=>item.minimized)?" is-minimized":"")+
+                (windows.length>1?" is-stacked":"")+
+                (buttonMode!=="combine"?" is-full-size":"")}
+              title={windows.length>1?(app?.label??win.appId):win.title}
+              aria-label={"Switch to "+(app?.label??win.title)}
+              onMouseEnter={event=>showTaskbarPreview(group.appId,event.currentTarget)}
+              onMouseLeave={schedulePreviewHide}
               onContextMenu={event=>{
+                dismissLivePreview();
                 event.preventDefault();event.stopPropagation();
                 const rect=event.currentTarget.getBoundingClientRect();
                 setTaskbarContext({
-                  kind:"item",id:win.appId,
+                  kind:"item",id:group.appId,
                   x:rect.left+rect.width/2,y:rect.top
                 });
               }}
-              onClick={() => dispatch({
-                type: win.minimized || win.z!==highestVisibleWindowZ
-                  ? "FOCUS_WINDOW" : "MINIMIZE_WINDOW", id: win.id
-              })}>
-              <img src={sourceThemeProgramArt(state.theme,win.appId)??win.icon}
-                alt="" width={26} height={26} />
+              onClick={()=>activateTaskbarGroup(windows)}>
+              <img src={sourceThemeProgramArt(state.theme,group.appId)??win.icon}
+                alt="" width={26} height={26}/>
               {buttonMode!=="combine"&&<span className="windows-taskbar__item-label"
-                aria-hidden="true">{win.title}</span>}
-            </button>
-          ))}
+                aria-hidden="true">{app?.label??win.title}</span>}
+            </button>;
+          })}
         </div>
         <div className="windows-taskbar__tray">
           <button title="Show hidden icons" aria-label="Show hidden icons"
@@ -512,6 +600,20 @@ export function DesktopShell({
             }
           }} />
       </footer>
+      {livePreview&&state.windows.some(win=>win.appId===livePreview.appId)&&
+        <SourceTaskbarLivePreview appId={livePreview.appId}
+          windows={state.windows.filter(win=>win.appId===livePreview.appId)}
+          left={livePreview.left} theme={state.theme}
+          onStay={cancelPreviewHide} onLeave={schedulePreviewHide}
+          onPeek={setPeekWindowId}
+          onActivate={id=>{
+            dismissLivePreview();
+            dispatch({type:"FOCUS_WINDOW",id});
+          }}
+          onClose={id=>{
+            dismissLivePreview();
+            requestClose(id);
+          }}/>}
       {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
         onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}/>}
