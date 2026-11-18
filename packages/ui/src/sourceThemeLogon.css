@@ -1,7 +1,8 @@
 /*
  * Guest-only React adapters of pinned legacy-win7
  * src/modules/themes/logon-winxp.js + src/styles/themes/logon-winxp.css
- * src/modules/themes/logon-win11.js + src/styles/themes/logon-win11.css.
+ * src/modules/themes/logon-win11.js + src/styles/themes/logon-win11.css
+ * src/modules/themes/logon-win10.js + src/styles/themes/logon-win10.css.
  * Source art is byte-imported; external account auth is deliberately unavailable.
  * Full CSS screenshot parity remains pending for every family; all other
  * original screen families require independent migration and acceptance.
@@ -85,6 +86,19 @@
   background-color:#162139;background-position:center center;background-size:cover;
   display:flex;align-items:center;justify-content:center;
   color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-win11-logon.source-win10-logon{
+  /* Source Win10 retains natural wallpaper cover and square login controls. */
+  background-size:cover;
+}
+.source-win10-logon .source-win11-logon__account h1{font-weight:400}
+.source-win10-logon .source-win11-logon__signin{
+  border-radius:0;padding:6px 12px;
+}
+.source-win10-logon .source-win11-logon__avatar:hover,
+.source-win10-logon .source-win11-logon__avatar:focus-visible{
+  box-shadow:0 0 0 4px rgba(255,255,255,.2);
+  outline:2px solid rgba(255,255,255,.2);outline-offset:2px;
 }
 .source-win11-logon__overlay{
   position:absolute;inset:0;background:rgba(0,0,0,.5);

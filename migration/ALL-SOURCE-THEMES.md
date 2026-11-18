@@ -25,7 +25,7 @@ entry is intentionally omitted.
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Pending theme-specific implementation |
 | `win8` | `win8`, `win81` | 2 | Pending theme-specific implementation |
-| `win10` | `win10` | 1 | Pending theme-specific implementation |
+| `win10` | `win10` | 1 | Source-shaped Win10 Guest logon with original wallpaper/avatar; shell/boot/pixel parity pending |
 | `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
 | `chromeos` | `chromeos` | 1 | Pending theme-specific implementation |
@@ -151,3 +151,9 @@ even though `win7` itself is not a key in the final source
 - Source `logon-win2k.js` uses the shared `logon-window` with `hideAvatar`, a `misc.logo2k` banner, 32rem-wide window at top 20%, `#3b6ea4` background and a six-pixel blue gradient bar (`logon-win2k.css`). The shared React classic adapter now selects this family without a Win7 visual fallback.
 - Exact original `assets/images/logo2k.15140c8b.webp` is committed byte-for-byte: source/target Git blob SHA `028a0e1cd4f9eab7c472482312189eeecd0fc0df`. The existing source art verification gate now checks it.
 - Desktop/mobile browser tests cover banner URL, hidden avatar, blue source background, form/Guest/power boundaries and responsive width. Original account backend, screenshot pixel parity and boot/theme shells remain pending; status remains `pending`.
+
+## Windows 10 original Guest logon slice — 18 November 2026
+
+- The pinned `src/modules/themes/logon-win10.js` uses the same `logon-base` account icon `guest-win10`, 150px round avatar and half-transparent black overlay as Win11, but loads `bgs.win10` and has different CSS for login buttons/avatar focus. Shared React modern logon rendering now dispatches by exact screen family (`win10` or `win11`) instead of falling back to Win7.
+- Exact original `assets/images/win10.743e8c13.webp` imported with source/target Git blob SHA `988278e48d41f10f2f701c748d73595f700b75c0`, and registered in `sourceThemeLogonArtwork.win10`; the already pinned `guest-win10.a110df5a.webp` avatar is shared intentionally. The original-source artwork audit now includes the Win10 wallpaper.
+- Theme catalog browser acceptance checks Win10 wallpaper URL, source avatar, translucent overlay, square login button, unported backend limitation, power controls, Guest authorization and active theme identity. `win10` shell status remains `pending`: complete Windows 10 taskbar/desktop/Start/window/Explorer/boot visual personalities, sound, screenshots and authentic login-form pixel parity are still not certified.

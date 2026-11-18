@@ -70,20 +70,22 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
     </main>
   );
 
-  // Original logon-win11.js delegates the full-screen background, 150px
-  // rounded guest-win10 avatar, and black overlay to logon-base. Keep this
-  // renderer available to win11dark through the source themeScreens map.
-  if(sourceScreens.logon==="win11")return (
-    <main className="windows-logon source-win11-logon" data-test-logon-screen
-      data-source-theme-id={theme} data-source-logon-theme="win11"
-      data-source-shell-status={status} data-source-logon-renderer="win11"
-      style={{backgroundImage:`url("${sourceThemeLogonArtwork.win11.background}")`}}>
+  // Pinned logon-win10.js and logon-win11.js share source logon-base,
+  // the 150px guest-win10 avatar and black overlay. Their *backgrounds*
+  // and button treatments remain distinct. The Win10 shell is not ported.
+  if(sourceScreens.logon==="win10"||sourceScreens.logon==="win11"){
+    const modernFamily=sourceScreens.logon;
+    return (
+    <main className={"windows-logon source-win11-logon"+(modernFamily==="win10"?" source-win10-logon":"")} data-test-logon-screen
+      data-source-theme-id={theme} data-source-logon-theme={modernFamily}
+      data-source-shell-status={status} data-source-logon-renderer={modernFamily}
+      style={{backgroundImage:`url("${sourceThemeLogonArtwork[modernFamily].background}")`}}>
       <div className="source-win11-logon__overlay" aria-hidden="true"/>
       <section className="source-win11-logon__account" aria-label="Guest account">
         <button className="source-win11-logon__avatar avatar-button can-click"
           onClick={onGuest} data-test-avatar="win7"
-          data-test-source-logon-avatar="win11" aria-label="Log in as Guest">
-          <img src={sourceThemeLogonArtwork.win11.guest}
+          data-test-source-logon-avatar={modernFamily} aria-label="Log in as Guest">
+          <img src={sourceThemeLogonArtwork[modernFamily].guest}
             width={150} height={150} alt="Guest avatar"/>
         </button>
         <h1>Guest</h1>
@@ -110,7 +112,8 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
         <button onClick={()=>setShowAccount(false)}>Back</button>
       </div>}
     </main>
-  );
+    );
+  }
 
   return (
     <main className="windows-logon is-win7" data-test-logon-screen

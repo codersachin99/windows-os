@@ -67,6 +67,9 @@ FILES: dict[str, dict[str, str]] = {
         "logoff-winxp.71dc5ab2.webp": "95046c4af328fdf2e3380d19d21174d5ff4e4afa",
         "shutdown-winxp.f3312ea0.webp": "26ffb2c4eb3e05ad056edf14111bac54d2f46007",
     },
+    "win10": {
+        "win10.743e8c13.webp": "988278e48d41f10f2f701c748d73595f700b75c0",
+    },
     "win11": {
         "guest-win10.a110df5a.webp": "57caee256e62a46271db867a088f49b1981bbc7d",
         "personal-win11.76af8a1e.webp": "758c1959c286e169051e211b680ae26fb959bc95",
@@ -161,8 +164,8 @@ def main() -> None:
     parser.add_argument("--source", type=Path, default=project.parent / "legacy-win7")
     parser.add_argument("--target", type=Path,
                         default=project / "apps/web/public/assets/images")
-    parser.add_argument("--themes", choices=["win7", "win2k", "winxp", "win11"], nargs="+",
-                        default=["win7", "win2k", "winxp", "win11"])
+    parser.add_argument("--themes", choices=["win7", "win2k", "winxp", "win10", "win11"], nargs="+",
+                        default=["win7", "win2k", "winxp", "win10", "win11"])
     parser.add_argument("--verify-only", action="store_true")
     parser.add_argument("--verify-target-only", action="store_true",
                         help="Check committed target bytes without source checkout")

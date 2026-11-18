@@ -13,6 +13,7 @@ test("source theme variants select exact login screen families and report fallba
     ["win95","win95","win95","pending"],
     ["win98","win98","win98","pending"],
     ["win2k","win2k","win2k","pending"],
+    ["win10","win10","win10","pending"],
     ["win11dark","win11","win11","pending"],
     ["winLP","winLS","win7-fallback","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
@@ -111,4 +112,29 @@ test("XP and Win11 login retain power controls and never fake account authentica
     await expect(login.locator('[data-test-logon-shutdown]')).toBeVisible();
     await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
   }
+});
+
+test("Windows 10 logon uses pinned original Win10 wallpaper and shared guest-win10 avatar",async({page})=>{
+  await page.goto("/?theme=win10");
+  const login=page.locator("[data-test-logon-screen]");
+  await expect(login).toHaveAttribute("data-source-logon-theme","win10");
+  await expect(login).toHaveAttribute("data-source-logon-renderer","win10");
+  await expect(login).toHaveAttribute("data-source-shell-status","pending");
+  await expect(login).toHaveCSS("background-image",/win10\.743e8c13\.webp/);
+  const avatar=login.locator('[data-test-source-logon-avatar="win10"]');
+  await expect(avatar.locator("img")).toHaveAttribute(
+    "src","/assets/images/guest-win10.a110df5a.webp");
+  await expect(login.locator(".source-win11-logon__overlay"))
+    .toHaveCSS("background-color","rgba(0, 0, 0, 0.5)");
+  await expect(login.locator(".source-win11-logon__signin"))
+    .toHaveCSS("border-radius","0px");
+  await login.getByRole("button",{name:"Other user"}).click();
+  await expect(login.getByRole("dialog",{name:"Account login"})).toBeVisible();
+  await login.getByRole("button",{name:"Back"}).click();
+  await login.getByRole("button",{name:"Power options"}).click();
+  await expect(login.locator('[data-test-logon-restart]')).toBeVisible();
+  await login.locator('[data-test-avatar="win7"]').click();
+  const desktop=page.locator("[data-test-main-screen]");
+  await expect(desktop).toBeVisible();
+  await expect(desktop).toHaveAttribute("data-theme","win10");
 });
