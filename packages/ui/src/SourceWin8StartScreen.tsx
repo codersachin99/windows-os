@@ -1,5 +1,6 @@
 import {useEffect,useRef,useState,type MouseEvent as ReactMouseEvent,type RefObject} from "react";
 import type {AppDefinition} from "@windows-os/contracts";
+import {sourceProgramsById} from "@windows-os/filesystem";
 import {
   legacyArt,sourceShellWallpaper,sourceThemeLogonArtwork,sourceThemeProgramArt,
   sourceWin8ShellArtwork
@@ -46,8 +47,18 @@ export function SourceWin8StartScreen({
   const matches=programs.filter(app=>app.label.toLowerCase()
     .includes(query.toLowerCase()));
   const tiles=programs.filter(app=>!sourceCoreIds.has(app.id));
-  const groups=Array.from({length:Math.ceil(tiles.length/6)},(_,index)=>
-    tiles.slice(index*6,index*6+6));
+  // Source has separate programItems and appItems pose-lists. The former
+  // are installed executables; the latter are external app shortcuts.
+  // Never mix an external app into the final installed-program group.
+  const isInstalled=(app:AppDefinition)=>Boolean(sourceProgramsById.get(app.id)?.installPath);
+  const makeGroups=(items:AppDefinition[],kind:"programs"|"apps")=>
+    Array.from({length:Math.ceil(items.length/6)},(_,index)=>({
+      kind,apps:items.slice(index*6,index*6+6)
+    }));
+  const groups=[
+    ...makeGroups(tiles.filter(isInstalled),"programs"),
+    ...makeGroups(tiles.filter(app=>!isInstalled(app)),"apps")
+  ];
   useEffect(()=>{rootRef.current?.focus({preventScroll:true});},[rootRef]);
   useEffect(()=>{
     if(searching)inputRef.current?.focus({preventScroll:true});
@@ -157,13 +168,14 @@ export function SourceWin8StartScreen({
         </button>)}
       </section>
       {groups.map((group,index)=><section className="win8-start__group"
-        key={index} aria-label={"Programs group "+(index+1)}
-        data-test-win8-start-group={index+1}>
-        {group.map(app=><button type="button"
+        key={index} aria-label={(group.kind==="programs"?"Programs":"Apps")+" group "+(index+1)}
+        data-test-win8-start-group={index+1}
+        data-test-win8-start-group-kind={group.kind}>
+        {group.apps.map(app=><button type="button"
           className="win8-start__tile win8-start__tile--app"
           key={app.id} data-test-program={app.id}
           onClick={()=>onLaunch(app.id)}
-          onContextMenu={event=>onContext(event,app.id)}>
+          onContextMenu={group.kind==="programs"?event=>onContext(event,app.id):undefined}>
           <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
             width={44} height={44} alt=""/>
           <span className="win8-start__tile-label">{app.label}</span>
