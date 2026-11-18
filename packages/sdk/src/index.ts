@@ -220,3 +220,5 @@ export {
 export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";
 
 export { SOURCE_EMBED_VERSION,SOURCE_EMBED_PREFIX,sourceEmbedOrigins,sourceEmbedUrl,sourceEmbedAppId,sourceEmbedCommand,sourceWebAppWindow } from "./embed";
+
+export {SOURCE_FINAL_DESKTOP_MENU_FLAGS} from "./sourceFinalMenuFlags";
