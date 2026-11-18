@@ -21,7 +21,7 @@ entry is intentionally omitted.
 | `win31` | `win31` | 1 | Source-shaped classic Guest logon adapter; shell/boot/pixel parity pending |
 | `win95` | `win95` | 1 | Source-shaped Win9x Guest logon adapter; shell/boot/pixel parity pending |
 | `win98` | `win98` | 1 | Source-shaped Win9x Guest logon adapter; shell/boot/pixel parity pending |
-| `win2k` | `win2k` | 1 | Pending theme-specific implementation |
+| `win2k` | `win2k` | 1 | Source-shaped classic Guest logon, byte-identical 2000 logo; shell/boot/pixel parity pending |
 | `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
 | `winvista` | `winvista` | 1 | Pending theme-specific implementation |
 | `win8` | `win8`, `win81` | 2 | Pending theme-specific implementation |
@@ -57,7 +57,7 @@ even though `win7` itself is not a key in the final source
   still requires Guest authentication. The React Guest logon now dispatches to source-derived **WinXP**
   (three blue regions, 150×89 logo, Guest account tile) and **Win11**
   (source wallpaper, dark overlay, original 150px guest-win10 avatar)
-  renderers. The existing **Win7** login remains intact. The Win31, Win95 and Win98 logons use an incremental shared classic
+  renderers. The existing **Win7** login remains intact. The Win31, Win95, Win98 and Win2k logons use an incremental shared classic
   window and form adapter. Other unported screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
@@ -145,3 +145,9 @@ even though `win7` itself is not a key in the final source
 - Classic form displays source-inspired username/password/Guest Logon/Options; Guest enters the real existing Guest filesystem, while account submit/create requests explicitly report unavailable authentication. Shut down/restart remain functional.
 - `source-classic-logon.spec.ts` and the theme catalog test cover all three families, narrow viewport bounds, Guest authorization and account/power boundaries. The focused `[run-ci]` browser gate includes the new regression suite.
 - **Not certified**: Win31/Win9x pixel screenshots, original forms and social login fidelity, audio, all boot animations, shell skins. Theme status is still `pending` for all three.
+
+## Windows 2000 original Guest logon slice — 18 November 2026
+
+- Source `logon-win2k.js` uses the shared `logon-window` with `hideAvatar`, a `misc.logo2k` banner, 32rem-wide window at top 20%, `#3b6ea4` background and a six-pixel blue gradient bar (`logon-win2k.css`). The shared React classic adapter now selects this family without a Win7 visual fallback.
+- Exact original `assets/images/logo2k.15140c8b.webp` is committed byte-for-byte: source/target Git blob SHA `028a0e1cd4f9eab7c472482312189eeecd0fc0df`. The existing source art verification gate now checks it.
+- Desktop/mobile browser tests cover banner URL, hidden avatar, blue source background, form/Guest/power boundaries and responsive width. Original account backend, screenshot pixel parity and boot/theme shells remain pending; status remains `pending`.

@@ -8,6 +8,16 @@
   font:12px "MS Sans Serif",Tahoma,Arial,sans-serif;
 }
 .windows-logon.source-classic-logon.is-win31{background:#bfbdc0}
+.windows-logon.source-classic-logon.is-win2k{background:#3b6ea4}
+.source-classic-logon.is-win2k .source-classic-logon__window{
+  top:20%;width:min(32rem,calc(100vw - 24px));
+}
+.source-classic-logon__banner{background:#fff;position:relative;padding:6px 12px 12px}
+.source-classic-logon__banner img{display:block;max-width:100%;height:auto;margin:auto}
+.source-classic-logon__banner::after{
+  position:absolute;bottom:0;left:0;right:0;height:6px;content:"";
+  background:linear-gradient(90deg,#082767,#8aaed5,#082767);
+}
 .source-classic-logon__window{
   position:absolute;left:50%;top:30%;transform:translateX(-50%);
   width:min(500px,calc(100vw - 24px));max-height:calc(100dvh - 94px);
@@ -90,7 +100,8 @@
 }
 @media(max-width:600px), (max-height:480px){
   .source-classic-logon__window,
-  .source-classic-logon.is-win31 .source-classic-logon__window{top:12%}
+  .source-classic-logon.is-win31 .source-classic-logon__window,
+  .source-classic-logon.is-win2k .source-classic-logon__window{top:12%}
   .source-classic-logon__section{gap:6px;padding:9px 7px}
   .source-classic-logon__avatar{width:40px;height:40px}
   .source-classic-logon__form{grid-template-columns:1fr;gap:5px}

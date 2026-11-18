@@ -12,6 +12,7 @@ test("source theme variants select exact login screen families and report fallba
     ["win31","win31","win31","pending"],
     ["win95","win95","win95","pending"],
     ["win98","win98","win98","pending"],
+    ["win2k","win2k","win2k","pending"],
     ["win11dark","win11","win11","pending"],
     ["winLP","winLS","win7-fallback","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],

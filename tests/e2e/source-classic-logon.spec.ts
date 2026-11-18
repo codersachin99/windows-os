@@ -2,8 +2,8 @@ import {expect,test} from "@playwright/test";
 
 /** Source logon-win31 and logon-win9x share a classic logon-window.
  * Theme recognition and Guest behavior do not establish pixel parity. */
-test("Win31/95/98 source-shaped classic logon keeps Guest-only authentication",async({page})=>{
-  for(const family of ["win31","win95","win98"] as const){
+test("Win31/95/98/2k source-shaped classic logon keeps Guest-only authentication",async({page})=>{
+  for(const family of ["win31","win95","win98","win2k"] as const){
     await page.goto("/?theme="+family);
     const login=page.locator("[data-test-logon-screen]");
     await expect(login).toBeVisible({timeout:12000});
@@ -12,6 +12,12 @@ test("Win31/95/98 source-shaped classic logon keeps Guest-only authentication",a
     await expect(login).toHaveAttribute("data-source-logon-renderer",family);
     await expect(login).toHaveAttribute("data-source-shell-status","pending");
     await expect(login.getByRole("dialog",{name:"Logon Windows"})).toBeVisible();
+    if(family==="win2k"){
+      await expect(login.locator('[data-test-source-logon-logo="win2k"]'))
+        .toHaveAttribute("src","/assets/images/logo2k.15140c8b.webp");
+      await expect(login.locator(".source-classic-logon__avatar")).toHaveCount(0);
+      await expect(login).toHaveCSS("background-color","rgb(59, 110, 164)");
+    }
     await expect(login.getByRole("textbox",{name:"User name"})).toBeVisible();
     await expect(login.locator("input[type=password]")).toBeVisible();
     await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);

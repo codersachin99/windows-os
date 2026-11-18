@@ -19,7 +19,7 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
   // The source Win31 and Win9x screens share the classic logon-window.
   // The shell skin remains pending; this is a source-shaped Guest adapter.
   if(sourceScreens.logon==="win31"||sourceScreens.logon==="win95"||
-    sourceScreens.logon==="win98")return <SourceClassicLogon
+    sourceScreens.logon==="win98"||sourceScreens.logon==="win2k")return <SourceClassicLogon
       theme={theme} family={sourceScreens.logon} shellStatus={status}
       onGuest={onGuest} onShutdown={onShutdown} onRestart={onRestart}/>;
 

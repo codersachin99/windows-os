@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy byte-identical XP/Win11 theme artwork from a checked-out legacy-win7.
+"""Copy byte-identical original theme artwork from a checked-out legacy-win7.
 
 This is an explicit, verified source import, NOT generated replacement artwork.
 The pinned source repository is codersachin99/legacy-win7 at
@@ -21,6 +21,9 @@ LEGACY_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
 FILES: dict[str, dict[str, str]] = {
     "win7": {
         "personal.ccbfdd3a.webp": "1c1649d47ab3c405afb49ce2fa45e3a9cd937725",
+    },
+    "win2k": {
+        "logo2k.15140c8b.webp": "028a0e1cd4f9eab7c472482312189eeecd0fc0df",
     },
     "winxp": {
         "logoxp.9b034658.png": "33b3bca96d3c07994b096bf13d2a87a6a05b1196",
@@ -158,8 +161,8 @@ def main() -> None:
     parser.add_argument("--source", type=Path, default=project.parent / "legacy-win7")
     parser.add_argument("--target", type=Path,
                         default=project / "apps/web/public/assets/images")
-    parser.add_argument("--themes", choices=["win7", "winxp", "win11"], nargs="+",
-                        default=["win7", "winxp", "win11"])
+    parser.add_argument("--themes", choices=["win7", "win2k", "winxp", "win11"], nargs="+",
+                        default=["win7", "win2k", "winxp", "win11"])
     parser.add_argument("--verify-only", action="store_true")
     parser.add_argument("--verify-target-only", action="store_true",
                         help="Check committed target bytes without source checkout")
@@ -168,7 +171,7 @@ def main() -> None:
         count = verify_target_files(
             args.target.resolve(), tuple(dict.fromkeys(args.themes))
         )
-        print(f"Verified {count} exact pinned XP/Win11 Git blobs in target checkout.")
+        print(f"Verified {count} exact pinned theme Git blobs in target checkout.")
         return
     count, copied = import_files(
         args.source.resolve(), args.target.resolve(), tuple(dict.fromkeys(args.themes)),

@@ -1,12 +1,12 @@
 import {useState} from "react";
-import {legacyArt} from "@windows-os/assets";
+import {legacyArt,sourceThemeLogonArtwork} from "@windows-os/assets";
 import type {ThemeId} from "@windows-os/contracts";
 import "./sourceClassicLogon.css";
 
 /** Source logon-win31.js and logon-win9x.js both mount logon-window.
  * This Guest-only adapter preserves their different classic-window positions
  * and form entry points. Real account authentication is not yet migrated. */
-export type SourceClassicLogonFamily="win31"|"win95"|"win98";
+export type SourceClassicLogonFamily="win31"|"win95"|"win98"|"win2k";
 
 export interface SourceClassicLogonProps{
   theme:ThemeId;
@@ -26,6 +26,7 @@ export function SourceClassicLogon({
   const nameId="source-classic-"+family+"-username";
   const passwordId="source-classic-"+family+"-password";
   const win31=family==="win31";
+  const win2k=family==="win2k";
   return (
     <main className={"windows-logon source-classic-logon is-"+family}
       data-test-logon-screen data-source-theme-id={theme}
@@ -35,14 +36,18 @@ export function SourceClassicLogon({
       <section className="source-classic-logon__window" role="dialog"
         aria-label="Logon Windows">
         <header className="source-classic-logon__titlebar">Logon Windows</header>
+        {win2k&&<div className="source-classic-logon__banner">
+          <img src={sourceThemeLogonArtwork.win2k.banner}
+            alt="Windows 2000" data-test-source-logon-logo="win2k"/>
+        </div>}
         <div className="source-classic-logon__section">
-          <img className="source-classic-logon__avatar"
-            src={legacyArt.guestAvatar} alt="" width={64} height={64}/>
+          {!win2k&&<img className="source-classic-logon__avatar"
+            src={legacyArt.guestAvatar} alt="" width={64} height={64}/>}
           <form className="source-classic-logon__form" onSubmit={event=>{
             event.preventDefault();
             setShowAccount(true);
           }}>
-            {!win31&&<p className="source-classic-logon__instruction">
+            {!win31&&!win2k&&<p className="source-classic-logon__instruction">
               Type a user name and password to log on to Windows.
             </p>}
             <label htmlFor={nameId}>User name:</label>
