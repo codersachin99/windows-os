@@ -1,0 +1,93 @@
+/* Source System Properties → Advanced and child SystemPerformance (420×500)
+ * from pinned legacy-win7/src/modules/shell/system.js. Shared Win7 form
+ * controls retain native buttons and keyboard focus. */
+.windows-system-properties{
+  height:100%;min-height:0;position:relative;display:flex;flex-direction:column;
+  background:#f0f0f0;color:#222;font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-system-properties__tabs,.windows-system-performance__tabs{
+  display:flex;align-items:flex-end;gap:2px;overflow-x:auto;min-height:34px;
+  padding:7px 9px 0;border-bottom:1px solid #b8b8b8;
+}
+.windows-system-properties__tabs button,
+.windows-system-performance__tabs button{
+  flex:none;border:1px solid #aaa;border-radius:3px 3px 0 0;
+  background:#e8e8e8;padding:5px 10px;color:#252525;
+}
+.windows-system-properties__tabs button[aria-current="page"],
+.windows-system-performance__tabs button[aria-current="page"]{
+  background:white;border-bottom-color:white;position:relative;
+}
+.windows-system-properties__tabs button:disabled{opacity:.45;cursor:not-allowed}
+.windows-system-properties__body{
+  padding:14px;overflow:auto;flex:1;background:white;
+}
+.windows-system-properties__body p{margin:6px 0 12px}
+.windows-system-properties__body fieldset{
+  border:1px solid #a2a2a2;margin:0 0 16px;min-width:0;padding:10px 12px;
+}
+.windows-system-properties__body legend,
+.windows-system-performance legend{padding:0 5px}
+.windows-system-properties__body fieldset button{display:block;margin-left:auto}
+.windows-system-properties__actions,
+.windows-system-performance__actions{
+  display:flex;justify-content:flex-end;gap:8px;padding:10px 14px;
+  border-top:1px solid #ddd;background:#f0f0f0;
+}
+.windows-system-properties__actions button,
+.windows-system-performance__actions button,
+.windows-system-properties__body fieldset button,
+.windows-system-performance__content button{
+  color:#171717;border:1px solid #888;border-radius:3px;
+  background:linear-gradient(#fff,#e3e3e3);padding:4px 14px;min-width:70px;
+}
+.windows-system-properties__actions button:disabled,
+.windows-system-performance__actions button:disabled,
+.windows-system-performance__content button:disabled{opacity:.45;cursor:default}
+.windows-system-performance__backdrop{
+  position:absolute;inset:0;z-index:20;background:#0003;
+  display:grid;place-items:center;padding:8px;
+}
+.windows-system-performance{
+  display:flex;flex-direction:column;min-width:0;
+  width:min(420px,100%);height:min(500px,100%);
+  background:#f0f0f0;border:1px solid #6b6b6b;
+  box-shadow:0 3px 15px #0006;color:#222;
+}
+.windows-system-performance__title{
+  flex:none;display:flex;align-items:center;justify-content:space-between;
+  min-height:30px;padding:3px 5px 3px 11px;
+  background:linear-gradient(#e4f2fd,#b5d1eb);border-bottom:1px solid #89a1b9;
+}
+.windows-system-performance__title button{
+  width:34px;height:24px;padding:0;border:1px solid #a04b4b;
+  color:#fff;background:linear-gradient(#ec9286,#bc3a2d);
+}
+.windows-system-performance__tabs{flex:none}
+.windows-system-performance__content{
+  flex:1;min-height:0;overflow:auto;padding:13px;background:#fff;
+}
+.windows-system-performance__content>p{margin:0 0 10px;line-height:1.4}
+.windows-system-performance__presets,
+.windows-system-performance__options{
+  display:flex;flex-direction:column;gap:7px;margin:0 0 11px;
+  min-width:0;padding:9px 11px;border:1px solid #aaa;
+}
+.windows-system-performance__options{min-height:120px}
+.windows-system-performance__presets label,
+.windows-system-performance__options label{
+  display:flex;align-items:flex-start;gap:8px;cursor:pointer;
+}
+.windows-system-performance__presets input,
+.windows-system-performance__options input{margin:2px 0 0;flex:none}
+.windows-system-performance__note{
+  color:#555;font-size:11px;line-height:1.35;margin:5px 0 0;
+}
+@media(max-width:540px){
+  .windows-system-properties__tabs,.windows-system-performance__tabs{
+    padding-left:3px;padding-right:3px
+  }
+  .windows-system-performance__tabs button{padding:5px 6px;font-size:11px}
+  .windows-system-performance__actions{gap:4px;padding:8px}
+  .windows-system-performance__actions button{min-width:58px;padding:5px 8px}
+}
