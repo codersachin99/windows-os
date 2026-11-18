@@ -8,8 +8,8 @@ import {expect,test} from "@playwright/test";
 test("source theme variants select exact login screen families and report fallback",async({page})=>{
   const cases=[
     ["aero-3","win7","win7","pending"],
-    ["winxpE","winxp","win7-fallback","pending"],
-    ["win11dark","win11","win7-fallback","pending"],
+    ["winxpE","winxp","winxp","pending"],
+    ["win11dark","win11","win11","pending"],
     ["winLP","winLS","win7-fallback","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
     ["kubuntu","kubuntu","win7-fallback","pending"],
@@ -50,4 +50,61 @@ test("source theme catalog selection carries through explicit Guest login",async
   // The full Win11-dark artwork and UI personalities have not been
   // migrated. Recognition is not a false visual-parity acceptance.
   await expect(page.locator('[data-test-taskbar="base"]')).toBeVisible();
+});
+
+
+test("original XP logon renders three bands, exact source logo and responsive Guest account",async({page})=>{
+  await page.goto("/?theme=winxpG");
+  const login=page.locator("[data-test-logon-screen]");
+  await expect(login).toHaveAttribute("data-source-logon-renderer","winxp");
+  await expect(login.locator(".source-xp-logon__top")).toBeVisible();
+  await expect(login.locator(".source-xp-logon__body")).toBeVisible();
+  await expect(login.locator(".source-xp-logon__bottom")).toBeVisible();
+  await expect(login.locator('[data-test-source-logon-logo="winxp"]'))
+    .toHaveAttribute("src","/assets/images/logoxp.9b034658.png");
+  await expect(login.locator(".source-xp-logon__body"))
+    .toHaveCSS("background-image",/radial-gradient/);
+  const avatar=login.locator('[data-test-source-logon-avatar="winxp"]');
+  await expect(avatar).toBeVisible();
+  await expect(avatar).toContainText("Guest");
+  await expect(login.locator("[data-test-avatar=win7]")).toHaveCount(1);
+  await avatar.click();
+  await expect(page.locator("[data-test-main-screen]")).toBeVisible();
+  await expect(page.locator("[data-test-main-screen]"))
+    .toHaveAttribute("data-theme","winxpG");
+});
+
+test("original Win11 logon uses source guest-win10 art, dark overlay and Guest sign-in",async({page})=>{
+  await page.goto("/?theme=win11dark");
+  const login=page.locator("[data-test-logon-screen]");
+  await expect(login).toHaveAttribute("data-source-logon-renderer","win11");
+  await expect(login).toHaveCSS("background-image",/win11\.fc00c43d\.webp/);
+  const avatar=login.locator('[data-test-source-logon-avatar="win11"]');
+  await expect(avatar.locator("img"))
+    .toHaveAttribute("src","/assets/images/guest-win10.a110df5a.webp");
+  await expect(avatar).toHaveCSS("border-radius","50%");
+  await expect(login.locator(".source-win11-logon__overlay"))
+    .toHaveCSS("background-color","rgba(0, 0, 0, 0.5)");
+  await login.getByRole("button",{name:"Sign in"}).click();
+  await expect(page.locator("[data-test-main-screen]")).toBeVisible();
+  await expect(page.locator("[data-test-main-screen]"))
+    .toHaveAttribute("data-theme","win11dark");
+});
+
+test("XP and Win11 login retain power controls and never fake account authentication",async({page})=>{
+  for(const theme of ["winxp","win11"] as const){
+    await page.goto("/?theme="+theme);
+    const login=page.locator("[data-test-logon-screen]");
+    const account=login.getByRole("button",{
+      name:theme==="winxp"?"Create a new account":"Other user"
+    });
+    await account.click();
+    await expect(login.getByRole("dialog",{name:"Account login"})).toBeVisible();
+    await login.getByRole("button",{name:"Back"}).click();
+    await expect(login.getByRole("dialog",{name:"Account login"})).toHaveCount(0);
+    await login.getByRole("button",{name:"Power options"}).click();
+    await expect(login.locator('[data-test-logon-restart]')).toBeVisible();
+    await expect(login.locator('[data-test-logon-shutdown]')).toBeVisible();
+    await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
+  }
 });
