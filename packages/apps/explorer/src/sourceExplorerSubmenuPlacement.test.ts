@@ -23,9 +23,34 @@ describe("pinned ExplorerMenu source submenu side/vertical clipping",()=>{
       {left:10,top:80,width:205,height:220},{top:105},submenu,
       {width:320,height:480}
     );
-    expect(output).toEqual({left:101,top:25,side:"right"});
+    // With no horizontal space, place the child below the parent instead
+    // of covering the "Send to" trigger with an interactive submenu.
+    expect(output).toEqual({left:0,top:222,side:"right"});
     expect(10+output.left+submenu.width).toBeLessThanOrEqual(320);
     expect(80+output.top+submenu.height).toBeLessThanOrEqual(480);
+  });
+  it("stacks a narrow mobile child above the parent when below is clipped",()=>{
+    const parent={left:110,top:340,width:205,height:225};
+    const child={width:205,height:64};
+    const viewport={width:390,height:600};
+    const placement=sourceExplorerSubmenuPlacement(
+      parent,{top:400},child,viewport
+    );
+    expect(placement).toEqual({left:0,top:-66,side:"right"});
+    expect(parent.top+placement.top+child.height)
+      .toBeLessThan(parent.top);
+    expect(parent.left+placement.left).toBeGreaterThanOrEqual(4);
+  });
+  it("preserves source adjacent side flipping on desktop for available space",()=>{
+    const child={width:205,height:64};
+    expect(sourceExplorerSubmenuPlacement(
+      {left:100,top:100,width:205,height:240},{top:170},child,
+      {width:1024,height:768}
+    )).toEqual({left:203,top:70,side:"right"});
+    expect(sourceExplorerSubmenuPlacement(
+      {left:750,top:100,width:205,height:240},{top:170},child,
+      {width:1024,height:768}
+    )).toEqual({left:-203,top:70,side:"left"});
   });
   it("clamps negative overflow without propagating measured geometry changes",()=>{
     const placement=sourceExplorerSubmenuPlacement(

@@ -95,3 +95,37 @@ test("Explorer path shortcut to a folder opens the same real Guest directory",as
   await expect(explorer.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(PROFILE+"/Documents/Project Folder");
 });
+
+
+test("mobile Explorer Send to submenu never covers its own trigger when sides cannot fit",async({page})=>{
+  await page.setViewportSize({width:375,height:667});
+  const computer=await documents(page);
+  await computer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Mobile Send To.txt",mimeType:"text/plain",
+      buffer:Buffer.from("mobile source shortcut")});
+  const item=computer.locator('[data-test-explorer-item="Mobile Send To.txt"]');
+  await expect(item).toBeVisible();
+  await item.click({button:"right"});
+  const menu=computer.locator('[data-test-explorer-context="item"]');
+  await expect(menu).toBeVisible();
+  const trigger=menu.locator('[data-test-explorer-item-send-to]');
+  // Pointer movement over the source row opens the child even before
+  // click. The previous center-overlap made Playwright click hang 30s.
+  await trigger.hover();
+  const child=menu.locator('[data-test-explorer-sendto-submenu]');
+  await expect(child).toBeVisible();
+  const a=await trigger.boundingBox();
+  const b=await child.boundingBox();
+  expect(a).not.toBeNull();
+  expect(b).not.toBeNull();
+  // If the viewport cannot fit both side-by-side, a vertically stacked
+  // menu must leave the full parent trigger pointer-interactable.
+  expect(b!.y>=a!.y+a!.height-1||b!.y+b!.height<=a!.y+1
+    ||b!.x>=a!.x+a!.width-1||b!.x+b!.width<=a!.x+1).toBe(true);
+  await trigger.click();
+  await expect(child).toBeVisible();
+  await child.locator('[data-test-explorer-item-send-to-kind="desktop"]').click();
+  const shortcut=page.locator('[data-test-desktop-file="'+
+    DESKTOP+'/Mobile Send To - Shortcut.lnk"]');
+  await expect(shortcut).toBeVisible();
+});

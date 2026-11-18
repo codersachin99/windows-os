@@ -21,6 +21,28 @@ export function sourceExplorerSubmenuPlacement(
   const preferRight=parent.left+parent.width-overlap+child.width<=
     viewport.width-margin;
   const fitsLeft=parent.left-child.width+overlap>=margin;
+  // A 205px parent and a 205px child cannot fit side-by-side in a
+  // 320-390px mobile viewport. The source flip/clamp fallback used to
+  // overlap the parent row, so simply hovering Send to opened a child
+  // above its own trigger and trapped pointer clicks until timeout.
+  // Preserve original left/right source layout whenever either fits;
+  // only when neither side can fit, stack the child fully below or
+  // above the root menu if that fits vertically. This is the narrow
+  // viewport adaptation, not a source desktop layout change.
+  if(!preferRight&&!fitsLeft){
+    const gap=2;
+    const below=parent.top+parent.height+gap+child.height<=viewport.height-margin;
+    const above=parent.top-child.height-gap>=margin;
+    if(below||above){
+      const maxWorldLeft=Math.max(margin,viewport.width-margin-child.width);
+      const worldLeft=Math.max(margin,Math.min(parent.left,maxWorldLeft));
+      return {
+        left:worldLeft-parent.left,
+        top:below?parent.height+gap:-child.height-gap,
+        side:"right"
+      };
+    }
+  }
   const side:SourceSubmenuPlacement["side"]=preferRight?"right":
     fitsLeft?"left":
     (viewport.width-(parent.left+parent.width)>=parent.left?"right":"left");
