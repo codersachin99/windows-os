@@ -36,7 +36,8 @@ export function sourceSortDesktopItems<T extends SourceDesktopSortable>(
   };
   return entries.map((item,index)=>({item,index})).sort((a,b)=>{
     const left=value(a.item),right=value(b.item);
-    const comparison=left<right?-1:left>right?1:0;
+    const comparison=typeof left==="number"&&typeof right==="number"
+      ?Math.sign(left-right):String(left)<String(right)?-1:String(left)>String(right)?1:0;
     return comparison?(sort.asc?comparison:-comparison):a.index-b.index;
   }).map(x=>x.item);
 }
