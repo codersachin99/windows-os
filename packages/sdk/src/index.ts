@@ -1,6 +1,7 @@
 import type { AppDefinition } from "@windows-os/contracts";
 import { legacyArt, legacySourceIconArtwork } from "@windows-os/assets";
 import sourceShortcuts from "./legacy-shortcuts.json";
+import {sourceRegisteredAliases} from "./sourceFinalAppAliases";
 
 // Public, reusable app-registration contract. App implementations live separately
 // from the shell. Never mark an app migrated just because its icon is registered.
@@ -92,6 +93,7 @@ const builtinApps: AppDefinition[] = [
   {
     id: "sticky", label: "Sticky Notes", icon: legacyArt.sticky,
     kind: "utility", desktop: false, showInStart: true,
+    allowMultipleWindows:false,
     window: { width: 200, height: 200, resizable: false, centered: true }
   },
   {
@@ -186,21 +188,45 @@ const builtinApps: AppDefinition[] = [
 
 export class AppRegistry {
   private readonly apps = new Map<string, AppDefinition>();
+  private readonly aliases = new Map<string,string>();
   constructor(initial: readonly AppDefinition[] = []) {
     for (const app of initial) this.register(app);
   }
   register(app: AppDefinition): void {
-    if (!/^[a-z][a-z0-9_-]*$/.test(app.id)) throw new Error(`Invalid app id: ${app.id}`);
-    if (this.apps.has(app.id)) throw new Error(`Duplicate app id: ${app.id}`);
-    this.apps.set(app.id, Object.freeze({ ...app, window: { ...app.window } }));
+    if (!/^[a-z][a-z0-9_-]*$/.test(app.id))
+      throw new Error(`Invalid app id: ${app.id}`);
+    if (this.apps.has(app.id)||this.aliases.has(app.id))
+      throw new Error(`Duplicate app id: ${app.id}`);
+    const aliases=app.aliases??[];
+    for(const alias of aliases){
+      // Source aliases include *.cpl, but never host paths, arguments,
+      // URL schemes, reserved special names or another registered app.
+      if(!/^[a-z][a-z0-9._-]*$/.test(alias)||alias.includes("..")||
+        alias===app.id||this.apps.has(alias)||this.aliases.has(alias))
+        throw new Error(`Invalid or duplicate app alias: ${alias}`);
+    }
+    if(new Set(aliases).size!==aliases.length)
+      throw new Error(`Duplicate app alias in ${app.id}`);
+    this.apps.set(app.id,Object.freeze({
+      ...app,aliases:Object.freeze([...aliases]),window:{...app.window}
+    }));
+    for(const alias of aliases)this.aliases.set(alias,app.id);
   }
-  get(id: string): AppDefinition | undefined { return this.apps.get(id); }
+  get(id: string): AppDefinition | undefined {
+    const name=id.trim().toLowerCase();
+    return this.apps.get(name)??this.apps.get(this.aliases.get(name)??"");
+  }
   list(): AppDefinition[] { return [...this.apps.values()]; }
   desktop(): AppDefinition[] { return this.list().filter(app => app.desktop); }
   startMenu(): AppDefinition[] { return this.list().filter(app => app.showInStart); }
 }
 
-export const appRegistry = new AppRegistry(builtinApps);
+// Keep the source app registry authoritative over names while excluding
+// not-yet-migrated apps and special-folder navigation aliases. Other
+// registered apps (e.g. user shortcuts) do not silently gain source aliases.
+export const appRegistry = new AppRegistry(builtinApps.map(app=>({
+  ...app,aliases:sourceRegisteredAliases(app.id)
+})));
 
 export { browserStorage, fileStore, fileClipboard, fileDragSession } from "./files";
 export {sourceRecentPrograms,SourceRecentPrograms,SOURCE_RECENT_PROGRAMS_KEY} from "./recentPrograms";
@@ -222,3 +248,5 @@ export { sourceFilesystemRuntime, SourceFilesystemRuntime } from "./runtime";
 export { SOURCE_EMBED_VERSION,SOURCE_EMBED_PREFIX,sourceEmbedOrigins,sourceEmbedUrl,sourceEmbedAppId,sourceEmbedCommand,sourceWebAppWindow } from "./embed";
 
 export {SOURCE_FINAL_DESKTOP_MENU_FLAGS} from "./sourceFinalMenuFlags";
+
+export {SOURCE_FINAL_APP_ALIASES,sourceRegisteredAliases} from "./sourceFinalAppAliases";
