@@ -1,3 +1,4 @@
+import {sourceIsKnownTheme} from "@windows-os/contracts";
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
 import {sourceShellWallpaper,sourceIsSystemWallpaper} from "@windows-os/assets";
 
@@ -14,9 +15,10 @@ export const LEGACY_DEFAULTS = Object.freeze({
 /** Legacy testmode.js supports a query-string theme override; never accept unknown skin IDs. */
 export function sourceTestTheme(search: string): DesktopState["theme"] | null {
   const theme = new URLSearchParams(search).get("theme");
-  return theme && ["win7", "winxp", "win11", "win10", "winvista",
-    "win31", "win95", "win98"].includes(theme)
-    ? theme as DesktopState["theme"] : null;
+  // Source catalog contains 36 config entries plus the canonical Win7
+  // shell ID. Only permit literal known IDs; never treat a query as an
+  // import path. Pending visual skins use the existing Win7 fallback.
+  return theme&&sourceIsKnownTheme(theme)?theme:null;
 }
 
 export const SOURCE_ACTIVE_THEME_KEY="windows-os:guest:active-theme:v1";
@@ -42,7 +44,7 @@ export function sourceSavedTheme(
 ):DesktopState["theme"]|null{
   try{
     const theme=storage?.getItem(SOURCE_ACTIVE_THEME_KEY);
-    return theme==="win7"||theme==="winxp"||theme==="win11"?theme:null;
+    return theme&&sourceIsKnownTheme(theme)?theme:null;
   }catch{return null;}
 }
 /** Keep the optional animated boot path for source config overrides and
