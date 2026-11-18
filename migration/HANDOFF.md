@@ -1,3 +1,28 @@
+## Final source taskbar singleton title regression and app alias registry — 18 November 2026
+
+**Active reference remains locked** at `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+The old `4e63290d` pinned reference is historical; `migration/SHELL-PRIORITY.md` now labels it explicitly. Source repo was not modified.
+
+**CI evidence before this work:**
+- [CI #44249449912](https://github.com/codersachin99/windows-os/actions/runs/44249449912) on `813c9e1` passed TypeScript, unit tests, source inventory, byte-identical artwork, Contacts audit, Vite build and **188/188 focused desktop/mobile Chromium tests**.
+- Full Chromium had **676 passed, 2 failed, 2 skipped out of 680**. The failures were the same Notepad dirty-title minimize/restore test on desktop and mobile. Exact cause was the new grouped taskbar always generating the ARIA button label from the program name `Notepad`, when a single running instance had a dynamic window title `*Untitled - Notepad`. The program window and its unsaved document remained present; Playwright could not find the old uniquely titled switcher.
+
+**Pushed fix and focused acceptance:**
+- `337d287` — single-instance unpinned grouped taskbar buttons expose `Switch to ${win.title}`, while multiple windows retain their program-level group name. No extra app instance or document reset is involved.
+- `f47d9b4` — new Playwright acceptance: Notepad dirty title, single window group, minimize/restore, original CodeMirror content remains, close confirmation. `8473dd5` — moves the existing `notepad.spec.ts` into opt-in focused CI to catch this regression before the complete suite.
+
+**New final-source app registry reconciliation:**
+- `be89029` — source `src/config/app.registry.json` alias catalogue for 13 source entries. Only aliases with currently migrated app launch semantics are enabled; unported programs and Explorer folder-path aliases are retained as reference data but deliberately not falsely activated.
+- `7a9d621`, `fd1f979` — alias contract and collision-validated `AppRegistry` with safe case-insensitive lookups for migrated apps (e.g. `calculator` → `calc`, `control` → `cpanel`, `winver` → `about`, `explorer` → `computer`, `sysdm.cpl` → `system`). `sticky.allowMultipleWindows=false` now explicitly comes from the final registry policy as well as the existing shell singleton guard.
+- `1250e03` — Vitest for source aliases, absence of fake unported apps, case-insensitive resolution, duplicate names, unsafe paths, and retained installed app count.
+- `eb3a854`, `4beb7ca` — updated active baseline matrix and historical shell-priority checkpoint.
+
+**This handoff commit with `[run-ci]` triggers exact-head opt-in CI.** Validate TypeScript, unit, fixed source asset checks, Vite build, focused Playwright including Notepad and full desktop/mobile suite before claiming accepted status. This is not evidence of end-to-end pixel-perfect parity.
+
+**Next:** repair any new CI failure; prioritize original Win7/XP/11 visuals, desktop context/Start and Computer/Bin remaining items (mapped-directory permission adapter, source registry shortcuts, original icon and theme screenshot comparisons). Draft PR #1 unmerged, no release, WindowsOS main unchanged.
+
+---
+
 ## Final source Computer checkbox reconciliation — 18 November 2026
 
 - Pinned source `legacy-win7@26b9f0c` has `features.showItemCheckboxes=false`; source `src/modules/apps/computer.js` explicitly gates touch-selection checkbox rendering on this flag.
