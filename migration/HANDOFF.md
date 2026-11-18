@@ -1,3 +1,13 @@
+## Win10 exact-head CI unit contract follow-up — 18 November 2026
+
+The first Win10 Desktop/Start [CI #44321034075](https://github.com/codersachin99/windows-os/actions/runs/44321034075), exact-head `47e482d`, passed TypeScript but **failed two outdated unit expectations**; source/art audits, Vite, and browser steps were skipped (not a code-build verification). Both failures arose from deliberately migrated **original** source assets: `sourceShellArtwork.test.ts` incorrectly still treated Win10's Start/Computer/Bin artwork as unported, and `personalize/src/model.test.ts` expected the gallery to omit the newly imported byte-identical original Win10 wallpaper.
+
+[`f87e6e2`](https://github.com/codersachin99/windows-os/commit/f87e6e2a473ccccb0f75b6edd0f28ccb36caba99) updates these **tests to assert actual source behavior**, not to disable tests: Win10's unusual original Win8 start-button SVG, Computer and both Bin states, file/folder artwork, original Games/CPanel and wallpaper URL and exact gallery order. Unported other themes still must return `null` and Win7 remains unchanged.
+
+This deliberate `[run-ci]` checkpoint is required to verify the *new* exact head. Resolve any TypeScript, unit, art SHA/audit, Vite or focused/full desktop/mobile Playwright failure before claiming the Win10 shell slice passed. Original visual screenshot parity and all 19 source boot families are still pending, PR #1 remains draft, main and immutable source remain unchanged.
+
+---
+
 ## Windows 10 desktop, taskbar, window controls, Computer/Bin, Start menu — 18 November 2026
 
 **Immutable source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; original repository, target `main`, existing PR draft and release history untouched.
