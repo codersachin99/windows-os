@@ -18,39 +18,26 @@ async function createFolder(win:ReturnType<Page["locator"]>,name:string){
   return row;
 }
 
-test("source fa65 checkbox only appears after touch selection; toggles Guest multi-select",async({page})=>{
+test("final source showItemCheckboxes=false hides Computer checkboxes after selection",async({page})=>{
   const win=await openExplorer(page);
   const a=await createFolder(win,"SourceCheckA");
   const b=await createFolder(win,"SourceCheckB");
   await expect(win.locator('[data-test-item-checkbox]')).toHaveCount(0);
   await a.click();
   await expect(a).toHaveClass(/is-selected/);
+  // Final app.config.json explicitly disables the source 2024-era
+  // touch-selection checkbox feature. This is not a device heuristic.
+  await expect(win.locator('[data-test-item-checkbox]')).toHaveCount(0);
   const touch=await page.evaluate(()=>
     window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
   if(!touch){
-    // Source Computer.showCheckboxes requires isTouch === true.
+    // Existing ordinary multi-selection still works when checkboxes
+    // are disabled by the source feature flag.
+    await b.click({modifiers:["Control"]});
+    await expect(a).toHaveClass(/is-selected/);
+    await expect(b).toHaveClass(/is-selected/);
+    await expect(win.getByText("2 selected",{exact:false})).toBeVisible();
     await expect(win.locator('[data-test-item-checkbox]')).toHaveCount(0);
-    return;
   }
-  const first=a.locator('[data-test-item-checkbox]');
-  const second=b.locator('[data-test-item-checkbox]');
-  await expect(first).toHaveAttribute("aria-checked","true");
-  await expect(second).toHaveAttribute("aria-checked","false");
-  await expect(first).toHaveAttribute("aria-label","SourceCheckA");
-  await expect(second).toHaveAttribute("data-test-item-checkbox","");
-  await second.click();
-  await expect(second).toHaveAttribute("aria-checked","true");
-  await expect(b).toHaveClass(/is-selected/);
-  await expect(a).toHaveClass(/is-selected/);
-  await expect(win.getByText("2 selected",{exact:false})).toBeVisible();
-  await first.click();
-  await expect(a).not.toHaveClass(/is-selected/);
-  await expect(b).toHaveClass(/is-selected/);
-  await expect(second).toHaveAttribute("aria-checked","true");
-  // The migrated checkbox is also keyboard accessible; the original click
-  // activation still must not navigate into the folder.
-  await second.focus();
-  await second.press("Space");
-  await expect(win.locator('[data-test-item-checkbox]')).toHaveCount(0);
   await expect(win.getByRole("textbox",{name:"Folder address"})).toHaveValue("Computer");
 });
