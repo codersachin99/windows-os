@@ -203,3 +203,24 @@ for(const theme of ["win8","win81"] as const){
       .toBeVisible();
   });
 }
+
+
+test("source Win8 tile grids scroll horizontally from vertical and horizontal wheel deltas",async({page})=>{
+  // A deliberately narrow viewport guarantees source's scrollable tile grid,
+  // independent of whether this run uses desktop or mobile Chromium.
+  await page.setViewportSize({width:700,height:720});
+  await guest(page,"win8");
+  const start=await openStart(page);
+  const grid=start.locator('[data-test-win8-start-groups]');
+  const available=await grid.evaluate(el=>el.scrollWidth-el.clientWidth);
+  expect(available).toBeGreaterThan(240);
+  const bounds=await grid.boundingBox();
+  expect(bounds).not.toBeNull();
+  await page.mouse.move(bounds!.x+70,bounds!.y+70);
+  await page.mouse.wheel(0,160);
+  await expect.poll(()=>grid.evaluate(el=>el.scrollLeft)).toBeGreaterThan(0);
+  const afterVertical=await grid.evaluate(el=>el.scrollLeft);
+  await page.mouse.wheel(110,0);
+  await expect.poll(()=>grid.evaluate(el=>el.scrollLeft)).toBeGreaterThan(afterVertical);
+  await expect(start).toBeVisible();
+});
