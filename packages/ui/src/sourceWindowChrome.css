@@ -94,6 +94,9 @@
   border-radius:0 0 5px 5px;
   box-shadow:0 1px 0 rgba(255,255,255,.3333333333);
 }
+.windows-desktop[data-theme="win7"]:dir(rtl) .windows-window__buttons{
+  margin:0 8px 0 2px;
+}
 .windows-desktop[data-theme="win7"] .windows-window__buttons button{
   height:20px;min-height:20px;
   border-radius:0;
@@ -147,6 +150,9 @@
 }
 .windows-desktop[data-theme="winxp"] .windows-window__title{
   font-weight:bold;text-shadow:1px 1px rgba(0,0,0,.6);
+}
+.windows-desktop[data-theme="winxp"]:dir(rtl) .windows-window__title{
+  text-shadow:-1px 1px rgba(0,0,0,.6);
 }
 .windows-desktop[data-theme="winxp"] .windows-window__buttons{
   gap:3px;margin:0;align-self:center;
@@ -204,6 +210,9 @@
   margin:0;padding-left:6px;
   color:var(--source-text);
   text-shadow:none;
+}
+.windows-desktop[data-theme="win11"]:dir(rtl) .windows-window__titlebar{
+  padding-left:0;padding-right:6px;
 }
 .windows-desktop[data-theme="win11"] .windows-window__title{
   color:inherit;text-shadow:none;opacity:.5;
