@@ -41,6 +41,7 @@ import {sourceTaskbarGroups,sourceTaskbarPreviewLeft,SOURCE_TASKBAR_FINAL_FEATUR
 import {taskbarPins} from "./sourceTaskbarPins";
 import { ShortcutWizard } from "./ShortcutWizard";
 import "./sourceTray.css";
+import "./sourceWin9xShell.css";
 
 interface DesktopShellProps {
   state: DesktopState;
