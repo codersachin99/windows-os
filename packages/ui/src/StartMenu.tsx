@@ -18,6 +18,7 @@ import {sourceWin11PageCount,sourceWin11StartPage,sourceWin11NextStartPage} from
 import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
 import {SourceWin8StartScreen} from "./SourceWin8StartScreen";
 import {SourceWin31ProgramManager} from "./SourceWin31ProgramManager";
+import {SourceWin9xStartMenu} from "./SourceWin9xStartMenu";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -287,6 +288,12 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         onLaunch={openApp} onContext={openProgramContext}
         onClose={()=>dispatch({type:"CLOSE_START"})}
         onPower={type=>dispatch({type})}/>:
+    (theme==="win95"||theme==="win98"||theme==="win2k")?
+      <SourceWin9xStartMenu theme={theme} rootRef={menuRef}
+        programs={appRegistry.startMenu()} onLaunch={openApp}
+        onSearch={()=>openApp(theme==="win2k"?"computer":"find")}
+        onPower={type=>dispatch({type})}
+        onContext={openProgramContext}/>:
     <nav className={"windows-startmenu" +
       (theme==="winxp"?" windows-startmenu--winxp":
       theme==="win11"?" windows-startmenu--win11":
