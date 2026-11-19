@@ -53,7 +53,7 @@
   color:#000;border:1px solid transparent;border-radius:0;
   font-weight:bold;background:transparent;
 }
-.windows-desktop[data-theme="win31"] .explorer-navigation__home:not(:disabled):hover{
+.windows-desktop[data-theme="win31"] .explorer-navigation__home:not(:disabled):hover:not([aria-current="location"]){
   color:#000;background:transparent;
 }
 .windows-desktop[data-theme="win31"] .explorer-navigation__home[aria-current="location"],
