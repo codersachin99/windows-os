@@ -2,6 +2,18 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  win95:{
+    empty:"/assets/images/bin-win95.28a063bb.webp",
+    full:"/assets/images/bin-full-win95.5b7aebde.webp"
+  },
+  win98:{
+    empty:"/assets/images/bin-win95.28a063bb.webp",
+    full:"/assets/images/bin-full-win95.5b7aebde.webp"
+  },
+  win2k:{
+    empty:"/assets/images/bin-win2k.4b231417.webp",
+    full:"/assets/images/bin-full-win2k.f2dd6793.webp"
+  },
   win10:{
     empty:"/assets/images/bin-win10.e0f739cc.webp",
     full:"/assets/images/bin-full-win10.857c2cab.webp"
@@ -22,7 +34,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["winxp","win10","win11"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
