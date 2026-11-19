@@ -4942,3 +4942,24 @@ new Explorer code was checked by that earlier run.
 The next CI-marked exact-head commit should verify the
 full classic shell + source listview. Keep original source
 pinned, PR #1 draft, main/release unchanged.
+
+
+### Combined exact-head Win9x source shell/Explorer acceptance — 19 November 2026
+
+`[run-ci]` intentionally requested for latest Win95/98/2k
+React Start shell, 20 byte-identical source assets, real
+Recycle Bin art, source Desktop/taskbar/Explorer context menus,
+and **new source label-only Explorer listview**.
+The earlier [run #44556549754](https://github.com/codersachin99/windows-os/actions/runs/44556549754)
+checks only `b8b7bca`, before `8bfe39e`/
+`e9b67aa`/`2dd3d69`. No exact-head verification can
+be inferred from that run.
+
+Inspect TypeScript, 659+ unit contracts,
+source/original artwork/Contacts audit, build, targeted and
+full desktop/mobile Chromium. If a browser test fails,
+inspect the real GitHub Actions error and trace and fix
+without bypassing. Source Win9x Help integration,
+2000 Search mode and original-paired screenshot parity
+remain incomplete. Preserve draft PR #1, `main`, frozen
+legacy reference and zero release changes.
