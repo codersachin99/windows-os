@@ -209,3 +209,34 @@ passed an exact-head run until the deliberately opted-in checkpoint
 below completes. Source multi-category classification, rendered
 screenshot pairs, fully animated tile/lifecycle and remaining theme
 families remain open; do not call the full Start source-parity-complete.
+
+
+## 19 November 2026 — Correct actual browser failures in Guest file search
+
+The first complete [CI #44465134125](https://github.com/codersachin99/windows-os/actions/runs/44465134125)
+on `1803a79` **FAILED** focused Playwright: **363 passed, 2 skipped,
+5 failed**. TypeScript, unit, original source/artwork integrity, Contacts
+contracts and Vite production build all succeeded. Full browser was not run
+because focused browser failed. Original visual capture was skipped.
+
+Inspecting the **actual uploaded Playwright error-context artifacts**
+established the root causes:
+- Four Win8/Win81 desktop+mobile Guest `.txt` launch failures displayed
+  **"No original application association has been migrated for this file type."**
+  The new `StartMenu.openSearchFile` used double-backslash JS regex literal
+  patterns matching a literal backslash, not `.txt`, `.lnk` or supported
+  media extensions. [facce57](https://github.com/codersachin99/windows-os/commit/facce577025b043f8ce065a621a51b398ba86353)
+  fixes all three patterns; the actual Guest-file launch behavior and
+  strict Notepad byte-contents test are retained.
+- One narrow/mobile Win8 keyboard test still asserted an **apps-only**
+  ArrowUp wrap target even though this feature correctly appends Guest
+  file results. [a709309](https://github.com/codersachin99/windows-os/commit/a709309f8d8afabefcd7389d2bbc9d81de85d062)
+  checks the final **combined** result rather than silently skipping file
+  results. [3e81f48](https://github.com/codersachin99/windows-os/commit/3e81f48a222779a39572ad4342d02cd437d9e433)
+  exposes actual async query completion, and
+  [5c4f113](https://github.com/codersachin99/windows-os/commit/5c4f113b5c9952b0932237b2ada80b4a44e73fa5)
+  waits for that state in the strict browser contracts.
+
+A fresh deliberately requested `[run-ci]` verifies this correction on
+its exact head. **Do not declare green before all jobs complete.** No
+source/main/release change or screenshot parity claim.
