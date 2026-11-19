@@ -246,7 +246,11 @@ for(const theme of ["win8","win81"] as const){
     await input.press("ArrowUp");
     await expect(all.first()).toHaveAttribute("data-test-win8-start-result-selected","");
     await input.press("ArrowUp");
-    await expect(all.last()).toHaveAttribute("data-test-win8-start-result-selected","");
+    // The source search result list combines programs and mounted Guest files.
+    // ArrowUp at the first program wraps to the final visible result across
+    // *both* groups; it need not be the last program anymore.
+    const combined=flyout.locator('[data-test-win8-start-result],[data-test-win8-start-file-result]');
+    await expect(combined.last()).toHaveAttribute("data-test-win8-start-result-selected","");
     // Changing the search query resets selection rather than opening a
     // stale index from the previous result list.
     await input.fill("notepad");
