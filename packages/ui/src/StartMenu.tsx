@@ -230,11 +230,11 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         return null;
       };
       if(actual.type==="directory")return launch("computer",actual.uri);
-      if(/\\.txt$/i.test(actual.name))return launch("notepad",actual.uri);
+      if(/\.txt$/i.test(actual.name))return launch("notepad",actual.uri);
       if(matchesSourceKind(actual,"picture"))return launch("photo",actual.uri);
-      if(/\\.(?:mp3|wav|ogg|oga|m4a|aac|flac|mp4|webm|ogv|mov|m4v|avi)$/i.test(actual.name))
+      if(/\.(?:mp3|wav|ogg|oga|m4a|aac|flac|mp4|webm|ogv|mov|m4v|avi)$/i.test(actual.name))
         return launch("player",actual.uri);
-      if(/\\.lnk$/i.test(actual.name)){
+      if(/\.lnk$/i.test(actual.name)){
         const contents=await readSourceShortcutText(fileStore,actual.uri);
         const target=parseSourcePathShortcut(contents);
         if(target){
