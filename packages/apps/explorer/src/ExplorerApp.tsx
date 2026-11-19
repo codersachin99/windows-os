@@ -50,6 +50,7 @@ import "./sourceExplorerContextTheme.css";
 import "./sourceWin10ComputerToolbar.css";
 import "./sourceWin8ComputerToolbar.css";
 import "./sourceWin31Explorer.css";
+import "./sourceWin9xExplorer.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
