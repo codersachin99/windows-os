@@ -176,9 +176,11 @@ export function sourceThemeScreens(theme:string):SourceThemeScreens{
   return sourceIsKnownTheme(theme)&&theme!=="win7"
     ?SOURCE_THEME_SCREENS[theme]:SOURCE_THEME_SCREEN_DEFAULTS;
 }
-/** Indicates implementation scope, not source catalog membership.
- * Values other than these three have no fully migrated shell skin yet. */
+/** Indicates shell implementation scope, not theme catalog membership.
+ * Six themes now have source-backed desktop, taskbar and Start adaptations;
+ * partial never means pixel-perfect, and login-only families remain pending. */
 export function sourceThemeShellStatus(theme:string):"partial"|"pending"{
-  return theme==="win7"||theme==="winxp"||theme==="win11"
+  return theme==="win7"||theme==="winxp"||theme==="win8"
+    ||theme==="win81"||theme==="win10"||theme==="win11"
     ?"partial":"pending";
 }
