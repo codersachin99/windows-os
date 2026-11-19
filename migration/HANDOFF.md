@@ -4996,3 +4996,17 @@ inspect failure traces if needed, keep PR #1 draft;
 never claim paired-source screenshot parity or merge.
 Frozen reference `26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
 `main` and releases stay unchanged.
+
+
+### Final classic shell + Personalize acceptance request — 19 November 2026
+
+This is the **deliberate new head `[run-ci]`** after actual
+Win95/98/2k Personalize chooser implementation and correction
+of both browser gallery counts. It must run original pinned
+asset audits, all unit tests, TypeScript, Vite, the focused
+source shell suites and the full desktop/mobile Chromium tests.
+Previous CI jobs on older heads are historical only; review
+the result of this run's exact commit before labeling work
+verified. If any failures persist, extract concrete error
+contexts and fix implementation/test defects without deleting
+source functionality or skipping tests.
