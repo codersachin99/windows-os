@@ -4654,3 +4654,23 @@ and all remaining original theme skins, with paired screenshot gate
 before any full-parity claim. Preserve immutable
 `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
 `windows-os/main`, PR #1 **draft**, and no release.
+
+
+### Win31 group focus follow-up (newer than initial opt-in CI) — 19 Nov 2026
+
+[052ec13](https://github.com/codersachin99/windows-os/commit/052ec1382ef12db084f4f0195b1050c514e21a02)
+changes Program Manager child window bring-to-front from
+`onPointerDown` to `onClickCapture`, matching the original Vue
+`nativeOn.click` group-window focus action. React may reorder keyed
+child group sections when focus changes; doing this during
+`pointerdown` can detach the pointer target before the subsequent
+click and prevent a program/close control from activating. The new
+handler reorders during the click event and preserves the original
+group toggle/maximize behavior.
+
+Initial [CI #44477415484](https://github.com/codersachin99/windows-os/actions/runs/44477415484)
+was already running on `b973dc9` when this commit landed, so its
+outcome **cannot verify** this follow-up. Do not trigger GitHub
+Actions for every edit; after inspecting that run, request a single
+opt-in full check of this exact latest head. Keep PR #1 draft and
+do not claim pixel parity.
