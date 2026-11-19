@@ -1,7 +1,8 @@
-import {useState,type MouseEvent as ReactMouseEvent,type RefObject} from "react";
+import {useLayoutEffect,useRef,useState,type MouseEvent as ReactMouseEvent,type RefObject} from "react";
 import type {AppDefinition} from "@windows-os/contracts";
 import {legacySourceIconArtwork,sourceThemeProgramArt} from "@windows-os/assets";
 import "./sourceWin9xStartMenu.css";
+import {sourceWin9xSubmenuPlacement,type ClassicStartSubmenuPlacement} from "./sourceWin9xSubmenuPlacement";
 
 export type SourceWin9xTheme="win95"|"win98"|"win2k";
 type SourceWin9xPower="SHUTDOWN"|"RESTART"|"LOG_OFF"|"SWITCH_USER";
@@ -33,6 +34,46 @@ export function SourceWin9xStartMenu({
   theme,rootRef,programs,onLaunch,onSearch,onPower,onContext
 }:SourceWin9xStartMenuProps){
   const [branch,setBranch]=useState<MenuBranch>(null);
+  const [placement,setPlacement]=useState<ClassicStartSubmenuPlacement|null>(null);
+  const programsTrigger=useRef<HTMLButtonElement>(null);
+  const shutdownTrigger=useRef<HTMLButtonElement>(null);
+  const submenuRef=useRef<HTMLDivElement>(null);
+  // Preserve the original adjacent desktop cascade. On narrow screens
+  // stack the measured 224px flyout outside its own trigger.
+  useLayoutEffect(()=>{
+    if(!branch)return;
+    const place=()=>{
+      if(window.innerWidth>520){setPlacement(null);return;}
+      const trigger=(branch==="programs"?programsTrigger:shutdownTrigger).current;
+      const submenu=submenuRef.current;
+      const root=rootRef.current;
+      if(!trigger||!submenu||!root)return;
+      const t=trigger.getBoundingClientRect();
+      const r=root.getBoundingClientRect();
+      setPlacement(sourceWin9xSubmenuPlacement(
+        {left:t.left,top:t.top,right:t.right,bottom:t.bottom},
+        {left:r.left,top:r.top,right:r.right,bottom:r.bottom},
+        {width:submenu.offsetWidth,height:submenu.offsetHeight},
+        {width:window.innerWidth,height:window.innerHeight}
+      ));
+    };
+    place();
+    window.addEventListener("resize",place);
+    return ()=>window.removeEventListener("resize",place);
+  },[branch,rootRef]);
+  const openBranch=(next:Exclude<MenuBranch,null>)=>{
+    setPlacement(null);
+    setBranch(next);
+  };
+  const closeBranch=(trigger:HTMLButtonElement|null)=>{
+    setBranch(null);
+    setPlacement(null);
+    trigger?.focus({preventScroll:true});
+  };
+  const submenuStyle=placement?{
+    left:placement.left,top:placement.top,right:"auto" as const,
+    bottom:"auto" as const,maxHeight:placement.maxHeight
+  }:undefined;
   const is2k=theme==="win2k";
   const icon=(key:string)=>
     sourceThemeProgramArt(theme,key)??legacySourceIconArtwork(key).src;
@@ -58,20 +99,28 @@ export function SourceWin9xStartMenu({
       {mainItem("about","About","about")}
       <div className="source-win9x-startmenu__separator" role="separator"/>
       <div className="source-win9x-startmenu__branch"
-        onPointerEnter={()=>setBranch("programs")}>
+        onPointerEnter={()=>{if(branch!=="programs")openBranch("programs");}}>
         <button type="button" role="menuitem" aria-haspopup="menu"
-          aria-expanded={branch==="programs"}
+          aria-expanded={branch==="programs"} ref={programsTrigger}
           data-test-win9x-branch="programs"
-          onClick={()=>setBranch("programs")}
+          onClick={()=>openBranch("programs")}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
-              event.preventDefault();setBranch("programs");
+              event.preventDefault();openBranch("programs");
             }
           }}>
           <img src={icon("programs")} width={24} height={24} alt=""/>
           <span>Programs</span><span aria-hidden="true" className="source-win9x-startmenu__arrow">▶</span>
         </button>
         {branch==="programs"&&<div className="source-win9x-startmenu__submenu"
+          ref={submenuRef} style={submenuStyle}
+          data-source-cascade-direction={placement?.direction}
+          onKeyDown={event=>{
+            if(event.key==="Escape"||event.key==="ArrowLeft"){
+              event.preventDefault();event.stopPropagation();
+              closeBranch(programsTrigger.current);
+            }
+          }}
           role="menu" aria-label="Programs" data-test-win9x-submenu="programs">
           {[...programs].sort((a,b)=>a.label.localeCompare(b.label)).map(app=>
             <button type="button" role="menuitem" key={app.id}
@@ -115,20 +164,28 @@ export function SourceWin9xStartMenu({
         <span>Switch user</span>
       </button>
       <div className="source-win9x-startmenu__branch"
-        onPointerEnter={()=>setBranch("shutdown")}>
+        onPointerEnter={()=>{if(branch!=="shutdown")openBranch("shutdown");}}>
         <button type="button" role="menuitem" aria-haspopup="menu"
-          data-test-win9x-branch="shutdown"
+          data-test-win9x-branch="shutdown" ref={shutdownTrigger}
           aria-expanded={branch==="shutdown"}
-          onClick={()=>setBranch("shutdown")}
+          onClick={()=>openBranch("shutdown")}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
-              event.preventDefault();setBranch("shutdown");
+              event.preventDefault();openBranch("shutdown");
             }
           }}>
           <img src={icon("shutdown")} width={24} height={24} alt=""/>
           <span>Shut down...</span><span aria-hidden="true" className="source-win9x-startmenu__arrow">▶</span>
         </button>
         {branch==="shutdown"&&<div className="source-win9x-startmenu__submenu is-shutdown"
+          ref={submenuRef} style={submenuStyle}
+          data-source-cascade-direction={placement?.direction}
+          onKeyDown={event=>{
+            if(event.key==="Escape"||event.key==="ArrowLeft"){
+              event.preventDefault();event.stopPropagation();
+              closeBranch(shutdownTrigger.current);
+            }
+          }}
           role="menu" aria-label="Power options" data-test-win9x-submenu="shutdown">
           {([
             ["SHUTDOWN","Shut down"],["RESTART","Restart"],["LOG_OFF","Log off"]
