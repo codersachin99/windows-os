@@ -7,6 +7,10 @@ import {expect,test,type Page} from "@playwright/test";
  */
 const variants=[
   {
+    theme:"win31",surface:"rgb(255, 255, 255)",border:"rgb(0, 0, 0)",
+    radius:"0px",hover:"rgb(8, 10, 189)",text:"rgb(255, 255, 255)"
+  },
+  {
     theme:"winxp",surface:"rgb(255, 255, 255)",border:"rgb(172, 168, 153)",
     radius:"0px",hover:"rgb(49, 106, 197)",text:"rgb(255, 255, 255)"
   },
