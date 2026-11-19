@@ -4597,3 +4597,16 @@ whose SHA is `5487b67`. Do not invent a test pass. Finish/fix
 that run first, then deliberately opt in one exact-head full CI
 for Win10 card without generating Actions on each intermediate commit.
 Maintain PR #1 draft and original/main/release unchanged.
+
+
+### 19 Nov verification marker for Win8 Guest search fixes + Win10 selectable Personalize
+
+An intentional combined `[run-ci]` exact-head checkpoint is requested
+here for the Win8 search extension-pattern/combined-result corrections
+and the new Win10 Personalize card. This is separate from the already
+started earlier [CI #44473304311](https://github.com/codersachin99/windows-os/actions/runs/44473304311)
+on `5487b67`: that older run cannot verify the later Win10 chooser
+changes, regardless of its eventual conclusion. Inspect the new run's
+actual completed focused and full browser steps and correct failures.
+Avoid further CI-marked commits for documentation-only work.
+Original source, `main`, draft PR status and releases remain unchanged.
