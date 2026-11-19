@@ -242,3 +242,48 @@ the main frame, classic taskbar/desktop/window/explorer styles,
 screenshots at all sizes and many program/Help commands remain
 pending. `win31` continues reporting theme shell `pending`
 rather than claiming entire family is migrated.
+
+
+## Win31 original taskbar, desktop selection and window frame slice — 19 Nov 2026
+
+Pinned `src/modules/themes/theme-win31-scss.js` source confirms
+`--theme-surface:#c0c0c0`, `--theme-accent:#080abd`,
+white `taskbar__wrapper` with black 1px outline and 2px vertical
+padding, 2px gap for running items and bold icons/text.
+Active taskbar buttons use `shade-color--dark:#808080`; the
+selected desktop icon has **no selection rectangle**, but its
+`desktop__icon-name` gets the accent background and white text.
+The source classic window frame is `theme-surface` with inset
+black border, a **24px** caption, centered title and **24×24**
+square caption buttons. Non-active captions are white, active
+ones use `theme-accent`. Program Manager stays separately
+implemented by `SourceWin31ProgramManager`.
+
+The React Win31-only adapter in `packages/ui/src/sourceShellTheme.css`
+now applies those source-grounded palette and geometry rules to
+the actual desktop/taskbar/app window DOM while preserving existing
+application lifecycles and the other theme families.
+[Code `33bb31f`](https://github.com/codersachin99/windows-os/commit/33bb31ff3a83cf3026cd2dc7bedf4627ba5eded2).
+Browser test `tests/e2e/source-win31-shell.spec.ts` exercises white
+taskbar, Start Program Manager, selected Computer icon label,
+actual Computer and Recycle Bin windows, source border/title
+metrics, real minimize/restore and theme-specific state.
+[Tests `336bd81`](https://github.com/codersachin99/windows-os/commit/336bd81eac3409eb700702e2536b983ee44417ce).
+Focused opt-in CI includes the new test in
+[workflow `ac0c5e2`](https://github.com/codersachin99/windows-os/commit/ac0c5e2852e646e3c5d4cad6a7547a09da6e6449).
+
+The prior [Win31 CI #44477415484](https://github.com/codersachin99/windows-os/actions/runs/44477415484)
+failed **4 of 378 targeted browser tests**: two Windows 8
+catalog statuses in each desktop/mobile project; **372 passed
+and 2 skipped**, and the Win31-specific tests passed. The shared
+`sourceThemeShellStatus` now correctly reports `win8`/`win81`
+as partial, but the Win8 logon component was hard-coded
+`pending`. Fixed without weakening any browser assertions in
+[a606c6c](https://github.com/codersachin99/windows-os/commit/a606c6ca78dd133c808fffdde7cf8fd41fbaf521)
+and [bfd25d2](https://github.com/codersachin99/windows-os/commit/bfd25d20937c50f185b396afe9055893bb932f39).
+
+**Status:** Win31 remains **pending** for full-shell parity: desktop
+background, icons, taskbar menus, full classic Computer/Bin skins,
+native artwork, timing and source-paired screenshots still need
+verification. Do not label the project pixel-perfect based on
+source-shaped CSS alone.
