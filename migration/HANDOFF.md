@@ -4574,3 +4574,26 @@ real failures from artifacts and repair, never suppress tests.
 Then resume highest-priority themes/context/Desktop/Start/Computer/Bin
 source migration. Preserve locked `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
 `windows-os/main`, PR #1 **draft**, and no releases.
+
+
+## 19 November 2026 — Windows 10 theme chooser follows Win8 CI repair
+
+Independent next theme-priority slice after the Win8 Search repair:
+[c876061](https://github.com/codersachin99/windows-os/commit/c876061bfd7d92f1777c492e4db5583e92831afc)
+adds the already source-art-backed `win10` Personalize card;
+[d9b0eac](https://github.com/codersachin99/windows-os/commit/d9b0eac1f326fe5a207855c1bff53655ba7e4c61)
+updates exact original asset/grouping unit expectations;
+[5e0bd1e](https://github.com/codersachin99/windows-os/commit/5e0bd1eaced78f06ef8261fafd7146bec92f3252)
+adds actual desktop/mobile theme switch, Win10 taskbar/Start,
+wallpaper and reload persistence acceptance.
+
+There are now **six partially implemented, selectable** source-backed
+Personalize themes (Win7, XP, Win8, Win8.1, Win10, Win11). The full
+37 original recognized theme IDs remain in the catalog; none is
+certified screenshot pixel-perfect. This new chooser change is
+**not included** in the existing Guest Win8 search repair CI
+[#44473304311](https://github.com/codersachin99/windows-os/actions/runs/44473304311)
+whose SHA is `5487b67`. Do not invent a test pass. Finish/fix
+that run first, then deliberately opt in one exact-head full CI
+for Win10 card without generating Actions on each intermediate commit.
+Maintain PR #1 draft and original/main/release unchanged.
