@@ -26,7 +26,7 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
 
   // Both win8 and win81 select the pinned Windows 8 screen family.
   if(sourceScreens.logon==="win8")return <SourceWin8Logon
-    theme={theme} onGuest={onGuest} onShutdown={onShutdown}
+    theme={theme} shellStatus={status} onGuest={onGuest} onShutdown={onShutdown}
     onRestart={onRestart}/>;
 
   // The original WinXP source uses a three-region blue login screen,
