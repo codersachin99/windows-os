@@ -123,3 +123,33 @@
 .windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .windows-taskbar__context button:disabled{
   color:#808080;opacity:1;
 }
+
+
+/* Exact Win31 source theme-win31-scss.js .winui-menu:
+ * white rectangular surface; black 1px outline; 1×1 #808080
+ * shadow; bold source MS Sans Serif text; hovered item white over
+ * --theme-accent:#080abd. Applies to real Desktop/Taskbar menus.
+ */
+.windows-desktop[data-theme="win31"] .windows-desktop__menu,
+.windows-desktop[data-theme="win31"] .windows-taskbar__context{
+  color:#000;background:#fff;border:1px solid #000;
+  border-radius:0;padding:0;
+  box-shadow:1px 1px 0 0 #808080;
+  font:700 12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win31"] .windows-desktop__menu button,
+.windows-desktop[data-theme="win31"] .windows-taskbar__context button{
+  font-weight:bold;color:#000;background:transparent;
+  border:1px solid transparent;border-radius:0;
+}
+.windows-desktop[data-theme="win31"] .windows-desktop__menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win31"] .windows-desktop__menu button:not(:disabled):focus-visible,
+.windows-desktop[data-theme="win31"] .windows-taskbar__context button:not(:disabled):hover,
+.windows-desktop[data-theme="win31"] .windows-taskbar__context button:not(:disabled):focus-visible{
+  background:var(--theme-accent,#080abd);
+  color:#fff;border-color:transparent;
+}
+.windows-desktop[data-theme="win31"] .windows-desktop__menu button:disabled,
+.windows-desktop[data-theme="win31"] .windows-taskbar__context button:disabled{
+  color:#808080;opacity:1;
+}
