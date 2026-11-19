@@ -97,7 +97,7 @@
   backdrop-filter:none;
 }
 .windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__titlebar{
-  flex:0 0 24px;height:24px;padding:2px;
+  box-sizing:border-box;flex:0 0 24px;height:24px;padding:2px;
   background:#7b7b7b;color:#fff;
   box-shadow:none;
 }
