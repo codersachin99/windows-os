@@ -451,3 +451,32 @@ original Help service, 95/98 alternate shutdown screens,
 customization/reflow, paired original/React screenshot measurements,
 and other source themes. Do not infer "complete" from source
 CSS and passing functional browser tests alone.
+
+
+## 19 November 2026 — Win9x source Computer/Bin classic listview and tree selection
+
+Pinned `theme-win9x-scss.js` differentiates the
+classic 95/98/2k `listview__item` from both Win7 and
+Win31. On hover and when selected, the **row background stays
+transparent**. Only the **filename label** is accented
+(white text on source `--theme-accent`) with a **1px dotted
+`#ff3` outline**. The original also specifies beveled
+`listview__header-column` box shadows, a 2px header,
+an inset 4px address bar, a theme-surface navigation
+menubar and status surface, and an active tree button
+using the same label accent/dotted yellow outline.
+
+[8bfe39e](https://github.com/codersachin99/windows-os/commit/8bfe39ee2003f90898e6e96b88474399a7941e3b)
+ports these *source-backed* styles into a Win95/98/2k-only
+Explorer/Bin adapter while sharing Guest VFS and Computer
+actions. [e9b67aa](https://github.com/codersachin99/windows-os/commit/e9b67aaa9193763637555408b3f508e3a330026a)
+activates it. [2dd3d69](https://github.com/codersachin99/windows-os/commit/2dd3d69cdc997177c9b8fc46a547d8ec2b4fce8b)
+tests real Guest file upload, pointer hover, label-only
+accent+outline, details header, folder navigation and
+Recycle Bin on **all three classic themes** in desktop/mobile.
+[cc582ed](https://github.com/codersachin99/windows-os/commit/cc582ed9a867b57794dd53e50db0bd7b84b5dbea)
+includes that spec in the deliberately opt-in focused browser
+regression set.
+
+Source Help and Win2k Computer search mode, file operation
+completeness, and original paired screenshots remain pending.
