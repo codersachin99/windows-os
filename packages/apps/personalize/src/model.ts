@@ -3,10 +3,10 @@ import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers,sourceWin8ShellA
 
 /** Original pinned personalize.js ChangeTheme, _getThemes:
  * classes aero/basic/wins, theme selection immediately applies Theme and
- * source theme background. This bounded chooser exposes six source-backed
+ * source theme background. This bounded chooser exposes nine source-backed
  * shell personalities, not the entire source catalog or complete parity.
  */
-export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"winxp"|"win8"|"win81"|"win10"|"win11">;
+export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"win95"|"win98"|"win2k"|"winxp"|"win8"|"win81"|"win10"|"win11">;
 export interface SourcePersonalizeTheme{
   id:SourcePersonalizeThemeId;
   label:string;
@@ -15,6 +15,9 @@ export interface SourcePersonalizeTheme{
 }
 export const SOURCE_PERSONALIZE_THEMES:readonly SourcePersonalizeTheme[]=[
   {id:"win7",label:"Windows 7",group:"aero",preview:legacyArt.wallpaperWin7},
+  {id:"win95",label:"Windows 95",group:"wins",preview:legacyShellThemeAssets.win95.theme},
+  {id:"win98",label:"Windows 98",group:"wins",preview:legacyShellThemeAssets.win95.theme},
+  {id:"win2k",label:"Windows 2000",group:"wins",preview:legacyShellThemeAssets.win2k.theme},
   {id:"winxp",label:"Windows XP",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
   {id:"win8",label:"Windows 8",group:"wins",preview:sourceWin8ShellArtwork.win8Wallpaper},
   {id:"win81",label:"Windows 8.1",group:"wins",preview:sourceWin8ShellArtwork.win81Wallpaper},
