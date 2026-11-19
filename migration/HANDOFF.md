@@ -4674,3 +4674,45 @@ outcome **cannot verify** this follow-up. Do not trigger GitHub
 Actions for every edit; after inspecting that run, request a single
 opt-in full check of this exact latest head. Keep PR #1 draft and
 do not claim pixel parity.
+
+
+## 19 November 2026 — Resolve Win31 CI failure and add original classic shell
+
+**Failed source CI checkpoint:** 
+[Run #44477415484](https://github.com/codersachin99/windows-os/actions/runs/44477415484)
+at `b973dc9` was **failure**: TypeScript, unit, source inventory,
+original artwork/Contacts verification and production build all
+**passed**; targeted browser: **372 passed, 4 failed, 2 skipped**.
+The four failures were only in Windows 8 logon status browser tests,
+which expected `partial` from the newly corrected catalog while
+`SourceWin8Logon` still rendered hard-coded `pending`.
+[Fix `a606c6c`](https://github.com/codersachin99/windows-os/commit/a606c6ca78dd133c808fffdde7cf8fd41fbaf521)
+adds a typed `shellStatus` prop and
+[fix `bfd25d2`](https://github.com/codersachin99/windows-os/commit/bfd25d20937c50f185b396afe9055893bb932f39)
+passes the authoritative shared status from `LogonScreen`.
+No test expectations were relaxed. Win31 Program Manager specs
+had no failures in this run. Full browser suite was not run after
+targeted failure; original paired screenshot job skipped.
+
+**Next source-backed shell slice:** original
+`legacy-win7@26b9f0c/src/modules/themes/theme-win31-scss.js`
+shows white/black taskbar, `#c0c0c0` classic surface,
+`#080abd` selection/title accent, 24px window caption,
+24×24 square control buttons, no hover icon rectangle and
+accented selected *label* only. 
+[33bb31f](https://github.com/codersachin99/windows-os/commit/33bb31ff3a83cf3026cd2dc7bedf4627ba5eded2)
+implements scoped Win31 taskbar/Desktop/WindowFrame CSS.
+[336bd81](https://github.com/codersachin99/windows-os/commit/336bd81eac3409eb700702e2536b983ee44417ce)
+and [c2dc99f](https://github.com/codersachin99/windows-os/commit/c2dc99f862ecef553b52420825e9cf7e36a4e498)
+add strict desktop/mobile browser tests opening real Computer,
+Recycle Bin, minimizing and restoring from the taskbar; 
+[ac0c5e2](https://github.com/codersachin99/windows-os/commit/ac0c5e2852e646e3c5d4cad6a7547a09da6e6449)
+includes them in the focused CI.
+
+**Next:** a single deliberate `[run-ci]` verification of the
+*new exact head* must pass TS/unit/art/source/build,
+focused and complete desktop/mobile browser tests. Investigate
+actual Playwright errors and fix source code/test defects rather
+than suppress tests. Preserve pinned
+`codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+target `windows-os/main`, draft PR #1 and no releases.
