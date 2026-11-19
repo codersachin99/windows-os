@@ -4809,3 +4809,27 @@ Check its actual conclusion, and run **one** opt-in full CI at the
 current branch head to verify all source-backed Explorer and
 Program Manager changes together. No merges/releases; keep
 the pinned reference/main unchanged and draft PR #1 open.
+
+
+### 19 Nov — Exact-head Win31 Explorer + centered Program Manager CI gate
+
+The [first Explorer CI #44483797012](https://github.com/codersachin99/windows-os/actions/runs/44483797012)
+at `baf8b12` is a separate, earlier verification. It
+**does not include** later
+[652967d](https://github.com/codersachin99/windows-os/commit/652967da28b10f4be9e1e702c218ba9def2c2e42)
+(selected tree item remains accented on hover),
+[bdad2c9](https://github.com/codersachin99/windows-os/commit/bdad2c9be9eb742cf3a83693eacb80bb98ac4d0c)
+(centered original Win31 Program Manager), or
+[a844d07](https://github.com/codersachin99/windows-os/commit/a844d076bd756dac404b39f8cae996b3c598fb66)
+(strict centered geometry acceptance).
+
+This is the **single deliberate** new `[run-ci]` checkpoint
+for all those changes together, preserving the full TypeScript,
+unit, original inventory/artwork/Contacts, Vite, focused and
+complete desktop/mobile browser gates. If browser asserts
+fail, inspect actual CI logs and Playwright artifacts before editing.
+Never claim a passing run from a still-running job.
+Do not merge draft PR #1, change `main`, mutate
+`legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`
+or create a docs-only release. Original paired screenshot
+parity remains unverified.
