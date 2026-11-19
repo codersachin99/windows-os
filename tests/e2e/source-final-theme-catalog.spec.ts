@@ -13,9 +13,9 @@ test("source theme variants select exact login screen families and report fallba
     ["win95","win95","win95","pending"],
     ["win98","win98","win98","pending"],
     ["win2k","win2k","win2k","pending"],
-    ["win10","win10","win10","pending"],
-    ["win8","win8","win8","pending"],
-    ["win81","win8","win8","pending"],
+    ["win10","win10","win10","partial"],
+    ["win8","win8","win8","partial"],
+    ["win81","win8","win8","partial"],
     ["win11dark","win11","win11","pending"],
     ["winLP","winLS","win7-fallback","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
@@ -121,7 +121,7 @@ test("Windows 10 logon uses pinned original Win10 wallpaper and shared guest-win
   const login=page.locator("[data-test-logon-screen]");
   await expect(login).toHaveAttribute("data-source-logon-theme","win10");
   await expect(login).toHaveAttribute("data-source-logon-renderer","win10");
-  await expect(login).toHaveAttribute("data-source-shell-status","pending");
+  await expect(login).toHaveAttribute("data-source-shell-status","partial");
   await expect(login).toHaveCSS("background-image",/win10\.743e8c13\.webp/);
   const avatar=login.locator('[data-test-source-logon-avatar="win10"]');
   await expect(avatar.locator("img")).toHaveAttribute(
@@ -148,7 +148,7 @@ test("original Windows 8/8.1 Guest logon uses purple source screen and 150px ava
     await expect(login).toHaveAttribute("data-source-theme-id",theme);
     await expect(login).toHaveAttribute("data-source-logon-theme","win8");
     await expect(login).toHaveAttribute("data-source-logon-renderer","win8");
-    await expect(login).toHaveAttribute("data-source-shell-status","pending");
+    await expect(login).toHaveAttribute("data-source-shell-status","partial");
     await expect(login).toHaveCSS("background-color","rgb(24, 0, 83)");
     const avatar=login.locator('[data-test-source-logon-avatar="win8"]');
     await expect(avatar.locator("img")).toHaveAttribute(
