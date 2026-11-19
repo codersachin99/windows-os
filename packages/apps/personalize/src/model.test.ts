@@ -3,12 +3,12 @@ import {SOURCE_PERSONALIZE_THEMES,SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS,
   sourcePersonalizeGroup} from "./model";
 import {sourceIsSystemWallpaper} from "@windows-os/assets";
 describe("source personalize.js ChangeTheme grouped first shell chooser",()=>{
-  it("exposes five source-backed Windows personalities",()=>{
+  it("exposes six source-backed Windows personalities",()=>{
     expect(SOURCE_PERSONALIZE_THEMES.map(x=>x.id))
-      .toEqual(["win7","winxp","win8","win81","win11"]);
+      .toEqual(["win7","winxp","win8","win81","win10","win11"]);
     expect(sourcePersonalizeGroup("aero").map(x=>x.id)).toEqual(["win7"]);
     expect(sourcePersonalizeGroup("wins").map(x=>x.id))
-      .toEqual(["winxp","win8","win81","win11"]);
+      .toEqual(["winxp","win8","win81","win10","win11"]);
   });
   it("theme cards display pinned original artwork, not generated substitutes",()=>{
     expect(SOURCE_PERSONALIZE_THEMES.map(x=>x.preview)).toEqual([
@@ -16,6 +16,7 @@ describe("source personalize.js ChangeTheme grouped first shell chooser",()=>{
       "/assets/images/winxp.3e41719f.webp",
       "/assets/images/win8.3a5f11f3.webp",
       "/assets/images/win81.7b80787e.webp",
+      "/assets/images/win10.743e8c13.webp",
       "/assets/images/win11.fc00c43d.webp"
     ]);
   });
