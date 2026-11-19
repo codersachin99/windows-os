@@ -153,3 +153,33 @@
 .windows-desktop[data-theme="win31"] .windows-taskbar__context button:disabled{
   color:#808080;opacity:1;
 }
+
+
+/* Original legacy-win7 theme-win9x-scss.js source .win9x .winui-menu:
+ * Win95 #bdbebd/#00007b, Win98 #c0c7c8/#0608a6, and Win2k
+ * #d4d0c8/#082767. Beveled 3D menu, 2px double-line separators
+ * and white text on accent while hovering/focusing. A single shared
+ * functional menu adapter honors all three distinct source palettes.
+ */
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__menu,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__context{
+  color:#000;background:var(--theme-surface);border:1px solid #393c39;
+  border-radius:0;padding:3px;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,
+    inset -2px -2px #7b7b7b;
+  font:12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__menu button,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__context button{
+  color:#000;background:transparent;border-color:transparent;border-radius:0;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__menu button:not(:disabled):focus-visible,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__context button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__context button:not(:disabled):focus-visible{
+  color:#fff;background:var(--theme-accent);border-color:transparent;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__menu button:disabled,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__context button:disabled{
+  color:#7b7b7b;opacity:1;
+}
