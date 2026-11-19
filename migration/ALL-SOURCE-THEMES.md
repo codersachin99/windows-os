@@ -353,3 +353,19 @@ Win31 folder/drive glyphs, classic toolbar actions beyond already
 migrated VFS behavior, source-paired visual screenshots, host support
 and remaining 36 source-theme catalog variants. Win31 full shell
 status remains `pending` until feature and visual acceptance.
+
+
+## 19 November 2026 — Center Program Manager exactly in desktop area
+
+Original immutable `src/modules/shell/startmenu-win31.js`
+sets `window-main` `centered: true`, `w:600`, `h:400`.
+The earlier React Program Manager used `top:0` and only horizontal
+centering despite being described as centered.
+[Fix `bdad2c9`](https://github.com/codersachin99/windows-os/commit/bdad2c9be9eb742cf3a83693eacb80bb98ac4d0c)
+centers both axes within the desktop workspace **above** its
+40px taskbar while keeping the bounded small-screen layout and
+maximized state at the workspace origin. Browser acceptance
+[a844d07](https://github.com/codersachin99/windows-os/commit/a844d076bd756dac404b39f8cae996b3c598fb66)
+now checks original 600×400 geometry and centered top/left
+coordinates on a full desktop viewport. This still does not
+assert screenshot pixel parity for the full source shell.
