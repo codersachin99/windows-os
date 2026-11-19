@@ -313,3 +313,43 @@ This is source-grounded visual CSS plus existing functional menu
 actions. Exact menu glyphs, focus/keyboard event timing, original
 Win31 font bytes and original-vs-React screenshot comparisons still
 need verification. No full theme acceptance claim.
+
+
+## 19 November 2026 — Win31 source Computer/Bin file-list and navigation adaptation
+
+Source lock is still the immutable `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+`src/modules/themes/theme-win31-scss.js` explicitly defines:
+`--theme-surface:#c0c0c0`, `--theme-accent:#080abd`,
+`.window__addressbar` with `4px 0` padding,
+`.winui-textbox` white/black border,
+`.listview__header` and `.listview__header-column` black borders,
+`.listview__item:hover` transparent (no Win7 blue wash),
+`.listview__item.is-active` and `:focus` white foreground on
+theme accent, `.treeview__button.is-active` same accent with
+dotted yellow outline, and the classic gray/black `.window__statusbar`.
+These differ materially from modern Explorer styles.
+
+New `packages/apps/explorer/src/sourceWin31Explorer.css`
+([5506c27](https://github.com/codersachin99/windows-os/commit/5506c276b64fb991cba13607ad78d711d62ab3df))
+reuses those exact source colors and geometry on the **existing
+functional Guest Computer and Recycle Bin** lists, address bar,
+buttons, header, navigation, status and in-app prompts. It is
+strictly scoped to `[data-theme=win31]`, not a new Explorer engine.
+[4bb4901](https://github.com/codersachin99/windows-os/commit/4bb49010d9a1bafa848933a98037a763c29d7099)
+gives real Guest folder navigation links
+`aria-current=location` for active drive/Desktop/shortcut paths;
+only Win31 uses the classic selected-tree palette. This stays
+keyboard/assistive-technology discoverable and works at mobile width.
+
+[4df2043](https://github.com/codersachin99/windows-os/commit/4df20430074e6af5efb7403b796586211b8a0912)
+adds desktop/mobile browser acceptance for themed Computer navigation,
+true Guest VFS file upload and selected blue list item, no hover
+background, details column borders, and real Recycle Bin Explorer
+context and status. [1fb6569](https://github.com/codersachin99/windows-os/commit/1fb6569f00314f0b0d53413898dbe0ecf249933a)
+adds the new spec to the opt-in focused browser gate.
+
+**Not certified:** complete source Computer UI hierarchy, original
+Win31 folder/drive glyphs, classic toolbar actions beyond already
+migrated VFS behavior, source-paired visual screenshots, host support
+and remaining 36 source-theme catalog variants. Win31 full shell
+status remains `pending` until feature and visual acceptance.
