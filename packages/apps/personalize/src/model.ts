@@ -3,10 +3,10 @@ import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers,sourceWin8ShellA
 
 /** Original pinned personalize.js ChangeTheme, _getThemes:
  * classes aero/basic/wins, theme selection immediately applies Theme and
- * source theme background. This bounded chooser exposes five source-backed
+ * source theme background. This bounded chooser exposes six source-backed
  * shell personalities, not the entire source catalog or complete parity.
  */
-export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"winxp"|"win8"|"win81"|"win11">;
+export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"winxp"|"win8"|"win81"|"win10"|"win11">;
 export interface SourcePersonalizeTheme{
   id:SourcePersonalizeThemeId;
   label:string;
@@ -18,6 +18,7 @@ export const SOURCE_PERSONALIZE_THEMES:readonly SourcePersonalizeTheme[]=[
   {id:"winxp",label:"Windows XP",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
   {id:"win8",label:"Windows 8",group:"wins",preview:sourceWin8ShellArtwork.win8Wallpaper},
   {id:"win81",label:"Windows 8.1",group:"wins",preview:sourceWin8ShellArtwork.win81Wallpaper},
+  {id:"win10",label:"Windows 10",group:"wins",preview:legacyShellThemeAssets.win10.theme},
   {id:"win11",label:"Windows 11",group:"wins",preview:legacyShellThemeAssets.win11.theme}
 ] as const;
 export function sourcePersonalizeGroup(group:SourcePersonalizeTheme["group"]):SourcePersonalizeTheme[]{
