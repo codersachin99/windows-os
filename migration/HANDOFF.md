@@ -4785,3 +4785,27 @@ read logs and artifacts; do not weaken checks. Continue theme
 desktop/context/Computer/Bin priorities after verification.
 PR #1 stays draft; original pinned repo `26b9f0ce...`,
 `windows-os/main` and releases remain untouched.
+
+
+### 19 November 2026 — Original Win31 Program Manager centering correction
+
+Pinned `startmenu-win31.js` `window-main` explicitly sets
+`centered:true, w:600, h:400`. The previous React
+`SourceWin31ProgramManager` positioned at `top:0`.
+[bdad2c9](https://github.com/codersachin99/windows-os/commit/bdad2c9be9eb742cf3a83693eacb80bb98ac4d0c)
+centers original-sized window in the working desktop above
+the taskbar, preserving maximized window and narrow-screen
+constraints. [a844d07](https://github.com/codersachin99/windows-os/commit/a844d076bd756dac404b39f8cae996b3c598fb66)
+adds strict real Playwright checks of desktop window x/y as
+well as original source width/height.
+
+Also [652967d](https://github.com/codersachin99/windows-os/commit/652967da28b10f4be9e1e702c218ba9def2c2e42)
+ensures Win31 Explorer's selected tree row stays blue while hovered
+(the non-selected hover remains transparent), preventing generic
+Win7 behavior from masking the original current-directory indicator.
+Neither edit is covered by the previously started
+[CI #44483797012](https://github.com/codersachin99/windows-os/actions/runs/44483797012).
+Check its actual conclusion, and run **one** opt-in full CI at the
+current branch head to verify all source-backed Explorer and
+Program Manager changes together. No merges/releases; keep
+the pinned reference/main unchanged and draft PR #1 open.
