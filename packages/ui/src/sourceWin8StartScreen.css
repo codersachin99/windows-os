@@ -121,6 +121,18 @@
 .win8-start__results button:hover,.win8-start__results button:focus-visible{
   background:rgba(255,255,255,.2)
 }
+.win8-start__results h4{
+  font-size:13px;font-weight:600;color:#fff;
+  margin:12px 9px 4px;border-bottom:1px solid #ffffff33;padding-bottom:6px;
+}
+.win8-start__file-label{
+  display:flex;flex-direction:column;gap:3px;min-width:0;overflow:hidden;
+}
+.win8-start__file-label strong,.win8-start__file-label small{
+  display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.win8-start__file-label strong{font-size:13px;font-weight:500}
+.win8-start__file-label small{font-size:11px;opacity:.75}
 .win8-start__results p{opacity:.75;font-size:13px}
 @media(max-width:720px){
   .win8-start__header{padding:20px 22px 0;gap:4px}
