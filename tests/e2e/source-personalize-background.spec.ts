@@ -31,8 +31,8 @@ test("source ChangeBackground system tiles stage changes until Save and Cancel",
   await expect(desktop).toHaveAttribute("data-test-desktop-background",fallback);
   let view=await backgroundView(page);
   const system=view.locator('[data-test-bg-list="system"]');
-  // Win8/Win81 original wallpapers are byte-imported as separate themes.
-  await expect(system.locator("[data-test-bg-item]")).toHaveCount(10);
+  // Win8/Win81 and Win95/Win2k original wallpapers are byte-imported as separate themes.
+  await expect(system.locator("[data-test-bg-item]")).toHaveCount(12);
   await expect(system.locator('[data-test-bg-item="/assets/images/win8.3a5f11f3.webp"] img'))
     .toHaveAttribute("src","/assets/images/win8.3a5f11f3.webp");
   await expect(system.locator('[data-test-bg-item="/assets/images/win81.7b80787e.webp"] img'))
