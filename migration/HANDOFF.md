@@ -4610,3 +4610,47 @@ changes, regardless of its eventual conclusion. Inspect the new run's
 actual completed focused and full browser steps and correct failures.
 Avoid further CI-marked commits for documentation-only work.
 Original source, `main`, draft PR status and releases remain unchanged.
+
+
+## 19 November 2026 — Windows 3.1 Program Manager and six honest partial-shell statuses
+
+**Previous completed acceptance:** [CI #44474137082](https://github.com/codersachin99/windows-os/actions/runs/44474137082)
+at `334e1a8` finished **SUCCESS** TypeScript, unit/source
+inventory/artwork/Contacts audit, Vite, focused and full browser
+desktop/mobile. It verifies corrected Win8/8.1 Guest-file Start
+search, Win10 Personalize choice and app interactions.
+Visual capture job was skipped; **no original screenshot parity claim**.
+
+**Current work, newer than the green checkpoint:**
+[0c3ec89](https://github.com/codersachin99/windows-os/commit/0c3ec898287f748a5ac50cad11d5d7eef7e58011)
+corrected the source shell implementation status:
+Win7, XP, Win8, Win8.1, Win10 and Win11 are now truthfully
+`partial`, not `pending`. All other source catalog variants
+remain `pending`, including `win31`; no theme is labeled
+pixel-perfect. Unit/browser contracts updated in
+[44da660](https://github.com/codersachin99/windows-os/commit/44da6604e050c320a761555bd78e7c4b910a7597)
+and [2569f1b](https://github.com/codersachin99/windows-os/commit/2569f1bc425380b4d70a68e5729d2dc4e70a94b4).
+
+Original `startmenu-win31.js` is a genuine 600×400 **Program
+Manager**, not a Win7 menu. [985447d](https://github.com/codersachin99/windows-os/commit/985447dffef1cfeaa73d5bc55fb2e780c5a2e5b0)
+adds a new source-shaped React component with separately closable,
+maximizable and focusable Recent/Programs/Games child windows,
+source Window/Help command structure and real app/power dispatch.
+[0c6523a](https://github.com/codersachin99/windows-os/commit/0c6523ab9815293bdd9b62ea4b4c98f9b4dfff5d)
+adds exact source 32px group icon, 24px caption, 600×400 frame,
+`#2900ad` hover and constrained mobile geometry.
+[fdbc798](https://github.com/codersachin99/windows-os/commit/fdbc7982fe045420093fff79bfdc769fac27f585)
+routes only Win31 Start through the component; other themes unchanged.
+[3e7147b](https://github.com/codersachin99/windows-os/commit/3e7147bafe97a00aac48b54b71befd5eddc5c667)
+adds desktop/mobile browser tests for layout and actions;
+[a1c6357](https://github.com/codersachin99/windows-os/commit/a1c63574eb8205ee4e6204d83278b410dae5d235)
+opts these specs into the focused Actions test set.
+
+**Next:** single deliberate `[run-ci]` commit at exact head,
+inspect status/logs for TypeScript, all unit/asset/build, focused
+and full browser. Fix real regressions rather than skipping tests.
+Continue source Win31 themed taskbar/Desktop/context/Computer/Bin,
+and all remaining original theme skins, with paired screenshot gate
+before any full-parity claim. Preserve immutable
+`legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+`windows-os/main`, PR #1 **draft**, and no release.
