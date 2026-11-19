@@ -94,6 +94,27 @@ export const legacyArt = {
 // Original XP/Win11 shell image names and bytes were imported from the
 // pinned legacy-win7 revision. Never use generated substitute graphics.
 export const legacyShellThemeAssets = Object.freeze({
+  // Pinned source 9x & 2k theme artwork is byte-identical to legacy-win7
+  // @26b9f0c. Win95/98 share their classic source icon family.
+  win95: {
+    start: legacyArt.win7Brand,
+    computer:"/assets/images/computer-win95.004ba941.webp",
+    bin:"/assets/images/bin-win95.28a063bb.webp",
+    binFull:"/assets/images/bin-full-win95.5b7aebde.webp",
+    folder:"/assets/images/folder-win95.dde31877.webp",
+    file:"/assets/images/file-win95.ce41ba94.webp",
+    theme:"/assets/images/win95.fcef1b3b.webp"
+  },
+  win2k: {
+    start:"/assets/images/start-button-win2k.650d501c.webp",
+    computer:"/assets/images/computer-win2k.5c9df4ed.webp",
+    bin:"/assets/images/bin-win2k.4b231417.webp",
+    binFull:"/assets/images/bin-full-win2k.f2dd6793.webp",
+    folder:"/assets/images/folder-win2k.6bea372b.webp",
+    // The source's 2k set does not override the generic file icon.
+    file:"/assets/images/file-win95.ce41ba94.webp",
+    theme:"/assets/images/default-win2k.1c1f7fa2.png"
+  },
   // Pinned original icons.registry.json win10 group; the source uses the
   // Win8 Start button SVG for Win10, not the Win7 glass orb.
   win10: {
@@ -163,6 +184,8 @@ export const sourceThemeLogonArtwork=Object.freeze({
 
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
+  if(theme==="win95"||theme==="win98")return legacyShellThemeAssets.win95.theme;
+  if(theme==="win2k")return legacyShellThemeAssets.win2k.theme;
   if(theme==="win8")return sourceWin8ShellArtwork.win8Wallpaper;
   if(theme==="win81")return sourceWin8ShellArtwork.win81Wallpaper;
   if(theme==="win10")return legacyShellThemeAssets.win10.theme;
@@ -174,6 +197,8 @@ export function sourceShellWallpaper(theme:string):string{
 /** The subset of original system backgrounds actually byte-imported from
  * the pinned legacy source. Do not add guessed URLs or unported user uploads. */
 export const sourceSystemWallpapers:readonly string[]=Object.freeze([
+  legacyShellThemeAssets.win95.theme,
+  legacyShellThemeAssets.win2k.theme,
   ...legacyArt.wallpaperChoices,
   sourceWin8ShellArtwork.win8Wallpaper,
   sourceWin8ShellArtwork.win81Wallpaper,
@@ -279,7 +304,23 @@ export const legacyThemeProgramArtwork=Object.freeze({
     "default":"/assets/images/default-win11.fdf9b988.webp"
   })
 } as const);
+export const sourceWin2kProgramArtwork:Readonly<Record<string,string>>=Object.freeze({
+  about:"/assets/images/about-win2k.ddc7bdd1.webp",
+  programs:"/assets/images/programs-win2k.a348b75a.webp",
+  games:"/assets/images/games-win2k.4f15470b.webp",
+  cpanel:"/assets/images/cpanel-win2k.613075e7.webp",
+  search:"/assets/images/search-win2k.b73ad698.webp",
+  run:"/assets/images/run-win2k.a75b3afb.png",
+  shutdown:"/assets/images/shutdown-win2k.db9ed044.webp",
+  computer:"/assets/images/computer-win2k.5c9df4ed.webp",
+  bin:"/assets/images/bin-win2k.4b231417.webp",
+  "bin-full":"/assets/images/bin-full-win2k.f2dd6793.webp",
+  folder:"/assets/images/folder-win2k.6bea372b.webp"
+});
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="win2k")return sourceWin2kProgramArtwork[iconKey]??null;
+  if((theme==="win95"||theme==="win98")&&iconKey==="shutdown")
+    return "/assets/images/power-win95.11d0301d.webp";
   if(theme==="win10"){
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win10;
     return icons[iconKey]??null;
@@ -324,6 +365,8 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="win95"||theme==="win98")return legacyShellThemeAssets.win95[kind];
+  if(theme==="win2k")return legacyShellThemeAssets.win2k[kind];
   if ((theme === "win8" || theme === "win81") && kind === "start")
     return sourceWin8ShellArtwork.start;
   if (theme === "win10") return legacyShellThemeAssets.win10[kind];
