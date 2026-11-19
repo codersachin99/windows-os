@@ -48,3 +48,31 @@ The original Win10 wallpaper `win10.743e8c13.webp` (SHA `988278e48d41f10f2f701c7
 ## Original source Computer is a toolbar, not a full ribbon
 
 Source audit on the immutable original `src/modules/apps/computer.js` shows **`window-menubar asToolbar`** and real Organize/View nested menus, not the full ribbon UI used by other apps. The React Win10 Computer/Bin now uses the shared eight-mode source View popup instead of the fallback select and applies original `#fff` toolbar / `#eee` popup styling. Source details, exact values, test coverage and remaining gaps: [WIN10-EXPLORER-TOOLBAR.md](WIN10-EXPLORER-TOOLBAR.md). No new claim of complete theme parity.
+
+
+## Windows 10 is selectable in source-backed Personalize — 19 November 2026
+
+The initial Personalize chooser exposed five partially source-backed
+skins, but omitted the already implemented original `win10` shell
+despite its pinned `win10.743e8c13.webp` wallpaper, Win8-reused
+Start SVG, dark taskbar, source Win10 Start and Explorer implementations.
+[Commit `c876061`](https://github.com/codersachin99/windows-os/commit/c876061bfd7d92f1777c492e4db5583e92831afc)
+adds Win10 as the sixth selectable source-backed Personalize card,
+under **Other Windows Themes**, reusing the existing registered
+byte-identical image without fetching or inventing artwork.
+The shared `SET_THEME` and saved theme/background engine is unchanged.
+
+[Commit `d9b0eac`](https://github.com/codersachin99/windows-os/commit/d9b0eac1f326fe5a207855c1bff53655ba7e4c61)
+updates original-artwork and grouping unit contracts.
+[Commit `5e0bd1e`](https://github.com/codersachin99/windows-os/commit/5e0bd1eaced78f06ef8261fafd7146bec92f3252)
+adds a desktop/mobile browser test asserting the real Win10
+Personalize selection, original wallpaper, exact reused Win8 Start
+SVG, `#101010` taskbar, source-shaped Win10 Start rail and reload
+persistence. No new CSS fallback or alternate theme engine.
+
+**Acceptance is pending:** earlier Guest Win8 search repair
+[CI #44473304311](https://github.com/codersachin99/windows-os/actions/runs/44473304311)
+at `5487b67` does not cover these later Win10 card commits. A later
+explicit `[run-ci]` is required. Win10 is selectable, **not**
+certified pixel-perfect, nor are the other 31 source theme IDs declared
+fully migrated.
