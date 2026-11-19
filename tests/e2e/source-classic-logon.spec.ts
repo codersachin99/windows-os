@@ -10,7 +10,7 @@ test("Win31/95/98/2k source-shaped classic logon keeps Guest-only authentication
     await expect(login).toHaveAttribute("data-source-theme-id",family);
     await expect(login).toHaveAttribute("data-source-logon-theme",family);
     await expect(login).toHaveAttribute("data-source-logon-renderer",family);
-    await expect(login).toHaveAttribute("data-source-shell-status","pending");
+    await expect(login).toHaveAttribute("data-source-shell-status","partial");
     await expect(login.getByRole("dialog",{name:"Logon Windows"})).toBeVisible();
     if(family==="win2k"){
       await expect(login.locator('[data-test-source-logon-logo="win2k"]'))
