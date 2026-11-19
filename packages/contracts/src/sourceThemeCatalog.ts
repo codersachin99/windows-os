@@ -177,10 +177,11 @@ export function sourceThemeScreens(theme:string):SourceThemeScreens{
     ?SOURCE_THEME_SCREENS[theme]:SOURCE_THEME_SCREEN_DEFAULTS;
 }
 /** Indicates shell implementation scope, not theme catalog membership.
- * Six themes now have source-backed desktop, taskbar and Start adaptations;
+ * Ten themes now have source-backed desktop, taskbar and Start adaptations;
  * partial never means pixel-perfect, and login-only families remain pending. */
 export function sourceThemeShellStatus(theme:string):"partial"|"pending"{
-  return theme==="win7"||theme==="winxp"||theme==="win8"
+  return theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
+    ||theme==="win7"||theme==="winxp"||theme==="win8"
     ||theme==="win81"||theme==="win10"||theme==="win11"
     ?"partial":"pending";
 }
