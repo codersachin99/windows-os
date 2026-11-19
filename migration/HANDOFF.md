@@ -4750,3 +4750,38 @@ all original source/artwork/unit/Vite and focused/full mobile/desktop
 browser assertions. Report any failures precisely, then repair on
 branch without suppressing them. Do not automatically merge
 draft PR #1 or alter the frozen legacy source/main/release.
+
+
+## 19 November 2026 — Win31 Computer/Bin authentic listview and tree slice
+
+The two previous deliberate opt-in checkpoints are **green**:
+[CI #44478850230](https://github.com/codersachin99/windows-os/actions/runs/44478850230)
+at `5b76646`, and exact-head
+[CI #44479186773](https://github.com/codersachin99/windows-os/actions/runs/44479186773)
+at `1e9c980`, both with TypeScript, unit, source asset and inventory
+verification, build, focused and full browser desktop/mobile tests.
+Original screenshot visual-capture job was skipped; not pixel-complete.
+
+**Additional unverified work (new head):**
+Pinned `theme-win31-scss.js` original `.window__addressbar`,
+`.winui-textbox`, `.listview__header`, `.listview__item`,
+`.treeview__button`, and `.window__statusbar` require classic
+gray/black square frames and white-on-`#080abd` selected rows
+with **no hover wash**.
+[5506c27](https://github.com/codersachin99/windows-os/commit/5506c276b64fb991cba13607ad78d711d62ab3df)
+adds a theme-scoped Explorer/Bin adapter;
+[4bb4901](https://github.com/codersachin99/windows-os/commit/4bb49010d9a1bafa848933a98037a763c29d7099)
+adds `aria-current=location` for live drive/Desktop/shortcut
+navigation; [4df2043](https://github.com/codersachin99/windows-os/commit/4df20430074e6af5efb7403b796586211b8a0912)
+tests desktop/mobile Computer/Bin source style, real uploaded
+Guest file, selection, Details header and context actions.
+[1fb6569](https://github.com/codersachin99/windows-os/commit/1fb6569f00314f0b0d53413898dbe0ecf249933a)
+adds the spec to the opt-in CI list.
+
+**Next:** run one deliberate exact-head `[run-ci]` acceptance
+covering TS/unit/original source and artwork audits, build,
+targeted and full browser tests. If a real browser failure occurs,
+read logs and artifacts; do not weaken checks. Continue theme
+desktop/context/Computer/Bin priorities after verification.
+PR #1 stays draft; original pinned repo `26b9f0ce...`,
+`windows-os/main` and releases remain untouched.
