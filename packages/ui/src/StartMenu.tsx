@@ -17,6 +17,7 @@ import {taskbarPins} from "./sourceTaskbarPins";
 import {sourceWin11PageCount,sourceWin11StartPage,sourceWin11NextStartPage} from "./sourceWin11StartPaging";
 import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
 import {SourceWin8StartScreen} from "./SourceWin8StartScreen";
+import {SourceWin31ProgramManager} from "./SourceWin31ProgramManager";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -278,6 +279,12 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         wallpaper={wallpaper} programs={appRegistry.startMenu()}
         onLaunch={openApp} onOpenFile={openSearchFile}
         onContext={openProgramContext}
+        onClose={()=>dispatch({type:"CLOSE_START"})}
+        onPower={type=>dispatch({type})}/>:
+    theme==="win31"?
+      <SourceWin31ProgramManager rootRef={menuRef}
+        programs={appRegistry.list()} recent={recentApps}
+        onLaunch={openApp} onContext={openProgramContext}
         onClose={()=>dispatch({type:"CLOSE_START"})}
         onPower={type=>dispatch({type})}/>:
     <nav className={"windows-startmenu" +
