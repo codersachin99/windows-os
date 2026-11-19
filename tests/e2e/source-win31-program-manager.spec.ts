@@ -29,6 +29,12 @@ test("original Windows 3.1 Start is a centered 600x400 Program Manager, not Win7
   if(viewport!.width>=600&&viewport!.height>=450){
     expect(Math.round(box!.width)).toBe(600);
     expect(Math.round(box!.height)).toBe(400);
+    // The original window-main has centered:true; the Program Manager
+    // is centered inside the desktop area above its 40px taskbar.
+    const expectedX=(viewport!.width-box!.width)/2;
+    const expectedY=(viewport!.height-40-box!.height)/2;
+    expect(Math.abs(box!.x-expectedX)).toBeLessThanOrEqual(2);
+    expect(Math.abs(box!.y-expectedY)).toBeLessThanOrEqual(2);
   }
   const button=manager.locator('[data-test-win31-group="simu-programs"]');
   await button.hover();
