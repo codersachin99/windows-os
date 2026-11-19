@@ -25,6 +25,8 @@ describe("source personalize.js ChangeTheme grouped first shell chooser",()=>{
 describe("source ChangeBackground imported system gallery",()=>{
   it("only exposes original pinned backgrounds already present as assets",()=>{
     expect(SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS).toEqual([
+      "/assets/images/win95.fcef1b3b.webp",
+      "/assets/images/default-win2k.1c1f7fa2.png",
       "/assets/images/default.deccec52.webp",
       "/assets/images/win7-1.5c44223b.webp",
       "/assets/images/win7-2.bf7d7452.webp",
