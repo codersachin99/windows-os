@@ -5,6 +5,7 @@ import "./sourceWin8Logon.css";
 
 export interface SourceWin8LogonProps{
   theme:ThemeId;
+  shellStatus:"partial"|"pending";
   onGuest:()=>void;
   onShutdown:()=>void;
   onRestart:()=>void;
@@ -15,13 +16,13 @@ export interface SourceWin8LogonProps{
  * theme IDs win8 and win81. It is NOT a finished shell or original account
  * backend; Guest entry and the source user-form shape are retained.
  */
-export function SourceWin8Logon({theme,onGuest,onShutdown,onRestart}:SourceWin8LogonProps){
+export function SourceWin8Logon({theme,shellStatus,onGuest,onShutdown,onRestart}:SourceWin8LogonProps){
   const [showAccount,setShowAccount]=useState(false);
   const [showPower,setShowPower]=useState(false);
   return <main className="windows-logon source-win8-logon"
     data-test-logon-screen data-source-theme-id={theme}
     data-source-logon-theme="win8"
-    data-source-logon-renderer="win8" data-source-shell-status="pending">
+    data-source-logon-renderer="win8" data-source-shell-status={shellStatus}>
     <section className="source-win8-logon__pane" aria-label="Guest account">
       <button className="source-win8-logon__avatar avatar-button can-click"
         data-test-avatar="win7" data-test-source-logon-avatar="win8"
