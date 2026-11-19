@@ -4716,3 +4716,23 @@ actual Playwright errors and fix source code/test defects rather
 than suppress tests. Preserve pinned
 `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
 target `windows-os/main`, draft PR #1 and no releases.
+
+
+### 19 Nov — Win31 original popup menu source parity follow-up
+
+Original `theme-win31-scss.js` source `.winui-menu` palette
+is flat white, black 1px border, zero padding, square corners,
+1×1 `#808080` shadow and white/bold hover labels on
+`#080abd`. [ec56fd3](https://github.com/codersachin99/windows-os/commit/ec56fd3bfd3bd717fcfb0f8c8261ededae3e12e5)
+maps original style to actual Desktop/taskbar popup menus;
+[1bd4426](https://github.com/codersachin99/windows-os/commit/1bd4426310eed2c9c37ae188a20236982a64c2b3)
+maps it to Computer/Bin and View/Send To Explorer context
+popups. [1a2d611](https://github.com/codersachin99/windows-os/commit/1a2d611a6d29c789a5afd1d0efc7b5357626a0d7)
+and [9a4d676](https://github.com/codersachin99/windows-os/commit/9a4d6768aac70c8dd54277b196867156fbfc964d)
+expand desktop/mobile browser contract variants using
+real menus and working actions. This work is newer than
+[CI #44478850230](https://github.com/codersachin99/windows-os/actions/runs/44478850230),
+which tests the earlier Win31 chrome and Win8 shell-status
+fix, **not** these popup changes. Check the earlier run and
+request one exact-head full acceptance run only when appropriate.
+No merges/releases/visual-complete claim. Preserve PR #1 draft.
