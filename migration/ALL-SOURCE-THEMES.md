@@ -480,3 +480,42 @@ regression set.
 
 Source Help and Win2k Computer search mode, file operation
 completeness, and original paired screenshots remain pending.
+
+
+## 19 November 2026 — Classic Win95/98/2k Personalize cards and source gallery
+
+The source-backed Personalize chooser initially listed only
+Win7, XP, Win8, Win8.1, Win10 and Win11. With exact original
+Win95 wallpaper and Win2k default background now imported, all
+three source classic shell variants can also be chosen from
+the real `ChangeTheme` UI. Win98 intentionally reuses the
+same original Win95 backdrop while its separate classic theme
+CSS palette `#c0c7c8/#0608a6` remains distinct.
+
+[ccb3d37](https://github.com/codersachin99/windows-os/commit/ccb3d379d01b1c6c57acf40e6c21f000dddbbe37)
+adds Win95, Win98 and Win2000 theme cards (nine source-backed
+choices, grouped under Other Windows Themes);
+[3c63945](https://github.com/codersachin99/windows-os/commit/3c63945985c64e362f4119a66beef7cbb2b1cb16)
+pins card IDs, groups and exact imported previews.
+[e69c655](https://github.com/codersachin99/windows-os/commit/e69c6550da295f48197179499eec278c5f615430)
+uses the actual Desktop Personalize window to test switching
+all 3 palette/wallpaper combinations, Start and reload persistence
+on desktop/mobile. Win31 has only source classic shell/boot
+coverage and a gray desktop, so it is not misrepresented by
+a fake wallpaper preview tile.
+
+The first classic [CI #44556549754](https://github.com/codersachin99/windows-os/actions/runs/44556549754)
+had **426 targeted browser passes, 4 failures, 2 skips**
+because two pre-existing Personalize/Control Panel checks
+asserted 10 background cards after importing 2 new exact
+original system wallpapers; desktop and mobile both failed.
+[dd23936](https://github.com/codersachin99/windows-os/commit/dd23936ded586d8a6572c84a61d207abde241a02)
+and [99f32ad](https://github.com/codersachin99/windows-os/commit/99f32ad5ea126b84d934507560142817c4674f34)
+correct those exact counts to 12 without disabling tests
+or dropping the new source gallery entries. The original
+10-asset source archive requirement was never implied:
+the imported gallery grows as real source art is added.
+
+Status remains **partial**; source-paired visual screenshots,
+full 95/98/2k menus, Win2k search location and unported
+classic theme variants remain outstanding.
