@@ -40,6 +40,9 @@ describe("immutable final source app.config themeScreens",()=>{
       expect(sourceIsKnownTheme(id),id).toBe(false);
       expect(sourceThemeScreens(id)).toEqual(SOURCE_THEME_SCREEN_DEFAULTS);
     }
+    for(const theme of ["win31","win95","win98","win2k"]){
+      expect(sourceThemeShellStatus(theme)).toBe("partial");
+    }
     expect(sourceThemeShellStatus("win7")).toBe("partial");
     expect(sourceThemeShellStatus("winxp")).toBe("partial");
     expect(sourceThemeShellStatus("win8")).toBe("partial");
