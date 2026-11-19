@@ -1,0 +1,114 @@
+/* Original immutable legacy-win7/src/styles/shell/startmenu-win9x.css
+ * and src/modules/themes/theme-win9x-scss.js (Win95/98 and Win2k).
+ * Classic 208px source menu, inset edges, 24px icons, a vertical
+ * banner, 224px cascading Programs/Shutdown menus, 40px taskbar.
+ * Exact icon artwork is separately imported and selected by theme.
+ */
+.source-win9x-startmenu{
+  box-sizing:border-box;position:absolute;left:2px;bottom:var(--taskbar-height,40px);
+  z-index:3500;display:flex;flex-direction:row;align-items:stretch;
+  color:#000;background:var(--theme-surface,#bdbebd);
+  font:12px "MS Sans Serif",Tahoma,sans-serif;
+  width:230px;max-width:calc(100vw - 4px);
+  max-height:calc(100dvh - var(--taskbar-height,40px) - 4px);
+  padding:2px;border:0;border-radius:0;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+}
+.source-win9x-startmenu__banner{
+  box-sizing:border-box;align-self:stretch;flex:0 0 20px;
+  margin:2px 0 2px 1px;padding:3px 0;
+  display:flex;align-items:center;justify-content:flex-end;gap:3px;
+  color:#fff;white-space:nowrap;overflow:hidden;
+  background:linear-gradient(0deg,#00f,#000);
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font:12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.source-win9x-startmenu__main{
+  position:relative;flex:1;min-width:0;overflow:visible;
+  display:flex;flex-direction:column;align-items:stretch;
+  padding:4px 4px 4px 0;max-height:inherit;
+}
+.source-win9x-startmenu__item,
+.source-win9x-startmenu__branch>button{
+  box-sizing:border-box;display:flex;align-items:center;gap:5px;
+  width:100%;min-height:38px;
+  padding:6px 4px;border:0;border-radius:0;
+  background:transparent;color:#000;text-align:left;
+  font:12px "MS Sans Serif",Tahoma,sans-serif;
+  cursor:pointer;
+}
+.source-win9x-startmenu__item>img,
+.source-win9x-startmenu__branch>button>img{
+  flex:0 0 24px;width:24px;height:24px;object-fit:contain;
+}
+.source-win9x-startmenu__item>span,
+.source-win9x-startmenu__branch>button>span:not(.source-win9x-startmenu__arrow){
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.source-win9x-startmenu__item:hover:not(:disabled),
+.source-win9x-startmenu__item:focus-visible,
+.source-win9x-startmenu__branch>button:hover,
+.source-win9x-startmenu__branch>button:focus-visible,
+.source-win9x-startmenu__branch>button[aria-expanded="true"]{
+  background:var(--theme-accent,#000080);color:#fff;
+  outline:none;
+}
+.source-win9x-startmenu__item:disabled{
+  opacity:1;color:#7b7b7b;cursor:default;
+  text-shadow:1px 1px #fff;
+}
+.source-win9x-startmenu__separator{
+  width:100%;height:2px;flex:0 0 2px;margin:3px 0;
+  box-shadow:inset 0 1px #7b7b7b,inset 0 2px #fff;
+}
+.source-win9x-startmenu__branch{position:relative;min-height:0}
+.source-win9x-startmenu__arrow{
+  margin-left:auto;flex:0 0 auto;font-size:10px;
+}
+.source-win9x-startmenu__submenu{
+  box-sizing:border-box;position:absolute;
+  left:calc(100% - 2px);top:0;z-index:2;
+  display:flex;flex-direction:column;
+  width:224px;max-width:calc(100vw - 8px);
+  max-height:min(288px,calc(100dvh - var(--taskbar-height,40px) - 8px));
+  overflow-y:auto;padding:3px;
+  background:var(--theme-surface,#bdbebd);
+  border:0;border-radius:0;color:#000;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+  scrollbar-width:thin;
+}
+.source-win9x-startmenu__submenu.is-shutdown{top:auto;bottom:0}
+.source-win9x-startmenu__submenu button{
+  display:flex;align-items:center;gap:7px;
+  width:100%;min-height:30px;flex:0 0 auto;
+  border:0;border-radius:0;padding:5px 6px;
+  text-align:left;font:12px "MS Sans Serif",Tahoma,sans-serif;
+  color:#000;background:transparent;cursor:pointer;
+}
+.source-win9x-startmenu__submenu button img{
+  width:16px;height:16px;flex:0 0 16px;object-fit:contain;
+}
+.source-win9x-startmenu__submenu button:hover,
+.source-win9x-startmenu__submenu button:focus-visible{
+  color:#fff;background:var(--theme-accent,#000080);outline:none;
+}
+/* Source Win2k places an exact 24px icon in a taller 12px-padded
+ * program row, and the gray Windows 2000 surface/accent comes from
+ * the theme-scoped desktop variables, not a substitute Win7 menu. */
+.source-win9x-startmenu.is-win2k .source-win9x-startmenu__item,
+.source-win9x-startmenu.is-win2k .source-win9x-startmenu__branch>button{
+  padding:9px 4px;min-height:48px;
+}
+.source-win9x-startmenu.is-win2k{
+  width:230px;
+}
+@media(max-width:520px){
+  .source-win9x-startmenu__main{
+    overflow-y:auto;overflow-x:visible;
+  }
+  .source-win9x-startmenu__submenu{
+    left:auto;right:0;top:0;z-index:4;
+    max-width:min(224px,calc(100vw - 30px));
+  }
+  .source-win9x-startmenu__submenu.is-shutdown{top:auto;bottom:0}
+}
