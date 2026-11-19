@@ -122,7 +122,7 @@ export function SourceWin31ProgramManager({
           style={{zIndex:10+index,
             ...(max?{}:{left:12+(index%3)*26,top:83+(index%3)*20})}}
           aria-label={group.label}
-          onPointerDown={()=>bringFront(id)}>
+          onClickCapture={()=>bringFront(id)}>
           <header className="source-win31-program-manager__child-title">
             <strong>{group.label}</strong>
             <div className="source-win31-program-manager__controls">
