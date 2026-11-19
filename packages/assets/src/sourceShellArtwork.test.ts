@@ -34,7 +34,7 @@ describe("pinned source XP/Win10/Win11 shell artwork mapping",()=>{
     expect(sourceThemeProgramArt("win10","notepad")).toBeNull();
   });
   it("never substitutes source artwork for Win7 and unported shell themes",()=>{
-    for(const theme of ["win7","winvista","win31","win95","win98","unknown"]){
+    for(const theme of ["win7","winvista","win31","unknown"]){
       expect(sourceShellAsset(theme,"start")).toBeNull();
       expect(sourceShellAsset(theme,"computer")).toBeNull();
       expect(sourceShellAsset(theme,"bin")).toBeNull();
@@ -73,5 +73,36 @@ describe("byte-identical original WinXP/Win11 login artwork contracts",()=>{
       .toBe(legacyShellThemeAssets.win11.theme);
     expect(sourceThemeLogonArtwork.win11.guest)
       .not.toBe(sourceThemeLogonArtwork.winxp.guest);
+  });
+});
+
+
+describe("byte-identical original Win95/98/2k shell image catalog",()=>{
+  it("uses source-matched Computer, empty/full Bin and folders for all 3 classic families",()=>{
+    for(const theme of ["win95","win98","win2k"] as const){
+      const source=theme==="win2k"?legacyShellThemeAssets.win2k:legacyShellThemeAssets.win95;
+      for(const kind of ["start","computer","bin","binFull","folder","file","theme"] as const)
+        expect(sourceShellAsset(theme,kind)).toBe(source[kind]);
+      expect(sourceShellAsset(theme,"binFull")).not.toBe(sourceShellAsset(theme,"bin"));
+    }
+    expect(sourceShellAsset("win95","computer"))
+      .toBe("/assets/images/computer-win95.004ba941.webp");
+    expect(sourceShellAsset("win98","binFull"))
+      .toBe("/assets/images/bin-full-win95.5b7aebde.webp");
+    expect(sourceShellAsset("win2k","start"))
+      .toBe("/assets/images/start-button-win2k.650d501c.webp");
+    expect(sourceShellAsset("win2k","theme"))
+      .toBe("/assets/images/default-win2k.1c1f7fa2.png");
+  });
+  it("selects exact source Win2k Start/Programs/Power images",()=>{
+    expect(sourceThemeProgramArt("win2k","programs"))
+      .toBe("/assets/images/programs-win2k.a348b75a.webp");
+    expect(sourceThemeProgramArt("win2k","games"))
+      .toBe("/assets/images/games-win2k.4f15470b.webp");
+    expect(sourceThemeProgramArt("win2k","shutdown"))
+      .toBe("/assets/images/shutdown-win2k.db9ed044.webp");
+    expect(sourceThemeProgramArt("win98","shutdown"))
+      .toBe("/assets/images/power-win95.11d0301d.webp");
+    expect(sourceThemeProgramArt("win2k","unknown")).toBeNull();
   });
 });
