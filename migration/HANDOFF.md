@@ -4963,3 +4963,36 @@ without bypassing. Source Win9x Help integration,
 2000 Search mode and original-paired screenshot parity
 remain incomplete. Preserve draft PR #1, `main`, frozen
 legacy reference and zero release changes.
+
+
+## 19 November 2026 — Classic theme UI chooser and fixed background browser expectations
+
+[First classic source CI #44556549754](https://github.com/codersachin99/windows-os/actions/runs/44556549754)
+on `b8b7bca` **failed** source shell targeted browser with
+**426 passed, 4 failed, 2 skipped**; source/TypeScript/unit/build
+all passed. Four failures were the same obsolete expected
+Personalize system gallery size 10 (actual 12) in
+`tests/e2e/source-cpanel-program-launch.spec.ts` and
+`tests/e2e/source-personalize-background.spec.ts`,
+both on desktop/mobile. The imported Win95 and Win2k
+source-pinned wallpapers are legitimate extra entries.
+[dd23936](https://github.com/codersachin99/windows-os/commit/dd23936ded586d8a6572c84a61d207abde241a02)
+and [99f32ad](https://github.com/codersachin99/windows-os/commit/99f32ad5ea126b84d934507560142817c4674f34)
+update only those counts to 12. No regression is suppressed.
+
+[ccb3d37](https://github.com/codersachin99/windows-os/commit/ccb3d379d01b1c6c57acf40e6c21f000dddbbe37)
+adds real Windows95/98/2000 theme cards in the 9-option
+Personalize chooser, using exact original wallpaper previews.
+[3c63945](https://github.com/codersachin99/windows-os/commit/3c63945985c64e362f4119a66beef7cbb2b1cb16)
+updates the unit contract; [e69c655](https://github.com/codersachin99/windows-os/commit/e69c6550da295f48197179499eec278c5f615430)
+tests real classic theme selection, wallpaper,
+palette, Start and persistent Guest reload in desktop/mobile.
+
+The earlier [CI #44557543620](https://github.com/codersachin99/windows-os/actions/runs/44557543620)
+on `128843c` does **not** cover these Personalize
+and browser count fixes. Next: exactly one opt-in
+`[run-ci]` at current head to verify all changes,
+inspect failure traces if needed, keep PR #1 draft;
+never claim paired-source screenshot parity or merge.
+Frozen reference `26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+`main` and releases stay unchanged.
