@@ -4889,3 +4889,29 @@ Vite and all browser suites. Correct actual failing tests
 or implementation, do not skip. PR #1 stays draft;
 do not change `windows-os/main`, release, or update pinned
 `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+
+
+### 19 Nov — First classic CI failure diagnosed; corrected gallery inventory
+
+[CI #44556148207](https://github.com/codersachin99/windows-os/actions/runs/44556148207)
+on `9cc064d` failed only `Unit tests`:
+**658 passed, 1 failed**, TS passed, browser was skipped.
+`packages/apps/personalize/src/model.test.ts` expected the
+prior 10 system backgrounds after source imports added the
+byte-identical `win95.fcef1b3b.webp` and
+`default-win2k.1c1f7fa2.png` entries to
+`sourceSystemWallpapers`. The source-backed gallery
+correctly contains 12 now; [4e833fc](https://github.com/codersachin99/windows-os/commit/4e833fc1730f7d594335eaa4d860ae9bb19d0065)
+updates only that expected list, without deleting any art
+or relaxing validation. No browser acceptance was obtained in
+the failed run.
+
+**Deliberate exact-head CI request:** this handoff
+commit includes `[run-ci]` to run TypeScript/unit,
+original source/artwork/Contacts checks, production build,
+focused and complete desktop/mobile Chromium tests.
+If failures recur, inspect logs/traces before further edits;
+do not imply original screenshot parity, do not merge
+draft PR #1, and keep `main` and immutable
+`legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`
+untouched.
