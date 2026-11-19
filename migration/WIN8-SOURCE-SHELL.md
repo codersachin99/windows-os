@@ -167,3 +167,45 @@ requests exact-head verification. Do **not** record a successful run
 until every required job completes. File/category search, screenshots,
 source transitions, dark/profile variants and full theme parity remain
 open. The locked original and target main are unchanged.
+
+
+## Source full-screen Search: real mounted Guest files — 19 November 2026
+
+The pinned Win8 `src/modules/shell/startmenu-win8.js` renders
+`start-search-results` from `resultGroups`, rather than restricting the
+right Search pane to `AppDefinition` tiles. React's prior Win8/81 flyout
+could launch registered apps but showed no source Guest filesystem hits.
+
+[18f5d3d](https://github.com/codersachin99/windows-os/commit/18f5d3d8e59e4d245e1bc263f2cdf4e2c378aba6)
+uses the existing `@windows-os/filesystem` source-ranked `searchFiles`
+adapter with `sourceMountedSearchRoots(sourceFilesystemRuntime.snapshot())`,
+a bounded result count and a native `AbortController`, and excludes
+the mounted trash tree. It avoids speculative host C: paths, scans only
+the actual Guest VFS, cancels obsolete queries, and subscribes to real
+file-store changes while the flyout is open. Search results are shown
+as separate **Programs** and **Files and folders** groups, retaining
+keyboard selection across both.
+
+[fbce994](https://github.com/codersachin99/windows-os/commit/fbce994736d3d1478bdaf25e95789f4c7285c7d2)
+routes found Guest directories to Computer, TXT to Notepad, original
+picture kinds to Photo Viewer, supported audio/video to Media Player,
+source executable paths to migrated apps, and valid Guest `.lnk`
+shortcuts to their registered programs or Guest VFS targets. Broken
+links and unported file associations show a real error rather than
+pretending an app opened. Shortcut recursion is bounded. Original
+generic icon bytes are used as explicit fallback for file rows;
+per-theme and per-extension Start search artwork remains unverified.
+
+[2c9bd54](https://github.com/codersachin99/windows-os/commit/2c9bd54d1ebdf6bc8a993e29f1eb92585d609323)
+scopes search group/filename styling to Win8, and
+[29b92b0](https://github.com/codersachin99/windows-os/commit/29b92b0cd7a32b78a7c1ebaf3a3a9bf6aaedc25f)
+adds Win8/Win81 browser regression using the real Desktop Upload Files
+action to seed `Win8 Start Scan Target.txt`, search the real mounted
+drive, select via ArrowDown and open its actual bytes in Notepad.
+
+**Verification:** previous [full CI #44425244752](https://github.com/codersachin99/windows-os/actions/runs/44425244752)
+**SUCCESS** at `5e4eaf7`, before this feature. New code has not
+passed an exact-head run until the deliberately opted-in checkpoint
+below completes. Source multi-category classification, rendered
+screenshot pairs, fully animated tile/lifecycle and remaining theme
+families remain open; do not call the full Start source-parity-complete.
