@@ -4544,3 +4544,33 @@ a separate original-source visual gate. Do not alter immutable
 `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
 target `windows-os/main`, or draft PR #1 status. No release or
 full-theme parity claims.
+
+
+## 19 November 2026 — Follow-up after actual failed Win8 Start Guest search CI
+
+[CI #44465134125](https://github.com/codersachin99/windows-os/actions/runs/44465134125)
+at `1803a79` exited **failure** in focused browser: **363 passed,
+2 skipped, 5 failed**; TypeScript, unit, source migration inventory,
+byte-identical artwork, Contacts integrity and Vite build passed. Full
+desktop/mobile browser did not run; visual capture skipped.
+
+Playwright `error-context.md` from artifact `14501443759` shows
+four failed Win8/Win81 file launch cases displaying actual unported
+association error; `StartMenu.tsx` regex literals were accidentally
+double-escaped. [facce577](https://github.com/codersachin99/windows-os/commit/facce577025b043f8ce065a621a51b398ba86353)
+repairs `.txt`, media and `.lnk` matching without changing source
+Guest VFS semantics. The fifth failure was a Win8/mobile apps-only
+ArrowUp wrap test incompatible with newly included Guest file results;
+[a709309](https://github.com/codersachin99/windows-os/commit/a709309f8d8afabefcd7389d2bbc9d81de85d062)
+checks the last combined result, while
+[3e81f48](https://github.com/codersachin99/windows-os/commit/3e81f48a222779a39572ad4342d02cd437d9e433)
+and [5c4f113](https://github.com/codersachin99/windows-os/commit/5c4f113b5c9952b0932237b2ada80b4a44e73fa5)
+ensure actual search completion before asserting keyboard state.
+
+**Next action:** this deliberate `[run-ci]` checkpoint must establish
+TypeScript, unit, original source/artwork, Vite, focused and full
+desktop/mobile browser success for the corrected SHA. Investigate
+real failures from artifacts and repair, never suppress tests.
+Then resume highest-priority themes/context/Desktop/Start/Computer/Bin
+source migration. Preserve locked `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+`windows-os/main`, PR #1 **draft**, and no releases.
