@@ -1,5 +1,7 @@
 import {useEffect,useRef,useState,type MouseEvent as ReactMouseEvent,type RefObject} from "react";
 import type {AppDefinition} from "@windows-os/contracts";
+import {searchFiles,sourceMountedSearchRoots,type FileEntry} from "@windows-os/filesystem";
+import {fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {sourceProgramsById} from "@windows-os/filesystem";
 import {
   legacyArt,sourceShellWallpaper,sourceThemeLogonArtwork,sourceThemeProgramArt,
@@ -15,6 +17,8 @@ interface SourceWin8StartScreenProps{
   wallpaper?:string;
   programs:readonly AppDefinition[];
   onLaunch(id:string):void;
+  /** Open only actual mounted Guest VFS results; report unavailable associations. */
+  onOpenFile(file:FileEntry):Promise<string|null>;
   onContext:(event:ReactMouseEvent<HTMLButtonElement>,id:string)=>void;
   onClose():void;
   onPower(action:Win8PowerAction):void;
@@ -34,12 +38,17 @@ const sourceCoreIds=new Set<string>(sourceCoreTiles.map(x=>x.id));
  * App backend stays the same permissioned Guest desktop engine.
  */
 export function SourceWin8StartScreen({
-  theme,rootRef,wallpaper,programs,onLaunch,onContext,onClose,onPower
+  theme,rootRef,wallpaper,programs,onLaunch,onOpenFile,onContext,onClose,onPower
 }:SourceWin8StartScreenProps){
   const [accountOpen,setAccountOpen]=useState(false);
   const [searching,setSearching]=useState(false);
   const [query,setQuery]=useState("");
   const [selectedResult,setSelectedResult]=useState(-1);
+  const [fileHits,setFileHits]=useState<{text:string;files:FileEntry[]}>({text:"",files:[]});
+  const [fileSearching,setFileSearching]=useState(false);
+  const [fileError,setFileError]=useState("");
+  const [fileOpenError,setFileOpenError]=useState("");
+  const [searchRevision,setSearchRevision]=useState(0);
   const inputRef=useRef<HTMLInputElement>(null);
   const accountRef=useRef<HTMLDivElement>(null);
   const groupsRef=useRef<HTMLDivElement>(null);
@@ -48,6 +57,56 @@ export function SourceWin8StartScreen({
   const startWallpaper=wallpaper??sourceShellWallpaper(theme);
   const matches=programs.filter(app=>app.label.toLowerCase()
     .includes(query.toLowerCase()));
+  const matchedFiles=fileHits.text===query.trim()?fileHits.files:[];
+  const resultCount=matches.length+matchedFiles.length;
+  // The original fullscreen Win8 start-search-results also shows real files.
+  // Scan only mounted Guest virtual disks. Do not touch host files or create
+  // a guessed drive root. Changes invalidate the active search.
+  useEffect(()=>{
+    if(!searching)return;
+    return fileStore.subscribe(()=>setSearchRevision(value=>value+1));
+  },[searching]);
+  useEffect(()=>{
+    const text=query.trim();
+    if(!searching||!text){
+      setFileHits({text:"",files:[]});
+      setFileSearching(false);
+      setFileError("");
+      return;
+    }
+    const volume=sourceFilesystemRuntime.snapshot();
+    const roots=sourceMountedSearchRoots(volume);
+    if(!roots.length){
+      setFileHits({text,files:[]});
+      setFileSearching(false);
+      setFileError("");
+      return;
+    }
+    const controller=new AbortController();
+    let active=true;
+    setFileSearching(true);
+    setFileError("");
+    const timer=window.setTimeout(()=>{
+      void searchFiles(fileStore,{
+        scope:roots[0]!,rootScopes:roots,text,subfolders:true,maxResults:40,
+        skipPaths:volume?.trashPath?[volume.trashPath]:[]
+      },{signal:controller.signal}).then(found=>{
+        if(!active)return;
+        setFileHits({text,files:found.files.filter(entry=>!entry.originalPath)});
+        setFileSearching(false);
+      }).catch(cause=>{
+        if(!active||controller.signal.aborted)return;
+        setFileHits({text,files:[]});
+        setFileError(cause instanceof Error?cause.message:"Guest search failed.");
+        setFileSearching(false);
+      });
+    },120);
+    return ()=>{
+      active=false;
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  },[query,searching,searchRevision]);
   const tiles=programs.filter(app=>!sourceCoreIds.has(app.id));
   // Source has separate programItems and appItems pose-lists. The former
   // are installed executables; the latter are external app shortcuts.
@@ -122,7 +181,7 @@ export function SourceWin8StartScreen({
       if(event.key.length===1&&!event.ctrlKey&&!event.metaKey&&!event.altKey
         &&!(event.target instanceof Element&&event.target.closest("input, textarea"))){
         event.preventDefault();setQuery(text=>text+event.key);
-        setSelectedResult(-1);
+        setSelectedResult(-1);setFileOpenError("");
         setSearching(true);
       }
     }}>
@@ -206,20 +265,24 @@ export function SourceWin8StartScreen({
         onChange={event=>{
           setQuery(event.target.value);
           setSelectedResult(-1);
+          setFileOpenError("");
         }}
         onKeyDown={event=>{
-          if((event.key==="ArrowDown"||event.key==="ArrowUp")&&matches.length){
+          if((event.key==="ArrowDown"||event.key==="ArrowUp")&&resultCount){
             event.preventDefault();
             setSelectedResult(index=>event.key==="ArrowDown"
-              ?(index+1)%matches.length
-              :index<=0?matches.length-1:index-1);
-          }else if(event.key==="Enter"&&matches.length){
+              ?(index+1)%resultCount
+              :index<=0?resultCount-1:index-1);
+          }else if(event.key==="Enter"&&resultCount){
             event.preventDefault();
-            onLaunch(matches[selectedResult>=0&&selectedResult<matches.length
-              ?selectedResult:0]!.id);
+            const index=selectedResult>=0&&selectedResult<resultCount?selectedResult:0;
+            if(index<matches.length)onLaunch(matches[index]!.id);
+            else void onOpenFile(matchedFiles[index-matches.length]!)
+              .then(message=>setFileOpenError(message??""));
           }
         }}/>
       <div className="win8-start__results">
+        {query&&matches.length>0&&<h4>Programs</h4>}
         {query?matches.map((app,index)=><button key={app.id} type="button"
           data-test-win8-start-result={app.id}
           data-test-win8-start-result-selected={selectedResult===index?"":undefined}
@@ -230,8 +293,25 @@ export function SourceWin8StartScreen({
           <img src={sourceThemeProgramArt(theme,app.id)??app.icon}
             width={32} height={32} alt=""/>
           <span>{app.label}</span>
-        </button>):<p>Type to search apps.</p>}
-        {query&&!matches.length&&<p>No items match your search.</p>}
+        </button>):<p>Type to search programs and files.</p>}
+        {query&&matchedFiles.length>0&&<h4>Files and folders</h4>}
+        {query&&matchedFiles.map((entry,index)=><button key={entry.uri} type="button"
+          data-test-win8-start-file-result={entry.uri}
+          data-test-win8-start-result-selected={selectedResult===matches.length+index?"":undefined}
+          className={selectedResult===matches.length+index?"is-selected":undefined}
+          onMouseEnter={()=>setSelectedResult(matches.length+index)}
+          onClick={()=>{void onOpenFile(entry).then(message=>setFileOpenError(message??""));}}>
+          <img src={entry.type==="directory"?legacyArt.folder:legacyArt.file}
+            width={32} height={32} alt=""/>
+          <span className="win8-start__file-label">
+            <strong>{entry.name}</strong><small>{entry.uri}</small>
+          </span>
+        </button>)}
+        {query&&fileSearching&&<p role="status">Searching Guest files…</p>}
+        {query&&!fileSearching&&!matches.length&&!matchedFiles.length&&!fileError&&
+          <p>No items match your search.</p>}
+        {fileError&&<p role="alert">{fileError}</p>}
+        {fileOpenError&&<p role="alert">{fileOpenError}</p>}
       </div>
     </aside>}
   </nav>;
