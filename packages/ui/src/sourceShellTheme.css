@@ -391,3 +391,143 @@
 .windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .desktop__icon-name{
   color:#fff;text-shadow:0 1px 2px #000,0 1px 2px #000,0 1px 3px #000;
 }
+
+
+/* Windows 3.1 original source skin:
+ * legacy-win7@26b9f0c/src/modules/themes/theme-win31-scss.js
+ * theme-surface #c0c0c0, theme-accent #080abd, taskbar #fff + 1px black
+ * outline, 2px vertical padding, active selection accent labels only,
+ * centered 24px captions, and classic black inset window borders.
+ * Keep all rules Win31-scoped: the default Win7 skin must not leak here.
+ * This is the faithful first shell geometry/color slice; original
+ * bitmap icons, desktop wallpaper and screenshot parity remain pending.
+ */
+.windows-desktop[data-theme="win31"]{
+  --theme-surface:#c0c0c0;
+  --theme-accent:#080abd;
+  --shade-color--dark:#808080;
+  --shade-color--light:#fff;
+  --source-win31-accent:#080abd;
+  --source-win31-surface:#c0c0c0;
+  color:#000;font-family:"MS Sans Serif",Tahoma,sans-serif;
+  font-size:12px;font-weight:bold;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar{
+  background:#fff;color:#000;
+  border-top:1px solid #000;
+  box-shadow:0 0 0 1px #000;
+  backdrop-filter:none;
+  padding:2px 0;gap:2px;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__start{
+  flex:0 0 40px;width:40px;height:36px;
+  margin:0 2px;padding:2px;
+  border:1px solid transparent;border-radius:0;
+  background:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__start:hover,
+.windows-desktop[data-theme="win31"] .windows-taskbar__start:focus-visible{
+  background:transparent;border-color:transparent;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__start:active,
+.windows-desktop[data-theme="win31"] .windows-taskbar__start[aria-expanded="true"]{
+  background:var(--shade-color--dark);border-color:#000;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__start img{
+  object-fit:contain;filter:none;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__running{
+  gap:2px;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__application{
+  background:transparent;color:#000;
+  font-weight:bold;border:1px solid transparent;
+  border-radius:0;box-shadow:none;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__application.is-running{
+  border-color:#000;
+  background:var(--theme-surface);
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__application.is-active,
+.windows-desktop[data-theme="win31"] .windows-taskbar__application:active{
+  border-color:#000;background:var(--shade-color--dark);
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__application.is-active img{
+  filter:invert(1);
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__tray{
+  color:#000;gap:4px;font-weight:bold;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__tray>button,
+.windows-desktop[data-theme="win31"] .windows-taskbar__clock{
+  background:none;color:#000;font-weight:bold;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__tray>button:hover{
+  background:transparent;
+}
+.windows-desktop[data-theme="win31"] .windows-taskbar__show-desktop{
+  border:1px solid #000;border-radius:0;
+  background:var(--theme-surface);
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #808080;
+}
+.windows-desktop[data-theme="win31"] .windows-desktop__shortcut,
+.windows-desktop[data-theme="win31"] .windows-desktop__shortcut:hover,
+.windows-desktop[data-theme="win31"] .windows-desktop__shortcut.is-active{
+  border-color:transparent;background:transparent;
+  box-shadow:none;border-radius:0;
+}
+.windows-desktop[data-theme="win31"] .desktop__icon-name:not(.is-input){
+  color:#000;background:transparent;text-shadow:none;
+  padding:0 2px;
+}
+.windows-desktop[data-theme="win31"] .windows-desktop__shortcut.is-active
+.desktop__icon-name:not(.is-input){
+  background:var(--theme-accent);color:#fff;
+}
+.windows-desktop[data-theme="win31"] .windows-window{
+  border:1px solid #000;border-radius:0;
+  padding:4px;background:var(--theme-surface);
+  color:#000;
+  box-shadow:inset 0 0 0 1px #000;
+  backdrop-filter:none;
+}
+.windows-desktop[data-theme="win31"] .windows-window__titlebar{
+  position:relative;box-sizing:border-box;
+  flex:0 0 24px;height:24px;
+  background:#fff;color:#000;
+  margin:0;box-shadow:inset 0 0 0 1px #000;
+  justify-content:center;
+}
+.windows-desktop[data-theme="win31"] .windows-window.is-active
+.windows-window__titlebar{
+  background:var(--theme-accent);color:#fff;
+}
+.windows-desktop[data-theme="win31"] .windows-window__titlebar>img{
+  display:none;
+}
+.windows-desktop[data-theme="win31"] .windows-window__title{
+  flex:0 1 auto;max-width:calc(100% - 130px);
+  font-size:12px;font-weight:bold;text-align:center;
+  color:inherit;text-shadow:none;
+}
+.windows-desktop[data-theme="win31"] .windows-window__buttons{
+  position:absolute;top:0;right:0;margin:0;
+  height:24px;gap:0;
+}
+.windows-desktop[data-theme="win31"] .windows-window__buttons button,
+.windows-desktop[data-theme="win31"] .windows-window__buttons button.windows-window__close{
+  box-sizing:border-box;display:grid;place-items:center;
+  width:24px;height:24px;padding:0;
+  background:var(--theme-surface);color:#000;
+  border:1px solid #000;border-radius:0;
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #808080;
+}
+.windows-desktop[data-theme="win31"] .windows-window__buttons button:active{
+  box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;
+}
+.windows-desktop[data-theme="win31"] .windows-window__content{
+  border:1px solid #000;border-top:0;
+}
+.windows-desktop[data-theme="win31"] .windows-window.is-maximized{
+  border-radius:0;
+}
