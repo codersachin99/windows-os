@@ -4,7 +4,7 @@ import {expect,test,type Page} from "@playwright/test";
  * theme-win7-scss / theme-winxp-scss / theme-win11-scss at 4e63290d.
  * Test computed colors for actual Computer context + its side View popup,
  * not just presence of theme CSS selectors in the bundle. */
-async function openSourceComputerMenu(page:Page,theme:"win7"|"winxp"|"win10"|"win11"){
+async function openSourceComputerMenu(page:Page,theme:"win7"|"win31"|"winxp"|"win10"|"win11"){
   await page.goto("/?theme="+theme);
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
@@ -21,6 +21,12 @@ async function openSourceComputerMenu(page:Page,theme:"win7"|"winxp"|"win10"|"wi
   return {computer,menu};
 }
 const cases=[
+  {
+    theme:"win31",
+    surface:"rgb(255, 255, 255)",
+    border:"rgb(0, 0, 0)",radius:"0px",
+    hover:"rgb(8, 10, 189)"
+  },
   {
     theme:"win7",
     surface:"rgb(241, 241, 241)",
@@ -60,7 +66,7 @@ for(const source of cases){
       await expect(menu).toHaveCSS("box-shadow",/inset/);
     }else{
       await expect(refresh).toHaveCSS("background-color",source.hover);
-      if(source.theme==="winxp")
+      if(source.theme==="winxp"||source.theme==="win31")
         await expect(refresh).toHaveCSS("color","rgb(255, 255, 255)");
       else await expect(refresh).toHaveCSS("color",
         source.theme==="win10"?"rgb(0, 0, 0)":"rgb(26, 26, 26)");
