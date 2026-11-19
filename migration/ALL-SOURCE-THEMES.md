@@ -369,3 +369,85 @@ maximized state at the workspace origin. Browser acceptance
 now checks original 600×400 geometry and centered top/left
 coordinates on a full desktop viewport. This still does not
 assert screenshot pixel parity for the full source shell.
+
+
+## 19 November 2026 — Win95, Win98 and Win2k classic source Start/shell migration
+
+Original immutable source
+`codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`
+`src/modules/shell/startmenu-win9x.js`, `src/styles/shell/startmenu-win9x.css`
+and `src/modules/themes/theme-win9x-scss.js` show that the three
+classic themes share a **different Start implementation**:
+208px `winui-menu` with vertical Windows 7 Simulator banner,
+24px command icons, a separate **224px Programs submenu**, and
+a nested Shutdown submenu. Commands include About, Programs,
+Documents/Computer, Games, Control Panel, Find (95/98) or
+Search (2k), Help, Run, Switch user, and Shut down/Restart/Log off.
+The source has `--taskbar-height:36px` (not Win7's 40px),
+beveled taskbar/Start/window borders, 20px caption controls,
+and independent color palettes:
+`win95:#bdbebd/#00007b`,
+`win98:#c0c7c8/#0608a6`,
+`win2k:#d4d0c8/#082767`
+(surface/accent). Windows 2k's active titlebar gradient runs
+from the accent to `#a4caee`. The original Start sidebar
+renders text **Windows 7 Simulator** even for 95/98/2k;
+retain the pinned product text rather than inventing branding.
+
+**Binary provenance:** Imported 20 image blobs from the exact
+immutable reference to `apps/web/public/assets/images`.
+Each target `mcp__GitHub__create_blob` SHA was compared against
+the original source file's Git blob SHA, and all 20 matched before
+committing [de197bb](https://github.com/codersachin99/windows-os/commit/de197bb89b49ee480c4257d3970e31cb777ed9a4).
+They cover the Win95 wallpaper, 2k base texture, 2k Start button,
+95/2k Computer/Bin empty/full/folders, 95 generic file,
+and source 2k Program/Power/Control Panel/Games/Run/Search icons.
+[20d561c](https://github.com/codersachin99/windows-os/commit/20d561c50322fcea7c6c8613eb4ac54a673f5ae1)
+binds that catalog to normal Desktop, Computer, Bin and Start image
+selection; Win98 uses the same original Win95 icon family.
+
+**React adaptation:** [9d35d48](https://github.com/codersachin99/windows-os/commit/9d35d48647f5718c228801dc83596a73c718a952)
+adds the separate `SourceWin9xStartMenu` with real app launch,
+right-click program context, nested Programs and Shutdown commands
+and separate Find/Search title; [75defb3](https://github.com/codersachin99/windows-os/commit/75defb3a8a75ced9f863865136b59700133ba610)
+ports classic layout/scroll geometry. [56e84db](https://github.com/codersachin99/windows-os/commit/56e84db8c36ad7ecee697af4dcdace0d9496f97d)
+routes those three themes through shared `StartMenu` and
+permissioned `DesktopAction` dispatch. The source 2k Search
+currently opens Computer without replicating its original
+`file:{path:null,search:true}` search-location state; full
+search-mode parity is pending. Original browser Help service
+is explicitly disabled, not replaced with an unrelated action.
+[4691672](https://github.com/codersachin99/windows-os/commit/4691672f6f61f642470453ad4c68ed628d039dec)
+keeps a hover-open submenu open when clicked.
+
+[850b005](https://github.com/codersachin99/windows-os/commit/850b00538cb536035ba8b340547fc36a4f794477)
+adds the classic taskbar, source color, 3D window and desktop
+label selection; [fb815c3](https://github.com/codersachin99/windows-os/commit/fb815c323dbbbdac3907a36015761a8886c227ee)
+installs the theme-only stylesheet. The source `win9x`
+menu backdrop and hover rules are ported to Desktop and
+taskbar [995d4be](https://github.com/codersachin99/windows-os/commit/995d4be6d51729f7921fa3ff3731fd5ae0a954bb)
+and Explorer background/item/child menus
+[1667b17](https://github.com/codersachin99/windows-os/commit/1667b17b4a46d2a04a14a96be2c3815f84df0275).
+All existing Guest virtual-file operations remain shared.
+
+**Verification under construction:** Unit art mapping
+[4fad547](https://github.com/codersachin99/windows-os/commit/4fad547bfb3103ef3b60856d70194fdcf6acdc3b),
+classic browser Start/power/shell
+[be8c5b9](https://github.com/codersachin99/windows-os/commit/be8c5b93f89ac4720ed7951d73fdd55e511727c8),
+actual deleted/restored Bin art lifecycle
+[36a31f2](https://github.com/codersachin99/windows-os/commit/36a31f26776dd509dd194c1038fc0514bf9a1540),
+Desktop/taskbar palette
+[9f22d7f](https://github.com/codersachin99/windows-os/commit/9f22d7feb9e36b672597491088c3d061121b731d)
+and Explorer child menu actions
+[7121051](https://github.com/codersachin99/windows-os/commit/7121051a6f1f386b2684cad39d29da1824777d6c).
+[ec82812](https://github.com/codersachin99/windows-os/commit/ec82812840564cad2f058ee07d7753443023b0bf)
+now honestly reports Win31/95/98/2k shell families as
+**partial** alongside six other source-backed themes;
+no source theme is marked fully pixel-parity verified.
+
+**Remaining:** exact original theme full Explorer layout/controls,
+vintage artwork not yet imported, Win2k Search mode,
+original Help service, 95/98 alternate shutdown screens,
+customization/reflow, paired original/React screenshot measurements,
+and other source themes. Do not infer "complete" from source
+CSS and passing functional browser tests alone.
