@@ -42,6 +42,9 @@ describe("immutable final source app.config themeScreens",()=>{
     }
     expect(sourceThemeShellStatus("win7")).toBe("partial");
     expect(sourceThemeShellStatus("winxp")).toBe("partial");
+    expect(sourceThemeShellStatus("win8")).toBe("partial");
+    expect(sourceThemeShellStatus("win81")).toBe("partial");
+    expect(sourceThemeShellStatus("win10")).toBe("partial");
     expect(sourceThemeShellStatus("win11")).toBe("partial");
     expect(sourceThemeShellStatus("macos")).toBe("pending");
     expect(sourceThemeShellStatus("aeroNoir")).toBe("pending");
