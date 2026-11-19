@@ -62,7 +62,7 @@ export function SourceWin9xStartMenu({
         <button type="button" role="menuitem" aria-haspopup="menu"
           aria-expanded={branch==="programs"}
           data-test-win9x-branch="programs"
-          onClick={()=>setBranch(value=>value==="programs"?null:"programs")}
+          onClick={()=>setBranch("programs")}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
               event.preventDefault();setBranch("programs");
@@ -119,7 +119,7 @@ export function SourceWin9xStartMenu({
         <button type="button" role="menuitem" aria-haspopup="menu"
           data-test-win9x-branch="shutdown"
           aria-expanded={branch==="shutdown"}
-          onClick={()=>setBranch(value=>value==="shutdown"?null:"shutdown")}
+          onClick={()=>setBranch("shutdown")}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
               event.preventDefault();setBranch("shutdown");
