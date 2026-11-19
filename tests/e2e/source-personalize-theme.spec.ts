@@ -111,3 +111,38 @@ test("Personalize exposes source Windows 10 with persistent wallpaper, Start and
     .toHaveAttribute("data-test-desktop-background",
       "/assets/images/win10.743e8c13.webp");
 });
+
+
+test("Personalize switches original Win95, Win98 and Win2k while keeping 3 classic palettes",async({page})=>{
+  const win=await openPersonalize(page);
+  const chooser=win.locator('[data-test-personalize]');
+  for(const classic of [
+    {id:"win95",wallpaper:"/assets/images/win95.fcef1b3b.webp",
+      bg:"rgb(189, 190, 189)"},
+    {id:"win98",wallpaper:"/assets/images/win95.fcef1b3b.webp",
+      bg:"rgb(192, 199, 200)"},
+    {id:"win2k",wallpaper:"/assets/images/default-win2k.1c1f7fa2.png",
+      bg:"rgb(212, 208, 200)"}
+  ]){
+    const tile=chooser.locator('[data-test-personalize-theme="'+classic.id+'"]');
+    await expect(tile).toBeVisible();
+    await expect(tile.locator("img")).toHaveAttribute("src",classic.wallpaper);
+    await tile.click();
+    await expect(tile).toHaveAttribute("aria-pressed","true");
+    const desktop=page.locator('[data-test-main-screen]');
+    await expect(desktop).toHaveAttribute("data-theme",classic.id);
+    await expect(desktop.locator('[data-test-desktop-background]'))
+      .toHaveAttribute("data-test-desktop-background",classic.wallpaper);
+    await expect(desktop.locator('[data-test-taskbar="base"]'))
+      .toHaveCSS("background-color",classic.bg);
+  }
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await expect(page.locator('[data-test-win9x-start-menu]'))
+    .toHaveAttribute("data-source-start-theme","win2k");
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme","win2k");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/default-win2k.1c1f7fa2.png");
+});
