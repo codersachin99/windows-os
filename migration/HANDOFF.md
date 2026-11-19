@@ -4833,3 +4833,59 @@ Do not merge draft PR #1, change `main`, mutate
 `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`
 or create a docs-only release. Original paired screenshot
 parity remains unverified.
+
+
+## 19 November 2026 — Classic Windows 95/98/2000 source migration
+
+**Last accepted green:** exact-head
+[CI #44484384067](https://github.com/codersachin99/windows-os/actions/runs/44484384067)
+at `2d9fa42` **SUCCESS** (TypeScript, all unit tests, immutable
+source inventory/artwork/Contacts audit, production build,
+targeted and full desktop/mobile browser).
+Original screenshot comparison was skipped; no full visual parity.
+
+**New unverified work:** 20 source image Git blobs
+imported byte-identically in [de197bb](https://github.com/codersachin99/windows-os/commit/de197bb89b49ee480c4257d3970e31cb777ed9a4);
+exact Start/Computer/Bin/folder/wallpaper/image mapping
+[20d561c](https://github.com/codersachin99/windows-os/commit/20d561c50322fcea7c6c8613eb4ac54a673f5ae1).
+Original classic `startmenu-win9x.js` has
+a 208px main menu, vertical source banner, cascading Programs
+and Shutdown menus and 24px icons; not a Win7/11 Start.
+[9d35d48](https://github.com/codersachin99/windows-os/commit/9d35d48647f5718c228801dc83596a73c718a952)
+adds source-specific React Start, [75defb3](https://github.com/codersachin99/windows-os/commit/75defb3a8a75ced9f863865136b59700133ba610)
+source CSS and [56e84db](https://github.com/codersachin99/windows-os/commit/56e84db8c36ad7ecee697af4dcdace0d9496f97d)
+shared shell routing. Source-hover submenu bug fixed in
+[4691672](https://github.com/codersachin99/windows-os/commit/4691672f6f61f642470453ad4c68ed628d039dec).
+[850b005](https://github.com/codersachin99/windows-os/commit/850b00538cb536035ba8b340547fc36a4f794477)
+ports three classic palettes + 36px taskbar/20px caption controls;
+[fb815c3](https://github.com/codersachin99/windows-os/commit/fb815c323dbbbdac3907a36015761a8886c227ee)
+mounts CSS only on those themes.
+[995d4be](https://github.com/codersachin99/windows-os/commit/995d4be6d51729f7921fa3ff3731fd5ae0a954bb)
+and [1667b17](https://github.com/codersachin99/windows-os/commit/1667b17b4a46d2a04a14a96be2c3815f84df0275)
+port Desktop/taskbar/Explorer context palette.
+
+Tests [4fad547](https://github.com/codersachin99/windows-os/commit/4fad547bfb3103ef3b60856d70194fdcf6acdc3b),
+[be8c5b9](https://github.com/codersachin99/windows-os/commit/be8c5b93f89ac4720ed7951d73fdd55e511727c8),
+[36a31f2](https://github.com/codersachin99/windows-os/commit/36a31f26776dd509dd194c1038fc0514bf9a1540),
+[9f22d7f](https://github.com/codersachin99/windows-os/commit/9f22d7feb9e36b672597491088c3d061121b731d)
+and [7121051](https://github.com/codersachin99/windows-os/commit/7121051a6f1f386b2684cad39d29da1824777d6c)
+verify original assets, three palettes, Start actions,
+Computer/Bin image lifecycle and nested Explorer menus.
+[ec82812](https://github.com/codersachin99/windows-os/commit/ec82812840564cad2f058ee07d7753443023b0bf)
+labels Win31/95/98/2k accurately `partial`; all
+37 source IDs remain recognized.
+[b52377d](https://github.com/codersachin99/windows-os/commit/b52377dac594eabfd4915ab28869bc0967207698)
+adds new classic Start spec to the focused opt-in browser gate.
+
+**Known gaps/risks:** source Win2k Search should launch Computer
+in search mode, currently only opens Computer. Original Help
+depends on unavailable legacy service and is deliberately disabled.
+95/98/2k complete Explorer toolbar, theme customization,
+other icon overrides and screenshot parity remain incomplete.
+
+**Next:** Run a *single* opt-in `[run-ci]` at exact head;
+inspect TypeScript, unit, original-source/artwork audit,
+Vite and all browser suites. Correct actual failing tests
+or implementation, do not skip. PR #1 stays draft;
+do not change `windows-os/main`, release, or update pinned
+`legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
