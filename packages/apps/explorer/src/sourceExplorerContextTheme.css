@@ -165,3 +165,28 @@
 .windows-desktop[data-theme="win31"] .explorer-context-menu button:disabled{
   color:#808080;opacity:1;
 }
+
+
+/* Original theme-win9x-scss.js: same classic 3D .winui-menu surface
+ * and white-on-accent selection for Explorer background/item context,
+ * View and Send To children. Palette comes from source Win95/98/2k
+ * desktop variables; no blanket Win7 gradients are reused here. */
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu__submenu{
+  color:#000;background:var(--theme-surface);border:1px solid #393c39;
+  border-radius:0;padding:3px;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,
+    inset -2px -2px #7b7b7b;
+  font:12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button{
+  color:#000;background:transparent;border:1px solid transparent;
+  border-radius:0;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#fff;background:var(--theme-accent);border-color:transparent;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:disabled{
+  color:#7b7b7b;opacity:1;
+}
