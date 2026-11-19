@@ -82,3 +82,49 @@ for(const source of classics){
     await expect(menu).toHaveCount(0);
   });
 }
+
+
+for(const source of classics){
+  test(source.id+" narrow classic cascade does not intercept parent triggers",async({page})=>{
+    await page.setViewportSize({width:375,height:667});
+    const desktop=await classicDesktop(page,source.id);
+    await desktop.locator('[data-test-start-button]').click();
+    const menu=desktop.locator('[data-test-win9x-start-menu]');
+    const programs=menu.locator('[data-test-win9x-branch="programs"]');
+    await programs.click();
+    const flyout=menu.locator('[data-test-win9x-submenu="programs"]');
+    await expect(flyout).toHaveAttribute("data-source-cascade-direction","below");
+    const triggerBox=await programs.boundingBox();
+    const flyoutBox=await flyout.boundingBox();
+    expect(triggerBox).not.toBeNull();
+    expect(flyoutBox).not.toBeNull();
+    expect(flyoutBox!.y).toBeGreaterThanOrEqual(triggerBox!.y+triggerBox!.height+1);
+    expect(flyoutBox!.x).toBeGreaterThanOrEqual(0);
+    expect(flyoutBox!.x+flyoutBox!.width).toBeLessThanOrEqual(375);
+    // The open child used to cover the parent button on mobile.
+    await programs.click();
+    await expect(flyout).toBeVisible();
+    await flyout.locator('[data-test-win9x-program="notepad"]').focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(flyout).toHaveCount(0);
+    await expect(programs).toBeFocused();
+    await programs.click();
+    await menu.locator('[data-test-win9x-program="notepad"]').click();
+    await expect(desktop.locator('[data-test-window="notepad"]')).toBeVisible();
+    await desktop.locator('[data-test-start-button]').click();
+    const shutdown=menu.locator('[data-test-win9x-branch="shutdown"]');
+    await shutdown.click();
+    const power=menu.locator('[data-test-win9x-submenu="shutdown"]');
+    await expect(power).toHaveAttribute("data-source-cascade-direction","above");
+    const shutdownBox=await shutdown.boundingBox();
+    const powerBox=await power.boundingBox();
+    expect(shutdownBox).not.toBeNull();
+    expect(powerBox).not.toBeNull();
+    expect(powerBox!.y+powerBox!.height)
+      .toBeLessThanOrEqual(shutdownBox!.y-1);
+    await shutdown.click();
+    await expect(power).toBeVisible();
+    await power.locator('[data-test-win9x-power="log_off"]').click();
+    await expect(page.locator('[data-test-logon-screen]')).toBeVisible();
+  });
+}
