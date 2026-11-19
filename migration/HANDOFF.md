@@ -4512,3 +4512,35 @@ parity. Continue unimplemented theme families and desktop/menu/
 Computer/Bin source parity after verification. Never auto-trigger CI
 without the explicit marker; do not merge the draft PR or release
 while acceptance is incomplete.
+
+
+## 19 November 2026 — full Win8/8.1 Start Search Guest file results
+
+**Verified previous:** [CI #44425244752](https://github.com/codersachin99/windows-os/actions/runs/44425244752)
+completed **success** against `5e4eaf7`: TypeScript, unit/source/art
+contracts, Vite, focused and full desktop/mobile Chromium. Visual
+capture was skipped. The resulting Win8 search keyboard/grouping/wheel
+work is accepted at that exact SHA only, not screenshot parity.
+
+**New code:** [18f5d3d](https://github.com/codersachin99/windows-os/commit/18f5d3d8e59e4d245e1bc263f2cdf4e2c378aba6)
+adds real mounted Guest VFS search to the fullscreen Win8/Win81 Search
+pane, with source-ranked filtering, cancellation, bounded results,
+trash exclusion and file-store invalidation. The presentation separates
+Programs from Files and folders.
+[fbce994](https://github.com/codersachin99/windows-os/commit/fbce994736d3d1478bdaf25e95789f4c7285c7d2)
+reuses Guest app associations for opening text, picture, media, paths
+and resolved source shortcuts, with truthful failure errors for
+unported cases.
+[2c9bd54](https://github.com/codersachin99/windows-os/commit/2c9bd54d1ebdf6bc8a993e29f1eb92585d609323)
+adds scoped CSS; [29b92b0](https://github.com/codersachin99/windows-os/commit/29b92b0cd7a32b78a7c1ebaf3a3a9bf6aaedc25f)
+uses actual desktop UI upload then Win8/Win81 Search and Notepad
+launch in the browser, not mocked files.
+
+**Next:** this `[run-ci]` handoff commit deliberately requests
+one exact-head verification. Review full TypeScript/unit/source/art/
+build/desktop+mobile browser status and actual failure logs; fix
+regressions without loosening behavioral checks. Screenshots require
+a separate original-source visual gate. Do not alter immutable
+`codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`,
+target `windows-os/main`, or draft PR #1 status. No release or
+full-theme parity claims.
