@@ -256,7 +256,9 @@ export function SourceWin8StartScreen({
       </section>)}
     </div>
     {searching&&<aside ref={searchRef} className="win8-start__flyout"
-      role="search" data-test-win8-start-flyout="">
+      role="search" data-test-win8-start-flyout=""
+      data-test-win8-start-query-state={fileSearching?"pending":
+        fileHits.text===query.trim()?"ready":"idle"}>
       <h3>Search</h3>
       <label htmlFor="win8-start-query">Everywhere</label>
       <input id="win8-start-query" type="search" ref={inputRef}
