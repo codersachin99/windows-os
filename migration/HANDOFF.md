@@ -4915,3 +4915,30 @@ do not imply original screenshot parity, do not merge
 draft PR #1, and keep `main` and immutable
 `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`
 untouched.
+
+
+### 19 Nov — Win95/98/2k Explorer original label selection and listview header
+
+Classic source CSS `theme-win9x-scss.js` requires a
+transparent selected list **row** while only the file
+**label** receives accent/white text/1px dotted yellow
+outline. `listview__header-column` uses a raised 3D
+border, the address/toolbar has inset classic lines,
+and the navigation active item is accented.
+
+[8bfe39e](https://github.com/codersachin99/windows-os/commit/8bfe39ee2003f90898e6e96b88474399a7941e3b)
+adds classic-only Explorer/Bin stylesheet;
+[e9b67aa](https://github.com/codersachin99/windows-os/commit/e9b67aaa9193763637555408b3f508e3a330026a)
+imports it in the real Explorer module.
+[2dd3d69](https://github.com/codersachin99/windows-os/commit/2dd3d69cdc997177c9b8fc46a547d8ec2b4fce8b)
+tests all three original palettes via real Guest upload,
+selection, details headers and Bin; [cc582ed](https://github.com/codersachin99/windows-os/commit/cc582ed9a867b57794dd53e50db0bd7b84b5dbea)
+adds the spec to the focused opt-in Actions gate.
+
+This slice is newer than the already running
+[CI #44556549754](https://github.com/codersachin99/windows-os/actions/runs/44556549754)
+at `b8b7bca` (classic Start/assets). Do not claim the
+new Explorer code was checked by that earlier run.
+The next CI-marked exact-head commit should verify the
+full classic shell + source listview. Keep original source
+pinned, PR #1 draft, main/release unchanged.
