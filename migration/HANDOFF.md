@@ -4736,3 +4736,17 @@ which tests the earlier Win31 chrome and Win8 shell-status
 fix, **not** these popup changes. Check the earlier run and
 request one exact-head full acceptance run only when appropriate.
 No merges/releases/visual-complete claim. Preserve PR #1 draft.
+
+
+### Exact-head combined acceptance request — 19 Nov 2026
+
+Request **one** deliberately gated full `[run-ci]` for the newest
+source Win31 popup menu, taskbar, desktop, Computer/Bin chrome,
+Program Manager click focus and Win8/Win81 catalog status fixes.
+Earlier [CI #44478850230](https://github.com/codersachin99/windows-os/actions/runs/44478850230)
+was on `5b76646` and cannot verify subsequent menu changes. The
+new run is the acceptance authority for *this* head; retain
+all original source/artwork/unit/Vite and focused/full mobile/desktop
+browser assertions. Report any failures precisely, then repair on
+branch without suppressing them. Do not automatically merge
+draft PR #1 or alter the frozen legacy source/main/release.
