@@ -39,7 +39,7 @@ test("Win31 desktop selects label only, opens authentic Computer and Recycle Bin
   const titlebar=explorer.locator(".windows-window__titlebar");
   await expect(titlebar).toHaveCSS("height","24px");
   await expect(titlebar).toHaveCSS("background-color","rgb(8, 10, 189)");
-  await expect(titlebar.locator("> img")).toHaveCount(0);
+  await expect(titlebar.locator(":scope > img")).toHaveCSS("display","none");
   await expect(explorer.locator('[data-source-window-control="minimize"]'))
     .toHaveCSS("width","24px");
   await desktop.locator('[data-test-desktop-icon="bin"]').dblclick();
@@ -56,7 +56,7 @@ test("Win31 window minimize and restore remain operational with classic caption 
   await explorer.locator('[data-source-window-control="minimize"]').click();
   await expect(explorer).toHaveCount(0);
   const taskbar=desktop.locator('[data-test-taskbar="base"]');
-  const computerButton=taskbar.locator('[data-test-taskbar-running-group="computer"]');
+  const computerButton=taskbar.locator('button.windows-taskbar__application[title="Computer"]');
   await expect(computerButton).toBeVisible();
   await computerButton.click();
   await expect(explorer).toBeVisible();
