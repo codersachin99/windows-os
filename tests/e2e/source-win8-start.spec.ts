@@ -236,6 +236,7 @@ for(const theme of ["win8","win81"] as const){
     const all=flyout.locator('[data-test-win8-start-result]');
     const selected=flyout.locator('[data-test-win8-start-result-selected]');
     await input.fill("e");
+    await expect(flyout).toHaveAttribute("data-test-win8-start-query-state","ready");
     expect(await all.count()).toBeGreaterThan(1);
     await expect(selected).toHaveCount(0);
     await input.press("ArrowDown");
@@ -290,6 +291,7 @@ for(const theme of ["win8","win81"] as const){
     await expect(flyout.getByRole("heading",{name:"Files and folders"})).toBeVisible();
     await expect(file).toBeVisible();
     await expect(file).toContainText("Win8 Start Scan Target.txt");
+    await expect(flyout).toHaveAttribute("data-test-win8-start-query-state","ready");
     // Keyboard navigation now traverses Guest file results as well as apps.
     await input.press("ArrowDown");
     await expect(file).toHaveAttribute("data-test-win8-start-result-selected","");
