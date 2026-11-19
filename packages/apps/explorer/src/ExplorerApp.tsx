@@ -49,6 +49,7 @@ import "./ExplorerApp.css";
 import "./sourceExplorerContextTheme.css";
 import "./sourceWin10ComputerToolbar.css";
 import "./sourceWin8ComputerToolbar.css";
+import "./sourceWin31Explorer.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
@@ -829,6 +830,7 @@ export function ExplorerApp({
         </button>
         {!isBin && volume?.pathConfig.drives.map(drive =>
           <button key={drive.letter} className="explorer-navigation__home"
+            aria-current={state.path===volume.pathConfig.root+"/"+drive.path?"location":undefined}
             onClick={() => void execute(() => session.open(
               volume.pathConfig.root + "/" + drive.path
             ))} title={drive.label + " (" + drive.letter + ":)"}>
@@ -838,11 +840,13 @@ export function ExplorerApp({
           </button>
         )}
         {!isBin && volume && <button className="explorer-navigation__home"
+          aria-current={state.path===volume.desktopPath?"location":undefined}
           onClick={() => void execute(() => session.open(volume.desktopPath))}>
           <img src={sourceShellAsset(theme,"folder") ?? legacyArt.folder} alt="" /> Desktop
         </button>}
         {shortcuts.map(shortcut =>
           <button key={shortcut.label} className="explorer-navigation__home"
+            aria-current={state.path===shortcut.path?"location":undefined}
             onClick={() => void execute(() => session.open(shortcut.path))}>
             <img src={sourceThemeSpecialFolderArt(theme,shortcut.label)
               ?? sourceShellAsset(theme,"folder") ?? legacyArt.folder} alt="" /> {shortcut.label}
