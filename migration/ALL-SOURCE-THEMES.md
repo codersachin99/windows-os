@@ -195,3 +195,50 @@ Both themes now have their original separate **byte-identical desktop wallpapers
 ## Win8/Win8.1 selectable themes and source context menus
 
 The source-backed Personalize chooser now includes separate Win8 and Win8.1 entries with their distinct pinned wallpapers, rather than requiring URL parameters ([`5e6dd2a`](https://github.com/codersachin99/windows-os/commit/5e6dd2a28a3904f373a52911fb7ab053609eb524)). Their desktop/taskbar/Explorer popup surfaces now use the original Win8 light theme-surface/blue-accent menu palettes ([`176923e`](https://github.com/codersachin99/windows-os/commit/176923e3bb0ab33f07f584367548679251b331d8)); focused browser contracts were added ([`7c88bc4`](https://github.com/codersachin99/windows-os/commit/7c88bc4e41de17d78c6da80f2a9946957ce8457d)). Original shell/pixel parity across all 37 theme IDs is still incomplete.
+
+
+## Windows 3.1 source Program Manager Start slice — 19 November 2026
+
+The canonical `win31` shell Start is *not* a Win7-style Start menu.
+Immutable original `src/modules/shell/startmenu-win31.js` renders
+`window-main` as a **non-draggable, non-resizable, centered 600×400**
+**Program Manager**, with a 24px caption, Window/Help menubar and
+group icons. Source groups are keyed `recently-opened`,
+`simu-programs`, `games` and (only on the original Android
+platform) `android-apps`. Toggling a group opens/closes a separate
+**250px-high group window**; maximized/restore, child close and
+front-focus are independent. Original
+`src/styles/shell/startmenu-win31.css` fixes group icon dimensions at
+32×32 and hover group label colors **`#fff` on `#2900ad`**.
+`theme-win31-scss.js` defines a 24px caption, source surface/accent
+variables, square/inset classic frames.
+
+The React port is a dedicated `SourceWin31ProgramManager` component,
+not a Win7 two-column skin. It preserves source **three browser groups**
+and live Recent program order, shows only registered/source-manifest
+applications in the respective program/game group, opens actual
+apps via existing `OPEN_APP` dispatch, supports multi-open/close,
+front reorder, maximized/restore and titlebar close, with the
+Window menu's Computer, Games, Control Panel, Log off, Restart and
+Shut down; About is working and original Support is honestly
+disabled pending integration. No Android-only group is fabricated
+on web. React uses shared source artwork where available; the
+generic Programs group icon and exact desktop palette still need
+the rest of the original theme asset/skin verification.
+
+Code: [985447d](https://github.com/codersachin99/windows-os/commit/985447dffef1cfeaa73d5bc55fb2e780c5a2e5b0),
+[0c6523a](https://github.com/codersachin99/windows-os/commit/0c6523ab9815293bdd9b62ea4b4c98f9b4dfff5d),
+[fdbc798](https://github.com/codersachin99/windows-os/commit/fdbc7982fe045420093fff79bfdc769fac27f585).
+Actual-browser desktop/mobile group lifecycle, 600×400 bounds,
+game/program launch, menu/power actions in
+[3e7147b](https://github.com/codersachin99/windows-os/commit/3e7147bafe97a00aac48b54b71befd5eddc5c667);
+opt-in focused gate extended in
+[a1c6357](https://github.com/codersachin99/windows-os/commit/a1c63574eb8205ee4e6204d83278b410dae5d235).
+
+**Limit:** This is a source-backed Program Manager functional/layout
+slice, not full Win31 fidelity. Exact source group window placement,
+legacy toolbar keyboard, bitmap icon mapping, grouped windows outside
+the main frame, classic taskbar/desktop/window/explorer styles,
+screenshots at all sizes and many program/Help commands remain
+pending. `win31` continues reporting theme shell `pending`
+rather than claiming entire family is migrated.
