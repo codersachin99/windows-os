@@ -287,3 +287,29 @@ background, icons, taskbar menus, full classic Computer/Bin skins,
 native artwork, timing and source-paired screenshots still need
 verification. Do not label the project pixel-perfect based on
 source-shaped CSS alone.
+
+
+## Win31 Desktop, taskbar and Computer menu source skin — 19 Nov 2026
+
+Exact pinned source `src/modules/themes/theme-win31-scss.js`
+`.win31 .winui-menu` is a flat white menu, **1px black border**,
+zero padding, square corners, **1px diagonal `#808080` shadow**,
+bold text and `--theme-accent:#080abd` selection with white labels.
+This is distinct from the XP/Win7/Win8/Win10/Win11 menu families;
+it does not use a blue glossy hover or a gutter/ribbon.
+
+The React shell now maps that source skin only under Win31 to
+the functional Desktop and taskbar popup menus
+([ec56fd3](https://github.com/codersachin99/windows-os/commit/ec56fd3bfd3bd717fcfb0f8c8261ededae3e12e5))
+and to Computer/Recycle Bin Explorer background and item
+context menus, including View and Send To child popups
+([1bd4426](https://github.com/codersachin99/windows-os/commit/1bd4426310eed2c9c37ae188a20236982a64c2b3)).
+Real desktop/mobile browser tests added to both original
+menu palette/action suites:
+[1a2d611](https://github.com/codersachin99/windows-os/commit/1a2d611a6d29c789a5afd1d0efc7b5357626a0d7)
+and [9a4d676](https://github.com/codersachin99/windows-os/commit/9a4d6768aac70c8dd54277b196867156fbfc964d).
+
+This is source-grounded visual CSS plus existing functional menu
+actions. Exact menu glyphs, focus/keyboard event timing, original
+Win31 font bytes and original-vs-React screenshot comparisons still
+need verification. No full theme acceptance claim.
