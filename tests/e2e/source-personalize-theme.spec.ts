@@ -82,3 +82,32 @@ test("source Personalize chooses Win8 and Win8.1 separately with original wallpa
   await expect(page.locator('[data-test-win8-start-screen]'))
     .toHaveAttribute("data-source-start-theme","win81");
 });
+
+
+test("Personalize exposes source Windows 10 with persistent wallpaper, Start and taskbar",async({page})=>{
+  const win=await openPersonalize(page);
+  const chooser=win.locator('[data-test-personalize]');
+  const ten=chooser.locator('[data-test-personalize-theme="win10"]');
+  await expect(ten).toBeVisible();
+  await expect(ten.locator("img")).toHaveAttribute(
+    "src","/assets/images/win10.743e8c13.webp");
+  await ten.click();
+  const desktop=page.locator('[data-test-main-screen]');
+  await expect(desktop).toHaveAttribute("data-theme","win10");
+  await expect(ten).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win10.743e8c13.webp");
+  await expect(page.locator('[data-test-start-button] img'))
+    .toHaveAttribute("src","/assets/images/start-button-win8.2e5214cc.svg");
+  await expect(page.locator('[data-test-taskbar="base"]'))
+    .toHaveCSS("background-color","rgb(16, 16, 16)");
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await expect(page.locator('.windows-startmenu--win10')).toBeVisible();
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme","win10");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win10.743e8c13.webp");
+});
