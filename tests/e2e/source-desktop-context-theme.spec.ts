@@ -6,6 +6,12 @@ import {expect,test,type Page} from "@playwright/test";
  * This tests actual DOM surfaces and working menu behavior, not CSS text.
  */
 const variants=[
+  {theme:"win95",surface:"rgb(189, 190, 189)",border:"rgb(57, 60, 57)",
+    radius:"0px",hover:"rgb(0, 0, 123)",text:"rgb(255, 255, 255)"},
+  {theme:"win98",surface:"rgb(192, 199, 200)",border:"rgb(57, 60, 57)",
+    radius:"0px",hover:"rgb(6, 8, 166)",text:"rgb(255, 255, 255)"},
+  {theme:"win2k",surface:"rgb(212, 208, 200)",border:"rgb(57, 60, 57)",
+    radius:"0px",hover:"rgb(8, 39, 103)",text:"rgb(255, 255, 255)"},
   {
     theme:"win31",surface:"rgb(255, 255, 255)",border:"rgb(0, 0, 0)",
     radius:"0px",hover:"rgb(8, 10, 189)",text:"rgb(255, 255, 255)"
