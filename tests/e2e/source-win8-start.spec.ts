@@ -259,3 +259,39 @@ for(const theme of ["win8","win81"] as const){
     await expect(start).toHaveCount(0);
   });
 }
+
+
+for(const theme of ["win8","win81"] as const){
+  test("source "+theme+" Search includes live Guest desktop files and opens supported documents",async({page})=>{
+    await guest(page,theme);
+    // Seed via the actual source Desktop upload action, not a test-only
+    // filesystem injection or host path. Search must traverse drive0.
+    const desktop=page.locator("#desktop-icons");
+    await desktop.click({button:"right",position:{x:260,y:200}});
+    const menu=desktop.locator('[data-test-desktop-menu]');
+    await expect(menu).toBeVisible();
+    await menu.locator('[data-test-desktop-upload-here]').click();
+    await page.locator('[data-test-desktop-upload-input]').setInputFiles({
+      name:"Win8 Start Scan Target.txt",mimeType:"text/plain",
+      buffer:Buffer.from("Start search opened the real Guest document")
+    });
+    const path="/EXTERNAL/computer/drive0/Users/Guest/Desktop/Win8 Start Scan Target.txt";
+    await expect(page.locator('[data-test-desktop-file="'+path+'"]')).toBeVisible();
+    const start=await openStart(page);
+    await start.locator('[data-test-start-search-button]').click();
+    const flyout=start.locator('[data-test-win8-start-flyout]');
+    const input=flyout.getByRole("searchbox",{name:"Search programs and files"});
+    await input.fill("Start Scan Target");
+    const file=flyout.locator('[data-test-win8-start-file-result="'+path+'"]');
+    await expect(flyout.getByRole("heading",{name:"Files and folders"})).toBeVisible();
+    await expect(file).toBeVisible();
+    await expect(file).toContainText("Win8 Start Scan Target.txt");
+    // Keyboard navigation now traverses Guest file results as well as apps.
+    await input.press("ArrowDown");
+    await expect(file).toHaveAttribute("data-test-win8-start-result-selected","");
+    await input.press("Enter");
+    await expect(page.locator('[data-test-window="notepad"] .cm-content'))
+      .toContainText("Start search opened the real Guest document");
+    await expect(start).toHaveCount(0);
+  });
+}
