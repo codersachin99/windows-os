@@ -60,10 +60,12 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
   const isXpTheme=sourceIsXpFamily(theme);
-  // Pinned startmenu-base.js supplies recent programs and the configured
-  // power action to the whole Win7 Start renderer (Aero and Basic included).
-  const isWin7StartFamily=theme==="win7"||sourceIsAeroFamily(theme)||
-    theme==="basic-1"||theme==="basic-2"||theme==="basic-3"||theme==="basic-4";
+  // Pinned startmenu-base.js supplies recent programs and configured
+  // power actions to the shared Win7 renderer, including Vista's
+  // isVista/searchStyle variant and all Aero/Basic skins.
+  const isWin7StartFamily=theme==="win7"||theme==="winvista"||
+    sourceIsAeroFamily(theme)||theme==="basic-1"||theme==="basic-2"||
+    theme==="basic-3"||theme==="basic-4";
   const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
