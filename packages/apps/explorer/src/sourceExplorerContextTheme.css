@@ -190,3 +190,25 @@
 .windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:disabled{
   color:#7b7b7b;opacity:1;
 }
+
+
+/* Exact win11dark palette from pinned theme-win11-scss.js.
+ * Win11 and Win11dark retain the same menu interactions and geometry.
+ */
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu,
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu__submenu{
+  background:#242424;color:#fff;border:1px solid #fff3;
+  border-radius:6px;padding:6px;box-shadow:0 4px 6px #0006;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button{
+  color:#fff;background:transparent;border:1px solid transparent;
+  border-radius:3px;padding:6px 6px 6px 32px;
+}
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#fff;background:#fff1;border-color:transparent;
+}
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button:disabled{
+  color:#aaa;opacity:1;
+}
