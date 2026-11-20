@@ -183,3 +183,26 @@
 .windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__context button:disabled{
   color:#7b7b7b;opacity:1;
 }
+
+
+/* Pinned Win11 dark inherits the same rounded menu geometry as Win11.
+ * Source theme-win11-scss.js supplies #242424 bright menu, #fff text,
+ * #fff3 border, and translucent white hover.
+ */
+.windows-desktop[data-theme="win11dark"] .windows-desktop__menu,
+.windows-desktop[data-theme="win11dark"] .windows-taskbar__context{
+  background:#242424;color:#fff;border:1px solid #fff3;
+  border-radius:6px;padding:6px;box-shadow:0 4px 6px #0006;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win11dark"] .windows-desktop__menu button,
+.windows-desktop[data-theme="win11dark"] .windows-taskbar__context button{
+  color:#fff;background:transparent;border:1px solid transparent;
+  border-radius:3px;
+}
+.windows-desktop[data-theme="win11dark"] .windows-desktop__menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win11dark"] .windows-desktop__menu button:not(:disabled):focus-visible,
+.windows-desktop[data-theme="win11dark"] .windows-taskbar__context button:not(:disabled):hover,
+.windows-desktop[data-theme="win11dark"] .windows-taskbar__context button:not(:disabled):focus-visible{
+  background:#fff1;color:#fff;border-color:transparent;
+}
