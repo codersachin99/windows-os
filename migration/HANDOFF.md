@@ -1,3 +1,43 @@
+## 20 Nov 2026 — restore shared Win7 Start recents and configured power (Aero/Basic)
+
+**Immutable source:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1 (unmerged).
+
+The **previous** exact-head [CI #44756219652](https://github.com/codersachin99/windows-os/actions/runs/44756219652)
+**PASSED** on `b3051af`: TypeScript, units, source/artwork/Contacts
+audits, Vite, focused and full desktop/mobile Chromium; visual capture
+was skipped. This acceptance includes the previous Computer/Bin context
+menu theme-family work, *not* the Start changes below.
+
+**New source-backed fix:** the pinned original `src/modules/shell/startmenu-base.js`
+provides one `recentPrograms` list and configured power action for its
+shared Start. React's existing recent-section condition included only
+canonical `win7` (plus XP/Win11), even though the surrounding Win7 Aero
+and Basic branch already mounted the list. The power button was likewise
+restricted to literal `win7`. A shared family predicate now enables
+both real source behaviors on four Aero and four Basic variants without
+altering XP, Win8/10/11, Win31 or Win9x menus. All eight variations
+continue using their existing theme-specific shell and Start paints.
+
+**Commits:**
+- [`3b3646a`](https://github.com/codersachin99/windows-os/commit/3b3646a0cef7274ad6079f9991d57fdf7fb18824) restores recent history and configurable power on Aero/Basic;
+- [`d27fc43`](https://github.com/codersachin99/windows-os/commit/d27fc43ce428db5335ead00d58e7ca5e4ac5eac8) adds Playwright per-theme history/All Programs checks and actual configured Switch user action tests on desktop/mobile.
+
+**Verification:** one opt-in `[run-ci]` exact-head workflow is requested
+by this handoff commit. At commit time, new Start tests are **unverified**:
+inspect the result, address actual regressions, never suppress tests.
+Paired pinned-source/React viewport screenshots remain **not assessed**,
+including original Start layout geometry and full Computer/Bin/desktop
+functional/theme parity. Preserve reference SHA, target `main`, draft PR
+state and zero product releases.
+
+**Next:** inspect exact-head CI; then compare source/React Start and
+Desktop/Explorer/Bin screenshots across desktop and mobile, isolate the
+largest measured difference and port the smallest complete original
+behavior/skin rather than inventing a substitute.
+
+---
+
 ## 20 Nov 2026 — source theme-family Explorer / Recycle Bin context menus
 
 Pinned reference: `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
