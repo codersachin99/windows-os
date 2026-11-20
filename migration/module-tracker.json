@@ -1683,7 +1683,14 @@
       "sha": "97296745a9acc341f927f1bac0feccd58c4fe8c0",
       "area": "shell",
       "status": "in-progress",
-      "evidence": []
+      "evidence": [
+        "packages/ui/src/StartMenu.tsx",
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-recent-start.spec.ts",
+        "tests/e2e/source-start-context-theme-families.spec.ts",
+        "migration/START-CONTEXT-THEME-SOURCE.md"
+      ],
+      "verification": "shared Win7 Aero/Basic Start recents and configurable power restored; cross-theme source program context tests pending CI; full original source screenshot parity pending"
     },
     {
       "source": "src/modules/shell/startmenu-chromeos.js",
@@ -2348,7 +2355,9 @@
         "packages/ui/src/sourceWin7BasicVariants.css",
         "packages/ui/src/sourceWin7ClassicContrast.css",
         "tests/e2e/source-final-theme-catalog.spec.ts",
-        "migration/AERO-BASIC-SOURCE.md"
+        "migration/AERO-BASIC-SOURCE.md",
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-theme-families.spec.ts"
       ],
       "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending"
     },
@@ -2362,7 +2371,9 @@
         "packages/ui/src/sourceWin7ClassicContrast.css",
         "tests/e2e/source-final-theme-catalog.spec.ts",
         "migration/AERO-BASIC-SOURCE.md",
-        "packages/ui/src/sourceWindowChrome.css"
+        "packages/ui/src/sourceWindowChrome.css",
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-theme-families.spec.ts"
       ],
       "verification": "Basic 1 + Aero 1–4 shared source window chrome implemented in bounded scope; per-theme colors, wallpapers, desktop/taskbar and screenshot parity pending"
     },
@@ -2405,8 +2416,13 @@
       "source": "src/modules/themes/theme-winxp-scss.js",
       "sha": "780085761632998d6ad003b3f2b754ab7fcab6ea",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-theme-families.spec.ts",
+        "migration/START-CONTEXT-THEME-SOURCE.md"
+      ],
+      "verification": "bounded source XP program popup palette across seven variants; full theme and source-paired screenshot parity pending"
     },
     {
       "source": "src/modules/themes/themestudio.js",
