@@ -1,3 +1,37 @@
+## 20 Nov 2026 — source theme-family Explorer / Recycle Bin context menus
+
+Pinned reference: `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+Target branch: `feat/0001-faithful-react-foundation`; draft PR #1.
+
+Previous exact-head [CI #44749268210](https://github.com/codersachin99/windows-os/actions/runs/44749268210)
+**SUCCEEDED** on commit `1de989fe` (browser-and-contracts; visual-capture
+skipped). Previous PR/HEAD docs that said in progress are historical.
+
+**Implemented next source-priority slice:** `sourceExplorerContextTheme.css`
+now uses the source .win7 menu appearance for Aero 1–4 + Basic 1, source
+.win7-classic menu bevel/contrast/accessibility variables for Basic 2–4
+and the source .winxp menu for seven XP variants. XP menu selection
+uses original per-variant `--source-accent`, consistent with desktop
+context menus. Scope includes Computer/Recycle Bin background/item
+menus and detached View/New/Send To child surfaces. New
+`source-explorer-theme-families.spec.ts` covers real Computer/Bin
+context, hover and eight View modes on desktop/mobile.
+
+**Status:** commit(s) `a242268`, `1644c92`, `37560dc` and
+`fd0a880` have NOT yet passed exact-head browser CI. A single opt-in
+`[run-ci]` will be requested on the documentation checkpoint.
+Do not claim this CSS slice accepted until the run completes and any
+failing tests are fixed. Pair with actual original screenshots later.
+The pinned original and target main stay unchanged; PR #1 is draft,
+no merge/release.
+
+**Next:** check precise CI results/logs; fix regressions without
+skipping. Then source/React viewport screenshot comparisons and
+remaining original Start, Desktop, Explorer and Recycle Bin visual,
+interaction and audio parity (do not infer completeness from tests).
+
+---
+
 ## Aero Window Color and Appearance — 20 Nov 2026
 
 **Pinned original:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
