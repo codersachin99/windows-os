@@ -1,3 +1,19 @@
+## Original XP seven-theme family implementation — 20 November 2026
+
+**Immutable source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; target remains `feat/0001-faithful-react-foundation`, draft PR #1. Do not merge or claim pixel parity.
+
+**Fixed after the earlier browser regression commits:** `scripts/import-legacy.mjs` now gets its source SHA from the exact `module-tracker.json.referenceSha` already verified by `npm run audit:legacy` instead of hardcoding obsolete `4e63290`; `packages/assets/src/index.ts` now reports the same final source `LEGACY_REVISION`. `migration/README.md` was corrected to actual npm commands and final original PHP Slim 4 service rather than claiming a source Python server.
+
+**Original XP variant slice:** `SOURCE_XP_THEME_IDS` and `sourceIsXpFamily` in contracts identify precisely `winxp,winxpE,winxpG,winxpN,winxpR,winxpS,winxpZ` from source config / compiled CSS; all report **partial** shell status. The shared assets now reuse byte-identical original XP wallpaper, Start, program, tray, Computer/Bin art for all seven, rather than the incorrect Win7 fallback. `StartMenu` includes all XP-specific sections and Power actions for each family ID; `SourceWindowControlGlyph` uses the original XP SVG glyph on every XP variant. The source XP desktop/taskbar, context menu, window chrome and Start geometry rules are now family-scoped; source `--startmenu-*`, accent and window tokens were transcribed from pinned `theme-winxp-scss.js` into six variant-specific rules in `sourceShellTheme.css`. `migration/XP-VARIANTS-SOURCE.md` documents the exact original colors and unresolved gradients/remaining mismatches.
+
+**New tests:** `sourceThemeCatalog.test.ts` checks exact IDs/status and invalid strings; `sourceShellArtwork.test.ts` checks XP asset reuse for all subvariants; `source-final-theme-catalog.spec.ts` checks original XP wallpaper/Start/menu/power, source palette CSS and Guest entry in each of seven variants on desktop and mobile. The previous Win11dark/Control Panel regression fix is preserved.
+
+**CI:** Previous opt-in [run #44677771463](https://github.com/codersachin99/windows-os/actions/runs/44677771463) passed the focused browser suite and entered the full browser suite, but has **not yet concluded** as of this note. The commit carrying this handoff contains `[run-ci]` to request a fresh exact-head verification of the new XP/code/importer changes. Inspect the most recent Actions run; if red, repair actual errors before expanding theme features.
+
+**Next high-priority tasks:** (1) resolve exact-head CI, (2) finish source-per-variant XP taskbar/tray/window gradients and source Personalize previews, (3) continue original Win7 Aero/Basic theme selector and desktop/Start/context/Computer/Bin parity, (4) obtain genuine paired Vue-vs-React screenshot evidence via authorized read-only original-repo access. Original repository is private and currently unpaired. Keep draft PR, source and main intact.
+
+---
+
 ## CI regression repair + locked-source documentation checkpoint — 20 November 2026
 
 **Branch:** `feat/0001-faithful-react-foundation`; **draft** [PR #1](https://github.com/codersachin99/windows-os/pull/1). `main` still `9bb90a41`; immutable `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` unchanged.
