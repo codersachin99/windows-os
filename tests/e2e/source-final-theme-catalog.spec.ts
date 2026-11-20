@@ -81,6 +81,23 @@ test("original XP logon renders three bands, exact source logo and responsive Gu
     .toHaveAttribute("data-theme","winxpG");
 });
 
+// First stops in the original XP-specific painted frame gradients. These
+// complement token-only checks, which could pass while rendering Luna blue.
+const paintedXpFrames={
+  winxpN:{taskbar:"rgb(115, 124, 132)",tray:"rgb(37, 54, 73)",
+    header:"rgb(97, 108, 125)",footer:"rgb(115, 124, 137)",
+    window:"rgb(103, 115, 124)"},
+  winxpR:{taskbar:"rgb(131, 194, 237)",tray:"rgb(251, 253, 255)",
+    header:"rgb(242, 247, 251)",footer:"rgb(118, 161, 222)",
+    window:"rgb(131, 194, 237)"},
+  winxpS:{taskbar:"rgb(154, 153, 177)",tray:"rgb(255, 255, 255)",
+    header:"rgb(168, 167, 191)",footer:"rgb(230, 230, 237)",
+    window:"rgb(168, 167, 191)"},
+  winxpZ:{taskbar:"rgb(111, 111, 111)",tray:"rgb(72, 72, 72)",
+    header:"rgb(87, 87, 87)",footer:"rgb(87, 87, 87)",
+    window:"rgb(111, 111, 111)"}
+} as const;
+
 // Original theme-winxp-scss.js defines distinct color tokens for each XP
 // variant. Every ID must use real XP artwork and XP Start/Power UI rather than
 // silently falling back to a Win7 shell, on both desktop and mobile profiles.
@@ -116,6 +133,29 @@ for(const [theme,border,right,accent] of [
     await expect(start.locator('[data-test-startmenu-xp-footer]')).toBeVisible();
     await expect(start.locator('[data-test-startmenu-xp-footer] img').first())
       .toHaveAttribute("src","/assets/images/logoff-winxp.71dc5ab2.webp");
+    if(theme==="winxpG")
+      await expect(page.locator(".windows-taskbar__tray"))
+        .toHaveCSS("border-left-color","rgb(150, 139, 75)");
+    if(theme in paintedXpFrames){
+      const paint=paintedXpFrames[theme as keyof typeof paintedXpFrames];
+      for(const [selector,firstStop] of [
+        ['[data-test-taskbar="base"]',paint.taskbar],
+        [".windows-taskbar__tray",paint.tray],
+        ["[data-test-startmenu-xp-header]",paint.header],
+        ["[data-test-startmenu-xp-footer]",paint.footer]
+      ] as const){
+        const background=await page.locator(selector).evaluate(
+          element=>getComputedStyle(element).backgroundImage);
+        expect(background,`${theme} source paint for ${selector}`).toContain(firstStop);
+      }
+      await page.locator('[data-test-start-button]').click();
+      await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+      const win=page.locator('[data-test-window="computer"]');
+      await expect(win).toBeVisible();
+      await expect(win).toHaveAttribute("data-source-window-active","true");
+      const frame=await win.evaluate(element=>getComputedStyle(element).backgroundImage);
+      expect(frame,`${theme} active caption frame`).toContain(paint.window);
+    }
   });
 }
 
