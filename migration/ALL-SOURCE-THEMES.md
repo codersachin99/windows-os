@@ -26,7 +26,7 @@ entry is intentionally omitted.
 | `winvista` | `winvista` | 1 | Original boot GIF/view migrated; logon/shell/pixel parity pending |
 | `win8` | `win8`, `win81` | 2 | Original boot/logon, Win8 fullscreen tile Start, source wallpaper/taskbar/flat windows; full shell/pixel parity pending |
 | `win10` | `win10` | 1 | Original Win8-reused boot logo/spinner + Win10 logon, dark taskbar, windows, Start; complete shell/pixel parity pending |
-| `win11` | `win11`, `win11dark` | 2 | Win11 source-shaped Guest logon migrated for both IDs; complete dark desktop skin pending |
+| `win11` | `win11`, `win11dark` | 2 | Shared original Win11 Guest logon and desktop/Start layout, with source-pinned separate dark wallpaper and Start art, source dark palette/context menus; complete screenshot and functionality parity pending |
 | `macos` | `macos` | 1 | Pending theme-specific implementation |
 | `chromeos` | `chromeos` | 1 | Pending theme-specific implementation |
 | `ubuntu` | `ubuntu` | 1 | Pending theme-specific implementation |
