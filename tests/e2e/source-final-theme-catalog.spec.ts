@@ -552,7 +552,9 @@ for(const theme of ["win7","aero-1","aero-2","aero-3","aero-4"] as const){
     await expect(desktop).toHaveAttribute("data-theme",theme);
     const taskbar=page.locator('[data-test-taskbar="base"]');
     await expect(taskbar).toHaveCSS("height","40px");
-    await expect(taskbar).toHaveCSS("background-image",/linear-gradient\\(to right/);
+    await expect(taskbar).toHaveCSS("background-image",/linear-gradient/);
+    expect(await taskbar.evaluate(el=>getComputedStyle(el).backgroundImage))
+      .toContain("to right");
     const pseudo=await taskbar.evaluate(el=>{
       const style=getComputedStyle(el,"::before");
       return {content:style.content,background:style.backgroundImage,

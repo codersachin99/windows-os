@@ -1,3 +1,18 @@
+## Aero taskbar source test syntax correction / CI — 20 Nov 2026
+
+Reviewed new source taskbar browser assertion before running CI;
+fixed an over-escaped regex by testing CSS linear-gradient and
+its exact 'to right' axis separately. This commit triggers the
+only opt-in `[run-ci]` run for the new taskbar source adaptation.
+
+Previous full browser [CI #44735229979](https://github.com/codersachin99/windows-os/actions/runs/44735229979)
+successfully verified the Aero window-chrome slice. Basic 1/2
+[CI #44734587135](https://github.com/codersachin99/windows-os/actions/runs/44734587135)
+also successfully passed. Source taskbar results remain unverified
+until this new exact-head run finishes.
+
+---
+
 ## Shared Win7 Aero taskbar original surface — 20 Nov 2026
 
 **Locked source** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; target PR #1 draft.
