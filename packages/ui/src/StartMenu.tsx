@@ -69,6 +69,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
+  // The same popup is opened by Win31, Win9x, Win8 and modern Start
+  // program buttons. Keep the actual button, not a Win7-only selector.
+  const contextTriggerRef=useRef<HTMLButtonElement|null>(null);
   const win11PowerRef=useRef<HTMLDivElement>(null);
   const [win11PowerOpen,setWin11PowerOpen]=useState(false);
   const [win10SidebarExpanded,setWin10SidebarExpanded]=useState(false);
@@ -132,6 +135,11 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   useLayoutEffect(()=>{
     if(!programContext||!contextRef.current)return;
     const element=contextRef.current;
+    // Original winui-menu is keyboard-navigable: focus its first enabled
+    // action so ArrowUp/Down and Escape work after pointer right-click.
+    element.querySelector<HTMLButtonElement>(
+      'button[role="menuitem"]:not(:disabled)'
+    )?.focus({preventScroll:true});
     const align=()=>setContextPosition(sourceDesktopMenuPosition(
       {x:programContext.x,y:programContext.y},
       {width:element.offsetWidth,height:element.offsetHeight},
@@ -145,6 +153,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     event.preventDefault();event.stopPropagation();
     setContextError("");
     setWin11PowerOpen(false);
+    contextTriggerRef.current=event.currentTarget;
     setProgramContext({id,x:event.clientX,y:event.clientY});
   };
   const contextProgram=programContext?appRegistry.get(programContext.id):null;
@@ -194,6 +203,14 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         const id=programContext.id;
         setProgramContext(null);
         window.requestAnimationFrame(()=>{
+          // Portaled menus live under document.body and buttons differ
+          // across Win31 groups, Win9x cascades, Win8 tiles, Win10
+          // recents and Win7/XP/11 program grids.
+          const trigger=contextTriggerRef.current;
+          if(trigger?.isConnected){
+            trigger.focus({preventScroll:true});
+            return;
+          }
           const escaped=typeof CSS!=="undefined"&&CSS.escape?CSS.escape(id):id;
           menuRef.current?.querySelector<HTMLButtonElement>(
             '[data-test-program="'+escaped+'"],[data-test-source-program="'+escaped+'"]'
