@@ -1,3 +1,34 @@
+## 20 Nov 2026 — Explorer/Bin theme-family context menus
+
+The pinned source `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` uses
+`.win7 .winui-menu` for Aero 1–4 and Basic 1, and
+`.win7-classic .winui-menu` for Basic 2–4. Original
+`.winxp .winui-menu` likewise covers all XP variants. The existing React
+Explorer adapter had only `data-theme=win7` and `data-theme=winxp`,
+so other family IDs silently inherited fallback Explorer popup styling.
+
+Updated `packages/apps/explorer/src/sourceExplorerContextTheme.css` to
+scope the existing Win7 source rules to all Aero/Basic 1 IDs, all XP variant
+IDs, and adapt the actual Win7 Classic source bevel + accent hover for
+Basic 2–4 with live accessible High Contrast palette variables. XP
+highlight now resolves the already-source-traced `--source-accent` per
+variant (matching Desktop menus), rather than forcing Luna blue. Both
+background/item and nested View/New/Send To popups use the shared skin.
+Added desktop/mobile browser cases for all four Aero cards, all Basic
+variants and representative XP Green/Zune, exercising real Computer and
+Recycle Bin background menus, hover, and eight View choices.
+
+**Verification status:** CI is opt-in only; the preceding 1de989f
+[Aero appearance run #44749268210](https://github.com/codersachin99/windows-os/actions/runs/44749268210)
+is now **successful** (browser-and-contracts), visual capture intentionally
+skipped. This new Explorer menu slice is **unverified** until a new exact-head
+`[run-ci]` browser run finishes; do not equate source selectors with
+pixel-perfect screenshots. Draft PR #1 remains open; main and original
+remain unchanged. Follow with source/candidate paired screenshots and
+the remaining Start/Computer/Bin action/visual gaps.
+
+---
+
 ## Original built-in Win7 Aero/Basic registry and exact asset bytes — 20 Nov 2026
 
 **Recovered pinned source:** webpack registry `3b8c` and palette
