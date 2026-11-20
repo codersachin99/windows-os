@@ -1,5 +1,5 @@
 import {useId} from "react";
-import type {ThemeId} from "@windows-os/contracts";
+import {sourceIsXpFamily,type ThemeId} from "@windows-os/contracts";
 
 export type SourceWindowControlKind="minimize"|"maximize"|"restore"|"close";
 interface SourceWindowControlGlyphProps{
@@ -8,7 +8,7 @@ interface SourceWindowControlGlyphProps{
 }
 
 /** Pinned source compiled ControlItem, module e863:
- * legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187
+ * legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776
  * src/modules/chunks/shared~about~bin~bsod~calc~camera~chess~chrome~cmd~computer~cpanel~find~gadgets~games~ie~installer~i~40bd2819.js
  *
  * Original: Aero/Vista -> variant 1, WinXP -> variant 2,
@@ -31,7 +31,7 @@ const aeroCloseStops=[
 export function SourceWindowControlGlyph({theme,kind}:SourceWindowControlGlyphProps){
   const svgId=useId();
   const aero=theme==="win7"||theme==="winvista";
-  const xp=theme==="winxp";
+  const xp=sourceIsXpFamily(theme);
   const common={
     "aria-hidden":true as const,
     focusable:"false" as const,
