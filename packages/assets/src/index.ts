@@ -1,3 +1,4 @@
+import {sourceIsXpFamily} from "@windows-os/contracts";
 export const LEGACY_REVISION = "26b9f0ce7a1665dee89a7c81824bec09e2c75776" as const;
 
 // Exact asset file names and bytes come from legacy-win7 at LEGACY_REVISION.
@@ -198,7 +199,7 @@ export function sourceShellWallpaper(theme:string):string{
   if(theme==="win8")return sourceWin8ShellArtwork.win8Wallpaper;
   if(theme==="win81")return sourceWin8ShellArtwork.win81Wallpaper;
   if(theme==="win10")return legacyShellThemeAssets.win10.theme;
-  if(theme==="winxp")return legacyShellThemeAssets.winxp.theme;
+  if(sourceIsXpFamily(theme))return legacyShellThemeAssets.winxp.theme;
   if(theme==="win11")return legacyShellThemeAssets.win11.theme;
   if(theme==="win11dark")return sourceWin11DarkArtwork.wallpaper;
   return legacyArt.wallpaperWin7;
@@ -336,7 +337,7 @@ export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win10;
     return icons[iconKey]??null;
   }
-  if(theme==="winxp"){
+  if(sourceIsXpFamily(theme)){
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.winxp;
     return icons[iconKey]??null;
   }
@@ -381,7 +382,7 @@ export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): s
   if ((theme === "win8" || theme === "win81") && kind === "start")
     return sourceWin8ShellArtwork.start;
   if (theme === "win10") return legacyShellThemeAssets.win10[kind];
-  if (theme === "winxp") return legacyShellThemeAssets.winxp[kind];
+  if (sourceIsXpFamily(theme)) return legacyShellThemeAssets.winxp[kind];
   if (theme === "win11") return legacyShellThemeAssets.win11[kind];
   if (theme === "win11dark") return kind==="start"
     ?sourceWin11DarkArtwork.start:legacyShellThemeAssets.win11[kind];
