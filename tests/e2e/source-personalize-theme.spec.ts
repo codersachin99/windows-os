@@ -188,7 +188,7 @@ test("Win11 Dark chooses exact pinned source wallpaper/Start and native dark she
   const logon=page.locator('[data-test-logon-screen]');
   await expect(logon).toHaveAttribute("data-source-logon-renderer","win11");
   await expect(logon).toHaveAttribute("data-source-shell-status","partial");
-  await expect(logon).toHaveCSS("background-image",/win11dark\\.af52a1ca\\.webp/);
+  await expect(logon).toHaveCSS("background-image",/win11dark\.af52a1ca\.webp/);
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await expect(page.locator("[data-test-main-screen]"))
     .toHaveAttribute("data-theme","win11dark");
