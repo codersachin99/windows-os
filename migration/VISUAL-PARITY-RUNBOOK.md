@@ -55,7 +55,7 @@ Capture with *deterministic file names and folder fixtures* in both applications
 
 [GitHub Actions run #43490774615](https://github.com/codersachin99/windows-os/actions/runs/43490774615) successfully captured **10 of 10** target screenshots, zero errors, for the five initial scenes across desktop and mobile. It uploaded artifact `visual-parity-0e1ea5752982b84905e8381b5e41ff2158988f41` (ID `14067939886`). The visual job's JavaScript check and 36-image audit passed; the normal long browser-and-contracts suite was correctly skipped.
 
-**No original screenshots were captured.** The runner had no `LEGACY_SOURCE_READ_TOKEN`; `manifest.json` reports `sourceConfigured:false`, `sourceCaptured:0`, and `parityStatus:"not-assessed"`. This proves the React capture workflow and upload work, not pixel-level parity. The original source checkout, Python server, source selectors, paired image diff and full acceptance review remain unverified. Source access should be supplied through a GitHub Actions repository secret with only read-only access to the original repository, never in chat, committed code or workflow logs.
+**No original screenshots were captured.** The runner had no `LEGACY_SOURCE_READ_TOKEN`; `manifest.json` reports `sourceConfigured:false`, `sourceCaptured:0`, and `parityStatus:"not-assessed"`. This proves the React capture workflow and upload work, not pixel-level parity. The original source checkout, PHP Slim 4 server, source selectors, paired image diff and full acceptance review remain unverified. Source access should be supplied through a GitHub Actions repository secret with only read-only access to the original repository, never in chat, committed code or workflow logs.
 
 ### Extended React capture matrix — 2026-11-14 (TARGET-ONLY CI VERIFIED)
 
@@ -82,7 +82,7 @@ The React writable filesystem root `"/"` is not identical to original Computer's
 - `scripts/capture-visual-parity.mjs` opens an isolated Chromium context for each scene, using fixed UTC time (`2026-11-11T12:00:00Z`), en-US locale, 1920×1080 desktop and Playwright Pixel 7 mobile profile. It captures Guest desktop, Computer root, Organize, View and Recycle Bin as separate PNGs, along with a machine-readable `manifest.json`, screenshot SHA-256 values and explicit capture errors. An error makes the capture job fail, never "pass" by silently omitting a scene.
 - `scripts/compare-visual-parity.py` creates overlay/diff PNGs and counts changed pixels above the documented grayscale threshold (20/255) only when **both** original and target PNGs actually exist. Its output is always `requires-human-review`, never an automatic acceptance or equality claim.
 - `.github/workflows/react-checks.yml` has a separate `visual-capture` job **only** when a push commit message contains `[capture-visual]` or an explicitly selected manual dispatch has `capture_visual=true`. Existing full CI is still gated behind `[run-ci]` or manual dispatch with `capture_visual=false`. Ordinary doc/source pushes skip both.
-- Source checkout is optional, via a user-managed, **read-only** repository-access secret named `LEGACY_SOURCE_READ_TOKEN`. The job pins `codersachin99/legacy-win7` to `4e63290d783009e1293433c6ccf252abba9c1187` and checks the checked-out Git HEAD. If the secret is absent, the job captures only React and labels `sourceConfigured=false`, `parityStatus=not-assessed`; **never call that source parity**. No GitHub token or database credential is written into artifacts. The original Python server is only started in the optional source branch.
+- Source checkout is optional, via a user-managed, **read-only** repository-access secret named `LEGACY_SOURCE_READ_TOKEN`. The job pins `codersachin99/legacy-win7` to `26b9f0ce7a1665dee89a7c81824bec09e2c75776` and checks the checked-out Git HEAD. If the secret is absent, the job captures only React and labels `sourceConfigured=false`, `parityStatus=not-assessed`; **never call that source parity**. No GitHub token or database credential is written into artifacts. The original PHP Slim 4 server is only started in the optional source branch.
 - Captures live in the ignored `artifacts/visual-parity/` folder. GitHub Actions uploads that folder for 14 days regardless of job outcome, rather than committing generated PNGs. Both server endpoints must be loopback-only HTTP and must be distinct.
 
 ### Running it locally
@@ -93,10 +93,10 @@ With the React Vite server running at `127.0.0.1:1420`:
 npm run visual:capture -- --target-url http://127.0.0.1:1420
 ```
 
-For a genuine paired comparison, run the **isolated pinned** `legacy-win7` Python server on port 8099 (without production credentials or databases) and use:
+For a genuine paired comparison, run the **isolated pinned** `legacy-win7` PHP Slim 4 server on port 8099 (without production credentials or databases) and use:
 
 ```sh
-npm run visual:capture -- --target-url http://127.0.0.1:1420 --source-url http://127.0.0.1:8099 --source-sha 4e63290d783009e1293433c6ccf252abba9c1187
+npm run visual:capture -- --target-url http://127.0.0.1:1420 --source-url http://127.0.0.1:8099 --source-sha 26b9f0ce7a1665dee89a7c81824bec09e2c75776
 python -m pip install Pillow
 npm run visual:compare
 ```
