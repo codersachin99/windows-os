@@ -1,3 +1,24 @@
+## 21 November 2026 — Computer and Recycle Bin Explorer context focus integration
+
+**Original lock:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`; draft PR #1 unmerged.
+No original/`main` modifications or product release.
+
+**Prior verification:** [#44794377379](https://github.com/codersachin99/windows-os/actions/runs/44794377379) **SUCCESS** at `d157ca5`, validating Start popup focus, TypeScript/unit, all source/artwork audits, Vite and focused/full desktop/mobile Chromium. The following Desktop/Bin context run [#44805818122](https://github.com/codersachin99/windows-os/actions/runs/44805818122) was still **in progress** at `7c194be` during this slice (non-browser gates passed, focused browser running); do NOT infer its result or this new slice's result from that run.
+
+**Next concrete menu defect:** Computer and Bin `ExplorerApp.tsx` root/item `[data-test-explorer-context]` menus already have the shared `sourceMenuArrowFocus` handler and real source View/New/Send to children, but right-click did not focus the first action, so arrow navigation was unreachable; Escape dismissed without restoring the original file row or folder surface.
+
+**Source-backed commits:**
+- [`ecec0b8`](https://github.com/codersachin99/windows-os/commit/ecec0b8909abd88840d2d8b9abb36dac3acfccfe): add real item/background focus anchor; make `explorer-content` programmatically focusable but out of Tab sequence; focus first enabled direct menuitem only on root context open; return focus on Escape, fallback to current Explorer content. Preserve existing directional child menus, source item actions, styles, clipboard and trash operations.
+- [`e6f45b8`](https://github.com/codersachin99/windows-os/commit/e6f45b8ffa0dd1d47691970fdc6816fc7e55a976): eight real Playwright scenarios × desktop/mobile: Computer bg Win7/XP/Win8/Win11dark, empty Bin bg Win7/XP, uploaded Computer text-file Send-to submenu, and actual created/deleted folder in Bin. Checks disabled commands and returned focus.
+- [`1e70a86`](https://github.com/codersachin99/windows-os/commit/1e70a8627ba61f26b655274f48a099a277c35dd7): add suite to opt-in focused GitHub Actions.
+- [`5bb1199`](https://github.com/codersachin99/windows-os/commit/5bb1199a525028ddcc4450b20d28ef9fd66451ea): `migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md` source proof and limits.
+- [`f52aaf5`](https://github.com/codersachin99/windows-os/commit/f52aaf5a7f456f680d4955f603734706a403eb15): mark specific `main.js`, Computer and Bin modules **in progress** with bounded evidence; not full source ports.
+
+**Verification:** one new exact-head `[run-ci]` required; no claim this slice passed before CI. Check prior run #44805818122 and this new run separately, inspect failed browser logs/traces without skipping tests. Source-paired visual capture still needs controlled pinned original checkout / configured `LEGACY_SOURCE_READ_TOKEN` and has not proved pixel fidelity. Continue original Desktop/Start/Computer/Bin next priorities; draft PR remains unmerged until safe acceptance.
+
+---
+
 ## 21 November 2026 — Desktop and Recycle Bin context keyboard focus integration
 
 **Original pinned:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; **branch:** `feat/0001-faithful-react-foundation`; draft PR #1 unmerged. No source, `main` or release changes.
