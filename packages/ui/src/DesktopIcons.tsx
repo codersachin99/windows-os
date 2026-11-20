@@ -107,6 +107,9 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const list = useRef<HTMLDivElement>(null);
   const uploadInput = useRef<HTMLInputElement>(null);
   const menuHost = useRef<HTMLDivElement>(null);
+  // Context can open on a specific icon or the Desktop background.
+  // Keep the real invoking element for Escape rather than losing focus.
+  const menuReturnFocus = useRef<HTMLElement|null>(null);
   const press = useRef<ActivePress | null>(null);
   const bandPress = useRef<ActiveBand | null>(null);
   const anchor = useRef<string | null>(null);
@@ -608,7 +611,14 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       }
     };
     const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenu(null);
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setMenu(null);
+      window.requestAnimationFrame(() => {
+        const trigger = menuReturnFocus.current;
+        if (trigger?.isConnected) trigger.focus({preventScroll:true});
+        else list.current?.focus({preventScroll:true});
+      });
     };
     window.addEventListener("pointerdown", dismiss);
     window.addEventListener("keydown", escape);
@@ -757,6 +767,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     event.stopPropagation();
     const item = (event.target as HTMLElement).closest<HTMLElement>("[data-test-desktop-icon]");
     const id = item?.dataset.testDesktopIcon ?? null;
+    menuReturnFocus.current = item instanceof HTMLButtonElement ? item : list.current;
     if (id && !selected.includes(id)) pick(id, false, false);
     const bounds = list.current?.getBoundingClientRect();
     const x=event.clientX-(bounds?.left??0);
@@ -765,6 +776,16 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     // Initial anchor is corrected in a layout effect after mount.
     setMenu({id,view:false,sortOpen:false,newOpen:false,anchorX:x,anchorY:y,x,y});
   };
+  // The source menu supports roving arrow focus, but a right-click
+  // does not focus the popup automatically in Chromium. Focus its first
+  // enabled action only when the anchor changes, never on submenu
+  // re-render or viewport position correction.
+  useLayoutEffect(()=>{
+    if(!menu||!menuHost.current)return;
+    menuHost.current.querySelector<HTMLButtonElement>(
+      'button[role="menuitem"]:not(:disabled)'
+    )?.focus({preventScroll:true});
+  },[menu?.id,menu?.anchorX,menu?.anchorY]);
   useLayoutEffect(()=>{
     const element=menuHost.current;
     if(!element||!menu)return;
