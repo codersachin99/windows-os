@@ -1688,9 +1688,11 @@
         "packages/ui/src/sourceStartContextThemes.css",
         "tests/e2e/source-recent-start.spec.ts",
         "tests/e2e/source-start-context-theme-families.spec.ts",
-        "migration/START-CONTEXT-THEME-SOURCE.md"
+        "migration/START-CONTEXT-THEME-SOURCE.md",
+        "tests/e2e/source-vista-start.spec.ts",
+        "migration/VISTA-START-SOURCE.md"
       ],
-      "verification": "shared Win7 Aero/Basic Start recents and configurable power restored; cross-theme source program context tests pending CI; full original source screenshot parity pending"
+      "verification": "source-backed Vista shared Start recent programs, configured power and popup palette; exact-head CI / Vista searchStyle UI and source-paired screenshots pending"
     },
     {
       "source": "src/modules/shell/startmenu-chromeos.js",
@@ -2444,8 +2446,14 @@
       "source": "src/modules/themes/theme-winvista-scss.js",
       "sha": "0ab2f2627a079c4c557d6507c0f6394ddf83e31c",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/StartMenu.tsx",
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-vista-start.spec.ts",
+        "migration/VISTA-START-SOURCE.md"
+      ],
+      "verification": "source-backed Vista shared Start recent programs, configured power and popup palette; exact-head CI / Vista searchStyle UI and source-paired screenshots pending"
     },
     {
       "source": "src/modules/themes/theme-winxp-scss.js",
