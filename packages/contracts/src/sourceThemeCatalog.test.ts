@@ -68,6 +68,7 @@ describe("immutable final source app.config themeScreens",()=>{
     for(const theme of ["winXP","winxpQ","../winxp","win7","win11"]){
       expect(sourceIsXpFamily(theme),theme).toBe(false);
     }
+    expect(sourceThemeShellStatus("winvista")).toBe("partial");
     expect(sourceThemeShellStatus("win8")).toBe("partial");
     expect(sourceThemeShellStatus("win81")).toBe("partial");
     expect(sourceThemeShellStatus("win10")).toBe("partial");
