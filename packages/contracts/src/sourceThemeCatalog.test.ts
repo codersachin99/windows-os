@@ -1,6 +1,6 @@
 import {describe,expect,it} from "vitest";
 import {
-  SOURCE_THEME_CATALOG_IDS,SOURCE_THEME_SCREENS,
+  SOURCE_THEME_CATALOG_IDS,SOURCE_THEME_SCREENS,SOURCE_XP_THEME_IDS,sourceIsXpFamily,
   SOURCE_THEME_SCREEN_DEFAULTS,sourceIsKnownTheme,
   sourceThemeScreens,sourceThemeShellStatus
 } from "./sourceThemeCatalog";
@@ -45,6 +45,16 @@ describe("immutable final source app.config themeScreens",()=>{
     }
     expect(sourceThemeShellStatus("win7")).toBe("partial");
     expect(sourceThemeShellStatus("winxp")).toBe("partial");
+    expect([...SOURCE_XP_THEME_IDS]).toEqual([
+      "winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ"
+    ]);
+    for(const theme of SOURCE_XP_THEME_IDS){
+      expect(sourceIsXpFamily(theme),theme).toBe(true);
+      expect(sourceThemeShellStatus(theme),theme).toBe("partial");
+    }
+    for(const theme of ["winXP","winxpQ","../winxp","win7","win11"]){
+      expect(sourceIsXpFamily(theme),theme).toBe(false);
+    }
     expect(sourceThemeShellStatus("win8")).toBe("partial");
     expect(sourceThemeShellStatus("win81")).toBe("partial");
     expect(sourceThemeShellStatus("win10")).toBe("partial");
