@@ -1,3 +1,29 @@
+## Win7 Aero/Basic original Personalize gallery — 20 Nov 2026
+
+**Original pin:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Development:** `feat/0001-faithful-react-foundation`, draft PR #1.
+**CI:** preceding XP geometry-fix opt-in run [#44697312900](https://github.com/codersachin99/windows-os/actions/runs/44697312900)
+was pending at commit start, not yet marked green.
+
+**Source work:** `packages/apps/personalize` now renders four
+Aero + four Basic literal source IDs with the pinned source gallery
+geometry, glass overlay and Basic 1/2/3/4 faux-window CSS swatches.
+Adds source-correct separate Basic group, real theme choice/persistence
+and desktop/mobile browser tests; source and target main unchanged.
+
+**Important limit:** Aero color metadata and exact theme wallpaper
+mappings were NOT evidenced by the pinned files; previews use
+existing original byte-imported Win7 wallpapers with interim
+assignments. Full visual shell skins are still PENDING, not partial.
+See [AERO-BASIC-SOURCE.md](AERO-BASIC-SOURCE.md).
+Do not claim complete source migration or merge draft PR.
+
+**Next:** inspect CI job failures precisely and repair. Recover
+source Aero/Basic palette metadata and implement actual source
+taskbar/Start/menu/context/Explorer/Bin variants, screenshot-pair.
+
+---
+
 ## Correct failed XP Start CI source geometry — 20 November 2026
 
 **Source:** immutable legacy-win7 26b9f0ce7a1665dee89a7c81824bec09e2c75776.

@@ -46,9 +46,9 @@ export function PersonalizeApp({
             (theme===item.id?" is-selected":"")}
           onClick={()=>{if(item.id!==theme)onSelectTheme(item.id);}}>
           <div className={"windows-personalize__theme-preview"+
-            (sourceIsXpFamily(item.id)?" is-xp":"")}>
+            (sourceIsXpFamily(item.id)?" is-xp":/^aero-[1-4]$|^basic-[1-4]$/.test(item.id)?" is-win7-family":"")}>
             <img src={item.preview} alt="" draggable={false}/>
-            {sourceIsXpFamily(item.id)&&<span aria-hidden="true"
+            {(sourceIsXpFamily(item.id)||/^aero-[1-4]$|^basic-[1-4]$/.test(item.id))&&<span aria-hidden="true"
               data-test-personalize-color={item.id}
               className="windows-personalize__theme-color"/>}
           </div>
@@ -97,6 +97,7 @@ export function PersonalizeApp({
         <h2>Change the visuals and sounds on your computer</h2>
         <p>Click a theme to change the desktop visuals.</p>
         {gallery("aero","Aero Themes")}
+        {gallery("basic","Basic and High Contrast Themes")}
         {gallery("wins","Other Windows Themes")}
         <div className="windows-personalize__preview">
           <span>Selected theme</span>

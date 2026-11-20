@@ -14,7 +14,7 @@ async function openPersonalize(page:Page){
 test("source Desktop Personalize changes shell, artwork and wallpaper in place",async({page})=>{
   const win=await openPersonalize(page);
   const chooser=win.locator("[data-test-personalize]");
-  await expect(chooser.locator("[data-test-personalize-group]")).toHaveCount(2);
+  await expect(chooser.locator("[data-test-personalize-group]")).toHaveCount(3);
   const xp=chooser.locator('[data-test-personalize-theme="winxp"]');
   const eleven=chooser.locator('[data-test-personalize-theme="win11"]');
   await expect(xp.locator("img")).toHaveAttribute("src",
@@ -241,4 +241,51 @@ test("Personalize offers all seven original XP palettes with persistent selectio
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await expect(page.locator('[data-test-main-screen]'))
     .toHaveAttribute("data-theme","winxpZ");
+});
+
+/* Original personalize.js uses independent aero/basic/wins categories.
+ * Original swatches in pinned src/styles/system/personalize.css use a
+ * common Aero glass gradient and four separate Basic faux-window colors.
+ * These selected IDs remain "pending" for full shell-skin parity. */
+test("Aero and Basic originals are selectable with source thumbnail swatches",async({page})=>{
+  const win=await openPersonalize(page);
+  const chooser=win.locator('[data-test-personalize]');
+  await expect(chooser.locator('[data-test-personalize-group="aero"] [data-test-personalize-theme]')).toHaveCount(5);
+  await expect(chooser.locator('[data-test-personalize-group="basic"] [data-test-personalize-theme]')).toHaveCount(4);
+  const variants=[
+    ["aero-1","/assets/images/win7-1.5c44223b.webp","linear-gradient"],
+    ["aero-2","/assets/images/win7-2.bf7d7452.webp","linear-gradient"],
+    ["aero-3","/assets/images/win7-3.64168120.webp","linear-gradient"],
+    ["aero-4","/assets/images/win7-4.53fed3fd.webp","linear-gradient"],
+    ["basic-1","/assets/images/default.deccec52.webp","rgb(167, 192, 220)"],
+    ["basic-2","/assets/images/default.deccec52.webp","rgb(212, 208, 200)"],
+    ["basic-3","/assets/images/default.deccec52.webp","rgb(255, 255, 255)"],
+    ["basic-4","/assets/images/default.deccec52.webp","rgb(255, 255, 255)"]
+  ] as const;
+  for(const [theme,asset,paint] of variants){
+    const tile=chooser.locator('[data-test-personalize-theme="'+theme+'"]');
+    await expect(tile.locator("img")).toHaveAttribute("src",asset);
+    const swatch=tile.locator('[data-test-personalize-color="'+theme+'"]');
+    await expect(swatch).toHaveCSS("height","25px");
+    const rendered=await swatch.evaluate(el=>{
+      const css=getComputedStyle(el);
+      return css.backgroundColor+" "+css.backgroundImage;
+    });
+    expect(rendered).toContain(paint);
+    if(theme.startsWith("basic-")){
+      const pseudo=await swatch.evaluate(el=>{
+        const a=getComputedStyle(el,"::before");
+        const b=getComputedStyle(el,"::after");
+        return [a.content,b.content,a.height,b.height];
+      });
+      expect(pseudo.slice(0,2)).toEqual(['""','""']);
+    }
+    await tile.click();
+    await expect(chooser).toHaveAttribute("data-active-theme",theme);
+    await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
+    await expect(tile).toHaveAttribute("aria-pressed","true");
+  }
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme","basic-4");
 });

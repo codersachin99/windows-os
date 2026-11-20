@@ -4,10 +4,12 @@ import {SOURCE_PERSONALIZE_THEMES,SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS,
 import {sourceIsSystemWallpaper} from "@windows-os/assets";
 import {SOURCE_XP_THEME_IDS} from "@windows-os/contracts";
 describe("source personalize.js ChangeTheme grouped first shell chooser",()=>{
-  it("exposes sixteen source-backed Windows personalities",()=>{
+  it("exposes twenty-four original selectable Windows personalities",()=>{
     expect(SOURCE_PERSONALIZE_THEMES.map(x=>x.id))
-      .toEqual(["win7","win95","win98","win2k","winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ","win8","win81","win10","win11","win11dark"]);
-    expect(sourcePersonalizeGroup("aero").map(x=>x.id)).toEqual(["win7"]);
+      .toEqual(["win7","aero-1","aero-2","aero-3","aero-4","basic-1","basic-2","basic-3","basic-4","win95","win98","win2k","winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ","win8","win81","win10","win11","win11dark"]);
+    expect(sourcePersonalizeGroup("aero").map(x=>x.id)).toEqual(["win7","aero-1","aero-2","aero-3","aero-4"]);
+    expect(sourcePersonalizeGroup("basic").map(x=>x.id))
+      .toEqual(["basic-1","basic-2","basic-3","basic-4"]);
     expect(sourcePersonalizeGroup("wins").map(x=>x.id))
       .toEqual(["win95","win98","win2k","winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ","win8","win81","win10","win11","win11dark"]);
   });
@@ -17,6 +19,14 @@ describe("source personalize.js ChangeTheme grouped first shell chooser",()=>{
   });
   it("theme cards display pinned original artwork, not generated substitutes",()=>{
     expect(SOURCE_PERSONALIZE_THEMES.map(x=>x.preview)).toEqual([
+      "/assets/images/default.deccec52.webp",
+      "/assets/images/win7-1.5c44223b.webp",
+      "/assets/images/win7-2.bf7d7452.webp",
+      "/assets/images/win7-3.64168120.webp",
+      "/assets/images/win7-4.53fed3fd.webp",
+      "/assets/images/default.deccec52.webp",
+      "/assets/images/default.deccec52.webp",
+      "/assets/images/default.deccec52.webp",
       "/assets/images/default.deccec52.webp",
       "/assets/images/win95.fcef1b3b.webp",
       "/assets/images/win95.fcef1b3b.webp",

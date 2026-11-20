@@ -159,3 +159,116 @@
   border-color:#252525;
   background:linear-gradient(#6f6f6f,#545454 50%,#3d3d3d 0,#1b1b1b);
 }
+
+
+/* Immutable source src/styles/system/personalize.css @ 26b9f0ce:
+ * Aero/Basic use the same 112x70 thumbnail, right 96x64 background and
+ * bottom-left 25x25 foreground sample as XP; original Basic swatches
+ * draw two distinct 35%/65% internal window panes.
+ * The Aero palette CSS variable is supplied by the legacy theme metadata.
+ * Until that data is ported, the base Win7 tint is an explicit fallback. */
+.windows-personalize__theme-preview.is-win7-family{
+  position:relative;width:112px;height:70px;flex:none;
+}
+.windows-personalize__theme-preview.is-win7-family>img{
+  position:absolute;right:0;top:0;width:96px;height:64px;
+  border:0;object-fit:cover;
+}
+.windows-personalize__theme-preview.is-win7-family .windows-personalize__theme-color{
+  box-sizing:border-box;position:absolute;left:0;top:36px;
+  display:flex;flex-direction:column;
+  width:25px;height:25px;
+  border:1px solid #888;
+  box-shadow:inset 0 0 0 1px #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme^="aero-"] .windows-personalize__theme-color{
+  border-radius:3px;
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 90% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color,var(--theme-color,#6a9eb9));
+}
+.windows-personalize:dir(rtl) .windows-personalize__theme-preview.is-win7-family>img{
+  right:auto;left:0;
+}
+.windows-personalize:dir(rtl) .windows-personalize__theme-preview.is-win7-family .windows-personalize__theme-color{
+  left:auto;right:0;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="aero-"] .windows-personalize__theme-color{
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(-135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 90% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color,var(--theme-color,#6a9eb9));
+}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color{
+  border-radius:0;border-color:transparent;box-shadow:none;
+}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::before,
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::after{
+  content:"";display:block;flex:none;width:100%;box-sizing:border-box;
+}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::before{height:35%}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::after{height:65%}
+/* Source's separate Basic 1 (blue), 2 (classic), 3 (purple) and
+ * 4 (black-white) faux-window 25px sample strokes. */
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color{
+  background:#a7c0dc;border-radius:4px 4px 0 0;padding:4px;
+  box-shadow:.5px .5px 0 1px #000,inset 0 0 0 .5px #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color::before{
+  background:#000;
+  box-shadow:inset 0 0 0 4px #a7c0dc,inset -8px -8px 0 #a7c0dc;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color::after{
+  background:#000;box-shadow:inset 0 0 0 6px #fff,inset -15px -22px 0 #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-2"] .windows-personalize__theme-color{
+  background:#d4d0c8;padding:1px;box-shadow:.5px .5px 0 1px #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-2"] .windows-personalize__theme-color::before{
+  background:#fff;box-shadow:inset 0 0 0 7px #0f75c9,inset -8px -8px 0 #0f75c9;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-2"] .windows-personalize__theme-color::after{
+  background:#000;box-shadow:inset 0 0 0 7px #fff,inset -16px -25px 0 #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-3"] .windows-personalize__theme-color{
+  background:#fff;padding:.5px;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-3"] .windows-personalize__theme-color::before{
+  background:#fff;box-shadow:inset 0 0 0 7px purple,inset -8px -8px 0 purple;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-3"] .windows-personalize__theme-color::after{
+  background:#fff;box-shadow:inset 0 0 0 7px #000,inset -16px -25px 0 #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-4"] .windows-personalize__theme-color{
+  background:#fff;padding:.5px;box-shadow:.5px .5px 0 1px #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-4"] .windows-personalize__theme-color::before{
+  background:#fff;box-shadow:inset 0 0 0 7px #000,inset -8px -8px 0 #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-4"] .windows-personalize__theme-color::after{
+  background:#000;box-shadow:inset 0 0 0 7px #fff,inset -16px -25px 0 #fff;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color{
+  box-shadow:-.5px .5px 0 1px #000;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color{
+  box-shadow:-.5px .5px 0 1px #000,inset 0 0 0 .5px #fff;
+}
+/* Original RTL source flips every faux-window diagonal inset direction. */
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::before{
+  transform:scaleX(-1);
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::after{
+  transform:scaleX(-1);
+}
+@media(max-width:530px){
+  .windows-personalize__theme-preview.is-win7-family{
+    max-width:100%;width:100%;height:70px;
+  }
+}
