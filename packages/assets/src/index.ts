@@ -5,6 +5,9 @@ export const LEGACY_REVISION = "26b9f0ce7a1665dee89a7c81824bec09e2c75776" as con
 // Keep source names and paths. Do not substitute emoji or approximated artwork.
 export const legacyArt = {
   wallpaperWin7: "/assets/images/default.deccec52.webp",
+  wallpaperArchitecture: "/assets/images/architecture.e651db26.webp",
+  wallpaperLandscape: "/assets/images/landscape.1626b82c.webp",
+  wallpaperNature: "/assets/images/nature.e05e4ec0.webp",
   wallpaperChoices: [
     "/assets/images/default.deccec52.webp",
     "/assets/images/win7-1.5c44223b.webp",
@@ -194,6 +197,14 @@ export const sourceThemeLogonArtwork=Object.freeze({
 
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
+  // Pinned built-in registry 3b8c: exact Aero image categories and
+  // Basic 2–4 solid desktop colors, not inferred Win7-1…4 files.
+  if(theme==="aero-2")return legacyArt.wallpaperArchitecture;
+  if(theme==="aero-3")return legacyArt.wallpaperLandscape;
+  if(theme==="aero-4")return legacyArt.wallpaperNature;
+  if(theme==="basic-2")return "#3b6ea4";
+  if(theme==="basic-3")return "#000";
+  if(theme==="basic-4")return "#fff";
   if(theme==="win95"||theme==="win98")return legacyShellThemeAssets.win95.theme;
   if(theme==="win2k")return legacyShellThemeAssets.win2k.theme;
   if(theme==="win8")return sourceWin8ShellArtwork.win8Wallpaper;
@@ -211,6 +222,9 @@ export const sourceSystemWallpapers:readonly string[]=Object.freeze([
   legacyShellThemeAssets.win95.theme,
   legacyShellThemeAssets.win2k.theme,
   ...legacyArt.wallpaperChoices,
+  legacyArt.wallpaperArchitecture,
+  legacyArt.wallpaperLandscape,
+  legacyArt.wallpaperNature,
   sourceWin8ShellArtwork.win8Wallpaper,
   sourceWin8ShellArtwork.win81Wallpaper,
   legacyShellThemeAssets.win10.theme,
@@ -218,6 +232,10 @@ export const sourceSystemWallpapers:readonly string[]=Object.freeze([
   legacyShellThemeAssets.win11.theme,
   sourceWin11DarkArtwork.wallpaper
 ]);
+/** Source Basic 2/3/4 background colors are theme defaults, not user URLs. */
+export function sourceIsSolidThemeWallpaper(path:string):boolean{
+  return path==="#3b6ea4"||path==="#000"||path==="#fff";
+}
 export function sourceIsSystemWallpaper(path:string):boolean{
   return sourceSystemWallpapers.includes(path);
 }
