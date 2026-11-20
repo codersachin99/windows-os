@@ -124,6 +124,10 @@ export function ExplorerApp({
     sendToOpen:boolean;uri?:string
   }|null>(null);
   const contextRef=useRef<HTMLDivElement>(null);
+  const contentRef=useRef<HTMLElement>(null);
+  // Both Computer and Bin use real listview item buttons and the
+  // focusable folder background as their context-menu anchors.
+  const contextReturnFocus=useRef<HTMLElement|null>(null);
   const sendToRef=useRef<HTMLDivElement>(null);
   const backgroundSubmenuRef=useRef<HTMLDivElement>(null);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
@@ -514,7 +518,14 @@ export function ExplorerApp({
         && event.target.closest("[data-test-explorer-context]"))) setContext(null);
     };
     const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setContext(null);
+      if(event.key!=="Escape")return;
+      event.preventDefault();
+      setContext(null);
+      window.requestAnimationFrame(()=>{
+        const origin=contextReturnFocus.current;
+        if(origin?.isConnected)origin.focus({preventScroll:true});
+        else contentRef.current?.focus({preventScroll:true});
+      });
     };
     window.addEventListener("pointerdown", dismiss);
     window.addEventListener("keydown", escape);
@@ -523,6 +534,17 @@ export function ExplorerApp({
       window.removeEventListener("keydown", escape);
     };
   }, [context]);
+
+  // Source ExplorerMenu already supports keyboard roving through its
+  // shared menu helper. Enter the root popup on right-click so the
+  // existing ArrowUp/Down and child-menu navigation actually work.
+  // Never reset focus when a submenu expands or the popup flips sides.
+  useLayoutEffect(()=>{
+    if(!context||!contextRef.current)return;
+    contextRef.current.querySelector<HTMLButtonElement>(
+      ':scope > button[role="menuitem"]:not(:disabled)'
+    )?.focus({preventScroll:true});
+  },[context?.kind,context?.uri,context?.anchorX,context?.anchorY]);
 
   useLayoutEffect(()=>{
     const element=contextRef.current;
@@ -606,6 +628,7 @@ export function ExplorerApp({
   ) => {
     event.preventDefault();
     event.stopPropagation();
+    contextReturnFocus.current=event.currentTarget;
     if (kind === "item" && uri && !state.selected.includes(uri)) session.select(uri);
     if (kind === "background") session.clearSelection();
     setContext({
@@ -870,6 +893,7 @@ export function ExplorerApp({
           (dropTarget === state.path ? " is-drop-target" : "")}
         data-windows-os-drop-directory={isBin ? undefined : state.path}
         aria-label="Folder contents"
+        ref={contentRef} tabIndex={-1}
         onDragOver={event => overDrop(event, state.path)}
         onDragLeave={event => {
           if (!event.currentTarget.contains(event.relatedTarget as Node)) setDropTarget(null);
