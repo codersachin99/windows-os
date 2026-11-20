@@ -222,3 +222,122 @@
 ):dir(rtl){
   box-shadow:-4px 4px 2px -2px rgba(0,0,0,.5333333333);
 }
+
+/* Original theme-win31-scss.js .win31 .winui-menu. Program Manager
+ * delegates real program context actions to this detached portal. */
+.windows-startmenu__context[data-source-start-context-theme="win31"]{
+  color:#000;background:#fff;border:1px solid #000;border-radius:0;
+  padding:0;box-shadow:1px 1px 0 #808080;
+  font:700 12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-startmenu__context[data-source-start-context-theme="win31"] button{
+  color:#000;background:transparent;border:1px solid transparent;border-radius:0;
+  font-weight:700;
+}
+.windows-startmenu__context[data-source-start-context-theme="win31"]
+button:not(:disabled):is(:hover,:focus-visible){
+  background:#080abd;color:#fff;border-color:transparent;
+}
+.windows-startmenu__context[data-source-start-context-theme="win31"]:dir(rtl){
+  box-shadow:-1px 1px 0 #808080;
+}
+
+/* Pinned theme-win9x-scss.js shared menu, with actual source
+ * Win95/98/2000 per-variant --theme-surface and --theme-accent values.
+ * The real Start cascade layout and interaction remain untouched. */
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win95"],
+  [data-source-start-context-theme="win98"],
+  [data-source-start-context-theme="win2k"]
+){
+  --context-classic-surface:#bdbebd;
+  --context-classic-accent:#00007b;
+  background:var(--context-classic-surface);color:#000;
+  border:1px solid #393c39;border-radius:0;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,
+    inset -2px -2px #7b7b7b;
+  padding:3px;font:12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-startmenu__context[data-source-start-context-theme="win98"]{
+  --context-classic-surface:#c0c7c8;--context-classic-accent:#0608a6;
+}
+.windows-startmenu__context[data-source-start-context-theme="win2k"]{
+  --context-classic-surface:#d4d0c8;--context-classic-accent:#082767;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win95"],
+  [data-source-start-context-theme="win98"],
+  [data-source-start-context-theme="win2k"]
+) button{
+  background:transparent;color:#000;
+  border:1px solid transparent;border-radius:0;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win95"],
+  [data-source-start-context-theme="win98"],
+  [data-source-start-context-theme="win2k"]
+) button:not(:disabled):is(:hover,:focus-visible){
+  color:#fff;background:var(--context-classic-accent);border-color:transparent;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win95"],
+  [data-source-start-context-theme="win98"],
+  [data-source-start-context-theme="win2k"]
+) button:disabled{opacity:1;color:#7b7b7b}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win95"],
+  [data-source-start-context-theme="win98"],
+  [data-source-start-context-theme="win2k"]
+):dir(rtl){
+  box-shadow:inset 1px -1px #393c39,inset -1px 1px #fff,
+    inset 2px -2px #7b7b7b;
+}
+
+/* theme-win8-scss.js .win8 .winui-menu and shared Win8.1 variant:
+ * 1px offset gutter, translucent source-blue selection with thin
+ * #8acfff outline, flat panel and direction-correct source shadow. */
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+){
+  color:#000;background:#f0f0f0;border:1px solid rgba(0,0,0,.4);
+  border-radius:0;padding:4px 2px;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5333333333);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+)::before{
+  content:"";position:absolute;top:2px;bottom:2px;left:28px;
+  width:1px;background:#d7d7d7;pointer-events:none;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+) button{
+  position:relative;z-index:1;padding-left:34px;
+  color:#000;background:transparent;border:1px solid transparent;
+  border-radius:0;box-shadow:none;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+) button:not(:disabled):is(:hover,:focus-visible){
+  color:#000;background:rgba(146,200,253,.2);
+  border-color:transparent;box-shadow:0 0 0 1px #8acfff;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+):dir(rtl){
+  box-shadow:-4px 4px 3px -2px rgba(0,0,0,.5333333333);
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+):dir(rtl)::before{left:auto;right:28px}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win8"],
+  [data-source-start-context-theme="win81"]
+):dir(rtl) button{padding-left:9px;padding-right:34px}
