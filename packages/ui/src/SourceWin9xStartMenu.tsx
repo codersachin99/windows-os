@@ -66,7 +66,9 @@ export function SourceWin9xStartMenu({
     // Re-clicking the already expanded trigger must not erase measured
     // placement: the layout effect only reruns when branch changes.
     if(branch===next)return;
-    setPlacement(null);
+    // Keep the last measured position until the layout effect measures the
+    // new branch. A pointer-enter followed by a click in the same event
+    // sequence must not leave placement null while branch stays unchanged.
     setBranch(next);
   };
   const closeBranch=(trigger:HTMLButtonElement|null)=>{
