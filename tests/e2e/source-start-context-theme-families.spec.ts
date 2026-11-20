@@ -69,7 +69,7 @@ for(const [theme,accent] of [
   ["winxpE","rgb(62, 157, 232)"],
   ["winxpG","rgb(147, 160, 112)"],
   ["winxpN","rgb(94, 129, 188)"],
-  ["winxpR","rgb(51, 90, 168)"],
+  ["winxpR","rgb(51, 94, 168)"],
   ["winxpS","rgb(187, 183, 199)"],
   ["winxpZ","rgb(190, 190, 190)"]
 ] as const){
