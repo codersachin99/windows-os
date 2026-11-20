@@ -59,6 +59,10 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
   const isXpTheme=sourceIsXpFamily(theme);
+  // Pinned startmenu-base.js supplies recent programs and the configured
+  // power action to the whole Win7 Start renderer (Aero and Basic included).
+  const isWin7StartFamily=theme==="win7"||sourceIsAeroFamily(theme)||
+    theme==="basic-1"||theme==="basic-2"||theme==="basic-3"||theme==="basic-4";
   const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
@@ -259,7 +263,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   // Source startmenu-base.js also renders a recent-program list on Win7.
   // Preserve the existing launch grid pending complete Win7 structural parity.
   const recentSection=startPreferences.storeRecentApps&&
-    (theme==="win7"||isXpTheme||isWin11Theme)&&
+    (isWin7StartFamily||isXpTheme||isWin11Theme)&&
     !allPrograms&&!query&&recentApps.length>0&&
     <section className="windows-startmenu__recent"
       aria-label="Recently opened programs" data-test-list-recent="">
@@ -382,7 +386,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         </div>
       </aside>}
       <div className="windows-startmenu__left">
-        {(isXpTheme||theme==="win7"||sourceIsAeroFamily(theme)||theme==="basic-2"||theme==="basic-3"||theme==="basic-4")&&recentSection}
+        {(isXpTheme||isWin7StartFamily)&&recentSection}
         <div className="windows-startmenu__programs"
           onWheel={event=>{
             if(!win11Paged||event.deltaY===0)return;
@@ -567,7 +571,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         <hr />
         {!isXpTheme&&<button onClick={() => dispatch({ type: "LOG_OFF" })}>
           Log off</button>}
-        {theme==="win7"&&<button className="windows-startmenu__power"
+        {isWin7StartFamily&&<button className="windows-startmenu__power"
           data-test-startmenu-power-action={startPreferences.powerButtonAction}
           onClick={() => {
             const actions={
