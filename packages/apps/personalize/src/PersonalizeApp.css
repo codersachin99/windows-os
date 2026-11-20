@@ -165,8 +165,8 @@
  * Aero/Basic use the same 112x70 thumbnail, right 96x64 background and
  * bottom-left 25x25 foreground sample as XP; original Basic swatches
  * draw two distinct 35%/65% internal window panes.
- * The Aero palette CSS variable is supplied by the legacy theme metadata.
- * Until that data is ported, the base Win7 tint is an explicit fallback. */
+ * The Aero color variable comes from pinned registry 3b8c and palette 2299,
+ * not a guessed color or an inferred wallpaper image. */
 .windows-personalize__theme-preview.is-win7-family{
   position:relative;width:112px;height:70px;flex:none;
 }
@@ -271,4 +271,14 @@
   .windows-personalize__theme-preview.is-win7-family{
     max-width:100%;width:100%;height:70px;
   }
+}
+
+/* Source 3b8c Basic 2/3/4 theme backgrounds are literal colors,
+ * not default Win7 wallpapers. Preserve source thumbnail geometry. */
+.windows-personalize__theme-preview.is-win7-family>.windows-personalize__theme-solid{
+  position:absolute;right:0;top:0;width:96px;height:64px;border:0;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme-preview.is-win7-family>.windows-personalize__theme-solid{
+  right:auto;left:0;
 }

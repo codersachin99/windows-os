@@ -1,6 +1,6 @@
-import {useCallback,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
-import {sourceIsAeroFamily,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
-import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
+import {useCallback,useEffect,useLayoutEffect,useRef,useState,type CSSProperties,type Dispatch} from "react";
+import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
+import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
@@ -407,8 +407,14 @@ export function DesktopShell({
     return () => window.removeEventListener("keydown", keydown);
   }, [state.windows, state.phase, requestClose, dispatch]);
 
+  const win7Colors=sourceWin7ThemeChromeColors(state.theme);
+  const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
+      style={win7Colors?{
+        "--theme-color":win7Colors.active,
+        "--theme-color--inactive":win7Colors.inactive??undefined
+      } as CSSProperties:undefined}
       data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
       data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}
       data-source-aero-peeking={previewDesktop?"true":undefined}
@@ -427,7 +433,10 @@ export function DesktopShell({
         }}>
       <div className="desktop-background is-static windows-desktop__wallpaper"
         data-test-desktop-background={state.wallpaper}
-        style={{ backgroundImage: `url("${state.wallpaper}")` }} />
+        style={{
+          backgroundImage:isSolidBackground?"none":`url("${state.wallpaper}")`,
+          backgroundColor:isSolidBackground?state.wallpaper:undefined
+        }} />
       <div id="desktop" className="desktop__wrapper windows-desktop__workspace"
         onClick={() => dispatch({ type: "SELECT_ICON", id: null })}>
         <DesktopIcons apps={desktop} dispatch={dispatch} theme={state.theme} />

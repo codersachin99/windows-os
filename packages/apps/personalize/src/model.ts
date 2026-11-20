@@ -1,11 +1,12 @@
 import type {ThemeId} from "@windows-os/contracts";
 import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers,sourceWin8ShellArtwork,sourceWin11DarkArtwork} from "@windows-os/assets";
 
-/** Original pinned personalize.js ChangeTheme, _getThemes:
- * classes aero/basic/wins, theme selection immediately applies Theme and
- * source theme background. The original Aero and Basic category IDs
- * are now exposed alongside the sixteen previously migrated cards. Some
- * source styles remain pending: showing a theme is NOT shell visual parity.
+/** Pinned source built-in theme registry (webpack 3b8c and 2299).
+ * Exact original names, source Aero palettes, solid Basic background
+ * colors and immutable original image assets. Original _getThemes("aero")
+ * contains four cards; the "base" theme is excluded from the gallery.
+ * The canonical win7 direct route remains supported outside the gallery.
+ * Rendering these cards still does not mean full source visual parity.
  */
 export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"aero-1"|"aero-2"|"aero-3"|"aero-4"|"basic-1"|"basic-2"|"basic-3"|"basic-4"|"win95"|"win98"|"win2k"|"winxp"|"winxpE"|"winxpG"|"winxpN"|"winxpR"|"winxpS"|"winxpZ"|"win8"|"win81"|"win10"|"win11"|"win11dark">;
 export interface SourcePersonalizeTheme{
@@ -15,15 +16,14 @@ export interface SourcePersonalizeTheme{
   preview:string;
 }
 export const SOURCE_PERSONALIZE_THEMES:readonly SourcePersonalizeTheme[]=[
-  {id:"win7",label:"Windows 7",group:"aero",preview:legacyArt.wallpaperWin7},
-  {id:"aero-1",label:"Windows 7 Aero 1",group:"aero",preview:legacyArt.wallpaperChoices[1]},
-  {id:"aero-2",label:"Windows 7 Aero 2",group:"aero",preview:legacyArt.wallpaperChoices[2]},
-  {id:"aero-3",label:"Windows 7 Aero 3",group:"aero",preview:legacyArt.wallpaperChoices[3]},
-  {id:"aero-4",label:"Windows 7 Aero 4",group:"aero",preview:legacyArt.wallpaperChoices[4]},
-  {id:"basic-1",label:"Windows 7 Basic 1",group:"basic",preview:legacyArt.wallpaperWin7},
-  {id:"basic-2",label:"Windows 7 Basic 2",group:"basic",preview:legacyArt.wallpaperWin7},
-  {id:"basic-3",label:"Windows 7 Basic 3",group:"basic",preview:legacyArt.wallpaperWin7},
-  {id:"basic-4",label:"Windows 7 Basic 4",group:"basic",preview:legacyArt.wallpaperWin7},
+  {id:"aero-1",label:"Windows 7",group:"aero",preview:legacyArt.wallpaperWin7},
+  {id:"aero-2",label:"Architecture",group:"aero",preview:legacyArt.wallpaperArchitecture},
+  {id:"aero-3",label:"Landscape",group:"aero",preview:legacyArt.wallpaperLandscape},
+  {id:"aero-4",label:"Nature",group:"aero",preview:legacyArt.wallpaperNature},
+  {id:"basic-1",label:"Windows 7 Basic",group:"basic",preview:legacyArt.wallpaperWin7},
+  {id:"basic-2",label:"Windows Classic",group:"basic",preview:"#3b6ea4"},
+  {id:"basic-3",label:"High Contrast Black",group:"basic",preview:"#000"},
+  {id:"basic-4",label:"High Contrast White",group:"basic",preview:"#fff"},
   {id:"win95",label:"Windows 95",group:"wins",preview:legacyShellThemeAssets.win95.theme},
   {id:"win98",label:"Windows 98",group:"wins",preview:legacyShellThemeAssets.win95.theme},
   {id:"win2k",label:"Windows 2000",group:"wins",preview:legacyShellThemeAssets.win2k.theme},

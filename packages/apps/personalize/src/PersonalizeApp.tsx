@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {sourceIsXpFamily,type ThemeId} from "@windows-os/contracts";
+import {useState,type CSSProperties} from "react";
+import {sourceIsXpFamily,sourceWin7ThemeColor,type ThemeId} from "@windows-os/contracts";
 import {
   SOURCE_PERSONALIZE_THEMES,SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS,
   sourcePersonalizeGroup,type SourcePersonalizeTheme
@@ -47,10 +47,16 @@ export function PersonalizeApp({
           onClick={()=>{if(item.id!==theme)onSelectTheme(item.id);}}>
           <div className={"windows-personalize__theme-preview"+
             (sourceIsXpFamily(item.id)?" is-xp":/^aero-[1-4]$|^basic-[1-4]$/.test(item.id)?" is-win7-family":"")}>
-            <img src={item.preview} alt="" draggable={false}/>
+            {item.preview.startsWith("#")
+              ?<span className="windows-personalize__theme-solid"
+                style={{backgroundColor:item.preview}} aria-hidden="true"/>
+              :<img src={item.preview} alt="" draggable={false}/>}
             {(sourceIsXpFamily(item.id)||/^aero-[1-4]$|^basic-[1-4]$/.test(item.id))&&<span aria-hidden="true"
               data-test-personalize-color={item.id}
-              className="windows-personalize__theme-color"/>}
+              className="windows-personalize__theme-color"
+              style={sourceWin7ThemeColor(item.id)
+                ?{"--preview-color":sourceWin7ThemeColor(item.id)} as CSSProperties
+                :undefined}/>}
           </div>
           <span>{item.label}</span>
         </button>)}
@@ -102,7 +108,7 @@ export function PersonalizeApp({
         <div className="windows-personalize__preview">
           <span>Selected theme</span>
           <strong>{SOURCE_PERSONALIZE_THEMES.find(item=>item.id===theme)?.label
-            ??"Another original theme"}</strong>
+            ??(theme==="win7"?"Windows 7":"Another original theme")}</strong>
           <button type="button" className="windows-personalize__navigation"
             data-test-personalize-background-link=""
             onClick={openBackground}>Desktop Background</button>
