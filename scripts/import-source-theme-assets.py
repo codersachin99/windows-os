@@ -96,6 +96,10 @@ FILES: dict[str, dict[str, str]] = {
         "cpanel-win10.d3d1d446.webp": "a960a2939446c2ef6901dc9acdca55ddfcfdbaf6",
         "games-win10.63f82076.webp": "05104c19549b3579db2eb3f31b1b9af5bb4d7377",
     },
+    "win11dark": {
+        "start-button-win11dark.d417814c.webp": "13187c97beb8af8f2b0b3a7ccda25b0925868a42",
+        "win11dark.af52a1ca.webp": "18ec99e80efb302bcdd01e86d31954daaa706b8d",
+    },
     "win11": {
         "guest-win10.a110df5a.webp": "57caee256e62a46271db867a088f49b1981bbc7d",
         "personal-win11.76af8a1e.webp": "758c1959c286e169051e211b680ae26fb959bc95",
