@@ -85,7 +85,7 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
     <main className={"windows-logon source-win11-logon"+(modernFamily==="win10"?" source-win10-logon":"")} data-test-logon-screen
       data-source-theme-id={theme} data-source-logon-theme={modernFamily}
       data-source-shell-status={status} data-source-logon-renderer={modernFamily}
-      style={{backgroundImage:`url("${sourceThemeLogonArtwork[modernFamily].background}")`}}>
+      style={{backgroundImage:`url("${theme==="win11dark"?sourceWin11DarkArtwork.wallpaper:sourceThemeLogonArtwork[modernFamily].background}")`}}>
       <div className="source-win11-logon__overlay" aria-hidden="true"/>
       <section className="source-win11-logon__account" aria-label="Guest account">
         <button className="source-win11-logon__avatar avatar-button can-click"
