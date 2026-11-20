@@ -178,6 +178,12 @@ test("Win11 Dark chooses exact pinned source wallpaper/Start and native dark she
   const computer=page.locator('[data-test-window="computer"]').first();
   await expect(computer).toBeVisible();
   await expect(computer).toHaveCSS("background-color","rgb(28, 28, 28)");
+  // Windows correctly intercept desktop pointers while open. Minimize all
+  // three overlapping windows before exercising the actual desktop context.
+  for(const openWindow of [computer,notepad,win]){
+    await openWindow.locator('[data-source-window-control="minimize"]').click();
+    await expect(openWindow).toBeHidden();
+  }
   // The same original Win11 context structure uses distinct dark tokens.
   await page.locator("#desktop-icons").click({
     button:"right",position:{x:270,y:210}
