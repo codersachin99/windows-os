@@ -11,6 +11,18 @@ describe("pinned source XP/Win10/Win11 shell artwork mapping",()=>{
       expect(sourceShellAsset(theme,"binFull")).not.toBe(sourceShellAsset(theme,"bin"));
     }
   });
+  it("reuses only pinned XP family resources for all six source XP subvariants",()=>{
+    for(const theme of ["winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ"]){
+      for(const kind of ["start","computer","bin","binFull","folder","file","theme"] as const){
+        expect(sourceShellAsset(theme,kind),theme+" "+kind)
+          .toBe(legacyShellThemeAssets.winxp[kind]);
+      }
+      for(const key of ["notepad","games","cpanel","cmd"]){
+        expect(sourceThemeProgramArt(theme,key),theme+" "+key)
+          .toBe(sourceThemeProgramArt("winxp",key));
+      }
+    }
+  });
   it("binds Win10 to the exact original shell icons rather than Win7 substitutes",()=>{
     const art=legacyShellThemeAssets.win10;
     expect(art.start).toBe("/assets/images/start-button-win8.2e5214cc.svg");
