@@ -29,8 +29,11 @@
         "tests/e2e/bin.spec.ts",
         "migration/RECYCLE-BIN.md",
         "packages/filesystem/src/sourceGuest.ts",
-        "tests/e2e/source-guest.spec.ts"
-      ]
+        "tests/e2e/source-guest.spec.ts",
+        "tests/e2e/source-explorer-context-keyboard.spec.ts",
+        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md"
+      ],
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted"
     },
     {
       "source": "src/modules/apps/calc.js",
@@ -125,9 +128,11 @@
         "migration/LISTITEM-INTERACTIONS-SOURCE.md",
         "packages/ui/src/sourceListItemRename.tsx",
         "packages/ui/src/sourceListItemRename.test.tsx",
-        "tests/e2e/listview-source-rename.spec.ts"
+        "tests/e2e/listview-source-rename.spec.ts",
+        "tests/e2e/source-explorer-context-keyboard.spec.ts",
+        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md"
       ],
-      "verification": "CI #43606204510 failed TypeScript only: sourceItemCheckbox aria-checked was generic string (now boolean). Previous #43604884502 passed 315 unit but 4 older Rename dialog browser specs failed; updated. Source exact 0e9a filename stem/extension now added with new tests. Next combined CI pending; pixel parity unverified."
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted"
     },
     {
       "source": "src/modules/apps/cpanel.js",
@@ -1926,9 +1931,12 @@
         "tests/e2e/desktop-rename.spec.ts",
         "migration/DESKTOP-RENAME.md",
         "tests/e2e/source-desktop-context-keyboard.spec.ts",
-        "migration/DESKTOP-CONTEXT-KEYBOARD-SOURCE.md"
+        "migration/DESKTOP-CONTEXT-KEYBOARD-SOURCE.md",
+        "packages/apps/explorer/src/ExplorerApp.tsx",
+        "tests/e2e/source-explorer-context-keyboard.spec.ts",
+        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md"
       ],
-      "verification": "bounded Desktop/Computer/Bin menu source actions and keyboard roving/trigger focus; exact-head browser CI pending, entire source shell and screenshot parity pending"
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted"
     },
     {
       "source": "src/modules/system/mediacenter.js",
