@@ -5,7 +5,7 @@
  * Exact source asset palette and full interaction parity are still pending.
  * Keep Win7 selectors untouched; never borrow its look for XP/Win11.
  */
-.windows-desktop[data-theme="winxp"] .windows-startmenu--winxp{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-startmenu--winxp{
   width:min(360px,calc(100vw - 8px));
   max-height:calc(100dvh - 44px);min-height:0;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
