@@ -1,6 +1,6 @@
 # Source-locked React conversion of legacy-win7
 
-**Canonical product/source:** [codersachin99/legacy-win7](https://github.com/codersachin99/legacy-win7), commit `4e63290d783009e1293433c6ccf252abba9c1187`.
+**Canonical product/source:** [codersachin99/legacy-win7](https://github.com/codersachin99/legacy-win7), immutable commit `26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
 **Target:** [codersachin99/windows-os](https://github.com/codersachin99/windows-os), React + TypeScript + Vite.
 **Non-negotiable:** do not redesign, replace icons with emojis or approximate source behavior. Preserve login, themes, boot, windows, apps, games, gadgets, settings, keyboard/touch behavior, backend and files.
 
@@ -30,7 +30,7 @@ All three `apps/*/index.html` entries from the original source are now recorded 
 1. Exact boot and Win7 logon, Guest and account flows, first-run behavior.
 2. Desktop and taskbar/window management: grid, wallpaper, selection, drag/drop, menus, Start, tray, clock, theme changes.
 3. Full source application registry and *one-by-one real ports* of apps with shared Window SDK, storage, commands and events.
-4. Games/gadgets/media/assets, 18 original themes, responsive/mobile and input accessibility.
+4. Games/gadgets/media/assets, all 36 original `defaults.themeScreens` IDs (plus canonical Win7 runtime alias), responsive/mobile and input accessibility.
 5. Python backend/API parity (auth, contacts, store, themes, feed), persistence and browser/native host boundaries.
 6. Audit every source module and asset against the checkpoint; functional behavior tests and screenshot acceptance per state.
 
