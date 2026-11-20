@@ -1,3 +1,28 @@
+## 21 November 2026 — fix Start program popup keyboard and Escape focus for every renderer
+
+**Source lock:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`; draft PR #1 unmerged.
+`main` and pinned source untouched.
+
+**Previous exact-head CI checks BOTH green:**
+- [#44787399492](https://github.com/codersachin99/windows-os/actions/runs/44787399492), `b97d550`: Win10/11 popup styling, TypeScript, unit, audits, Vite, focused and full desktop/mobile browser **SUCCESS**.
+- [#44788112053](https://github.com/codersachin99/windows-os/actions/runs/44788112053), `b8dc340`: Vista shared Start recents/power and popup styling, all checks **SUCCESS**. Visual capture SKIPPED on both; no original-vs-React parity established.
+
+**Found actionable keyboard bug:** Start program action menu is portaled under `document.body`, with `role=menu` and ArrowUp/Down roving focus handler but never focuses a menu item when opened. The arrow handler was effectively unreachable on right-click. Escape focus restoration previously used only normal `data-test-program` or `data-test-source-program` selectors; it missed actual Win31 Program Manager and Win95/98/2k cascading menu buttons, and some Win10 recent tiles.
+
+**Committed:**
+- [`657ea323`](https://github.com/codersachin99/windows-os/commit/657ea3237c057516f524f6baa11ec04dbfb56b3b): keep the actual invoking `event.currentTarget` in a React ref; focus first enabled action after portal mounts; Escape restores actual still-connected origin button. Retain selector fallback, source viewport placement, action engine and disabled-item boundaries.
+- [`2cfa74e8`](https://github.com/codersachin99/windows-os/commit/2cfa74e8ee5d2c52bf106d476097f21ba738f580): 11 theme/layout Playwright cases × desktop/mobile checking focus, arrows, disabled action skip, Escape and exact origin focus in Win7, XP, Vista, Win10, Win11dark, Win8/81, Win31 and Win95/98/2k.
+- [`5f0e83da`](https://github.com/codersachin99/windows-os/commit/5f0e83dad65d805779c5b707a27e1315b2446c89): includes the suite in opt-in source shell targeted browser CI.
+- [`2e7ed61d`](https://github.com/codersachin99/windows-os/commit/2e7ed61d9664e97ed040b653dd35ccfc74e0c0ba): source/focus audit `migration/START-CONTEXT-KEYBOARD-SOURCE.md`.
+- [`876515d0`](https://github.com/codersachin99/windows-os/commit/876515d0cffade3851fcd1f28cfa2b10114280b4): source module tracker evidence; module status remains **in-progress**.
+
+**Verification request:** ONE new exact-head opt-in `[run-ci]` on this checkpoint. New code and 22 desktop/mobile browser executions are NOT verified until that CI completes; previous green CI cannot be applied to new code. Inspect test failures and remedy root causes, especially HTML focus and Win8/Win31 event propagation; do not skip failing tests. Screenshot comparison remains pending original private-source checkout/configured `LEGACY_SOURCE_READ_TOKEN`, not part of default CI.
+
+**Next highest priority:** check current CI exact-head result, correct any source-backed defects, then tackle the highest-value original Start/Desktop/Computer/Bin interactions and visually compare rendered source and candidate at fixed sizes. Full source parity, remaining apps/themes/native adapter and verified release are not complete; PR remains draft.
+
+---
+
 ## 20 November 2026 — restore source Vista Start recents/power and program menu
 
 **Original pinned:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
