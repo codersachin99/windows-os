@@ -1,6 +1,6 @@
 /*
  * Exact menu-surface and hover-color values from pinned legacy-win7:
- * src/modules/themes/theme-win7-scss.js, theme-winxp-scss.js and
+ * src/modules/themes/theme-win7-scss.js, theme-winvista-scss.js, theme-winxp-scss.js and
  * theme-win11-scss.js at 4e63290d783009e1293433c6ccf252abba9c1187.
  * Shared source .winui-menu base: src/styles/system/vue-app.css.
  *
@@ -8,8 +8,8 @@
  * separately positioned BaseMenu children. It does NOT recreate the
  * original Vue menu DOM, exact fonts, or every icon/checkmark.
  */
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu,
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu{
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu{
   border:1px solid #979797;
   border-radius:0;
   background:#f1f1f1;
@@ -17,19 +17,19 @@
     inset 0 0 0 2px #f5f5f5;
   padding:4px 2px;
 }
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu::before,
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu::before{
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu::before,
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu::before{
   content:"";position:absolute;z-index:0;pointer-events:none;
   top:2px;bottom:2px;left:27px;width:2px;
   box-shadow:inset 1px 0 rgba(0,0,0,.1490196078),
     inset -1px 0 #fff;
 }
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button{
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button{
   position:relative;z-index:1;
   color:#1b3956;border:1px solid transparent;border-radius:3px;
 }
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):hover,
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):focus-visible{
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):focus-visible{
   border-color:#aaddfa;
   background:linear-gradient(rgba(255,255,255,.6),
     rgba(230,236,245,.8) 90%,rgba(255,255,255,.8));
