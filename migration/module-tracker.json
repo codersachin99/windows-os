@@ -1690,9 +1690,11 @@
         "tests/e2e/source-start-context-theme-families.spec.ts",
         "migration/START-CONTEXT-THEME-SOURCE.md",
         "tests/e2e/source-vista-start.spec.ts",
-        "migration/VISTA-START-SOURCE.md"
+        "migration/VISTA-START-SOURCE.md",
+        "tests/e2e/source-start-context-keyboard-themes.spec.ts",
+        "migration/START-CONTEXT-KEYBOARD-SOURCE.md"
       ],
-      "verification": "source-backed Vista shared Start recent programs, configured power and popup palette; exact-head CI / Vista searchStyle UI and source-paired screenshots pending"
+      "verification": "source Win7/Aero/Basic/Vista recent programs and configured power; all shared Start program popup themes plus original-layout keyboard focus and Escape test pending exact-head CI; full source screenshot/installed catalog parity pending"
     },
     {
       "source": "src/modules/shell/startmenu-chromeos.js",
