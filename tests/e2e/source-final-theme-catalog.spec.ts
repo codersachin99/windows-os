@@ -13,6 +13,7 @@ test("source theme variants select exact login screen families and report fallba
     ["win95","win95","win95","partial"],
     ["win98","win98","win98","partial"],
     ["win2k","win2k","win2k","partial"],
+    ["winvista","winvista","win7-fallback","partial"],
     ["win10","win10","win10","partial"],
     ["win8","win8","win8","partial"],
     ["win81","win8","win8","partial"],
