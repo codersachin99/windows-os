@@ -16,7 +16,7 @@ test("source theme variants select exact login screen families and report fallba
     ["win10","win10","win10","partial"],
     ["win8","win8","win8","partial"],
     ["win81","win8","win8","partial"],
-    ["win11dark","win11","win11","pending"],
+    ["win11dark","win11","win11","partial"],
     ["winLP","winLS","win7-fallback","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
     ["kubuntu","kubuntu","win7-fallback","pending"],
@@ -54,8 +54,8 @@ test("source theme catalog selection carries through explicit Guest login",async
   const desktop=page.locator('[data-test-main-screen]');
   await expect(desktop).toBeVisible();
   await expect(desktop).toHaveAttribute("data-theme","win11dark");
-  // The full Win11-dark artwork and UI personalities have not been
-  // migrated. Recognition is not a false visual-parity acceptance.
+  // Win11dark now has original wallpaper/Start artwork and source palette,
+  // but whole-theme pixel parity and remaining original actions are pending.
   await expect(page.locator('[data-test-taskbar="base"]')).toBeVisible();
 });
 
@@ -85,7 +85,7 @@ test("original Win11 logon uses source guest-win10 art, dark overlay and Guest s
   await page.goto("/?theme=win11dark");
   const login=page.locator("[data-test-logon-screen]");
   await expect(login).toHaveAttribute("data-source-logon-renderer","win11");
-  await expect(login).toHaveCSS("background-image",/win11\.fc00c43d\.webp/);
+  await expect(login).toHaveCSS("background-image",/win11dark\.af52a1ca\.webp/);
   const avatar=login.locator('[data-test-source-logon-avatar="win11"]');
   await expect(avatar.locator("img"))
     .toHaveAttribute("src","/assets/images/guest-win10.a110df5a.webp");
