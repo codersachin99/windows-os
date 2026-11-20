@@ -171,6 +171,82 @@
   color:var(--source-startmenu-right-text,#0a246a);
 }
 
+/* Original XP variant gradients from immutable theme-winxp-scss.js,
+ * .winxpG/N/R/S/Z taskbar__wrapper/tray and N/R/S/Z Start regions.
+ * Unlike the base Luna colors these are distinct painted frames, not
+ * replacements derived from their theme-accent token. */
+.windows-desktop[data-theme="winxpG"] .windows-taskbar{
+  background-image:linear-gradient(rgba(0,0,0,.2) 1px,
+    rgba(255,255,255,.4) 6%,rgba(0,0,0,.2) 16%,
+    rgba(255,255,255,.1333333333) 89%,rgba(0,0,0,.2) 97%);
+}
+.windows-desktop[data-theme="winxpG"] .windows-taskbar__tray{
+  border-left-color:#968b4b;
+}
+.windows-desktop[data-theme="winxpN"] .windows-taskbar{
+  background:linear-gradient(#737c84,#4c5868 50%,#334151 50%,#232a3d 100%);
+  box-shadow:inset 0 0 0 1px #1f2639;
+}
+.windows-desktop[data-theme="winxpN"] .windows-taskbar__tray{
+  background:linear-gradient(#253649,#1c2b41 50%,#010409 50%,#00091c 100%);
+  border:0;box-shadow:inset 0 0 0 1px #000007;
+}
+.windows-desktop[data-theme="winxpN"] .windows-startmenu__xp-header{
+  background:linear-gradient(#616c7d,#2b3647 50%,#273243 50%,#0e192a 100%);
+  box-shadow:inset -24px 0 24px rgba(255,255,255,.1333333333);
+}
+.windows-desktop[data-theme="winxpN"] .windows-startmenu__xp-footer{
+  background:linear-gradient(#737c89,#4d5466);
+  box-shadow:inset 0 1px #4b515e;
+}
+.windows-desktop[data-theme="winxpR"] .windows-taskbar{
+  background:linear-gradient(#83c2ed,#5895e0 50%,#397dd0 50%,#2c55b1 100%);
+  box-shadow:inset 0 0 0 1px #2a4dab;
+}
+.windows-desktop[data-theme="winxpR"] .windows-taskbar__tray{
+  background:linear-gradient(#fbfdff,#c4d5f1 50%,#a1bfe5 50%,#5086c9 100%);
+  border:0;box-shadow:inset 0 0 0 1px #3e647e;
+}
+.windows-desktop[data-theme="winxpR"] .windows-startmenu__xp-header{
+  background:linear-gradient(#f2f7fb,#b1cbec 50%,#9bbae6 50%,#587ac7 100%);
+  box-shadow:inset -24px 0 24px rgba(255,255,255,.2);
+}
+.windows-desktop[data-theme="winxpR"] .windows-startmenu__xp-footer{
+  background:linear-gradient(#76a1de,#3f66bc);
+  box-shadow:inset 0 1px #4567a4;
+}
+.windows-desktop[data-theme="winxpS"] .windows-taskbar{
+  background:linear-gradient(rgba(0,0,0,.2) 0,#fff 2px,
+    #9a99b1 6px,#ecebec 90%,#bfc4d4),#d7d7d7;
+}
+.windows-desktop[data-theme="winxpS"] .windows-taskbar__tray{
+  background:linear-gradient(#fff,#888ba3);
+  border-left-color:#58596d;
+}
+.windows-desktop[data-theme="winxpS"] .windows-startmenu__xp-header{
+  background:linear-gradient(#a8a7bf,#fff 3px,#a8a7bf 5px,#fff);
+  box-shadow:inset 1px 0 #fff,inset -1px 0 #fff;
+}
+.windows-desktop[data-theme="winxpS"] .windows-startmenu__xp-footer{
+  background:linear-gradient(#e6e6ed,#a8a7bf);
+  box-shadow:inset 0 0 0 1px #6b6e73,inset 2px 0 #fff,inset -2px 0 #fff;
+}
+.windows-desktop[data-theme="winxpZ"] .windows-taskbar{
+  background:linear-gradient(#6f6f6f,#545454 50%,#3d3d3d 50%,#292929 100%);
+  box-shadow:inset 0 0 0 1px #252525,inset 0 2px #858585;
+}
+.windows-desktop[data-theme="winxpZ"] .windows-taskbar__tray{
+  background:linear-gradient(#484848,#2f2f2f 50%,#1d1d1d 50%,#111 100%);
+  box-shadow:inset 1px 1px #000;
+}
+.windows-desktop[data-theme="winxpZ"] .windows-startmenu__xp-header{
+  background:linear-gradient(#575757,#2c2c2c 50%,#1b1b1b 50%,#131313 100%);
+}
+.windows-desktop[data-theme="winxpZ"] .windows-startmenu__xp-footer{
+  background:linear-gradient(#575757,#1b1b1b 50%,#080808 50%,#151515 100%);
+  box-shadow:inset 0 1px #464646;
+}
+
 /* Source win11 theme uses a 48px centered taskbar, 40px task icons,
  * light surface #f0f0f0 and #0003 borders. */
 .windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]){
