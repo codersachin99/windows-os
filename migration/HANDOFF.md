@@ -1,3 +1,55 @@
+## 20 November 2026 — correct source Win10 / Win11 Start program popup paint
+
+**Immutable original:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation` / draft PR #1, unmerged.
+
+**Prior exact-head CI:** [#44782599216](https://github.com/codersachin99/windows-os/actions/runs/44782599216)
+**SUCCESS at `c2a7afd`** (TypeScript, units, source inventory,
+byte-identical original art, Contacts, Vite, focused regressions and full
+desktop/mobile Chromium). Source-vs-React visual capture skipped; no
+source screenshot parity claimed.
+
+**Next source-backed bug:** original frozen
+`src/modules/themes/theme-win10-scss.js` shows
+`.win10 .winui-menu` **light `#eee`** with black text, `#a0a0a0`
+border and `#fff` hover. Earlier React Start popup incorrectly copied
+the dark `#2c2c2c` Start panel. The **pinned**
+`theme-win11-scss.js` similarly has `.win11 .winui-menu` radius 6,
+padding 6, left item indent 32, light `#f9f9f9` surface, original
+`--item-bg--hover:#f0f0f0` rather than the reused incorrect blue
+`#e5f3ff`; Win11dark uses `#242424`, `#fff1` border/hover,
+black 20% shadow. These source constants were confirmed directly
+against the frozen modules. Real program actions are still portaled
+to `document.body` and must be styled via popup attr, not by theme
+ancestor.
+
+**Commits on this branch:**
+- [`43c93b6`](https://github.com/codersachin99/windows-os/commit/43c93b6078a32ef2b9e371d195dbaea4d900fdb4): isolated
+  exact source Win10 light/Win11 light-dark popup CSS in
+  `sourceStartContextThemes.css`, RTL preserved and dark Start panel
+  unchanged.
+- [`070b06e`](https://github.com/codersachin99/windows-os/commit/070b06eae1fd639f5a5cfd38d222528acea46a6a): three real Notepad
+  right-click and Pin-to-taskbar cases on desktop AND mobile; computed
+  color, hover, border, radius and item indentation checks.
+- [`ec18634`](https://github.com/codersachin99/windows-os/commit/ec18634ebf5b312a5a1b707a12971404772b5045): add to opt-in
+  focused GitHub Actions source shell tests.
+- [`66c61fe`](https://github.com/codersachin99/windows-os/commit/66c61fe4425c67998f8856ae926a91c787f53600): source comparison and
+  acceptance limits in `migration/START-CONTEXT-MODERN-SOURCE.md`.
+- [`44f61eb`](https://github.com/codersachin99/windows-os/commit/44f61ebb91a63ae6f811ac56ad53be979537dfa6): source module tracker
+  flags theme-win10/theme-win11 and startmenu-win10/startmenu-win11 as
+  **in progress**, NOT fully complete, with linked evidence.
+
+**Verification action:** this commit uses `[run-ci]` to request one
+new exact-head CI; new code/tests have not yet been verified. Inspect
+focused browser failures and fix root causes. If green, pursue the
+next source-backed Start/desktop/Computer/Bin screenshot/behavior
+difference. Source-paired screenshot capture depends on private
+`LEGACY_SOURCE_READ_TOKEN` or an explicitly authorized source checkout;
+do not treat target-only capture as parity. No merge to main and no
+release until genuine pixel/function parity.
+
+---
+
 ## 20 November 2026 — repair XP Royale test; source Win31/9x/8 Start popup palettes
 
 **Frozen source reference:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
