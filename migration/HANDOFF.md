@@ -1,3 +1,50 @@
+## 20 November 2026 — restore source Vista Start recents/power and program menu
+
+**Original pinned:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`, draft PR #1, unmerged.
+`main` and original remain untouched.
+
+**Verified prior baseline:** exact-head [CI #44782599216](https://github.com/codersachin99/windows-os/actions/runs/44782599216)
+**SUCCESS** on `c2a7afd`, including focused/full browser runs.
+The newer Win10/Win11 system popup [CI #44787399492](https://github.com/codersachin99/windows-os/actions/runs/44787399492)
+was still **running** at handoff (TypeScript, unit, source/artwork audit,
+Contacts and Vite passed; focused browser started).
+Do not silently mark that run green or infer Vista verification from it.
+
+**Found source omission:** immutable `src/modules/shell/startmenu-base.js`
+defines `isVista() { return "winvista" === this.theme; }` and
+`searchStyle() { return this.isVista ? "vista" : "win7"; }`.
+The same Vue base template renders recentPrograms and the configured
+powerButtonAction for Vista. React had included Win7/Aero/Basic in
+`isWin7StartFamily` but accidentally excluded **`winvista`**, hiding
+both working shared surfaces. Pinned `theme-winvista-scss.js` also
+uses the Win7 source `.winui-menu` light panel/hover/gutter, which
+was missing on the detached React program-actions popup.
+
+**Committed source-backed slice:**
+- [`d63689c`](https://github.com/codersachin99/windows-os/commit/d63689c704fb4cb5700feb6fe2a9192abdb192e3) adds Vista to the shared Start recent/history and configured power surfaces.
+- [`ea539b9`](https://github.com/codersachin99/windows-os/commit/ea539b93e8124446033a46408dae58808e6f15f9) adds original Vista system popup gradient, gutter, bevel, border, directional shadow in portal-local stylesheet.
+- [`0e17784`](https://github.com/codersachin99/windows-os/commit/0e1778416ed67453a15300030343fc4809471f72) adds 3 desktop/mobile browser tests: recent launch + All Programs, right-click hover + real taskbar Pin, configured Switch user/logon.
+- [`73cc241`](https://github.com/codersachin99/windows-os/commit/73cc24136d65e9246d403be6b7b9b8ffad6b6d8f) includes these in the opt-in focused gate.
+- [`10bb118`](https://github.com/codersachin99/windows-os/commit/10bb118c5104a1dfdf2b33876914c07dde0d2a44) documents original source evidence and explicit acceptance gaps.
+- [`30d0693`](https://github.com/codersachin99/windows-os/commit/30d0693fc5827cf98258a67415b8bea7732244b5) records the source module slices as **in-progress**, never complete.
+
+**Verify:** one exact-head opt-in `[run-ci]` requested by this handoff;
+new Vista tests remain **unverified** until that run completes.
+The older Win10/11 modern popup run at `b97d550` is independent.
+Inspect source targeted browser test failures (especially Android
+touch emulation, menu selectors and original CSS computed colors)
+and fix objectively. The original `searchStyle:"vista"` search
+places UI and original-vs-target screenshot matching remain pending.
+Native host features, whole themes and unrelated app behavior are
+not certified. Do not merge draft PR or release.
+
+**Next:** check both opt-in runs, then continue highest-value original
+Start/Desktop/Computer/Bin functional parity and paired screenshots,
+when the private source can be run in a controlled visual comparison.
+
+---
+
 ## 20 November 2026 — correct source Win10 / Win11 Start program popup paint
 
 **Immutable original:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
