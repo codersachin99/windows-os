@@ -1717,15 +1717,25 @@
       "source": "src/modules/shell/startmenu-win10.js",
       "sha": "93b08980cbef28e60cb280dfed09378ed9422a82",
       "area": "shell",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-modern.spec.ts",
+        "migration/START-CONTEXT-MODERN-SOURCE.md"
+      ],
+      "verification": "bounded original Win10/Win11 Start-program popup styling and interaction suite; exact-head CI and paired original visual parity pending; full source family remains incomplete"
     },
     {
       "source": "src/modules/shell/startmenu-win11.js",
       "sha": "14b438e5ce0ac4f5e33813edb16f961728c3e772",
       "area": "shell",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-modern.spec.ts",
+        "migration/START-CONTEXT-MODERN-SOURCE.md"
+      ],
+      "verification": "bounded original Win10/Win11 Start-program popup styling and interaction suite; exact-head CI and paired original visual parity pending; full source family remains incomplete"
     },
     {
       "source": "src/modules/shell/startmenu-win31.js",
@@ -2329,15 +2339,25 @@
       "source": "src/modules/themes/theme-win10-scss.js",
       "sha": "413fbad695d0456139e0765a50a0e21fe8fa4b13",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-modern.spec.ts",
+        "migration/START-CONTEXT-MODERN-SOURCE.md"
+      ],
+      "verification": "bounded original Win10/Win11 Start-program popup styling and interaction suite; exact-head CI and paired original visual parity pending; full source family remains incomplete"
     },
     {
       "source": "src/modules/themes/theme-win11-scss.js",
       "sha": "6a38151cd37419e69e58192a8ff487c9fd09bf14",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-modern.spec.ts",
+        "migration/START-CONTEXT-MODERN-SOURCE.md"
+      ],
+      "verification": "bounded original Win10/Win11 Start-program popup styling and interaction suite; exact-head CI and paired original visual parity pending; full source family remains incomplete"
     },
     {
       "source": "src/modules/themes/theme-win31-scss.js",
