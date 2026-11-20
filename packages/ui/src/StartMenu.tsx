@@ -58,6 +58,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
+  const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   const win11PowerRef=useRef<HTMLDivElement>(null);
@@ -87,7 +88,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     app.label.toLowerCase().includes(query.toLowerCase())
   );
   const win11PageCount=sourceWin11PageCount(programs.length);
-  const win11Paged=theme==="win11"&&!query&&!allPrograms;
+  const win11Paged=isWin11Theme&&!query&&!allPrograms;
   const visiblePrograms=win11Paged?sourceWin11StartPage(programs,win11Page):programs;
   const changeWin11Page=(delta:number)=>{
     setWin11Page(page=>sourceWin11NextStartPage(page,win11PageCount,delta));
@@ -97,7 +98,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     return app?[app]:[];
   }).slice(0,theme==="winxp"?7:6);
   useEffect(() => {
-    if (!allPrograms||theme==="win11") return;
+    if (!allPrograms||isWin11Theme) return;
     let active = true;
     const load = async () => {
       try {
@@ -257,11 +258,11 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   // Source startmenu-base.js also renders a recent-program list on Win7.
   // Preserve the existing launch grid pending complete Win7 structural parity.
   const recentSection=startPreferences.storeRecentApps&&
-    (theme==="win7"||theme==="winxp"||theme==="win11")&&
+    (theme==="win7"||theme==="winxp"||isWin11Theme)&&
     !allPrograms&&!query&&recentApps.length>0&&
     <section className="windows-startmenu__recent"
       aria-label="Recently opened programs" data-test-list-recent="">
-      {theme==="win11"&&<strong>Recently opened</strong>}
+      {isWin11Theme&&<strong>Recently opened</strong>}
       <div className="windows-startmenu__recent-grid">
         {recentApps.map(app=><button key={app.id} type="button"
           data-test-recent-program={app.id}
@@ -296,7 +297,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         onContext={openProgramContext}/>:
     <nav className={"windows-startmenu" +
       (theme==="winxp"?" windows-startmenu--winxp":
-      theme==="win11"?" windows-startmenu--win11":
+      isWin11Theme?" windows-startmenu--win11":
       theme==="win10"?" windows-startmenu--win10":"") +
       (allPrograms&&!query?" is-all-programs":"")+
       (theme==="win10"&&win10SidebarExpanded?" is-win10-sidebar-expanded":"")}
@@ -404,7 +405,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
               <span aria-hidden="true">◀</span>
               {activeFolder ? "Back to All Programs" : "Back"}
             </button>
-            {theme==="win11"? win11AllApps.map(app=>{
+            {isWin11Theme? win11AllApps.map(app=>{
               const registered=appRegistry.get(app.id);
               return <button key={app.id} type="button"
                 className="windows-startmenu__program"
@@ -474,7 +475,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
               </button>)}
           </nav>}
         </div>
-        {theme==="win11"&&recentSection}
+        {isWin11Theme&&recentSection}
         {contextError&&<p role="alert" data-test-start-context-error=""
           className="windows-startmenu__empty">{contextError}</p>}
         {!query && <button type="button" className="windows-startmenu__all-programs"
@@ -510,7 +511,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
           alt="Guest" className="windows-startmenu__avatar" />}
         {theme!=="winxp"&&<strong>Guest</strong>}
-        {theme==="win11"&&<div className="windows-startmenu__win11-actions"
+        {isWin11Theme&&<div className="windows-startmenu__win11-actions"
           data-test-win11-start-actions="">
           <button type="button" aria-label="Open Computer"
             title="Computer" data-test-win11-start-computer=""
