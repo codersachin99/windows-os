@@ -1924,8 +1924,11 @@
         "packages/ui/src/desktopRename.ts",
         "packages/ui/src/desktopRename.test.ts",
         "tests/e2e/desktop-rename.spec.ts",
-        "migration/DESKTOP-RENAME.md"
-      ]
+        "migration/DESKTOP-RENAME.md",
+        "tests/e2e/source-desktop-context-keyboard.spec.ts",
+        "migration/DESKTOP-CONTEXT-KEYBOARD-SOURCE.md"
+      ],
+      "verification": "bounded Desktop/Computer/Bin menu source actions and keyboard roving/trigger focus; exact-head browser CI pending, entire source shell and screenshot parity pending"
     },
     {
       "source": "src/modules/system/mediacenter.js",
