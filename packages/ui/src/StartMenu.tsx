@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type Dispatch, type MouseEvent as ReactMouseEvent } from "react";
 import {createPortal} from "react-dom";
-import type { DesktopAction, ThemeId } from "@windows-os/contracts";
+import {sourceIsXpFamily,type DesktopAction,type ThemeId} from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
 import {
@@ -58,6 +58,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
+  const isXpTheme=sourceIsXpFamily(theme);
   const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
@@ -96,7 +97,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   const recentApps=recentIds.flatMap(id=>{
     const app=appRegistry.get(id);
     return app?[app]:[];
-  }).slice(0,theme==="winxp"?7:6);
+  }).slice(0,isXpTheme?7:6);
   useEffect(() => {
     if (!allPrograms||isWin11Theme) return;
     let active = true;
@@ -258,7 +259,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   // Source startmenu-base.js also renders a recent-program list on Win7.
   // Preserve the existing launch grid pending complete Win7 structural parity.
   const recentSection=startPreferences.storeRecentApps&&
-    (theme==="win7"||theme==="winxp"||isWin11Theme)&&
+    (theme==="win7"||isXpTheme||isWin11Theme)&&
     !allPrograms&&!query&&recentApps.length>0&&
     <section className="windows-startmenu__recent"
       aria-label="Recently opened programs" data-test-list-recent="">
@@ -296,14 +297,14 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         onPower={type=>dispatch({type})}
         onContext={openProgramContext}/>:
     <nav className={"windows-startmenu" +
-      (theme==="winxp"?" windows-startmenu--winxp":
+      (isXpTheme?" windows-startmenu--winxp":
       isWin11Theme?" windows-startmenu--win11":
       theme==="win10"?" windows-startmenu--win10":"") +
       (allPrograms&&!query?" is-all-programs":"")+
       (theme==="win10"&&win10SidebarExpanded?" is-win10-sidebar-expanded":"")}
       data-source-start-theme={theme}
       id="start-menu" ref={menuRef} data-test-start-menu="" aria-label="Start menu">
-      {theme==="winxp"&&<header className="windows-startmenu__xp-header"
+      {isXpTheme&&<header className="windows-startmenu__xp-header"
         data-test-startmenu-xp-header="">
         <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
         <strong>Guest</strong>
@@ -381,7 +382,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         </div>
       </aside>}
       <div className="windows-startmenu__left">
-        {(theme==="winxp"||theme==="win7")&&recentSection}
+        {(isXpTheme||theme==="win7")&&recentSection}
         <div className="windows-startmenu__programs"
           onWheel={event=>{
             if(!win11Paged||event.deltaY===0)return;
@@ -483,7 +484,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
           onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null);setWin11Page(1); }}>
           {allPrograms ? "‹ Back" : "All Programs ▸"}
         </button>}
-        {theme!=="winxp"&&<label className="windows-startmenu__search">
+        {!isXpTheme&&<label className="windows-startmenu__search">
           <input value={query} onChange={e => setQuery(e.target.value)}
             placeholder="Search programs and files" aria-label="Search programs and files"
             data-test-startmenu-search="" autoFocus
@@ -508,9 +509,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
             <span>{app.label}</span>
           </button>)}
         </section>}
-        {theme!=="winxp"&&<img src={legacyArt.guestAvatar}
+        {!isXpTheme&&<img src={legacyArt.guestAvatar}
           alt="Guest" className="windows-startmenu__avatar" />}
-        {theme!=="winxp"&&<strong>Guest</strong>}
+        {!isXpTheme&&<strong>Guest</strong>}
         {isWin11Theme&&<div className="windows-startmenu__win11-actions"
           data-test-win11-start-actions="">
           <button type="button" aria-label="Open Computer"
@@ -564,7 +565,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         }}>Control Panel</button>
         <button onClick={() => dispatch({ type: "OPEN_APP", app: appRegistry.get("web_contacts")! })}>Contacts</button>
         <hr />
-        {theme!=="winxp"&&<button onClick={() => dispatch({ type: "LOG_OFF" })}>
+        {!isXpTheme&&<button onClick={() => dispatch({ type: "LOG_OFF" })}>
           Log off</button>}
         {theme==="win7"&&<button className="windows-startmenu__power"
           data-test-startmenu-power-action={startPreferences.powerButtonAction}
@@ -579,7 +580,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
             restart:"Restart",shutdown:"Shut down"
           } as const)[startPreferences.powerButtonAction]}</button>}
       </div>
-      {theme==="winxp"&&<footer className="windows-startmenu__xp-footer"
+      {isXpTheme&&<footer className="windows-startmenu__xp-footer"
         data-test-startmenu-xp-footer="">
         <button type="button" onClick={() => dispatch({type:"LOG_OFF"})}>
           <img src={legacyXpPowerArtwork.logoff} width={20} height={20} alt="" />Log off</button>
