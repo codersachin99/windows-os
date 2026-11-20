@@ -1,3 +1,26 @@
+## Basic 3/4 high-contrast classic skin — 20 Nov 2026
+
+**Original source:** locked `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Previous green CI:** [#44697312900](https://github.com/codersachin99/windows-os/actions/runs/44697312900) (XP fixes),
+[#44697839308](https://github.com/codersachin99/windows-os/actions/runs/44697839308)
+(Aero/Basic Personalize). Both finished successfully.
+
+**Implementation:** scope-isolated CSS for source Basic3/4 black/white
+palettes, source 52px classic taskbar, original 26px Classic Start icon,
+Start pressed paint, active/idle title and window body,
+Start/context menus and live React lifecycle. Catalog now identifies
+both as partial, while Basic1/2 and Aero remain pending.
+See `migration/AERO-BASIC-SOURCE.md`.
+
+**Verification:** new Playwright desktop/mobile contracts for Start,
+taskbar, Computer/Recycle Bin focus, maximize bottom, Desktop and
+taskbar context actions; opt-in CI must confirm before counting green.
+**Next:** fix any exact-head CI regression, then Basic 1/2 real shell,
+Aero metadata and shell visuals; pixel-perfect screenshot pairing.
+PR #1 stays draft, main/original source untouched, no release.
+
+---
+
 ## Win7 Aero/Basic original Personalize gallery — 20 Nov 2026
 
 **Original pin:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

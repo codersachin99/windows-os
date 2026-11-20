@@ -382,7 +382,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         </div>
       </aside>}
       <div className="windows-startmenu__left">
-        {(isXpTheme||theme==="win7")&&recentSection}
+        {(isXpTheme||theme==="win7"||theme==="basic-3"||theme==="basic-4")&&recentSection}
         <div className="windows-startmenu__programs"
           onWheel={event=>{
             if(!win11Paged||event.deltaY===0)return;

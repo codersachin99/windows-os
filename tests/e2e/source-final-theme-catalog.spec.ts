@@ -324,3 +324,81 @@ test("XP source Start button mirrors the curved end and shadows in RTL",async({p
   expect(before.right).toBe("-18px");
   expect(before.radius).toBe("50%");
 });
+
+/* Pinned theme-win7-classic-scss.js Basic 3/4 actual shell regressions,
+ * desktop + mobile. These partial skins still require source screenshot pairing. */
+for(const source of [
+  {theme:"basic-3",surface:"rgb(0, 0, 0)",accent:"rgb(128, 0, 128)",
+   idle:"rgb(0, 128, 0)",border:"rgb(0, 128, 0)"},
+  {theme:"basic-4",surface:"rgb(255, 255, 255)",accent:"rgb(0, 0, 0)",
+   idle:"rgb(255, 255, 255)",border:"rgb(125, 125, 125)"}
+] as const){
+  test("source "+source.theme+" high contrast taskbar Start and window state",async({page})=>{
+    await page.goto("/?theme="+source.theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const desk=page.locator('[data-test-main-screen]');
+    await expect(desk).toHaveAttribute("data-theme",source.theme);
+    const bar=page.locator('[data-test-taskbar="base"]');
+    await expect(bar).toHaveCSS("height","52px");
+    await expect(bar).toHaveCSS("background-color",source.surface);
+    await expect(bar).toHaveCSS("border-top-color",source.border);
+    const start=page.locator('[data-test-start-button]');
+    await expect(start.locator("img")).toHaveAttribute("src",
+      "/assets/images/start-button-classic.ec7b0b9f.webp");
+    await expect(start.locator("img")).toHaveCSS("width","26px");
+    expect(await start.evaluate(el=>getComputedStyle(el,"::after").content))
+      .toBe('"Start"');
+    await start.click();
+    await expect(start).toHaveClass(/is-active/);
+    const menu=page.locator('[data-test-start-menu]');
+    await expect(menu).toBeVisible();
+    await expect(menu).toHaveCSS("background-color",source.surface);
+    await start.click();
+    await expect(menu).toHaveCount(0);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]');
+    await expect(win).toBeVisible();
+    await expect(win).toHaveCSS("border-top-left-radius","0px");
+    await expect(win).toHaveCSS("background-color",source.surface);
+    await expect(win).toHaveCSS("backdrop-filter","none");
+    const title=win.locator(".windows-window__titlebar");
+    await expect(title).toHaveCSS("background-color",source.accent);
+    await expect(title).toHaveCSS("color","rgb(255, 255, 255)");
+    await expect(win.locator(".windows-window__body"))
+      .toHaveCSS("background-color",source.surface);
+    await win.locator('[data-source-window-control="maximize"]').click();
+    await expect(win).toHaveClass(/is-maximized/);
+    const bounds=await win.boundingBox();
+    const viewport=page.viewportSize()!;
+    expect(bounds).not.toBeNull();
+    expect(Math.abs(viewport.height-bounds!.y-bounds!.height-52))
+      .toBeLessThanOrEqual(2);
+    await win.locator('[data-source-window-control="restore"]').click();
+    await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+    await expect(page.locator('[data-test-window="bin"]')).toBeVisible();
+    await expect(title).toHaveCSS("background-color",source.idle);
+  });
+  test("source "+source.theme+" high contrast Desktop/taskbar context actions",async({page})=>{
+    await page.goto("/?theme="+source.theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const icons=page.locator("#desktop-icons");
+    await icons.click({button:"right",position:{x:260,y:200}});
+    const menu=icons.locator("[data-test-desktop-menu]");
+    await expect(menu).toBeVisible();
+    await expect(menu).toHaveCSS("background-color",source.surface);
+    const refresh=menu.getByRole("menuitem",{name:"Refresh",exact:true});
+    await refresh.hover();
+    await expect(refresh).toHaveCSS("background-color",source.accent);
+    await expect(refresh).toHaveCSS("color","rgb(255, 255, 255)");
+    await page.keyboard.press("Escape");
+    await expect(menu).toHaveCount(0);
+    await page.locator(".windows-taskbar__running").click({
+      button:"right",position:{x:15,y:5}
+    });
+    const popup=page.locator('[data-test-taskbar-context="background"]');
+    await expect(popup).toBeVisible();
+    await expect(popup).toHaveCSS("background-color",source.surface);
+    await popup.locator('[data-test-taskbar-context-action="taskmgr"]').click();
+    await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
+  });
+}

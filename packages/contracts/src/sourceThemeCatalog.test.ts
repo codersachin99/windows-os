@@ -44,6 +44,10 @@ describe("immutable final source app.config themeScreens",()=>{
       expect(sourceThemeShellStatus(theme)).toBe("partial");
     }
     expect(sourceThemeShellStatus("win7")).toBe("partial");
+    expect(sourceThemeShellStatus("basic-3")).toBe("partial");
+    expect(sourceThemeShellStatus("basic-4")).toBe("partial");
+    expect(sourceThemeShellStatus("basic-1")).toBe("pending");
+    expect(sourceThemeShellStatus("basic-2")).toBe("pending");
     expect(sourceThemeShellStatus("winxp")).toBe("partial");
     expect([...SOURCE_XP_THEME_IDS]).toEqual([
       "winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ"

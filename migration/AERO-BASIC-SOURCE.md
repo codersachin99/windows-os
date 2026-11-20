@@ -43,3 +43,25 @@ wallpaper associations, Aero colors), faithfully port Basic 1/2/3/4
 taskbar/Start/window/Explorer/desktop differences and Aero translucency,
 then obtain paired source/target screenshots on all target viewports.
 No full parity or release claim until these checks exist.
+
+## Classic high-contrast Basic 3/4 shell — 20 Nov 2026
+
+Verified against pinned `src/modules/themes/theme-win7-classic-scss.js`.
+Basic 3 uses black (#000) surface, white text, purple (#800080) focused
+title and green (#008000) inactive title/taskbar border. Basic 4 has
+white surface, black text, black focus title and a #7d7d7d taskbar border.
+Both use the original classic 52px taskbar and rectangular Start control
+with 26px original icon and bold `Start` pseudo text.
+
+Added an isolated source CSS adapter applied to live React desktop,
+taskbar/running buttons, Start menu, 420px classic menu surface,
+opaque square window frames and focus/idle titlebar, Explorer surfaces,
+and real Desktop/Taskbar context menus. Actual menu/focus engines remain
+unchanged. Source theme catalog marks Basic 3/4 **partial**;
+Basic 1/2 and all Aero still **pending**.
+
+Added browser contracts for both themes, desktop/mobile, which exercise
+real Start open/close, Computer focus/maximize, Bin focus change,
+Desktop/Taskbar right-click actions and high-contrast paints.
+Remaining: exact full app styles, original wallpaper associations,
+screen captures across viewports and pixel-by-pixel visual comparison.
