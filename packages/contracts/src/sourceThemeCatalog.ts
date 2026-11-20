@@ -167,6 +167,14 @@ export const SOURCE_THEME_SCREEN_DEFAULTS:SourceThemeScreens=
   Object.freeze({boot:"win7",logon:"win7"});
 export const SOURCE_THEME_CATALOG_IDS:readonly SourceThemeId[]=
   Object.freeze(["win7",...Object.keys(SOURCE_THEME_SCREENS)] as SourceThemeId[]);
+/** All seven exact XP theme IDs share the original XP shell family,
+ * with individual colors defined by theme-winxp-scss.js. */
+export const SOURCE_XP_THEME_IDS=Object.freeze([
+  "winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ"
+] as const);
+export function sourceIsXpFamily(theme:string):boolean{
+  return (SOURCE_XP_THEME_IDS as readonly string[]).includes(theme);
+}
 export function sourceIsKnownTheme(id:string):id is SourceThemeId{
   return id==="win7"||Object.prototype.hasOwnProperty.call(SOURCE_THEME_SCREENS,id);
 }
@@ -181,7 +189,7 @@ export function sourceThemeScreens(theme:string):SourceThemeScreens{
  * partial never means pixel-perfect, and login-only families remain pending. */
 export function sourceThemeShellStatus(theme:string):"partial"|"pending"{
   return theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
-    ||theme==="win7"||theme==="winxp"||theme==="win8"
+    ||theme==="win7"||sourceIsXpFamily(theme)||theme==="win8"
     ||theme==="win81"||theme==="win10"||theme==="win11"||theme==="win11dark"
     ?"partial":"pending";
 }
