@@ -114,3 +114,25 @@ source-window border/radius/padding, maximize/restore/close and
 desktop context Refresh, not just a screenshot. The exact original
 per-ID accent palette, wallpaper mapping, desktop skin differences
 and full source visual comparison remain unported/unverified.
+
+## Shared Win7 Aero source taskbar surface — 20 Nov 2026
+
+The pinned `theme-win7-scss.js` `.win7 .taskbar__wrapper`
+background is a 50–80px dark horizontal gradient over editable
+`--theme-color`, with an inset black/white 1px/2px rim. When
+`data-effect-enable-glass` is set, original `blur(4px)` and a
+full-height two-layer 54° glass reflection texture apply. The
+source also draws a 40px-extended translucent tray backing
+and uses a 54px Start wrapper, white running-program text and
+2px-radius taskbar buttons with dark 53.3% hover/open borders.
+
+A new narrowly scoped `sourceWin7AeroTaskbar.css` applies those
+original source gradients/reflections (including RTL texture)
+to canonical Win7 and Aero 1–4 React taskbars. The source
+`--theme-color` remains a live CSS variable: its original
+individual palette values have *not* been fabricated. Basic
+1–4 taskbars remain separate and unaffected.
+
+Added browser checks of paint, 40px height, Start 54px wrapper,
+opened program taskbar focus/minimize/restore and source ::before
+glass rim on desktop and mobile.

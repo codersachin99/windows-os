@@ -540,3 +540,41 @@ for(const aero of ["aero-1","aero-2","aero-3","aero-4"] as const){
     await expect(menu).toHaveCount(0);
   });
 }
+
+/* Original source .win7 taskbar__wrapper and glass texture were
+ * imported from immutable theme-win7-scss.js; verifies actual live
+ * taskbar layering, source Win7 Start metrics and opened group state. */
+for(const theme of ["win7","aero-1","aero-2","aero-3","aero-4"] as const){
+  test(theme+" paints original source Win7 Aero taskbar and remains interactive",async({page})=>{
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const desktop=page.locator('[data-test-main-screen]');
+    await expect(desktop).toHaveAttribute("data-theme",theme);
+    const taskbar=page.locator('[data-test-taskbar="base"]');
+    await expect(taskbar).toHaveCSS("height","40px");
+    await expect(taskbar).toHaveCSS("background-image",/linear-gradient\\(to right/);
+    const pseudo=await taskbar.evaluate(el=>{
+      const style=getComputedStyle(el,"::before");
+      return {content:style.content,background:style.backgroundImage,
+        shadow:style.boxShadow};
+    });
+    expect(pseudo.content).toBe('""');
+    expect(pseudo.background).toContain("linear-gradient");
+    expect(pseudo.shadow).toContain("inset");
+    const start=page.locator('[data-test-start-button]');
+    await expect(start).toHaveCSS("width","54px");
+    await expect(start.locator("img")).toHaveCSS("width","40px");
+    await start.click();
+    await expect(page.locator('[data-test-start-menu]')).toBeVisible();
+    await start.click();
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+    const group=page.locator('[data-test-taskbar-running-group="computer"]');
+    await expect(group).toBeVisible();
+    await expect(group).toHaveCSS("border-top-color","rgba(0, 0, 0, 0.533)");
+    await group.click();
+    await expect(page.locator('[data-test-window="computer"]')).toHaveCount(0);
+    await group.click();
+    await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+  });
+}

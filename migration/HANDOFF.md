@@ -1,3 +1,29 @@
+## Shared Win7 Aero taskbar original surface — 20 Nov 2026
+
+**Locked source** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; target PR #1 draft.
+Source `src/modules/themes/theme-win7-scss.js` provides exact Win7
+taskbar gradients, dark 50–80px left strip, 1px/2px highlight rims,
+conditional 4px glass blur, 54° reflected translucent texture,
+40px-extended tray backing and 54px Start wrapper. New
+`packages/ui/src/sourceWin7AeroTaskbar.css` copies their source
+declarations to live taskbars for Win7 and Aero 1–4 with RTL.
+Source color variable remains configurable; per-ID colors/wallpapers
+are still not verified. Classic Basic 1–4 remain independent.
+
+**Tests** `tests/e2e/source-final-theme-catalog.spec.ts` for all five
+live themes: source painting, pseudo-element rim, Start open/close,
+actual Computer running/minimize/restore. Exact-head CI must
+verify before asserting this task green. Prior Basic 1/2
+[CI #44734587135](https://github.com/codersachin99/windows-os/actions/runs/44734587135)
+finished **success**; preceding Aero #44735229979 was still
+running during this work.
+
+**Next** resolve any CI regressions and original Aero per-ID
+palette/wallpaper lookup; source + candidate screenshot pairs on
+desktop/laptop/mobile. PR remains draft; no merge or release.
+
+---
+
 ## Aero 1–4 shared source Win7 WindowMain shell — 20 Nov 2026
 
 **Immutable source:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

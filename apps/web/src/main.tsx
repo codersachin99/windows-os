@@ -8,6 +8,7 @@ import "../../../packages/ui/src/sourceShellTheme.css";
 import "../../../packages/ui/src/sourceWindowChrome.css";
 import "../../../packages/ui/src/sourceWin7ClassicContrast.css";
 import "../../../packages/ui/src/sourceWin7BasicVariants.css";
+import "../../../packages/ui/src/sourceWin7AeroTaskbar.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>
