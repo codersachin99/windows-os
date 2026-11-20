@@ -5,8 +5,15 @@ import { copyFile, mkdir, readFile, stat } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const CHECKPOINT = "4e63290d783009e1293433c6ccf252abba9c1187";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+// Use the same immutable source lock that audit:legacy verifies; never
+// retain a separate, stale importer SHA after a pinned-source migration.
+const CHECKPOINT = JSON.parse(await readFile(
+  join(ROOT, "migration", "module-tracker.json"), "utf8"
+)).referenceSha;
+if (typeof CHECKPOINT !== "string" || !/^[0-9a-f]{40}$/.test(CHECKPOINT)) {
+  throw new Error("Invalid source checkpoint in migration/module-tracker.json");
+}
 const INVENTORY = join(ROOT, "migration", "legacy-files.tsv");
 
 function usage() {
