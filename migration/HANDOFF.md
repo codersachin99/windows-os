@@ -1,3 +1,55 @@
+## 20 Nov 2026 — source StartProgram popup skins across Aero / Classic / XP
+
+**Original frozen:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1, unmerged.
+
+**Previous Start recents/power verification:** exact-head [CI #44763970264](https://github.com/codersachin99/windows-os/actions/runs/44763970264)
+was **still in progress** at this handoff (TypeScript, unit, source inventory,
+asset/Contacts audit and Vite build all passed; focused desktop/mobile browser
+running, full suite not completed). Do **not** claim prior Start changes green
+until that run finishes; inspect and fix failures if any.
+
+**New pinned source slice:** the original `.winui-menu` styles in
+`theme-win7-scss.js`, `theme-win7-classic-scss.js` and
+`theme-winxp-scss.js` have been ported to the actual
+`StartMenu.tsx` program context menu through
+`sourceStartContextThemes.css`. Unlike Explorer popups, these program
+menus are portaled to `document.body`, so source family selectors under
+`.windows-desktop` could never style them. The new adapter explicitly
+scopes source paints by the existing `data-source-start-context-theme`:
+Win7 + four Aero + Basic 1 source inset/gutter/gradient hover; Basic 2–4
+classic/high-contrast bevel, backgrounds and selection; all seven XP
+variant accent highlights and source white/Tahoma/beige border.
+The menu's real Pin to taskbar action, keyboard/portal positioning, and
+disabled Properties remain unchanged.
+
+**Commits**
+- [`a60f601`](https://github.com/codersachin99/windows-os/commit/a60f601c08fddd368b3a7fdb5bea0bb944720020) source palette and theme-family popup CSS;
+- [`51f90f4`](https://github.com/codersachin99/windows-os/commit/51f90f4d78819980d3b57ebddeb10e370f1ec061) imports stylesheet after existing Start base;
+- [`fe8ab5b`](https://github.com/codersachin99/windows-os/commit/fe8ab5b27a0a76706cf92cb1d41c6ca39e59d50c) adds 16 browser theme cases (32 desktop/mobile);
+- [`0ae06df`](https://github.com/codersachin99/windows-os/commit/0ae06dfcf67ee58cc772138481551eaf93e51e35) adds the suite to the **opt-in** focused CI gate;
+- [`d991a80`](https://github.com/codersachin99/windows-os/commit/d991a80cbe6799c70b78c35818a604e170242c90) pins explicit original source evidence and outstanding differences;
+- [`714851a`](https://github.com/codersachin99/windows-os/commit/714851ab8e83596ebf13a8cf33e266484d78deed) updates source module tracker, keeping statuses partial/in-progress.
+
+**Verification:** This checkpoint deliberately requests **one** new
+exact-head opt-in `[run-ci]` for both the prior Start recents/power
+changes and new popup CSS and browser tests. None of the new popup tests
+were executed locally (GitHub connector has no local test runner).
+Inspect TypeScript, unit, source/artwork audits, Vite, focused and
+complete desktop/mobile Chromium. Fix failures; never skip tests.
+The source-vs-target viewport **paired screenshot** comparison, exact
+Vue menuitem DOM/icons/indentation and remaining theme families are
+not accepted. `main`, frozen reference and releases remain unchanged.
+
+**Next priority:** verify both outstanding opt-in CI runs; if green,
+measure real original/React Start/desktop/Computer/Bin screenshot
+differences where pinned source can be launched, then correct the
+highest-confidence source-backed visual/function gap. If screenshot
+capture lacks `LEGACY_SOURCE_READ_TOKEN`, mark it target-only,
+not visual parity.
+
+---
+
 ## 20 Nov 2026 — restore shared Win7 Start recents and configured power (Aero/Basic)
 
 **Immutable source:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
