@@ -1,3 +1,25 @@
+## 21 November 2026 — correct source Computer root Send to Desktop test fixture; rerun CI
+
+**Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation` / draft PR #1, `main` untouched.
+
+**Actual CI outcomes:**
+- [Desktop/Bin context #44805818122](https://github.com/codersachin99/windows-os/actions/runs/44805818122) at `7c194be`: **SUCCESS** with full TypeScript/units/audits/Vite and both focused/full desktop/mobile Chromium suites.
+- [Computer/Bin Explorer context #44807318274](https://github.com/codersachin99/windows-os/actions/runs/44807318274) at `8f81fe0`: **FAILURE**, focused 662 passed / 2 failed / 2 skipped; full suite skipped. Both failures are the SAME new `Computer file context focuses Open, opens Send to child, and Escape focuses exact row` test at line 93 on desktop and mobile. TypeScript, unit, source/artwork audits, Contacts, Vite and browser installation PASSED.
+
+**Root cause:** test uploaded `Keyboard Context Note.txt` in virtual Computer `/` before trying the source `Send to → Desktop (create shortcut)` submenu. Actual DOM correctly disabled this action. The existing `sourceExplorerSendToMenu` guard requires a real `/EXTERNAL/computer/...` live Guest path; virtual `/` cannot produce supported Guest desktop shortcuts. This is a TEST FIXTURE mistake, not a reason to bypass path permissions.
+
+**Changes on branch:**
+- [`60a4da7`](https://github.com/codersachin99/windows-os/commit/60a4da70e2909a999d03be1fa0e23dfd35802c6a): navigate the source Explorer Documents folder before importing the positive keyboard test text file; confirms real Guest path (same setup as existing `source-explorer-item-menu.spec.ts`).
+- [`c22688a`](https://github.com/codersachin99/windows-os/commit/c22688afb042745df93e930c2f93f2b3893d9b36): add explicit virtual Computer root NEGATIVE browser regression: both child commands disabled, focus stays on Send to row, Escape restores origin; desktop/mobile.
+- [`a54d2de`](https://github.com/codersachin99/windows-os/commit/a54d2de1265c150ccaaaa3029dbd766071fe7ee7): root cause, source safety boundary and exact CI numbers documented in `migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md`.
+
+**Verification request:** commit this handoff with `[run-ci]` to re-run the fixed targeted gate and full browser checks on the latest exact head. **Do not claim green** until run completes. No production Explorer code change in this correction. No code skipped, weakened, made permissive or fake filesystem service added. Original source and target `main` untouched, PR remains draft and releases remain blocked by paired source/candidate screenshots and unported modules.
+
+**Next:** inspect exact-head focused/full browser CI for any additional failures, fix root causes, continue source-backed Desktop/Start/Computer/Bin functionality and visual parity only once grounded. The source-paired visual job still requires the private original checkout token `LEGACY_SOURCE_READ_TOKEN`.
+
+---
+
 ## 21 November 2026 — Computer and Recycle Bin Explorer context focus integration
 
 **Original lock:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
