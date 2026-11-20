@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {sourceThemeScreens,sourceThemeShellStatus,type ThemeId} from "@windows-os/contracts";
-import { legacyArt,sourceThemeLogonArtwork } from "@windows-os/assets";
+import { legacyArt,sourceThemeLogonArtwork,sourceWin11DarkArtwork } from "@windows-os/assets";
 import "./sourceThemeLogon.css";
 import {SourceClassicLogon} from "./SourceClassicLogon";
 import {SourceWin8Logon} from "./SourceWin8Logon";
