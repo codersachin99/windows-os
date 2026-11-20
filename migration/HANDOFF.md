@@ -1,3 +1,23 @@
+## Aero Window Color and Appearance — 20 Nov 2026
+
+**Pinned original:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`, Draft PR #1.
+Previous [CI #44745437012](https://github.com/codersachin99/windows-os/actions/runs/44745437012)
+had passed typing, unit, source/asset and targeted browser steps; its
+full browser suite remained in progress at last observation.
+
+**Implementation:** actual 32-color source webpack 2299 palette,
+ChangeAppearance Save/Cancel and transient preview, transparency
+option, validated Guest persistence and color reset when switching
+themes. Enabled glass respects the pinned plugin-cssvar predicate.
+Tests cover source colors, safely parsed storage, source painting,
+Cancel/window-close rollback, theme reset and persistence.
+No merge, release or upstream edit. Exact-head `[run-ci]` required
+before accepting new behavior as green. Complete screenshots and
+Start/context/Computer/Recycle Bin theme parity remain next.
+
+---
+
 ## Fix stale system wallpaper regression counts — 20 Nov 2026
 
 **Source lock:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

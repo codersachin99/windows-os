@@ -1,5 +1,6 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type CSSProperties,type Dispatch} from "react";
-import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
+import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
+  sourceAeroAppearanceSave,type SourceAeroAppearance,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
@@ -50,6 +51,10 @@ interface DesktopShellProps {
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
   visualEffects:SourceVisualEffects;
   onVisualEffectsChange(value:SourceVisualEffects):void;
+  aeroAppearance:SourceAeroAppearance;
+  onAeroAppearancePreview(value:SourceAeroAppearance):void;
+  onAeroAppearanceSave(value:SourceAeroAppearance):void;
+  onAeroAppearanceDiscard():void;
 }
 
 interface ApplicationContentProps {
@@ -67,11 +72,16 @@ interface ApplicationContentProps {
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
   visualEffects:SourceVisualEffects;
   onVisualEffectsChange(value:SourceVisualEffects):void;
+  aeroAppearance:SourceAeroAppearance;
+  onAeroAppearancePreview(value:SourceAeroAppearance):void;
+  onAeroAppearanceSave(value:SourceAeroAppearance):void;
+  onAeroAppearanceDiscard():void;
 }
 function ApplicationContent({
   appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
   windows, onRequestCloseWindow, theme,wallpaper,
-  trayPreferences,onTrayPreferencesChange,visualEffects,onVisualEffectsChange
+  trayPreferences,onTrayPreferencesChange,visualEffects,onVisualEffectsChange,
+  aeroAppearance,onAeroAppearancePreview,onAeroAppearanceSave,onAeroAppearanceDiscard
 }: ApplicationContentProps) {
   if (appId === "shortcut") return <ShortcutWizard
     onClose={() => dispatch({ type: "CLOSE_WINDOW", id: windowId })}
@@ -111,6 +121,10 @@ function ApplicationContent({
   if (appId === "personalize") return <PersonalizeApp
     initialView={filePath==="background"?"background":"theme"}
     theme={theme} wallpaper={wallpaper}
+    aeroAppearance={aeroAppearance}
+    onAeroAppearancePreview={onAeroAppearancePreview}
+    onAeroAppearanceSave={onAeroAppearanceSave}
+    onAeroAppearanceDiscard={onAeroAppearanceDiscard}
     onSelectTheme={next=>dispatch({type:"SET_THEME",theme:next})}
     onSelectWallpaper={path=>dispatch({type:"SET_WALLPAPER",path})}/>;
   if (appId==="taskbar") return <TaskbarSettingsApp theme={theme}
@@ -237,6 +251,34 @@ export function DesktopShell({
   visualEffects,onVisualEffectsChange
 }:DesktopShellProps) {
   const desktop = appRegistry.desktop();
+  // Original ChangeAppearance previews immediately but saves only on Save.
+  const [aeroAppearance,setAeroAppearance]=useState<SourceAeroAppearance>(()=>{
+    try{return sourceAeroAppearanceRead(window.localStorage);}
+    catch{return sourceAeroAppearanceRead(undefined);}
+  });
+  const [aeroAppearancePreview,setAeroAppearancePreview]=
+    useState<SourceAeroAppearance|null>(null);
+  const onAeroAppearanceDiscard=useCallback(()=>setAeroAppearancePreview(null),[]);
+  const onAeroAppearanceSave=useCallback((value:SourceAeroAppearance)=>{
+    setAeroAppearance(value);
+    setAeroAppearancePreview(null);
+    try{sourceAeroAppearanceSave(window.localStorage,value);}
+    catch{/* Guest session selection still works when storage is blocked. */}
+  },[]);
+  // Pinned ChangeTheme reapplies the new theme's source default accent.
+  // Preserve the global transparency setting, but reset custom color.
+  const previousAppearanceTheme=useRef(state.theme);
+  useEffect(()=>{
+    if(previousAppearanceTheme.current===state.theme)return;
+    previousAppearanceTheme.current=state.theme;
+    setAeroAppearancePreview(null);
+    setAeroAppearance(previous=>{
+      const next={color:null,transparent:previous.transparent};
+      try{sourceAeroAppearanceSave(window.localStorage,next);}
+      catch{/* Restricted storage: keep this Guest session change. */}
+      return next;
+    });
+  },[state.theme]);
   // Pinned source window__main.active follows the topmost nonminimized
   // desktop window; z-order is the single Guest focus authority.
   const highestVisibleWindowZ=state.windows.reduce((highest,win)=>
@@ -407,7 +449,8 @@ export function DesktopShell({
     return () => window.removeEventListener("keydown", keydown);
   }, [state.windows, state.phase, requestClose, dispatch]);
 
-  const win7Colors=sourceWin7ThemeChromeColors(state.theme);
+  const win7Colors=sourceWin7ThemeChromeColors(
+    state.theme,aeroAppearancePreview??aeroAppearance,visualEffects.enableGlass);
   const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
@@ -461,7 +504,11 @@ export function DesktopShell({
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange}
             visualEffects={visualEffects}
-            onVisualEffectsChange={onVisualEffectsChange} />
+            onVisualEffectsChange={onVisualEffectsChange}
+            aeroAppearance={aeroAppearance}
+            onAeroAppearancePreview={setAeroAppearancePreview}
+            onAeroAppearanceSave={onAeroAppearanceSave}
+            onAeroAppearanceDiscard={onAeroAppearanceDiscard} />
         </WindowFrame>
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch}
@@ -483,7 +530,11 @@ export function DesktopShell({
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange}
             visualEffects={visualEffects}
-            onVisualEffectsChange={onVisualEffectsChange} />
+            onVisualEffectsChange={onVisualEffectsChange}
+            aeroAppearance={aeroAppearance}
+            onAeroAppearancePreview={setAeroAppearancePreview}
+            onAeroAppearanceSave={onAeroAppearanceSave}
+            onAeroAppearanceDiscard={onAeroAppearanceDiscard} />
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base"

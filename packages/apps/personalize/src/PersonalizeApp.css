@@ -282,3 +282,37 @@
 .windows-personalize__theme-preview.is-win7-family>.windows-personalize__theme-solid{
   right:auto;left:0;
 }
+
+/* Pinned source ChangeAppearance: 32 colored 64px previews in 8 columns,
+ * an enableTransparency checkbox and independent Save/Cancel. */
+.windows-personalize__color-list{
+  display:grid;grid-template-columns:repeat(8,64px);gap:5px;
+  list-style:none;padding:0;margin:0 0 20px;max-width:100%;
+}
+.windows-personalize__color-list li{
+  box-sizing:border-box;list-style:none;padding:4px;width:64px;height:64px;
+}
+.windows-personalize__color-list li.is-selected{background:rgba(0,0,0,.2)}
+.windows-personalize__color-chip{
+  display:block;box-sizing:border-box;width:100%;height:100%;
+  padding:0;border:1px solid #8a8a8a;border-radius:4px;cursor:pointer;
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 90% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color);
+}
+.windows-personalize:dir(rtl) .windows-personalize__color-chip{
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(-135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 10% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color);
+}
+.windows-personalize__color-chip:focus-visible{
+  outline:2px solid #3279af;outline-offset:1px;
+}
+.windows-personalize__transparency{
+  display:flex;align-items:center;gap:8px;cursor:pointer;padding:3px 0;
+}
+@media(max-width:760px){
+  .windows-personalize__color-list{grid-template-columns:repeat(4,64px);gap:4px}
+}

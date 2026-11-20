@@ -2,7 +2,10 @@ import type {SourceThemeId} from "./sourceThemeCatalog";
 export type ThemeId = SourceThemeId;
 export {
   SOURCE_WIN7_THEME_METADATA,sourceWin7VariantMetadata,sourceWin7ThemeColor,
-  sourceWin7ThemeChromeColors,type SourceWin7VariantId
+  sourceWin7ThemeChromeColors,SOURCE_AERO_COLORS,SOURCE_AERO_APPEARANCE_KEY,
+  SOURCE_DEFAULT_AERO_APPEARANCE,sourceAeroAppearanceRead,
+  sourceAeroAppearanceSave,sourceAeroAppearanceValid,
+  type SourceAeroAppearance,type SourceWin7VariantId
 } from "./sourceWin7ThemeMetadata";
 export {SOURCE_THEME_SCREENS,SOURCE_THEME_CATALOG_IDS,SOURCE_THEME_SCREEN_DEFAULTS,
   sourceIsKnownTheme,sourceThemeScreens,sourceThemeShellStatus,

@@ -179,3 +179,19 @@ individual palette values have *not* been fabricated. Basic
 Added browser checks of paint, 40px height, Start 54px wrapper,
 opened program taskbar focus/minimize/restore and source ::before
 glass rim on desktop and mobile.
+
+## Aero Window Color and Appearance — 20 Nov 2026
+
+Pinned original `src/modules/system/personalize.js` ChangeAppearance
+renders the exact 32 webpack 2299 colors in eight columns, plus
+`enableTransparency` and separate Save/Cancel. Original
+`src/modules/plugins/plugin-cssvar.js` requires both the theme
+transparent flag and `effects.enableGlass` before applying Aero alpha.
+
+React now provides this bounded Aero 1–4 screen: original palette,
+live color/transparency preview, Cancel and window-close rollback,
+Guest-local validated persistence, theme default color reset, and
+0.65/0.3 alpha when glass/transparency are on. Basic themes stay opaque.
+Unit and desktop/mobile acceptance have been added, but remain
+unverified until the new exact-head opt-in CI completes. Full
+source-paired screenshot and audio parity remain pending.

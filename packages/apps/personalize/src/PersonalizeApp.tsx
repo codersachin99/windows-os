@@ -1,5 +1,6 @@
-import {useState,type CSSProperties} from "react";
-import {sourceIsXpFamily,sourceWin7ThemeColor,type ThemeId} from "@windows-os/contracts";
+import {useEffect,useState,type CSSProperties} from "react";
+import {SOURCE_AERO_COLORS,sourceIsAeroFamily,sourceIsXpFamily,
+  sourceWin7ThemeColor,type SourceAeroAppearance,type ThemeId} from "@windows-os/contracts";
 import {
   SOURCE_PERSONALIZE_THEMES,SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS,
   sourcePersonalizeGroup,type SourcePersonalizeTheme
@@ -13,17 +14,41 @@ interface PersonalizeAppProps{
   wallpaper:string;
   onSelectTheme(theme:SourcePersonalizeTheme["id"]):void;
   onSelectWallpaper(path:string):void;
+  aeroAppearance:SourceAeroAppearance;
+  onAeroAppearancePreview(value:SourceAeroAppearance):void;
+  onAeroAppearanceSave(value:SourceAeroAppearance):void;
+  onAeroAppearanceDiscard():void;
 }
 /** Source personalize.js ChangeTheme and first ChangeBackground system gallery.
  * The source saves ChangeTheme immediately, but ChangeBackground only on Save;
  * Cancel must discard its draft. User image/video uploads, animations, ads,
- * appearance/cursor and sounds pages are not yet implemented.
+ * cursor and sounds pages are not yet implemented.
  */
 export function PersonalizeApp({
-  theme,wallpaper,onSelectTheme,onSelectWallpaper,initialView="theme"
+  theme,wallpaper,onSelectTheme,onSelectWallpaper,initialView="theme",
+  aeroAppearance,onAeroAppearancePreview,onAeroAppearanceSave,
+  onAeroAppearanceDiscard
 }:PersonalizeAppProps){
-  const [view,setView]=useState<"theme"|"background">(initialView);
+  const [view,setView]=useState<"theme"|"background"|"appearance">(initialView);
   const [selectedBg,setSelectedBg]=useState(wallpaper);
+  const [selectedColor,setSelectedColor]=useState(
+    aeroAppearance.color??sourceWin7ThemeColor(theme)??SOURCE_AERO_COLORS[0]);
+  const [enableTransparency,setEnableTransparency]=useState(aeroAppearance.transparent);
+  useEffect(()=>()=>onAeroAppearanceDiscard(),[onAeroAppearanceDiscard]);
+  const openAppearance=()=>{
+    if(!sourceIsAeroFamily(theme))return;
+    setSelectedColor(aeroAppearance.color??sourceWin7ThemeColor(theme)??SOURCE_AERO_COLORS[0]);
+    setEnableTransparency(aeroAppearance.transparent);
+    setView("appearance");
+  };
+  const cancelAppearance=()=>{
+    onAeroAppearanceDiscard();
+    setView("theme");
+  };
+  const saveAppearance=()=>{
+    onAeroAppearanceSave({color:selectedColor,transparent:enableTransparency});
+    setView("theme");
+  };
   const openBackground=()=>{
     setSelectedBg(wallpaper);
     setView("background");
@@ -73,7 +98,39 @@ export function PersonalizeApp({
         onClick={openBackground}>Desktop Background</button>
     </aside>
     <div className="windows-personalize__main">
-      {view==="background"?<>
+      {view==="appearance"?<>
+        <h2>Window Color and Appearance</h2>
+        <p>Change the color of your window borders, Start menu and taskbar.</p>
+        <ul className="windows-personalize__color-list"
+          data-test-color-list="" aria-label="Window colors">
+          {SOURCE_AERO_COLORS.map(color=>
+            <li key={color} className={selectedColor===color?"is-selected":""}>
+              <button type="button" data-test-color-item={color}
+                aria-label={`Color ${color}`} aria-pressed={selectedColor===color}
+                className="windows-personalize__color-chip"
+                style={{"--preview-color":color} as CSSProperties}
+                onClick={()=>{
+                  setSelectedColor(color);
+                  onAeroAppearancePreview({color,transparent:enableTransparency});
+                }}/>
+            </li>)}
+        </ul>
+        <label className="windows-personalize__transparency">
+          <input id="enableTransparency" data-test-color-transparency=""
+            type="checkbox" checked={enableTransparency}
+            onChange={event=>{
+              setEnableTransparency(event.target.checked);
+              onAeroAppearancePreview({color:selectedColor,transparent:event.target.checked});
+            }}/>
+          Enable transparency
+        </label>
+        <div className="windows-personalize__actions">
+          <button type="button" data-test-color-save=""
+            onClick={saveAppearance}>Save</button>
+          <button type="button" data-test-color-cancel=""
+            onClick={cancelAppearance}>Cancel</button>
+        </div>
+      </>:view==="background"?<>
         <h2>Desktop Background</h2>
         <p>Choose a background for your desktop.</p>
         <section className="windows-personalize__group"
@@ -112,6 +169,10 @@ export function PersonalizeApp({
           <button type="button" className="windows-personalize__navigation"
             data-test-personalize-background-link=""
             onClick={openBackground}>Desktop Background</button>
+          {sourceIsAeroFamily(theme)&&
+            <button type="button" className="windows-personalize__navigation"
+              data-test-personalize-appearance-link=""
+              onClick={openAppearance}>Window Color</button>}
         </div>
       </>}
     </div>
