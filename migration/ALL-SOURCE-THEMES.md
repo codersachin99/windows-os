@@ -22,7 +22,7 @@ entry is intentionally omitted.
 | `win95` | `win95` | 1 | Original boot GIF/view + Win9x Guest logon; shell/pixel parity pending |
 | `win98` | `win98` | 1 | Original boot GIF/view + Win9x Guest logon; shell/pixel parity pending |
 | `win2k` | `win2k` | 1 | Original boot GIF/view + classic Guest logon; 2000 logo; shell/pixel parity pending |
-| `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP source-shaped Guest logon migrated for all XP mappings; XP desktop/variant skins pending |
+| `winxp` | `winxp`, `winxpE`, `winxpG`, `winxpN`, `winxpR`, `winxpS`, `winxpZ` | 7 | XP Guest logon and shared source-backed XP shell/Start/icon mappings for all seven; exact color-token variants partially transcribed; whole XP visual parity pending |
 | `winvista` | `winvista` | 1 | Original boot GIF/view migrated; logon/shell/pixel parity pending |
 | `win8` | `win8`, `win81` | 2 | Original boot/logon, Win8 fullscreen tile Start, source wallpaper/taskbar/flat windows; full shell/pixel parity pending |
 | `win10` | `win10` | 1 | Original Win8-reused boot logo/spinner + Win10 logon, dark taskbar, windows, Start; complete shell/pixel parity pending |
@@ -69,7 +69,7 @@ even though `win7` itself is not a key in the final source
   families. The other eight retain an explicit Win7 fallback.
   See [SOURCE-BOOT-FAMILIES.md](SOURCE-BOOT-FAMILIES.md).
   A recognized theme ID is **not** a fully ported theme.
-- **Visual fidelity:** Win7/XP/Win11 shell skins are partially ported.
+- **Visual fidelity:** Win7/XP (all seven source color variants)/Win11 shell skins are partially ported.
   No theme is currently certified pixel-perfect. Other theme IDs
   remain source-catalogued, with existing Win7 fallback shell artwork.
   Do not label a skin complete until its original rendered desktop,
@@ -116,6 +116,8 @@ even though `win7` itself is not a key in the final source
   visual CSS properties, power/account boundaries and Guest entry.
   Original vs React screenshot comparisons and original authentication
   backend parity remain pending. Do not mark any whole theme complete.
+
+See [XP-VARIANTS-SOURCE.md](XP-VARIANTS-SOURCE.md) for the exact XP E/G/N/R/S/Z color values, shared artwork, browser acceptance and remaining differences.
 
 ## Execution sequence
 
