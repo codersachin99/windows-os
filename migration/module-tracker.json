@@ -2464,9 +2464,14 @@
         "packages/ui/src/StartMenu.tsx",
         "packages/ui/src/sourceStartContextThemes.css",
         "tests/e2e/source-vista-start.spec.ts",
-        "migration/VISTA-START-SOURCE.md"
+        "migration/VISTA-START-SOURCE.md",
+        "packages/ui/src/sourceDesktopContextThemes.css",
+        "packages/apps/explorer/src/sourceExplorerContextTheme.css",
+        "packages/contracts/src/sourceThemeCatalog.ts",
+        "tests/e2e/source-vista-context-themes.spec.ts",
+        "migration/VISTA-CONTEXT-MENU-SOURCE.md"
       ],
-      "verification": "source-backed Vista shared Start recent programs, configured power and popup palette; exact-head CI / Vista searchStyle UI and source-paired screenshots pending"
+      "verification": "Vista shared Start recents/power and popup plus Desktop/taskbar/Explorer/Bin source menu CSS/RTL and tests; login remains fallback and paired visual/font/icon/full source parity remains pending exact-head browser CI"
     },
     {
       "source": "src/modules/themes/theme-winxp-scss.js",
