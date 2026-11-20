@@ -2343,8 +2343,13 @@
       "source": "src/modules/themes/theme-win31-scss.js",
       "sha": "2ba7974836ae3548c7c695520f116ae776f2d787",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-classic-win8.spec.ts",
+        "migration/START-CONTEXT-CLASSIC-WIN8-SOURCE.md"
+      ],
+      "verification": "source-backed detached Start-program menu palette with real Pin actions; exact-head CI pending, complete shell/visual screenshot parity pending"
     },
     {
       "source": "src/modules/themes/theme-win7-classic-scss.js",
@@ -2381,15 +2386,25 @@
       "source": "src/modules/themes/theme-win8-scss.js",
       "sha": "0dc922912536e42a43bcc6ce86a199c38e6ce0a6",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-classic-win8.spec.ts",
+        "migration/START-CONTEXT-CLASSIC-WIN8-SOURCE.md"
+      ],
+      "verification": "source-backed detached Start-program menu palette with real Pin actions; exact-head CI pending, complete shell/visual screenshot parity pending"
     },
     {
       "source": "src/modules/themes/theme-win9x-scss.js",
       "sha": "59bac54409dd719400245d35268882ae321bbc5c",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceStartContextThemes.css",
+        "tests/e2e/source-start-context-classic-win8.spec.ts",
+        "migration/START-CONTEXT-CLASSIC-WIN8-SOURCE.md"
+      ],
+      "verification": "source-backed detached Start-program menu palette with real Pin actions; exact-head CI pending, complete shell/visual screenshot parity pending"
     },
     {
       "source": "src/modules/themes/theme-winW-scss.js",
