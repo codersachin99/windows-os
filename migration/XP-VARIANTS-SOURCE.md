@@ -107,13 +107,30 @@ generic round Win7 40px orb. The actual Start open state controls
 `.is-active` and `aria-expanded`, so the pressed skin follows app behavior.
 Seven source-specific before-gradient treatments are copied, including
 XP Noir hover/open and XP Zune open override; mirrored RTL framing added.
-XP's original 36px taskbar height and desktop reserved height are adopted.
+XP taskbar is aligned to the validated 40px window-reserved height.
 No new raster graphics are generated; some deeper source variations
 (Win7/Vista taskbar, other 29 themes, source screenshot comparison)
 are still unverified.
 
 Desktop/mobile browser regressions check the source image, label, 20px
-icon, 36px taskbar, per-theme gradient, pointer hover, real menu open,
+icon, 40px taskbar, per-theme gradient, pointer hover, real menu open,
 active skin and close. An RTL case checks curved side mirroring. These
 checks do not establish source/React pixel-by-pixel equivalence.
+
+
+## XP Start regression correction (20 Nov 2026)
+
+The first Start pseudo-skin commit introduced a 36px XP taskbar token,
+but `WindowFrame` and the already-established source-window geometry
+regression use the 40px taskbar baseline. That mismatch left a visible
+4px strip below maximized XP windows. Corrected the XP taskbar and Start
+control to 40px while retaining the source 80px curved pseudo-skin;
+this ensures the wallpaper, maximized windows and bar share one token.
+Do not certify source pixel dimensions until source/target paired capture.
+
+In Chromium, a pseudo-element with both `right:-18px` and
+`width:115%` has computed `left` resolved numerically even if the
+author CSS declares `left:auto`. The RTL acceptance now checks the
+actual right anchor and curved mirrored corner rather than an invalid
+computed-style `auto` expectation.
 

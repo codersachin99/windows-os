@@ -1,3 +1,30 @@
+## Correct failed XP Start CI source geometry — 20 November 2026
+
+**Source:** immutable legacy-win7 26b9f0ce7a1665dee89a7c81824bec09e2c75776.
+**Previous run:** [CI #44695637058](https://github.com/codersachin99/windows-os/actions/runs/44695637058)
+FAILED, not green: 488 passed, 4 failed (2 repeated cases across
+desktop/mobile), 2 skipped. Typed/build/unit and artwork checks passed.
+
+**Root causes:** new CSS reduced XP taskbar height to 36px while
+maximized-window source regression/previous React geometry kept the
+40px window reservation: a 4px edge mismatch. Re-synchronized XP
+taskbar and Start button height to 40px and retained the original
+115%-wide/80px curved Start pseudo-skin. The RTL browser test assumed
+computed `left:auto` under an absolutely positioned 115%-wide pseudo
+element also anchored by `right:-18px`; Chromium resolves its computed
+left in px. Acceptance now checks the physically meaningful right
+anchor and rounded mirrored corner. Neither failing browser test is
+skipped or loosened for window-frame position.
+
+**Validation:** a new `[run-ci]` check is required. No local browser
+runner available. If it fails, inspect exact job logs and fix source.
+The draft PR, main and source ref are unchanged.
+
+**Next:** finish eight Aero/Basic source-themed Personalize previews,
+then real shell skins, desktop/Start/context/explorer visual parity.
+
+---
+
 ## XP Start source shape, hover and pressed styling — 20 November 2026
 
 **Source reference:** locked `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

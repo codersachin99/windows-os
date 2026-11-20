@@ -342,12 +342,12 @@
  * source icon, and its own italic 'start' label. React preserves the real
  * byte-imported source icon (never paints a guessed Windows flag).
  * State .is-active follows real Start menu visibility, not pointer focus. */
-.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]){--taskbar-height:36px}
-.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar{height:36px}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]){--taskbar-height:40px}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar{height:40px}
 .windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar__start{
   flex:0 0 auto;display:flex;align-items:center;gap:6px;
   box-sizing:border-box;position:relative;overflow:hidden;
-  width:auto;height:36px;min-height:36px;
+  width:auto;height:40px;min-height:40px;
   margin:0;padding:0 24px 0 8px;
   border:0;border-radius:0;background:transparent;
   color:#fff;filter:none;cursor:pointer;

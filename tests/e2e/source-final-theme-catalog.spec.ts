@@ -284,7 +284,7 @@ for(const {theme,idle,hover,active} of [{"theme":"winxp","idle":"linear-gradient
     const button=page.locator('[data-test-start-button]');
     await expect(button).toBeVisible();
     await expect(button).toHaveAttribute("aria-expanded","false");
-    await expect(page.locator('[data-test-taskbar="base"]')).toHaveCSS("height","36px");
+    await expect(page.locator('[data-test-taskbar="base"]')).toHaveCSS("height","40px");
     await expect(button.locator("img")).toHaveAttribute("src",
       "/assets/images/start-button-winxp.a3485adf.webp");
     await expect(button.locator("img")).toHaveCSS("width","20px");
@@ -319,9 +319,8 @@ test("XP source Start button mirrors the curved end and shadows in RTL",async({p
   await expect(button).toBeVisible();
   const before=await button.evaluate(el=>{
     const css=getComputedStyle(el,"::before");
-    return {right:css.right,left:css.left,radius:css.borderTopLeftRadius};
+    return {right:css.right,radius:css.borderTopLeftRadius};
   });
   expect(before.right).toBe("-18px");
-  expect(before.left).toBe("auto");
   expect(before.radius).toBe("50%");
 });
