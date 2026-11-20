@@ -1,3 +1,15 @@
+## Win7 mobile Explorer stacked Send-to pointer traversal — 20 November 2026 (08:48 IST continuation)
+
+**Actual prior CI failure:** [run #44590124670](https://github.com/codersachin99/windows-os/actions/runs/44590124670), head `f3b734b`. TypeScript, unit, source inventory, source artwork, Contacts source, Vite build **passed**; focused Playwright finished **443 passed, 2 skipped, 1 failed**, so full browser suite was **skipped**. The single failure was recurring **Win7 mobile Explorer "Send to Desktop" click** at `source-explorer-send-to-desktop.spec.ts:26`: first child action was visible/enabled, then `html` intercepted the pointer and submenu detached. The failing trace artifact is `browser-test-results` (artifact 14564231726). No evidence of Win9x classic Start test failure in this run.
+
+**Source behavior fix:** [`c2a0868`](https://github.com/codersachin99/windows-os/commit/c2a086855d271ed695fe0f93fab24682d55edbba) identifies when a narrow-viewport `sourceExplorerSubmenuPlacement` has *vertically stacked* the Send-to child away from the root menu, then ignores incidental `onPointerEnter` events from its other root rows while the child is open. This is necessary because a pointer going from the trigger to a child **above/below the parent** must physically cross those root rows; the old other-item hover handler destroyed the child mid-travel. Desktop adjacent submenu hover-to-switch behavior is **unchanged**; clicking a real root action still performs and closes the menu. It does not disable Playwright, skip the test, or introduce timeout inflation.
+
+**Regression:** [`e945d3f`](https://github.com/codersachin99/windows-os/commit/e945d3fc8d85fa334e3c4f7acebd899b56967b17) explicitly checks a 375x667 stacked child, intentionally hovers **Copy** while Send-to remains expanded, and then clicks the real Desktop shortcut action. The previous mobile placement/desktop/brower tests are preserved.
+
+**Verification:** This `[run-ci]` commit requests exact-head TS, units, source audits, Vite, all focused and full browser tests. Do not mark this bug closed or claim CI green until this run finishes. Original `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`, target main and releases untouched; PR #1 remains draft. Next source-backed work resumes remaining Win7 Aero/Basic and XP variants and untouched original theme families after mobile regression is verified.
+
+---
+
 ## Win95/98/2000 narrow Start cascading-menu regression — 20 November 2026
 
 **Prior exact-head verification:** [CI #44558730852](https://github.com/codersachin99/windows-os/actions/runs/44558730852) **SUCCESS** at `bb347915df37c195a593249a959e39a77d9eafdc`, including TypeScript, unit, original source inventory and artwork, production build, and full desktop/mobile Chromium. This verifies the preceding Windows 95/98/2000 source shell, Explorer and Personalize integration, **not** the follow-up below.
