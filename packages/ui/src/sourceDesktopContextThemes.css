@@ -11,25 +11,25 @@
  */
 
 /* Windows XP: original Tahoma, white menu and #316ac5 accent. */
-.windows-desktop[data-theme="winxp"] .windows-desktop__menu,
-.windows-desktop[data-theme="winxp"] .windows-taskbar__context{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-desktop__menu,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar__context{
   color:#000;background:#fff;border:1px solid #aca899;
   border-radius:0;padding:3px 2px;
   box-shadow:4px 4px 2px -2px rgba(0,0,0,.5333333333);
   font:12px Tahoma,"Microsoft Sans Serif",sans-serif;
 }
-.windows-desktop[data-theme="winxp"] .windows-desktop__menu button,
-.windows-desktop[data-theme="winxp"] .windows-taskbar__context button{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-desktop__menu button,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar__context button{
   color:#000;background:transparent;border-color:transparent;border-radius:0;
 }
-.windows-desktop[data-theme="winxp"] .windows-desktop__menu button:not(:disabled):hover,
-.windows-desktop[data-theme="winxp"] .windows-desktop__menu button:not(:disabled):focus-visible,
-.windows-desktop[data-theme="winxp"] .windows-taskbar__context button:not(:disabled):hover,
-.windows-desktop[data-theme="winxp"] .windows-taskbar__context button:not(:disabled):focus-visible{
-  color:#fff;background:#316ac5;border-color:transparent;
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-desktop__menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-desktop__menu button:not(:disabled):focus-visible,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar__context button:not(:disabled):hover,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar__context button:not(:disabled):focus-visible{
+  color:#fff;background:var(--source-accent,#316ac5);border-color:transparent;
 }
-.windows-desktop[data-theme="winxp"] .windows-desktop__menu button:disabled,
-.windows-desktop[data-theme="winxp"] .windows-taskbar__context button:disabled{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-desktop__menu button:disabled,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .windows-taskbar__context button:disabled{
   opacity:1;color:#aca899;
 }
 
