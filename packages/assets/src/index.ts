@@ -146,6 +146,15 @@ export const legacyShellThemeAssets = Object.freeze({
   }
 } as const);
 
+/** Source-pinned Windows 11 dark variant is a distinct desktop image and
+ * Start orb, while the remaining Windows 11 app/file icon family is shared.
+ * Both blobs were copied unchanged from legacy-win7@26b9f0ce.
+ */
+export const sourceWin11DarkArtwork=Object.freeze({
+  wallpaper:"/assets/images/win11dark.af52a1ca.webp",
+  start:"/assets/images/start-button-win11dark.d417814c.webp"
+});
+
 /** Immutable Win8/Win8.1 native wallpaper and fullscreen Start art from
  * pinned legacy-win7 source. Unlike Windows 10, Win8/Win81 have no
  * distinct Computer/Bin icon overrides in icons.registry.json.
@@ -191,6 +200,7 @@ export function sourceShellWallpaper(theme:string):string{
   if(theme==="win10")return legacyShellThemeAssets.win10.theme;
   if(theme==="winxp")return legacyShellThemeAssets.winxp.theme;
   if(theme==="win11")return legacyShellThemeAssets.win11.theme;
+  if(theme==="win11dark")return sourceWin11DarkArtwork.wallpaper;
   return legacyArt.wallpaperWin7;
 }
 
@@ -204,7 +214,8 @@ export const sourceSystemWallpapers:readonly string[]=Object.freeze([
   sourceWin8ShellArtwork.win81Wallpaper,
   legacyShellThemeAssets.win10.theme,
   legacyShellThemeAssets.winxp.theme,
-  legacyShellThemeAssets.win11.theme
+  legacyShellThemeAssets.win11.theme,
+  sourceWin11DarkArtwork.wallpaper
 ]);
 export function sourceIsSystemWallpaper(path:string):boolean{
   return sourceSystemWallpapers.includes(path);
@@ -329,7 +340,7 @@ export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.winxp;
     return icons[iconKey]??null;
   }
-  if(theme==="win11"){
+  if(theme==="win11"||theme==="win11dark"){
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win11;
     return icons[iconKey]??null;
   }
@@ -372,6 +383,8 @@ export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): s
   if (theme === "win10") return legacyShellThemeAssets.win10[kind];
   if (theme === "winxp") return legacyShellThemeAssets.winxp[kind];
   if (theme === "win11") return legacyShellThemeAssets.win11[kind];
+  if (theme === "win11dark") return kind==="start"
+    ?sourceWin11DarkArtwork.start:legacyShellThemeAssets.win11[kind];
   return null;
 }
 
