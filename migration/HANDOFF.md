@@ -1,3 +1,54 @@
+## 20 November 2026 — repair XP Royale test; source Win31/9x/8 Start popup palettes
+
+**Frozen source reference:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target branch:** `feat/0001-faithful-react-foundation`; draft PR #1 unmerged.
+
+**Verification facts:**
+- [Previous Win7 Start CI #44763970264](https://github.com/codersachin99/windows-os/actions/runs/44763970264)
+  **PASSED**, including TypeScript, unit, source/artwork/Contacts audits, Vite,
+  focused and full desktop/mobile Chromium. It checks `4cf6406`.
+- [Win7/Xp context CI #44765901335](https://github.com/codersachin99/windows-os/actions/runs/44765901335)
+  **FAILED** at `927bdb5`: source, TypeScript, unit, artwork, Contacts
+  and Vite all passed; focused Chromium: **578 passed, 2 failed, 2 skipped**.
+  Both failures were the SAME stale test expected `rgb(51,90,168)`
+  vs actual **`rgb(51,94,168)`** for Royale `winxpR`.
+  Source `sourceShellTheme.css` and pinned XP palette both use
+  `#335ea8`; the application CSS is correct. Full browser suite
+  skipped after targeted failure; no green claim.
+
+**Corrective/source-backed work:**
+- [`0dafa824`](https://github.com/codersachin99/windows-os/commit/0dafa824c0374213ab05ca035c4544de68c6c974)
+  corrects only the precise XP Royale test value, preserving the CSS.
+- [`39e62f31`](https://github.com/codersachin99/windows-os/commit/39e62f31bf0ce815a383aee1a4c01fa1b81a5198)
+  ports the original `.winui-menu` theme CSS for Windows 3.1,
+  Win95/98/2000 and Win8/8.1 to **real portaled** Start program menus,
+  preserving individual original palette, classic bevel, Win8 gutter,
+  high contrast and direction-specific shadows.
+- [`287ce3cf`](https://github.com/codersachin99/windows-os/commit/287ce3cfd5ddc875c7340a97726bfa09d5b6424a)
+  adds six per-theme Playwright cases (desktop and mobile: 12 instances)
+  testing actual Win31 Program Manager/Win9x cascading Programs/Win8 tile
+  right-click, menu paints and working Pin to taskbar.
+- [`4b8994ff`](https://github.com/codersachin99/windows-os/commit/4b8994ff0f6ebadd048f5c1410bcf516e1366260)
+  adds this test suite to opt-in focused browser CI.
+- [`4e0e32a8`](https://github.com/codersachin99/windows-os/commit/4e0e32a8966876b6aa0ac12420947aa585cf69f4)
+  adds source audit; [`abfe0220`](https://github.com/codersachin99/windows-os/commit/abfe02206a2cde9061cb57f5d1a258a40acd310e)
+  marks three source theme modules **in-progress**, not complete.
+
+**Action:** this checkpoint deliberately triggers ONE `[run-ci]` exact
+branch-head run. All new tests remain **unverified** until this run
+completes. Inspect concrete Playwright failure logs/artifacts and fix
+real implementation/tests; never skip, relax source values or falsely
+claim pixel parity. Screenshot source pairing still unavailable until
+private `LEGACY_SOURCE_READ_TOKEN` is configured for source checkout;
+React-only screenshots are not original comparison evidence.
+
+**Next priority:** resolve exact-head CI, then pursue measured original
+vs React Start/desktop/Computer/Bin theme screenshots and finish the
+largest source-backed interaction and visual gaps, preserving
+`legacy-win7`, target `main`, draft PR and no product release.
+
+---
+
 ## 20 Nov 2026 — source StartProgram popup skins across Aero / Classic / XP
 
 **Original frozen:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
