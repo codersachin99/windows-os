@@ -32,13 +32,15 @@ test("source ChangeBackground system tiles stage changes until Save and Cancel",
   let view=await backgroundView(page);
   const system=view.locator('[data-test-bg-list="system"]');
   // Win8/Win81 and Win95/Win2k original wallpapers are byte-imported as separate themes.
-  await expect(system.locator("[data-test-bg-item]")).toHaveCount(12);
+  await expect(system.locator("[data-test-bg-item]")).toHaveCount(13);
   await expect(system.locator('[data-test-bg-item="/assets/images/win8.3a5f11f3.webp"] img'))
     .toHaveAttribute("src","/assets/images/win8.3a5f11f3.webp");
   await expect(system.locator('[data-test-bg-item="/assets/images/win81.7b80787e.webp"] img'))
     .toHaveAttribute("src","/assets/images/win81.7b80787e.webp");
   await expect(system.locator('[data-test-bg-item="/assets/images/win10.743e8c13.webp"] img'))
     .toHaveAttribute("src","/assets/images/win10.743e8c13.webp");
+  await expect(system.locator('[data-test-bg-item="/assets/images/win11dark.af52a1ca.webp"] img'))
+    .toHaveAttribute("src","/assets/images/win11dark.af52a1ca.webp");
   const chosen=system.locator('[data-test-bg-item="'+alternate+'"]');
   await expect(chosen.locator("img")).toHaveAttribute("src",alternate);
   await chosen.click();
