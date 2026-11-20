@@ -202,3 +202,43 @@ test("Win11 Dark chooses exact pinned source wallpaper/Start and native dark she
     .toHaveAttribute("data-test-desktop-background",
       "/assets/images/win11dark.af52a1ca.webp");
 });
+
+/** Original personalize.css swatches, not inferred from the wallpaper:
+ * all XP variants share the exact original XP image but have their own
+ * 25px source palette marker. Check desktop and mobile Playwright projects. */
+test("Personalize offers all seven original XP palettes with persistent selection",async({page})=>{
+  const win=await openPersonalize(page);
+  const cases=[
+    ["winxp","rgb(0, 85, 230)","rgb(0, 85, 230)"],
+    ["winxpE","rgb(1, 47, 84)","rgb(52, 123, 179)"],
+    ["winxpG","rgb(186, 200, 145)","rgb(186, 200, 145)"],
+    ["winxpN","rgb(22, 29, 45)","rgb(102, 115, 124)"],
+    ["winxpR","rgb(42, 77, 171)","rgb(153, 198, 241)"],
+    ["winxpS","rgb(224, 223, 227)","rgb(224, 223, 227)"],
+    ["winxpZ","rgb(37, 37, 37)","rgb(111, 111, 111)"]
+  ] as const;
+  for(const [theme,border,paint] of cases){
+    const item=win.locator('[data-test-personalize-theme="'+theme+'"]');
+    await expect(item).toBeVisible();
+    await expect(item.locator("img")).toHaveAttribute(
+      "src","/assets/images/winxp.3e41719f.webp");
+    const swatch=item.locator('[data-test-personalize-color="'+theme+'"]');
+    await expect(swatch).toHaveCSS("border-top-color",border);
+    const renderedPaint=await swatch.evaluate(element=>{
+      const css=getComputedStyle(element);
+      return css.backgroundImage+" "+css.backgroundColor;
+    });
+    expect(renderedPaint,theme+" original source swatch").toContain(paint);
+    await item.click();
+    await expect(page.locator('[data-test-main-screen]'))
+      .toHaveAttribute("data-theme",theme);
+    await expect(item).toHaveAttribute("aria-pressed","true");
+    await expect(page.locator('[data-test-desktop-background]'))
+      .toHaveAttribute("data-test-desktop-background",
+        "/assets/images/winxp.3e41719f.webp");
+  }
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-main-screen]'))
+    .toHaveAttribute("data-theme","winxpZ");
+});

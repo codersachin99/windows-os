@@ -1,3 +1,33 @@
+## Original XP seven-theme Personalize cards — 20 November 2026
+
+**Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`, draft PR #1; original and
+target `main` unchanged.
+
+**Last finished acceptance:** [run #44682340690](https://github.com/codersachin99/windows-os/actions/runs/44682340690)
+completed successfully, including TypeScript, units, source/asset audits,
+Vite build, focused and full browser testing of the preceding XP frame slice.
+
+**New change:** `PersonalizeApp` now lists all seven real XP source IDs, with
+the same exact original XP background preview and each distinct
+source `personalize.css` 25px color swatch. No generated images or guessed
+theme palette. The existing source-derived reducer applies/persists each
+variant when selected. Added unit catalog/image checks and real desktop/mobile
+Playwright tests for every variant's color and persistence. See
+[migration/XP-VARIANTS-SOURCE.md](XP-VARIANTS-SOURCE.md).
+
+**Verification:** this new slice is not covered by the previous green run.
+The source/target checkout cannot run locally in the connector-only workspace.
+One explicit `[run-ci]` commit requests the next full check; inspect the
+new run before reporting success, fix failures without skipping assertions.
+
+**Next priorities:** source-paired Personalize preview screenshots and
+XP taskbar/Start hover/pressed behavior; then Windows 7 Aero/Basic families,
+desktop, Start, context menus, Computer/Bin. Preserve draft PR/no release
+until source and responsive parity are substantially verified.
+
+---
+
 ## XP variant original painted-frame migration — 20 November 2026
 
 **Reference:** immutable `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

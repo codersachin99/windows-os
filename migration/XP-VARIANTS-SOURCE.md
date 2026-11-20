@@ -56,3 +56,28 @@ Personalize appearance previews and source-paired visual measurements.
 - Automated contracts: `packages/contracts/src/sourceThemeCatalog.test.ts`; `packages/assets/src/sourceShellArtwork.test.ts`.
 - Browser: `tests/e2e/source-final-theme-catalog.spec.ts` includes desktop/mobile checks per XP ID for Guest login, theme selection, source palette tokens, wallpaper, Start orb and XP-only header/footer.
 - Pending: remaining XP caption interaction states, taskbar item/Start-button skins and independent source preview tiles in Personalize; full right-click/menu, Computer/Bin and layout parity in each variant; matching source/target screenshots at desktop/laptop/tablet/mobile; final E2E CI results. Keep original source untouched.
+
+## Personalize XP variant preview controls — 20 November 2026
+
+**Source-of-truth:** `src/modules/system/personalize.js` renders a theme item
+using a 112×70 preview with a 96×64 theme background and a separate 25×25
+color swatch positioned 36px from the top. The immutable
+`src/styles/system/personalize.css` supplies **independent swatch paints**
+for `winxp,winxpE,winxpG,winxpN,winxpR,winxpS,winxpZ`.
+The previous React chooser mistakenly offered only `winxp`.
+
+**Now implemented:** the exact seven IDs appear separately within the
+existing Other Windows Themes gallery. Each shares the verified original
+XP wallpaper image; its 25×25 marker copies the correct source CSS border,
+gradient, and background color, rather than using accent approximations.
+Selecting any variant applies the existing source-backed partial XP shell,
+not a screenshot-only fake. The existing theme persistence code is unchanged.
+
+**Acceptance:** the Personalize unit catalog tests enforce all seven IDs,
+source order, and byte-imported wallpaper references. Desktop/mobile
+Playwright now selects all seven in turn, checks the independent swatch
+paint and selected/persisted desktop ID. Non-XP cards intentionally retain
+their existing interim thumbnails. Source theme names, complete preview
+composition for remaining 20+ families, responsive dimensions and entire
+source-paired screenshot parity are not certified.
+

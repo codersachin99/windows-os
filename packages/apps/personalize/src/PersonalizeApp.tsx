@@ -1,5 +1,5 @@
 import {useState} from "react";
-import type {ThemeId} from "@windows-os/contracts";
+import {sourceIsXpFamily,type ThemeId} from "@windows-os/contracts";
 import {
   SOURCE_PERSONALIZE_THEMES,SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS,
   sourcePersonalizeGroup,type SourcePersonalizeTheme
@@ -45,7 +45,13 @@ export function PersonalizeApp({
           className={"windows-personalize__theme"+
             (theme===item.id?" is-selected":"")}
           onClick={()=>{if(item.id!==theme)onSelectTheme(item.id);}}>
-          <img src={item.preview} alt="" draggable={false}/>
+          <div className={"windows-personalize__theme-preview"+
+            (sourceIsXpFamily(item.id)?" is-xp":"")}>
+            <img src={item.preview} alt="" draggable={false}/>
+            {sourceIsXpFamily(item.id)&&<span aria-hidden="true"
+              data-test-personalize-color={item.id}
+              className="windows-personalize__theme-color"/>}
+          </div>
           <span>{item.label}</span>
         </button>)}
       </div>

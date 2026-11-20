@@ -3,10 +3,10 @@ import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers,sourceWin8ShellA
 
 /** Original pinned personalize.js ChangeTheme, _getThemes:
  * classes aero/basic/wins, theme selection immediately applies Theme and
- * source theme background. This bounded chooser exposes ten source-backed
+ * source theme background. This bounded chooser exposes sixteen source-backed
  * shell personalities, not the entire source catalog or complete parity.
  */
-export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"win95"|"win98"|"win2k"|"winxp"|"win8"|"win81"|"win10"|"win11"|"win11dark">;
+export type SourcePersonalizeThemeId=Extract<ThemeId,"win7"|"win95"|"win98"|"win2k"|"winxp"|"winxpE"|"winxpG"|"winxpN"|"winxpR"|"winxpS"|"winxpZ"|"win8"|"win81"|"win10"|"win11"|"win11dark">;
 export interface SourcePersonalizeTheme{
   id:SourcePersonalizeThemeId;
   label:string;
@@ -19,6 +19,12 @@ export const SOURCE_PERSONALIZE_THEMES:readonly SourcePersonalizeTheme[]=[
   {id:"win98",label:"Windows 98",group:"wins",preview:legacyShellThemeAssets.win95.theme},
   {id:"win2k",label:"Windows 2000",group:"wins",preview:legacyShellThemeAssets.win2k.theme},
   {id:"winxp",label:"Windows XP",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpE",label:"Windows XP (E)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpG",label:"Windows XP (G)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpN",label:"Windows XP (N)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpR",label:"Windows XP (R)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpS",label:"Windows XP (S)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpZ",label:"Windows XP (Z)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
   {id:"win8",label:"Windows 8",group:"wins",preview:sourceWin8ShellArtwork.win8Wallpaper},
   {id:"win81",label:"Windows 8.1",group:"wins",preview:sourceWin8ShellArtwork.win81Wallpaper},
   {id:"win10",label:"Windows 10",group:"wins",preview:legacyShellThemeAssets.win10.theme},
