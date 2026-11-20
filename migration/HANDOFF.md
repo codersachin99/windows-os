@@ -1,3 +1,35 @@
+## XP Start source shape, hover and pressed styling — 20 November 2026
+
+**Source reference:** locked `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1.
+**Previous CI:** [run #44692695641](https://github.com/codersachin99/windows-os/actions/runs/44692695641)
+was still in progress at check time; do not claim green until complete.
+
+**New actual code:** `DesktopShell.tsx` makes the Start toggle reflect
+real `state.startOpen` as `.is-active` and `aria-expanded`. XP-only
+rules in `sourceShellTheme.css` copy original curved 80px, 115%
+Start `::before` geometry and shadows, original image at 20px and
+source "start" label, theme-specific E/G/N/R/S/Z gradients, Noir hover
+and pressed and Zune pressed, plus RTL mirroring. XP shell/taskbar
+reserve the original 36px height. Other themes stay isolated.
+
+**New source checks:** `source-final-theme-catalog.spec.ts` tests
+all seven XP variants on desktop/mobile for original icon bytes,
+CSS background, hover, active-menu state, closing, taskbar dimensions
+and one RTL shape check. Previous full visual screenshot pairing
+and all non-XP skins remain pending.
+
+**Verification:** New `[run-ci]` opt-in commit will run TypeScript,
+unit, Vite, source/asset audits and browser assertions. Cannot run
+local npm/browser tests via connector-only GitHub environment;
+do not report green before the exact-head run concludes.
+
+**Next:** fix any CI failure, then prioritize Win7 Aero/Basic family
+selection and original desktop/Start/context/Computer/Bin parity.
+Avoid merging draft or releasing incomplete migrations.
+
+---
+
 ## XP taskbar application state painting — 20 November 2026
 
 **Original:** immutable `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

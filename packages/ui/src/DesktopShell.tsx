@@ -487,7 +487,9 @@ export function DesktopShell({
             kind:"background",x:event.clientX,y:event.clientY
           });
         }}>
-        <button className="windows-taskbar__start" data-test-start-button="" aria-label="Open Start menu"
+        <button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
+          data-test-start-button="" aria-label="Open Start menu"
+          aria-expanded={state.startOpen}
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
         </button>

@@ -96,3 +96,24 @@ foreground+hover, minimizes it, checks running+hover and restores it for
 each XP ID. Original screenshot-paired pixel parity, remaining variant
 inset shadows and exact Start-button pseudo paints are still pending.
 
+
+## XP Start button original pseudo-skin and real pressed state — 20 November 2026
+
+The pinned `theme-winxp-scss.js` Start wrapper renders a curved 115%-wide,
+80px pseudo background, exact source 20px icon, CSS italic 1.5rem `start`
+label, and separate idle/hover/active brightness. React now uses the same
+original imported XP icon with those CSS source geometries rather than the
+generic round Win7 40px orb. The actual Start open state controls
+`.is-active` and `aria-expanded`, so the pressed skin follows app behavior.
+Seven source-specific before-gradient treatments are copied, including
+XP Noir hover/open and XP Zune open override; mirrored RTL framing added.
+XP's original 36px taskbar height and desktop reserved height are adopted.
+No new raster graphics are generated; some deeper source variations
+(Win7/Vista taskbar, other 29 themes, source screenshot comparison)
+are still unverified.
+
+Desktop/mobile browser regressions check the source image, label, 20px
+icon, 36px taskbar, per-theme gradient, pointer hover, real menu open,
+active skin and close. An RTL case checks curved side mirroring. These
+checks do not establish source/React pixel-by-pixel equivalence.
+

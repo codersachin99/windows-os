@@ -273,3 +273,55 @@ for(const [theme,property,opened,openedHover,active,activeHover] of [["winxp","b
     await expect(item).toHaveClass(/is-active/);
   });
 }
+
+/* Pinned XP startbutton-wrapper source: curved 80px pseudo skin with 20px
+ * original icon + italic source "start" label, and distinct N/Z pressed
+ * gradients. Real Start menu click state, all seven XP variants and RTL. */
+for(const {theme,idle,hover,active} of [{"theme":"winxp","idle":"linear-gradient(","hover":null,"active":null},{"theme":"winxpE","idle":"rgb(19, 61, 102)","hover":null,"active":null},{"theme":"winxpG","idle":"rgb(66, 107, 47)","hover":null,"active":null},{"theme":"winxpN","idle":"rgb(0, 0, 7)","hover":"rgb(79, 92, 106)","active":"rgb(30, 52, 31)"},{"theme":"winxpR","idle":"rgb(59, 91, 126)","hover":null,"active":null},{"theme":"winxpS","idle":"rgb(0, 103, 0)","hover":null,"active":null},{"theme":"winxpZ","idle":"rgb(78, 31, 1)","hover":null,"active":"rgb(89, 34, 1)"}] as const){
+  test("XP "+theme+" original Start button source geometry and state",async({page})=>{
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const button=page.locator('[data-test-start-button]');
+    await expect(button).toBeVisible();
+    await expect(button).toHaveAttribute("aria-expanded","false");
+    await expect(page.locator('[data-test-taskbar="base"]')).toHaveCSS("height","36px");
+    await expect(button.locator("img")).toHaveAttribute("src",
+      "/assets/images/start-button-winxp.a3485adf.webp");
+    await expect(button.locator("img")).toHaveCSS("width","20px");
+    const paint=()=>button.evaluate(el=>getComputedStyle(el,"::before").backgroundImage);
+    const label=await button.evaluate(el=>getComputedStyle(el,"::after").content);
+    expect(label).toBe('"start"');
+    expect(await paint()).toContain(idle);
+    const dimensions=await button.boundingBox();
+    expect(dimensions).not.toBeNull();
+    expect(dimensions!.width).toBeGreaterThan(40);
+    expect(dimensions!.x+dimensions!.width).toBeLessThanOrEqual(
+      page.viewportSize()!.width+1);
+    await button.hover();
+    await expect(button).toHaveCSS("filter","brightness(1.1) contrast(1.1)");
+    if(hover)expect(await paint()).toContain(hover);
+    await button.click();
+    await expect(button).toHaveAttribute("aria-expanded","true");
+    await expect(button).toHaveClass(/is-active/);
+    await expect(button).toHaveCSS("filter","brightness(0.9) contrast(1.1)");
+    await expect(page.locator('[data-test-start-menu]')).toBeVisible();
+    if(active)expect(await paint()).toContain(active);
+    await button.click();
+    await expect(button).toHaveAttribute("aria-expanded","false");
+    await expect(page.locator('[data-test-start-menu]')).toHaveCount(0);
+  });
+}
+test("XP source Start button mirrors the curved end and shadows in RTL",async({page})=>{
+  await page.goto("/?theme=winxp");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const button=page.locator('[data-test-start-button]');
+  await page.evaluate(()=>document.documentElement.setAttribute("dir","rtl"));
+  await expect(button).toBeVisible();
+  const before=await button.evaluate(el=>{
+    const css=getComputedStyle(el,"::before");
+    return {right:css.right,left:css.left,radius:css.borderTopLeftRadius};
+  });
+  expect(before.right).toBe("-18px");
+  expect(before.left).toBe("auto");
+  expect(before.radius).toBe("50%");
+});
