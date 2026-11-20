@@ -1,10 +1,12 @@
 
 /*
  * Source lock legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776
- * theme-win7-classic-scss.js: .win7-classic / .basic-3 / .basic-4.
- * High-contrast shell adapter only. Full source screenshot parity pending.
+ * theme-win7-classic-scss.js: .win7-classic / .basic-2 / .basic-3 / .basic-4.
+ * Shared classic shell base plus Basic 3/4 high-contrast palette.
+ * Source Basic 2 uses the .win7-classic base without named CSS rules.
+ * Full source screenshot parity pending.
  */
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]){
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]){
   --taskbar-height:52px;
   --theme-surface:var(--source-basic-surface);
   --theme-accent:var(--source-basic-active);
@@ -41,34 +43,34 @@
   --link-color:#000;
 }
 /* Classic taskbar: source --taskbar-height:52px and opaque bevel. */
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]) .windows-taskbar{
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]) .windows-taskbar{
   box-sizing:border-box;height:52px;
   padding:2px 4px 3px;border:1px solid var(--taskbar-border);
   border-radius:0;background:var(--theme-surface);color:var(--text-color);
   backdrop-filter:none;box-shadow:-1px 0 0 1px var(--border-color--contrast),
     -1px 0 0 2px var(--theme-surface);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl) .windows-taskbar{
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl) .windows-taskbar{
   box-shadow:1px 0 0 1px var(--border-color--contrast),1px 0 0 2px var(--theme-surface);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]) .windows-taskbar__application{
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]) .windows-taskbar__application{
   border:1px solid var(--border-color);border-radius:0;
   background:transparent;box-shadow:none;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__application:is(.is-active,:active){background:silver}
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]) .windows-taskbar__tray{
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]) .windows-taskbar__tray{
   background:var(--theme-surface);color:var(--text-color);height:100%;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 :is(.windows-taskbar__tray button,.windows-taskbar__clock){color:var(--text-color)}
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__show-desktop{
   background:var(--theme-surface);border:1px solid var(--border-color);
 }
 /* Classic source Start: 26px exact icon, square bevel, 'Start' label,
  * pressed paint follows React's real state.startOpen class. */
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__start{
   position:relative;box-sizing:border-box;display:flex;align-items:center;
   flex:0 0 auto;width:auto;height:40px;
@@ -79,42 +81,42 @@
     inset 1px 1px var(--border-color--contrast),
     inset -2px -2px var(--text-color--disabled);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__start img{
   width:26px;height:26px;object-fit:contain;filter:none;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__start:hover img{filter:none}
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__start::after{
   content:"Start";font:700 13px "Segoe UI",sans-serif;
   color:var(--text-color);pointer-events:none;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__start:is(:hover,:focus-visible,.is-active){
   background:var(--theme-surface);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-taskbar__start:is(.is-active,:focus-visible){
   box-shadow:inset 1px 1px var(--border-color),
     inset -1px -1px var(--border-color--contrast),
     inset 2px 2px var(--text-color--disabled);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
 .windows-taskbar__start{
   margin:0 2px 0 0;padding:0 4px 0 8px;
   box-shadow:inset 1px -1px var(--border-color),
     inset -1px 1px var(--border-color--contrast),
     inset 2px -2px var(--text-color--disabled);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
 .windows-taskbar__start:is(.is-active,:focus-visible){
   box-shadow:inset -1px 1px var(--border-color),
     inset 1px -1px var(--border-color--contrast),
     inset -2px 2px var(--text-color--disabled);
 }
 /* High-contrast classic .window__main, active/inactive titlebar/body. */
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]) .windows-window{
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]) .windows-window{
   border:1px solid var(--border-color);border-radius:0;
   padding:3px;background:var(--theme-surface);color:var(--text-color);
   backdrop-filter:none;
@@ -122,37 +124,37 @@
     inset 1px 1px var(--border-color--contrast),
     inset -2px -2px var(--text-color--disabled);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-window__titlebar{
   background:var(--theme-accent--idle);color:var(--text-color);padding:0 4px;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-window.is-active .windows-window__titlebar{
   background:var(--theme-accent);color:#fff;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-window__title{font-weight:600;color:inherit;text-shadow:none}
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-window__buttons button,
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-window__buttons button.windows-window__close{
   background:var(--theme-surface);color:var(--text-color);
   border:1px solid var(--border-color);border-radius:0;box-shadow:none;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-window__body{
   background:var(--theme-surface);color:var(--text-color);
   border:1px solid var(--border-color);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-explorer{background:var(--theme-surface);color:var(--text-color)}
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 :is(.windows-explorer__toolbar,.windows-explorer__crumb){
   background:var(--theme-surface);color:var(--text-color);
   border-color:var(--border-color);
 }
 /* Source classic Start is an opaque square 420px bevel, not Aero glass. */
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-startmenu{
   bottom:calc(var(--taskbar-height) - 1px);
   min-height:0;height:min(420px,calc(100dvh - var(--taskbar-height) - 5px));
@@ -163,28 +165,28 @@
     inset 1px 1px var(--border-color--contrast),
     inset -2px -2px var(--text-color--disabled);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 :is(.windows-startmenu__left,.windows-startmenu__right){
   background:var(--theme-surface);border-color:var(--border-color);
   color:var(--text-color);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-startmenu :is(button,input){color:var(--text-color)}
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-startmenu__program:not(:disabled):hover,
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-startmenu__right button:not(:disabled):hover{
   background:var(--theme-accent);color:#fff;border-color:var(--border-color);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-startmenu__search{
   background:var(--theme-surface);border-color:var(--border-color);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .windows-startmenu__search input{background:var(--theme-surface);color:var(--text-color)}
 .windows-desktop[data-theme="basic-4"] .windows-startmenu button{font-weight:600}
 /* Original winui-menu bevel and accent on Desktop/Taskbar context menus. */
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 :is(.windows-desktop__menu,.windows-taskbar__context){
   border:1px solid var(--border-color);border-radius:0;
   background:var(--theme-surface);color:var(--text-color);
@@ -192,11 +194,11 @@
     inset 1px 1px var(--border-color--contrast),
     inset -2px -2px var(--text-color--disabled);
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 :is(.windows-desktop__menu,.windows-taskbar__context) button{
   background:transparent;color:var(--text-color);border-radius:0;
 }
-.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"])
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 :is(.windows-desktop__menu,.windows-taskbar__context)
 button:not(:disabled):is(:hover,:focus-visible){
   background:var(--theme-accent);color:#fff;

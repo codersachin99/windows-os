@@ -2325,15 +2325,27 @@
       "source": "src/modules/themes/theme-win7-classic-scss.js",
       "sha": "d8527d0e2a6c68d8b68c8c55d6bc6d7994b0f36a",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceWin7BasicVariants.css",
+        "packages/ui/src/sourceWin7ClassicContrast.css",
+        "tests/e2e/source-final-theme-catalog.spec.ts",
+        "migration/AERO-BASIC-SOURCE.md"
+      ],
+      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending"
     },
     {
       "source": "src/modules/themes/theme-win7-scss.js",
       "sha": "c15e3758a1756d2ac2d7a5cef014f906f92d29b2",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceWin7BasicVariants.css",
+        "packages/ui/src/sourceWin7ClassicContrast.css",
+        "tests/e2e/source-final-theme-catalog.spec.ts",
+        "migration/AERO-BASIC-SOURCE.md"
+      ],
+      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending"
     },
     {
       "source": "src/modules/themes/theme-win8-scss.js",

@@ -1,0 +1,130 @@
+
+/*
+ * Pinned final original legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776:
+ * - theme-win7-scss.js .basic-1 overrides of .win7.
+ * - theme-win7-classic-scss.js base .win7-classic for basic-2.
+ * Basic 2 intentionally has no separate named .basic-2 block in that CSS.
+ * These are DOM-target adapters, not complete visual parity certification.
+ */
+
+/* BASIC 1: source inherits the Aero/Win7 shell, with specific opaque
+ * window frame, 40px caption control, and dark taskbar gradient. */
+.windows-desktop[data-theme="basic-1"]{
+  --taskbar-height:40px;
+}
+.windows-desktop[data-theme="basic-1"] .windows-taskbar{
+  height:40px;
+  background:linear-gradient(to right,rgba(0,0,0,.2392156863),
+    rgba(0,0,0,.2392156863) 70%,rgba(0,0,0,.4) 90%),
+    var(--theme-color,#6a9eb9);
+  border-top-color:#646464;backdrop-filter:none;
+}
+.windows-desktop[data-theme="basic-1"]:dir(rtl) .windows-taskbar{
+  background:linear-gradient(to left,rgba(0,0,0,.2392156863),
+    rgba(0,0,0,.2392156863) 70%,rgba(0,0,0,.4) 90%),
+    var(--theme-color,#6a9eb9);
+}
+.windows-desktop[data-theme="basic-1"] .windows-startmenu__right{
+  padding:0;
+}
+.windows-desktop[data-theme="basic-1"] .windows-taskbar__context{
+  border-color:#646464;border-radius:0;box-shadow:none;
+}
+/* Original Basic 1 .window__main loses Aero glass, uses inset white
+ * framing and a 40px caption control with square-bottom frame. */
+.windows-desktop[data-theme="basic-1"] .windows-window{
+  border-bottom-left-radius:0;border-bottom-right-radius:0;
+  background-color:var(--theme-color,#a7c0dc);
+  background-image:linear-gradient(rgba(0,0,0,.2),
+    rgba(255,255,255,0) 10%);
+  backdrop-filter:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667);
+}
+.windows-desktop[data-theme="basic-1"] .windows-window.is-active{
+  border-bottom-left-radius:0;border-bottom-right-radius:0;
+  background-image:linear-gradient(rgba(0,0,0,.2),
+    rgba(255,255,255,0) 10%),
+    linear-gradient(rgba(255,255,255,0) 30px,
+    rgba(255,255,255,.5333333333) 129px,
+    rgba(255,255,255,0) 130px);
+  box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #28cfe4;
+}
+.windows-desktop[data-theme="basic-1"]:dir(rtl) .windows-window.is-active{
+  box-shadow:inset -1px 1px 0 #fff,inset 1px -1px 0 #28cfe4;
+}
+.windows-desktop[data-theme="basic-1"] .windows-window__buttons{
+  gap:3px;position:relative;top:0;border:0;box-shadow:none;
+  border-radius:0;
+}
+.windows-desktop[data-theme="basic-1"] .windows-window__buttons button,
+.windows-desktop[data-theme="basic-1"] .windows-window__buttons button.windows-window__close{
+  box-sizing:border-box;width:40px;min-width:40px;height:20px;
+  border:1px solid rgba(0,0,0,.5333333333);
+  border-radius:3px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667);
+}
+.windows-desktop[data-theme="basic-1"] .windows-window__body{
+  border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="basic-1"] .windows-explorer__toolbar,
+.windows-desktop[data-theme="basic-1"] .windows-explorer__crumb{
+  border-color:transparent;box-shadow:none;
+}
+
+/* BASIC 2: the original uses the common .win7-classic stylesheet,
+ * with no further .basic-2 overrides. Shared classic controls, taskbar,
+ * menu surface, context menus and bevels live in sourceWin7ClassicContrast.
+ * Its distinct original base palette and titlebar gradients follow here. */
+.windows-desktop[data-theme="basic-2"]{
+  --source-basic-surface:#d4d0c8;
+  --source-basic-text:#000;
+  --source-basic-active:#0a246a;
+  --source-basic-idle:#7b7b7b;
+  --source-basic-taskbar-border:#393c39;
+  --source-basic-border:#393c39;
+  --source-basic-contrast:#fff;
+  --link-color:#0000ad;
+  --text-color--muted:#7b7b7b;
+}
+.windows-desktop[data-theme="basic-2"] .windows-window__titlebar{
+  color:#fff;font-weight:700;
+  background:#7b7b7b;
+  background-image:linear-gradient(to right,#7f7e78,transparent);
+}
+.windows-desktop[data-theme="basic-2"]:dir(rtl) .windows-window__titlebar{
+  background-image:linear-gradient(to left,#7f7e78,transparent);
+}
+.windows-desktop[data-theme="basic-2"] .windows-window.is-active .windows-window__titlebar{
+  background:var(--theme-accent);
+  background-image:linear-gradient(to right,var(--theme-accent),#a4caee);
+}
+.windows-desktop[data-theme="basic-2"]:dir(rtl)
+.windows-window.is-active .windows-window__titlebar{
+  background-image:linear-gradient(to left,var(--theme-accent),#a4caee);
+}
+.windows-desktop[data-theme="basic-2"] .windows-window__buttons{
+  gap:2px;margin:0 2px 0 8px;top:0;
+}
+.windows-desktop[data-theme="basic-2"] .windows-window__buttons button,
+.windows-desktop[data-theme="basic-2"] .windows-window__buttons button.windows-window__close{
+  box-sizing:border-box;width:20px;min-width:20px;height:20px;
+  padding:0;background:var(--theme-surface);color:#000;
+  border:0;border-radius:0;
+  box-shadow:inset -1px -1px var(--border-color),
+    inset 1px 1px var(--border-color--contrast),
+    inset -2px -2px var(--text-color--disabled);
+}
+.windows-desktop[data-theme="basic-2"] .windows-window__buttons button:active{
+  box-shadow:inset 1px 1px var(--border-color),
+    inset -1px -1px var(--border-color--contrast),
+    inset 2px 2px var(--text-color--disabled);
+}
+.windows-desktop[data-theme="basic-2"] .windows-startmenu__right>strong{
+  color:var(--text-color);text-shadow:none;
+}
+.windows-desktop[data-theme="basic-2"] .windows-startmenu__right>.windows-startmenu__power{
+  background:var(--theme-surface);color:var(--text-color);
+  border:0;border-radius:0;
+  box-shadow:inset -1px -1px var(--border-color),
+    inset 1px 1px var(--border-color--contrast),
+    inset -2px -2px var(--text-color--disabled);
+}

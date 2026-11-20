@@ -185,10 +185,10 @@ export function sourceThemeScreens(theme:string):SourceThemeScreens{
     ?SOURCE_THEME_SCREENS[theme]:SOURCE_THEME_SCREEN_DEFAULTS;
 }
 /** Indicates shell implementation scope, not theme catalog membership.
- * Nineteen themes now have partial source-backed shell adaptations;
+ * Twenty-one themes now have partial source-backed shell adaptations;
  * partial never means pixel-perfect, and login-only families remain pending. */
 export function sourceThemeShellStatus(theme:string):"partial"|"pending"{
-  return theme==="basic-3"||theme==="basic-4"||theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
+  return theme==="basic-1"||theme==="basic-2"||theme==="basic-3"||theme==="basic-4"||theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
     ||theme==="win7"||sourceIsXpFamily(theme)||theme==="win8"
     ||theme==="win81"||theme==="win10"||theme==="win11"||theme==="win11dark"
     ?"partial":"pending";

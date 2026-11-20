@@ -65,3 +65,28 @@ real Start open/close, Computer focus/maximize, Bin focus change,
 Desktop/Taskbar right-click actions and high-contrast paints.
 Remaining: exact full app styles, original wallpaper associations,
 screen captures across viewports and pixel-by-pixel visual comparison.
+
+## Basic 1 + Basic 2 actual shell adapters — 20 Nov 2026
+
+Pinned `theme-win7-scss.js` defines dedicated `.basic-1` rules:
+source Win7 taskbar dark linear overlay, non-glass window background,
+zero bottom frame rounding, focused cyan-white inset shadow, three
+40px caption controls, transparent window-body borders, and zero
+padding on Start right area. React now scopes these overrides to
+Basic 1 without changing Win7 or Aero theme rendering. The exact
+theme accent and wallpaper association is not yet independently
+recovered; the preview-tint fallback remains provisional.
+
+The pinned `theme-win7-classic-scss.js` has no separate
+`.basic-2` override. Basic 2 therefore inherits its original
+`.win7-classic` base with `--theme-surface:#d4d0c8`,
+`--theme-accent:#0a246a`, 52px taskbar, 26px classic Start icon,
+20px classic window buttons, bevelled opaque backgrounds, idle
+grey and active blue titlebar gradients (LTR/RTL), and 420px Start
+surface. Shared classic shell behavior is now scoped to Basic 2/3/4.
+
+Browser acceptance covers Basic 1 and Basic 2 real Start, window
+focus/maximization, 40px/52px geometry, literal pinned assets and
+Desktop/Taskbar context actions. Catalog moves both to **partial**;
+all four Aero variants remain **pending**. These are bounded
+source-backed shells, NOT full parity or finished themes.

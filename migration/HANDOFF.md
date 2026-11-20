@@ -1,3 +1,32 @@
+## Basic 1 and 2 real shell migration — 20 Nov 2026
+
+**Source:** immutable `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Previous checkpoint:** Basic 3/4 `5f4ee9f`; opt-in
+[CI #44703453623](https://github.com/codersachin99/windows-os/actions/runs/44703453623)
+SUCCESS including browser suite.
+
+**Implementation:** Basic 1 gets its own source-backed Windows 7
+opaque-window style, 40px caption controls and Win7 taskbar overlay;
+Basic 2 uses actual classic source default palette #d4d0c8 and
+52px taskbar, classic bevelled Start, 20px window controls, original
+active/inactive title gradients. New `sourceWin7BasicVariants.css`;
+shared classic selector now also includes Basic 2.
+Real menu/window state remains wired to the existing React engine.
+Both statuses advance to partial, with all Aero variants pending.
+
+**Verification:** new desktop/mobile browser contracts in
+`source-final-theme-catalog.spec.ts`; opt-in `[run-ci]` commit
+requires exact-head green before reporting tested. Original
+wallpaper-to-theme associations and some custom color metadata are
+unverified. Docs at `migration/AERO-BASIC-SOURCE.md`.
+
+**Next:** diagnose browser/test failures if any, then Aero 1–4
+original palettes and shell frames, followed by paired visual captures
+and full context/Explorer parity. Keep PR #1 draft; don't touch main,
+locked legacy source or releases.
+
+---
+
 ## Basic 3/4 high-contrast classic skin — 20 Nov 2026
 
 **Original source:** locked `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

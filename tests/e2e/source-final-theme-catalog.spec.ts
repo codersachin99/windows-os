@@ -402,3 +402,93 @@ for(const source of [
     await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
   });
 }
+
+/* Immutable final original theme-win7-scss.js Basic1 and
+ * theme-win7-classic-scss.js (Basic2 inherits the unmodified classic base).
+ * Test live geometry, Start and window behavior on desktop and mobile. */
+test("basic-1 original non-glass Win7 window controls and taskbar remain operational",async({page})=>{
+  await page.goto("/?theme=basic-1");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const bar=page.locator('[data-test-taskbar="base"]');
+  await expect(bar).toHaveCSS("height","40px");
+  await expect(bar).toHaveCSS("background-image",/linear-gradient\(to right/);
+  const start=page.locator('[data-test-start-button]');
+  await expect(start.locator("img")).toHaveAttribute("src",
+    "/assets/images/start-button.b35eae12.webp");
+  await start.click();
+  await expect(page.locator('[data-test-start-menu]')).toBeVisible();
+  await expect(page.locator('[data-test-start-menu] .windows-startmenu__right'))
+    .toHaveCSS("padding-top","0px");
+  await start.click();
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]');
+  await expect(win).toBeVisible();
+  await expect(win).toHaveCSS("backdrop-filter","none");
+  await expect(win).toHaveCSS("border-bottom-left-radius","0px");
+  const controls=win.locator(".windows-window__buttons button");
+  await expect(controls).toHaveCount(3);
+  await expect(controls.first()).toHaveCSS("width","40px");
+  await expect(controls.last()).toHaveCSS("width","40px");
+  await controls.nth(1).click();
+  await expect(win).toHaveClass(/is-maximized/);
+  const size=await win.boundingBox(),vp=page.viewportSize()!;
+  expect(size).not.toBeNull();
+  expect(Math.abs(vp.height-size!.y-size!.height-40)).toBeLessThanOrEqual(2);
+  await controls.nth(1).click();
+  await controls.last().click();
+  await expect(win).toHaveCount(0);
+});
+test("basic-2 original classic base colors, Start and taskbar geometry",async({page})=>{
+  await page.goto("/?theme=basic-2");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const bar=page.locator('[data-test-taskbar="base"]');
+  await expect(bar).toHaveCSS("height","52px");
+  await expect(bar).toHaveCSS("background-color","rgb(212, 208, 200)");
+  const start=page.locator('[data-test-start-button]');
+  await expect(start.locator("img")).toHaveAttribute("src",
+    "/assets/images/start-button-classic.ec7b0b9f.webp");
+  expect(await start.evaluate(el=>getComputedStyle(el,"::after").content))
+    .toBe('"Start"');
+  await start.click();
+  await expect(page.locator('[data-test-start-menu]')).toBeVisible();
+  await expect(page.locator('[data-test-start-menu]'))
+    .toHaveCSS("background-color","rgb(212, 208, 200)");
+  await start.click();
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]');
+  await expect(win).toHaveCSS("background-color","rgb(212, 208, 200)");
+  await expect(win).toHaveCSS("border-top-left-radius","0px");
+  await expect(win.locator(".windows-window__titlebar"))
+    .toHaveCSS("background-image",/linear-gradient\(to right/);
+  const controls=win.locator(".windows-window__buttons button");
+  await expect(controls).toHaveCount(3);
+  await expect(controls.last()).toHaveCSS("width","20px");
+  await controls.nth(1).click();
+  await expect(win).toHaveClass(/is-maximized/);
+  const size=await win.boundingBox(),vp=page.viewportSize()!;
+  expect(size).not.toBeNull();
+  expect(Math.abs(vp.height-size!.y-size!.height-52)).toBeLessThanOrEqual(2);
+  await controls.nth(1).click();
+  await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+  await expect(win.locator(".windows-window__titlebar"))
+    .toHaveCSS("background-image",/linear-gradient\(to right/);
+});
+test("basic-2 source classic popup retains real Desktop and Task Manager actions",async({page})=>{
+  await page.goto("/?theme=basic-2");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const icons=page.locator("#desktop-icons");
+  await icons.click({button:"right",position:{x:260,y:200}});
+  const desktopMenu=icons.locator('[data-test-desktop-menu]');
+  await expect(desktopMenu).toHaveCSS("background-color","rgb(212, 208, 200)");
+  const refresh=desktopMenu.getByRole("menuitem",{name:"Refresh",exact:true});
+  await refresh.hover();
+  await expect(refresh).toHaveCSS("background-color","rgb(10, 36, 106)");
+  await page.keyboard.press("Escape");
+  await page.locator(".windows-taskbar__running").click({
+    button:"right",position:{x:15,y:5}
+  });
+  const context=page.locator('[data-test-taskbar-context="background"]');
+  await expect(context).toHaveCSS("background-color","rgb(212, 208, 200)");
+  await context.locator('[data-test-taskbar-context-action="taskmgr"]').click();
+  await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
+});

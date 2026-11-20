@@ -378,7 +378,7 @@ export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
   // Pinned classic Start image, selected only for the new Basic 3/4 shells.
-  if((theme==="basic-3"||theme==="basic-4")&&kind==="start")return legacyArt.win7Brand;
+  if((theme==="basic-2"||theme==="basic-3"||theme==="basic-4")&&kind==="start")return legacyArt.win7Brand;
   if(theme==="win95"||theme==="win98")return legacyShellThemeAssets.win95[kind];
   if(theme==="win2k")return legacyShellThemeAssets.win2k[kind];
   if ((theme === "win8" || theme === "win81") && kind === "start")
