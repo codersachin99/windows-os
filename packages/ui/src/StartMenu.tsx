@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type Dispatch, type Mouse
 import {createPortal} from "react-dom";
 import {sourceIsXpFamily,sourceIsAeroFamily,type DesktopAction,type ThemeId} from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
+import "./sourceStartContextThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
 import {
   parseSourceShortcut,parseSourcePathShortcut,readSourceShortcutText,
