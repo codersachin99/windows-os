@@ -68,3 +68,34 @@ These Explorer changes must be checked under a **new exact-head
 The paired source-vs-React screenshots remain absent and neither
 all Explorer/Computer/Bin source modules nor all original theme
 variants are certified. Main stays unchanged and PR remains draft.
+
+## 21 November 2026 — CI failure diagnosis and bounded regression correction
+
+[First exact-head CI #44807318274](https://github.com/codersachin99/windows-os/actions/runs/44807318274)
+at `8f81fe0` **FAILED** its focused browser gate: **662 passed,
+2 failed, 2 skipped**. Both failures were the same new case
+`Computer file context focuses Open, opens Send to child, and Escape
+focuses exact row` on desktop and mobile. TypeScript, units,
+artwork/source audits and production Vite build passed.
+
+**Observed failure:** the `Desktop (create shortcut)` menuitem was
+correctly `disabled`, whereas the new test expected it to receive
+focus. The test had imported a file while Computer was at its
+virtual root `/`; this is not a mounted `/EXTERNAL/computer/...`
+folder. The existing source-path adapter in `ExplorerApp.tsx`
+only enables `sourceExplorerSendToMenu(canSendToDesktop)` for
+supported live Guest paths. It must NOT synthesize a host or
+virtual-root shortcut to satisfy a test.
+
+**Fix:** `tests/e2e/source-explorer-context-keyboard.spec.ts`
+now navigates through the *real Guest Documents* navigation control
+before importing the file used to test the enabled Desktop submenu.
+This matches the established working path used by
+`tests/e2e/source-explorer-item-menu.spec.ts`.
+Added a separate explicit **virtual Computer root negative test**
+to verify both Send-to children stay disabled and keyboard focus
+remains on the submenu trigger, with Escape restoring the real file
+row. The original guarded application code is intentionally
+unchanged. One fresh exact-head opt-in CI must pass both profiles
+before the new context keyboard milestone is called verified.
+
