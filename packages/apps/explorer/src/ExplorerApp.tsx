@@ -552,6 +552,12 @@ export function ExplorerApp({
     child.style.left=placement.left+"px";
     child.style.top=placement.top+"px";
     child.dataset.side=placement.side;
+    // On phones neither 205px menu can sit beside the other. When the
+    // submenu is stacked above/below the root, the pointer must travel
+    // over another root row before it reaches the child. Those rows
+    // must not collapse the submenu mid-trajectory.
+    child.dataset.cascade=placement.top>=a.height||
+      placement.top+child.offsetHeight<=0?"stacked":"adjacent";
   },[context?.kind,context?.sendToOpen,context?.x,context?.y]);
   // The original Computer/Bin background View and Computer New commands use
   // the same separate side-flipping BaseMenu as item Send to. Position it
@@ -1060,6 +1066,12 @@ export function ExplorerApp({
             setContext(current=>{
               if(!current)return current;
               const open=action.id==="send-to";
+              // A stacked Send-to submenu is reached by crossing the
+              // remaining root rows. Do not close it from those
+              // incidental pointer-enter events; an actual click still
+              // performs the chosen root command and closes the menu.
+              if(!open&&current.sendToOpen&&
+                sendToRef.current?.dataset.cascade==="stacked")return current;
               return current.sendToOpen===open?current:{
                 ...current,sendToOpen:open,
                 viewOpen:false,newOpen:false
