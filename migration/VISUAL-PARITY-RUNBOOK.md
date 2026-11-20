@@ -1,6 +1,6 @@
 # Visual parity runbook — original WindowsOS versus React
 
-Source of truth: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`.
+Source of truth: `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` (immutable final checkpoint).
 Target: `codersachin99/windows-os`, feature branch `feat/0001-faithful-react-foundation`.
 
 ## Purpose and acceptance
@@ -15,13 +15,14 @@ A visual checkpoint becomes verified only when:
 
 ## Source server: local source-backed baseline
 
-The original repository contains `start.py`, a Python HTTP server that integrates static UI assets and backend APIs; `index.html` references packaged runtime JS/CSS from the source tree. On a *separate temporary checkout* at the pinned commit, the source launch command is:
+The **pinned** original contains `start.php` (not `start.py`): its PHP 8+ Slim 4 HTTP launcher routes dynamic config, front-end modules and the API through `service/api/server.php`. The checked-in `service/api/composer.json` and `composer.lock` specify PHP dependencies; `service/api/vendor/autoload.php` is **not checked in**, so install them in an isolated disposable checkout. Use its original SQLite development configuration, not production data:
 
 ```sh
-python start.py --host 127.0.0.1 --port 8099 --no-browser
+composer install --no-dev --no-interaction --working-dir=service/api
+php start.php --host 127.0.0.1 --port 8099 --no-browser
 ```
 
-The server initializes a local database according to `db.config.json` and may access the original app's network-backed services or cache. Do not modify the source revision or point it at production data. Confirm boot/logon, mapped assets, backend requests and Guest access in the isolated environment *before* treating a captured image as authoritative. No claim is made here that this command was exercised in CI.
+`db.config.json` defaults to SQLite and the launcher initializes its database; the checkout therefore needs writable disposable storage plus a compatible PHP SQLite extension. Confirm boot/logon, mapped assets, backend requests and Guest access before using source images as authoritative. Do not edit the locked upstream reference or connect the baseline to live accounts. **These commands have not yet been executed in CI**, and no source-versus-React screenshot comparison is verified.
 
 For the React migration, start the Vite development server using `npm run dev` from `windows-os` (Playwright currently expects `127.0.0.1:1420`). Both apps should be opened using the same Chromium version and fixed browser profile.
 
