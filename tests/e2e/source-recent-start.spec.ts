@@ -64,3 +64,53 @@ test("final Win7 Start lists recent Guest programs before All Programs and after
   await expect(page.locator('[data-test-window="calc"]')).toBeVisible();
   await expect(page.locator('[data-test-start-menu]')).toHaveCount(0);
 });
+
+
+/**
+ * The pinned startmenu-base.js has one recentPrograms list and configured
+ * power action for Win7's shared Start renderer. Switching to an original
+ * Aero or Basic skin must not silently remove either live command surface.
+ * These exercise real launches on desktop AND mobile, not theme token values.
+ */
+for(const theme of [
+  "aero-1","aero-2","aero-3","aero-4",
+  "basic-1","basic-2","basic-3","basic-4"
+] as const){
+  test("source Win7 Aero and Basic Start recent and power: "+theme,async({page})=>{
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const button=page.locator("[data-test-start-button]");
+    await button.click();
+    const menu=page.locator("[data-test-start-menu]");
+    await expect(menu).toHaveAttribute("data-source-start-theme",theme);
+    await expect(menu.locator("[data-test-startmenu-power-action]"))
+      .toHaveText("Shut down");
+    await expect(menu.locator("[data-test-list-recent]")).toHaveCount(0);
+    await menu.locator('[data-test-program="notepad"]').click();
+    await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+    await button.click();
+    const recent=menu.locator("[data-test-list-recent]");
+    await expect(recent.locator('[data-test-recent-program="notepad"]'))
+      .toBeVisible();
+    await menu.locator("[data-test-all-programs]").click();
+    await expect(menu.locator("[data-test-list-recent]")).toHaveCount(0);
+  });
+}
+
+for(const theme of ["aero-2","basic-3"] as const){
+  test("source Win7 Start configured power button remains functional: "+theme,async({page})=>{
+    await page.addInitScript(()=>{
+      localStorage.setItem("windows-os:guest:start-preferences:v1",
+        JSON.stringify({powerButtonAction:"switchuser",storeRecentApps:true}));
+    });
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    await page.locator("[data-test-start-button]").click();
+    const power=page.locator('[data-test-startmenu-power-action="switchuser"]');
+    await expect(power).toBeVisible();
+    await expect(power).toHaveText("Switch user");
+    await power.click();
+    await expect(page.locator("[data-test-logon-screen]")).toBeVisible();
+    await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
+  });
+}
