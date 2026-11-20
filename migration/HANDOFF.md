@@ -1,3 +1,29 @@
+## 21 November 2026 — Vista Desktop/taskbar/Computer/Bin source menu parity slice
+
+**Pinned source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`; draft PR #1 unmerged. Original source/`main` intact.
+
+**Previous CI now confirmed GREEN:** [#44828332062](https://github.com/codersachin99/windows-os/actions/runs/44828332062) exact head `5112f358`: TypeScript, unit, original asset/source/Contacts audits, Vite, targeted and full desktop/mobile Chromium **SUCCESS**; source-paired visual capture **SKIPPED**.
+
+**Source check:** `src/modules/themes/theme-winvista-scss.js` `.winvista .winui-menu` has exact Win7/Vista pale `#f1f1f1` surface, `#979797` border, directional black shadow + `inset 0 0 0 2px #f5f5f5`, painted 2px icon/check gutter, `#aaddfa` hover border and three-stop white/pale-blue gradient. RTL reverses shadow/gutter. The React Start menu had already ported Vista shared recents/power and right-click palette, but **Desktop/taskbar/Explorer/Bin context menus still used fallback paint**, and the theme catalog incorrectly reported Vista `pending`.
+
+**Branch changes:**
+- [`f5d8e53`](https://github.com/codersachin99/windows-os/commit/f5d8e53b66166ac80c0dd18e7dc16bbf0679e23a): `sourceThemeShellStatus("winvista")="partial"`, reflecting actual partial source-backed shell; 26 partial instead of 25. Original Vista screen mapping unchanged and login renderer remains honestly labeled `win7-fallback`, not a fake complete Vista login.
+- [`67dd4d1`](https://github.com/codersachin99/windows-os/commit/67dd4d180617a38795f52dc0ecf0275730865886): unit assertion for Vista shell scope.
+- [`623ec1a`](https://github.com/codersachin99/windows-os/commit/623ec1a5862b9bc8b534e69ebcc83a89a869b6ce): browser catalog asserts Vista source login mapping, documented Win7 fallback, partial status.
+- [`1c5548d`](https://github.com/codersachin99/windows-os/commit/1c5548d79c1e2fd9b04151801c2f07643116c3d2): include Vista in original Win7-family Explorer context base/child selectors, preserving all commands.
+- [`c6f9303`](https://github.com/codersachin99/windows-os/commit/c6f9303ee12b4776c9f948e89c74daf2ead6f452): original Vista WinUI gutter, bevel, shadow, hover and RTL for real Desktop/taskbar context.
+- [`ae536c1`](https://github.com/codersachin99/windows-os/commit/ae536c186d1d814bc41ffa2bf3ea810d15cb3afc), [`d44ccfe`](https://github.com/codersachin99/windows-os/commit/d44ccfe27427fb92f0e161a816c9893a6e194ad0): three real Playwright browser cases × desktop/mobile covering source paint, gutter, hover and working Desktop Computer, taskbar Task Manager, Computer and Bin context View nested menu.
+- [`2825d60`](https://github.com/codersachin99/windows-os/commit/2825d6024d891602bacd82b4b2517805a62d0a28): opt-in focused Actions includes new Vista suite.
+- [`5e4606e`](https://github.com/codersachin99/windows-os/commit/5e4606ec425b6a195244a41e5d6e6376eacf95c6): `migration/VISTA-CONTEXT-MENU-SOURCE.md` source proof and acceptance constraints.
+- [`3d8c748`](https://github.com/codersachin99/windows-os/commit/3d8c74886b601ada30331dc9df78430adc32a654): source module tracker updated, remains **in-progress**, not complete.
+
+**Verification:** this handoff checkpoint requests ONE exact-head opt-in `[run-ci]`. Above Vista code/tests are **not verified** by prior `5112f35` green CI. Inspect any failures and fix source-backed CSS/test issues; do not skip tests. Source-and-target matched screenshots remain unavailable without a controlled pinned private source checkout and configured `LEGACY_SOURCE_READ_TOKEN`. Main untouched, PR draft, no release until accepted.
+
+**Next:** confirm new CI, then original Desktop/Start/Computer/Bin visual/interaction parity. Preserve the other original themes, including macOS/ChromeOS/Ubuntu/Kubuntu/Oxygen/WinW/WinLS/WinLP/Onebit, as pending rather than inventing skins.
+
+---
+
 ## 21 November 2026 — correct source Computer root Send to Desktop test fixture; rerun CI
 
 **Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
