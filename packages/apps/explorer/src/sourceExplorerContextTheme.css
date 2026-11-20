@@ -8,8 +8,8 @@
  * separately positioned BaseMenu children. It does NOT recreate the
  * original Vue menu DOM, exact fonts, or every icon/checkmark.
  */
-.windows-desktop[data-theme="win7"] .explorer-context-menu,
-.windows-desktop[data-theme="win7"] .explorer-context-menu__submenu{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu{
   border:1px solid #979797;
   border-radius:0;
   background:#f1f1f1;
@@ -17,19 +17,19 @@
     inset 0 0 0 2px #f5f5f5;
   padding:4px 2px;
 }
-.windows-desktop[data-theme="win7"] .explorer-context-menu::before,
-.windows-desktop[data-theme="win7"] .explorer-context-menu__submenu::before{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu::before,
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu::before{
   content:"";position:absolute;z-index:0;pointer-events:none;
   top:2px;bottom:2px;left:27px;width:2px;
   box-shadow:inset 1px 0 rgba(0,0,0,.1490196078),
     inset -1px 0 #fff;
 }
-.windows-desktop[data-theme="win7"] .explorer-context-menu button{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button{
   position:relative;z-index:1;
   color:#1b3956;border:1px solid transparent;border-radius:3px;
 }
-.windows-desktop[data-theme="win7"] .explorer-context-menu button:not(:disabled):hover,
-.windows-desktop[data-theme="win7"] .explorer-context-menu button:not(:disabled):focus-visible{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):focus-visible{
   border-color:#aaddfa;
   background:linear-gradient(rgba(255,255,255,.6),
     rgba(230,236,245,.8) 90%,rgba(255,255,255,.8));
@@ -37,21 +37,21 @@
 
 /* XP's source .winui-menu inherits the white base surface from vue-app,
  * with disabled-text #aca899 and accent #316ac5 from .winxp theme. */
-.windows-desktop[data-theme="winxp"] .explorer-context-menu,
-.windows-desktop[data-theme="winxp"] .explorer-context-menu__submenu{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu__submenu{
   background:#fff;border:1px solid #aca899;border-radius:0;
   box-shadow:4px 4px 2px -2px rgba(0,0,0,.5333333333);
   padding:3px 2px;
   font:12px Tahoma,"Microsoft Sans Serif",sans-serif;
 }
-.windows-desktop[data-theme="winxp"] .explorer-context-menu button{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button{
   color:#000;border-color:transparent;border-radius:0;
 }
-.windows-desktop[data-theme="winxp"] .explorer-context-menu button:not(:disabled):hover,
-.windows-desktop[data-theme="winxp"] .explorer-context-menu button:not(:disabled):focus-visible{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:not(:disabled):focus-visible{
   color:#fff;background:#316ac5;border-color:transparent;
 }
-.windows-desktop[data-theme="winxp"] .explorer-context-menu button:disabled{
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:disabled{
   color:#aca899;opacity:1;
 }
 
@@ -211,4 +211,41 @@
 }
 .windows-desktop[data-theme="win11dark"] .explorer-context-menu button:disabled{
   color:#aaa;opacity:1;
+}
+
+
+/* Pinned src/modules/themes/theme-win7-classic-scss.js:
+ * Basic 2/3/4 use the win7-classic .winui-menu, NOT Aero glass.
+ * Reuse live palette variables from sourceWin7ClassicContrast.css, so
+ * High Contrast Black/White menus remain legible and source-correct.
+ * These selectors apply to Computer and Recycle Bin background/item
+ * menus and both independently opened View/New/Send To child popups.
+ */
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+:is(.explorer-context-menu,.explorer-context-menu__submenu){
+  color:var(--text-color);background:var(--theme-surface);
+  border:1px solid var(--border-color);border-radius:0;
+  padding:3px;font:12px "Segoe UI",Tahoma,sans-serif;
+  box-shadow:inset -1px -1px var(--border-color),
+    inset 1px 1px var(--border-color--contrast),
+    inset -2px -2px var(--text-color--disabled);
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+:is(.explorer-context-menu,.explorer-context-menu__submenu){
+  box-shadow:inset 1px -1px var(--border-color),
+    inset -1px 1px var(--border-color--contrast),
+    inset 2px -2px var(--text-color--disabled);
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+.explorer-context-menu button{
+  color:var(--text-color);background:transparent;
+  border:1px solid transparent;border-radius:0;
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+.explorer-context-menu button:not(:disabled):is(:hover,:focus-visible){
+  color:#fff;background:var(--theme-accent);border-color:transparent;
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+.explorer-context-menu button:disabled{
+  color:var(--text-color--disabled);opacity:1;
 }
