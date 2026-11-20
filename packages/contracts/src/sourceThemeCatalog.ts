@@ -182,6 +182,6 @@ export function sourceThemeScreens(theme:string):SourceThemeScreens{
 export function sourceThemeShellStatus(theme:string):"partial"|"pending"{
   return theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
     ||theme==="win7"||theme==="winxp"||theme==="win8"
-    ||theme==="win81"||theme==="win10"||theme==="win11"
+    ||theme==="win81"||theme==="win10"||theme==="win11"||theme==="win11dark"
     ?"partial":"pending";
 }
