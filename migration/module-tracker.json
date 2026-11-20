@@ -1023,8 +1023,17 @@
       "source": "src/modules/chunks/shared~plugin-cssvar~sandbox~vue-app~vue-store.js",
       "sha": "592e07c9f70bfff5e684467b080dfa062945b919",
       "area": "chunks",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/contracts/src/sourceWin7ThemeMetadata.ts",
+        "packages/contracts/src/sourceWin7ThemeMetadata.test.ts",
+        "packages/apps/personalize/src/model.ts",
+        "packages/apps/personalize/src/model.test.ts",
+        "tests/e2e/source-personalize-theme.spec.ts",
+        "packages/assets/src/index.ts",
+        "migration/AERO-BASIC-SOURCE.md"
+      ],
+      "verification": "Exact original registry 3b8c/color 2299, Aero category assets and Basic2/3/4 solid backgrounds; full user sound/transparency and screenshot parity pending"
     },
     {
       "source": "src/modules/chunks/shared~plugin-embed~sandbox~system-cache~vue-app~vue-store.js",
@@ -1908,8 +1917,17 @@
       "source": "src/modules/system/personalize.js",
       "sha": "eff37a30fa9d9d8d04d848d5215b0a7ad0eb7164",
       "area": "system",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/contracts/src/sourceWin7ThemeMetadata.ts",
+        "packages/contracts/src/sourceWin7ThemeMetadata.test.ts",
+        "packages/apps/personalize/src/model.ts",
+        "packages/apps/personalize/src/model.test.ts",
+        "tests/e2e/source-personalize-theme.spec.ts",
+        "packages/assets/src/index.ts",
+        "migration/AERO-BASIC-SOURCE.md"
+      ],
+      "verification": "Exact original registry 3b8c/color 2299, Aero category assets and Basic2/3/4 solid backgrounds; full user sound/transparency and screenshot parity pending"
     },
     {
       "source": "src/modules/system/pricing-panel.js",

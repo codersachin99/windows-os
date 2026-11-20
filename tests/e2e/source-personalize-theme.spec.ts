@@ -243,49 +243,110 @@ test("Personalize offers all seven original XP palettes with persistent selectio
     .toHaveAttribute("data-theme","winxpZ");
 });
 
-/* Original personalize.js uses independent aero/basic/wins categories.
- * Original swatches in pinned src/styles/system/personalize.css use a
- * common Aero glass gradient and four separate Basic faux-window colors.
- * These selected IDs remain "pending" for full shell-skin parity. */
-test("Aero and Basic originals are selectable with source thumbnail swatches",async({page})=>{
+
+/* Pinned theme registry 3b8c, palette 2299 and source personalize.js.
+ * The original category has four Aero tiles, not canonical win7+four.
+ * Source Basic2–4 backgrounds are solid CSS colors, not Win7 wallpaper. */
+test("Aero and Basic original thumbnails, palettes, desktop backgrounds and persistence",async({page})=>{
   const win=await openPersonalize(page);
   const chooser=win.locator('[data-test-personalize]');
-  await expect(chooser.locator('[data-test-personalize-group="aero"] [data-test-personalize-theme]')).toHaveCount(5);
-  await expect(chooser.locator('[data-test-personalize-group="basic"] [data-test-personalize-theme]')).toHaveCount(4);
+  await expect(chooser.locator('[data-test-personalize-group="aero"] [data-test-personalize-theme]'))
+    .toHaveCount(4);
+  await expect(chooser.locator('[data-test-personalize-group="basic"] [data-test-personalize-theme]'))
+    .toHaveCount(4);
   const variants=[
-    ["aero-1","/assets/images/win7-1.5c44223b.webp","linear-gradient"],
-    ["aero-2","/assets/images/win7-2.bf7d7452.webp","linear-gradient"],
-    ["aero-3","/assets/images/win7-3.64168120.webp","linear-gradient"],
-    ["aero-4","/assets/images/win7-4.53fed3fd.webp","linear-gradient"],
-    ["basic-1","/assets/images/default.deccec52.webp","rgb(167, 192, 220)"],
-    ["basic-2","/assets/images/default.deccec52.webp","rgb(212, 208, 200)"],
-    ["basic-3","/assets/images/default.deccec52.webp","rgb(255, 255, 255)"],
-    ["basic-4","/assets/images/default.deccec52.webp","rgb(255, 255, 255)"]
+    {id:"aero-1",name:"Windows 7",asset:"/assets/images/default.deccec52.webp",
+      paint:"linear-gradient",accent:"#aad1fb"},
+    {id:"aero-2",name:"Architecture",asset:"/assets/images/architecture.e651db26.webp",
+      paint:"linear-gradient",accent:"#5986ca"},
+    {id:"aero-3",name:"Landscape",asset:"/assets/images/landscape.1626b82c.webp",
+      paint:"linear-gradient",accent:"#ababab"},
+    {id:"aero-4",name:"Nature",asset:"/assets/images/nature.e05e4ec0.webp",
+      paint:"linear-gradient",accent:"#9f81bf"},
+    {id:"basic-1",name:"Windows 7 Basic",asset:"/assets/images/default.deccec52.webp",
+      paint:"rgb(167, 192, 220)",accent:"#a7c0dc"},
+    {id:"basic-2",name:"Windows Classic",asset:"#3b6ea4",
+      paint:"rgb(212, 208, 200)",accent:null},
+    {id:"basic-3",name:"High Contrast Black",asset:"#000",
+      paint:"rgb(255, 255, 255)",accent:null},
+    {id:"basic-4",name:"High Contrast White",asset:"#fff",
+      paint:"rgb(255, 255, 255)",accent:null}
   ] as const;
-  for(const [theme,asset,paint] of variants){
-    const tile=chooser.locator('[data-test-personalize-theme="'+theme+'"]');
-    await expect(tile.locator("img")).toHaveAttribute("src",asset);
-    const swatch=tile.locator('[data-test-personalize-color="'+theme+'"]');
-    await expect(swatch).toHaveCSS("height","25px");
-    const rendered=await swatch.evaluate(el=>{
-      const css=getComputedStyle(el);
-      return css.backgroundColor+" "+css.backgroundImage;
-    });
-    expect(rendered).toContain(paint);
-    if(theme.startsWith("basic-")){
-      const pseudo=await swatch.evaluate(el=>{
-        const a=getComputedStyle(el,"::before");
-        const b=getComputedStyle(el,"::after");
-        return [a.content,b.content,a.height,b.height];
-      });
-      expect(pseudo.slice(0,2)).toEqual(['""','""']);
+  for(const {id,name,asset,paint,accent} of variants){
+    const tile=chooser.locator('[data-test-personalize-theme="'+id+'"]');
+    await expect(tile).toBeVisible();
+    await expect(tile).toContainText(name);
+    if(asset.startsWith("#")){
+      await expect(tile.locator("img")).toHaveCount(0);
+      await expect(tile.locator(".windows-personalize__theme-solid"))
+        .toHaveCSS("background-color",
+          asset==="#3b6ea4"?"rgb(59, 110, 164)":
+            asset==="#000"?"rgb(0, 0, 0)":"rgb(255, 255, 255)");
+    }else{
+      await expect(tile.locator("img")).toHaveAttribute("src",asset);
     }
+    const swatch=tile.locator('[data-test-personalize-color="'+id+'"]');
+    await expect(swatch).toHaveCSS("height","25px");
+    const sample=await swatch.evaluate(el=>{
+      const css=getComputedStyle(el);
+      return {background:css.backgroundColor+" "+css.backgroundImage,
+        color:css.getPropertyValue("--preview-color").trim(),
+        before:getComputedStyle(el,"::before").content,
+        after:getComputedStyle(el,"::after").content};
+    });
+    expect(sample.background,id).toContain(paint);
+    if(accent)expect(sample.color,id).toBe(accent);
+    if(id.startsWith("basic-"))
+      expect([sample.before,sample.after]).toEqual(['""','""']);
     await tile.click();
-    await expect(chooser).toHaveAttribute("data-active-theme",theme);
-    await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
+    await expect(chooser).toHaveAttribute("data-active-theme",id);
+    await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",id);
     await expect(tile).toHaveAttribute("aria-pressed","true");
+    const desktopBg=page.locator('[data-test-desktop-background]');
+    await expect(desktopBg).toHaveAttribute("data-test-desktop-background",asset);
+    if(asset.startsWith("#")){
+      await expect(desktopBg).toHaveCSS("background-image","none");
+    }else{
+      expect(await desktopBg.evaluate(el=>getComputedStyle(el).backgroundImage))
+        .toContain(asset);
+    }
   }
   await page.reload();
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
-  await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme","basic-4");
+  await expect(page.locator('[data-test-main-screen]'))
+    .toHaveAttribute("data-theme","basic-4");
+  await expect(page.locator('[data-test-desktop-background]'))
+    .toHaveCSS("background-color","rgb(255, 255, 255)");
+});
+
+test("source Aero per-variant colors use original palette and alpha on real shell",async({page})=>{
+  for(const {id,active,inactive,background} of [
+    {id:"aero-1",active:"rgba(170, 209, 251, 0.65)",
+      inactive:"rgba(170, 209, 251, 0.3)",
+      background:"/assets/images/default.deccec52.webp"},
+    {id:"aero-2",active:"rgba(89, 134, 202, 0.65)",
+      inactive:"rgba(89, 134, 202, 0.3)",
+      background:"/assets/images/architecture.e651db26.webp"},
+    {id:"aero-3",active:"rgba(171, 171, 171, 0.65)",
+      inactive:"rgba(171, 171, 171, 0.3)",
+      background:"/assets/images/landscape.1626b82c.webp"},
+    {id:"aero-4",active:"rgba(159, 129, 191, 0.65)",
+      inactive:"rgba(159, 129, 191, 0.3)",
+      background:"/assets/images/nature.e05e4ec0.webp"}
+  ] as const){
+    await page.goto("/?theme="+id);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const root=page.locator('[data-test-main-screen]');
+    const actual=await root.evaluate(el=>({
+      active:getComputedStyle(el).getPropertyValue("--theme-color").trim(),
+      inactive:getComputedStyle(el).getPropertyValue("--theme-color--inactive").trim()
+    }));
+    expect(actual,id).toEqual({active,inactive});
+    await expect(page.locator('[data-test-desktop-background]'))
+      .toHaveAttribute("data-test-desktop-background",background);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const frame=page.locator('[data-test-window="computer"]');
+    await expect(frame).toHaveCSS("background-image",/linear-gradient/);
+    await frame.getByRole("button",{name:"Close Computer"}).click();
+  }
 });

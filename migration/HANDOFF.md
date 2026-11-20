@@ -1,3 +1,35 @@
+## Original source registry-driven Aero/Basic thumbnails and desktop — 20 Nov 2026
+
+**Source lock:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+Original webpack modules 3b8c/2299 establish exact Aero colors
+# aad1fb, #5986ca, #ababab, #9f81bf (no spaces), Basic1 #a7c0dc,
+Aero2/3/4 category backgrounds architecture/landscape/nature and
+Basic2/3/4 solid backgrounds #3b6ea4 / #000 / #fff. Three source
+images imported with source/target Git SHA equality.
+
+**Code:** `packages/contracts/src/sourceWin7ThemeMetadata.ts`,
+`packages/assets/src/index.ts`, `packages/ui/src/DesktopShell.tsx`,
+Personalize model/view/CSS, source unit tests and desktop/mobile E2E.
+The original Aero gallery has FOUR IDs; canonical `win7` direct
+route remains supported, but not as a fifth source gallery tile.
+Live DesktopShell uses original metadata to set theme-color /
+theme-color--inactive and background image or solid paint.
+The source sound scheme metadata is recorded but sound changes
+are not yet implemented. Do not mark full theme parity complete.
+
+**Verification:** this checkpoint triggers one opt-in `[run-ci]`
+run on exact head. Previous Aero frames and Basic1/2 CI passed.
+Source taskbar [CI #44739028004](https://github.com/codersachin99/windows-os/actions/runs/44739028004)
+was still running during metadata implementation.
+Fix any browser failures before expanding source theme skins.
+
+**Next:** source/target viewport screenshots, full Start/menu/
+Explorer parity, source sound/transparency experience, then
+more themes beyond Windows families. PR #1 remains draft,
+main and immutable original untouched, no product release.
+
+---
+
 ## Aero taskbar source test syntax correction / CI — 20 Nov 2026
 
 Reviewed new source taskbar browser assertion before running CI;

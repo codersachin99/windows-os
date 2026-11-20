@@ -1,3 +1,46 @@
+## Original built-in Win7 Aero/Basic registry and exact asset bytes — 20 Nov 2026
+
+**Recovered pinned source:** webpack registry `3b8c` and palette
+`2299` in
+`src/modules/chunks/shared~plugin-cssvar~sandbox~vue-app~vue-store.js`;
+`src/modules/system/personalize.js` module `5e9f` verifies
+per-ID color lookup and category selection. The plugin-cssvar
+component specifies 0.65 active / 0.3 inactive Aero alpha.
+
+| ID | Original name | Accent | Default background | Sound |
+| --- | --- | --- | --- | --- |
+| aero-1 | Windows 7 | #aad1fb | default Win7 | Windows Default |
+| aero-2 | Architecture | #5986ca | architecture | Cityscape |
+| aero-3 | Landscape | #ababab | landscape | Landscape |
+| aero-4 | Nature | #9f81bf | nature | Garden |
+| basic-1 | Windows 7 Basic | #a7c0dc | default Win7 | Windows Default |
+| basic-2 | Windows Classic | none | #3b6ea4 | Windows Default |
+| basic-3 | High Contrast Black | none | #000 | Windows Default |
+| basic-4 | High Contrast White | none | #fff | Windows Default |
+
+Original Aero category has FOUR cards; there is no separate win7
+card in the source `_getThemes("aero")` collection, although the
+canonical win7 route remains valid. Three real original category
+images were imported byte-identically, SHA matched:
+`architecture.e651db26.webp` e1b4fcd17c720133cbff993b76a0ec1555aafaef;
+`landscape.1626b82c.webp` 3fcedce05153b18a12ac2568d3d87266ac9e11e9;
+`nature.e05e4ec0.webp` b7de1d0743118a4ba05868c42034ad3248b0c308.
+
+New typed `sourceWin7ThemeMetadata.ts` records immutable source
+colors/categories, backgrounds and sound names. React applies its
+real Aero active/idle chrome colors, uses actual category wallpapers,
+and paints Basic2/3/4 solid desktops rather than fallback Win7
+wallpapers. Personalize thumbnails render exact source names and
+real/solid backgrounds, with Aero thumbnail accents from registry.
+Additional unit tests validate source metadata and safe theme IDs;
+desktop/mobile browser tests validate selected visuals and persistence.
+
+The source preview's theme list, specific audio playback, interactive
+transparency toggle, per-app source styles and screenshot-matched
+pixel parity remain incomplete until independently verified.
+
+---
+
 # Windows 7 Aero and Basic source migration
 
 **Pinned original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
