@@ -1,3 +1,40 @@
+## XP variant original painted-frame migration — 20 November 2026
+
+**Reference:** immutable `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`; draft PR #1. Source, target main and releases unchanged.
+
+**Implemented code:** `packages/ui/src/sourceShellTheme.css` now adapts the *actual original*
+`winxpG/N/R/S/Z` taskbar/tray and `winxpN/R/S/Z` Start top/footer gradient rules,
+instead of painting every variant with Luna blue. `packages/ui/src/sourceWindowChrome.css`
+now preserves N/R/S/Z original active/inactive caption gradients, with non-close caption
+control ramps for N/R/Z and silver S black title text. Original source rules are
+`src/modules/themes/theme-winxp-scss.js` `.winxpG` through `.winxpZ`;
+the exact stops and unresolved source omissions are recorded in
+[migration/XP-VARIANTS-SOURCE.md](XP-VARIANTS-SOURCE.md).
+
+**Regression coverage:** `tests/e2e/source-final-theme-catalog.spec.ts` checks
+original G olive tray border and N/R/S/Z painted taskbar/tray and Start
+header/footer first-stop colors plus active Computer-window gradient,
+in the existing desktop/mobile theme matrix. No tests disabled or skipped
+to accommodate the new work.
+
+**CI status at this handoff:** previous exact-head
+[run #44679824547](https://github.com/codersachin99/windows-os/actions/runs/44679824547)
+was still `in_progress` (browser tests) when checked; it does **not** cover these
+new CSS/browser assertions. This handoff commit explicitly opts into a **single new**
+`[run-ci]` run for current code. Examine its TypeScript, unit, inventory, asset,
+build, focused and full Playwright checks; do not describe it as green until
+GitHub confirms completion. Local tests could not be run through the
+connector-only GitHub workspace, so this is **unverified** pending CI.
+
+**Next:** fix real CI failures if any, finish XP E/G/S/Z caption and
+taskbar-item/Start-button interactions and source Personalize variant previews,
+then prioritize the eight Windows 7 Aero/Basic IDs and desktop/Start/context/
+Computer/Bin/source-paired screenshots. Keep PR **draft** and never imply
+full visual parity.
+
+---
+
 ## Original XP seven-theme family implementation — 20 November 2026
 
 **Immutable source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; target remains `feat/0001-faithful-react-foundation`, draft PR #1. Do not merge or claim pixel parity.
