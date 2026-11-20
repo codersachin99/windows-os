@@ -62,7 +62,7 @@
 /* Pinned 18ee Win11 is bottom-centered, has search above a 6-column
  * grid (90x80 cells, 32px icons), and an account/power footer.
  * Current Guest program data remains a conservative interim source adapter. */
-.windows-desktop[data-theme="win11"] .windows-startmenu--win11{
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-startmenu--win11{
   left:50%;bottom:calc(var(--taskbar-height,40px) + 8px);
   transform:translateX(-50%);
   display:flex;flex-direction:column;gap:0;
@@ -520,4 +520,66 @@ button:not(:disabled):hover{
   .windows-startmenu--win10 .windows-startmenu__win10-sidebar[data-expanded="true"]{
     max-width:min(200px,calc(100vw - 16px));
   }
+}
+
+/* Win11-dark is the same 18ee Start layout and installed-program model.
+ * Source theme-win11-scss.js .win11dark: panel #242424, base #1c1c1c,
+ * translucent white hover and borders, and white text.
+ */
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11{
+  background:#242424;border-color:#fff3;color:#fff;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__search{
+  background:#1c1c1c;border-color:#fff3;box-shadow:0 1px 2px #0006;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__search input{
+  background:transparent;color:#fff;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__search input::placeholder{color:#bfbfbf}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__all-programs{
+  color:#fff;background:#fff1;border-color:#fff3;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__program,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__recent{color:#fff}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__program:hover,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__recent-grid button:hover,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__recent-grid button:focus-visible{
+  background:#fff1;border-color:#fff1;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__right{
+  color:#fff;background:#1c1c1c;border-top-color:#fff3;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__right>strong,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__right>.windows-startmenu__power,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__win11-actions>button,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__win11-power>button{
+  color:#fff;
+}
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__win11-actions button:hover,
+.windows-desktop[data-theme="win11dark"] .windows-startmenu--win11
+.windows-startmenu__win11-actions button:focus-visible{
+  background:#fff1;border-color:#fff3;
+}
+.windows-startmenu__context[data-source-start-context-theme="win11dark"]{
+  background:#242424;color:#fff;border-color:#fff3;border-radius:8px;
+  box-shadow:0 5px 16px #0008;
+}
+.windows-startmenu__context[data-source-start-context-theme="win11dark"]
+button:not(:disabled):hover{
+  background:#fff1;color:#fff;border-radius:4px;
 }
