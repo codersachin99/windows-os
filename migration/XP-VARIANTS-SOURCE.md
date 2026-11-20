@@ -81,3 +81,18 @@ their existing interim thumbnails. Source theme names, complete preview
 composition for remaining 20+ families, responsive dimensions and entire
 source-paired screenshot parity are not certified.
 
+
+## Source taskbar running / foreground paints — 20 November 2026
+
+Original `theme-winxp-scss.js` defines separate taskbar application
+idle, opened (running), hovered, focused, and active-hover paint. React
+now ties these visual states to real taskbar grouping and window focus,
+preserving base XP and Green source variable colors plus the independent
+E/N/R/S/Z source gradient stops. Silver retains its original bevel
+shadow treatment. Source taskbar icons are 22px and focus-shift 4%.
+
+The new desktop/mobile Playwright contract opens Computer, inspects
+foreground+hover, minimizes it, checks running+hover and restores it for
+each XP ID. Original screenshot-paired pixel parity, remaining variant
+inset shadows and exact Start-button pseudo paints are still pending.
+

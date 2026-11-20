@@ -244,3 +244,32 @@ test("original Windows 8/8.1 Guest logon uses purple source screen and 150px ava
     await expect(desktop).toHaveAttribute("data-theme",theme);
   }
 });
+
+/* Source XP running and foreground button source paints on real Computer
+ * minimize/restore lifecycle in both desktop and mobile browser projects. */
+for(const [theme,property,opened,openedHover,active,activeHover] of [["winxp","backgroundColor","rgb(57, 125, 243)","rgb(85, 160, 255)","rgb(26, 80, 184)","rgb(49, 106, 221)"],["winxpE","backgroundImage","rgb(69, 140, 196)","rgb(46, 117, 173)","rgb(12, 83, 139)","rgb(42, 113, 169)"],["winxpG","backgroundColor","rgb(195, 204, 165)","rgb(212, 222, 181)","rgb(141, 151, 126)","rgb(164, 177, 138)"],["winxpN","backgroundImage","rgb(105, 119, 128)","rgb(78, 93, 107)","rgb(43, 53, 65)","rgb(98, 109, 117)"],["winxpR","backgroundImage","rgb(148, 197, 239)","rgb(80, 157, 224)","rgb(68, 109, 165)","rgb(125, 179, 215)"],["winxpS","backgroundImage","rgb(255, 255, 255)","rgb(217, 218, 232)","rgb(97, 107, 120)","rgb(126, 136, 149)"],["winxpZ","backgroundImage","rgb(125, 125, 125)","rgb(90, 90, 90)","rgb(60, 60, 60)","rgb(107, 107, 107)"]] as const){
+  test("original "+theme+" taskbar application source hover and focus",async({page})=>{
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]');
+    await expect(win).toBeVisible();
+    const item=page.locator('[data-test-taskbar-pin="computer"][data-test-taskbar-pin-running="true"],[data-test-taskbar-running-group="computer"]');
+    await expect(item).toHaveCount(1);
+    await expect(item).toHaveClass(/is-active/);
+    await expect(item.locator("img")).toHaveCSS("width","22px");
+    const paint=()=>item.evaluate((el,prop)=>getComputedStyle(el)[prop as "backgroundColor"|"backgroundImage"],property);
+    expect(await paint()).toContain(active);
+    await item.hover();
+    expect(await paint()).toContain(activeHover);
+    await win.locator('[data-source-window-control="minimize"]').click();
+    await expect(win).toBeHidden();
+    await expect(item).not.toHaveClass(/is-active/);
+    expect(await paint()).toContain(opened);
+    await item.hover();
+    expect(await paint()).toContain(openedHover);
+    await item.click();
+    await expect(win).toBeVisible();
+    await expect(item).toHaveClass(/is-active/);
+  });
+}

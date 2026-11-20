@@ -1,3 +1,28 @@
+## XP taskbar application state painting — 20 November 2026
+
+**Original:** immutable `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`; draft PR #1, unchanged main.
+**Previous verification:** [CI #44688489556](https://github.com/codersachin99/windows-os/actions/runs/44688489556)
+completed **SUCCESS**, covering prior XP Personalize swatches.
+
+**This slice:** `sourceShellTheme.css` ports XP taskbar running/opened,
+hover, active and active-hover paints from the original XP source; XP
+Green is olive, Embedded/Noir/Royale/Silver/Zune each have separate
+four- or two-stop palettes. Real pinned/running groups and original
+foreground flags control the paint; 22px icon/active translation.
+Desktop/mobile Playwright tests operate an actual Computer window
+through open, hover, minimize, hover, restore. Source reference, main
+and releases untouched. Source-paired screenshot parity still pending.
+
+**Verification:** opt-in `[run-ci]` is required for this commit and
+must not be marked green before job completion. No local npm test
+execution was possible through connector-only access.
+
+**Next:** fix any CI regression; XP Start button pseudo-state parity;
+then original Win7 Aero/Basic and shell/Explorer/Bin visual comparison.
+
+---
+
 ## Original XP seven-theme Personalize cards — 20 November 2026
 
 **Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
