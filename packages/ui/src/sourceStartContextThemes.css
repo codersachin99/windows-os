@@ -1,0 +1,224 @@
+/*
+ * Source-faithful program context popups detached from the desktop tree.
+ * Frozen legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776:
+ * src/modules/themes/theme-win7-scss.js .win7 .winui-menu
+ * src/modules/themes/theme-win7-classic-scss.js .win7-classic .winui-menu
+ * src/modules/themes/theme-winxp-scss.js .winxp .winui-menu
+ *
+ * This popup uses createPortal(document.body) so it cannot inherit the
+ * desktop palette variables. Map the pinned theme tokens onto the popup
+ * itself instead of reading the host OS styles or moving the portal into
+ * a transformed/overflow-clipped Start menu.
+ */
+
+/* Aero 1–4 and Basic 1 share the original .win7 menu and its painted
+ * 2px icon/check gutter, rather than the generic React blue-gradient popup. */
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+){
+  background:#f1f1f1;color:#1b3956;
+  border:1px solid #979797;border-radius:0;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5019607843),
+    inset 0 0 0 2px #f5f5f5;
+  padding:4px 2px;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+)::before{
+  content:"";position:absolute;z-index:0;pointer-events:none;
+  left:27px;top:2px;bottom:2px;width:2px;
+  box-shadow:inset 1px 0 rgba(0,0,0,.1490196078),inset -1px 0 #fff;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+) button{
+  position:relative;z-index:1;
+  padding-left:34px;border:1px solid transparent;border-radius:3px;
+  background:transparent;color:inherit;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+) button:not(:disabled):is(:hover,:focus-visible){
+  border-color:#aaddfa;
+  background:linear-gradient(rgba(255,255,255,.6),
+    rgba(230,236,245,.8) 90%,rgba(255,255,255,.8));
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+):dir(rtl){
+  box-shadow:-4px 4px 3px -2px rgba(0,0,0,.5019607843),
+    inset 0 0 0 2px #f5f5f5;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+):dir(rtl)::before{
+  left:auto;right:27px;
+  box-shadow:inset -1px 0 rgba(0,0,0,.1490196078),inset 1px 0 #fff;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win7"],
+  [data-source-start-context-theme="aero-1"],
+  [data-source-start-context-theme="aero-2"],
+  [data-source-start-context-theme="aero-3"],
+  [data-source-start-context-theme="aero-4"],
+  [data-source-start-context-theme="basic-1"]
+):dir(rtl) button{padding-left:9px;padding-right:34px}
+
+/* Classic #d4d0c8, High Contrast Black and High Contrast White use
+ * the original 3D win7-classic bevel and palette-specific selection. */
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="basic-2"],
+  [data-source-start-context-theme="basic-3"],
+  [data-source-start-context-theme="basic-4"]
+){
+  --context-surface:#d4d0c8;
+  --context-text:#000;
+  --context-accent:#0a246a;
+  --context-border:#393c39;
+  --context-contrast:#fff;
+  background:var(--context-surface);color:var(--context-text);
+  border:1px solid var(--context-border);border-radius:0;
+  box-shadow:inset -1px -1px var(--context-border),
+    inset 1px 1px var(--context-contrast),inset -2px -2px #7b7b7b;
+  font:10pt "Segoe UI",sans-serif;
+}
+.windows-startmenu__context[data-source-start-context-theme="basic-3"]{
+  --context-surface:#000;--context-text:#fff;
+  --context-accent:#800080;--context-border:#fff;--context-contrast:#fff;
+}
+.windows-startmenu__context[data-source-start-context-theme="basic-4"]{
+  --context-surface:#fff;--context-text:#000;
+  --context-accent:#000;--context-border:#000;--context-contrast:#c0c0c0;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="basic-2"],
+  [data-source-start-context-theme="basic-3"],
+  [data-source-start-context-theme="basic-4"]
+) button{
+  border-radius:0;border:1px solid transparent;
+  color:var(--context-text);background:transparent;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="basic-2"],
+  [data-source-start-context-theme="basic-3"],
+  [data-source-start-context-theme="basic-4"]
+) button:not(:disabled):is(:hover,:focus-visible){
+  color:#fff;background:var(--context-accent);border-color:transparent;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="basic-2"],
+  [data-source-start-context-theme="basic-3"],
+  [data-source-start-context-theme="basic-4"]
+):dir(rtl){
+  box-shadow:inset 1px -1px var(--context-border),
+    inset -1px 1px var(--context-contrast),inset 2px -2px #7b7b7b;
+}
+
+/* All seven XP variants share the source .winxp white menu, disabled
+ * beige border and Tahoma. The highlight is the ORIGINAL variant
+ * --source-accent, not a hard-coded Luna blue. */
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="winxp"],
+  [data-source-start-context-theme="winxpE"],
+  [data-source-start-context-theme="winxpG"],
+  [data-source-start-context-theme="winxpN"],
+  [data-source-start-context-theme="winxpR"],
+  [data-source-start-context-theme="winxpS"],
+  [data-source-start-context-theme="winxpZ"]
+){
+  --context-xp-accent:#316ac5;
+  color:#000;background:#fff;border:1px solid #aca899;border-radius:0;
+  box-shadow:4px 4px 2px -2px rgba(0,0,0,.5333333333);
+  font:12px Tahoma,"Microsoft Sans Serif",sans-serif;
+  padding:3px 2px;
+}
+.windows-startmenu__context[data-source-start-context-theme="winxpE"]{
+  --context-xp-accent:#3e9de8;
+}
+.windows-startmenu__context[data-source-start-context-theme="winxpG"]{
+  --context-xp-accent:#93a070;
+}
+.windows-startmenu__context[data-source-start-context-theme="winxpN"]{
+  --context-xp-accent:#5e81bc;
+}
+.windows-startmenu__context[data-source-start-context-theme="winxpR"]{
+  --context-xp-accent:#335ea8;
+}
+.windows-startmenu__context[data-source-start-context-theme="winxpS"]{
+  --context-xp-accent:#bbb7c7;
+}
+.windows-startmenu__context[data-source-start-context-theme="winxpZ"]{
+  --context-xp-accent:#bebebe;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="winxp"],
+  [data-source-start-context-theme="winxpE"],
+  [data-source-start-context-theme="winxpG"],
+  [data-source-start-context-theme="winxpN"],
+  [data-source-start-context-theme="winxpR"],
+  [data-source-start-context-theme="winxpS"],
+  [data-source-start-context-theme="winxpZ"]
+) button{
+  color:#000;background:transparent;border-color:transparent;border-radius:0;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="winxp"],
+  [data-source-start-context-theme="winxpE"],
+  [data-source-start-context-theme="winxpG"],
+  [data-source-start-context-theme="winxpN"],
+  [data-source-start-context-theme="winxpR"],
+  [data-source-start-context-theme="winxpS"],
+  [data-source-start-context-theme="winxpZ"]
+) button:not(:disabled):is(:hover,:focus-visible){
+  color:#fff;background:var(--context-xp-accent);border-color:transparent;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="winxp"],
+  [data-source-start-context-theme="winxpE"],
+  [data-source-start-context-theme="winxpG"],
+  [data-source-start-context-theme="winxpN"],
+  [data-source-start-context-theme="winxpR"],
+  [data-source-start-context-theme="winxpS"],
+  [data-source-start-context-theme="winxpZ"]
+) button:disabled{color:#aca899;opacity:1}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="winxp"],
+  [data-source-start-context-theme="winxpE"],
+  [data-source-start-context-theme="winxpG"],
+  [data-source-start-context-theme="winxpN"],
+  [data-source-start-context-theme="winxpR"],
+  [data-source-start-context-theme="winxpS"],
+  [data-source-start-context-theme="winxpZ"]
+):dir(rtl){
+  box-shadow:-4px 4px 2px -2px rgba(0,0,0,.5333333333);
+}
