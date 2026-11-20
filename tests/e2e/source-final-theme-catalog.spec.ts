@@ -8,7 +8,7 @@ import {expect,test} from "@playwright/test";
 test("source theme variants select exact login screen families and report fallback",async({page})=>{
   const cases=[
     ["aero-3","win7","win7","pending"],
-    ["winxpE","winxp","winxp","pending"],
+    ["winxpE","winxp","winxp","partial"],
     ["win31","win31","win31","partial"],
     ["win95","win95","win95","partial"],
     ["win98","win98","win98","partial"],
@@ -80,6 +80,44 @@ test("original XP logon renders three bands, exact source logo and responsive Gu
   await expect(page.locator("[data-test-main-screen]"))
     .toHaveAttribute("data-theme","winxpG");
 });
+
+// Original theme-winxp-scss.js defines distinct color tokens for each XP
+// variant. Every ID must use real XP artwork and XP Start/Power UI rather than
+// silently falling back to a Win7 shell, on both desktop and mobile profiles.
+for(const [theme,border,right,accent] of [
+  ["winxp","#1665cb","#d3e5fa","#316ac5"],
+  ["winxpE","#010305","#3c83bb","#3e9de8"],
+  ["winxpG","#bdbfa8","#f1f2e4","#93a070"],
+  ["winxpN","#01060e","#5a606f","#5e81bc"],
+  ["winxpR","#6595cd","#5373bf","#335ea8"],
+  ["winxpS","#6b6e73","#e7e6ed","#bbb7c7"],
+  ["winxpZ","#080808","#666","#bebebe"]
+] as const){
+  test("original XP "+theme+" retains XP shell with source-defined variant palette",async({page})=>{
+    await page.goto("/?theme="+theme);
+    const login=page.locator('[data-test-logon-screen]');
+    await expect(login).toHaveAttribute("data-source-logon-renderer","winxp");
+    await expect(login).toHaveAttribute("data-source-shell-status","partial");
+    await login.locator('[data-test-source-logon-avatar="winxp"]').click();
+    const desktop=page.locator('[data-test-main-screen]');
+    await expect(desktop).toHaveAttribute("data-theme",theme);
+    await expect(desktop).toHaveCSS("--source-startmenu-border",border);
+    await expect(desktop).toHaveCSS("--source-startmenu-right",right);
+    await expect(desktop).toHaveCSS("--source-accent",accent);
+    await expect(page.locator('[data-test-desktop-background]'))
+      .toHaveAttribute("data-test-desktop-background",
+        "/assets/images/winxp.3e41719f.webp");
+    await expect(page.locator('[data-test-start-button] img'))
+      .toHaveAttribute("src","/assets/images/start-button-winxp.a3485adf.webp");
+    await page.locator('[data-test-start-button]').click();
+    const start=page.locator('[data-test-start-menu]');
+    await expect(start).toHaveClass(/windows-startmenu--winxp/);
+    await expect(start.locator('[data-test-startmenu-xp-header]')).toBeVisible();
+    await expect(start.locator('[data-test-startmenu-xp-footer]')).toBeVisible();
+    await expect(start.locator('[data-test-startmenu-xp-footer] img').first())
+      .toHaveAttribute("src","/assets/images/logoff-winxp.71dc5ab2.webp");
+  });
+}
 
 test("original Win11 logon uses source guest-win10 art, dark overlay and Guest sign-in",async({page})=>{
   await page.goto("/?theme=win11dark");
