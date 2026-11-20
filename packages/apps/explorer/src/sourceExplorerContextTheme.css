@@ -49,7 +49,7 @@
 }
 .windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:not(:disabled):hover,
 .windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:not(:disabled):focus-visible{
-  color:#fff;background:#316ac5;border-color:transparent;
+  color:#fff;background:var(--source-accent,#316ac5);border-color:transparent;
 }
 .windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:disabled{
   color:#aca899;opacity:1;
