@@ -21,7 +21,7 @@ async function originalMenuPaint(menu:ReturnType<Page["locator"]>){
   await expect(menu).toHaveCSS("background-color","rgb(241, 241, 241)");
   await expect(menu).toHaveCSS("border-top-color","rgb(151, 151, 151)");
   await expect(menu).toHaveCSS("border-top-left-radius","0px");
-  await expect(menu).toHaveCSS("box-shadow",/inset 0px 0px 0px 2px/);
+  await expect(menu).toHaveCSS("box-shadow",/0px 0px 0px 2px/);
   await expect(menu,"pinned source icon/checkmark gutter")
     .toHaveCSS("position",/^(absolute|fixed)$/);
   const gutter=await menu.evaluate(element=>({
