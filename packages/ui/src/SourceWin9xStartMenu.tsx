@@ -62,6 +62,10 @@ export function SourceWin9xStartMenu({
     return ()=>window.removeEventListener("resize",place);
   },[branch,rootRef]);
   const openBranch=(next:Exclude<MenuBranch,null>)=>{
+    // Pointer-enter often expands this menu before the click event.
+    // Re-clicking the already expanded trigger must not erase measured
+    // placement: the layout effect only reruns when branch changes.
+    if(branch===next)return;
     setPlacement(null);
     setBranch(next);
   };
