@@ -146,3 +146,53 @@ test("Personalize switches original Win95, Win98 and Win2k while keeping 3 class
     .toHaveAttribute("data-test-desktop-background",
       "/assets/images/default-win2k.1c1f7fa2.png");
 });
+
+test("Win11 Dark chooses exact pinned source wallpaper/Start and native dark shell",async({page})=>{
+  const win=await openPersonalize(page);
+  const dark=win.locator('[data-test-personalize-theme="win11dark"]');
+  await expect(dark).toBeVisible();
+  await expect(dark.locator("img")).toHaveAttribute(
+    "src","/assets/images/win11dark.af52a1ca.webp");
+  await dark.click();
+  const desktop=page.locator("[data-test-main-screen]");
+  await expect(desktop).toHaveAttribute("data-theme","win11dark");
+  await expect(dark).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator("[data-test-desktop-background]"))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win11dark.af52a1ca.webp");
+  await expect(page.locator("[data-test-start-button] img"))
+    .toHaveAttribute("src","/assets/images/start-button-win11dark.d417814c.webp");
+  const taskbar=page.locator('[data-test-taskbar="base"]');
+  await expect(taskbar).toHaveCSS("height","48px");
+  await expect(taskbar).toHaveCSS("background-color","rgb(28, 28, 28)");
+  await page.locator("[data-test-start-button]").click();
+  const menu=page.locator(".windows-startmenu--win11");
+  await expect(menu).toBeVisible();
+  await expect(menu).toHaveCSS("background-color","rgb(36, 36, 36)");
+  await expect(menu).toHaveCSS("color","rgb(255, 255, 255)");
+  await menu.locator('[data-test-program="notepad"]').click();
+  const notepad=page.locator('[data-test-window="notepad"]');
+  await expect(notepad).toBeVisible();
+  await expect(notepad).toHaveCSS("background-color","rgb(28, 28, 28)");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const computer=page.locator('[data-test-window="computer"]').first();
+  await expect(computer).toBeVisible();
+  await expect(computer).toHaveCSS("background-color","rgb(28, 28, 28)");
+  // The same original Win11 context structure uses distinct dark tokens.
+  await page.locator("#desktop-icons").click({
+    button:"right",position:{x:270,y:210}
+  });
+  await expect(page.locator('[data-test-desktop-menu]'))
+    .toHaveCSS("background-color","rgb(36, 36, 36)");
+  await page.reload();
+  const logon=page.locator('[data-test-logon-screen]');
+  await expect(logon).toHaveAttribute("data-source-logon-renderer","win11");
+  await expect(logon).toHaveAttribute("data-source-shell-status","partial");
+  await expect(logon).toHaveCSS("background-image",/win11dark\\.af52a1ca\\.webp/);
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator("[data-test-main-screen]"))
+    .toHaveAttribute("data-theme","win11dark");
+  await expect(page.locator("[data-test-desktop-background]"))
+    .toHaveAttribute("data-test-desktop-background",
+      "/assets/images/win11dark.af52a1ca.webp");
+});
