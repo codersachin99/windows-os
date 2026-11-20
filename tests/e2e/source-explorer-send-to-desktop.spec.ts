@@ -124,6 +124,12 @@ test("mobile Explorer Send to submenu never covers its own trigger when sides ca
     ||b!.x>=a!.x+a!.width-1||b!.x+b!.width<=a!.x+1).toBe(true);
   await trigger.click();
   await expect(child).toBeVisible();
+  await expect(child).toHaveAttribute("data-cascade","stacked");
+  // Reproduce the original failed full-suite pointer trajectory. The
+  // cursor crosses Copy while travelling from Send to to its detached
+  // vertical child. A hover over Copy must not destroy the child.
+  await menu.locator('[data-test-explorer-item-action="copy"]').hover();
+  await expect(child).toBeVisible();
   await child.locator('[data-test-explorer-item-send-to-kind="desktop"]').click();
   const shortcut=page.locator('[data-test-desktop-file="'+
     DESKTOP+'/Mobile Send To - Shortcut.lnk"]');
