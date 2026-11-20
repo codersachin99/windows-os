@@ -1,3 +1,24 @@
+## 21 November 2026 — Desktop and Recycle Bin context keyboard focus integration
+
+**Original pinned:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; **branch:** `feat/0001-faithful-react-foundation`; draft PR #1 unmerged. No source, `main` or release changes.
+
+**Previous exact-head CI:** [#44794377379](https://github.com/codersachin99/windows-os/actions/runs/44794377379) **SUCCESS** at `d157ca5` (source Start context keyboard fix). All TypeScript, units, source/artwork, Contacts, Vite, focused and full desktop/mobile Chromium passed. Source-paired screenshot job skipped.
+
+**Found Desktop/Bin keyboard gap:** `DesktopIcons.tsx` already rendered original DesktopMenu/ItemMenu commands with `sourceMenuArrowFocus` and right/left child menu navigation, but pointer-opened menu had no focus. The arrow handler was unreachable without explicit focus; Escape discarded the menu without returning focus to the invoking icon or Desktop background.
+
+**Changes in this slice:**
+- [`d58b36b`](https://github.com/codersachin99/windows-os/commit/d58b36bd39ed84604aa0c57c16320460b13a389c): capture real Desktop icon/background as return-focus target; move focus to first enabled context item on menu-anchor mount only (not submenu rerenders); Escape closes popup and returns focus to connected target or Desktop root. Preserve original actions, existing menu viewport reposition and source theme skins.
+- [`fb56504`](https://github.com/codersachin99/windows-os/commit/fb56504ee66f80f047ae5b26b21bbc4ed6229080), [`c4a9a67`](https://github.com/codersachin99/windows-os/commit/c4a9a67c5bc5160a16834a726f7c3cea28cc452e): 11 Playwright cases, desktop/mobile, for Win7, XP, Win31, Win8, Win11dark Desktop background View/Sort/ArrowLeft/Right/Escape, Computer icon disabled Properties skip and return focus, Bin disabled Empty/Properties skip with real Enter opens Bin. Original checked Large icons label accounts for its check glyph.
+- [`93475e4`](https://github.com/codersachin99/windows-os/commit/93475e4ad4e7225936d3241ee2e1340df69bd6c5): targeted opt-in CI now runs the suite.
+- [`035845d`](https://github.com/codersachin99/windows-os/commit/035845ddca4bcaaae63415b7b195471dc5ad357f): source-specific acceptance audit.
+- [`d4466de`](https://github.com/codersachin99/windows-os/commit/d4466de194a75362f8a47fe0d65a483badbab1ba): module tracker in-progress evidence, not complete.
+
+**Verification:** checkpoint triggers one exact-head `[run-ci]` run; the new code/tests **have not passed** until the run concludes. Inspect any failed desktop/mobile Playwright traces; fix original code/acceptance assertions, do not skip. The broader Desktop/Start/Computer/Bin original-vs-target pixel parity remains unverified until `LEGACY_SOURCE_READ_TOKEN` or a controlled pinned reference checkout is available. No releases or merge yet.
+
+**Next:** after checking CI, prioritize source-backed Desktop/Explorer/Bin functional fidelity and source-paired visual regression rather than aesthetic reinvention.
+
+---
+
 ## 21 November 2026 — fix Start program popup keyboard and Escape focus for every renderer
 
 **Source lock:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
