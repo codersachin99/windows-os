@@ -1,3 +1,31 @@
+## Fix stale system wallpaper regression counts — 20 Nov 2026
+
+**Source lock:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+Latest metadata exact-head [CI #44741632387](https://github.com/codersachin99/windows-os/actions/runs/44741632387)
+FAILED: TypeScript, unit, source/artwork checks and Vite build PASSED;
+the targeted Playwright suite had 524 passes, 4 failures, 2 skips
+on desktop/mobile. Both failing scenarios still asserted the previous
+13 original system wallpapers, while the actual source-correct gallery
+now includes 3 additional byte-imported Aero category images (16).
+This was a stale assertion, not evidence that the three source assets
+should be removed.
+
+Updated `source-personalize-background.spec.ts` and
+`source-cpanel-program-launch.spec.ts` to require 16 items and verify
+all 3 original architecture/landscape/nature image URLs explicitly.
+No application logic changed or tests disabled. Triggered an
+exact-head opt-in `[run-ci]` for verification; results must be read
+before claiming this new head passes. Previous taskbar
+[CI #44739028004](https://github.com/codersachin99/windows-os/actions/runs/44739028004)
+PASSED. Original and target main untouched; PR #1 remains draft and
+there is no release.
+
+**Next:** inspect new exact-head CI, correct any regressions, then
+pair screenshots against the pinned original and complete Start,
+Desktop, context, Computer and Recycle Bin theme parity.
+
+---
+
 ## Original source registry-driven Aero/Basic thumbnails and desktop — 20 Nov 2026
 
 **Source lock:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
