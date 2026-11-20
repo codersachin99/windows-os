@@ -72,6 +72,11 @@ for(const theme of ["win7","winxp"] as const){
 
 test("Computer file context focuses Open, opens Send to child, and Escape focuses exact row",async({page})=>{
   const window=await explorer(page,"win7","computer");
+  // The source virtual Computer root is not a mounted disk folder.
+  // A Send to Desktop path shortcut is supported from a live Guest
+  // Documents path, just as source-explorer-item-menu.spec.ts verifies.
+  await window.locator(".explorer-navigation__home")
+    .filter({hasText:"Documents"}).click();
   await window.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
     name:"Keyboard Context Note.txt",mimeType:"text/plain",
     buffer:Buffer.from("original guest explorer menu")
