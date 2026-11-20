@@ -51,10 +51,6 @@ interface DesktopShellProps {
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
   visualEffects:SourceVisualEffects;
   onVisualEffectsChange(value:SourceVisualEffects):void;
-  aeroAppearance:SourceAeroAppearance;
-  onAeroAppearancePreview(value:SourceAeroAppearance):void;
-  onAeroAppearanceSave(value:SourceAeroAppearance):void;
-  onAeroAppearanceDiscard():void;
 }
 
 interface ApplicationContentProps {
