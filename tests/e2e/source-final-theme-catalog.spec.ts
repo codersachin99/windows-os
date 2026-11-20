@@ -7,7 +7,7 @@ import {expect,test} from "@playwright/test";
  */
 test("source theme variants select exact login screen families and report fallback",async({page})=>{
   const cases=[
-    ["aero-3","win7","win7","pending"],
+    ["aero-3","win7","win7","partial"],
     ["winxpE","winxp","winxp","partial"],
     ["win31","win31","win31","partial"],
     ["win95","win95","win95","partial"],
@@ -492,3 +492,51 @@ test("basic-2 source classic popup retains real Desktop and Task Manager actions
   await context.locator('[data-test-taskbar-context-action="taskmgr"]').click();
   await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
 });
+
+/* Pinned final theme-win7-scss.js uses the Win7 window chrome
+ * across its four Aero IDs; palette per-ID still unverified.
+ * Assert actual live renderer, desktop menu, window interactions. */
+for(const aero of ["aero-1","aero-2","aero-3","aero-4"] as const){
+  test(aero+" inherits original Win7 Aero window geometry and interactive shell",async({page})=>{
+    await page.goto("/?theme="+aero);
+    const logon=page.locator('[data-test-logon-screen]');
+    await expect(logon).toHaveAttribute("data-source-logon-theme","win7");
+    await expect(logon).toHaveAttribute("data-source-shell-status","partial");
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    await expect(page.locator('[data-test-main-screen]'))
+      .toHaveAttribute("data-theme",aero);
+    await expect(page.locator('[data-test-taskbar="base"]'))
+      .toHaveCSS("height","40px");
+    const start=page.locator('[data-test-start-button]');
+    await expect(start.locator("img")).toHaveAttribute("src",
+      "/assets/images/start-button.b35eae12.webp");
+    await start.click();
+    await expect(page.locator('[data-test-start-menu]')).toBeVisible();
+    await expect(start).toHaveAttribute("aria-expanded","true");
+    await start.click();
+    await expect(page.locator('[data-test-start-menu]')).toHaveCount(0);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]');
+    await expect(win).toBeVisible();
+    await expect(win).toHaveCSS("border-top-left-radius","7px");
+    await expect(win).toHaveCSS("border-top-color","rgb(0, 0, 0)");
+    await expect(win).toHaveCSS("padding-top","6px");
+    await expect(win).toHaveCSS("background-image",/linear-gradient/);
+    await win.getByRole("button",{name:"Maximize Computer"}).click();
+    await expect(win).toHaveClass(/is-maximized/);
+    const bounds=await win.boundingBox(),size=page.viewportSize()!;
+    expect(bounds).not.toBeNull();
+    expect(Math.abs(size.height-bounds!.y-bounds!.height-40))
+      .toBeLessThanOrEqual(2);
+    await win.getByRole("button",{name:"Maximize Computer"}).click();
+    await expect(win).not.toHaveClass(/is-maximized/);
+    await win.getByRole("button",{name:"Close Computer"}).click();
+    await expect(win).toHaveCount(0);
+    const icons=page.locator("#desktop-icons");
+    await icons.click({button:"right",position:{x:260,y:200}});
+    const menu=icons.locator("[data-test-desktop-menu]");
+    await expect(menu).toBeVisible();
+    await menu.getByRole("menuitem",{name:"Refresh",exact:true}).click();
+    await expect(menu).toHaveCount(0);
+  });
+}

@@ -8,11 +8,16 @@
  * window lifecycle and host OS remain unaffected.
  */
 
-/* Windows 7 glass: 6px idle / 7px focused corners, 6px inner stroke
+/* Shared pinned Windows 7 Aero family: canonical win7 + aero-1..aero-4.
+ * Source theme-win7-scss.js has the shared .win7 WindowMain skin, not
+ * individual per-Aero-window selector blocks. Keep individual palettes
+ * and wallpaper associations pending until source metadata is recovered.
+ *
+ * Windows 7 glass: 6px idle / 7px focused corners, 6px inner stroke
  * and the exact pinned translucent 140/225-degree border highlights.
  * The original --theme-color is user-configurable, so the base tint
  * remains a replaceable token rather than a hardcoded invented accent. */
-.windows-desktop[data-theme="win7"] .windows-window{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window{
   --source-window-tint:var(--theme-color, #6a9eb9);
   --source-window-tint--inactive:var(--theme-color--inactive, #6a9eb9);
   padding:6px;
@@ -26,7 +31,7 @@
   box-shadow:none;
   backdrop-filter:none;
 }
-.windows-desktop[data-theme="win7"] .windows-window.is-active{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window.is-active{
   border-radius:7px;
   background:linear-gradient(140deg,rgba(255,255,255,.6666666667),
     transparent 100px),
@@ -44,27 +49,27 @@
  * data-effect-enable-glass / data-effect-show-window-shadows flags.
  * DesktopShell enables both source defaults until Performance Options
  * is migrated; flag removal already has exact source behavior. */
-.windows-desktop[data-theme="win7"][data-effect-enable-glass] .windows-window{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-enable-glass] .windows-window{
   backdrop-filter:blur(4px);
 }
-.windows-desktop[data-theme="win7"][data-effect-show-window-shadows] .windows-window{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-show-window-shadows] .windows-window{
   box-shadow:0 0 10px 2px rgba(0,0,0,.3333333333),
     inset 0 0 0 1px rgba(255,255,255,.6666666667);
 }
-.windows-desktop[data-theme="win7"][data-effect-show-window-shadows] .windows-window.is-active{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-show-window-shadows] .windows-window.is-active{
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667),
     2px 2px 15px 1px rgba(0,0,0,.9333333333);
 }
 /* Source [dir=rtl] mirrors both Aero highlight diagonals and active
  * window shadow; :dir(rtl) also works with inherited document direction. */
-.windows-desktop[data-theme="win7"]:dir(rtl) .windows-window{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-window{
   background:linear-gradient(-140deg,rgba(255,255,255,.5333333333),
     transparent 100px),
     linear-gradient(-225deg,rgba(255,255,255,.5333333333),
       transparent 100px),
     var(--source-window-tint--inactive);
 }
-.windows-desktop[data-theme="win7"]:dir(rtl) .windows-window.is-active{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-window.is-active{
   background:linear-gradient(-140deg,rgba(255,255,255,.6666666667),
     transparent 100px),
     linear-gradient(-225deg,rgba(255,255,255,.6666666667),
@@ -77,16 +82,16 @@
     transparent 100px),
     var(--source-window-tint);
 }
-.windows-desktop[data-theme="win7"][data-effect-show-window-shadows]:dir(rtl)
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-show-window-shadows]:dir(rtl)
 .windows-window.is-active{
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667),
     -2px 2px 15px 1px rgba(0,0,0,.9333333333);
 }
-.windows-desktop[data-theme="win7"] .windows-window__titlebar{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__titlebar{
   min-height:24px;
   text-shadow:0 0 8px rgba(255,255,255,.6666666667);
 }
-.windows-desktop[data-theme="win7"] .windows-window__buttons{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__buttons{
   position:relative;top:-5px;align-self:flex-start;
   margin:0 2px 0 8px;
   border:1px solid rgba(0,0,0,.5333333333);
@@ -94,10 +99,10 @@
   border-radius:0 0 5px 5px;
   box-shadow:0 1px 0 rgba(255,255,255,.3333333333);
 }
-.windows-desktop[data-theme="win7"]:dir(rtl) .windows-window__buttons{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-window__buttons{
   margin:0 8px 0 2px;
 }
-.windows-desktop[data-theme="win7"] .windows-window__buttons button{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__buttons button{
   height:20px;min-height:20px;
   border-radius:0;
   border-color:rgba(0,0,0,.5333333333);
@@ -107,10 +112,10 @@
     rgba(143,150,173,.3058823529));
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667);
 }
-.windows-desktop[data-theme="win7"] .windows-window__buttons button:first-child{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__buttons button:first-child{
   border-radius:0 0 0 5px;
 }
-.windows-desktop[data-theme="win7"] .windows-window__buttons button.windows-window__close{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__buttons button.windows-window__close{
   width:48px;border-radius:0 0 5px 0;
   background-color:#d54f36;
   background-image:linear-gradient(rgba(244,244,244,.5725490196),
@@ -118,10 +123,10 @@
     rgba(0,0,0,.1803921569) 50%,
     rgba(143,150,173,.3058823529));
 }
-.windows-desktop[data-theme="win7"] .windows-window.is-maximized{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window.is-maximized{
   border:0;border-radius:0;padding:0;
 }
-.windows-desktop[data-theme="win7"] .windows-window.is-maximized .windows-window__buttons{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window.is-maximized .windows-window__buttons{
   top:0;
 }
 
@@ -327,34 +332,34 @@ button:not(.windows-window__close){
  * (opacity 0, .3s), removes the Aero backdrop and ignores pointer input.
  * React WindowFrame has no separate background layer; keep its outline
  * and fade title/body, without minimizing or closing Guest windows. */
-.windows-desktop[data-theme="win7"] .windows-window__titlebar,
-.windows-desktop[data-theme="win7"] .windows-window__body{
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__titlebar,
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-window__body{
   transition:opacity .3s;
 }
-.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-source-aero-peeking="true"]
 .windows-window{
   pointer-events:none;
   backdrop-filter:none;
 }
-.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-source-aero-peeking="true"]
 .windows-window:not(.is-maximized){
   background:linear-gradient(140deg,rgba(255,255,255,.5333333333),
     transparent 100px),
     linear-gradient(225deg,rgba(255,255,255,.5333333333),
     transparent 100px);
 }
-.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]:dir(rtl)
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-source-aero-peeking="true"]:dir(rtl)
 .windows-window:not(.is-maximized){
   background:linear-gradient(-140deg,rgba(255,255,255,.5333333333),
     transparent 100px),
     linear-gradient(-225deg,rgba(255,255,255,.5333333333),
     transparent 100px);
 }
-.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-source-aero-peeking="true"]
 .windows-window.is-maximized{background:none}
-.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-source-aero-peeking="true"]
 .windows-window__titlebar,
-.windows-desktop[data-theme="win7"][data-source-aero-peeking="true"]
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-source-aero-peeking="true"]
 .windows-window__body{opacity:0}
 
 

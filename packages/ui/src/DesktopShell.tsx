@@ -1,5 +1,5 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
-import type { DesktopAction, DesktopState, DesktopWindow } from "@windows-os/contracts";
+import {sourceIsAeroFamily,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
 import {legacyArt,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences } from "@windows-os/sdk";
 import { ContactsApp } from "@windows-os/apps/contacts";
@@ -252,7 +252,7 @@ export function DesktopShell({
   const previewHideTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const taskbarGroups=sourceTaskbarGroups(state.windows,pinnedPrograms);
   const buttonMode=taskbarConfig.type;
-  const canAeroPeek=state.theme==="win7"&&taskbarConfig.useAeroPeek;
+  const canAeroPeek=(state.theme==="win7"||sourceIsAeroFamily(state.theme))&&taskbarConfig.useAeroPeek;
   const previewDesktop=canAeroPeek&&aeroPeeking;
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
   const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);

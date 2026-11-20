@@ -1,3 +1,27 @@
+## Aero 1–4 shared source Win7 WindowMain shell — 20 Nov 2026
+
+**Immutable source:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Branch:** `feat/0001-faithful-react-foundation`, draft PR #1.
+**Previous head:** Basic 1/2 `76d3005`, opt-in
+[CI #44734587135](https://github.com/codersachin99/windows-os/actions/runs/44734587135)
+was still running during source inspection; no earlier green claim.
+
+**Work:** source `theme-win7-scss.js` shares the same window/glass
+geometry across all Aero IDs, while `app.config.json` maps each
+Aero boot/logon to Win7. Extended exact source Win7 window rules
+to the four Aero IDs, preserving RTL, Aero Peek and Start history;
+no made-up accent palettes or wallpaper associations. Source catalog
+now records the four as **partial**. Added four real desktop/mobile
+Playwright browser acceptance scenarios; updated source audit
+`migration/AERO-BASIC-SOURCE.md` and module tracker.
+
+**Remaining:** recover source exact Aero 1/2/3/4 palette and
+wallpaper associations, theme-specific assets and desktop/taskbar
+styles, screenshot pair source/target, Explorer/context full parity.
+No merge or release until verified.
+
+---
+
 ## Basic 1 and 2 real shell migration — 20 Nov 2026
 
 **Source:** immutable `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.

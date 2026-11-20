@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type Dispatch, type MouseEvent as ReactMouseEvent } from "react";
 import {createPortal} from "react-dom";
-import {sourceIsXpFamily,type DesktopAction,type ThemeId} from "@windows-os/contracts";
+import {sourceIsXpFamily,sourceIsAeroFamily,type DesktopAction,type ThemeId} from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
 import {
@@ -382,7 +382,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         </div>
       </aside>}
       <div className="windows-startmenu__left">
-        {(isXpTheme||theme==="win7"||theme==="basic-2"||theme==="basic-3"||theme==="basic-4")&&recentSection}
+        {(isXpTheme||theme==="win7"||sourceIsAeroFamily(theme)||theme==="basic-2"||theme==="basic-3"||theme==="basic-4")&&recentSection}
         <div className="windows-startmenu__programs"
           onWheel={event=>{
             if(!win11Paged||event.deltaY===0)return;

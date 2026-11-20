@@ -90,3 +90,27 @@ focus/maximization, 40px/52px geometry, literal pinned assets and
 Desktop/Taskbar context actions. Catalog moves both to **partial**;
 all four Aero variants remain **pending**. These are bounded
 source-backed shells, NOT full parity or finished themes.
+
+## Shared source Aero 1–4 shell family — 20 November 2026
+
+Original `src/modules/themes/theme-win7-scss.js` contains one
+shared `.win7` WindowMain style for the Aero family: 6px inactive/
+7px active rounded window, black border, 6px inset padding, source
+140/225-degree highlight gradients, optional 4px blur and activated
+shadows, mirrored RTL and source Aero Peek. The immutable final
+`app.config.json` maps all four Aero IDs to the Win7 boot/logon
+family. No discrete `.aero-1`…`.aero-4` window declarations were
+found in the pinned Win7 SCSS.
+
+The React WindowMain source chrome now applies these shared rules to
+canonical Win7 and all four Aero IDs without assigning invented
+per-theme palette values. The original Start orb, 40px taskbar,
+real Start recent history and Aero Peek eligibility are preserved
+across those IDs. Contracts define the exact allowed Aero IDs;
+the shell catalog reports them as **partial**.
+
+Desktop/mobile Playwright tests cover per-ID logon, Start open/close,
+source-window border/radius/padding, maximize/restore/close and
+desktop context Refresh, not just a screenshot. The exact original
+per-ID accent palette, wallpaper mapping, desktop skin differences
+and full source visual comparison remain unported/unverified.

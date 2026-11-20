@@ -3,6 +3,7 @@ export type ThemeId = SourceThemeId;
 export {SOURCE_THEME_SCREENS,SOURCE_THEME_CATALOG_IDS,SOURCE_THEME_SCREEN_DEFAULTS,
   sourceIsKnownTheme,sourceThemeScreens,sourceThemeShellStatus,
   SOURCE_XP_THEME_IDS,sourceIsXpFamily,
+  SOURCE_AERO_THEME_IDS,sourceIsAeroFamily,
   type SourceThemeConfigId,type SourceThemeScreenId,type SourceThemeScreens}
   from "./sourceThemeCatalog";
 export type SessionPhase = "boot" | "logon" | "switch" | "desktop" | "shutdown" | "bsod";

@@ -167,6 +167,15 @@ export const SOURCE_THEME_SCREEN_DEFAULTS:SourceThemeScreens=
   Object.freeze({boot:"win7",logon:"win7"});
 export const SOURCE_THEME_CATALOG_IDS:readonly SourceThemeId[]=
   Object.freeze(["win7",...Object.keys(SOURCE_THEME_SCREENS)] as SourceThemeId[]);
+/** Four source Aero IDs share Win7 renderer family/window chrome.
+ * Their individual original palette/wallpaper associations are still pending.
+ */
+export const SOURCE_AERO_THEME_IDS=Object.freeze([
+  "aero-1","aero-2","aero-3","aero-4"
+] as const);
+export function sourceIsAeroFamily(theme:string):boolean{
+  return (SOURCE_AERO_THEME_IDS as readonly string[]).includes(theme);
+}
 /** All seven exact XP theme IDs share the original XP shell family,
  * with individual colors defined by theme-winxp-scss.js. */
 export const SOURCE_XP_THEME_IDS=Object.freeze([
@@ -185,10 +194,10 @@ export function sourceThemeScreens(theme:string):SourceThemeScreens{
     ?SOURCE_THEME_SCREENS[theme]:SOURCE_THEME_SCREEN_DEFAULTS;
 }
 /** Indicates shell implementation scope, not theme catalog membership.
- * Twenty-one themes now have partial source-backed shell adaptations;
+ * Twenty-five themes now have partial source-backed shell adaptations;
  * partial never means pixel-perfect, and login-only families remain pending. */
 export function sourceThemeShellStatus(theme:string):"partial"|"pending"{
-  return theme==="basic-1"||theme==="basic-2"||theme==="basic-3"||theme==="basic-4"||theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
+  return sourceIsAeroFamily(theme)||theme==="basic-1"||theme==="basic-2"||theme==="basic-3"||theme==="basic-4"||theme==="win31"||theme==="win95"||theme==="win98"||theme==="win2k"
     ||theme==="win7"||sourceIsXpFamily(theme)||theme==="win8"
     ||theme==="win81"||theme==="win10"||theme==="win11"||theme==="win11dark"
     ?"partial":"pending";

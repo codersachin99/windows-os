@@ -1,6 +1,7 @@
 import {describe,expect,it} from "vitest";
 import {
   SOURCE_THEME_CATALOG_IDS,SOURCE_THEME_SCREENS,SOURCE_XP_THEME_IDS,sourceIsXpFamily,
+  SOURCE_AERO_THEME_IDS,sourceIsAeroFamily,
   SOURCE_THEME_SCREEN_DEFAULTS,sourceIsKnownTheme,
   sourceThemeScreens,sourceThemeShellStatus
 } from "./sourceThemeCatalog";
@@ -44,6 +45,14 @@ describe("immutable final source app.config themeScreens",()=>{
       expect(sourceThemeShellStatus(theme)).toBe("partial");
     }
     expect(sourceThemeShellStatus("win7")).toBe("partial");
+    expect([...SOURCE_AERO_THEME_IDS]).toEqual(["aero-1","aero-2","aero-3","aero-4"]);
+    for(const theme of SOURCE_AERO_THEME_IDS){
+      expect(sourceIsAeroFamily(theme),theme).toBe(true);
+      expect(sourceThemeShellStatus(theme),theme).toBe("partial");
+      expect(sourceThemeScreens(theme)).toEqual({boot:"win7",logon:"win7"});
+    }
+    for(const theme of ["win7","aeroNoir","aero-5","basic-1","../aero-1"])
+      expect(sourceIsAeroFamily(theme),theme).toBe(false);
     expect(sourceThemeShellStatus("basic-3")).toBe("partial");
     expect(sourceThemeShellStatus("basic-4")).toBe("partial");
     expect(sourceThemeShellStatus("basic-1")).toBe("partial");

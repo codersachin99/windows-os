@@ -2343,9 +2343,10 @@
         "packages/ui/src/sourceWin7BasicVariants.css",
         "packages/ui/src/sourceWin7ClassicContrast.css",
         "tests/e2e/source-final-theme-catalog.spec.ts",
-        "migration/AERO-BASIC-SOURCE.md"
+        "migration/AERO-BASIC-SOURCE.md",
+        "packages/ui/src/sourceWindowChrome.css"
       ],
-      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending"
+      "verification": "Basic 1 + Aero 1–4 shared source window chrome implemented in bounded scope; per-theme colors, wallpapers, desktop/taskbar and screenshot parity pending"
     },
     {
       "source": "src/modules/themes/theme-win8-scss.js",
