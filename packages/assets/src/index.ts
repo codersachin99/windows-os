@@ -1,4 +1,4 @@
-export const LEGACY_REVISION = "4e63290d783009e1293433c6ccf252abba9c1187" as const;
+export const LEGACY_REVISION = "26b9f0ce7a1665dee89a7c81824bec09e2c75776" as const;
 
 // Exact asset file names and bytes come from legacy-win7 at LEGACY_REVISION.
 // Keep source names and paths. Do not substitute emoji or approximated artwork.
