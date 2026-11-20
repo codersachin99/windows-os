@@ -70,6 +70,33 @@ for(const theme of ["win7","winxp"] as const){
   });
 }
 
+test("virtual Computer root never offers an unbacked Desktop shortcut",async({page})=>{
+  const window=await explorer(page,"win7","computer");
+  // Computer '/' can display a file, but it is a virtual shell root,
+  // not a path under /EXTERNAL/computer. Creating a path shortcut here
+  // must remain unavailable rather than emitting an unsafe host path.
+  await window.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"Virtual Root Guard.txt",mimeType:"text/plain",buffer:Buffer.from("root")
+  });
+  const item=window.locator('[data-test-explorer-item="Virtual Root Guard.txt"]');
+  await expect(item).toBeVisible();
+  await item.click({button:"right"});
+  const menu=window.locator('[data-test-explorer-context="item"]');
+  await expect(menu.locator('[data-test-explorer-item-action="open"]')).toBeFocused();
+  const trigger=menu.locator('[data-test-explorer-item-send-to]');
+  await trigger.focus();
+  await trigger.press("ArrowRight");
+  const child=menu.locator('[data-test-explorer-sendto-submenu]');
+  await expect(child.locator('[data-test-explorer-item-send-to-kind="compress"]'))
+    .toBeDisabled();
+  await expect(child.locator('[data-test-explorer-item-send-to-kind="desktop"]'))
+    .toBeDisabled();
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await expect(item).toBeFocused();
+});
+
 test("Computer file context focuses Open, opens Send to child, and Escape focuses exact row",async({page})=>{
   const window=await explorer(page,"win7","computer");
   // The source virtual Computer root is not a mounted disk folder.
