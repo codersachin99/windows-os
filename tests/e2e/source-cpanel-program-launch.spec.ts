@@ -55,8 +55,9 @@ test("source Control Panel Change desktop background opens actual Background vie
   const personalize=page.locator('[data-test-window="personalize"]');
   await expect(personalize.locator('[data-personalize-view="background"]'))
     .toBeVisible();
+  // The source-verified Win11 Dark wallpaper expands the system gallery to 13.
   await expect(personalize.locator('[data-test-bg-list="system"] [data-test-bg-item]'))
-    .toHaveCount(12);
+    .toHaveCount(13);
   await expect(personalize.locator('[data-test-bg-item="/assets/images/win10.743e8c13.webp"] img'))
     .toHaveAttribute("src","/assets/images/win10.743e8c13.webp");
   const background="/assets/images/win7-2.bf7d7452.webp";
