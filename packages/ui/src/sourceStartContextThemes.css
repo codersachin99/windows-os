@@ -341,3 +341,70 @@ button:not(:disabled):is(:hover,:focus-visible){
   [data-source-start-context-theme="win8"],
   [data-source-start-context-theme="win81"]
 ):dir(rtl) button{padding-left:9px;padding-right:34px}
+
+/* Original theme-win10-scss.js .win10 .winui-menu:
+ * despite the dark #1f1f1f START layout, the source system popup is
+ * #eee with a pale border, black text, white hover and directional shadow.
+ * Never derive this popup's appearance from Start panel background. */
+.windows-startmenu__context[data-source-start-context-theme="win10"]{
+  background:#eee;color:#000;border:1px solid #a0a0a0;border-radius:0;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5333333333);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-startmenu__context[data-source-start-context-theme="win10"]
+button:not(:disabled):is(:hover,:focus-visible){
+  color:#000;background:#fff;border-color:transparent;border-radius:0;
+}
+.windows-startmenu__context[data-source-start-context-theme="win10"]:dir(rtl){
+  box-shadow:-4px 4px 3px -2px rgba(0,0,0,.5333333333);
+}
+
+/* Original theme-win11-scss.js .win11 .winui-menu and .win11dark
+ * token overrides. The original radius is 6px, padding 6px, icon offset
+ * 32px, and hover uses --item-bg--hover (#f0f0f0 LIGHT, #fff1 DARK),
+ * not Win10's #e5f3ff theme-surface hover.
+ */
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win11"],
+  [data-source-start-context-theme="win11dark"]
+){
+  --context-win11-surface:#f9f9f9;
+  --context-win11-text:#1a1a1a;
+  --context-win11-border:rgba(0,0,0,.0666666667);
+  --context-win11-hover:#f0f0f0;
+  background:var(--context-win11-surface);
+  color:var(--context-win11-text);
+  border:1px solid var(--context-win11-border);
+  border-radius:6px;padding:6px;
+  box-shadow:0 4px 6px rgba(0,0,0,.2);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-startmenu__context[data-source-start-context-theme="win11dark"]{
+  --context-win11-surface:#242424;
+  --context-win11-text:#fff;
+  --context-win11-border:rgba(255,255,255,.0666666667);
+  --context-win11-hover:rgba(255,255,255,.0666666667);
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win11"],
+  [data-source-start-context-theme="win11dark"]
+) button{
+  color:var(--context-win11-text);
+  background:transparent;
+  border:1px solid transparent;border-radius:3px;
+  padding:6px 6px 6px 32px;transition:background .1s;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win11"],
+  [data-source-start-context-theme="win11dark"]
+) button:not(:disabled):is(:hover,:focus-visible){
+  color:var(--context-win11-text);
+  background:var(--context-win11-hover);
+  border-color:transparent;border-radius:3px;
+}
+.windows-startmenu__context:is(
+  [data-source-start-context-theme="win11"],
+  [data-source-start-context-theme="win11dark"]
+):dir(rtl) button{
+  padding:6px 32px 6px 6px;
+}
