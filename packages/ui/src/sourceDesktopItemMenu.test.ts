@@ -64,6 +64,18 @@ describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
       .some(a=>a.id==="download")).toBe(false);
   });
 
+  it("hides source Cut/Copy for a program-only shortcut without a path",()=>{
+    const link={id:"file:/Desktop/Notepad.lnk",isFile:true,
+      fileType:"file" as const,fileName:"Notepad.lnk",multiple:false};
+    const noPaths=sourceDesktopItemMenu({...link,hasClipboardSourcePaths:false});
+    expect(noPaths.some(a=>a.id==="cut"||a.id==="copy")).toBe(false);
+    const actualTarget=sourceDesktopItemMenu({...link,hasClipboardSourcePaths:true});
+    expect(actualTarget.some(a=>a.id==="cut")).toBe(true);
+    expect(actualTarget.some(a=>a.id==="copy")).toBe(true);
+    expect(sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,
+      hasClipboardSourcePaths:true}).some(a=>a.id==="copy")).toBe(false);
+  });
+
   it("original Desktop Extract here precedes Send to and enables only a real Guest ZIP",()=>{
     const input={
       id:"file:/EXTERNAL/computer/drive0/Users/Guest/Desktop/Bundle.zip",
