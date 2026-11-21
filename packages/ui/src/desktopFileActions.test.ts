@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FileClipboard, VirtualFileStore } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths } from "./desktopFileActions";
+import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,desktopSourceArchiveSelection } from "./desktopFileActions";
 
 const icons = [
   { id: "computer" },
@@ -88,6 +88,35 @@ describe("source desktop file selection and shared clipboard", () => {
       a.id,b.id,ordinary.id,executable.id,"computer",host.id,traversal.id,a.id
     ])).toEqual([target,"/Desktop/Note.txt"]);
     expect(desktopSourceClipboardPaths(items,[executable.id,"computer"])).toEqual([]);
+  });
+
+  it("archives path-backed shortcut TARGET in its real Guest parent folder",()=>{
+    const root="/EXTERNAL/computer/drive0/Users/Guest";
+    const doc=root+"/Documents/Exact Data.bin";
+    const zipShortcut=root+"/Desktop/Exact Data - Shortcut.lnk";
+    const alias={
+      id:"file:"+zipShortcut,file:{entry:{
+        uri:zipShortcut,name:"Exact Data - Shortcut.lnk",type:"file" as const
+      },targetPath:doc}
+    };
+    const a=desktopSourceArchiveSelection([alias],[alias.id]);
+    expect(a).toEqual({folder:root+"/Documents",paths:[doc]});
+    const desktopFile={id:"desktop",file:{entry:{
+      uri:root+"/Desktop/Other.txt",name:"Other.txt",type:"file" as const
+    }}};
+    expect(desktopSourceArchiveSelection([alias,desktopFile],
+      [alias.id,desktopFile.id])).toBeNull();
+    const doc2={id:"second",file:{entry:{
+      uri:root+"/Documents/Second.txt",name:"Second.txt",type:"file" as const
+    }}};
+    expect(desktopSourceArchiveSelection([alias,doc2],
+      [alias.id,doc2.id])).toEqual({
+      folder:root+"/Documents",paths:[doc,root+"/Documents/Second.txt"]
+    });
+    const programOnly={...alias,file:{entry:alias.file.entry,targetPath:null}};
+    expect(desktopSourceArchiveSelection([programOnly],[alias.id])).toBeNull();
+    const outside={...alias,file:{...alias.file,targetPath:"/host/Data.bin"}};
+    expect(desktopSourceArchiveSelection([outside],[alias.id])).toBeNull();
   });
 
   it("moves and copies between Explorer and Desktop through one shared clipboard", async () => {
