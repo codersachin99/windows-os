@@ -54,7 +54,7 @@ test("source Desktop file menu can download exact Guest bytes and safely empty B
   await expect(menu.locator("[data-test-desktop-item-action]")).toHaveText([
     "Open","Send to ▸","Download","Cut","Copy","Delete","Rename","Properties"
   ]);
-  await expect(menu.locator('[data-test-desktop-item-action="send-to"]')).toBeDisabled();
+  await expect(menu.locator('[data-test-desktop-item-action="send-to"]')).toBeEnabled();
   const downloadEvent=page.waitForEvent("download");
   await menu.locator('[data-test-desktop-item-action="download"]').click();
   const download=await downloadEvent;
