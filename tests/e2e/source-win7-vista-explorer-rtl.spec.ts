@@ -25,14 +25,20 @@ async function sourceRtlPaint(menu:Locator){
   const gutter=await menu.evaluate(element=>{
     const css=getComputedStyle(element,"::before");
     return {
-      content:css.content,width:css.width,left:css.left,right:css.right,
-      shadow:css.boxShadow
+      content:css.content,width:css.width,
+      left:Number.parseFloat(css.left),right:Number.parseFloat(css.right),
+      hostWidth:element.clientWidth,shadow:css.boxShadow
     };
   });
   expect(gutter.content).toBe('""');
   expect(gutter.width).toBe("2px");
-  expect(gutter.left).toBe("auto");
-  expect(gutter.right).toBe("27px");
+  // Chromium resolves 'left:auto' for an absolutely positioned ::before
+  // into the used pixel coordinate. Check its actual mirrored placement,
+  // not the authored-but-unresolved keyword.
+  expect(gutter.right).toBe(27);
+  expect(gutter.left).toBeGreaterThan(gutter.right);
+  expect(Math.abs(gutter.left+gutter.right+2-gutter.hostWidth))
+    .toBeLessThanOrEqual(2);
   expect(gutter.shadow).toMatch(/-1px 0px/);
   expect(gutter.shadow).toContain("inset");
 }
@@ -89,8 +95,17 @@ test("switching Win7 Explorer from RTL back to LTR restores original left gutter
   await expect(root).toBeVisible();
   const gutter=await root.evaluate(el=>{
     const css=getComputedStyle(el,"::before");
-    return {left:css.left,right:css.right};
+    return {
+      left:Number.parseFloat(css.left),right:Number.parseFloat(css.right),
+      hostWidth:el.clientWidth
+    };
   });
-  expect(gutter).toEqual({left:"27px",right:"auto"});
+  // RTL-to-LTR reverses the pinned 27px gutter and its computed used
+  // coordinate. Browsers do not preserve 'right:auto' in CSSOM here.
+  expect(gutter.left).toBe(27);
+  expect(gutter.right).toBeGreaterThan(gutter.left);
+  expect(Math.abs(gutter.left+gutter.right+2-gutter.hostWidth))
+    .toBeLessThanOrEqual(2);
   await expect(root).toHaveCSS("box-shadow",/4px 4px 3px -2px/);
+  await expect(root).not.toHaveCSS("box-shadow",/-4px 4px 3px -2px/);
 });
