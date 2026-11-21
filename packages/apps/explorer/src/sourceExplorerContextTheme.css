@@ -248,6 +248,14 @@
 .windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
 .explorer-context-menu button:disabled{
   color:var(--text-color--disabled);opacity:1;
+  text-shadow:1px 1px var(--border-color--contrast);
+}
+/* Pinned theme-win7-classic-scss.js [dir=rtl] classic disabled menuitem
+ * text-shadow:-1px 1px var(--border-color--contrast). The same root
+ * and detached View/New/Send To submenu buttons share Explorer DOM. */
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+.explorer-context-menu button:disabled{
+  text-shadow:-1px 1px var(--border-color--contrast);
 }
 
 /* Pinned Win7/Vista RTL .winui-menu direction, shared by source Aero
