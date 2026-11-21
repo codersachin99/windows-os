@@ -1,3 +1,25 @@
+## 21 November 2026 — original Win7/Aero/Basic1 Desktop + taskbar context source parity
+
+**Immutable reference:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target branch:** `feat/0001-faithful-react-foundation`, draft [PR #1](https://github.com/codersachin99/windows-os/pull/1). Do not merge `main` or modify original source.
+**Last verified CI:** [Vista run #44836963645](https://github.com/codersachin99/windows-os/actions/runs/44836963645) **SUCCESS** on `ed6012a`; TypeScript, unit, source/artwork/Contacts audits, production Vite build, focused and full desktop/mobile Chromium. Screenshot pairing SKIPPED.
+
+**Next verified source defect:** frozen `src/modules/themes/theme-win7-scss.js` `.win7 .winui-menu` uses pale `#f1f1f1`, `#979797` border, inset 2px bevel `#f5f5f5`, 2px icon/check gutter and pale-blue gradient hover with `#aaddfa` border. The React Computer/Bin menus already use this paint, but original Win7, Aero1–4 and Basic1 **Desktop/taskbar context menus** still used the port's generic blue-gradient fallback.
+
+**Commits:**
+- [`82062b4`](https://github.com/codersachin99/windows-os/commit/82062b4a67dc249a4f00a0701e69c237c0c457b3): source Win7 WinUI menu skin mapped to actual Desktop/taskbar context popups for `win7`, `aero-1`, `aero-2`, `aero-3`, `aero-4`, `basic-1`, with RTL shadow/gutter. Preserves source actions, taskbar behavior and source classic Basic2–4.
+- [`4d61e93`](https://github.com/codersachin99/windows-os/commit/4d61e93972a371d24739431a1d9f97a041d55007): 15 Playwright cases × desktop/mobile, for six theme Desktop background/Computer Open, taskbar Task Manager popup, plus Aero2/Aero4/Basic1 Explorer View child, asserting painted computed source colors, bevel/gutter/hover.
+- [`771d777`](https://github.com/codersachin99/windows-os/commit/771d7777f7f46c1f76750cb3074c957a2e81a025): remove overly broad Basic1 CSS rule that applied original `.taskbar__tray .taskbar-popup` border/shadow override to all taskbar context menus; tray-popup-specific port is still pending. Keep Basic1 taskbar height, shell paint and window chrome.
+- [`834308a`](https://github.com/codersachin99/windows-os/commit/834308a36271d44e48deda327f5884835e31368e): include new spec in opt-in focused Playwright gate, not always-on GitHub Actions.
+- [`05bcc0f`](https://github.com/codersachin99/windows-os/commit/05bcc0fdb3f571cc202abce86230eec964a7d737): `migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md` pinned source comparison, code scope and known limits.
+- [`b786cd7`](https://github.com/codersachin99/windows-os/commit/b786cd7655b706291d0dbf4ac766c1fd6b56b674): `theme-win7-scss.js` and `main.js` tracker evidence remains **in progress**, not complete.
+
+**Verification:** request one exact-head opt-in `[run-ci]` with this checkpoint. **New Win7/Aero/Basic1 browser tests and CSS are not verified until that run finishes.** Inspect all focused, full browser and CSS outcomes without disabling tests. Source paired screenshots still require approved pinned private legacy checkout (`LEGACY_SOURCE_READ_TOKEN`), so no source-to-React pixel parity claim and no release.
+
+**Next priority:** resolve CI failures, then continue original Desktop/Start/Computer/Bin and all themes according to pinned source, not new designs. Preserve the 37 source theme IDs, including login-only and high-contrast pending scopes; do not silently promote anything to pixel-perfect.
+
+---
+
 ## 21 November 2026 — Vista Desktop/taskbar/Computer/Bin source menu parity slice
 
 **Pinned source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
