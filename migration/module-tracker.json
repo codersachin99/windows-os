@@ -1786,7 +1786,13 @@
       "sha": "eb18afce38d7f508ba179c59e8d6414bb5278870",
       "area": "shell",
       "status": "in-progress",
-      "evidence": []
+      "evidence": [
+        "packages/ui/src/SourceTaskbarMenu.tsx",
+        "packages/ui/src/DesktopShell.tsx",
+        "tests/e2e/source-taskbar-context-keyboard.spec.ts",
+        "migration/TASKBAR-CONTEXT-KEYBOARD-SOURCE.md"
+      ],
+      "verification": "React source taskbar background/pin/running context keyboard entry, disabled menuitem bypass, ArrowUp/Down roving and Escape exact-origin focus; exact-head CI and original paired pixel capture pending; source module not complete"
     },
     {
       "source": "src/modules/shell/taskbar-macos.js",
