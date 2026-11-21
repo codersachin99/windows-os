@@ -30,7 +30,7 @@ import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
   sourceFileIconType,createSourceGuestArchive,sourceCanCompressSelection,
   extractSourceGuestZip,sourceCanExtractGuestZip,getParentDirectory,getFileName,
   type FileEntry } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths } from "./desktopFileActions";
+import { desktopSelectedFilePaths,desktopDownloadableFiles } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
 import {
@@ -368,22 +368,32 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       .catch(cause=>setError(cause instanceof Error?
         cause.message:"Cannot create desktop shortcut"));
   };
-  const downloadSourceFile=(item:DesktopItem)=>{
+  // Frozen DesktopItemMenu calls download(this.downloadablePaths), NOT the
+  // context-clicked shortcut alone. Read all eligible selected Guest files
+  // before launching any download so a missing file cannot partly succeed.
+  const downloadDesktopSelection=(keys:readonly string[])=>{
     setMenu(null);
-    const entry=item.file?.entry;
-    if(!entry||entry.type!=="file")return;
-    void fileStore.readBytes(entry.uri).then(bytes=>{
-      const blob=new Blob([new Uint8Array(bytes)],{type:"application/octet-stream"});
-      const url=URL.createObjectURL(blob);
-      const link=document.createElement("a");
-      link.href=url;link.download=entry.name;
-      document.body.append(link);link.click();link.remove();
-      // Release after click navigation has had an opportunity to consume
-      // the object URL; no data is uploaded to the host or another service.
-      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+    const selectedFiles=desktopDownloadableFiles(items,keys);
+    if(!selectedFiles.length)return;
+    void Promise.all(selectedFiles.map(async entry=>({
+      name:entry.name,bytes:await fileStore.readBytes(entry.uri)
+    }))).then(downloads=>{
+      for(const file of downloads){
+        const url=URL.createObjectURL(new Blob([new Uint8Array(file.bytes)],{
+          type:"application/octet-stream"
+        }));
+        try{
+          const link=document.createElement("a");
+          link.href=url;link.download=file.name;
+          document.body.append(link);link.click();link.remove();
+        }finally{
+          // The browser consumes the Blob URL asynchronously after click.
+          window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+        }
+      }
       setError(null);
     }).catch(cause=>setError(cause instanceof Error?
-      cause.message:"Cannot download desktop file"));
+      cause.message:"Cannot download selected Guest Desktop files"));
   };
   const requestEmptyBin=()=>{
     setMenu(null);
@@ -925,6 +935,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const archivePath=contextItem?.file?.targetPath??contextItem?.file?.entry.uri;
   const canExtractGuestZip=Boolean(contextItem?.file&&contextKeys.length===1&&
     archivePath&&sourceCanExtractGuestZip(getParentDirectory(archivePath),archivePath));
+  const downloadableFiles=desktopDownloadableFiles(items,contextKeys);
   const itemActions=contextItem?sourceDesktopItemMenu({
     id:contextItem.id,
     isFile:Boolean(contextItem.file),
@@ -932,6 +943,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     fileType:contextItem.file?.entry.type,
     archiveName:archivePath?getFileName(archivePath):undefined,
     canExtractGuestZip,
+    downloadableCount:downloadableFiles.length,
     programInstalled:Boolean(
       contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
     multiple:contextKeys.length>1,
@@ -963,7 +975,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       case "empty-bin":requestEmptyBin();break;
       case "send-desktop":sendProgramToDesktop(item);break;
       case "extract-here":extractDesktopArchive(item);break;
-      case "download":downloadSourceFile(item);break;
+      case "download":downloadDesktopSelection(contextKeys);break;
       case "cut":prepareDesktopClipboard("cut",contextKeys);break;
       case "copy":prepareDesktopClipboard("copy",contextKeys);break;
       case "delete":requestDesktopDelete(contextKeys);break;
