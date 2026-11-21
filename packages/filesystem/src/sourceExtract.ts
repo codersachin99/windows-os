@@ -39,7 +39,8 @@ function safeZipName(name:string):{parts:string[];directory:boolean}{
   const parts=name.split("/");
   if(directory)parts.pop();
   if(!parts.length || parts.length>SOURCE_GUEST_ZIP_MAX_DEPTH ||
-     parts.some(part=>!part || part==="." || part===".." || /[. ]$/.test(part))){
+     parts.some(part=>!part || part==="." || part===".." || /[. ]$/.test(part) ||
+       ["__proto__","constructor","prototype"].includes(part.toLowerCase()))){
     throw new FileStoreError("EINVAL","Unsafe ZIP member nesting");
   }
   return {parts,directory};
