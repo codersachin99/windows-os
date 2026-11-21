@@ -144,13 +144,18 @@ test("Desktop path-backed ZIP shortcut extracts into its real Documents parent",
   const shortcutPath=DESKTOP+"/Linked Archive - Shortcut.lnk";
   const shortcut=page.locator('[data-test-desktop-file="'+shortcutPath+'"]');
   await expect(shortcut).toBeVisible();
+  // The Computer window can cover a newly created desktop icon; close it
+  // before invoking the *real* shortcut context menu, as a user would.
+  await win.getByRole("button",{name:/^Close /}).click();
   const menu=await desktopMenu(page,shortcutPath);
   await expect(menu.locator('[data-test-desktop-item-action="extract-here"]'))
     .toBeEnabled();
   await menu.locator('[data-test-desktop-item-action="extract-here"]').click();
-  await expect(win.locator('[data-test-explorer-item="Linked Result.txt"]')).toBeVisible();
-  expect(await downloadFile(page,win,"Linked Result.txt"))
+  const reopened=await documents(page);
+  await expect(reopened.locator('[data-test-explorer-item="Linked Result.txt"]')).toBeVisible();
+  expect(await downloadFile(page,reopened,"Linked Result.txt"))
     .toEqual(Buffer.from("Shortcut archive result"));
   await expect(shortcut).toBeVisible();
-  await expect(zip).toBeVisible();
+  await expect(reopened.locator('[data-test-explorer-item="Linked Archive.zip"]'))
+    .toBeVisible();
 });
