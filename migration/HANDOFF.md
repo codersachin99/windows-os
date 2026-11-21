@@ -1,3 +1,15 @@
+## 22 November 2026 — Desktop path-backed shortcut Delete is target-based; restore regression
+
+**Source proof:** frozen `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` `src/modules/system/main.js` `DesktopItemMenu.deleteShortcut()` calls `deleteItems(this.paths)`, with `this.paths=selected.map(this.getShortcut).filter(shortcut=>shortcut.path).map(shortcut=>shortcut.path)`; keyboard `deleteSelectedIcons()` uses the same `getShortcut(key).path` selection. File-backed Desktop .lnk created by Explorer Send to Desktop points to real Guest target in Documents, not the .lnk JSON URI.
+
+**Committed:** `DesktopIcons.tsx` context Delete and keyboard Delete now call `desktopSourceClipboardPaths` to confirm/recycle actual canonical mounted Guest targets; no host operations or shortcut deletion as a side effect. Program-only link with no path skips keyboard deletion and source menu Delete remains visible **disabled** via `sourceDesktopItemMenu.ts`. The existing Guest `trashMany` transaction and confirmation are retained. Linked .lnk stays on Desktop; target enters Bin and may be restored.
+
+**Regression:** new `tests/e2e/source-desktop-shortcut-delete.spec.ts` added to focused desktop/mobile browser gate: real Explorer-created path-backed .lnk → Delete confirmation → original target absent in Documents, desktop .lnk still visible, Recycle Bin contains **actual binary**; Restore → exact original bytes download; program-only .lnk Delete disabled and keyboard Delete cannot trigger confirmation. Unit assertion in `sourceDesktopItemMenu.test.ts`. [Full source, security and acceptance note](DESKTOP-SHORTCUT-DELETE-SOURCE.md).
+
+**CI:** previous exact-head [#44931334630](https://github.com/codersachin99/windows-os/actions/runs/44931334630) SUCCESS on `7af9b85` for clipboard. Compressed shortcut [#44937841704](https://github.com/codersachin99/windows-os/actions/runs/44937841704) was still in focused browser step at `34904c3` when Delete implementation began; **does not** validate Delete work. New exact-head opt-in `[run-ci]` required for TypeScript, all units, pinned inventory/artwork/Contacts, Vite, focused and complete desktop/mobile. Remaining drag-to-Bin source difference should be treated separately. Don't merge/release or claim paired original visual parity without secret and actual screenshots across all 37 themes.
+
+---
+
 ## 22 November 2026 — Desktop shortcut Send to compressed ZIP source parity
 
 **Previous accepted baseline:** [CI #44931334630](https://github.com/codersachin99/windows-os/actions/runs/44931334630) SUCCESS at `7af9b85` for source Desktop Copy/Cut and all earlier ZIP/Download commits (TS, units, pinned source inventory, original artwork/Contacts audits, Vite, focused/full desktop/mobile browser); paired original screenshots remain unverified.
