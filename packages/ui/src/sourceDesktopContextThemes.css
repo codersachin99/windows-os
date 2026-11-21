@@ -262,3 +262,71 @@
 ) button{
   padding-left:10px;padding-right:34px;
 }
+
+/* Pinned theme-win7-scss.js .win7 .winui-menu, shared by original
+ * Win7 (base), all four Aero variants and Basic 1. Explorer already
+ * uses this exact palette; Desktop/taskbar previously retained the
+ * port's non-source blue glass default. Basic 2/3/4 instead use the
+ * separately ported original win7-classic contrast family.
+ *
+ * The source uses the same 2px menu gutter, #f1f1f1 surface, bevel,
+ * #979797 border and #aaddfa hover gradient as Vista. Preserve the
+ * six original theme IDs and all existing menu commands/handlers. */
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+) :is(.windows-desktop__menu,.windows-taskbar__context){
+  background:#f1f1f1;color:#1b3956;
+  border:1px solid #979797;border-radius:0;padding:4px 2px;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5019607843),
+    inset 0 0 0 2px #f5f5f5;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+) :is(.windows-desktop__menu,.windows-taskbar__context)::before{
+  content:"";position:absolute;z-index:0;pointer-events:none;
+  top:2px;bottom:2px;left:27px;width:2px;
+  box-shadow:inset 1px 0 rgba(0,0,0,.1490196078),
+    inset -1px 0 #fff;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+) :is(.windows-desktop__menu,.windows-taskbar__context) button{
+  position:relative;z-index:1;
+  color:inherit;background:transparent;
+  border:1px solid transparent;border-radius:3px;
+  padding-left:34px;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+) :is(.windows-desktop__menu,.windows-taskbar__context)
+button:not(:disabled):is(:hover,:focus-visible){
+  color:#1b3956;border-color:#aaddfa;
+  background:linear-gradient(rgba(255,255,255,.6),
+    rgba(230,236,245,.8) 90%,rgba(255,255,255,.8));
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+):dir(rtl) :is(.windows-desktop__menu,.windows-taskbar__context){
+  box-shadow:-4px 4px 3px -2px rgba(0,0,0,.5019607843),
+    inset 0 0 0 2px #f5f5f5;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+):dir(rtl) :is(.windows-desktop__menu,.windows-taskbar__context)::before{
+  left:auto;right:27px;
+  box-shadow:inset -1px 0 rgba(0,0,0,.1490196078),
+    inset 1px 0 #fff;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+):dir(rtl) :is(.windows-desktop__menu,.windows-taskbar__context) button{
+  padding-left:10px;padding-right:34px;
+}
