@@ -530,7 +530,7 @@ export {
 export type { SourceParsedSearch, SourceSearchMatch, SourceSearchHighlight } from "./sourceTextSearch";
 export { sourceSearchLocations, sourceMountedSearchRoots, sourceComputerSearchLocation } from "./sourceSearchLocations";
 export { encodeSourceSearchPath, decodeSourceSearchPath, isSourceSearchPath,
-  SOURCE_SEARCH_URI_PREFIX } from "./sourceSearchPath";
+  SOURCE_SEARCH_URI_PREFIX, SOURCE_WIN2K_START_SEARCH_PATH } from "./sourceSearchPath";
 export type { SourceSearchPath } from "./sourceSearchPath";
 export { createSourceFindQuery, encodeSourceFindPath, decodeSourceFindPath, sourceFindSearchRequest,
   SOURCE_FIND_PREFIX } from "./findQuery";
