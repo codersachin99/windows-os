@@ -28,6 +28,7 @@ import {
 } from "./sourceDesktopItemMenu";
 import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
   sourceFileIconType,createSourceGuestArchive,sourceCanCompressSelection,
+  extractSourceGuestZip,sourceCanExtractGuestZip,getParentDirectory,getFileName,
   type FileEntry } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
@@ -247,6 +248,33 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       setError(null);
     }).catch(cause => setError(cause instanceof Error ? cause.message :
       "Cannot compress Guest Desktop files"));
+  };
+
+  // Frozen main.js DesktopItemMenu extract-here uses shortcut.path, so a
+  // genuine Guest .lnk can target a ZIP in another Guest folder. A direct
+  // Desktop ZIP uses its own VFS path. The shared Explorer adapter protects
+  // both from host paths, traversal, overwrites and partial writes.
+  const extractDesktopArchive=(item:DesktopItem)=>{
+    setMenu(null);
+    const archivePath=item.file?.targetPath??item.file?.entry.uri;
+    if(!archivePath){
+      setError("Select a Guest ZIP file or a shortcut to one.");
+      return;
+    }
+    const folder=getParentDirectory(archivePath);
+    if(!sourceCanExtractGuestZip(folder,archivePath)){
+      setError("Extract here supports ZIP files inside mounted Guest folders.");
+      return;
+    }
+    void extractSourceGuestZip(fileStore,folder,archivePath).then(created=>{
+      const desktop=sourceFilesystemRuntime.snapshot()?.desktopPath;
+      if(folder===desktop&&created.length){
+        setSelected(["file:"+created[0]]);
+        anchor.current="file:"+created[0];
+      }
+      setError(null);
+    }).catch(cause=>setError(cause instanceof Error?cause.message:
+      "Could not extract the Guest ZIP archive"));
   };
 
   const prepareDesktopClipboard = (mode: "copy" | "cut", keys: readonly string[]) => {
@@ -894,11 +922,16 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const contextPaths=desktopSelectedFilePaths(items,contextKeys);
   const canCompressGuest=Boolean(contextItem?.file&&desktopPath&&
     sourceCanCompressSelection(desktopPath,contextPaths));
+  const archivePath=contextItem?.file?.targetPath??contextItem?.file?.entry.uri;
+  const canExtractGuestZip=Boolean(contextItem?.file&&contextKeys.length===1&&
+    archivePath&&sourceCanExtractGuestZip(getParentDirectory(archivePath),archivePath));
   const itemActions=contextItem?sourceDesktopItemMenu({
     id:contextItem.id,
     isFile:Boolean(contextItem.file),
     fileName:contextItem.file?.entry.name,
     fileType:contextItem.file?.entry.type,
+    archiveName:archivePath?getFileName(archivePath):undefined,
+    canExtractGuestZip,
     programInstalled:Boolean(
       contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
     multiple:contextKeys.length>1,
@@ -929,6 +962,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         setMenu(null);openItem(item);break;
       case "empty-bin":requestEmptyBin();break;
       case "send-desktop":sendProgramToDesktop(item);break;
+      case "extract-here":extractDesktopArchive(item);break;
       case "download":downloadSourceFile(item);break;
       case "cut":prepareDesktopClipboard("cut",contextKeys);break;
       case "copy":prepareDesktopClipboard("copy",contextKeys);break;
