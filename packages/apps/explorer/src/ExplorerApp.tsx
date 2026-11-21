@@ -4,7 +4,8 @@ import {
   searchFiles, SourceSearchIndex, decodeSourceFindPath, decodeSourceSearchPath, sourceFindSearchRequest,
   sourceMountedSearchRoots,
   parseSourceShortcut, parseSourcePathShortcut,
-  createSourcePathDesktopShortcuts, sourcePrograms, sourceIsShortcutEntry,
+  createSourcePathDesktopShortcuts, createSourceGuestArchive, sourceCanCompressSelection,
+  sourcePrograms, sourceIsShortcutEntry,
   sourceShortcutIconValue,
   readSourceShortcutText,
   importDroppedFiles, SHELL_DRAG_TYPE,
@@ -697,12 +698,24 @@ export function ExplorerApp({
   const canSendToDesktop=Boolean(!isBin&&sourceDesktopPath&&contextSelection.length&&
     contextSelection.every(item=>item.uri.startsWith(SOURCE_COMPUTER_ROOT+"/")&&
       !item.originalPath&&!sourceIsShortcutEntry(item)));
-  const sendToItems=sourceExplorerSendToMenu(canSendToDesktop);
+  const canCompressGuest=Boolean(!isBin&&contextSelection.length&&
+    contextSelection.every(item=>!item.originalPath)&&
+    sourceCanCompressSelection(state.path,contextSelection.map(item=>item.uri)));
+  const sendToItems=sourceExplorerSendToMenu(canSendToDesktop,canCompressGuest);
   const sendSelectionToDesktop=()=>{
     if(!sourceDesktopPath)return;
     const paths=contextSelection.map(entry=>entry.uri);
     void execute(async()=>{
       await createSourcePathDesktopShortcuts(fileStore,sourceDesktopPath,paths);
+    });
+  };
+  const sendSelectionToCompressedFolder=()=>{
+    if(!canCompressGuest)return;
+    const paths=contextSelection.map(entry=>entry.uri);
+    const destinationFolder=state.path;
+    void execute(async()=>{
+      const uri=await createSourceGuestArchive(fileStore,destinationFolder,paths);
+      session.select(uri);
     });
   };
   const runSourceItemAction=(action:SourceExplorerItemAction)=>{
@@ -1131,8 +1144,10 @@ export function ExplorerApp({
             disabled={action.disabled}
             title={action.disabled?"Original action requires unavailable source service":undefined}
             onClick={()=>{
-              if(!action.disabled&&action.id==="desktop")
-                contextAction(sendSelectionToDesktop);
+              if(action.disabled)return;
+              if(action.id==="desktop")contextAction(sendSelectionToDesktop);
+              else if(action.id==="compress")
+                contextAction(sendSelectionToCompressedFolder);
             }}>
             {action.label}
           </button>)}
