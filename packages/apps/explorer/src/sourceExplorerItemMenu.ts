@@ -77,7 +77,7 @@ export function sourceExplorerItemMenu(
   };
   if(!multiple)add("open","Open");
   if(!multiple&&!inArchive&&isArchiveFile)
-    add("extract-here","Extract here",!(input.canExtractGuestZip&&/\.zip$/i.test(first.name)));
+    add("extract-here","Extract here",!(input.canExtractGuestZip&&/\.zip$/i.test(first?.name??"")));
   if(!inArchive)add("send-to","Send to ▸");
   if(downloadable)add("download","Download");
   add("cut","Cut",inArchive);
