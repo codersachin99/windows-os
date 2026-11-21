@@ -24,6 +24,8 @@ export interface SourceDesktopItemMenuInput{
   canExtractGuestZip?:boolean;
   /** Number of eligible selected path-backed files, not just the clicked icon. */
   downloadableCount?:number;
+  /** Original DesktopItemMenu hides Cut/Copy without any selected shortcut.path. */
+  hasClipboardSourcePaths?:boolean;
   trashCount?:number;
 }
 export interface SourceDesktopItemMenuEntry{
@@ -62,8 +64,10 @@ export function sourceDesktopItemMenu(
         !(input.canExtractGuestZip&&/\.zip$/i.test(archiveName)));
     add("send-to","Send to ▸",!input.canCompressGuest); // original has compressed ZIP child
     if(canDownload)add("download","Download");
-    add("cut","Cut");
-    add("copy","Copy");
+    if(input.hasClipboardSourcePaths!==false){
+      add("cut","Cut");
+      add("copy","Copy");
+    }
     add("delete","Delete");
     if(!input.multiple)add("rename","Rename");
   }
