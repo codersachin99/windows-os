@@ -1,3 +1,20 @@
+## 21 November 2026 — fix exact-head CI Rollup Linux native optional package install
+
+**Frozen source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1, `main` untouched. No change to reference source.
+
+**Observed exact-head failure:** [CI #44878279959](https://github.com/codersachin99/windows-os/actions/runs/44878279959) at `0bb8e5e` **FAILED** during `npm test` after TypeScript **PASSED**. Runner Node 22.23.5/npm 10.9.9, `npm install` reported 119 packages added, then Vitest's transitive Rollup native loader aborted: **`Cannot find module @rollup/rollup-linux-x64-gnu`** (known npm optional-dependency omission). Source/theme audits, Vite build, focused RTL/taskbar browser tests and full browser tests were **SKIPPED** due to this installation issue. Do **not** interpret as a failed RTL or taskbar assertion or disable suites to force green.
+
+**Minimal CI-only changes:**
+- [`11e3937`](https://github.com/codersachin99/windows-os/commit/11e3937484ba2a967a3b3e716b9f4f7a09441e80): `.github/workflows/react-checks.yml` installs `npm install --include=optional`; checks real native `@rollup/rollup-linux-x64-gnu`. Only if missing, reads the actually installed Rollup package version, explicitly installs exact matching native package with `--no-save --no-package-lock`, and asserts load success. Same guarded setup in opt-in visual-capture job. No lockfile or package/version-range change, no source or app change, `[run-ci]` trigger policy unchanged.
+- [`a9ff01c`](https://github.com/codersachin99/windows-os/commit/a9ff01cd0c45f061823ce6b70850a7c25b684286): `migration/CI-ROLLUP-OPTIONAL-NATIVE.md` exact failure, fix and acceptance.
+
+**Other running work:** previous taskbar keyboard [CI #44877278653](https://github.com/codersachin99/windows-os/actions/runs/44877278653) at `0b5fd0f` had progressed to full desktop/mobile browser after **success** on targeted source-shell browser test, but its overall result was not yet confirmed at last poll. Keep this previous SHA's result distinct from the failed new RTL SHA and the forthcoming repaired run.
+
+**Exact-head recheck:** this checkpoint commit requests one `[run-ci]` to verify repaired npm setup + TypeScript, full units, immutable source and artwork audits, production Vite build, **taskbar keyboard** and **Win7/Vista RTL Computer/Bin** focused Chromium cases and the full desktop/mobile E2E suite. New code is NOT verified until the whole exact-head job is green. Diagnose true assertion failures in CI logs and fix source-backed causes. Paired original-React pixel comparison still requires read-only token `LEGACY_SOURCE_READ_TOKEN`; complete migration not reached. Do not merge PR, touch original or `main`, or publish release.
+
+---
+
 ## 21 November 2026 — original Win7/Vista RTL Explorer & Bin context mirror
 
 **Immutable source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
