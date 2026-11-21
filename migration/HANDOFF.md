@@ -1,3 +1,26 @@
+## 21 November 2026 — original Win7/Vista RTL Explorer & Bin context mirror
+
+**Immutable source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft [PR #1](https://github.com/codersachin99/windows-os/pull/1), no changes to original or target main.
+
+**Earlier verified CI:** [Win7/Aero/Basic1 #44870350897](https://github.com/codersachin99/windows-os/actions/runs/44870350897) on `46883af` **SUCCESS** with TypeScript, unit, original source/theme/Contacts audit, Vite production build and focused/full desktop/mobile Playwright; source-paired screenshot visual job **skipped**.
+**Prior taskbar keyboard CI:** [#44877278653](https://github.com/codersachin99/windows-os/actions/runs/44877278653) at `0b5fd0f` was **IN PROGRESS (source-shell targeted browser gate)** at last poll. This previous CI does not cover current RTL changes. Inspect its final status, and fix any taskbar focus regressions without weakening tests.
+
+**Source comparison:** frozen `src/modules/themes/theme-win7-scss.js` and `theme-winvista-scss.js` have `[dir=rtl] .winui-menu` with negative horizontal drop shadow, opposite/right 2px icon gutter + bevel, and right-aligned command padding. React Explorer's `sourceExplorerContextTheme.css` mirrored Win8 and Basic2/3/4 but **not** Win7/Aero1–4/Basic1/Vista. Source Desktop/Start menu had already ported the equivalent RTL geometry.
+
+**New branch commits:**
+- [`8d0f8d6`](https://github.com/codersachin99/windows-os/commit/8d0f8d64dd7eab07aeaba51fc6a54558d93c7d4): original RTL-only -4px shadow, 2px gutter at `right:27px` with opposite inset shadow, 34px right command padding, right alignment for source Win7/Vista/Aero/Basic1. Applies to Computer and Bin roots plus independently rendered View/New/Send-To submenus. LTR/other themes and functionality untouched.
+- [`0ffcb88`](https://github.com/codersachin99/windows-os/commit/0ffcb88a5db2a4eb63a9c3ae07b832740b21e839) + [`10e62d7`](https://github.com/codersachin99/windows-os/commit/10e62d7d469d1a2da613f37ab9631d2d99e1e62d): new `tests/e2e/source-win7-vista-explorer-rtl.spec.ts` 9 real browser tests × desktop/mobile, for Win7/Aero2/Basic1/Vista Computer and Bin menus and detached View child; true RTL root, computed paint/gutter/shadow/padding/alignment, live View actions, Escape focus return, and RTL→LTR reversibility. CSSOM shadow regex accommodates serialization order.
+- [`7809255`](https://github.com/codersachin99/windows-os/commit/7809255f3343688ce529702db8189fb44d8922aa): targeted opt-in Actions suite includes new RTL test.
+- [`78cebc5`](https://github.com/codersachin99/windows-os/commit/78cebc5f8014e300bb1203bc7539611fde40eb78): `migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md` original source values, limited scope and acceptance.
+- [`fcbc504`](https://github.com/codersachin99/windows-os/commit/fcbc50431b0448fefe9de7a883c795bd6e6cec13): tracker entries for `theme-win7-scss.js`, `theme-winvista-scss.js`, `computer.js`, `bin.js` record bounded evidence, remain **in-progress**.
+
+**Verification request:** commit this checkpoint with `[run-ci]` to launch fresh exact-head TypeScript/unit/source audits, Vite, focused and full Chromium desktop/mobile. New RTL test and taskbar keyboard slice are **NOT accepted** until exact-head CI success. Run/failure artifacts should be inspected; never skip or remove failing tests for a green badge. Original paired screenshot visual acceptance still awaits `LEGACY_SOURCE_READ_TOKEN`, and full 37 source themes/apps remain incomplete. Keep PR draft, `main` intact, no release.
+
+**Next:** inspect previous taskbar run and new RTL run; fix concrete failures; then continue source-backed Desktop, Start, Computer, Bin shell parity and source theme variants without inventing design.
+
+---
+
 ## 21 November 2026 — source taskbar context keyboard entry and exact focus restoration
 
 **Frozen original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
