@@ -68,21 +68,35 @@ for(const theme of themes){
     await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
   });
 
-  test(theme.id+" RTL taskbar source classic popup keeps action colors and Task Manager",async({page})=>{
+  test(theme.id+" LTR/RTL classic taskbar disabled emboss and working Task Manager",async({page})=>{
     await guest(page,theme.id);
-    await setDirection(page,"rtl");
     // Classic layouts keep a real running-items background lane.
-    await page.locator(".windows-taskbar__running").click({
-      button:"right",position:{x:15,y:5}
-    });
-    const menu=page.locator('[data-test-taskbar-context="background"]');
-    await sourceClassicPaint(menu,theme,"rtl");
-    const manager=menu.locator('[data-test-taskbar-context-action="taskmgr"]');
-    await manager.hover();
-    await expect(manager).toHaveCSS("background-color",theme.hover);
-    await expect(manager).toHaveCSS("color","rgb(255, 255, 255)");
-    await manager.click();
-    await expect(menu).toHaveCount(0);
+    const background=page.locator(".windows-taskbar__running");
+    for(const direction of ["ltr","rtl"] as const){
+      await setDirection(page,direction);
+      await background.click({button:"right",position:{x:15,y:5}});
+      const menu=page.locator('[data-test-taskbar-context="background"]');
+      await sourceClassicPaint(menu,theme,direction);
+      // Source .win7-classic [aria-disabled] is a full-opacity
+      // #7b7b7b embossed command, not the fallback's .52 fade.
+      const disabled=menu.locator('[data-test-taskbar-context-action="toolbar"]');
+      await expect(disabled).toBeDisabled();
+      await expect(disabled).toHaveCSS("opacity","1");
+      await expect(disabled).toHaveCSS("color","rgb(123, 123, 123)");
+      await expect(disabled).toHaveCSS("text-shadow",direction==="rtl"
+        ? /(?:^|\s)-1px 1px/ : /(?:^|\s)1px 1px/);
+      if(direction==="ltr"){
+        await page.keyboard.press("Escape");
+        await expect(menu).toHaveCount(0);
+      }else{
+        const manager=menu.locator('[data-test-taskbar-context-action="taskmgr"]');
+        await manager.hover();
+        await expect(manager).toHaveCSS("background-color",theme.hover);
+        await expect(manager).toHaveCSS("color","rgb(255, 255, 255)");
+        await manager.click();
+        await expect(menu).toHaveCount(0);
+      }
+    }
     await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
   });
 
