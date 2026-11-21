@@ -1,3 +1,14 @@
+## 21 November 2026 — Desktop Extract here browser regressions diagnosed
+
+CI #44908838690 (caf815e) and combined CI #44909579800 (bc45e6e) both failed only four focused Chromium tests (two scenarios x desktop/mobile). The newer run: 792 passed, 2 skipped, 4 failed; TypeScript, units, source inventory, artwork, Contacts audits, Vite all SUCCESS. Both failure cases reported Extract here menu item NOT FOUND after a multi-file upload, not an extractor failure.
+
+Root cause: DesktopIcons.importDesktopUploads selects all newly imported real files, and DesktopIcons.contextMenu preserves the full selection when right-clicking one already-selected member. Frozen legacy main.js DesktopItemMenu isMultiple intentionally HIDE Extract here for such a selection. React behaves faithfully; the single-item browser tests wrongly assumed a right-click deselected the other files.
+
+Fix commit 4aa5439ddd35a6a6b9b8ed378832d93eff23d115: source-desktop-extract-here.spec.ts shared helper now left-clicks a single icon before single-item right-click. Explicit multi-selection predicate check passes preserveSelection=true and must still hide Extract here. Archive bytes, overwrite safety, unsupported RAR and Guest .lnk assertions remain; no product code, source logic or test coverage was removed.
+
+Next: request deliberate exact-head [run-ci] acceptance of focused/full Chromium and contracts. Keep draft PR #1, source frozen, main untouched, no release. Paired original-vs-React screenshot comparison still blocked by missing LEGACY_SOURCE_READ_TOKEN.
+
+---
 ## 21 November 2026 — Desktop Download from original multi-selection, queued exact-head acceptance
 
 **Reference:** frozen `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; work `feat/0001-faithful-react-foundation`, draft [PR #1](https://github.com/codersachin99/windows-os/pull/1). No change to source, target main or releases.
