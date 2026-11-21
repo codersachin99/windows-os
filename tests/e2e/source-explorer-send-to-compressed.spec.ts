@@ -71,6 +71,10 @@ test("original multi-item Send to ZIP is non-overwriting and packs both Guest it
   const zipped=await downloadZip(page,win,"Archive.zip");
   expect(strFromU8(zipped["Pack A.txt"])).toBe("Hello A");
   expect(strFromU8(zipped["Pack B.txt"])).toBe("Hello B");
+  // Creating and downloading Archive.zip legitimately changes Explorer's
+  // selected row; reselect the two original items for the second ZIP.
+  await first.click();
+  await second.click({modifiers:["Control"]});
   await compress(win,first);
   const again=await downloadZip(page,win,"Archive (2).zip");
   expect(strFromU8(again["Pack A.txt"])).toBe("Hello A");
