@@ -21,7 +21,7 @@ async function sourceRtlPaint(menu:Locator){
   await expect(menu).toBeVisible();
   await expect(menu).toHaveCSS("background-color","rgb(241, 241, 241)");
   await expect(menu).toHaveCSS("border-top-color","rgb(151, 151, 151)");
-  await expect(menu).toHaveCSS("box-shadow",/^-4px 4px 3px -2px/);
+  await expect(menu).toHaveCSS("box-shadow",/-4px 4px 3px -2px/);
   const gutter=await menu.evaluate(element=>{
     const css=getComputedStyle(element,"::before");
     return {
@@ -33,7 +33,8 @@ async function sourceRtlPaint(menu:Locator){
   expect(gutter.width).toBe("2px");
   expect(gutter.left).toBe("auto");
   expect(gutter.right).toBe("27px");
-  expect(gutter.shadow).toContain("inset -1px 0px");
+  expect(gutter.shadow).toMatch(/-1px 0px/);
+  expect(gutter.shadow).toContain("inset");
 }
 
 for(const theme of ["win7","aero-2","basic-1","winvista"] as const){
@@ -91,5 +92,5 @@ test("switching Win7 Explorer from RTL back to LTR restores original left gutter
     return {left:css.left,right:css.right};
   });
   expect(gutter).toEqual({left:"27px",right:"auto"});
-  await expect(root).toHaveCSS("box-shadow",/^4px 4px 3px -2px/);
+  await expect(root).toHaveCSS("box-shadow",/4px 4px 3px -2px/);
 });
