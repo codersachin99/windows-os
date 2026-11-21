@@ -38,7 +38,9 @@ export async function createSourceGuestArchive(
   const folderItem=await store.stat(folder);
   if(folderItem?.type!=="directory")
     throw new FileStoreError("ENOTDIR","Archive destination is not a Guest folder");
-  const entries:Zippable={};
+  // Guest filenames may legally be JS object keys such as "__proto__".
+  // Keep archive member names in a null-prototype table.
+  const entries=Object.create(null) as Zippable;
   let count=0,totalBytes=0;
   const visited=new Set<string>();
   async function collect(path:string,relative:string,depth:number):Promise<void>{
