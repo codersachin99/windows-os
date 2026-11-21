@@ -69,7 +69,7 @@ export function sourceDesktopItemMenu(
       add("cut","Cut");
       add("copy","Copy");
     }
-    add("delete","Delete");
+    add("delete","Delete",input.hasClipboardSourcePaths===false);
     if(!input.multiple)add("rename","Rename");
   }
   if(!input.multiple)add("properties","Properties",true);
