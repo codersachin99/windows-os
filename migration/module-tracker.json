@@ -140,9 +140,13 @@
         "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
         "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md",
         "tests/e2e/source-classic-explorer-disabled-rtl.spec.ts",
-        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md",
+        "packages/filesystem/src/sourceArchive.ts",
+        "packages/filesystem/src/sourceArchive.test.ts",
+        "tests/e2e/source-explorer-send-to-compressed.spec.ts",
+        "migration/EXPLORER-SEND-TO-ZIP-SOURCE.md"
       ],
-      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending; Classic Basic2–4 Computer/Bin disabled text directional emboss and nested Send To source affordance tested; exact-head CI and source paired screenshot pending"
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending; Classic Basic2–4 Computer/Bin disabled text directional emboss and nested Send To source affordance tested; exact-head CI and source paired screenshot pending; Frozen ExplorerItemMenu Send to compressed-folder now invokes bounded Guest-only atomic ZIP engine, with unit and desktop/mobile browser byte and collision tests; CI and source-paired parity pending"
     },
     {
       "source": "src/modules/apps/cpanel.js",
@@ -1960,9 +1964,13 @@
         "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md",
         "packages/ui/src/sourceWin7ClassicContrast.css",
         "tests/e2e/source-win7-classic-rtl-context-themes.spec.ts",
-        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md",
+        "packages/filesystem/src/sourceArchive.ts",
+        "packages/filesystem/src/sourceArchive.test.ts",
+        "tests/e2e/source-explorer-send-to-compressed.spec.ts",
+        "migration/EXPLORER-SEND-TO-ZIP-SOURCE.md"
       ],
-      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending"
+      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending; Frozen ExplorerItemMenu Send to compressed-folder now invokes bounded Guest-only atomic ZIP engine, with unit and desktop/mobile browser byte and collision tests; CI and source-paired parity pending"
     },
     {
       "source": "src/modules/system/mediacenter.js",
