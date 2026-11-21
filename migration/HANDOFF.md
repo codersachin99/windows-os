@@ -1,3 +1,29 @@
+## 21 November 2026 — actual frozen Explorer Send to Compressed (zipped) folder via Guest ZIP
+
+**Frozen source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. **Target:** `feat/0001-faithful-react-foundation`, draft PR #1. Original and target main untouched; no merge/release.
+
+**Prior verified exact-head CI:** [Classic RTL #44884377212](https://github.com/codersachin99/windows-os/actions/runs/44884377212) `e51dd3f` and [Classic disabled #44884540994](https://github.com/codersachin99/windows-os/actions/runs/44884540994) `92fbce3` **SUCCESS** TypeScript, units, source/artwork/Contacts audit, build, focused and full desktop/mobile Chromium, visual paired job skipped. Newer [Classic Computer/Bin #44887093277](https://github.com/codersachin99/windows-os/actions/runs/44887093277) at `e553cbb` had completed focused source browser checks and was running full browser at last check. None covers the ZIP commits below.
+
+**Source functionality:** pinned `src/modules/system/main.js` ExplorerItemMenu `send-to` has actual `compressed-folder` **click handler `this.compress(this.paths)`**, followed by Desktop shortcut; target always disabled first child even for normal Guest Documents files. Corrected a real function parity gap rather than cosmetic styling.
+
+**New code commits:**
+- [`7fa7988`](https://github.com/codersachin99/windows-os/commit/7fa7988407ffbf08cecf257f658707c4e3a0a130) + [`32039a0`](https://github.com/codersachin99/windows-os/commit/32039a012a91be396126a21b2204086413859427): `packages/filesystem/src/sourceArchive.ts` source ZIP adapter using already-installed `fflate.zipSync`. Real Guest `VirtualFileStore.readBytes`, recursive files/folders (empty directories), stores archive in same mounted Guest parent via **create-only atomic `createFilesAtomic`** with case-insensitive collision-safe `Archive (2).zip`/file-stem naming, never overwrite, null-prototype member table for `__proto__` filenames. Rejects foreign/unmounted paths, deleted Bin entries, missing sources, traversal and selection outside same Guest folder. Explicit safe limits 32 MiB input, 2048 entries, depth 64; not claimed as original app limits.
+- [`bf6a7f9`](https://github.com/codersachin99/windows-os/commit/bf6a7f99d467748807fd9f61870557acf52524d9): export bounded source archive API from filesystem engine.
+- [`ec4921c`](https://github.com/codersachin99/windows-os/commit/ec4921cf173242def57c6a385f630bac6eee2baf): `sourceExplorerSendToMenu(canCreateDesktop,canCompressGuest=false)` retains frozen ordering, independent correct disabled predicates, unbacked root fallback disabled.
+- [`d8ce0ae`](https://github.com/codersachin99/windows-os/commit/d8ce0ae3308a62f3c8f7b11fab5a19b0139e2a55): `ExplorerApp.tsx` safely enables real ZIP command for mounted Guest paths, performs compression via shared error-handling and selects resulting ZIP. Leaves extracted archive service and disabled Properties untouched.
+- [`930de65`](https://github.com/codersachin99/windows-os/commit/930de65d785f14e80757a6c460f8e2546a6ba590): `sourceArchive.test.ts` **6 unit cases**: UTF-8/binary, nested/empty directories, multi-select and non-overwrite, invalid root/traversal, missing source and no partial ZIP.
+- [`34720d8`](https://github.com/codersachin99/windows-os/commit/34720d8c5028a1295e3aa8f04a512f525701eac0) + [`89192cd`](https://github.com/codersachin99/windows-os/commit/89192cd5d7075231f9a8debab5c02a21df75aa41) + [`fb6c165`](https://github.com/codersachin99/windows-os/commit/fb6c1658bf3e973398a9dcc303f0ec0f6a1cd771) + [`77da174`](https://github.com/codersachin99/windows-os/commit/77da1746908c9fcfeff8d2b129590270a5c90094) + [`f8eac34`](https://github.com/codersachin99/windows-os/commit/f8eac34e3c2084c1b02b7b6c62c44319ce38f35e): update menu availability/unit, real Explorer item, keyboard focused first enabled child, Classic high contrast tests; virtual Computer root remains disabled.
+- [`2ca24b7`](https://github.com/codersachin99/windows-os/commit/2ca24b728aba7b49b1bfe620c43d1babcbd5c001) + [`b15f6d4`](https://github.com/codersachin99/windows-os/commit/b15f6d46aec9f0580c1e2fc63f9f767bc9727eda): **2 browser cases × desktop/mobile** uploading Guest binary TXT, clicking real Send to ZIP, downloading actual .zip with existing Download command and inspecting unzipped bytes; multi-select/collision repeat, preserves both archives.
+- [`128a474`](https://github.com/codersachin99/windows-os/commit/128a474f6ef9bdba376a026595b86e4a8dcaf136): focused opt-in Playwright CI includes ZIP.
+- [`df4cea7`](https://github.com/codersachin99/windows-os/commit/df4cea784fb89f11f6436cbfacb5df8def5c0efd): `migration/EXPLORER-SEND-TO-ZIP-SOURCE.md` exact source hook, Guest-only behavior, explicit limits/deltas.
+- [`ab1d87c`](https://github.com/codersachin99/windows-os/commit/ab1d87c2233788b4f5e9cb80c4443225d24c8352): source main/computer tracker stays **in-progress**, not falsely complete.
+
+**Required next action:** this checkpoint commit requests **one exact-head opt-in `[run-ci]`**. Verify TS (including `Zippable` type), all units incl ZIP, original source/artwork/Contacts audit, build, focused Playwright (ZIP, changed menu focus, Classic disabled) **and full desktop/mobile browser**. Diagnose all genuine CI failures; do not skip or remove checks. No local test execution claimed. Visual source-vs-React paired screenshots still skipped pending private `LEGACY_SOURCE_READ_TOKEN`. Original React source screenshot/functional parity and remaining 37 theme matrix not complete. Keep draft PR, original and main untouched.
+
+**Next:** after ZIP CI, continue highest-priority original themes/context menu/Desktop/Start/Computer/Bin safe backing functionality; close outstanding source screenshot gap before merge or release.
+
+---
+
 ## 21 November 2026 — source Classic Basic2/3/4 Computer and Bin disabled RTL menu emboss
 
 **Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
