@@ -1,3 +1,17 @@
+## 21 November 2026 — Desktop Download from original multi-selection, queued exact-head acceptance
+
+**Reference:** frozen `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`; work `feat/0001-faithful-react-foundation`, draft [PR #1](https://github.com/codersachin99/windows-os/pull/1). No change to source, target main or releases.
+
+**Specific source bug:** pinned `main.js` `DesktopItemMenu.downloadablePaths()` filters *all* selected real shortcut paths by extension excluding `.lnk`; Download executes `this.download(this.downloadablePaths)`. React's old `downloadSourceFile(item)` only downloaded the clicked Desktop item, and its source menu ignored selected eligible files when clicked item was a `.lnk`.
+
+**New source-backed implementation:** `packages/ui/src/desktopFileActions.ts` extracts unique, actual selected Guest files excluding directory/system icons and `.lnk`; `sourceDesktopItemMenu.ts` accepts `downloadableCount` with default behavior retained for older callers; `DesktopIcons.tsx` reads all eligible Guest binary bytes, then triggers the browser downloads without touching host files. New `desktopFileActions.test.ts`, `sourceDesktopItemMenu.test.ts` and desktop/mobile `source-desktop-multi-download.spec.ts` verify selection, both real byte downloads, and a clicked `.lnk` with an eligible selected TXT. Focused opt-in workflow includes the new spec. Source proof: [DESKTOP-MULTI-DOWNLOAD-SOURCE.md](DESKTOP-MULTI-DOWNLOAD-SOURCE.md).
+
+**Important boundary:** frozen `main.js` Desktop Properties `launchSetting(this.type)` resolves to the Capacitor `Launcher.launchMiscellaneous({target:type})` host action, **not** the internal System Properties React app; leave disabled pending a permissioned native adapter, do not invent parity.
+
+**Prior acceptance:** Explorer ZIP extraction [CI #44905733445](https://github.com/codersachin99/windows-os/actions/runs/44905733445) SUCCESS on `d143ba3`. Desktop Extract here [CI #44908838690](https://github.com/codersachin99/windows-os/actions/runs/44908838690) at `caf815e` still had Source shell targeted browser regressions active when observed; its exact snapshot **predates** the `.lnk` test correction and all new multi-Download commits. New combined exact-head opt-in `[run-ci]` is required for TypeScript, all unit/source/artwork/Contacts audits, Vite, focused and full desktop/mobile Playwright. Do not claim either newer code slice verified before its own success. Original paired screenshot job still cannot prove 37-theme parity without private read token. Diagnose any failure without disabling or deleting tests.
+
+---
+
 ## 21 November 2026 — real Desktop Extract here ZIP + source shortcut parity (pending CI)
 
 **Accepted prior exact-head:** [CI #44905733445](https://github.com/codersachin99/windows-os/actions/runs/44905733445) at `d143ba3` completed SUCCESS for Explorer ZIP extraction: TypeScript, all unit/source/artwork/Contacts checks, Vite and full targeted + desktop/mobile Playwright. Original-paired visual capture job skipped. The previous failed TS2345 run is historical and was corrected without weakening tests.
