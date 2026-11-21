@@ -279,6 +279,67 @@ export class VirtualFileStore {
   }
 
   /**
+   * Create a complete extracted Guest directory tree in one persisted snapshot.
+   * Every member must be a new canonical VFS path. An archive containing a
+   * collision, missing parent or file/directory conflict cannot partially
+   * create folders or overwrite existing Guest data.
+   */
+  async createTreeAtomic(
+    members: readonly (
+      | { path: string; type: "directory" }
+      | { path: string; type: "file"; content: Uint8Array | string }
+    )[]
+  ): Promise<FileEntry[]> {
+    if (!members.length) return [];
+    const next = new Map(this.entries);
+    const names = new Set([...next.keys()].map(path => path.toLowerCase()));
+    const timestamp = Date.now();
+    // Parents must be staged before children, regardless of ZIP member order.
+    const ordered = [...members].sort((a, b) =>
+      a.path.split("/").length - b.path.split("/").length ||
+      (a.type === "directory" ? 0 : 1) - (b.type === "directory" ? 0 : 1)
+    );
+    const staged: StoredEntry[] = [];
+    for (const member of ordered) {
+      const uri = normalizeFileUri(member.path);
+      if (uri !== member.path || uri === "/") {
+        throw new FileStoreError("EINVAL", "Invalid extracted Guest path");
+      }
+      const key = uri.toLowerCase();
+      if (names.has(key)) {
+        throw new FileStoreError("EEXIST", "Extracted path already exists: " + uri);
+      }
+      if (next.get(getParentDirectory(uri))?.type !== "directory") {
+        throw new FileStoreError("ENOTDIR", "Missing extracted parent: " + uri);
+      }
+      if (member.type !== "directory" && member.type !== "file") {
+        throw new FileStoreError("EINVAL", "Invalid extracted member type");
+      }
+      if (member.type === "file" &&
+          typeof member.content !== "string" &&
+          !(member.content instanceof Uint8Array)) {
+        throw new FileStoreError("EINVAL", "Invalid extracted file contents");
+      }
+      const item: StoredEntry = {
+        uri, type: member.type, mtime: timestamp,
+        ...(member.type === "file"
+          ? typeof member.content === "string"
+            ? { content: member.content }
+            : { bytes: encodeBytes(member.content) }
+          : {})
+      };
+      names.add(key);
+      next.set(uri, item);
+      staged.push(item);
+    }
+    this.commit(next, {type: "created", path: staged[0].uri});
+    for (const member of staged.slice(1)) {
+      this.notify({type: "created", path: member.uri});
+    }
+    return staged.map(item => this.entry(item));
+  }
+
+  /**
    * Source FileCreate semantics: create an empty/new text-backed file without
    * replacing a name that already exists. Unlike write(), a race with another
    * creator is an EEXIST error, never a silent overwrite.
