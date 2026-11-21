@@ -68,3 +68,32 @@ RTL test failure must be diagnosed/fixed; do not remove tests, invent
 source behavior, or claim complete theme or shell parity. Screenshot
 pairing to the frozen private source still requires approved
 `LEGACY_SOURCE_READ_TOKEN`. Keep PR draft, no merge or release.
+
+## Follow-up: source Classic disabled popup command paint
+
+The same frozen `theme-win7-classic-scss.js` immediately after the
+`.winui-menu` hover rules also styles
+`[role=menuitem][aria-disabled]` with **opacity:1** and text
+`var(--text-color--disabled,#7b7b7b)`. Its disabled command/button
+emboss reverses horizontally:
+`[dir=ltr] text-shadow:1px 1px var(--border-color--contrast,#fff)`;
+`[dir=rtl] text-shadow:-1px 1px var(--border-color--contrast,#fff)`.
+
+The React taskbar context menu already has four genuinely disabled
+source actions (Toolbars/Cascade/Stack/Side), but generic
+`windows7.css` uses `button:disabled { opacity:.52 }` and no
+directional disabled text-shadow. That washes out source Classic
+contrast themes. `sourceWin7ClassicContrast.css` now restores
+source `#7b7b7b` disabled text, full opacity and direction-aware
+emboss for **only** Basic2/3/4 Desktop/taskbar popup buttons, mapping
+the original Vue `aria-disabled` menuitem to React native
+`button:disabled`. `source-win7-classic-rtl-context-themes.spec.ts`
+now checks the live disabled `toolbar` row under **both** LTR and
+RTL for each of the three palettes (including its disabled state,
+computed color, full opacity and exact 1px embossed horizontal offset).
+The enabled Task Manager still launches in RTL. No action is falsely
+enabled, and high-contrast source palettes remain independent.
+
+These follow-up changes are newer than the initial Basic Classic
+`[run-ci]` checkpoint. A **new exact-head CI** after this follow-up
+must verify both the root menu beveled paint and disabled text.
