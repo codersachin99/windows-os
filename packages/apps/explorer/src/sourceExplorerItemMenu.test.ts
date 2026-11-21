@@ -24,6 +24,10 @@ describe("pinned main.js ExplorerItemMenu, ordinary Computer files",()=>{
     expect(sourceExplorerSendToMenu(false).every(item=>item.disabled)).toBe(true);
     expect(sourceExplorerSendToMenu(true).map(item=>[item.id,item.disabled]))
       .toEqual([["compress",true],["desktop",false]]);
+    expect(sourceExplorerSendToMenu(true,true).map(item=>[item.id,item.disabled]))
+      .toEqual([["compress",false],["desktop",false]]);
+    expect(sourceExplorerSendToMenu(false,true).map(item=>[item.id,item.disabled]))
+      .toEqual([["compress",false],["desktop",true]]);
   });
   it("does not download a directory or shortcut binary",()=>{
     expect(sourceExplorerItemMenu({
