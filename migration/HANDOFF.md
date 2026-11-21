@@ -1,3 +1,25 @@
+## 21 November 2026 — original Basic2–4 Win7 Classic RTL context bevel
+
+**Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target branch:** `feat/0001-faithful-react-foundation`, draft PR #1. Do not touch frozen original or target `main`, do not merge/release before full source parity.
+
+**Last verified CI:** [#44880039033](https://github.com/codersachin99/windows-os/actions/runs/44880039033) at `5bd0109` **SUCCESS**: TypeScript, unit, immutable source/theme/Contacts audits, Vite production build, focused source-shell and full desktop/mobile Playwright browser regressions. Paired source-vs-target visual capture **skipped**.
+
+**New focused source discrepancy:** pinned `src/modules/themes/theme-win7-classic-scss.js` `[dir=rtl] .win7-classic .winui-menu` mirrors all three inset shadow offsets compared to `[dir=ltr]`: `inset 1px -1px var(--border-color)`, `inset -1px 1px var(--border-color--contrast)`, `inset 2px -2px var(--text-color--disabled)`. This belongs to `basic-2` Classic, `basic-3` High Contrast Black, `basic-4` High Contrast White (not Aero Basic1). React Computer/Bin already ported that CSS in RTL; real Classic Desktop/taskbar context panels had original LTR bevel even in RTL.
+
+**Actual branch commits:**
+- [`f2cefce`](https://github.com/codersachin99/windows-os/commit/f2cefced6c25b4413b8c53bd7f6e9c3db7f8bb0f): `packages/ui/src/sourceWin7ClassicContrast.css` adds exact RTL-only mirrored classic 3D bevel on Desktop and taskbar context popup for three named source themes. Leaves LTR rules, real action handlers and contrast palettes intact.
+- [`e33a030`](https://github.com/codersachin99/windows-os/commit/e33a03042d3078470197fa1ef8e5ec153761902a) + [`e564207`](https://github.com/codersachin99/windows-os/commit/e5642074e0f1871f1f12fc82342a7e4faf95d5f2): `tests/e2e/source-win7-classic-rtl-context-themes.spec.ts`: **12 genuine browser scenarios × desktop/mobile**. For each Basic2,3,4: actual Desktop menu LTR/RTL (computed source classic surface/contrast/first 3D bevel/hover, View action, Computer item Open); RTL taskbar background menu and real Task Manager; separate Computer and Bin background with detached View child (8 source radio modes). CSSOM box-shadow checked directly without text-matching stylesheet declarations, 24 total project runs.
+- [`189a290`](https://github.com/codersachin99/windows-os/commit/189a290aad2283c4361563759efa2d992ef6de31): add new spec to opt-in focused browser Actions, preserving `[run-ci]` condition and separate `[capture-visual]` controls.
+- [`8bcbe01`](https://github.com/codersachin99/windows-os/commit/8bcbe01cec265ed939abb241ee298c1d1676de35): `migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md` exact original source and bounded evidence/limits.
+- [`c687aa4`](https://github.com/codersachin99/windows-os/commit/c687aa423c917b7a54c2b7478a5612f3be13d73f): theme-win7-classic-scss.js/main.js/taskbar-base.js tracker entries remain **in-progress**, not fully migrated.
+
+**Verification request:** this checkpoint commit opts into ONE exact-head `[run-ci]`. Confirm TypeScript, unit tests, original source/artwork/Contacts checks, Vite build, focused and full desktop/mobile Chromium; if any failure, inspect exact logs and fix the real issue, never remove source tests or label incomplete parity complete. Source-paired pixel screenshot job still requires private source read access `LEGACY_SOURCE_READ_TOKEN`, not run automatically.
+
+**Next:** after CI, continue source themes, Desktop, context menus, Start, Computer and Bin acceptance. Source visual and functional parity across all 37 themes remains outstanding; no main merge/release.
+
+---
+
 ## 21 November 2026 — correct 18 identical RTL browser assertion failures
 
 **Frozen original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
