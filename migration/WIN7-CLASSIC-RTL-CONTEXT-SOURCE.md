@@ -97,3 +97,38 @@ enabled, and high-contrast source palettes remain independent.
 These follow-up changes are newer than the initial Basic Classic
 `[run-ci]` checkpoint. A **new exact-head CI** after this follow-up
 must verify both the root menu beveled paint and disabled text.
+
+## Computer and Recycle Bin disabled menu source follow-up
+
+The source `.win7-classic .winui-menu [role=menuitem][aria-disabled]`
+rule is **shared across all menu surfaces**, including the Explorer
+root/item popup and its nested Send To and View/New menu controls.
+The React Explorer Classic menu already used full-opacity disabled
+`#7b7b7b` text, but did not apply the original *directional*
+embossing. On High Contrast Black/White backgrounds this is a
+source-visible difference.
+
+- `packages/apps/explorer/src/sourceExplorerContextTheme.css` now
+  gives `button:disabled` in Basic2/3/4 live Explorer menu roots
+  `text-shadow:1px 1px var(--border-color--contrast)` in LTR
+  and `text-shadow:-1px 1px var(--border-color--contrast)` in RTL.
+  The existing `opacity:1`, text `var(--text-color--disabled)`,
+  native disabled state, and root/submenu styling are retained.
+  This selector also reaches the real detached child submenu buttons.
+- `tests/e2e/source-classic-explorer-disabled-rtl.spec.ts` adds
+  **6 scenarios × desktop/mobile** (Basic2/3/4 × LTR/RTL).
+  Every scenario exercises the actual empty Bin background menu
+  (disabled Empty Recycle Bin, Upload Files, Properties), Computer
+  background Properties, a real file uploaded to the Guest Documents
+  volume, the file-item Properties and disabled Compressed (zipped)
+  folder action in Send To child. It asserts disabled state,
+  `opacity=1`, color `rgb(123,123,123)`,
+  **signed** computed text-shadow offset, and that the enabled
+  Desktop shortcut action stays available. It never replaces disabled
+  source services with fake handlers.
+- New suite is in the existing opt-in focused browser CI.
+  Frozen original unmodified, product main untouched. Source screenshot
+  pairing still pending.
+
+Do not call this second follow-up verified until an exact-head
+`[run-ci]` including these new source tests succeeds.
