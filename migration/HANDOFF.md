@@ -1,3 +1,7 @@
+### 21 Nov 2026 — first Extract here CI TypeScript failure diagnosed
+
+[CI #44905650895](https://github.com/codersachin99/windows-os/actions/runs/44905650895) on `33af1d1` stopped in **Verify TypeScript**, before units, audits, Vite and browser tests. Exact error: `sourceExtract.test.ts(75,34) TS2345`, inferred heterogeneous object union in malformed-ZIP fixtures permits optional `undefined` keys and is not assignable to `Record<string,string|Uint8Array>`. This is a **test fixture type annotation** issue, not a reason to disable tests. Correct it by declaring `const invalid:Record<string,string>[]` and request one new exact-head acceptance. All original source/security assertions remain. Visual paired source capture remains skipped.
+
 ## 21 November 2026 — Explorer real Extract here ZIP implementation (pending exact-head CI)
 
 **Prior verified checkpoint:** [CI #44898625505](https://github.com/codersachin99/windows-os/actions/runs/44898625505) at `17bdd8c` completed SUCCESS (TypeScript, unit, audited source/artwork/Contacts, Vite and browser-and-contracts including full desktop/mobile Chromium); visual capture skipped. That run confirms Desktop Send to Compressed ZIP and does **not** include new extraction code.
