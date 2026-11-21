@@ -1,3 +1,15 @@
+## 21 November 2026 — real Desktop Extract here ZIP + source shortcut parity (pending CI)
+
+**Accepted prior exact-head:** [CI #44905733445](https://github.com/codersachin99/windows-os/actions/runs/44905733445) at `d143ba3` completed SUCCESS for Explorer ZIP extraction: TypeScript, all unit/source/artwork/Contacts checks, Vite and full targeted + desktop/mobile Playwright. Original-paired visual capture job skipped. The previous failed TS2345 run is historical and was corrected without weakening tests.
+
+**Next frozen gap:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` `src/modules/system/main.js` `DesktopItemMenu` puts `extract-here` **after Pin and before Send to Desktop**, with `this.extractHere(this.shortcut.path)` for one archive-backed item. Explorer had now been fixed but Desktop still omitted the command.
+
+**Implemented:** `packages/ui/src/sourceDesktopItemMenu.ts` now preserves this action and source order, showing enabled **Extract here** only for a genuine mounted Guest ZIP and disabled for other original archive formats. Source `.lnk` shortcut metadata can specify a ZIP target; `DesktopIcons.tsx` resolves `targetPath` to the target's actual parent folder (e.g., Documents) and delegates to the existing `extractSourceGuestZip`/one-transaction VFS service; direct Desktop ZIP extraction selects created Desktop items. No host paths, second algorithm, overwrite or fake completion. Added `sourceDesktopItemMenu.test.ts` source order/link/format gates and `tests/e2e/source-desktop-extract-here.spec.ts` real ZIP bytes, text in Notepad, empty folder, rollback, non-ZIP/unsupported item gate and Explorer-created `.lnk` target in Documents. The focused Actions suite includes the new spec. [Source trace/limits](DESKTOP-EXTRACT-HERE-SOURCE.md).
+
+**Next:** one deliberate `[run-ci]` commit at exact head to verify TypeScript, all unit tests, source/artwork/Contacts audit, Vite, targeted Desktop/Explorer and full Chromium desktop/mobile. Diagnose concrete CI failures, preserve test coverage; do not claim green until completed. Unported RAR/7z/TAR/GZ, original archive filename/overwrite prompts and original paired screenshots for 37 theme IDs are still open. Draft [PR #1](https://github.com/codersachin99/windows-os/pull/1) stays open. Leave `windows-os/main`, original frozen reference and releases untouched.
+
+---
+
 ### 21 Nov 2026 — first Extract here CI TypeScript failure diagnosed
 
 [CI #44905650895](https://github.com/codersachin99/windows-os/actions/runs/44905650895) on `33af1d1` stopped in **Verify TypeScript**, before units, audits, Vite and browser tests. Exact error: `sourceExtract.test.ts(75,34) TS2345`, inferred heterogeneous object union in malformed-ZIP fixtures permits optional `undefined` keys and is not assignable to `Record<string,string|Uint8Array>`. This is a **test fixture type annotation** issue, not a reason to disable tests. Correct it by declaring `const invalid:Record<string,string>[]` and request one new exact-head acceptance. All original source/security assertions remain. Visual paired source capture remains skipped.
