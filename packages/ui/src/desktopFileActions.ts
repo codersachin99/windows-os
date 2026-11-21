@@ -1,4 +1,4 @@
-import type { FileEntry } from "@windows-os/filesystem";
+import {SOURCE_COMPUTER_ROOT, getFileName, normalizeFileUri, type FileEntry} from "@windows-os/filesystem";
 
 /** Source main.js desktop selectedKeys -> getShortcut(path) -> shell file actions.
  * System icons are selectable but have no actual file path and are excluded.
@@ -17,12 +17,17 @@ export function desktopSelectedFilePaths(
 
 /**
  * Pinned src/modules/system/main.js DesktopItemMenu.downloadablePaths:
- * the command uses ALL selected path-backed entries with an extension except
- * .lnk. Synthetic Computer/Bin/apps and directories have no byte download.
+ * the command uses ALL selected shortcut.path entries with an extension
+ * except .lnk. A file-backed .lnk with a validated path-backed shortcut target
+ * downloads its Guest target, never the .lnk payload itself. Program-only
+ * .lnk, synthetic Computer/Bin/apps and directories have no byte download.
  * Keep the predicate independent of the menu's right-clicked item.
  */
 export function desktopDownloadableFiles(
-  items: readonly { id: string; file?: {entry: Pick<FileEntry, "uri" | "name" | "type">} }[],
+  items: readonly { id: string; file?: {
+    entry: Pick<FileEntry, "uri" | "name" | "type">;
+    targetPath?: string|null;
+  } }[],
   selectedKeys: readonly string[]
 ): Array<Pick<FileEntry, "uri" | "name" | "type">> {
   const selected = new Set(selectedKeys);
@@ -31,11 +36,21 @@ export function desktopDownloadableFiles(
   for (const item of items) {
     if (!selected.has(item.id) || !item.file) continue;
     const entry=item.file.entry;
-    const ext=entry.name.lastIndexOf(".");
-    if (entry.type!=="file" || ext<=0 || ext===entry.name.length-1 ||
-        /^lnk$/i.test(entry.name.slice(ext+1)) || found.has(entry.uri)) continue;
-    found.add(entry.uri);
-    result.push(entry);
+    const path=item.file.targetPath??entry.uri;
+    // SourcePathShortcut parses/validates targets at import. Recheck their
+    // normalized mounted Guest scope at this action boundary.
+    if(item.file.targetPath){
+      try{
+        if(path!==normalizeFileUri(path) || !path.startsWith(SOURCE_COMPUTER_ROOT+"/"))
+          continue;
+      }catch{continue;}
+    }
+    const name=item.file.targetPath?getFileName(path):entry.name;
+    const ext=name.lastIndexOf(".");
+    if(entry.type!=="file" || ext<=0 || ext===name.length-1 ||
+        /^lnk$/i.test(name.slice(ext+1)) || found.has(path)) continue;
+    found.add(path);
+    result.push({uri:path,name,type:"file"});
   }
   return result;
 }
