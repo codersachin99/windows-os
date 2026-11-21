@@ -548,6 +548,11 @@ export {
   createSourcePathDesktopShortcuts,type SourcePathShortcut
 } from "./sourcePathShortcuts";
 
+export {
+  createSourceGuestArchive,sourceCanCompressSelection,
+  SOURCE_GUEST_ZIP_MAX_BYTES,SOURCE_GUEST_ZIP_MAX_ITEMS,SOURCE_GUEST_ZIP_MAX_DEPTH
+} from "./sourceArchive";
+
 export { transferFiles } from "./transfer";
 export type { FileTransferMode } from "./transfer";
 
