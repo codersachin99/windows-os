@@ -49,7 +49,7 @@ function safeZipName(name:string):{parts:string[];directory:boolean}{
 /** Keep UTF-8 text-backed Guest documents readable by Notepad while retaining
  * the original ZIP bytes. Unrecognized or non-UTF8 files stay binary-backed. */
 function sourceExtractedContent(name:string,bytes:Uint8Array):Uint8Array|string{
-  if(!/\\.(txt|md|csv|json|xml|ini|log|bat|cmd|js|ts|html|css|yaml|yml|svg|lnk)$/i.test(name))
+  if(!/\.(txt|md|csv|json|xml|ini|log|bat|cmd|js|ts|html|css|yaml|yml|svg|lnk)$/i.test(name))
     return bytes;
   try{
     const text=new TextDecoder("utf-8",{fatal:true,ignoreBOM:true}).decode(bytes);
