@@ -10,7 +10,7 @@ import {
   readSourceShortcutText,
   importDroppedFiles, SHELL_DRAG_TYPE,
   sourceExecutablePath, SOURCE_START_MENU_PROGRAMS,
-  SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE,
+  SOURCE_COMPUTER_ROOT, SOURCE_GUEST_PROFILE, SOURCE_WIN2K_START_SEARCH_PATH,
   matchesSourceKind, type FileEntry, type SourceSearchHighlight
 } from "@windows-os/filesystem";
 import { fileClipboard, fileDragSession, fileStore, sourceFilesystemRuntime,
@@ -100,9 +100,12 @@ export function ExplorerApp({
   const instantSearch = sourceWin7InstantSearch(theme, isBin);
   const initialFind = useMemo(() => decodeSourceFindPath(initialPath), [initialPath]);
   const initialSourceSearch = useMemo(() => decodeSourceSearchPath(initialPath), [initialPath]);
+  // Win2k Start opens an *empty Search Companion*, not an already-run
+  // shell:search query or a standard Computer folder window.
+  const startWithCompanion=initialPath===SOURCE_WIN2K_START_SEARCH_PATH;
   // Original shell:search is a virtual URI; route to its guest search scope
   // before constructing ExplorerSession, never normalize it as a file path.
-  const startPath = initialSourceSearch
+  const startPath = startWithCompanion ? SOURCE_COMPUTER_ROOT : initialSourceSearch
     ? initialSourceSearch.scope || SOURCE_COMPUTER_ROOT
     : initialFind?.scope ?? initialPath;
   const session = useMemo(() => new ExplorerSession(
@@ -144,7 +147,7 @@ export function ExplorerApp({
   const [searchTruncated, setSearchTruncated] = useState(false);
   // Original Computer owns the child SearchDialog and inline SearchCompanion.
   const [showSearchDialog, setShowSearchDialog] = useState(false);
-  const [showCompanion, setShowCompanion] = useState(false);
+  const [showCompanion, setShowCompanion] = useState(startWithCompanion);
   const [pendingSearch, setPendingSearch] = useState<SourceFindQuery | null>(null);
   const [foldersScanned, setFoldersScanned] = useState(0);
   const [searchFraction, setSearchFraction] = useState(0);
