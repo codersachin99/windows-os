@@ -7,7 +7,7 @@
 
 The pinned `src/modules/system/main.js` ExplorerItemMenu source exposes
 `extract-here` only for one selected archive outside an archive view; its
-handler calls `extractHere(this.paths[0])`. The original source recognises
+handler calls `extractHere(this.data.path)`. The original source recognises
 multiple archive extensions. Until this change the React item menu displayed
 the label but disabled it for *all* formats even though compressed Guest ZIP
 creation was already implemented. This slice enables actual `.zip`
