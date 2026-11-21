@@ -64,7 +64,7 @@ describe("frozen main.js Extract here / mounted Guest ZIP",()=>{
   });
   it("rejects traversal, absolute Windows separators, duplicate case-folded names",async()=>{
     const fs=await guest();
-    const invalid=[
+    const invalid:Record<string,string>[]=[
       {"../escape.txt":"unsafe"},
       {"/absolute.txt":"unsafe"},
       {"folder\\bad.txt":"unsafe"},
