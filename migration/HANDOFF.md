@@ -1,3 +1,15 @@
+## 21 November 2026 — Explorer real Extract here ZIP implementation (pending exact-head CI)
+
+**Prior verified checkpoint:** [CI #44898625505](https://github.com/codersachin99/windows-os/actions/runs/44898625505) at `17bdd8c` completed SUCCESS (TypeScript, unit, audited source/artwork/Contacts, Vite and browser-and-contracts including full desktop/mobile Chromium); visual capture skipped. That run confirms Desktop Send to Compressed ZIP and does **not** include new extraction code.
+
+**New source delta:** Frozen `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`, `src/modules/system/main.js` `ExplorerItemMenu` supports `extract-here` with `this.extractHere(this.data.path)` for one archive selection outside an archive view. React previously disabled the action. The new `sourceExtract.ts` now safely extracts real `.zip` bytes under the mounted Guest folder only, bounded by 32 MiB/2048 ZIP members/64 path components, rejecting traversal/host paths, case/entry collisions, malicious object-key segments, non-UTF-8 text transcoding, and ZIP over-expansion before writes. The new `VirtualFileStore.createTreeAtomic` stages nested folders/files before one persisted commit; quota errors and collision failures leave no partial output. Valid UTF-8 text files stay Notepad-readable with byte-equivalent contents; binary files stay binary. `sourceExplorerItemMenu.ts` enables only backed ZIP Extract here, `ExplorerApp.tsx` performs real extraction and selects first root.
+
+**Regression coverage:** `sourceExtract.test.ts` tests nested/empty/binary/UTF-8 entries, ZIP compression roundtrip, collisions, traversal, unsupported/malformed archives and quota rollback; `sourceExplorerItemMenu.test.ts` tests ZIP-only availability. New `source-explorer-extract-here.spec.ts` covers desktop/mobile upload, context action, nested binary Download, unsupported RAR disabled and non-overwrite. Focused workflow now includes the new spec; full browser plus TypeScript/unit/source/artwork/Contacts/Vite remain required. [Detailed original/React source trace](EXPLORER-EXTRACT-HERE-SOURCE.md).
+
+**Do not overclaim:** no local repo clone/test runtime in this ChatGPT container; new ZIP extraction code is **unverified until an exact-head opt-in CI** finishes. The original Desktop archive extraction, RAR/7z/tar/gz, source overwrite dialogs, all 37-theme paired screenshots and complete source functional parity remain open. Paired visual requires private original source token. Preserve branch `feat/0001-faithful-react-foundation`, draft [PR #1](https://github.com/codersachin99/windows-os/pull/1), unchanged `windows-os/main`, pinned legacy source and no release.
+
+---
+
 ## 21 November 2026 — Desktop source Send to Compressed ZIP continuation
 
 **Frozen:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. **Work branch:** `feat/0001-faithful-react-foundation`; draft PR #1; `main`, original and releases unchanged.
