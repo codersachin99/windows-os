@@ -31,7 +31,8 @@ import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
   extractSourceGuestZip,sourceCanExtractGuestZip,getParentDirectory,getFileName,
   type FileEntry } from "@windows-os/filesystem";
 import {
-  desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths
+  desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,
+  desktopSourceArchiveSelection
 } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
@@ -238,18 +239,21 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   // never a host filesystem adapter or a fake success notification.
   const compressDesktopSelection = (keys: readonly string[]) => {
     setMenu(null);
-    const desktop = sourceFilesystemRuntime.snapshot()?.desktopPath;
-    const paths = desktopSelectedFilePaths(items, keys);
-    if (!desktop || !sourceCanCompressSelection(desktop, paths)) {
-      setError("Select files from the mounted Guest Desktop to create a ZIP.");
+    const request=desktopSourceArchiveSelection(items,keys);
+    if(!request){
+      setError("Select files from one mounted Guest folder to create a ZIP.");
       return;
     }
-    void createSourceGuestArchive(fileStore, desktop, paths).then(uri => {
-      setSelected(["file:" + uri]);
-      anchor.current = "file:" + uri;
+    void createSourceGuestArchive(fileStore,request.folder,request.paths).then(uri=>{
+      // A path-backed .lnk may target Documents. Preserve the Desktop
+      // shortcut and select the new icon ONLY when the ZIP lives on Desktop.
+      if(request.folder===sourceFilesystemRuntime.snapshot()?.desktopPath){
+        setSelected(["file:"+uri]);
+        anchor.current="file:"+uri;
+      }
       setError(null);
-    }).catch(cause => setError(cause instanceof Error ? cause.message :
-      "Cannot compress Guest Desktop files"));
+    }).catch(cause=>setError(cause instanceof Error?cause.message:
+      "Cannot compress selected Guest files"));
   };
 
   // Frozen main.js DesktopItemMenu extract-here uses shortcut.path, so a
@@ -930,10 +934,8 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const contextItem=items.find(item=>item.id===menu?.id);
   const contextKeys=menu?.id&&selected.includes(menu.id)?selected:
     menu?.id?[menu.id]:[];
-  const desktopPath=sourceFilesystemRuntime.snapshot()?.desktopPath;
-  const contextPaths=desktopSelectedFilePaths(items,contextKeys);
-  const canCompressGuest=Boolean(contextItem?.file&&desktopPath&&
-    sourceCanCompressSelection(desktopPath,contextPaths));
+  const archiveRequest=desktopSourceArchiveSelection(items,contextKeys);
+  const canCompressGuest=Boolean(contextItem?.file&&archiveRequest);
   const archivePath=contextItem?.file?.targetPath??contextItem?.file?.entry.uri;
   const canExtractGuestZip=Boolean(contextItem?.file&&contextKeys.length===1&&
     archivePath&&sourceCanExtractGuestZip(getParentDirectory(archivePath),archivePath));
