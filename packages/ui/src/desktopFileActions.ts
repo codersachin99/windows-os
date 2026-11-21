@@ -1,4 +1,4 @@
-import {SOURCE_COMPUTER_ROOT, getFileName, normalizeFileUri, type FileEntry} from "@windows-os/filesystem";
+import {SOURCE_COMPUTER_ROOT, getFileName, getParentDirectory, normalizeFileUri, sourceCanCompressSelection, type FileEntry} from "@windows-os/filesystem";
 
 /** Source main.js desktop selectedKeys -> getShortcut(path) -> shell file actions.
  * System icons are selectable but have no actual file path and are excluded.
@@ -92,4 +92,21 @@ export function desktopSourceClipboardPaths(
     paths.add(path);
   }
   return [...paths];
+}
+
+/**
+ * Frozen DesktopItemMenu Send to > compressed folder calls compress(this.paths),
+ * the SAME getShortcut(id).path selection used for Cut/Copy.
+ * The shared ZIP adapter currently accepts one mounted Guest parent directory
+ * per operation; refuse mixed-folder selections instead of archiving a
+ * shortcut's JSON payload, crossing host boundaries or moving the results.
+ */
+export function desktopSourceArchiveSelection(
+  items: Parameters<typeof desktopSourceClipboardPaths>[0],
+  selectedKeys: readonly string[]
+):{folder:string;paths:string[]}|null{
+  const paths=desktopSourceClipboardPaths(items,selectedKeys);
+  if(!paths.length)return null;
+  const folder=getParentDirectory(paths[0]);
+  return sourceCanCompressSelection(folder,paths)?{folder,paths}:null;
 }
