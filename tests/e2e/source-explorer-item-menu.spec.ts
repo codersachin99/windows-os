@@ -130,10 +130,10 @@ test("source Send to popup opens beside the item menu, stays visible and keeps p
   if(await submenu.getAttribute("data-side")==="right")
     expect(child!.x).toBeGreaterThanOrEqual(after!.x-1);
   else expect(child!.x).toBeLessThanOrEqual(after!.x+after!.width);
-  const desktop=submenu.locator(
-    '[data-test-explorer-item-send-to-kind="desktop"]');
-  await expect(desktop).toBeFocused();
-  await desktop.press("ArrowLeft");
+  const compressed=submenu.locator(
+    '[data-test-explorer-item-send-to-kind="compress"]');
+  await expect(compressed).toBeFocused();
+  await compressed.press("ArrowLeft");
   await expect(submenu).toHaveCount(0);
   await expect(trigger).toBeFocused();
   await trigger.press("ArrowRight");
