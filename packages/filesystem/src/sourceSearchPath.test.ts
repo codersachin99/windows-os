@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decodeSourceSearchPath, encodeSourceSearchPath, isSourceSearchPath } from "./sourceSearchPath";
+import { decodeSourceSearchPath, encodeSourceSearchPath, isSourceSearchPath, SOURCE_WIN2K_START_SEARCH_PATH } from "./sourceSearchPath";
 
 describe("pinned 5401.k shell:search and 2e2c.f/d URI contract",()=>{
   it("serializes q then in then optional name and sub with URLSearchParams",()=>{
@@ -23,6 +23,12 @@ describe("pinned 5401.k shell:search and 2e2c.f/d URI contract",()=>{
     expect(decodeSourceSearchPath("shell:search?q=report&in=")).toEqual({
       text:"report",scope:null,namePattern:null,subfolders:true
     });
+  });
+  it("keeps the original Win2k Start Search window request distinct from search results",()=>{
+    // Frozen startmenu-win9x.js OpenWindow({id:'computer',file:{path:null,search:true}}).
+    expect(SOURCE_WIN2K_START_SEARCH_PATH).toBe("shell:win2k-start-search");
+    expect(isSourceSearchPath(SOURCE_WIN2K_START_SEARCH_PATH)).toBe(false);
+    expect(decodeSourceSearchPath(SOURCE_WIN2K_START_SEARCH_PATH)).toBeNull();
   });
   it("never treats shell paths or non-canonical scopes as physical VFS paths",()=>{
     expect(isSourceSearchPath("/guest")).toBe(false);
