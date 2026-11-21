@@ -7,6 +7,13 @@ import { normalizeFileUri } from "./index";
  */
 export const SOURCE_SEARCH_URI_PREFIX = "shell:search";
 
+/**
+ * Source startmenu-win9x.js opens Computer with {path:null,search:true}
+ * for Windows 2000. This internal route preserves that *unsubmitted*
+ * Search Companion state; it is never a shell:search results request.
+ */
+export const SOURCE_WIN2K_START_SEARCH_PATH = "shell:win2k-start-search";
+
 export interface SourceSearchPath {
   text: string;
   /** A null/blank scope instructs the source to search all mounted disks. */
