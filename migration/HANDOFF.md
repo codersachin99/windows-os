@@ -1,3 +1,25 @@
+## 21 November 2026 — source Classic Basic2/3/4 Computer and Bin disabled RTL menu emboss
+
+**Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1; target `main` and pinned original unchanged, no merge or release.
+
+**Last fully verified exact-head CI:** [#44880039033](https://github.com/codersachin99/windows-os/actions/runs/44880039033) `5bd0109` **SUCCESS** with TypeScript, full unit and source/theme/Contacts audits, Vite build, focused and full desktop/mobile browser. **In-flight Classic validations:** [#44884377212](https://github.com/codersachin99/windows-os/actions/runs/44884377212) at `e51dd3f` and [#44884540994](https://github.com/codersachin99/windows-os/actions/runs/44884540994) at `92fbce3` both passed TypeScript, units, source/artwork/Contacts audits, Vite, Chromium install and focused source-shell Playwright; their full desktop/mobile browser step was in progress at latest check. These older jobs **do not** cover the new Computer/Bin menu correction. Check their final statuses separately.
+
+**New source gap:** locked `src/modules/themes/theme-win7-classic-scss.js` `.win7-classic .winui-menu [role=menuitem][aria-disabled]` **requires** full-opacity grey `#7b7b7b` plus LTR `text-shadow:1px 1px var(--border-color--contrast)` / RTL `text-shadow:-1px 1px var(--border-color--contrast)`. The preceding slice applied this to actual Desktop/taskbar popup buttons. Computer/Bin Explorer menus already had full-opacity disabled grey but **no source directional embossed shadow**, including nested Send To. The original source styles this at the shared menu level; all three Classic variants Basic2/3/4 inherit it.
+
+**Committed follow-up:**
+- [`33e65ac`](https://github.com/codersachin99/windows-os/commit/33e65ac5496ed611304bcb349a2de0947a1c6690): `packages/apps/explorer/src/sourceExplorerContextTheme.css` maps source LTR and RTL embossed disabled label text to Basic2/3/4 actual Computer/Bin root/item/nested menus. Native source-disabled actions stay disabled, other themes untouched.
+- [`72c8a17`](https://github.com/codersachin99/windows-os/commit/72c8a1774cbedfe60408dd7d06500ae34f4d34de) and [`3e372b7`](https://github.com/codersachin99/windows-os/commit/3e372b7d6b545ddf5d4a7cdac2723a2239b7fbcf): `tests/e2e/source-classic-explorer-disabled-rtl.spec.ts` **6 real Chromium scenarios × desktop/mobile** across Classic2/3/4 × LTR/RTL. Validate empty Bin disabled Empty/Upload/Properties, Computer background Properties, uploaded actual Guest Documents file item Properties and compressed Send To child disabled text. Assert native disabled state, opacity 1, grey color and signed computed shadow; active Desktop send-to command remains enabled, no dummy action invented.
+- [`7feb80f`](https://github.com/codersachin99/windows-os/commit/7feb80f07c95eaf49659294d2dd2984f42c94a2d): focused opt-in Playwright workflow includes new suite alongside existing 12 Classic Desktop/taskbar tests.
+- [`3af45fd`](https://github.com/codersachin99/windows-os/commit/3af45fde57a46e2b93aef986ccfb6e2e6659d288): pinned source audit `migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md` updated.
+- [`9a2bfe2`](https://github.com/codersachin99/windows-os/commit/9a2bfe285e79d2696c3b93c714877d41f1cbfb4f): original Classic theme, Computer and Bin tracker entries remain **in-progress** with source evidence.
+
+**Verification:** this handoff checkpoint requests fresh exact-head `[run-ci]` validating TypeScript, units, locked source/artwork/Contacts audits, build and **all focused + complete desktop/mobile Chromium**, including both the older Classic 12 and new Explorer/Bin 6 scenarios. Inspect failure logs and fix actual source-compatibility issues; no removal of tests. Paired original-vs-target pixel screenshot acceptance still awaits `LEGACY_SOURCE_READ_TOKEN`. No merging, releasing, or implying all source themes migrated.
+
+**Next:** confirm both older runs and this new exact-head run; then continue highest-priority original themes, context menus, Desktop, Start, Computer and Bin source interactions. Keep docs and PR in sync.
+
+---
+
 ## 21 November 2026 — Classic Basic2–4 disabled popup source contrast follow-up
 
 **Frozen original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. **Target:** `feat/0001-faithful-react-foundation`, draft PR #1; original and `main` unchanged.
