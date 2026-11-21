@@ -31,9 +31,12 @@
         "packages/filesystem/src/sourceGuest.ts",
         "tests/e2e/source-guest.spec.ts",
         "tests/e2e/source-explorer-context-keyboard.spec.ts",
-        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md"
+        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md",
+        "packages/apps/explorer/src/sourceExplorerContextTheme.css",
+        "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
+        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md"
       ],
-      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted"
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending"
     },
     {
       "source": "src/modules/apps/calc.js",
@@ -130,9 +133,12 @@
         "packages/ui/src/sourceListItemRename.test.tsx",
         "tests/e2e/listview-source-rename.spec.ts",
         "tests/e2e/source-explorer-context-keyboard.spec.ts",
-        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md"
+        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md",
+        "packages/apps/explorer/src/sourceExplorerContextTheme.css",
+        "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
+        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md"
       ],
-      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted"
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending"
     },
     {
       "source": "src/modules/apps/cpanel.js",
@@ -2426,9 +2432,12 @@
         "tests/e2e/source-start-context-theme-families.spec.ts",
         "packages/ui/src/sourceDesktopContextThemes.css",
         "tests/e2e/source-win7-aero-context-themes.spec.ts",
-        "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md"
+        "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md",
+        "packages/apps/explorer/src/sourceExplorerContextTheme.css",
+        "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
+        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md"
       ],
-      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending"
+      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending"
     },
     {
       "source": "src/modules/themes/theme-win8-scss.js",
@@ -2482,9 +2491,11 @@
         "packages/apps/explorer/src/sourceExplorerContextTheme.css",
         "packages/contracts/src/sourceThemeCatalog.ts",
         "tests/e2e/source-vista-context-themes.spec.ts",
-        "migration/VISTA-CONTEXT-MENU-SOURCE.md"
+        "migration/VISTA-CONTEXT-MENU-SOURCE.md",
+        "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
+        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md"
       ],
-      "verification": "Vista shared Start recents/power and popup plus Desktop/taskbar/Explorer/Bin source menu CSS/RTL and tests; login remains fallback and paired visual/font/icon/full source parity remains pending exact-head browser CI"
+      "verification": "Vista shared Start recents/power and popup plus Desktop/taskbar/Explorer/Bin source menu CSS/RTL and tests; login remains fallback and paired visual/font/icon/full source parity remains pending exact-head browser CI; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending"
     },
     {
       "source": "src/modules/themes/theme-winxp-scss.js",
