@@ -293,6 +293,7 @@ export function DesktopShell({
   const canAeroPeek=(state.theme==="win7"||sourceIsAeroFamily(state.theme))&&taskbarConfig.useAeroPeek;
   const previewDesktop=canAeroPeek&&aeroPeeking;
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
+  const taskbarContextReturnFocus=useRef<HTMLElement|null>(null);
   const closeTaskbarContext=useCallback(()=>setTaskbarContext(null),[]);
   const cancelPreviewShow=()=>{
     if(previewShowTimer.current!==null){
@@ -534,11 +535,12 @@ export function DesktopShell({
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base"
-        data-taskbar-button-type={buttonMode}
+        data-taskbar-button-type={buttonMode} tabIndex={-1}
         onContextMenu={event=>{
           if((event.target as HTMLElement).closest("button,[data-test-tray-icon]"))
             return;
           event.preventDefault();
+          taskbarContextReturnFocus.current=event.currentTarget;
           setTaskbarContext({
             kind:"background",x:event.clientX,y:event.clientY
           });
@@ -569,6 +571,7 @@ export function DesktopShell({
               onMouseLeave={schedulePreviewHide}
               onContextMenu={event=>{
                 event.preventDefault();event.stopPropagation();
+                taskbarContextReturnFocus.current=event.currentTarget;
                 const rect=event.currentTarget.getBoundingClientRect();
                 setTaskbarContext({
                   kind:"item",id:programId,
@@ -609,6 +612,7 @@ export function DesktopShell({
               onContextMenu={event=>{
                 dismissLivePreview();
                 event.preventDefault();event.stopPropagation();
+                taskbarContextReturnFocus.current=event.currentTarget;
                 const rect=event.currentTarget.getBoundingClientRect();
                 setTaskbarContext({
                   kind:"item",id:group.appId,
@@ -678,7 +682,8 @@ export function DesktopShell({
           }}/>}
       {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
-        onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}/>}
+        onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}
+        returnFocusTarget={taskbarContextReturnFocus.current}/>}
       {state.windowLimitError&&
         <div className="windows-desktop__limit-alert" data-test-window-limit-alert="">
           <SourceMessageDialog data={{type:"error",message:state.windowLimitError}}
