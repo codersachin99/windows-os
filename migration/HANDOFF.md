@@ -1,3 +1,17 @@
+## 22 November 2026 — Desktop shortcut Send to compressed ZIP source parity
+
+**Previous accepted baseline:** [CI #44931334630](https://github.com/codersachin99/windows-os/actions/runs/44931334630) SUCCESS at `7af9b85` for source Desktop Copy/Cut and all earlier ZIP/Download commits (TS, units, pinned source inventory, original artwork/Contacts audits, Vite, focused/full desktop/mobile browser); paired original screenshots remain unverified.
+
+**Frozen source evidence:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`, `src/modules/system/main.js` `DesktopItemMenu` Send to → compressed folder: `this.compress(this.paths)`; `this.paths` comes from selected `this.getShortcut(key).path`; submenu hidden when `!this.paths.length`. An Explorer-created path-backed `.lnk` on Desktop pointing at Documents must archive the real Documents target, not shortcut JSON. Program-only links with no `shortcut.path` should not offer Send to.
+
+**Implementation:** `packages/ui/src/desktopFileActions.ts` adds `desktopSourceArchiveSelection` resolving canonical mounted Guest target paths via established `desktopSourceClipboardPaths` and the shared source ZIP adapter's one-parent safety restriction. `DesktopIcons.tsx` gates and invokes `createSourceGuestArchive` with actual source parent, selecting new Desktop icon only when ZIP created there; Documents ZIP remains in Documents, and original shortcut is preserved. `sourceDesktopItemMenu.ts` hides Send to when no source shortcut paths. Bounded atomic compression, overwrite safety and no host access unchanged. Source proof, distinctions and test contracts: [DESKTOP-SHORTCUT-COMPRESS-SOURCE.md](DESKTOP-SHORTCUT-COMPRESS-SOURCE.md).
+
+**Regression:** expanded `desktopFileActions.test.ts` for real target, single/mixed Guest parents, program-only links, unsafe paths; expanded `sourceDesktopItemMenu.test.ts`; appended two desktop/mobile browser scenarios to already focused `source-desktop-send-to-compressed.spec.ts`: real Explorer-created target shortcut ZIP byte integrity in Documents; program-only link hidden. Existing direct file/batch ZIP scenarios unchanged.
+
+**Acceptance still pending:** request deliberate exact-head `[run-ci]`, inspect TypeScript, units, source audits, original artwork/Contacts, Vite, focused and full desktop/mobile Playwright. Resolve genuine failures without weakening tests. No merge/release. Next priority path-backed shortcut Delete, drag, Desktop/Start/Computer/Bin and all 37 source themes; paired screenshots need `LEGACY_SOURCE_READ_TOKEN`.
+
+---
+
 ## 21 November 2026 — Desktop source shortcut Copy/Cut, accepted prior baseline
 
 **Accepted exact-head baseline:** [CI #44913862521](https://github.com/codersachin99/windows-os/actions/runs/44913862521) SUCCESS on `e0dde5bdc39b0a3023e4a3307c62fd3bd414ce52`: TypeScript, all unit/source inventory/artwork/Contacts audits, Vite, focused source regressions and complete desktop/mobile browser. Historical CI #44913595324 failed full browser on a now superseded earlier snapshot; latest exact-head passed, no hidden claim about original side-by-side screenshot parity.
