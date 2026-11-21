@@ -7,7 +7,7 @@ import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellA
 import {
   parseSourceShortcut,parseSourcePathShortcut,readSourceShortcutText,
   sourceExecutablePath,matchesSourceKind,SOURCE_START_MENU_PROGRAMS,sourcePrograms,
-  sourceProgramsById, type FileEntry
+  sourceProgramsById, SOURCE_WIN2K_START_SEARCH_PATH, type FileEntry
 } from "@windows-os/filesystem";
 import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
 import {createSourceDesktopShortcut} from "./desktopCreate";
@@ -317,7 +317,14 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     (theme==="win95"||theme==="win98"||theme==="win2k")?
       <SourceWin9xStartMenu theme={theme} rootRef={menuRef}
         programs={appRegistry.startMenu()} onLaunch={openApp}
-        onSearch={()=>openApp(theme==="win2k"?"computer":"find")}
+        onSearch={()=>{
+          if(theme!=="win2k"){openApp("find");return;}
+          // Frozen startmenu-win9x.js: OpenWindow computer with
+          // file:{path:null,search:true}, not ordinary Computer.
+          const app=appRegistry.get("computer");
+          if(app)dispatch({type:"OPEN_APP",app,file:{path:SOURCE_WIN2K_START_SEARCH_PATH}});
+          dispatch({type:"CLOSE_START"});
+        }}
         onPower={type=>dispatch({type})}
         onContext={openProgramContext}/>:
     <nav className={"windows-startmenu" +
