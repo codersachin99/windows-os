@@ -49,6 +49,21 @@ describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
     expect(sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,
       canCompressGuest:true}).some(a=>a.id==="send-to")).toBe(false);
   });
+  it("uses every selected file for Download even when the clicked icon is a .lnk",()=>{
+    const clicked={
+      id:"file:/Desktop/shortcut.lnk",isFile:true,
+      fileType:"file" as const,fileName:"shortcut.lnk",multiple:true
+    };
+    expect(sourceDesktopItemMenu(clicked).some(a=>a.id==="download")).toBe(false);
+    expect(sourceDesktopItemMenu({...clicked,downloadableCount:1})
+      .some(a=>a.id==="download")).toBe(true);
+    expect(sourceDesktopItemMenu({...clicked,downloadableCount:0})
+      .some(a=>a.id==="download")).toBe(false);
+    expect(sourceDesktopItemMenu({id:"computer",isFile:false,
+      multiple:false,downloadableCount:5})
+      .some(a=>a.id==="download")).toBe(false);
+  });
+
   it("original Desktop Extract here precedes Send to and enables only a real Guest ZIP",()=>{
     const input={
       id:"file:/EXTERNAL/computer/drive0/Users/Guest/Desktop/Bundle.zip",
