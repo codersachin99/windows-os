@@ -614,6 +614,8 @@ export {
   SOURCE_GUEST_ZIP_MAX_BYTES,SOURCE_GUEST_ZIP_MAX_ITEMS,SOURCE_GUEST_ZIP_MAX_DEPTH
 } from "./sourceArchive";
 
+export {extractSourceGuestZip,sourceCanExtractGuestZip} from "./sourceExtract";
+
 export { transferFiles } from "./transfer";
 export type { FileTransferMode } from "./transfer";
 
