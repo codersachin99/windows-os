@@ -20,7 +20,7 @@ async function disabledClassic(button:Locator,dir:"ltr"|"rtl"){
   await expect(button).toHaveCSS("opacity","1");
   await expect(button).toHaveCSS("color","rgb(123, 123, 123)");
   const textShadow=await button.evaluate(el=>getComputedStyle(el).textShadow);
-  expect(textShadow).toMatch(dir==="rtl"?/\b-1px 1px\b/:/\b1px 1px\b/);
+  expect(textShadow).toMatch(dir==="rtl"?/-1px 1px/:/\s1px 1px/);
   // Presence of emboss does not create a pointer action.
   await expect(button).toBeDisabled();
 }
