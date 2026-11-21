@@ -30,7 +30,9 @@ import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
   sourceFileIconType,createSourceGuestArchive,sourceCanCompressSelection,
   extractSourceGuestZip,sourceCanExtractGuestZip,getParentDirectory,getFileName,
   type FileEntry } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths,desktopDownloadableFiles } from "./desktopFileActions";
+import {
+  desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths
+} from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
 import {
@@ -278,7 +280,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   };
 
   const prepareDesktopClipboard = (mode: "copy" | "cut", keys: readonly string[]) => {
-    const paths = desktopSelectedFilePaths(items, keys);
+    const paths = desktopSourceClipboardPaths(items, keys);
     if (!paths.length) return;
     try {
       fileClipboard.prepare(paths, mode);
@@ -936,6 +938,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const canExtractGuestZip=Boolean(contextItem?.file&&contextKeys.length===1&&
     archivePath&&sourceCanExtractGuestZip(getParentDirectory(archivePath),archivePath));
   const downloadableFiles=desktopDownloadableFiles(items,contextKeys);
+  const clipboardSourcePaths=desktopSourceClipboardPaths(items,contextKeys);
   const itemActions=contextItem?sourceDesktopItemMenu({
     id:contextItem.id,
     isFile:Boolean(contextItem.file),
@@ -944,6 +947,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     archiveName:archivePath?getFileName(archivePath):undefined,
     canExtractGuestZip,
     downloadableCount:downloadableFiles.length,
+    hasClipboardSourcePaths:clipboardSourcePaths.length>0,
     programInstalled:Boolean(
       contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
     multiple:contextKeys.length>1,
@@ -1024,7 +1028,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         if (key === "a") {
           event.preventDefault(); setSelected(items.map(item => item.id));
         } else if (key === "c" || key === "x") {
-          const paths = desktopSelectedFilePaths(items, selected);
+          const paths = desktopSourceClipboardPaths(items, selected);
           if (paths.length) {
             event.preventDefault();
             prepareDesktopClipboard(key === "c" ? "copy" : "cut", selected);
