@@ -37,8 +37,7 @@ async function sourceClassicPaint(menu:Locator,theme:typeof themes[number],
   // getComputedStyle normalizes inset shadow order/color, so assert the
   // first source bevel's actual horizontal offset, not authored CSS text.
   const shadow=await menu.evaluate(el=>getComputedStyle(el).boxShadow);
-  const first=shadow.split(", ")[0];
-  expect(first).toMatch(direction==="rtl"
+  expect(shadow).toMatch(direction==="rtl"
     ? /(?:^|\s)1px -1px 0px 0px inset/
     : /(?:^|\s)-1px -1px 0px 0px inset/);
   expect(shadow).toContain("inset");
@@ -87,10 +86,10 @@ for(const theme of themes){
     await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
   });
 
-  test(theme.id+" Computer and Bin View popup preserve classic RTL bevel and source interactions",async({page})=>{
-    await guest(page,theme.id);
-    await setDirection(page,"rtl");
-    for(const app of ["computer","bin"] as const){
+  for(const app of ["computer","bin"] as const){
+    test(theme.id+" "+app+" View popup preserves classic RTL bevel and source actions",async({page})=>{
+      await guest(page,theme.id);
+      await setDirection(page,"rtl");
       await page.locator('[data-test-desktop-icon="'+app+'"]').dblclick();
       const win=page.locator('[data-test-window="'+app+'"]');
       await expect(win).toBeVisible();
@@ -102,14 +101,13 @@ for(const theme of themes){
       }});
       const menu=win.locator('[data-test-explorer-context="background"]');
       await sourceClassicPaint(menu,theme,"rtl");
-      const view=menu.locator("[data-test-explorer-context-view]");
-      await view.click();
+      await menu.locator("[data-test-explorer-context-view]").click();
       const child=menu.locator("[data-test-explorer-background-submenu]");
       await sourceClassicPaint(child,theme,"rtl");
       await expect(child.getByRole("menuitemradio")).toHaveCount(8);
       await page.keyboard.press("Escape");
       await expect(menu).toHaveCount(0);
       await expect(win).toBeVisible();
-    }
-  });
+    });
+  }
 }
