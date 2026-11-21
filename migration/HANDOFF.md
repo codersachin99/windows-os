@@ -1,3 +1,15 @@
+## 21 November 2026 — Desktop source Send to Compressed ZIP continuation
+
+**Frozen:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. **Work branch:** `feat/0001-faithful-react-foundation`; draft PR #1; `main`, original and releases unchanged.
+
+Pinned `src/modules/system/main.js` `DesktopItemMenu` exposes `Send to` for real file paths, with one genuine `Compressed (zipped) folder` child calling `compress(this.paths)`. React Desktop had the parent permanently disabled. This follow-up reuses the bounded atomic Guest archive service previously verified for Explorer, without opening host paths, introducing another ZIP algorithm or claiming extraction/Properties parity.
+
+Changes: `sourceDesktopItemMenu.ts` gates actual Guest compression; `DesktopIcons.tsx` restores the single original child, theme-style popup, hover/ArrowRight/ArrowLeft/Escape, edge flip and selected ZIP state; unit source-menu predicates, existing Desktop menu E2E and new `source-desktop-send-to-compressed.spec.ts` desktop/mobile real ZIP bytes + multi-select/collision coverage; new suite in deliberate opt-in focused GitHub Actions. Full source proof and test contract: [migration/DESKTOP-SEND-TO-ZIP-SOURCE.md](DESKTOP-SEND-TO-ZIP-SOURCE.md).
+
+**Verification:** code and tests are committed, but no local execution is claimed (the local runtime has no access to clone the GitHub repository). Exact-head `[run-ci]` is required before reporting the slice verified. Prior Explorer ZIP [#44889309855](https://github.com/codersachin99/windows-os/actions/runs/44889309855) succeeded on an older commit; Win2k Search [#44895908763](https://github.com/codersachin99/windows-os/actions/runs/44895908763) is also an earlier code snapshot. Check the new head's TypeScript, units, original/artwork audits, Vite build and targeted/full desktop/mobile Playwright. Do not remove tests on failure; diagnose logs. Original/React paired screenshot parity and all 37 themes remain open; private visual source token still needed. Keep draft PR and no product release.
+
+---
+
 ## 21 November 2026 — actual frozen Explorer Send to Compressed (zipped) folder via Guest ZIP
 
 **Frozen source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. **Target:** `feat/0001-faithful-react-foundation`, draft PR #1. Original and target main untouched; no merge/release.
