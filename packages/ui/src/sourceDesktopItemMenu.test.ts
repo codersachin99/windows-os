@@ -70,12 +70,14 @@ describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
     const noPaths=sourceDesktopItemMenu({...link,hasClipboardSourcePaths:false});
     expect(noPaths.some(a=>a.id==="cut"||a.id==="copy")).toBe(false);
     expect(noPaths.some(a=>a.id==="send-to")).toBe(false);
+    expect(noPaths.find(a=>a.id==="delete")?.disabled).toBe(true);
     const actualTarget=sourceDesktopItemMenu({...link,hasClipboardSourcePaths:true});
     expect(actualTarget.some(a=>a.id==="cut")).toBe(true);
     expect(actualTarget.find(a=>a.id==="send-to")?.disabled).toBe(true);
     expect(sourceDesktopItemMenu({...link,hasClipboardSourcePaths:true,
       canCompressGuest:true}).find(a=>a.id==="send-to")?.disabled).toBe(false);
     expect(actualTarget.some(a=>a.id==="copy")).toBe(true);
+    expect(actualTarget.find(a=>a.id==="delete")?.disabled).toBe(false);
     expect(sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,
       hasClipboardSourcePaths:true}).some(a=>a.id==="copy")).toBe(false);
   });
