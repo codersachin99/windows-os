@@ -1934,9 +1934,13 @@
         "migration/DESKTOP-CONTEXT-KEYBOARD-SOURCE.md",
         "packages/apps/explorer/src/ExplorerApp.tsx",
         "tests/e2e/source-explorer-context-keyboard.spec.ts",
-        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md"
+        "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md",
+        "packages/ui/src/sourceDesktopContextThemes.css",
+        "packages/ui/src/sourceWin7BasicVariants.css",
+        "tests/e2e/source-win7-aero-context-themes.spec.ts",
+        "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md"
       ],
-      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted"
+      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending"
     },
     {
       "source": "src/modules/system/mediacenter.js",
@@ -2413,9 +2417,12 @@
         "migration/AERO-BASIC-SOURCE.md",
         "packages/ui/src/sourceWindowChrome.css",
         "packages/ui/src/sourceStartContextThemes.css",
-        "tests/e2e/source-start-context-theme-families.spec.ts"
+        "tests/e2e/source-start-context-theme-families.spec.ts",
+        "packages/ui/src/sourceDesktopContextThemes.css",
+        "tests/e2e/source-win7-aero-context-themes.spec.ts",
+        "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md"
       ],
-      "verification": "Basic 1 + Aero 1–4 shared source window chrome implemented in bounded scope; per-theme colors, wallpapers, desktop/taskbar and screenshot parity pending"
+      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending"
     },
     {
       "source": "src/modules/themes/theme-win8-scss.js",
