@@ -1,11 +1,13 @@
 import {readFile} from "node:fs/promises";
+import {zipSync} from "fflate";
 import {expect,test,type Download,type Page} from "@playwright/test";
 
 const DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 
 /** Frozen main.js DesktopItemMenu Download calls download(downloadablePaths).
- * Browser events must carry ALL real selected eligible Guest bytes, never only
- * the right-clicked file or a path-backed/system .lnk.
+ * Browser events must carry ALL selected eligible Guest bytes. A program-only
+ * .lnk is excluded, but a source path-backed .lnk downloads its real
+ * referenced Guest target, not the .lnk JSON file.
  */
 async function logon(page:Page){
   await page.goto("/?theme=win7");
@@ -69,5 +71,38 @@ test("Desktop multi-selection Download excludes .lnk even if shortcut is right-c
   await expect.poll(()=>downloads.length,{timeout:10000}).toBe(1);
   expect(downloads[0].suggestedFilename()).toBe("Download Only.txt");
   expect(await readFile(await downloads[0].path())).toEqual(Buffer.from("only real data"));
+  await expect(link).toBeVisible();
+});
+
+test("Desktop path-backed shortcut Download emits exact original Guest ZIP target bytes",async({page})=>{
+  await logon(page);
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').last();
+  await expect(win).toBeVisible();
+  await win.locator(".explorer-navigation__home").filter({hasText:"Documents"}).click();
+  const zip=Buffer.from(zipSync({
+    "Original.txt":new TextEncoder().encode("source shortcut target bytes")
+  }));
+  await win.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"Shortcut Target.zip",mimeType:"application/zip",buffer:zip
+  });
+  const archived=win.locator('[data-test-explorer-item="Shortcut Target.zip"]');
+  await expect(archived).toBeVisible();
+  await archived.click({button:"right"});
+  const context=win.locator('[data-test-explorer-context="item"]');
+  await context.locator('[data-test-explorer-item-send-to]').click();
+  await context.locator('[data-test-explorer-item-send-to-kind="desktop"]').click();
+  const link=item(page,"Shortcut Target - Shortcut.lnk");
+  await expect(link).toBeVisible();
+  await win.getByRole("button",{name:/^Close /}).click();
+  await link.click({button:"right"});
+  const menu=page.locator('[data-test-desktop-menu]');
+  const download=menu.locator('[data-test-desktop-item-action="download"]');
+  await expect(download).toBeEnabled();
+  const resultEvent=page.waitForEvent("download");
+  await download.click();
+  const result=await resultEvent;
+  expect(result.suggestedFilename()).toBe("Shortcut Target.zip");
+  expect(await readFile(await result.path())).toEqual(zip);
   await expect(link).toBeVisible();
 });
