@@ -216,3 +216,18 @@ button:not(:disabled):is(:hover,:focus-visible){
     inset -1px 1px var(--border-color--contrast),
     inset 2px -2px var(--text-color--disabled);
 }
+
+/* Pinned theme-win7-classic-scss.js [aria-disabled] menuitem:
+ * faded opacity on disabled rows is NOT the source Classic treatment.
+ * Text is #7b7b7b with full opacity and a direction-aware high-contrast
+ * embossed text shadow. In the React menu, native disabled buttons are
+ * used in place of the original Vue menuitem aria-disabled wrapper. */
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+:is(.windows-desktop__menu,.windows-taskbar__context) button:disabled{
+  color:var(--text-color--disabled);opacity:1;
+  text-shadow:1px 1px var(--border-color--contrast);
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+:is(.windows-desktop__menu,.windows-taskbar__context) button:disabled{
+  text-shadow:-1px 1px var(--border-color--contrast);
+}
