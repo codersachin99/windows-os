@@ -121,7 +121,10 @@ test("Computer file context focuses Open, opens Send to child, and Escape focuse
   const child=context.locator('[data-test-explorer-sendto-submenu]');
   const desktop=child.locator('[data-test-explorer-item-send-to-kind="desktop"]');
   await expect(child.locator('[data-test-explorer-item-send-to-kind="compress"]'))
-    .toBeDisabled();
+    .toBeEnabled();
+  await expect(child.locator('[data-test-explorer-item-send-to-kind="compress"]'))
+    .toBeFocused();
+  await page.keyboard.press("ArrowDown");
   await expect(desktop).toBeFocused();
   await page.keyboard.press("ArrowLeft");
   await expect(child).toHaveCount(0);
