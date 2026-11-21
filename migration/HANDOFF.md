@@ -1,3 +1,26 @@
+## 21 November 2026 — source taskbar context keyboard entry and exact focus restoration
+
+**Frozen original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1. Original source and target `main` remain untouched.
+**Last verified exact-head CI:** [#44870350897](https://github.com/codersachin99/windows-os/actions/runs/44870350897), `46883af` **SUCCESS** TypeScript, unit, original source/artwork/Contacts audit, Vite build, focused and full desktop/mobile Chromium. Visual source-vs-target capture **skipped**.
+
+**Frozen source relationship:** `src/modules/shell/taskbar-base.js` `taskbar-menu`, `base-menu` and `taskbar__main-popup` open from real taskbar background and app-item context events. Target had source action ordering/disabled Toolbars/arrangement and `sourceMenuArrowFocus` already, but a genuine right-click did not put focus on any root action. Escape removed the menu without restoring the actual taskbar button/background.
+
+**Implemented commits:**
+- [`cc90263`](https://github.com/codersachin99/windows-os/commit/cc9026338be8446cf4c290dda69562a3bd7d7fd2): `SourceTaskbarMenu.tsx` focuses first enabled direct menuitem once on anchor-open, keeps existing ArrowUp/Down roving, restores actual connected trigger on Escape after dismiss (taskbar fallback), does not steal focus on action/clickout.
+- [`2d7e695`](https://github.com/codersachin99/windows-os/commit/2d7e695ee8ceed755e75c44bc2e9d708c95452ae): `DesktopShell.tsx` records real right-click background footer/pinned launcher/running group origins, adds taskbar footer `tabIndex={-1}` (not Tab order), passes origin to popup.
+- [`afd5a81`](https://github.com/codersachin99/windows-os/commit/afd5a8183aabc4b2fe479c02b6441f63adce35ec): 7 true Playwright contexts × desktop/mobile across Win7/XP/Win11dark/Basic1 background; Win7/XP pin; actual unpinned Win7 running Computer. Confirms first enabled focus, skip disabled commands, ArrowDown/Up wrap, exact focus return without launching/closing.
+- [`3236e9c`](https://github.com/codersachin99/windows-os/commit/3236e9c96c9e1b5f13ad4c15566884a484730bec): use actual Win7/XP/Basic1 running lane, not the Start orb, to invoke the background context; Win11 dark empty lane requires left footer edge.
+- [`5c4f060`](https://github.com/codersachin99/windows-os/commit/5c4f0603ea9efd2438477b5f1cb17482409bb5c7): include new suite in focused **opt-in** GitHub Actions.
+- [`196e805`](https://github.com/codersachin99/windows-os/commit/196e805f9e1c96b8d1330c96eca031f893e9d680): `migration/TASKBAR-CONTEXT-KEYBOARD-SOURCE.md` locked-source audit, interaction scope and limits.
+- [`53cdcd0`](https://github.com/codersachin99/windows-os/commit/53cdcd0b654c09504de8b370311d0a56007b577d): `migration/module-tracker.json` tracks bounded source `src/modules/shell/taskbar-base.js` menu coverage as **in-progress**.
+
+**Verification:** this handoff commit requests one new exact-head `[run-ci]`. The previous green run predates this change. Inspect focused browser run and full mobile+desktop; diagnose log/trace if any failures. Do not claim this slice is accepted before run **SUCCESS**. Paired original screenshot evidence requires configured `LEGACY_SOURCE_READ_TOKEN`, is still pending. Do not merge draft PR or publish releases based on bounded menu focus alone.
+
+**Next:** after current CI, continue Desktop/Start/Computer/Bin full original behavior and all theme families, with pixel-perfect paired parity as separate acceptance.
+
+---
+
 ## 21 November 2026 — original Win7/Aero/Basic1 Desktop + taskbar context source parity
 
 **Immutable reference:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
