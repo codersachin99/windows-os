@@ -7,7 +7,9 @@
 
 Pinned `src/modules/system/main.js` `DesktopItemMenu` has
 `downloadablePaths()` filtering **all** `this.paths` by an extension
-other than `.lnk`. Its Download menu's original callback is
+other than `.lnk`. A Desktop `.lnk` with a real, validated `shortcut.path`
+is therefore eligible when its target is a Guest file with an extension;
+program-only `.lnk` files remain excluded. Its Download menu's original callback is
 `this.download(this.downloadablePaths)`, and its visibility is
 `hidden: !this.downloadablePaths.length`. This **is not** a command
 on only the clicked desktop icon.
@@ -21,8 +23,11 @@ Download even when another selected real file was eligible.
 
 - `packages/ui/src/desktopFileActions.ts` exports
   `desktopDownloadableFiles(items,selectedKeys)`. It selects each unique
-  actual Guest VFS file with an extension except `.lnk` (not synthetic
-  app icons, directory icons, duplicate keys or stale selections).
+  actual Guest VFS file with an extension except `.lnk`, dereferencing a
+  validated path-backed `.lnk` to its actual Guest target. It excludes
+  synthetic app icons, directories, program-only `.lnk`, duplicates and
+  stale selections; the target is rechecked for normalized mounted Guest
+  scope to prevent host and traversal access.
 - `sourceDesktopItemMenu.ts` receives a new optional
   `downloadableCount`, preserving prior use in tests/callers while
   allowing the exact selected-path visibility of the original menu.
@@ -44,13 +49,17 @@ Download even when another selected real file was eligible.
 ## Verification contract
 
 - `desktopFileActions.test.ts`: selected real TXT + binary file, excludes
-  system icons, directories, .lnk, repeated/stale IDs.
+  system icons, directories, program-only `.lnk`, repeated/stale IDs.
+  Path-backed `.lnk` tests assert Guest ZIP target resolution and host/path
+  traversal rejection.
 - `sourceDesktopItemMenu.test.ts`: selected file count controls Download
   even when context-clicked item is a .lnk, while system item actions remain
   hidden.
 - `source-desktop-multi-download.spec.ts`: desktop/mobile two-file actual
   download events with exact bytes; a separate case verifies the clicked
-  .lnk does not download while the other selected TXT does.
+  program-only `.lnk` does not download while the other selected TXT does.
+  A new Explorer-created path-backed `.lnk` case confirms exact target ZIP
+  filename/bytes and shortcut preservation.
 - Suite is included in the intentional opt-in focused browser step. Full
   TypeScript, unit, original-source/artwork/Contacts audits, Vite, focused
   and complete desktop/mobile Playwright still require a new exact-head
