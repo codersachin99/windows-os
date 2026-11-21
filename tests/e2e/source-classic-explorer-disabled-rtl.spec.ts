@@ -77,8 +77,8 @@ for(const theme of ["basic-2","basic-3","basic-4"] as const){
       await itemMenu.locator('[data-test-explorer-item-send-to]').click();
       const child=itemMenu.locator('[data-test-explorer-sendto-submenu]');
       await expect(child).toBeVisible();
-      await disabledClassic(child.locator(
-        '[data-test-explorer-item-send-to-kind="compress"]'),dir);
+      await expect(child.locator(
+        '[data-test-explorer-item-send-to-kind="compress"]')).toBeEnabled();
       await expect(child.locator(
         '[data-test-explorer-item-send-to-kind="desktop"]')).toBeEnabled();
       await page.keyboard.press("Escape");
