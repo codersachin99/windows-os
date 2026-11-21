@@ -1,3 +1,20 @@
+## 21 November 2026 — Classic Basic2–4 disabled popup source contrast follow-up
+
+**Frozen original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`. **Target:** `feat/0001-faithful-react-foundation`, draft PR #1; original and `main` unchanged.
+
+**Last fully verified CI:** [#44880039033](https://github.com/codersachin99/windows-os/actions/runs/44880039033) at `5bd0109` **SUCCESS** (TS, unit, immutable source/artwork/Contacts audit, build, focused and full desktop/mobile Playwright). **Prior Classic RTL CI [#44884377212](https://github.com/codersachin99/windows-os/actions/runs/44884377212) at `e51dd3f`** had completed TypeScript, unit, original source/artwork/Contacts audit, build and Chromium install and was running focused browser regressions at latest check. Inspect terminal result, fix any failures; it predates the two follow-up commits below.
+
+**Additional source gap confirmed:** original `theme-win7-classic-scss.js` `.win7-classic .winui-menu [role=menuitem][aria-disabled]` keeps **opacity:1**, `var(--text-color--disabled,#7b7b7b)` and direction-aware embossed text shadow `1px 1px` LTR / `-1px 1px` RTL in `var(--border-color--contrast,#fff)`. React generic `.windows-taskbar__context button:disabled` has **opacity .52** and no emboss. This incorrectly fades the High Contrast Black/White and Classic source popup actions. The source expects unavailable controls greyed, not silently enabled.
+
+**New commits:**
+- [`80775b3`](https://github.com/codersachin99/windows-os/commit/80775b346097d88a56e678683004a9427b09001b): `packages/ui/src/sourceWin7ClassicContrast.css` restores source full-opacity, disabled grey and LTR/RTL embossed text shadow for real Basic2/3/4 Desktop/taskbar popup `button:disabled` only. Leaves source View/Task Manager actions, all other themes and paint untouched.
+- [`a7c9907`](https://github.com/codersachin99/windows-os/commit/a7c9907f001ca9c8787233bacc520e4d03299814): existing Classic `tests/e2e/source-win7-classic-rtl-context-themes.spec.ts` now asserts disabled `Toolbars` is still disabled, computed `opacity=1`, `rgb(123,123,123)` text, directionally mirrored computed shadow **on each Basic2/3/4 taskbar in both LTR and RTL**, and still launches Task Manager; total 12 source browser cases × desktop/mobile retained.
+- [`d353bc5`](https://github.com/codersachin99/windows-os/commit/d353bc513fbefaf99b89bdade1bfe70aa673cfd2): source audit `migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md` updated with literal source disabled style and expected role mapping.
+
+**Verification:** trigger fresh exact-head `[run-ci]` once checkpoint commits; verify full TS, unit, audits, Vite, focused + full desktop/mobile browser, without suppressing failing tests. Prior Classic RTL run only validates older commit. Paired original-source screenshots not checked due read-only `LEGACY_SOURCE_READ_TOKEN` requirement. Keep all classic source modules in progress, PR draft, `main` intact, no release.
+
+---
+
 ## 21 November 2026 — original Basic2–4 Win7 Classic RTL context bevel
 
 **Immutable original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
