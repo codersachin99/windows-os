@@ -1,7 +1,7 @@
 import {describe,it,expect} from "vitest";
-import {strFromU8,zipSync} from "fflate";
+import {zipSync} from "fflate";
 import {
-  VirtualFileStore,FileStoreError,sourceCanExtractGuestZip,
+  VirtualFileStore,sourceCanExtractGuestZip,
   extractSourceGuestZip,createSourceGuestArchive
 } from "./index";
 import {SOURCE_GUEST_PROFILE} from "./sourceGuest";
@@ -110,7 +110,5 @@ describe("frozen main.js Extract here / mounted Guest ZIP",()=>{
     expect(sourceCanExtractGuestZip(FOLDER,FOLDER+"/Ready.rar")).toBe(false);
     expect(sourceCanExtractGuestZip(FOLDER,FOLDER+"/Nested/Ready.zip")).toBe(false);
     expect(sourceCanExtractGuestZip("/tmp","/tmp/Ready.zip")).toBe(false);
-    expect(FileStoreError).toBeDefined();
-    expect(strFromU8(new TextEncoder().encode("zip"))).toBe("zip");
   });
 });
