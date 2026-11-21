@@ -22,6 +22,8 @@ export interface SourceDesktopItemMenuInput{
   /** Path-backed .lnk shortcuts use the archive target name, not .lnk. */
   archiveName?:string;
   canExtractGuestZip?:boolean;
+  /** Number of eligible selected path-backed files, not just the clicked icon. */
+  downloadableCount?:number;
   trashCount?:number;
 }
 export interface SourceDesktopItemMenuEntry{
@@ -36,9 +38,11 @@ export function sourceDesktopItemMenu(
   const archiveName=input.archiveName??input.fileName??"";
   const isArchiveFile=input.isFile&&input.fileType==="file"&&
     /\.(zip|rar|7z|tar|gz)$/i.test(archiveName);
-  const canDownload=input.isFile&&input.fileType==="file"&&
+  const clickedFileDownloadable=input.isFile&&input.fileType==="file"&&
     Boolean(input.fileName&&/\.[^.]+$/.test(input.fileName))&&
     !/\.lnk$/i.test(input.fileName??"");
+  const canDownload=input.downloadableCount===undefined
+    ?clickedFileDownloadable:input.downloadableCount>0;
   const result:SourceDesktopItemMenuEntry[]=[];
   const add=(id:SourceDesktopItemMenuAction,label:string,disabled=false)=>{
     result.push({id,label,disabled});
