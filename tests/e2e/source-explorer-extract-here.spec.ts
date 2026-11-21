@@ -67,6 +67,7 @@ test("Extract here refuses to overwrite existing Guest items atomically",async({
         }))}
     ]);
   await extract(win,"Blocked.zip");
+  await expect(win.getByRole("alert")).toContainText("already exists");
   await expect(win.locator('[data-test-explorer-item="New Folder"]')).toHaveCount(0);
   const original=win.locator('[data-test-explorer-item="Existing.txt"]');
   await expect(original).toBeVisible();
