@@ -911,8 +911,12 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   // cannot clip it. Flip left near the screen edge as the original does.
   const submenuWidth=194;
   const menuWidth=menuHost.current?.offsetWidth??submenuWidth;
-  const sendToX=menu ? menu.x+menuWidth+submenuWidth<=area.width
-    ? menu.x+menuWidth : Math.max(0,menu.x-submenuWidth) : 0;
+  const rightSpace=menu?area.width-(menu.x+menuWidth):0;
+  const leftSpace=menu?.x??0;
+  const sendToX=!menu?0:rightSpace>=submenuWidth
+    ?menu.x+menuWidth:leftSpace>=submenuWidth
+    ?menu.x-submenuWidth:rightSpace>=leftSpace
+    ?Math.max(0,area.width-submenuWidth):0;
   const sendToY=menu ? Math.max(0,Math.min(
     menu.y+4+Math.max(0,itemActions.findIndex(action=>action.id==="send-to"))*27,
     area.height-42)) : 0;
