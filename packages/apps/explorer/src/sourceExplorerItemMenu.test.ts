@@ -56,6 +56,22 @@ describe("pinned main.js ExplorerItemMenu, ordinary Computer files",()=>{
       id:"extract-here",label:"Extract here",disabled:true
     });
   });
+  it("enables real ZIP extraction only with a mounted Guest archive service",()=>{
+    const zip=sourceExplorerItemMenu({
+      selected:[file("Compressed.zip")],canRecycle:true,canExtractGuestZip:true
+    });
+    expect(zip.find(item=>item.id==="extract-here"))
+      .toEqual({id:"extract-here",label:"Extract here",disabled:false});
+    for(const other of ["Compressed.rar","Compressed.7z","Compressed.tar"]){
+      expect(sourceExplorerItemMenu({
+        selected:[file(other)],canRecycle:true,canExtractGuestZip:true
+      }).find(item=>item.id==="extract-here")?.disabled).toBe(true);
+    }
+    expect(sourceExplorerItemMenu({
+      selected:[file("Compressed.zip"),file("Note.txt")],
+      canRecycle:true,canExtractGuestZip:true
+    }).some(item=>item.id==="extract-here")).toBe(false);
+  });
   it("mirrors archive/Android restrictions without fake actions",()=>{
     expect(sourceExplorerItemMenu({
       selected:[file("memo.txt")],canRecycle:true,inArchive:true
