@@ -6,9 +6,8 @@ import type {FileEntry} from "@windows-os/filesystem";
  * remains Restore / Delete / Properties, handled by sourceBinItemMenu.
  *
  * Keep source ordering and hidden predicates without tying them to React.
- * Original archive extraction still needs a backing service. Compression
- * is enabled only for live direct children of a mounted Guest folder,
- * implemented atomically by sourceArchive; unavailable actions remain disabled.
+ * ZIP extraction and compression require actual mounted Guest backing
+ * services; unsupported source archive formats remain visibly disabled.
  */
 export type SourceExplorerItemAction=
   "open"|"extract-here"|"send-to"|"download"|
@@ -27,6 +26,8 @@ export interface SourceExplorerSendToEntry{
 export interface SourceExplorerItemMenuInput{
   selected:readonly FileEntry[];
   canRecycle:boolean;
+  /** True only for a readable mounted-Guest ZIP with an atomic extractor. */
+  canExtractGuestZip?:boolean;
   inArchive?:boolean;
   isAndroidFile?:boolean;
 }
@@ -76,7 +77,7 @@ export function sourceExplorerItemMenu(
   };
   if(!multiple)add("open","Open");
   if(!multiple&&!inArchive&&isArchiveFile)
-    add("extract-here","Extract here",true);
+    add("extract-here","Extract here",!input.canExtractGuestZip);
   if(!inArchive)add("send-to","Send to ▸");
   if(downloadable)add("download","Download");
   add("cut","Cut",inArchive);
