@@ -27,9 +27,11 @@
 .windows-desktop[data-theme="basic-1"] .windows-startmenu__right{
   padding:0;
 }
-.windows-desktop[data-theme="basic-1"] .windows-taskbar__context{
-  border-color:#646464;border-radius:0;box-shadow:none;
-}
+/* The pinned .basic-1 .taskbar__tray .taskbar-popup gets a special
+ * borderless tray treatment; it is NOT the shared .win7 .winui-menu used
+ * for right-clicking taskbar background/launchers. Do not override the
+ * source Win7 menu bevel on .windows-taskbar__context here. A distinct
+ * tray-popup adapter will carry that source rule when implemented. */
 /* Original Basic 1 .window__main loses Aero glass, uses inset white
  * framing and a 40px caption control with square-bottom frame. */
 .windows-desktop[data-theme="basic-1"] .windows-window{
