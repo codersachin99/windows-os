@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FileClipboard, VirtualFileStore } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths } from "./desktopFileActions";
+import { desktopSelectedFilePaths,desktopDownloadableFiles } from "./desktopFileActions";
 
 const icons = [
   { id: "computer" },
@@ -16,6 +16,25 @@ describe("source desktop file selection and shared clipboard", () => {
     expect(desktopSelectedFilePaths(icons, ["computer", "bin"])).toEqual([]);
     expect(desktopSelectedFilePaths(icons, ["file:/Desktop/Folder", "file:/Desktop/Folder"]))
       .toEqual(["/Desktop/Folder"]);
+  });
+
+  it("downloads every selected real file with an extension, excluding .lnk, folders and system icons",()=>{
+    const selected=[
+      {id:"computer"},
+      {id:"file:/Desktop/one.txt",file:{entry:{uri:"/Desktop/one.txt",name:"one.txt",type:"file" as const}}},
+      {id:"file:/Desktop/second.bin",file:{entry:{uri:"/Desktop/second.bin",name:"second.bin",type:"file" as const}}},
+      {id:"file:/Desktop/shortcut.lnk",file:{entry:{uri:"/Desktop/shortcut.lnk",name:"shortcut.lnk",type:"file" as const}}},
+      {id:"file:/Desktop/Folder",file:{entry:{uri:"/Desktop/Folder",name:"Folder",type:"directory" as const}}}
+    ];
+    const result=desktopDownloadableFiles(selected,[
+      "computer","file:/Desktop/one.txt","file:/Desktop/second.bin",
+      "file:/Desktop/shortcut.lnk","file:/Desktop/Folder","file:/Desktop/second.bin"
+    ]);
+    expect(result.map(entry=>entry.uri)).toEqual([
+      "/Desktop/one.txt","/Desktop/second.bin"
+    ]);
+    expect(desktopDownloadableFiles(selected,["computer","file:/Desktop/shortcut.lnk"]))
+      .toEqual([]);
   });
 
   it("moves and copies between Explorer and Desktop through one shared clipboard", async () => {
