@@ -309,7 +309,10 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   };
   const requestDesktopDelete = (keys: readonly string[]) => {
     setMenu(null);
-    const paths = desktopSelectedFilePaths(items, keys);
+    // Frozen main.js DesktopItemMenu.deleteShortcut() and desktop Delete
+    // keyboard both pass the selected getShortcut(key).path targets, not
+    // Explorer-created .lnk JSON backing files.
+    const paths = desktopSourceClipboardPaths(items, keys);
     if (!paths.length) return;
     if (!sourceFilesystemRuntime.snapshot()?.trashPath) {
       setError("The original Recycle Bin is not mounted.");
@@ -1039,7 +1042,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           event.preventDefault(); pasteDesktopFiles();
         }
       } else if (event.key === "Delete" && !event.altKey && !event.shiftKey) {
-        if (desktopSelectedFilePaths(items, selected).length) {
+        if (desktopSourceClipboardPaths(items, selected).length) {
           event.preventDefault(); requestDesktopDelete(selected);
         }
       } else if (event.key === "Escape") {
