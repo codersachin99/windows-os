@@ -204,3 +204,15 @@ button:not(:disabled):is(:hover,:focus-visible){
   background:var(--theme-accent);color:#fff;
   border-color:transparent;border-radius:0;
 }
+
+/* Frozen theme-win7-classic-scss.js [dir="rtl"] .win7-classic .winui-menu:
+ * source classic 3D bevel is directional, not a symmetric dark outline.
+ * Computer/Bin child menus already mirror it in sourceExplorerContextTheme.
+ * Mirror the actual Desktop and taskbar right-click popup panels as well;
+ * left-to-right and all source menu actions stay unchanged. */
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+:is(.windows-desktop__menu,.windows-taskbar__context){
+  box-shadow:inset 1px -1px var(--border-color),
+    inset -1px 1px var(--border-color--contrast),
+    inset 2px -2px var(--text-color--disabled);
+}
