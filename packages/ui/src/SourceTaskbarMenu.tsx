@@ -17,6 +17,8 @@ interface SourceTaskbarMenuProps{
   dispatch:Dispatch<DesktopAction>;
   onRequestCloseWindow(id:string):void;
   onClose():void;
+  /** Actual pinned/running button or taskbar background that opened the menu. */
+  returnFocusTarget?:HTMLElement|null;
 }
 
 /** Pure viewport geometry for the source taskbar popup. Buttons are centered
@@ -35,7 +37,7 @@ export function sourceTaskbarPopupPosition(
 }
 
 export function SourceTaskbarMenu({
-  context,windows,pinned,dispatch,onRequestCloseWindow,onClose
+  context,windows,pinned,dispatch,onRequestCloseWindow,onClose,returnFocusTarget
 }:SourceTaskbarMenuProps){
   const ref=useRef<HTMLDivElement>(null);
   const [position,setPosition]=useState({left:0,top:0});
@@ -55,13 +57,32 @@ export function SourceTaskbarMenu({
     window.addEventListener("resize",align);
     return ()=>window.removeEventListener("resize",align);
   },[context]);
+  // The source arrow-navigation helper is already connected on the menu.
+  // A real pointer-triggered popup must first focus its first enabled
+  // direct command; otherwise ArrowUp/Down never reach that handler.
+  // Do not focus again on a geometry-only rerender.
+  useLayoutEffect(()=>{
+    ref.current?.querySelector<HTMLButtonElement>(
+      ':scope > button[role="menuitem"]:not(:disabled)'
+    )?.focus({preventScroll:true});
+  },[context.kind,context.x,context.y,context.kind==="item"?context.id:null]);
+
   useEffect(()=>{
     const outside=(event:PointerEvent)=>{
       if(!(event.target instanceof Node)||!ref.current?.contains(event.target))
         onClose();
     };
     const escape=(event:KeyboardEvent)=>{
-      if(event.key==="Escape"){event.preventDefault();onClose();}
+      if(event.key==="Escape"){
+        event.preventDefault();
+        onClose();
+        window.requestAnimationFrame(()=>{
+          if(returnFocusTarget?.isConnected)
+            returnFocusTarget.focus({preventScroll:true});
+          else document.querySelector<HTMLElement>(".windows-taskbar")
+            ?.focus({preventScroll:true});
+        });
+      }
     };
     window.addEventListener("pointerdown",outside);
     window.addEventListener("keydown",escape);
@@ -69,7 +90,7 @@ export function SourceTaskbarMenu({
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[onClose]);
+  },[onClose,returnFocusTarget]);
   const act=(id:SourceTaskbarAction)=>{
     if(id==="pin"&&app)taskbarPins.toggle(app.id);
     else if(id==="open"&&app)dispatch({type:"OPEN_APP",app});
