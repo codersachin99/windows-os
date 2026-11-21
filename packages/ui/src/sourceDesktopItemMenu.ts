@@ -62,7 +62,8 @@ export function sourceDesktopItemMenu(
     if(!input.multiple&&isArchiveFile)
       add("extract-here","Extract here",
         !(input.canExtractGuestZip&&/\.zip$/i.test(archiveName)));
-    add("send-to","Send to ▸",!input.canCompressGuest); // original has compressed ZIP child
+    if(input.hasClipboardSourcePaths!==false)
+      add("send-to","Send to ▸",!input.canCompressGuest); // original hides without shortcut.path
     if(canDownload)add("download","Download");
     if(input.hasClipboardSourcePaths!==false){
       add("cut","Cut");
