@@ -27,7 +27,8 @@ import {
   sourceDesktopItemMenu,type SourceDesktopItemMenuAction
 } from "./sourceDesktopItemMenu";
 import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
-  sourceFileIconType,type FileEntry } from "@windows-os/filesystem";
+  sourceFileIconType,createSourceGuestArchive,sourceCanCompressSelection,
+  type FileEntry } from "@windows-os/filesystem";
 import { desktopSelectedFilePaths } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
@@ -60,7 +61,7 @@ interface ActivePress {
   narrowTo: string | null;
   dragToken: string | null;
 }
-type DesktopMenu = { x: number; y: number; anchorX:number; anchorY:number; id: string | null; view: boolean; sortOpen:boolean; newOpen: boolean };
+type DesktopMenu = { x: number; y: number; anchorX:number; anchorY:number; id: string | null; view: boolean; sortOpen:boolean; newOpen: boolean; sendToOpen?:boolean };
 interface ActiveBand {
   start: DesktopPoint;
   previous: string[];
@@ -107,6 +108,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const list = useRef<HTMLDivElement>(null);
   const uploadInput = useRef<HTMLInputElement>(null);
   const menuHost = useRef<HTMLDivElement>(null);
+  const sendToMenuHost = useRef<HTMLDivElement>(null);
   // Context can open on a specific icon or the Desktop background.
   // Keep the real invoking element for Escape rather than losing focus.
   const menuReturnFocus = useRef<HTMLElement|null>(null);
@@ -226,6 +228,25 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     } else {
       openGuestEntry(file.entry);
     }
+  };
+
+  // Pinned main.js DesktopItemMenu Send to > compressed-folder calls
+  // compress(paths). Reuse Explorer's bounded, atomic Guest ZIP operation,
+  // never a host filesystem adapter or a fake success notification.
+  const compressDesktopSelection = (keys: readonly string[]) => {
+    setMenu(null);
+    const desktop = sourceFilesystemRuntime.snapshot()?.desktopPath;
+    const paths = desktopSelectedFilePaths(items, keys);
+    if (!desktop || !sourceCanCompressSelection(desktop, paths)) {
+      setError("Select files from the mounted Guest Desktop to create a ZIP.");
+      return;
+    }
+    void createSourceGuestArchive(fileStore, desktop, paths).then(uri => {
+      setSelected(["file:" + uri]);
+      anchor.current = "file:" + uri;
+      setError(null);
+    }).catch(cause => setError(cause instanceof Error ? cause.message :
+      "Cannot compress Guest Desktop files"));
   };
 
   const prepareDesktopClipboard = (mode: "copy" | "cut", keys: readonly string[]) => {
@@ -587,7 +608,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     if (event.button !== 0 || !options.showIcons || press.current) return;
     const target = event.target as HTMLElement;
     if (target.closest(
-      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-create], [data-test-desktop-confirm], .windows-desktop__layout-error"
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-send-to-submenu], [data-test-desktop-create], [data-test-desktop-confirm], .windows-desktop__layout-error"
     )) return;
     const bounds = list.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -606,7 +627,8 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   useEffect(() => {
     if (!menu) return;
     const dismiss = (event: PointerEvent) => {
-      if (!(event.target instanceof Element && event.target.closest("[data-test-desktop-menu]"))) {
+      if (!(event.target instanceof Element && event.target.closest(
+        "[data-test-desktop-menu], [data-test-desktop-send-to-submenu]"))) {
         setMenu(null);
       }
     };
@@ -657,7 +679,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const acceptsNativeDesktopDrop = (event: import("react").DragEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
     if (target.closest(
-      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-confirm], .windows-desktop__layout-error"
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-send-to-submenu], [data-test-desktop-confirm], .windows-desktop__layout-error"
     )) return false;
     const types = Array.from(event.dataTransfer.types);
     return types.includes(SHELL_DRAG_TYPE) || types.includes("Files");
@@ -868,6 +890,10 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const contextItem=items.find(item=>item.id===menu?.id);
   const contextKeys=menu?.id&&selected.includes(menu.id)?selected:
     menu?.id?[menu.id]:[];
+  const desktopPath=sourceFilesystemRuntime.snapshot()?.desktopPath;
+  const contextPaths=desktopSelectedFilePaths(items,contextKeys);
+  const canCompressGuest=Boolean(contextItem?.file&&desktopPath&&
+    sourceCanCompressSelection(desktopPath,contextPaths));
   const itemActions=contextItem?sourceDesktopItemMenu({
     id:contextItem.id,
     isFile:Boolean(contextItem.file),
@@ -877,9 +903,22 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
     multiple:contextKeys.length>1,
     canPin:Boolean(contextItem.app && appRegistry.get(contextItem.id)),
+    canCompressGuest,
     pinned:pinned.includes(contextItem.id),
     trashCount
   }):[];
+  // The child is a separate popup so the root menu's source scroll clamp
+  // cannot clip it. Flip left near the screen edge as the original does.
+  const submenuWidth=194;
+  const menuWidth=menuHost.current?.offsetWidth??submenuWidth;
+  const sendToX=menu ? menu.x+menuWidth+submenuWidth<=area.width
+    ? menu.x+menuWidth : Math.max(0,menu.x-submenuWidth) : 0;
+  const sendToY=menu ? Math.max(0,Math.min(
+    menu.y+4+Math.max(0,itemActions.findIndex(action=>action.id==="send-to"))*27,
+    area.height-42)) : 0;
+  const focusSendTo=()=>window.requestAnimationFrame(()=>
+    sendToMenuHost.current?.querySelector<HTMLButtonElement>(
+      '[data-test-desktop-send-to-kind="compress"]')?.focus({preventScroll:true}));
   const runItemAction=(action:SourceDesktopItemMenuAction,item:DesktopItem)=>{
     switch(action){
       case "open":
@@ -897,8 +936,8 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           setMenu(null);
         }
         break;
-      // Properties and Compressed Folder await source-backed services.
-      case "send-to":
+      // The parent opens a real submenu. Properties remains unimplemented.
+      case "send-to":break;
       case "properties":break;
     }
   };
@@ -919,7 +958,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     onPointerDown={startBand}
     onClick={event => {
       if (ignoreClick.current) {ignoreClick.current=false;return;}
-      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-create], [data-test-desktop-confirm]")) return;
+      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-send-to-submenu], [data-test-desktop-create], [data-test-desktop-confirm]")) return;
       if ((event.target as HTMLElement).closest("[data-test-desktop-icon]")) return;
       setSelected([]);anchor.current=null;dispatch({ type:"SELECT_ICON", id:null });
     }}
@@ -1061,9 +1100,29 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         {contextItem&&itemActions.map(action=>
           <button key={action.id} role="menuitem"
             data-test-desktop-item-action={action.id}
+            aria-haspopup={action.id==="send-to"?"menu":undefined}
+            aria-expanded={action.id==="send-to"?Boolean(menu.sendToOpen):undefined}
             disabled={action.disabled}
             title={action.disabled?"Original action not yet migrated or unavailable":undefined}
-            onClick={()=>runItemAction(action.id,contextItem)}>
+            onPointerEnter={()=>setMenu(current=>current?.id===contextItem.id
+              ?{...current,sendToOpen:action.id==="send-to"&&!action.disabled}:current)}
+            onFocus={()=>{
+              if(action.id!=="send-to"&&menu.sendToOpen)
+                setMenu(current=>current?{...current,sendToOpen:false}:current);
+            }}
+            onKeyDown={event=>{
+              if(action.id==="send-to"&&!action.disabled&&event.key==="ArrowRight"){
+                event.preventDefault();
+                setMenu(current=>current?{...current,sendToOpen:true}:current);
+                focusSendTo();
+              }
+            }}
+            onClick={()=>{
+              if(action.id==="send-to"){
+                setMenu(current=>current?{...current,sendToOpen:!current.sendToOpen}:current);
+                focusSendTo();
+              }else runItemAction(action.id,contextItem);
+            }}>
             {action.label}
           </button>)}
       </> : <>
@@ -1202,6 +1261,31 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         </div>
       </div>
     </div>}
+    {menu?.id&&menu.sendToOpen&&canCompressGuest&&
+      <div ref={sendToMenuHost} role="menu"
+        className="windows-desktop__menu windows-desktop__send-to-menu"
+        data-test-desktop-send-to-submenu=""
+        aria-label="Send to"
+        style={{left:sendToX,top:sendToY}}
+        onContextMenu={event=>{event.preventDefault();event.stopPropagation();}}
+        onKeyDown={event=>{
+          if(sourceMenuArrowFocus(sendToMenuHost.current,event.target,event.key)){
+            event.preventDefault();event.stopPropagation();return;
+          }
+          if(event.key==="ArrowLeft"){
+            event.preventDefault();event.stopPropagation();
+            setMenu(current=>current?{...current,sendToOpen:false}:current);
+            window.requestAnimationFrame(()=>menuHost.current
+              ?.querySelector<HTMLButtonElement>(
+                '[data-test-desktop-item-action="send-to"]')
+              ?.focus({preventScroll:true}));
+          }
+        }}>
+        <button role="menuitem" data-test-desktop-send-to-kind="compress"
+          onClick={()=>compressDesktopSelection(contextKeys)}>
+          Compressed (zipped) folder
+        </button>
+      </div>}
     {pendingDelete && <div className="windows-desktop__create-backdrop"
       data-test-desktop-confirm="" role="alertdialog" aria-modal="true"
       aria-label="Confirm desktop deletion"
