@@ -18,7 +18,7 @@ type ExtractStore=Pick<VirtualFileStore,
   "stat"|"readBytes"|"createTreeAtomic">;
 type TreeMember=
   | {path:string;type:"directory"}
-  | {path:string;type:"file";content:Uint8Array};
+  | {path:string;type:"file";content:Uint8Array|string};
 
 export function sourceCanExtractGuestZip(folder:string,archivePath:string):boolean{
   try{
@@ -44,6 +44,20 @@ function safeZipName(name:string):{parts:string[];directory:boolean}{
     throw new FileStoreError("EINVAL","Unsafe ZIP member nesting");
   }
   return {parts,directory};
+}
+
+/** Keep UTF-8 text-backed Guest documents readable by Notepad while retaining
+ * the original ZIP bytes. Unrecognized or non-UTF8 files stay binary-backed. */
+function sourceExtractedContent(name:string,bytes:Uint8Array):Uint8Array|string{
+  if(!/\\.(txt|md|csv|json|xml|ini|log|bat|cmd|js|ts|html|css|yaml|yml|svg|lnk)$/i.test(name))
+    return bytes;
+  try{
+    const text=new TextDecoder("utf-8",{fatal:true,ignoreBOM:true}).decode(bytes);
+    const encoded=new TextEncoder().encode(text);
+    if(encoded.byteLength!==bytes.byteLength ||
+       encoded.some((value,index)=>value!==bytes[index]))return bytes;
+    return text;
+  }catch{return bytes;}
 }
 
 export async function extractSourceGuestZip(
@@ -124,7 +138,8 @@ export async function extractSourceGuestZip(
     if(actualBytes>SOURCE_GUEST_ZIP_MAX_BYTES){
       throw new FileStoreError("EINVAL","ZIP expansion safety limit exceeded");
     }
-    tree.set(relative,{path:folder+"/"+relative,type:"file",content});
+    tree.set(relative,{path:folder+"/"+relative,type:"file",
+      content:sourceExtractedContent(relative,content)});
     lowerNames.set(key,relative);
   }
   if(!tree.size)throw new FileStoreError("EINVAL","The ZIP contains no files");
