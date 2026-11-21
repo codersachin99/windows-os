@@ -16,9 +16,16 @@ async function logon(page:Page){
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
   await expect(page.locator("#desktop-icons")).toBeVisible();
 }
-async function desktopMenu(page:Page,path:string):Promise<Locator>{
+async function desktopMenu(
+  page:Page,path:string,preserveSelection=false
+):Promise<Locator>{
   const icon=page.locator('[data-test-desktop-file="'+path+'"]');
   await expect(icon).toBeVisible();
+  // Native multi-upload intentionally selects ALL imported desktop icons.
+  // Right-clicking an already-selected member preserves that selection,
+  // matching the frozen DesktopItemMenu's isMultiple behavior. A single-item
+  // extraction test must explicitly select its one icon first.
+  if(!preserveSelection)await icon.click();
   await icon.click({button:"right"});
   const menu=page.locator('[data-test-desktop-menu]');
   await expect(menu).toBeVisible();
@@ -122,7 +129,7 @@ test("Desktop Extract here respects archive extension and single-selection predi
   await page.locator('[data-test-desktop-file="'+DESKTOP+'/Source Test.zip"]').click();
   await page.locator('[data-test-desktop-file="'+DESKTOP+'/Source Plain.txt"]')
     .click({modifiers:["Control"]});
-  menu=await desktopMenu(page,DESKTOP+"/Source Test.zip");
+  menu=await desktopMenu(page,DESKTOP+"/Source Test.zip",true);
   await expect(menu.locator('[data-test-desktop-item-action="extract-here"]'))
     .toHaveCount(0);
 });
