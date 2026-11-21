@@ -37,6 +37,33 @@ describe("source desktop file selection and shared clipboard", () => {
       .toEqual([]);
   });
 
+  it("downloads the mounted Guest target of source path-backed .lnk rather than the link JSON",()=>{
+    const doc="/EXTERNAL/computer/drive0/Users/Guest/Documents/Target Archive.zip";
+    const link={
+      id:"file:/EXTERNAL/computer/drive0/Users/Guest/Desktop/Target Archive - Shortcut.lnk",
+      file:{
+        entry:{uri:"/EXTERNAL/computer/drive0/Users/Guest/Desktop/Target Archive - Shortcut.lnk",
+          name:"Target Archive - Shortcut.lnk",type:"file" as const},
+        targetPath:doc
+      }
+    };
+    expect(desktopDownloadableFiles([link],[link.id])).toEqual([{
+      uri:doc,name:"Target Archive.zip",type:"file"
+    }]);
+    // Source shortcut target may not gain permission for a host URI, even
+    // if a malformed caller bypassed the validated .lnk parser.
+    const invalid={...link,file:{...link.file,targetPath:"/etc/passwd.zip"}};
+    expect(desktopDownloadableFiles([invalid],[link.id])).toEqual([]);
+    const traversal={...link,file:{...link.file,
+      targetPath:"/EXTERNAL/computer/drive0/Users/Guest/../../escape.zip"}};
+    expect(desktopDownloadableFiles([traversal],[link.id])).toEqual([]);
+    const programOnly={...link,file:{entry:link.file.entry,targetPath:null}};
+    expect(desktopDownloadableFiles([programOnly],[link.id])).toEqual([]);
+    const targetLink={...link,file:{...link.file,
+      targetPath:"/EXTERNAL/computer/drive0/Users/Guest/Documents/Other.lnk"}};
+    expect(desktopDownloadableFiles([targetLink],[link.id])).toEqual([]);
+  });
+
   it("moves and copies between Explorer and Desktop through one shared clipboard", async () => {
     const fs = new VirtualFileStore();
     await fs.mkdir("/Desktop");
