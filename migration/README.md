@@ -1,3 +1,5 @@
+> **21 November 2026 checkpoint (Windows 2000 Start Search):** pinned `startmenu-win9x.js` opens Computer in Search mode, not the ordinary Computer folder. The React Start/Explorer adapter now opens its real Search Companion (Win95/98 Find remains distinct), with unit and desktop/mobile Playwright regression updates. [Source contract and limitations](WIN2K-START-SEARCH-SOURCE.md). Latest prior exact-head ZIP [CI #44889309855](https://github.com/codersachin99/windows-os/actions/runs/44889309855) passed; this new code must receive its **own** opt-in acceptance. Draft PR #1 stays open; immutable source and `main` unchanged; screenshot parity not claimed. See the source audit document instead of rewriting the historical 6,000-line handoff log.
+
 # Source-locked React conversion of legacy-win7
 
 **Canonical product/source:** [codersachin99/legacy-win7](https://github.com/codersachin99/legacy-win7), immutable commit `26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
