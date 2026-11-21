@@ -33,7 +33,21 @@ jobs:
         with:
           node-version: "22"
       - name: Install npm dependencies
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --include=optional
+      # Without a committed lockfile npm can skip Rollup's platform-specific
+      # optional dependency on Ubuntu even when the JS package installs.
+      # Repair only that missing native binary, at EXACTLY the installed
+      # Rollup version, without changing package.json or generating a lock.
+      - name: Verify or restore Rollup native binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! node -e "require('@rollup/rollup-linux-x64-gnu')" >/dev/null 2>&1; then
+            ROLLUP_VERSION="$(node -p "require('./node_modules/rollup/package.json').version")"
+            npm install --no-save --no-package-lock --no-audit --no-fund \
+              "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
+          fi
+          node -e "require('@rollup/rollup-linux-x64-gnu')"
       - name: Verify TypeScript
         run: npm run typecheck
       - name: Unit tests
@@ -76,7 +90,17 @@ jobs:
         with:
           node-version: "22"
       - name: Install frontend dependencies
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --include=optional
+      - name: Verify or restore Rollup native binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! node -e "require('@rollup/rollup-linux-x64-gnu')" >/dev/null 2>&1; then
+            ROLLUP_VERSION="$(node -p "require('./node_modules/rollup/package.json').version")"
+            npm install --no-save --no-package-lock --no-audit --no-fund \
+              "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
+          fi
+          node -e "require('@rollup/rollup-linux-x64-gnu')"
       - name: Verify visual capture JavaScript syntax
         run: node --check scripts/capture-visual-parity.mjs
       - name: Assert pinned source assets before capture
