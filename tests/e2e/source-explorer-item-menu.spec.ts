@@ -35,7 +35,7 @@ test("pinned ExplorerItemMenu ordinary text file order and original Send to stru
     "Compressed (zipped) folder","Desktop (create shortcut)"
   ]);
   await expect(menu.locator('[data-test-explorer-item-send-to-kind="compress"]'))
-    .toBeDisabled();
+    .toBeEnabled();
   await expect(menu.locator('[data-test-explorer-item-send-to-kind="desktop"]'))
     .toBeEnabled();
   await page.keyboard.press("Escape");
