@@ -78,7 +78,19 @@ for(const source of classics){
     await page.locator('[data-test-avatar="win7"]').click();
     menu=await open();
     await menu.locator('[data-test-win9x-command="find"]').click();
-    await expect(desktop.locator('[data-test-window="'+(source.id==="win2k"?"computer":"find")+'"]')).toBeVisible();
+    const searched=desktop.locator('[data-test-window="'+(source.id==="win2k"?"computer":"find")+'"]');
+    await expect(searched).toBeVisible();
+    if(source.id==="win2k"){
+      // Original 015b opens Computer with file.search=true and an unsubmitted
+      // Search Companion; it must not show the ordinary folder-only view.
+      const companion=searched.locator('[data-test-search-companion]');
+      await expect(companion).toBeVisible();
+      await expect(companion.getByText("Search for files and folders")).toBeVisible();
+      await expect(companion.locator('[data-test-search-name-pattern]')).toBeFocused();
+      await expect(companion.locator('[data-test-search-submit]')).toBeEnabled();
+    }else{
+      await expect(searched.locator('[data-test-search-companion]')).toHaveCount(0);
+    }
     await expect(menu).toHaveCount(0);
   });
 }
