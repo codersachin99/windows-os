@@ -34,6 +34,21 @@ describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
       "open","send-to","download","cut","copy","delete","rename","properties"
     ]);
   });
+  it("enables source Desktop compressed submenu only for mounted Guest selection",()=>{
+    const input={id:"file:/EXTERNAL/computer/drive0/Users/Guest/Desktop/Test.txt",
+      isFile:true,multiple:false,fileType:"file" as const,fileName:"Test.txt"};
+    expect(sourceDesktopItemMenu(input).find(a=>a.id==="send-to")?.disabled).toBe(true);
+    expect(sourceDesktopItemMenu({...input,canCompressGuest:true})
+      .find(a=>a.id==="send-to")).toEqual({
+        id:"send-to",label:"Send to ▸",disabled:false
+      });
+    expect(sourceDesktopItemMenu({...input,canCompressGuest:false,multiple:true})
+      .find(a=>a.id==="send-to")?.disabled).toBe(true);
+    expect(sourceDesktopItemMenu({...input,canCompressGuest:true,multiple:true})
+      .find(a=>a.id==="send-to")?.disabled).toBe(false);
+    expect(sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,
+      canCompressGuest:true}).some(a=>a.id==="send-to")).toBe(false);
+  });
   it("folder and .lnk omit source download and multiple selection omits Open/Rename",()=>{
     for(const type of [
       {fileName:"Projects",fileType:"directory" as const},
