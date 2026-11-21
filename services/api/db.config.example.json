@@ -1,0 +1,22 @@
+{
+  "paths": {
+    "apiDir": "api",
+    "srcDir": "../../apps/web/src",
+    "assetsDir": "../../apps/web/public/assets",
+    "dataDir": "data",
+    "storageDir": "data/storage"
+  },
+  "type": "sqlite",
+  "sqlite": {
+    "path": "data/windowsos.sqlite3"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8099,
+    "autoOpenBrowser": false
+  },
+  "security": {
+    "exposeConfigFilesToBrowser": false,
+    "clientConfigDelivery": "endpoint"
+  }
+}

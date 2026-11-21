@@ -1,0 +1,568 @@
+.explorer-stage { position:relative; height:100%; min-height:0; display:flex; flex-direction:column;
+  font:12px/1.4 "Segoe UI",Tahoma,sans-serif; color:#263b4b; }
+.explorer-address { display:flex; gap:4px; flex:0 0 36px; align-items:center; padding:3px 7px; background:#f1f7fb; }
+.explorer-address button,.explorer-command button,.explorer-prompt button {
+  border:1px solid #afc3d4; border-radius:2px; color:#153f63; padding:4px 8px;
+  background:linear-gradient(#fff,#d5e9f6); cursor:pointer; font:inherit; }
+.explorer-address button:disabled,.explorer-command button:disabled { opacity:.5; cursor:default; }
+.explorer-address__location { display:flex; align-items:center; gap:4px; flex:1; min-width:0; }
+.explorer-address input { min-width:0; border:1px solid #b6c8d2; padding:4px; font:inherit; }
+.explorer-address__location-wrapper {
+  position:relative; display:flex; flex:1; min-width:0; height:25px;
+  background:rgba(255,255,255,.67);
+  border:1px solid rgba(0,0,0,.67); border-radius:2px;
+  box-shadow:0 0 0 1px #ffffff77,inset 0 0 0 1px #fff;
+  overflow:hidden;
+}
+.explorer-address__location-wrapper input {
+  position:relative; z-index:1; display:block; flex:1; width:100%; height:100%;
+  box-sizing:border-box; border:0; background:transparent;
+  padding:3px 6px; color:#23394c;
+}
+.explorer-address__location-wrapper input:focus { outline:1px solid #78add2; outline-offset:-1px; }
+.explorer-address__progress {
+  position:absolute; z-index:0; top:0; bottom:0; left:0;
+  pointer-events:none;
+  /* Exact pinned Win7 theme .window__addressbar-progress gradient. */
+  background:linear-gradient(to bottom,#e6fbe8,#bbf9ca 30%,#7ade96 30%,#89f097 100%);
+  transition:width .12s linear;
+}
+@media (prefers-reduced-motion:reduce) {
+  .explorer-address__progress { transition:none; }
+}
+.explorer-address__search { flex:0 1 135px; width:120px; }
+.explorer-command { display:flex; gap:8px; align-items:center; min-height:34px; padding:3px 8px;
+  background:linear-gradient(#fff,#e3edf7); border-top:1px solid #e9f2f8; border-bottom:1px solid #b3c6d8; }
+.explorer-command label { margin-left:auto; white-space:nowrap; }
+.explorer-command select { margin-left:4px; padding:3px; font:inherit; }
+.explorer-workspace { display:flex; min-height:0; flex:1; }
+.explorer-navigation { flex:0 0 170px; padding:14px 10px; background:linear-gradient(#e9f3fb,#d8e9f8); border-right:1px solid #b9cfdf; }
+.explorer-navigation__home { display:flex; align-items:center; gap:7px; padding:6px; border:0;
+  background:transparent; font:inherit; width:100%; text-align:left; color:#16456c; cursor:pointer; }
+.explorer-navigation__home img { width:24px; height:24px; object-fit:contain; }
+.explorer-navigation small { display:block; color:#567; font-size:10px; margin-top:16px; }
+.explorer-content { min-width:0; flex:1; overflow:auto; background:white; }
+.explorer-columns { display:grid; grid-template-columns:minmax(155px,2fr) minmax(100px,1.3fr) minmax(80px,1fr) 65px;
+  border-bottom:1px solid #c0cedb; background:linear-gradient(#f9fbff,#e8f0f8); color:#456477; }
+.explorer-columns .listview__header-column {
+  display:block;min-width:0;padding:5px 9px;border:0;
+  border-right:1px solid #d1dce6;background:transparent;
+  color:inherit;font:inherit;text-align:left;cursor:default;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.explorer-list { display:flex; flex-wrap:wrap; align-content:flex-start; padding:5px; }
+.explorer-item { display:flex; align-items:center; gap:5px; border:1px solid transparent; background:transparent;
+  font:inherit; text-align:left; color:#1e3348; cursor:default; }
+.explorer-item:hover { background:#eaf5ff; border-color:#c3e6fb; }
+.explorer-item.is-selected { background:#c6e5fa; border-color:#86bcd9; }
+.explorer-item .listview__item-iconbox { width:24px; height:24px; flex:0 0 24px; display:flex; align-items:center; justify-content:center; }
+.explorer-item .listview__item-iconbox img { width:100%; height:100%; object-fit:contain; }
+.explorer-list.has-details { display:block; }
+.explorer-list.has-details .explorer-item { display:grid; width:100%; grid-template-columns:minmax(155px,2fr) minmax(100px,1.3fr) minmax(80px,1fr) 65px; padding:2px 8px; }
+.explorer-list.has-details .explorer-item .listview__item-iconbox { grid-column:1; grid-row:1; }
+.explorer-list.has-details .explorer-item .listview__item-label { grid-column:1; grid-row:1; padding-left:29px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.explorer-list.has-details .explorer-item > span:nth-child(n + 3) { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.explorer-list.has-list .explorer-item { width:220px; }
+.explorer-list.has-icons .explorer-item { flex-direction:column; justify-content:flex-start; text-align:center; width:96px; min-height:0; padding:2px 4px 4px; }
+.explorer-list.has-icons.is-small .explorer-item { flex-direction:row; width:30%; min-width:160px; min-height:0; padding:2px; text-align:left; }
+.explorer-list.has-icons.is-small .explorer-item .listview__item-iconbox { width:16px; height:16px; flex-basis:16px; }
+.explorer-list.has-icons.is-medium .explorer-item .listview__item-iconbox { width:88px; height:88px; flex-basis:88px; }
+.explorer-list.has-icons.is-large .explorer-item { width:144px; min-height:0; padding:2px 8px 8px; }
+.explorer-list.has-icons.is-large .explorer-item .listview__item-iconbox { width:128px; height:128px; flex-basis:128px; }
+.explorer-list.has-icons.is-extra .explorer-item { width:212px; min-height:0; padding:2px 8px 8px; }
+.explorer-list.has-icons.is-extra .explorer-item .listview__item-iconbox {
+  width:196px; height:196px; flex-basis:196px;
+}
+/* Pinned legacy src/styles/apps/computer.css: medium/large/extra icon
+ * labels wrap to four lines. Earlier shared Explorer ellipsis clipped them
+ * to one line, making all three original icon views visually shorter. */
+.explorer-list.has-icons.is-medium .explorer-item .listview__item-label,
+.explorer-list.has-icons.is-large .explorer-item .listview__item-label,
+.explorer-list.has-icons.is-extra .explorer-item .listview__item-label {
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
+  white-space:normal;overflow:hidden;text-align:center;
+}
+.explorer-list.has-tiles .explorer-item {
+  display:grid;grid-template-columns:52px minmax(0,1fr);
+  grid-template-rows:auto auto auto;align-content:center;column-gap:8px;
+  min-width:256px;width:calc(20% - 8px);min-height:0;padding:4px;
+}
+.explorer-list.has-tiles .explorer-item .listview__item-iconbox {
+  grid-column:1;grid-row:1 / span 3;width:48px;height:48px;
+  flex:0 0 48px;align-self:center;
+}
+.explorer-list.has-tiles .explorer-item .listview__item-label {
+  grid-column:2;grid-row:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.explorer-list.has-tiles .explorer-item .listview__item-extra:nth-child(3){grid-column:2;grid-row:2;}
+.explorer-list.has-tiles .explorer-item .listview__item-extra:nth-child(4){grid-column:2;grid-row:3;}
+.explorer-list.has-content .explorer-item { width:100%; min-height:50px; }
+.explorer-empty { flex:1; text-align:center; color:#62788a; padding:24px; }
+.explorer-status { flex:0 0 24px; border-top:1px solid #bfcfdd; padding:3px 9px; background:#edf5fb; color:#46647c; }
+.explorer-error { position:absolute; left:10px; bottom:28px; padding:7px 12px; border:1px solid #a95; background:#fff4df; z-index:5; }
+.explorer-error button { margin-left:15px; }
+.explorer-prompt__backdrop { position:absolute; inset:0; z-index:10; display:grid; place-items:center; background:#1236; }
+.explorer-prompt { display:grid; gap:10px; width:min(330px,95%); padding:18px; background:#f2f7fb; border:1px solid #699bc0; box-shadow:0 5px 17px #0006; }
+.explorer-prompt div { display:flex; gap:8px; justify-content:flex-end; }
+@media (max-width:580px) {
+ .explorer-workspace { flex-direction:column; }
+ .explorer-navigation {
+   display:flex; flex:0 0 48px; flex-wrap:nowrap; gap:3px;
+   max-width:100%; min-width:0; padding:3px; overflow-x:auto; overflow-y:hidden;
+   white-space:nowrap; border-right:0; border-bottom:1px solid #b9cfdf;
+ }
+ .explorer-navigation__home {
+   flex:0 0 auto; width:auto; padding:3px 6px; font-size:11px;
+ }
+ .explorer-navigation__home img { width:18px; height:18px; }
+ .explorer-command { overflow-x:auto; flex-wrap:nowrap; }
+ .explorer-command button, .explorer-command label { flex-shrink:0; }
+ .explorer-address__search { width:80px; flex-basis:80px; }
+ .explorer-command { gap:3px; }
+ .explorer-command button { padding:4px; }
+ .explorer-list.has-details .explorer-item { grid-template-columns:minmax(120px,1fr) 70px; }
+ .explorer-list.has-details .explorer-item > .listview__item-extra:nth-last-child(2),
+ .explorer-list.has-details .explorer-item > .listview__item-extra:nth-last-child(3) { display:none; }
+ .explorer-columns { grid-template-columns:minmax(120px,1fr) 70px; }
+ .explorer-columns > .listview__header-column:nth-child(2),.explorer-columns > .listview__header-column:nth-child(3) { display:none; }
+}
+
+.explorer-search-controls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; min-height:29px;
+  padding:4px 9px; background:#f5f9fd; border-bottom:1px solid #c0d4e3; }
+.explorer-search-controls label { display:flex; align-items:center; gap:5px; }
+.explorer-search-controls input[type="text"],.explorer-search-controls input:not([type]) {
+  max-width:110px; border:1px solid #a7bfd3; padding:3px; }
+.explorer-search-controls button { font:inherit; padding:2px 7px; border:1px solid #9eb8d1; background:#e9f3ff; }
+.explorer-search-controls [role="status"] { color:#4b677a; }
+
+.explorer-navigation__home:disabled { cursor:default; color:#6f8295; opacity:.6; }
+.explorer-context-menu {
+  position:fixed; z-index:80; display:flex; flex-direction:column;
+  width:205px; min-width:155px; max-height:calc(100dvh - 8px);
+  box-sizing:border-box; overflow-y:auto; padding:4px 2px;
+  border:1px solid #759cb9; border-radius:2px; box-shadow:2px 5px 12px #0005;
+  background:linear-gradient(#f8fcff,#eaf2f8);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.explorer-context-menu button {
+  text-align:left; font:inherit; min-height:25px; padding:4px 22px;
+  border:1px solid transparent; color:#1b3956; background:transparent;
+}
+.explorer-context-menu button:not(:disabled):hover,
+.explorer-context-menu button:not(:disabled):focus {
+  background:linear-gradient(#e7f4fd,#bbddf6); border-color:#75b0db;
+}
+.explorer-context-menu button:disabled { opacity:.5; cursor:default; }
+
+/* Internal Explorer FileCopy/FileMove and source onDrop -> file parser feedback. */
+.explorer-content.is-drop-target { background:#f0f8ff; outline:2px inset #a9ccea; }
+.explorer-item.is-drop-target {
+  border:1px dashed #3987bd !important;
+  background:#c5e7fd !important;
+  outline:2px solid #96c8e5; outline-offset:-3px;
+}
+.explorer-item[draggable=true] { cursor:grab; }
+.explorer-item[draggable=true]:active { cursor:grabbing; }
+
+/* Pointer gestures from the source desktop share Explorer's destination
+   semantics without synthesizing a browser-native drag and drop event. */
+.explorer-content[data-desktop-pointer-hover="true"],
+.explorer-item[data-desktop-pointer-hover="true"] {
+  outline: 2px solid #4c9fdf;
+  outline-offset: -2px;
+  background-color: #c7e7ff77;
+}
+
+/* Source 2e2c.w search highlights are spans inside file titles, not HTML injection. */
+.explorer-search-mark { color:inherit; font:inherit; background:#ffe38c; padding:0; }
+
+
+/* Shared original Win7 27px history sprites now live in
+ * packages/ui/src/sourceWin7HistoryNav.css and are reused by Control Panel. */
+/* Win7 addressbar path control — pinned theme-win7-scss.js 25px translucent
+   field, 18px icon, 22px breadcrumb text, 25px refresh and hover/press paint.
+   Original 3b99/bd65 uses clickable segments but no editable path input. */
+.explorer-address__location.is-source-win7 .explorer-address__label { display:none; }
+.explorer-address__location.is-source-win7 .explorer-address__location-wrapper {
+  align-items:center;
+}
+.explorer-address__location-wrapper .explorer-address__source-crumbs {
+  display:flex; align-items:center; flex:1; min-width:0; height:100%;
+  overflow-x:auto; overflow-y:hidden; white-space:nowrap; scrollbar-width:none;
+  position:relative; z-index:1; padding:0 4px; box-sizing:border-box;
+}
+.explorer-address__source-crumbs::-webkit-scrollbar { display:none; }
+.explorer-address .explorer-address__source-root-icon {
+  display:flex; align-items:center; justify-content:center;
+  flex:0 0 24px; width:24px; min-width:24px; height:100%;
+  margin:0; padding:0; border:0; border-radius:0;
+  background:transparent; box-shadow:none; cursor:default;
+}
+.explorer-address__source-icon { flex:0 0 18px; width:18px; height:18px;
+  object-fit:contain; }
+.explorer-address__source-item {
+  display:flex; align-items:center; flex:0 0 auto; height:100%;
+}
+.explorer-address .explorer-address__source-dropdown {
+  display:flex; justify-content:center; align-items:center;
+  flex:0 0 16px; width:16px; min-width:16px; height:22px;
+  border:1px solid transparent; border-radius:2px; padding:0;
+  box-shadow:none; background:transparent; cursor:default;
+}
+.explorer-address__source-disclosure {
+  display:block; width:0; height:0;
+  border-top:4px solid transparent; border-bottom:4px solid transparent;
+  border-left:5px solid #65798c;
+}
+.explorer-address .explorer-address__source-dropdown:hover {
+  background:rgba(180,222,248,.35); border-color:rgba(65,140,195,.25);
+}
+
+.explorer-address .explorer-address__source-crumb {
+  display:flex; align-items:center; flex:0 0 auto; height:22px; max-width:180px;
+  background:transparent; border:1px solid transparent; border-radius:2px;
+  color:#19384d; font:inherit; padding:0 2px; box-shadow:none;
+}
+.explorer-address .explorer-address__source-crumb:hover {
+  background:rgba(180,222,248,.45); border-color:rgba(65,140,195,.45);
+}
+.explorer-address .explorer-address__source-crumb:focus-visible {
+  outline:2px solid #2272ad; outline-offset:-2px;
+}
+.explorer-address__source-crumb-text { overflow:hidden; text-overflow:ellipsis; }
+.explorer-address__location-wrapper .explorer-address__source-path-input {
+  position:absolute; inset:0 25px 0 0; z-index:0; width:calc(100% - 25px);
+  opacity:0; pointer-events:none;
+}
+.explorer-address .explorer-address__source-refresh {
+  flex:0 0 25px; width:25px; height:100%; padding:0;
+  background:transparent; border:0; border-left:1px solid rgba(0,0,0,.1333333333);
+  color:#315877; border-radius:0; position:relative; z-index:2;
+  display:grid; place-items:center;
+}
+.explorer-address__source-refresh::before {
+  content:""; position:absolute; inset:0; opacity:0; z-index:-1;
+  background:linear-gradient(#eaf6fd 45%,#bee6fd 45%,#a7d9f5);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5333333333);
+  transition:opacity .3s linear;
+}
+.explorer-address__source-refresh:hover::before { opacity:1; }
+.explorer-address__source-refresh:active::before {
+  opacity:1; box-shadow:inset 0 1px 2px rgba(0,0,0,.5333333333),inset 0 0 0 1px rgba(255,255,255,.5333333333);
+}
+.explorer-address__source-refresh:active > * { transform:translate(1px,1px); }
+.explorer-address__source-refresh:focus-visible {
+  outline:2px solid #267cae; outline-offset:-2px;
+}
+@media (prefers-reduced-motion:reduce) {
+  .explorer-address__source-refresh::before { transition:none; }
+}
+
+/* Source string-valued Search Results locations are not clickable crumbs. */
+.explorer-address .explorer-address__source-static,
+.explorer-address .explorer-address__source-static:hover {
+  cursor:default; background:transparent; border-color:transparent;
+  max-width:none; color:#19384d;
+}
+
+/* Pinned source 3b99 uses a 16px themeData icon, not an SVG approximation. */
+.explorer-address__source-refresh-icon {
+  display:block; width:16px; height:16px; object-fit:contain;
+}
+
+/* Original Computer window-menubar Organize dropdown: bounded functional
+   reconstruction of source toolbar(), not a claim of pixel-level menu parity. */
+.explorer-organize { position:relative; flex:0 0 auto; }
+.explorer-organize__caret { margin-left:6px; font-size:10px; }
+.explorer-organize__menu {
+  position:fixed; z-index:90; width:223px; max-height:calc(100dvh - 12px);
+  overflow-y:auto; padding:4px 2px; box-sizing:border-box;
+  border:1px solid #759cb9; border-radius:2px;
+  box-shadow:2px 5px 12px #0005;
+  background:linear-gradient(#f8fcff,#eaf2f8);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.explorer-organize__item { width:100%; }
+.explorer-organize__menu button[role="menuitem"] {
+  display:block; width:100%; min-height:24px;
+  text-align:left; padding:4px 22px; border:1px solid transparent;
+  border-radius:0; color:#1b3956; background:transparent; font:inherit;
+}
+.explorer-organize__menu button[role="menuitem"]:not(:disabled):hover,
+.explorer-organize__menu button[role="menuitem"]:not(:disabled):focus-visible {
+  background:linear-gradient(#e7f4fd,#bbddf6); border-color:#75b0db;
+  outline:none;
+}
+.explorer-organize__menu button[role="menuitem"]:disabled {
+  color:#8799a6; opacity:1; cursor:default;
+}
+.explorer-organize__separator {
+  border-top:1px solid #9db4c6; margin:3px 6px;
+}
+
+/* Original Win7 Computer window-menubar View popup: eight rows with a
+   192px slider and exact pinned view-* WebP icon artwork.
+   Overall menu geometry still requires source screenshot comparison. */
+.explorer-view { position:relative; display:flex; align-items:center; margin-left:auto; flex:0 0 auto; }
+.explorer-command .explorer-view__trigger {
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  min-width:49px; min-height:25px; padding:2px 6px;
+  color:#234962; border-color:transparent; background:transparent;
+}
+.explorer-command .explorer-view__trigger:hover,
+.explorer-command .explorer-view__trigger[aria-expanded="true"] {
+  border-color:#81afd0; background:linear-gradient(#f8fcff,#d7e9f7);
+}
+.explorer-view__icon, .explorer-view__choice-icon {
+  width:16px; height:16px; flex:0 0 16px; object-fit:contain;
+}
+.explorer-view__choice-icon { margin-right:6px; }
+.explorer-view__arrow { font-size:10px; }
+.explorer-view__menu {
+  position:fixed; z-index:80; display:grid; grid-template-columns:28px 1fr;
+  box-sizing:border-box; width:220px; min-height:224px; padding:5px 3px;
+  border:1px solid #7da8c2; border-radius:2px;
+  background:linear-gradient(#fafcff,#eaf2f8); box-shadow:2px 5px 12px #0005;
+}
+.explorer-view__choices { display:flex; flex-direction:column; min-width:0; }
+.explorer-command .explorer-view__choices button {
+  display:flex; align-items:center; text-align:left;
+  width:100%; min-height:26px; padding:4px 8px;
+  border:1px solid transparent; border-radius:0; background:transparent;
+  color:#1b3956; white-space:nowrap;
+}
+.explorer-command .explorer-view__choices button:hover,
+.explorer-command .explorer-view__choices button:focus-visible,
+.explorer-command .explorer-view__choices button.is-selected {
+  background:linear-gradient(#e7f4fd,#bbddf6); border-color:#75b0db;
+}
+.explorer-view__slider-wrap {
+  display:flex; align-items:center; justify-content:center; height:218px;
+}
+.explorer-view__slider-wrap input[type="range"] {
+  width:18px; height:192px; padding:0; margin:0;
+  writing-mode:vertical-lr; direction:rtl; accent-color:#599fcf;
+}
+@media (max-width:580px) {
+  .explorer-view { margin-left:auto; }
+  .explorer-command .explorer-view__trigger { padding:2px 6px; }
+}
+
+/* Original 0616 inline list-item rename input, only in the Win7 source view. */
+.explorer-item .listview__item-label.is-input {
+  min-width:0;max-width:100%;box-sizing:border-box;
+  padding:0 2px;background:#fff;color:#152535;border:1px solid #699ccd;
+  font:inherit;line-height:20px;text-align:left;
+}
+
+/* Source fa65 checkboxes are shown only for touch multi-selection.
+ * Preserve our responsive Details/Tiles grids when an extra leading span
+ * is inserted ahead of each item icon and label.
+ */
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox) {
+  grid-template-columns:24px 36px minmax(0,1fr);
+  gap:3px;
+}
+.explorer-list.has-tiles .explorer-item > .item-checkbox {
+  grid-column:1;grid-row:1 / span 3;align-self:center;
+}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox) .listview__item-iconbox{
+  grid-column:2;
+}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox) .listview__item-label{
+  grid-column:3;
+}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox)
+  .listview__item-extra:nth-child(4){grid-column:3;grid-row:2;}
+.explorer-list.has-tiles .explorer-item:has(> .item-checkbox)
+  .listview__item-extra:nth-child(5){grid-column:3;grid-row:3;}
+.explorer-list.has-details .explorer-item > .item-checkbox{
+  grid-column:1;grid-row:1;justify-self:start;z-index:1;
+}
+.explorer-list.has-details .explorer-item:has(> .item-checkbox)
+  .listview__item-iconbox{margin-left:24px;}
+.explorer-list.has-details .explorer-item:has(> .item-checkbox)
+  .listview__item-label{padding-left:53px;}
+
+/* Source 27b9 Content: full-width icon and metadata grid. */
+.explorer-list.has-content .explorer-item {
+  display:flex;align-items:center;gap:8px;width:100%;min-height:56px;padding:4px;
+}
+.explorer-list.has-content .explorer-item .listview__item-iconbox{
+  width:48px;height:48px;flex:0 0 48px;
+}
+.explorer-list.has-content .explorer-item .listview__item-info{
+  display:grid;gap:2px 9px;grid-template-columns:minmax(144px,1fr) minmax(144px,1fr);
+  min-width:0;width:100%;align-items:center;
+}
+.explorer-list.has-content .explorer-item .listview__item-label{
+  min-width:0;grid-column:1 / -1;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.explorer-list.has-content .explorer-item .listview__item-extra:last-child{
+  grid-column:2;
+}
+@media(max-width:580px){
+ .explorer-list.has-content .explorer-item .listview__item-info{
+   grid-template-columns:minmax(0,1fr);
+ }
+ .explorer-list.has-content .explorer-item .listview__item-extra:last-child{
+   grid-column:1;
+ }
+}
+
+/* Exact pinned legacy src/styles/shell/listview-list.css (blob
+ * 4a7dc019cc68fbca6b7429d2dafca100dfffd1c9), scoped to Win7.
+ * Do not force unfinished WinXP/Win31 themes to adopt its geometry. */
+.explorer-stage.is-source-win7 .explorer-list.has-list .explorer-item{
+  display:flex;align-items:center;min-width:300px;width:25%;padding:2px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-list .listview__item-iconbox{
+  width:16px;height:16px;flex:0 0 16px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-list .listview__item-info{
+  padding:0 2px;
+}
+
+/* Pinned legacy src/styles/shell/listview-content.css (blob
+ * 08151a47ee1c05bff6db72c0c38016b91eb88deb).
+ * Label and three source extras naturally occupy the two-column grid;
+ * the prior full-row label and forced last-column overrides were not source. */
+.explorer-stage.is-source-win7 .explorer-list.has-content{
+  min-width:fit-content;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-content .explorer-item{
+  display:flex;align-items:center;gap:8px;width:100%;padding:4px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-info{
+  display:grid;gap:6px;grid-template-columns:minmax(144px,1fr) minmax(144px,1fr);
+  width:100%;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-label,
+.explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-extra:last-child{
+  grid-column:auto;
+}
+@media(max-width:580px){
+  /* Responsive adaptation for an actual narrow browser window. */
+  .explorer-stage.is-source-win7 .explorer-list.has-list .explorer-item{
+    width:100%;min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-content{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-content .listview__item-info{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
+
+/* Pinned source Win7 Tiles css, blob 792221cf9f42cfe1579f5860fec0332e727f5381;
+ * original 0616 item-info contains label and the 7662 extra slot. */
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .explorer-item{
+  display:flex;align-items:center;gap:8px;
+  min-width:256px;width:calc(20% - 8px);min-height:0;padding:4px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .listview__item-iconbox{
+  width:48px;height:48px;flex:0 0 48px;align-self:center;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .listview__item-info{
+  display:flex;flex-direction:column;gap:2px;min-width:0;width:100%;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-tiles .listview__item-label{
+  min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media(max-width:580px){
+  .explorer-stage.is-source-win7 .explorer-list.has-tiles .explorer-item{
+    width:100%;min-width:0;
+  }
+}
+
+/* Pinned src/styles/shell/listview-details.css (Git blob
+ * 2aedda59802d5a36ea0e106ddcdf4a16be4aca52) and original computer.js:
+ * source columns ae=220, icon se=16 and label ne=204 (-24 when
+ * touch-only checkboxes appear). The 32cd extra widths are inline 220px. */
+.explorer-stage.is-source-win7 .explorer-columns{
+  display:flex;width:max-content;min-width:880px;
+}
+.explorer-stage.is-source-win7 .explorer-columns .listview__header-column{
+  box-sizing:border-box;flex:0 0 220px;min-width:220px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details{
+  display:flex;flex-wrap:wrap;min-width:fit-content;padding:0;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .explorer-item{
+  display:flex;align-items:center;gap:0;width:100%;min-width:880px;
+  padding:2px 0;text-align:left;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-iconbox{
+  width:16px;height:16px;flex:0 0 16px;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info{
+  display:flex;min-width:0;width:100%;overflow:visible;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-label,
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-extra{
+  box-sizing:border-box;min-width:0;padding:0 4px;
+  border-left:1px solid transparent;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-label{
+  grid-column:auto;grid-row:auto;padding-left:4px;flex:0 0 auto;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-extra{
+  flex:0 0 220px;overflow:hidden;
+}
+@media(max-width:580px){
+  /* Viewport-adaptive name+size columns, retaining the source semantics
+   * and preserving all three real extras in the DOM. */
+  .explorer-stage.is-source-win7 .explorer-columns{
+    display:grid;grid-template-columns:minmax(0,1fr) 88px;
+    min-width:0;width:100%;
+  }
+  .explorer-stage.is-source-win7 .explorer-columns .listview__header-column{
+    flex:initial;min-width:0;width:auto!important;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .explorer-item{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info{
+    min-width:0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-label{
+    width:0!important;flex:1 1 0;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info
+  > .listview__item-extra:nth-child(2),
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info
+  > .listview__item-extra:nth-child(3){
+    display:none;
+  }
+  .explorer-stage.is-source-win7 .explorer-list.has-details .listview__item-info
+  > .listview__item-extra:last-child{
+    width:88px!important;flex:0 0 88px;
+  }
+}
+
+/* Pinned main.js ExplorerItemMenu -> BaseMenu children:
+ * the child popup sits beside the trigger row, NOT in the parent list.
+ * Keep the normal background/Bin context scrolling unchanged. */
+.explorer-context-menu[data-test-explorer-context="item"],
+.explorer-context-menu[data-test-explorer-context="background"] {
+  overflow:visible;
+}
+.explorer-context-menu__submenu {
+  position:absolute; z-index:2; box-sizing:border-box;
+  display:flex; flex-direction:column; width:205px;
+  max-width:calc(100vw - 8px); max-height:calc(100dvh - 8px);
+  overflow-x:hidden; overflow-y:auto;
+  border:1px solid #759cb9; border-radius:2px;
+  box-shadow:2px 5px 12px #0005;
+  background:linear-gradient(#f8fcff,#eaf2f8);
+  padding:4px 2px;
+  left:calc(100% - 2px); top:0;
+}
+.explorer-context-menu__submenu button {
+  width:100%; white-space:normal; overflow-wrap:anywhere;
+}

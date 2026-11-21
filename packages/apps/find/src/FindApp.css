@@ -1,0 +1,30 @@
+/* Original src/modules/apps/find.js 709f: Windows 7 settings layout. */
+.windows-find {box-sizing:border-box;display:flex;gap:11px;height:100%;min-height:0;
+  padding:11px;background:#f0f0f0;color:#222;font:12px "Segoe UI",Tahoma,sans-serif;}
+.windows-find__panel {display:flex;flex:1;min-width:0;min-height:0;flex-direction:column;}
+.windows-find__tabs {display:flex;flex:none;gap:2px;align-items:flex-end;}
+.windows-find__tabs button {border:1px solid #9babb9;border-bottom:0;border-radius:4px 4px 0 0;
+  padding:6px 8px 5px;background:linear-gradient(#fff,#e3e3e3);
+  font:inherit;white-space:nowrap;color:#333;cursor:pointer;}
+.windows-find__tabs button.is-active {background:#fff;position:relative;z-index:1;}
+.windows-find__content {flex:1;min-height:0;overflow:auto;padding:12px 9px;
+  border:1px solid #9babb9;background:#fff;display:flex;flex-direction:column;gap:10px;}
+.windows-find__row {display:flex;gap:7px;align-items:center;min-width:0;}
+.windows-find__row > span {width:57px;flex:none;}
+.windows-find__row input,.windows-find__row select {min-width:0;flex:1;box-sizing:border-box;
+  max-width:100%;padding:4px;border:1px solid #9da6ae;background:white;color:#222;font:inherit;}
+.windows-find__row input[type=number] {flex:0 1 58px;width:58px;}
+.windows-find__check {display:flex;gap:5px;align-items:center;}
+.windows-find__dates {display:flex;flex-direction:column;gap:12px;border:0;padding:4px 0 0 14px;min-width:0;}
+.windows-find__dates label {display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.windows-find__dates input[type=date] {width:105px;max-width:100%;font:inherit;}
+.windows-find__dates input[type=number] {width:50px;max-width:100%;font:inherit;}
+.windows-find__dates:disabled {opacity:.55;}
+.windows-find__actions {display:flex;flex-direction:column;gap:8px;flex:none;padding-top:30px;}
+.windows-find__actions button {min-width:89px;padding:5px 8px;border:1px solid #8c9bab;border-radius:3px;
+  background:linear-gradient(#fff,#e5edf4);color:#222;font:inherit;cursor:pointer;}
+.windows-find__actions button.is-default {border-color:#3b8dd0;}
+.windows-find__actions button:disabled {opacity:.55;cursor:default;}
+@media(max-width:450px) {.windows-find{padding:5px;gap:5px;}
+  .windows-find__actions button{min-width:68px;padding:5px 2px;}
+  .windows-find__tabs button{padding:5px 4px;font-size:11px;}}

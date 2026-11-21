@@ -1,0 +1,197 @@
+/* Original 245c 21px cell/mine WebP sprites are now byte-identical.
+ * Counter/restart framing, flagged glyphs, dialog and audio remain partial. */
+.windows-minesweeper{
+  background:#c0c0c0;color:#222;
+  height:100%;min-height:0;display:flex;flex-direction:column;
+  position:relative;
+  font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-minesweeper__menubar{
+  display:flex;gap:6px;flex:none;position:relative;
+  padding:4px 6px;background:#f6f6f6;border-bottom:1px solid #a0a0a0;
+}
+.windows-minesweeper__menubar>button{
+  padding:2px 9px;background:transparent;border:0;
+  color:#222;font:inherit;
+}
+.windows-minesweeper__menubar>button:disabled{color:#999}
+.windows-minesweeper__menu{
+  position:absolute;z-index:4;top:100%;left:4px;min-width:190px;
+  display:flex;flex-direction:column;
+  padding:4px;background:#f8f8f8;border:1px solid #888;
+  box-shadow:2px 4px 10px #0003;
+}
+.windows-minesweeper__menu button{
+  padding:6px 12px;background:none;border:0;
+  text-align:left;color:#222;font:inherit;
+}
+.windows-minesweeper__menu button:not(:disabled):hover{background:#c8e4f9}
+.windows-minesweeper__menu button:disabled{color:#999}
+.windows-minesweeper__stage{
+  display:flex;flex-direction:column;align-items:center;
+  gap:12px;overflow:auto;flex:1;padding:12px;min-height:0;
+}
+.windows-minesweeper__scorebar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;min-width:190px;padding:7px 12px;
+  border:2px inset #e9e9e9;background:#c0c0c0;
+}
+.windows-minesweeper__scorebar output{
+  font:700 22px/1 monospace;letter-spacing:2px;
+  color:#f44336;background:#171717;min-width:58px;text-align:center;
+}
+.windows-minesweeper__restart{
+  width:34px;height:30px;border:2px outset #eee;
+  background:#ddd;color:#111;font:bold 16px monospace;
+}
+.windows-minesweeper__controls{
+  display:flex;flex-wrap:wrap;align-items:center;
+  gap:14px;justify-content:center;font-size:12px;
+}
+.windows-minesweeper__controls label{display:flex;gap:5px;align-items:center}
+.windows-minesweeper__controls input{margin:0}
+.windows-minesweeper__controls [role=status]{font-weight:600}
+.windows-minesweeper__board{
+  display:grid;flex:none;gap:1px;
+  padding:4px;border:2px inset #f8f8f8;background:#aaa;
+}
+.windows-minesweeper__cell{
+  display:grid;place-items:center;min-width:21px;min-height:21px;
+  width:21px;height:21px;cursor:pointer;font:700 13px monospace;
+  background:#ccc url("/assets/images/minesweeper-cell.a0c15d1c.webp") center/contain no-repeat;
+  color:#152a3e;
+  border:2px outset #fff;padding:0;
+}
+.windows-minesweeper__cell.is-open{
+  border:1px solid #999;background:#ddd;cursor:default;
+}
+.windows-minesweeper__cell.is-mine{
+  background:#edc9c9 url("/assets/images/minesweeper-mine.cbba8bd0.webp") center/contain no-repeat;
+  color:#830000;
+}
+.windows-minesweeper__cell[data-adjacent="1"]{color:#235bba}
+.windows-minesweeper__cell[data-adjacent="2"]{color:#278042}
+.windows-minesweeper__cell[data-adjacent="3"]{color:#d13f35}
+.windows-minesweeper__cell[data-adjacent="4"]{color:#542f96}
+@media(max-width:480px){
+  .windows-minesweeper__stage{padding:8px 3px}
+  .windows-minesweeper__scorebar{gap:15px}
+}
+
+.windows-minesweeper__stats-icon{width:21px;height:21px;object-fit:contain;flex:none}
+
+/* The pinned 245c source uses 280px result child windows and a separate
+ * static stats window. This scoped overlay is the current responsive
+ * React window adapter, not an assertion of source pixel parity. */
+.windows-minesweeper__overlay{
+  position:absolute;inset:0;z-index:6;background:#0004;
+  display:flex;align-items:center;justify-content:center;
+  padding:8px;min-width:0;min-height:0;
+}
+.windows-minesweeper__overlay--confirm{z-index:7}
+.windows-minesweeper__dialog{
+  box-sizing:border-box;width:min(280px,100%);max-height:100%;
+  overflow:auto;background:#f4f4f4;color:#222;
+  border:1px solid #6d899d;box-shadow:0 4px 16px #0005;
+  padding:0 12px 12px;text-align:center;
+}
+.windows-minesweeper__dialog>header{
+  margin:0 -12px 12px;padding:7px 10px;text-align:left;
+  background:linear-gradient(#eef9ff,#b5d6eb);
+  border-bottom:1px solid #8da8b9;font-weight:600;
+}
+.windows-minesweeper__dialog p{margin:10px 0;overflow-wrap:anywhere}
+.windows-minesweeper__dialog footer{
+  display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px;
+}
+.windows-minesweeper__dialog footer button{
+  padding:4px 14px;min-height:26px;cursor:pointer;
+  border:1px solid #8598a7;border-radius:2px;
+  background:linear-gradient(#fff,#e0e7ec);font:inherit;
+}
+.windows-minesweeper__dialog footer .is-default{
+  border-color:#407fb7;box-shadow:inset 0 0 0 1px #bbd9f7;
+}
+.windows-minesweeper__dialog--stats{width:min(350px,100%);text-align:left}
+.windows-minesweeper__stats-level{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.windows-minesweeper__stats-level select{max-width:65%;font:inherit}
+.windows-minesweeper__dialog--stats fieldset{
+  margin:12px 0;padding:8px;min-height:50px;border:1px solid #bbb;
+  max-height:130px;overflow:auto;
+}
+.windows-minesweeper__dialog--stats td{padding:2px 8px 2px 0}
+
+/* Pinned original src/styles/games/minesweeper.css values
+ * (SHA 51e624fd88af6940655c2cb98b433bbcd6754866).
+ * The extra restart/touch flag strip is an accessibility adapter. */
+.windows-minesweeper__stage{
+  align-items:safe center;justify-content:flex-start;gap:0;
+  padding:20px 20px 10px;
+  background-image:radial-gradient(ellipse at 0 0,rgba(135,157,181,.1019607843),#879db5);
+}
+.windows-minesweeper__source-grid{
+  display:flex;flex-direction:column;flex:none;width:max-content;
+  box-shadow:0 0 0 2px #808da4;border:1px solid #000;
+  background:linear-gradient(135deg,#0ff,#000078);
+}
+.windows-minesweeper__board{border:0;box-shadow:none;background:transparent;padding:0;gap:0}
+.windows-minesweeper__cell{border:1px solid #000;opacity:.45}
+.windows-minesweeper__cell:not(.is-open):hover{filter:brightness(1.6)}
+.windows-minesweeper__cell.is-open{
+  opacity:1;border:1px solid #000;
+  background:#e1eef7;box-shadow:inset 0 0 0 2px #fff;
+}
+.windows-minesweeper__cell.is-mine{
+  opacity:1;border:1px solid #000;color:#830000;
+  background:#e1eef7 url("/assets/images/minesweeper-mine.cbba8bd0.webp") center/contain no-repeat;
+}
+.windows-minesweeper__cell[data-adjacent="1"]{color:#4050be}
+.windows-minesweeper__cell[data-adjacent="2"]{color:#397e2d}
+.windows-minesweeper__cell[data-adjacent="3"]{color:#b60704}
+.windows-minesweeper__cell[data-adjacent="4"]{color:#010183}
+.windows-minesweeper__cell[data-adjacent="5"]{color:#8b0000}
+.windows-minesweeper__scorebar{
+  margin-top:10px;border:0;min-width:0;padding:0 0 2px;
+  background:none;gap:0;justify-content:space-between;
+}
+.windows-minesweeper__scorebar output{
+  box-sizing:border-box;width:45px;min-width:45px;
+  padding:4px 0;color:#fff;border-radius:.3em;
+  font:700 16px/1.25 "Segoe UI",Tahoma,sans-serif;letter-spacing:normal;
+  background:linear-gradient(135deg,#2c4f8f,#3d6cbc);
+  box-shadow:inset 1px 1px 2px 1px #203665,-1px -1px 2px 1px #69819c,
+    1px 1px 2px 1px #d4dae0;
+}
+.windows-minesweeper__stats-icon{
+  box-sizing:content-box;width:30px;height:30px;
+  padding:1px 0 1px 1px;border-radius:50%;background:#efefef;
+  box-shadow:-1px -1px 4px 1px #476581;
+}
+.windows-minesweeper__scorebar output:first-of-type{margin-right:auto}
+.windows-minesweeper__scorebar output:last-of-type{margin-left:auto}
+.windows-minesweeper__controls{
+  margin-top:10px;gap:10px;padding:4px 8px;max-width:100%;
+  background:#ecf1f6bb;border-radius:3px;
+}
+.windows-minesweeper__restart{
+  width:auto;height:auto;min-height:24px;padding:2px 7px;
+  font:11px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-minesweeper__controls output{font:600 12px monospace}
+
+/* A hidden measurement plane mirroring source 245c's fullscreen grid
+ * content box. The original measures grid.scrollWidth/scrollHeight
+ * after nextTick, then subtracts one pixel and divides by 22px.
+ * The React game's extra touch controls live outside this plane. */
+.windows-minesweeper__stage{position:relative}
+.windows-minesweeper__advanced-viewport{
+  position:absolute;top:20px;right:20px;bottom:10px;left:20px;
+  pointer-events:none;visibility:hidden;
+}
+@media(max-width:480px){
+  .windows-minesweeper__advanced-viewport{left:3px;right:3px;top:8px;bottom:10px}
+}
+
+/* Result and statistics are now shell-sibling child windows, not in-game sheets. */

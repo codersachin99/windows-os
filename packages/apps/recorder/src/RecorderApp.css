@@ -1,0 +1,77 @@
+/* Source recorder.js: compact non-resizable centered Win7 control strip. */
+.source-recorder {
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  height:100%;
+  min-height:0;
+  padding:6px 10px;
+  background:linear-gradient(#fff,#f0f0f0);
+  color:#222;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.source-recorder__button {
+  padding:5px 13px;
+  min-width:62px;
+  border:1px solid #999;
+  border-radius:3px;
+  color:#1d354a;
+  background:linear-gradient(#fdfdfd,#dfe9f2);
+  font:inherit;
+}
+.source-recorder__button:hover:not(:disabled){border-color:#4ba9dd;background:#e1f1ff}
+.source-recorder__button.is-recording{color:#a32222;font-weight:600}
+.source-recorder__button:disabled{opacity:.54;cursor:default}
+.source-recorder__clock {
+  min-width:61px;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  color:#333;
+}
+.source-recorder__meter {
+  appearance:none;
+  flex:1;
+  min-width:32px;
+  height:13px;
+  border:1px solid #9ba9af;
+  border-radius:2px;
+  background:#e4e7e9;
+}
+.source-recorder__meter::-webkit-progress-bar{background:#e4e7e9}
+.source-recorder__meter::-webkit-progress-value{background:linear-gradient(#89c782,#4b9e58)}
+.source-recorder__meter::-moz-progress-bar{background:#4b9e58}
+.source-recorder__help{
+  width:25px;height:25px;
+  border:1px solid #9ca8b0;
+  border-radius:50%;
+  color:#4f687b;
+  background:linear-gradient(#fff,#dae3e8);
+  font-weight:bold;
+}
+.source-recorder__help:disabled{cursor:default;opacity:.7}
+.source-recorder__status {position:absolute;right:41px;bottom:0;font-size:10px;color:#666}
+.source-recorder__error-overlay{
+  position:absolute;inset:0;z-index:7;
+  display:grid;place-items:center;
+  background:#e7edf5c9;
+}
+.source-recorder__error-overlay [role=alertdialog]{
+  min-width:min(310px,95vw);
+  max-width:95vw;
+  border:1px solid #749bbc;
+  background:#f4f8fc;
+  box-shadow:0 6px 24px #0005;
+  padding:13px;
+  color:#333;
+}
+.source-recorder__error-overlay p{margin:0 0 12px}
+.source-recorder__error-overlay button{display:block;margin-left:auto;padding:4px 12px}
+.source-recorder__dialog-host{
+  position:fixed;inset:0;z-index:100000;
+}
+@media(max-width:380px){
+  .source-recorder{gap:3px;padding:3px}
+  .source-recorder__button{min-width:48px;padding:4px}
+  .source-recorder__clock{min-width:55px}
+}

@@ -1,0 +1,112 @@
+/*
+ * The original Win31 and Win9x logon modules share logon-window and
+ * logon-form-win9x. Source CSS places their 500px windows at 40% / 30%.
+ * This is an incremental Guest-only UI adapter, NOT a pixel-parity claim.
+ */
+.windows-logon.source-classic-logon{
+  display:block;overflow:auto;color:#000;background:#008080;
+  font:12px "MS Sans Serif",Tahoma,Arial,sans-serif;
+}
+.windows-logon.source-classic-logon.is-win31{background:#bfbdc0}
+.windows-logon.source-classic-logon.is-win2k{background:#3b6ea4}
+.source-classic-logon.is-win2k .source-classic-logon__window{
+  top:20%;width:min(32rem,calc(100vw - 24px));
+}
+.source-classic-logon__banner{background:#fff;position:relative;padding:6px 12px 12px}
+.source-classic-logon__banner img{display:block;max-width:100%;height:auto;margin:auto}
+.source-classic-logon__banner::after{
+  position:absolute;bottom:0;left:0;right:0;height:6px;content:"";
+  background:linear-gradient(90deg,#082767,#8aaed5,#082767);
+}
+.source-classic-logon__window{
+  position:absolute;left:50%;top:30%;transform:translateX(-50%);
+  width:min(500px,calc(100vw - 24px));max-height:calc(100dvh - 94px);
+  overflow:auto;box-sizing:border-box;
+  border:2px solid;border-color:#fff #404040 #404040 #fff;
+  box-shadow:1px 1px 0 #000;background:#c0c0c0;
+}
+.source-classic-logon.is-win31 .source-classic-logon__window{top:40%}
+.source-classic-logon__titlebar{
+  background:linear-gradient(90deg,#000080,#1084d0);
+  color:#fff;padding:4px 6px;font-weight:bold;line-height:17px;
+  text-align:left;
+}
+.source-classic-logon__section{
+  display:flex;align-items:flex-start;gap:12px;padding:16px 12px;
+  background:#fff;min-height:160px;
+}
+.source-classic-logon__avatar{
+  flex:none;width:64px;height:64px;object-fit:contain;
+  border:1px solid #000;background:#fff;
+}
+.source-classic-logon__form{
+  flex:1;min-width:0;display:grid;grid-template-columns:90px minmax(0,1fr);
+  align-items:center;gap:8px 6px;color:#000;
+}
+.source-classic-logon__instruction{
+  grid-column:1/-1;margin:0 0 8px;
+}
+.source-classic-logon__form label{text-align:left}
+.source-classic-logon__form input{
+  width:100%;min-width:0;min-height:24px;background:#fff;color:#000;
+  padding:3px 5px;border:2px solid;
+  border-color:#404040 #fff #fff #404040;
+  border-radius:0;font:inherit;
+}
+.source-classic-logon.is-win31 .source-classic-logon__form input{
+  border:2px solid #000;padding:4px;
+}
+.source-classic-logon__buttons{
+  grid-column:1/-1;display:flex;justify-content:flex-end;
+  gap:6px;flex-wrap:wrap;margin-top:5px;
+}
+.source-classic-logon__buttons button,
+.source-classic-logon__options button,
+.source-classic-logon__power button,
+.source-classic-logon__unavailable button{
+  min-height:26px;padding:3px 10px;background:#c0c0c0;color:#000;
+  border:2px solid;border-color:#fff #404040 #404040 #fff;
+  border-radius:0;font:inherit;cursor:pointer;
+}
+.source-classic-logon__buttons button:active,
+.source-classic-logon__power button:active{
+  border-color:#404040 #fff #fff #404040;
+}
+.source-classic-logon__buttons button:focus-visible,
+.source-classic-logon__power button:focus-visible,
+.source-classic-logon__form input:focus-visible{
+  outline:2px solid #000080;outline-offset:1px;
+}
+.source-classic-logon__options{
+  grid-column:1/-1;display:flex;justify-content:flex-end;
+}
+.source-classic-logon__power{
+  position:absolute;right:16px;bottom:16px;display:flex;gap:3px;
+}
+.source-classic-logon__power-menu{
+  position:absolute;bottom:calc(100% + 4px);right:0;z-index:3;
+  min-width:125px;padding:4px;background:#c0c0c0;
+  border:2px solid;border-color:#fff #404040 #404040 #fff;
+}
+.source-classic-logon__power-menu button{
+  width:100%;display:block;text-align:left;
+}
+.source-classic-logon__unavailable{
+  position:absolute;z-index:5;left:50%;top:50%;
+  transform:translate(-50%,-50%);width:min(360px,calc(100vw - 32px));
+  padding:18px;background:#c0c0c0;color:#000;
+  border:2px solid;border-color:#fff #404040 #404040 #fff;
+  box-shadow:3px 4px 0 #0007;text-align:center;
+}
+@media(max-width:600px), (max-height:480px){
+  .source-classic-logon__window,
+  .source-classic-logon.is-win31 .source-classic-logon__window,
+  .source-classic-logon.is-win2k .source-classic-logon__window{top:12%}
+  .source-classic-logon__section{gap:6px;padding:9px 7px}
+  .source-classic-logon__avatar{width:40px;height:40px}
+  .source-classic-logon__form{grid-template-columns:1fr;gap:5px}
+  .source-classic-logon__instruction,
+  .source-classic-logon__buttons,
+  .source-classic-logon__options{grid-column:1}
+  .source-classic-logon__power{right:9px;bottom:7px}
+}

@@ -1,0 +1,65 @@
+/* Pinned legacy-win7 taskbar-base.js aero-peek-group/aero-peek-preview:
+ * 220px thumbnails, 8px gap, 206x125 cloned window pane and 200/450ms
+ * hover lifecycle. This is distinct from Show desktop Aero Peek. */
+.windows-taskbar__preview-group{
+  position:fixed;bottom:var(--taskbar-height,40px);
+  display:flex;align-items:stretch;gap:8px;padding:7px;
+  overflow-x:auto;overflow-y:hidden;max-height:220px;
+  background:linear-gradient(#eef6faee,#b7cbdbea);
+  border:1px solid #8199af;border-radius:5px;
+  box-shadow:0 7px 19px #0008,inset 0 1px #fff9;
+  z-index:5600;pointer-events:auto;
+}
+.windows-taskbar__preview-card{
+  flex:0 0 220px;display:flex;flex-direction:column;gap:4px;
+  padding:4px;background:linear-gradient(#fff8,#bcd0e588);
+  border:1px solid #95abc0;border-radius:3px;
+  min-width:0;color:#1c2f3c;font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-taskbar__preview-card:hover{
+  border-color:#5da7e7;background:linear-gradient(#eaf6ff,#b9daf5);
+}
+.windows-taskbar__preview-titlebar{
+  display:flex;align-items:center;gap:5px;height:24px;
+  white-space:nowrap;min-width:0;
+}
+.windows-taskbar__preview-titlebar>span{
+  flex:1;overflow:hidden;text-overflow:ellipsis;
+}
+.windows-taskbar__preview-close{
+  flex:none;width:22px;height:20px;border:0;border-radius:3px;
+  color:#19364d;background:transparent;cursor:pointer;
+}
+.windows-taskbar__preview-close:hover{color:#fff;background:#c42b1c;}
+.windows-taskbar__preview-body{
+  position:relative;width:206px;height:125px;overflow:hidden;
+  background:linear-gradient(#cad7e7,#fff);
+  border:1px solid #8c9fb1;cursor:pointer;
+}
+.windows-taskbar__preview-body:focus-visible{outline:2px solid #1884c5;}
+.windows-taskbar__preview-clone-host{
+  position:relative;width:206px;height:125px;overflow:hidden;
+  pointer-events:none;
+}
+.windows-taskbar__preview-clone-frame{position:absolute;pointer-events:none;}
+.windows-taskbar__preview-clone-frame>.is-preview-clone{
+  overflow:hidden !important;transition:none !important;
+}
+.windows-taskbar__preview-embedded,.windows-taskbar__preview-placeholder{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;color:#667988;
+}
+.windows-taskbar__application.is-stacked{
+  box-shadow:inset 0 1px 0 #fff5,2px 2px 0 #506e8a90;
+}
+.windows-desktop[data-source-taskbar-peeking="true"]
+.windows-window:not(.is-preview-clone):not([data-source-taskbar-peek-active="true"]){
+  opacity:0;pointer-events:none;
+}
+.windows-desktop[data-source-taskbar-peeking="true"]
+.windows-window[data-source-taskbar-peek-active="true"]{
+  opacity:1;pointer-events:none;
+}
+@media(max-width:500px){
+  .windows-taskbar__preview-group{max-width:calc(100vw - 20px);}
+}

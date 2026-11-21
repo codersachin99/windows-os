@@ -1,0 +1,21 @@
+/* Pinned legacy src/styles/apps/cmd.css: monospace body;
+ * webpack b894: black backdrop, white/80 text, whitespace-preserving rows.
+ * Shared WindowFrame owns titlebar, focus, close and drag.
+ */
+.cmd__body{
+  box-sizing:border-box;width:100%;height:100%;min-height:0;overflow:auto;
+  padding:2px;background:#000;color:rgba(255,255,255,.8);
+  font:14px/1.45 monospace,sans-serif;cursor:text;white-space:pre-wrap;
+}
+.cmd__banner{white-space:pre-wrap}
+.cmd__output{white-space:pre-wrap;overflow-wrap:break-word}
+.cmd__entry{margin-top:20px}
+.cmd__line{word-break:break-all}
+.cmd__input-line{display:flex;align-items:center;gap:0;margin-top:20px}
+.cmd__prompt{flex:0 0 auto}
+.cmd__input{
+  width:100%;height:100%;flex:1 1 0;min-width:2px;
+  border:0;outline:0;padding:0;margin:0;
+  color:inherit;background:transparent;font:inherit;caret-color:white;
+}
+.cmd__input:focus{outline:none}

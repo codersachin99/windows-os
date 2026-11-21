@@ -1,0 +1,107 @@
+/* Pinned legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776
+ * src/modules/themes/theme-win31-scss.js:
+ * .window__addressbar: 4px 0, plain inset location field;
+ * .winui-textbox: white / 1px black;
+ * .listview__header(-column): black borders;
+ * .listview__item:hover: no highlight; :focus/.is-active:
+ * white over --theme-accent (#080abd);
+ * .treeview__button.is-active: same accent with yellow dotted focus;
+ * .window__statusbar: gray surface with black outline.
+ * Map the source Win31 palette only onto the mounted Guest Explorer/Bin
+ * component; controls and file operations remain shared with the VFS.
+ */
+.windows-desktop[data-theme="win31"] .explorer-stage{
+  color:#000;background:var(--theme-surface,#c0c0c0);
+  font:700 12px/1.4 "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win31"] .explorer-address{
+  flex-basis:36px;gap:4px;padding:4px 0;
+  color:#000;background:var(--theme-surface,#c0c0c0);
+  border-bottom:1px solid #000;
+}
+.windows-desktop[data-theme="win31"] .explorer-address__location-wrapper{
+  background:#fff;border:1px solid #000;border-radius:0;
+  box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;
+}
+.windows-desktop[data-theme="win31"] .explorer-address__location-wrapper input,
+.windows-desktop[data-theme="win31"] .explorer-address__search{
+  color:#000;background:#fff;border-color:#000;border-radius:0;
+}
+.windows-desktop[data-theme="win31"] .explorer-address button,
+.windows-desktop[data-theme="win31"] .explorer-command button,
+.windows-desktop[data-theme="win31"] .explorer-search-controls button,
+.windows-desktop[data-theme="win31"] .explorer-prompt button{
+  color:#000;font-weight:bold;
+  border:1px solid #000;border-radius:2px;
+  background:var(--theme-surface,#c0c0c0);
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #808080;
+}
+.windows-desktop[data-theme="win31"] .explorer-command,
+.windows-desktop[data-theme="win31"] .explorer-search-controls{
+  color:#000;background:var(--theme-surface,#c0c0c0);
+  border-top:0;border-bottom:1px solid #000;
+}
+.windows-desktop[data-theme="win31"] .explorer-command select,
+.windows-desktop[data-theme="win31"] .explorer-search-controls input:not([type="checkbox"]){
+  border:1px solid #000;border-radius:0;color:#000;background:#fff;
+}
+.windows-desktop[data-theme="win31"] .explorer-navigation{
+  color:#000;background:var(--theme-surface,#c0c0c0);
+  border-right:1px solid #000;
+}
+.windows-desktop[data-theme="win31"] .explorer-navigation__home{
+  color:#000;border:1px solid transparent;border-radius:0;
+  font-weight:bold;background:transparent;
+}
+.windows-desktop[data-theme="win31"] .explorer-navigation__home:not(:disabled):hover:not([aria-current="location"]){
+  color:#000;background:transparent;
+}
+.windows-desktop[data-theme="win31"] .explorer-navigation__home[aria-current="location"],
+.windows-desktop[data-theme="win31"] .explorer-navigation__home:focus-visible{
+  color:#fff;background:var(--theme-accent,#080abd);
+  border-color:transparent;
+  outline:1px dotted #ff3;outline-offset:-2px;
+}
+.windows-desktop[data-theme="win31"] .explorer-content{
+  background:#fff;color:#000;
+}
+.windows-desktop[data-theme="win31"] .explorer-columns{
+  background:var(--theme-surface,#c0c0c0);color:#000;
+  border-bottom:1px solid #000;
+}
+.windows-desktop[data-theme="win31"] .explorer-columns .listview__header-column{
+  color:#000;font-weight:bold;border-right:1px solid #000;
+  background:transparent;
+}
+.windows-desktop[data-theme="win31"] .explorer-item,
+.windows-desktop[data-theme="win31"] .explorer-item:hover{
+  color:#000;background:transparent;border-color:transparent;
+  border-radius:0;box-shadow:none;
+}
+.windows-desktop[data-theme="win31"] .explorer-item.is-selected,
+.windows-desktop[data-theme="win31"] .explorer-item.is-active,
+.windows-desktop[data-theme="win31"] .explorer-item:focus{
+  color:#fff;background:var(--theme-accent,#080abd);
+  border-color:transparent;
+}
+.windows-desktop[data-theme="win31"] .explorer-item.is-selected .listview__item-extra,
+.windows-desktop[data-theme="win31"] .explorer-item:focus .listview__item-extra{
+  color:#fff;opacity:1;
+}
+.windows-desktop[data-theme="win31"] .explorer-status{
+  color:#000;background:var(--theme-surface,#c0c0c0);
+  border-top:1px solid #000;font-weight:bold;
+}
+.windows-desktop[data-theme="win31"] .explorer-prompt{
+  color:#000;background:var(--theme-surface,#c0c0c0);
+  border:1px solid #000;border-radius:0;
+  box-shadow:1px 1px 0 #808080;
+}
+.windows-desktop[data-theme="win31"] .explorer-prompt input{
+  color:#000;background:#fff;border:1px solid #000;border-radius:0;
+}
+@media(max-width:580px){
+  .windows-desktop[data-theme="win31"] .explorer-navigation{
+    border-right:0;border-bottom:1px solid #000;
+  }
+}

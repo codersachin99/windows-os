@@ -1,0 +1,124 @@
+/* Source lock: legacy-win7@26b9f0c
+ * src/modules/themes/theme-win9x-scss.js; Win95, Win98 and Win2k share
+ * classic 3D shell chrome, with three distinct source palette values.
+ * The source :root --taskbar-height is 36px (not Win7's 40px).
+ */
+.windows-desktop[data-theme="win95"]{
+  --theme-surface:#bdbebd;--theme-accent:#00007b;
+}
+.windows-desktop[data-theme="win98"]{
+  --theme-surface:#c0c7c8;--theme-accent:#0608a6;
+}
+.windows-desktop[data-theme="win2k"]{
+  --theme-surface:#d4d0c8;--theme-accent:#082767;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]){
+  --taskbar-height:36px;--source-taskbar-bg:var(--theme-surface);
+  font-family:"MS Sans Serif",Tahoma,sans-serif;
+  color:#000;font-size:12px;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar{
+  height:36px;gap:4px;padding:2px 0 3px;
+  background:var(--theme-surface);color:#000;
+  border-top:1px solid #fff;backdrop-filter:none;
+  box-shadow:inset 0 -1px #393c39,inset 0 1px #fff;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__running{
+  gap:2px;min-width:0;
+  border-left:2px ridge #fff;padding-left:3px;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__start{
+  box-sizing:border-box;display:flex;align-items:center;gap:4px;
+  flex:0 0 auto;width:auto;height:30px;
+  margin:0 2px;padding:0 8px 0 4px;
+  background:var(--theme-surface);border:0;border-radius:0;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__start::after{
+  content:"Start";font-size:12px;font-weight:bold;color:#000;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__start img{
+  width:26px;height:26px;filter:none;object-fit:contain;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__start:active{
+  background:var(--theme-surface);
+  box-shadow:inset 1px 1px #393c39,inset -1px -1px #fff,inset 2px 2px #7b7b7b;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__application{
+  flex:0 0 48px;width:48px;height:29px;
+  border:0;border-radius:0;background:transparent;color:#000;
+  box-shadow:none;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__application:hover,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__application.is-active,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__application.is-running{
+  background:var(--theme-surface);
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+}
+.windows-desktop[data-theme="win2k"] .windows-taskbar__application.is-active{
+  background-color:#fff;
+  background-image:linear-gradient(45deg,var(--theme-surface) 25%,transparent 25%,transparent 75%,var(--theme-surface) 75%,var(--theme-surface)),
+    linear-gradient(45deg,var(--theme-surface) 25%,transparent 25%,transparent 75%,var(--theme-surface) 75%,var(--theme-surface));
+  background-size:4px 4px;background-position:0 0,2px 2px;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__tray{
+  color:#000;gap:3px;padding:0 6px;
+  box-shadow:inset 1px 1px #7b7b7b,inset -1px -1px #fff;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__tray>button,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__clock{
+  color:#000;font-family:inherit;font-size:11px;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-taskbar__show-desktop{
+  display:none;
+}
+/* Original 9x theme highlights only selected labels and leaves icon
+ * rows themselves transparent; selected labels get yellow dotted focus. */
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__shortcut,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__shortcut:hover,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__shortcut.is-active{
+  background:transparent;border-color:transparent;box-shadow:none;border-radius:0;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .desktop__icon-name:not(.is-input){
+  padding:0 4px;color:#fff;background:transparent;
+  text-shadow:1px 1px #000;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-desktop__shortcut.is-active .desktop__icon-name:not(.is-input){
+  color:#fff;background:var(--theme-accent);text-shadow:none;
+  outline:1px dotted #ff3;outline-offset:-1px;
+}
+/* Theme-win9x-scss source window-main: 3px padding and classic
+ * inset beveled frame; 20px controls and blue active titlebar. */
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window{
+  padding:3px;box-sizing:border-box;
+  background:var(--theme-surface);color:#000;
+  border:0;border-radius:0;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+  backdrop-filter:none;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__titlebar{
+  box-sizing:border-box;flex:0 0 24px;height:24px;padding:2px;
+  background:#7b7b7b;color:#fff;
+  box-shadow:none;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window.is-active .windows-window__titlebar{
+  background:var(--theme-accent);
+}
+.windows-desktop[data-theme="win2k"] .windows-window.is-active .windows-window__titlebar{
+  background:linear-gradient(to right,var(--theme-accent),#a4caee);
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__title{
+  font-weight:bold;font-size:12px;color:#fff;text-shadow:none;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__buttons{
+  align-self:center;margin:0 0 0 8px;gap:2px;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__buttons button,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__buttons button.windows-window__close{
+  box-sizing:border-box;width:20px;height:20px;
+  border:0;border-radius:0;background:var(--theme-surface);color:#000;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .windows-window__buttons button:active{
+  box-shadow:inset 1px 1px #393c39,inset -1px -1px #fff;
+}

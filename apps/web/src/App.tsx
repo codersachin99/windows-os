@@ -1,0 +1,96 @@
+import { useCallback, useEffect, useReducer, useRef } from "react";
+import { desktopReducer, initialDesktopState,SOURCE_ACTIVE_THEME_KEY,
+  SOURCE_ACTIVE_WALLPAPER_KEY } from "@windows-os/engine";
+import {sourceIsSystemWallpaper} from "@windows-os/assets";
+import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
+import {sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
+import type {DesktopAction} from "@windows-os/contracts";
+import {sourceDefaultTrayPreferences,sourceVisualEffectsRead,
+  sourceVisualEffectsSave,type SourceVisualEffects} from "@windows-os/apps/cpanel";
+import {useState} from "react";
+
+export default function App() {
+  const [state,reduce] = useReducer(desktopReducer, undefined, initialDesktopState);
+  // Source ProgramEvent records launches from any shell surface (Start,
+  // Desktop, Explorer, Run and taskbar), not only from Start menu clicks.
+  const dispatch=useCallback((action:DesktopAction)=>{
+    if(action.type==="OPEN_APP"&&sourceStartPreferences.snapshot().storeRecentApps)
+      sourceRecentPrograms.record(action.app.id);
+    if(action.type==="SET_THEME"){
+      try{
+        window.localStorage.setItem(SOURCE_ACTIVE_THEME_KEY,action.theme);
+        // Source ChangeTheme replaces a previously chosen Background.
+        window.localStorage.removeItem(SOURCE_ACTIVE_WALLPAPER_KEY);
+      }catch{/* restricted browsers retain the choice for this session */}
+    }
+    if(action.type==="SET_WALLPAPER"){
+      // Only byte-imported original system backgrounds are supported in this
+      // slice. Uploaded files/URLs must not be persisted as trusted wallpaper.
+      if(!sourceIsSystemWallpaper(action.path))return;
+      try{window.localStorage.setItem(SOURCE_ACTIVE_WALLPAPER_KEY,
+        JSON.stringify({theme:state.theme,path:action.path}));}
+      catch{/* restricted browsers retain the in-memory background */}
+    }
+    reduce(action);
+  },[state.theme]);
+  const [trayPreferences,setTrayPreferences]=useState(sourceDefaultTrayPreferences);
+  // Source Guest visual effects persist separately from window geometry and
+  // theme. Storage denial keeps the settings for this running session.
+  const [visualEffects,setVisualEffects]=useState<SourceVisualEffects>(()=>{
+    try{return sourceVisualEffectsRead(
+      typeof window==="undefined"?undefined:window.localStorage);}
+    catch{return sourceVisualEffectsRead(undefined);}
+  });
+  const updateVisualEffects=useCallback((next:SourceVisualEffects)=>{
+    setVisualEffects(next);
+    try{sourceVisualEffectsSave(
+      typeof window==="undefined"?undefined:window.localStorage,next);}
+    catch{/* restricted browser storage: keep Guest session state only */}
+  },[]);
+  const guestLoginPending = useRef(false);
+  const finishBoot = useCallback(() => dispatch({ type: "BOOT_COMPLETE" }), []);
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (state.phase !== "desktop") return;
+      // Do not close Start globally on Escape. Original shell popups own
+      // Escape dismissal in z-order (Start program context first, then Start).
+      // StartMenu delegates focus restoration to DesktopShell after unmount.
+      if ((event.key === "Meta" || (event.ctrlKey && event.key === "Escape")) && !event.repeat) {
+        event.preventDefault();
+        dispatch({ type: "TOGGLE_START" });
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [state.phase]);
+  if (state.phase === "boot") return <BootScreen theme={state.theme} onComplete={finishBoot} />;
+  if (state.phase === "logon") return <LogonScreen theme={state.theme} onGuest={() => {
+    if (guestLoginPending.current) return;
+    guestLoginPending.current = true;
+    // Source g.init() creates drive0/System C: and g.ensureUser(null) creates
+    // the Guest profile. Prefer any previously supplied runtime metadata.
+    void sourceFilesystemRuntime.startGuest()
+      .catch(error => console.warn("Legacy Guest filesystem could not initialize", error))
+      .finally(() => {
+        guestLoginPending.current = false;
+        dispatch({ type: "GUEST_LOGIN" });
+      });
+  }}
+    onShutdown={() => dispatch({ type: "SHUTDOWN" })} onRestart={() => dispatch({ type: "RESTART" })} />;
+  if (state.phase === "bsod") return <SourceBsodScreen
+    code={state.bsodCode??"DUMMY_BSOD"} onRestart={() => dispatch({type:"RESTART"})}/>;
+  if (state.phase === "switch") return <LogonScreen theme={state.theme}
+    onGuest={() => dispatch({type:"RESUME_SESSION"})}
+    onShutdown={() => dispatch({type:"SHUTDOWN"})}
+    onRestart={() => dispatch({type:"RESTART"})}/>;
+  if (state.phase === "shutdown") return <main className="windows-shutdown">
+    <img src="/assets/images/start-button-classic.ec7b0b9f.webp" width={64} height={64} alt="" />
+    <p>Windows is shutting down</p>
+    <button onClick={() => dispatch({ type: "RESTART" })}>Restart WindowsOS</button>
+  </main>;
+  return <DesktopShell state={state} dispatch={dispatch}
+    trayPreferences={trayPreferences}
+    onTrayPreferencesChange={setTrayPreferences}
+    visualEffects={visualEffects}
+    onVisualEffectsChange={updateVisualEffects}/>;
+}

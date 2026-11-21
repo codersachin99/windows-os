@@ -1,0 +1,190 @@
+## Source registry acceptance follow-up — 15 November 2026
+
+The earlier Display-only migration section below is a historical checkpoint.
+The root now uses 24 pinned 3097 entries, source a682 task/keyword search,
+tile-mode ordering and exact Win7 source artwork for all registry items.
+All six navigable panel destinations exist; unsupported host-setting and
+unmigrated program targets remain visible but disabled. See
+[migration/CPANEL-REGISTRY-SOURCE.md](CPANEL-REGISTRY-SOURCE.md) and
+[migration/CPANEL-BACKUP-SPEC.md](CPANEL-BACKUP-SPEC.md).
+Previous backup CI #43724080733 passed 424/426 browser tests and failed
+only the expected skipped-shortcuts count in the source Guest backup
+test (34 existing AppData entries); a corrected browser assertion is
+committed. Do not declare source/visual parity before the next CI batch.
+
+# Source Control Panel a259 / Display — initial navigable React slice
+
+Pinned source: `codersachin99/legacy-win7@4e63290d783009e1293433c6ccf252abba9c1187`,
+`src/modules/apps/cpanel.js`, original a259 `window-cpanel` and
+display module Re (lines ~2880–3195). The original panel has titlebar,
+back/forward addressbar, breadcrumb history `history=[null]` and
+`historyIndex=0`, search field, root tiles, six internal panel IDs
+`accounts`, `action-center`, `backup`, `display`,
+`notification`, `programs`, and `openLocation()` that truncates
+forward history on new navigation.
+
+**Actually implemented now:** registered reusable `ControlPanelApp` via
+the normal `AppRegistry` and shared `WindowFrame`, with source Start menu
+right-side entry, real location/breadcrumb state, back/forward history,
+instant *Display-only* search, and the original Display panel. The Display
+screen includes exact source preview, the device dropdown, generated
+fullscreen/4:3/16:10/16:9/21:9 resolution descriptions and original
+70–200% zoom labels. The source checks `isWeb` and disables the hardware
+settings fieldset in browsers; React preserves this boundary and does not
+pretend to change native monitor resolution. Cancel closes Control Panel.
+
+**Original binary artwork:** `cpanel.38ffbb1d.webp`,
+`display.8adb9edd.webp`, and `resolution.f3fc8376.webp`
+were imported from the pinned legacy commit as byte-identical blobs, with
+original Git SHA verification. Browser/unit tests cover the Start entry,
+preview art, source navigation, browser-disabled settings and search.
+
+**Still not implemented:** full root tiles/categories from source shared
+a97a provider, other five internal panels and their settings, full
+source indexed search, live device setting adapters, full old-source CSS
+pixel/layout acceptance, alternate skins, source `windowLocation` router
+integration, breadcrumbs outside the two known locations. Do not label this
+module implemented or source-verified. It remains **in progress**. The
+current root intentionally exposes only a functioning Display entry rather
+than fake pages. The first screen layout uses source classes and source
+art but awaits screenshot comparison.
+
+## Programs and Features — source-list/selection follow-up
+
+The original `src/modules/apps/cpanel.js` `ra` programs panel renders
+a two-pane list with heading `uninstall-change-program`, source instruction,
+disabled Organize menu, name/date/version/type table and click-selectable
+rows sorted by lower-case label. The React Control Panel now exposes a
+second real navigation location `programs`; its rows come from the
+already source-pinned c170 manifest `sourcePrograms`, filtered to actual
+Guest-installed executable paths and excluding source-hidden entries.
+The module does **not** invent host machine installed packages or device
+version metadata: version is `--`, date explicitly unknown, type
+`Simulation`. The original split between `appItems` (device metadata)
+and `programItems` (simulator data) is still pending. Row selection,
+Back/Forward history, search discovery and no-uninstall-without-permissions
+are covered by model and desktop/mobile browser tests.
+
+Imported source exact `programs.610e703b.webp` with verified Git blob
+SHA `20787fca64de67b1b40ba3c16baf2f3362d84e6a`. The original
+installer launch side pane and uninstall flows are not implemented;
+do not substitute deleting Guest binaries. Other internal Control Panel
+screens, full category/search index and screenshot fidelity are pending.
+
+## User Accounts — source Guest-only Kt/Xt page
+
+Pinned `src/modules/apps/cpanel.js` `Kt` handles original
+account panel `accounts` and `pageLinks`. With `user=null`
+(the pinned browser Guest desktop), `Change password`, `Change picture`,
+`Change name`, `Link account`, and `Delete account` are disabled;
+the Guest card from `G` displays `Guest account`; the
+`logoff()` action emits `changeView({view:"Switch"})`, **not** a
+destructive `LOG_OFF`. React now renders that source Guest card and
+blocked actions, and invokes the existing permissioned `SWITCH_USER`
+phase to preserve running windows and files. This was verified from
+the source; authenticated account management and backend changes are
+not faked. The source's "View other accounts" action relies on the
+original account backend and is explicitly disabled pending that
+integration.
+
+Added narrow account search, Back/Forward navigation, source file-art
+`accounts.2f4d5075.webp` imported byte-identically (blob SHA
+`9b11bc4dd87a06e76db474967deaeda6d45c9def`), unit contracts
+and desktop/mobile browser acceptance for Guest switch/resume. All
+other original Control Panel account pages and screenshot parity
+remain pending. This commit intentionally avoids `[run-ci]` while
+the earlier Display+Programs acceptance run #43717661924 is active.
+
+## Notification Area Icons — source bc55 + cpanel.js qe responsive tray behavior
+
+Original `src/modules/shell/taskbar-base.js` module `bc55`
+defines **four** default tray items in order: Action Center, Network,
+Battery, Volume, each state `"shown"`; `showClockIcon=true`,
+`alwaysShowIcons=false`. Its selectors `visibleItems`, `hiddenItems`
+and `enabledItems` differentiate `shown`, `hidden`,
+`notifications-only` and `off`. The source `cpanel.js` `qe`
+panel provides the notification-area dropdowns, system icon on/off
+subpage, Restore defaults, Always show checkbox, and OK/Cancel footer.
+
+React now has a typed pure tray preference model, original initial values,
+source selector functions and deterministic unit tests. The fourth
+Control Panel page `notification` renders both `qe` subviews.
+Preferences are lifted to `App` so they survive source
+`Alt+L` Switch/resume; visible tray icons, clock visibility and
+hidden-icons flyout update immediately on selection. Restore default
+behaviors resets only `trayItems` exactly as the source action; it
+does not implicitly change the independent clock/always-show options.
+Desktop/mobile browser tests exercise visible/hidden flags, flyout,
+always-show, system clock off/on and restoring defaults.
+
+Imported five byte-identical pinned Win7 assets: volume 100, network,
+action-center, datetime-s and battery 90. Tray images are simulator UI;
+their presence **does not assert real host battery level or internet
+connectivity**, and clicking icons does not control native speakers or
+OS notifications. Full Vuex persisted settings, tray popup contents,
+notification counts/actions, source mobile skin and pixel screenshots
+remain pending. The page and shell tray wiring intentionally have no
+`[run-ci]` while CI #43717661924 from the previous Display/Programs
+batch is running. The new code cannot be called CI-accepted yet.
+
+## CI root cause and combined Control Panel acceptance — 15 November 2026
+
+[Run #43717661924](https://github.com/codersachin99/windows-os/actions/runs/43717661924)
+completed **FAILURE**: TypeScript, unit, audits and build passed;
+**414 desktop/mobile browser tests passed**, exactly **two** failed on
+`tests/e2e/cpanel.spec.ts` Display test. The test incorrectly
+used Playwright `expect(fieldset).toBeDisabled()` even though its
+browser locator resolved to `<fieldset disabled ...>` with the
+disabled attribute present. Playwright's disabled check covers the
+inherited *form controls*, not the fieldset element itself; the test
+therefore checks `toHaveAttribute("disabled","")` and keeps the
+independent disabled select assertions. No production UI code changed
+for that correction.
+
+This combined **[run-ci]** checkpoint checks Display/Programs,
+the Guest-only User Accounts screen + original Switch semantics, the
+source bc55 notification preferences and real taskbar tray wiring,
+and all existing regressions. Do not report success until the exact
+run completes. PR stays draft, main untouched, and all remaining
+source CPANEL pages and pixel visual parity remain pending.
+
+## Action Center read-only source Guest notification history — 15 November 2026
+
+Source `src/modules/apps/cpanel.js` `te/oe` Action Center panel
+reads Vuex `notifications.history`, calls `MarkAllRead` on mount,
+displays the `review-messages-title` header, and shows either
+`no-messages` or actual history cards. Pinned
+`assets/locales/en-US.json` provides **exact** strings:
+"Review recent messages and resolve problems",
+"Action Center has nothing to report.", "No messages",
+"Change Action Center settings" and "View archived messages".
+The latter two source side links are **disabled**.
+
+The fifth Control Panel location `action-center` now renders this
+source Guest empty-state because no real notification-history provider
+is mounted in the React shell; it does **not** invent alerts, security
+diagnoses, a backend history, or mark nonexistent messages read.
+The component accepts an optional typed `messages` list for eventual
+Vuex-notification history parity; until then the Guest source history
+is truthfully empty. A source-specific search, Back/Forward navigation,
+and desktop/mobile browser test verify exact translated copy, blocked
+links, no invented message entries, and route reopening. The full
+notification-history provider, read tracking and safe parsed inline
+links remain pending. The sixth original Control Panel page,
+Backup/Restore, is still outstanding. This follow-up does not
+trigger CI while the previous combined acceptance batch is active.
+
+## Original Backup/Restore contract and remaining gate — 15 November 2026
+
+Source-traced original `cpanel.js` `Pe/Ie/je` ZIP
+backup/restore and page `ue/Te`. Documented exact manifest,
+progress states, lastBackup, browser download, profile-only restore,
+existing-file skip, and source folder list discovery still needed.
+Added `migration/CPANEL-BACKUP-SPEC.md` with a security and test
+acceptance plan. No ZIP export or restore UI has been claimed,
+and current source program binaries are not exposed as native OS files.
+Five navigable Control Panel routes remain in-progress, final
+Backup/Restore page and full source visual parity pending.
+Current CI #43719078159 checks earlier tray work and does not include
+the newer Action Center source route or this documentation checkpoint.
+

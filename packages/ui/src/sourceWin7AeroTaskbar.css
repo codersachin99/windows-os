@@ -1,0 +1,103 @@
+
+/*
+ * Original locked legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776
+ * src/modules/themes/theme-win7-scss.js .win7 taskbar__wrapper and ::before.
+ * The CSS background declarations and glass texture below are copied
+ * byte-for-byte from the original source; selectors target React surfaces.
+ * --theme-color stays customizable; exact per-Aero tint mapping still pending.
+ * Taskbar's 40px layout is preserved. This is bounded parity, not complete.
+ */
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar{
+  box-sizing:border-box;
+  height:40px;
+  position:absolute;
+  isolation:isolate;
+  border:0;
+  background:linear-gradient(to right,rgba(0,0,0,.1333333333) 50px,
+    rgba(0,0,0,0) 80px),var(--theme-color,#6a9eb9);
+  box-shadow:none;backdrop-filter:none;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-taskbar{
+  background:linear-gradient(to left,rgba(0,0,0,.1333333333) 50px,
+    rgba(0,0,0,0) 80px),var(--theme-color,#6a9eb9);
+}
+/* Source had descendant [data-effect-enable-glass]. React stores the
+ * exact same effect toggle on the .windows-desktop ancestor. */
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-enable-glass] .windows-taskbar{
+  backdrop-filter:blur(4px);
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar::before{
+  content:"";position:absolute;inset:0;
+  width:100%;height:100%;
+  z-index:0;pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(0,0,0,.6666666667),
+    inset 0 2px 0 rgba(255,255,255,.6666666667);
+  background:linear-gradient(to right,
+    rgba(0,0,0,.2392156863),rgba(0,0,0,.2392156863) 70%,
+    rgba(0,0,0,.4) 90%);
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-taskbar::before{
+  
+  background:linear-gradient(to left, rgba(0, 0, 0, 0.2392156863), rgba(0, 0, 0, 0.2392156863) 70%, rgba(0, 0, 0, 0.4) 90%)
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-enable-glass] .windows-taskbar::before{
+  background:linear-gradient(to right, rgba(0, 0, 0, 0.2392156863), rgba(0, 0, 0, 0.2392156863) 70%, rgba(0, 0, 0, 0.4) 90%),linear-gradient(54deg, rgba(0, 0, 0, 0.1333333333) 0 4%, rgba(102, 102, 102, 0.0666666667) 6% 6%, rgba(0, 0, 0, 0.1333333333) 8% 10%, rgba(0, 0, 0, 0.1333333333) 15% 16%, rgba(170, 170, 170, 0.0666666667) 17% 18%, rgba(0, 0, 0, 0.1333333333) 23% 24%, rgba(187, 187, 187, 0.1333333333) 25% 26%, rgba(0, 0, 0, 0.1333333333) 31% 33%, rgba(0, 0, 0, 0.1333333333) 34% 34.5%, rgba(187, 187, 187, 0.1333333333) 36% 40%, rgba(0, 0, 0, 0.1333333333) 41% 41.5%, rgba(187, 187, 187, 0.1333333333) 44% 45%, rgba(187, 187, 187, 0.1333333333) 46% 47%, rgba(0, 0, 0, 0.1333333333) 48% 49%, rgba(0, 0, 0, 0.1333333333) 50% 50.5%, rgba(0, 0, 0, 0.1333333333) 56% 56.5%, rgba(187, 187, 187, 0.1333333333) 57% 63%, rgba(0, 0, 0, 0.1333333333) 67% 69%, rgba(187, 187, 187, 0.1333333333) 69.5% 70%, rgba(0, 0, 0, 0.1333333333) 73.5% 74%, rgba(187, 187, 187, 0.1333333333) 74.5% 79%, rgba(0, 0, 0, 0.1333333333) 80% 84%, rgba(170, 170, 170, 0.1333333333) 85% 86%, rgba(0, 0, 0, 0.1333333333) 87%, rgba(187, 187, 187, 0.0666666667) 90%) left center/100vw 100vh
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"])[data-effect-enable-glass]:dir(rtl) .windows-taskbar::before{
+  background:linear-gradient(to left, rgba(0, 0, 0, 0.2392156863), rgba(0, 0, 0, 0.2392156863) 70%, rgba(0, 0, 0, 0.4) 90%),linear-gradient(-54deg, rgba(0, 0, 0, 0.1333333333) 0 4%, rgba(102, 102, 102, 0.0666666667) 6% 6%, rgba(0, 0, 0, 0.1333333333) 8% 10%, rgba(0, 0, 0, 0.1333333333) 15% 16%, rgba(170, 170, 170, 0.0666666667) 17% 18%, rgba(0, 0, 0, 0.1333333333) 23% 24%, rgba(187, 187, 187, 0.1333333333) 25% 26%, rgba(0, 0, 0, 0.1333333333) 31% 33%, rgba(0, 0, 0, 0.1333333333) 34% 34.5%, rgba(187, 187, 187, 0.1333333333) 36% 40%, rgba(0, 0, 0, 0.1333333333) 41% 41.5%, rgba(187, 187, 187, 0.1333333333) 44% 45%, rgba(187, 187, 187, 0.1333333333) 46% 47%, rgba(0, 0, 0, 0.1333333333) 48% 49%, rgba(0, 0, 0, 0.1333333333) 50% 50.5%, rgba(0, 0, 0, 0.1333333333) 56% 56.5%, rgba(187, 187, 187, 0.1333333333) 57% 63%, rgba(0, 0, 0, 0.1333333333) 67% 69%, rgba(187, 187, 187, 0.1333333333) 69.5% 70%, rgba(0, 0, 0, 0.1333333333) 73.5% 74%, rgba(187, 187, 187, 0.1333333333) 74.5% 79%, rgba(0, 0, 0, 0.1333333333) 80% 84%, rgba(170, 170, 170, 0.1333333333) 85% 86%, rgba(0, 0, 0, 0.1333333333) 87%, rgba(187, 187, 187, 0.0666666667) 90%) right center/100vw 100vh
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar > *{
+  position:relative;z-index:1;
+}
+/* Original non-full taskbar__tray translucent full-width end overlay.
+ * Do not intercept click, keyboard focus or active popup semantics. */
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__tray{
+  position:relative;isolation:isolate;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__tray::before{
+  content:"";position:absolute;top:0;
+  width:calc(100% + 40px);height:100%;
+  pointer-events:none;z-index:-1;
+  right:0;
+  background:linear-gradient(to left, rgba(0, 0, 0, 0.1333333333) 0, rgba(0, 0, 0, 0.1333333333) calc(90% - 20px), rgba(0, 0, 0, 0) 90%)
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-taskbar__tray::before{
+  left:0;
+  background:linear-gradient(to right, rgba(0, 0, 0, 0.1333333333) 0, rgba(0, 0, 0, 0.1333333333) calc(90% - 20px), rgba(0, 0, 0, 0) 90%)
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__start{
+  flex:0 0 54px;width:54px;
+  display:grid;place-items:center;
+  background:none;border:0;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__start img{
+  width:40px;height:40px;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__application{
+  color:#fff;border-radius:2px;
+  border:1px solid rgba(255,255,255,0);
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__application:hover{
+  border-color:rgba(0,0,0,.5333333333);
+  background:radial-gradient(circle at bottom,
+    rgba(191,220,250,.6666666667) 5%,transparent 15%),
+    radial-gradient(circle at 0 50%,rgba(0,0,0,.3333333333),transparent),
+    radial-gradient(circle at 100% 50%,rgba(0,0,0,.3333333333),transparent),
+    rgba(255,255,255,.2);
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__application:not(.is-minimized){
+  border-color:rgba(0,0,0,.5333333333);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5333333333);
+  background:linear-gradient(155deg,rgba(255,255,255,.6666666667),
+    rgba(255,255,255,0) 40%),
+    radial-gradient(ellipse at bottom right,
+    rgba(0,0,0,0),rgba(0,0,0,.0666666667) 64%,
+    rgba(0,0,0,0) 65%),rgba(255,255,255,.2);
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]):dir(rtl) .windows-taskbar__application:not(.is-minimized){
+  background:linear-gradient(-155deg,rgba(255,255,255,.6666666667),
+    rgba(255,255,255,0) 40%),
+    radial-gradient(ellipse at bottom left,
+    rgba(0,0,0,0),rgba(0,0,0,.0666666667) 64%,
+    rgba(0,0,0,0) 65%),rgba(255,255,255,.2);
+}

@@ -1,0 +1,24 @@
+.vfs-dialog__overlay { position:absolute; inset:0; z-index:9; display:grid; place-items:center; background:#1d304a55; }
+.vfs-dialog { position:relative; display:flex; flex-direction:column; width:min(570px,96%); max-height:96%; background:#f0f4f9;
+  border:1px solid #507c9f; box-shadow:0 8px 25px #0007; color:#152f4a; font:12px/1.4 "Segoe UI",Tahoma,sans-serif; }
+.vfs-dialog__title { display:flex; justify-content:space-between; align-items:center; height:30px; padding:4px 7px;
+  background:linear-gradient(#c7e3f3,#95b9d3); font-size:13px; }
+.vfs-dialog__title button { background:linear-gradient(#dd7c71,#b9362c); color:white; border:1px solid #8e362c; }
+.vfs-dialog__address { display:flex; gap:7px; align-items:center; padding:9px; }
+.vfs-dialog__address label { display:flex; align-items:center; gap:6px; flex:1; min-width:0; }
+.vfs-dialog__address input { flex:1; min-width:0; }
+.vfs-dialog button,.vfs-dialog input,.vfs-dialog select { font:inherit; }
+.vfs-dialog button { border:1px solid #98aab9; border-radius:2px; padding:4px 9px; background:linear-gradient(#fff,#d8e6f2); color:#183c59; cursor:pointer; }
+.vfs-dialog button:disabled { cursor:default; opacity:.5; }
+.vfs-dialog__files { min-height:130px; height:min(230px,38vh); overflow:auto; margin:0 9px; padding:6px;
+  background:#fff; border:1px solid #9fbed3; display:flex; flex-direction:column; }
+.vfs-dialog__file { display:flex; align-items:center; gap:8px; text-align:left; border:0!important; background:transparent!important; min-height:26px; }
+.vfs-dialog__file:hover,.vfs-dialog__file:focus { background:#d8eaff!important; }
+.vfs-dialog__empty { padding:15px; text-align:center; color:#667; }
+.vfs-dialog__field { display:grid; grid-template-columns:90px 1fr; align-items:center; gap:8px; margin:8px 10px; }
+.vfs-dialog__field input,.vfs-dialog__field select { min-width:0; padding:4px; border:1px solid #94acbc; background:white; }
+.vfs-dialog__actions { display:flex; justify-content:flex-end; gap:7px; padding:7px 10px 12px; }
+.vfs-dialog__error { margin:5px 10px; color:#ad1d12; }
+.vfs-dialog__confirm { position:absolute; inset:25% 13% auto; border:1px solid #6b8ba4; padding:15px;
+  background:#f2f6fb; box-shadow:0 4px 13px #0006; }
+.vfs-dialog__confirm button { margin-right:8px; }

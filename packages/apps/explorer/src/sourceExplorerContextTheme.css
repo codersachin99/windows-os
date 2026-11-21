@@ -1,0 +1,291 @@
+/*
+ * Exact menu-surface and hover-color values from pinned legacy-win7:
+ * src/modules/themes/theme-win7-scss.js, theme-winvista-scss.js, theme-winxp-scss.js and
+ * theme-win11-scss.js at 4e63290d783009e1293433c6ccf252abba9c1187.
+ * Shared source .winui-menu base: src/styles/system/vue-app.css.
+ *
+ * This adapter maps their menu skin to the React Explorer context and
+ * separately positioned BaseMenu children. It does NOT recreate the
+ * original Vue menu DOM, exact fonts, or every icon/checkmark.
+ */
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu{
+  border:1px solid #979797;
+  border-radius:0;
+  background:#f1f1f1;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5019607843),
+    inset 0 0 0 2px #f5f5f5;
+  padding:4px 2px;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu::before,
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu__submenu::before{
+  content:"";position:absolute;z-index:0;pointer-events:none;
+  top:2px;bottom:2px;left:27px;width:2px;
+  box-shadow:inset 1px 0 rgba(0,0,0,.1490196078),
+    inset -1px 0 #fff;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button{
+  position:relative;z-index:1;
+  color:#1b3956;border:1px solid transparent;border-radius:3px;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win7"],[data-theme="winvista"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .explorer-context-menu button:not(:disabled):focus-visible{
+  border-color:#aaddfa;
+  background:linear-gradient(rgba(255,255,255,.6),
+    rgba(230,236,245,.8) 90%,rgba(255,255,255,.8));
+}
+
+/* XP's source .winui-menu inherits the white base surface from vue-app,
+ * with disabled-text #aca899 and accent #316ac5 from .winxp theme. */
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu__submenu{
+  background:#fff;border:1px solid #aca899;border-radius:0;
+  box-shadow:4px 4px 2px -2px rgba(0,0,0,.5333333333);
+  padding:3px 2px;
+  font:12px Tahoma,"Microsoft Sans Serif",sans-serif;
+}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button{
+  color:#000;border-color:transparent;border-radius:0;
+}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#fff;background:var(--source-accent,#316ac5);border-color:transparent;
+}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"]) .explorer-context-menu button:disabled{
+  color:#aca899;opacity:1;
+}
+
+/* Source Win11 menu: 6px radius/padding, bright #f9f9f9,
+ * bright border #0001, #0003 item shadow, neutral hover #f0f0f0. */
+.windows-desktop[data-theme="win11"] .explorer-context-menu,
+.windows-desktop[data-theme="win11"] .explorer-context-menu__submenu{
+  background:#f9f9f9;border:1px solid rgba(0,0,0,.0666666667);
+  border-radius:6px;
+  box-shadow:0 4px 6px rgba(0,0,0,.2);
+  padding:6px;
+  font:12px "Segoe UI",sans-serif;
+}
+.windows-desktop[data-theme="win11"] .explorer-context-menu button{
+  color:#1a1a1a;border:1px solid transparent;border-radius:3px;
+  padding:6px 6px 6px 32px;
+  transition:background-color .1s;
+}
+.windows-desktop[data-theme="win11"] .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win11"] .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#1a1a1a;background:#f0f0f0;border-color:transparent;
+}
+@media(prefers-reduced-motion:reduce){
+  .windows-desktop[data-theme="win11"] .explorer-context-menu button{
+    transition:none;
+  }
+}
+
+
+/* Source theme-win10-scss.js .win10 .winui-menu:
+ * #eee panel, 1px #a0a0a0 border, flat square corners and 4x4 shadow.
+ * The white hover (#fff) is distinct from the dark #2c2c2c Start sidebar.
+ * Explorer renders detached submenu nodes, so both must inherit this style. */
+.windows-desktop[data-theme="win10"] .explorer-context-menu,
+.windows-desktop[data-theme="win10"] .explorer-context-menu__submenu{
+  color:#000;background:#eee;border:1px solid #a0a0a0;
+  border-radius:0;padding:4px 2px;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5333333333);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win10"] .explorer-context-menu button{
+  color:#000;background:transparent;
+  border:1px solid transparent;border-radius:0;
+}
+.windows-desktop[data-theme="win10"] .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win10"] .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#000;background:#fff;border-color:transparent;
+}
+.windows-desktop[data-theme="win10"] .explorer-context-menu button:disabled{
+  color:#808080;opacity:1;
+}
+
+
+/* Source Win8 and Win8.1 use the same theme-win8-scss.js .winui-menu:
+ * theme surface, dark alpha border, 4px offset shadow, vertical gutter,
+ * translucent #92c8fd 0.2 hover and thin #8acfff outline. */
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu__submenu{
+  background:var(--theme-surface,#f0f0f0);
+  color:#000;border:1px solid rgba(0,0,0,.4);
+  border-radius:0;padding:4px 2px;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5333333333);
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu::before,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu__submenu::before{
+  content:"";position:absolute;pointer-events:none;z-index:0;
+  left:28px;top:2px;bottom:2px;width:1px;background:#d7d7d7;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu button{
+  position:relative;z-index:1;
+  color:#000;background:transparent;border:1px solid transparent;
+  border-radius:0;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#000;background:rgba(146,200,253,.2);
+  border-color:transparent;box-shadow:0 0 0 1px #8acfff;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-context-menu button:disabled{
+  opacity:1;color:#808080;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]):dir(rtl) .explorer-context-menu::before,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]):dir(rtl) .explorer-context-menu__submenu::before{
+  left:auto;right:28px;
+}
+
+
+/* Original pinned theme-win31-scss.js .winui-menu: flat white
+ * square 1px-black popup with a 1px diagonal #808080 shadow;
+ * bold labels and #080abd hovered/focused rows. The Explorer
+ * background menu, View child, item menu and Send To child share
+ * this source family. No host files or native menu API is involved.
+ */
+.windows-desktop[data-theme="win31"] .explorer-context-menu,
+.windows-desktop[data-theme="win31"] .explorer-context-menu__submenu{
+  color:#000;background:#fff;border:1px solid #000;
+  border-radius:0;padding:0;
+  box-shadow:1px 1px 0 0 #808080;
+  font:700 12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win31"] .explorer-context-menu button{
+  color:#000;background:transparent;border:1px solid transparent;
+  border-radius:0;font-weight:bold;
+}
+.windows-desktop[data-theme="win31"] .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win31"] .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#fff;background:var(--theme-accent,#080abd);
+  border-color:transparent;
+}
+.windows-desktop[data-theme="win31"] .explorer-context-menu button:disabled{
+  color:#808080;opacity:1;
+}
+
+
+/* Original theme-win9x-scss.js: same classic 3D .winui-menu surface
+ * and white-on-accent selection for Explorer background/item context,
+ * View and Send To children. Palette comes from source Win95/98/2k
+ * desktop variables; no blanket Win7 gradients are reused here. */
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu__submenu{
+  color:#000;background:var(--theme-surface);border:1px solid #393c39;
+  border-radius:0;padding:3px;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,
+    inset -2px -2px #7b7b7b;
+  font:12px "MS Sans Serif",Tahoma,sans-serif;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button{
+  color:#000;background:transparent;border:1px solid transparent;
+  border-radius:0;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#fff;background:var(--theme-accent);border-color:transparent;
+}
+.windows-desktop:is([data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .explorer-context-menu button:disabled{
+  color:#7b7b7b;opacity:1;
+}
+
+
+/* Exact win11dark palette from pinned theme-win11-scss.js.
+ * Win11 and Win11dark retain the same menu interactions and geometry.
+ */
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu,
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu__submenu{
+  background:#242424;color:#fff;border:1px solid #fff3;
+  border-radius:6px;padding:6px;box-shadow:0 4px 6px #0006;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button{
+  color:#fff;background:transparent;border:1px solid transparent;
+  border-radius:3px;padding:6px 6px 6px 32px;
+}
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button:not(:disabled):hover,
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button:not(:disabled):focus-visible{
+  color:#fff;background:#fff1;border-color:transparent;
+}
+.windows-desktop[data-theme="win11dark"] .explorer-context-menu button:disabled{
+  color:#aaa;opacity:1;
+}
+
+
+/* Pinned src/modules/themes/theme-win7-classic-scss.js:
+ * Basic 2/3/4 use the win7-classic .winui-menu, NOT Aero glass.
+ * Reuse live palette variables from sourceWin7ClassicContrast.css, so
+ * High Contrast Black/White menus remain legible and source-correct.
+ * These selectors apply to Computer and Recycle Bin background/item
+ * menus and both independently opened View/New/Send To child popups.
+ */
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+:is(.explorer-context-menu,.explorer-context-menu__submenu){
+  color:var(--text-color);background:var(--theme-surface);
+  border:1px solid var(--border-color);border-radius:0;
+  padding:3px;font:12px "Segoe UI",Tahoma,sans-serif;
+  box-shadow:inset -1px -1px var(--border-color),
+    inset 1px 1px var(--border-color--contrast),
+    inset -2px -2px var(--text-color--disabled);
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+:is(.explorer-context-menu,.explorer-context-menu__submenu){
+  box-shadow:inset 1px -1px var(--border-color),
+    inset -1px 1px var(--border-color--contrast),
+    inset 2px -2px var(--text-color--disabled);
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+.explorer-context-menu button{
+  color:var(--text-color);background:transparent;
+  border:1px solid transparent;border-radius:0;
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+.explorer-context-menu button:not(:disabled):is(:hover,:focus-visible){
+  color:#fff;background:var(--theme-accent);border-color:transparent;
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"])
+.explorer-context-menu button:disabled{
+  color:var(--text-color--disabled);opacity:1;
+  text-shadow:1px 1px var(--border-color--contrast);
+}
+/* Pinned theme-win7-classic-scss.js [dir=rtl] classic disabled menuitem
+ * text-shadow:-1px 1px var(--border-color--contrast). The same root
+ * and detached View/New/Send To submenu buttons share Explorer DOM. */
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"]):dir(rtl)
+.explorer-context-menu button:disabled{
+  text-shadow:-1px 1px var(--border-color--contrast);
+}
+
+/* Pinned Win7/Vista RTL .winui-menu direction, shared by source Aero
+ * variants and Basic 1. Frozen theme-win7-scss.js and
+ * theme-winvista-scss.js use a -4px menu shadow, right-hand 2px
+ * item/check gutter and mirrored border bevel in [dir="rtl"].
+ * Earlier React Explorer context adapted the LTR gutter only, even
+ * though the real Desktop/Start already had RTL menu paint. Apply to
+ * both root and separate View/New/Send To submenu DOM nodes. */
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="winvista"],
+  [data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+):dir(rtl) :is(.explorer-context-menu,.explorer-context-menu__submenu){
+  box-shadow:-4px 4px 3px -2px rgba(0,0,0,.5019607843),
+    inset 0 0 0 2px #f5f5f5;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="winvista"],
+  [data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+):dir(rtl) :is(.explorer-context-menu,.explorer-context-menu__submenu)::before{
+  left:auto;right:27px;
+  box-shadow:inset -1px 0 rgba(0,0,0,.1490196078),
+    inset 1px 0 #fff;
+}
+.windows-desktop:is(
+  [data-theme="win7"],[data-theme="winvista"],
+  [data-theme="aero-1"],[data-theme="aero-2"],
+  [data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]
+):dir(rtl) .explorer-context-menu button{
+  padding-left:10px;padding-right:34px;text-align:right;
+}

@@ -1,0 +1,52 @@
+.windows-tetris{
+  display:flex;flex-direction:column;position:relative;width:100%;
+  height:100%;min-height:0;overflow:hidden;background:#000;color:#fff;
+  font:12px "Segoe UI",Tahoma,sans-serif;outline:0;
+}
+.windows-tetris__menu{
+  flex:none;display:flex;align-items:center;position:relative;gap:8px;
+  padding:4px 8px;min-height:26px;background:#eff3f7;color:#111;
+  border-bottom:1px solid #b2c5d4;
+}
+.windows-tetris__menu>button{
+  border:0;background:none;color:inherit;font:inherit;padding:2px 9px;cursor:pointer;
+}
+.windows-tetris__submenu{
+  position:absolute;top:100%;left:6px;z-index:3;min-width:175px;
+  display:flex;flex-direction:column;border:1px solid #888;padding:4px;
+  box-shadow:1px 3px 9px #0006;background:#f7f7f7;
+}
+.windows-tetris__submenu button{
+  background:none;color:#111;text-align:left;border:0;
+  padding:5px 10px;font:inherit;cursor:pointer;
+}
+.windows-tetris__submenu button:hover{background:#c7e4fa}
+.windows-tetris__screen{
+  position:relative;flex:1;min-height:0;background-color:#000;
+  background-position:center;background-size:cover;
+}
+.windows-tetris__canvas{
+  position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;
+}
+.windows-tetris__control{
+  position:absolute;display:grid;place-items:center;z-index:1;
+  color:#fff;background:#000c;border:3px solid #9edbf2;
+  padding:0;cursor:pointer;line-height:1;
+}
+.windows-tetris__control:hover{background:#1a3849}
+.windows-tetris__dialog{
+  font:12px "Segoe UI",Tahoma,sans-serif;color:#111;
+  background:#fff;padding:12px;max-height:min(75vh,480px);overflow:auto;
+}
+.windows-tetris__dialog h3{font-size:13px;margin:8px 0}
+.windows-tetris__dialog ul{padding-left:20px}
+.windows-tetris__dialog li{margin:6px 0}
+.windows-tetris__dialog fieldset{min-height:70px;max-height:200px;overflow:auto}
+.windows-tetris__dialog table{width:100%;text-align:center}
+.windows-tetris__dialog footer{display:flex;gap:8px;justify-content:center}
+.windows-tetris__dialog footer button{cursor:pointer}
+.windows-tetris__confirm{
+  position:absolute;inset:30px 6px 5px;z-index:3;
+  background:#f3f5f6;border:1px solid #7ca9cc;
+  padding:20px 12px;text-align:center;
+}

@@ -1,0 +1,287 @@
+/* Original cpanel.js a259: white scrollable panel under a Win7
+ * window address bar, p-6 results, and a browser-disabled Display fieldset.
+ * Full original root tile inventory and skins remain pending. */
+.windows-cpanel{
+  width:100%;height:100%;min-height:0;
+  background:#fff;color:#202020;display:flex;flex-direction:column;
+  font-family:"Segoe UI",Tahoma,sans-serif;font-size:13px;
+}
+.windows-cpanel__addressbar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(#f7fbff,#e2edf8);border-bottom:1px solid #aebac8;
+  padding:7px 8px;flex:none;
+}
+/* Win7 exact 27px source sprite lives in shared sourceWin7HistoryNav.css.
+ * Keep neutral controls for legacy non-Win7 themes until their original
+ * themed navigation sprites/layout are independently source-verified. */
+.windows-cpanel__navigation--fallback{display:flex;gap:3px;align-items:center}
+.windows-cpanel__navigation--fallback button{
+  width:25px;height:24px;border:1px solid #8aa4bd;
+  background:linear-gradient(#fff,#d4e2f0);border-radius:3px;
+}
+.windows-cpanel__navigation--fallback button:disabled{opacity:.5}
+.windows-cpanel__breadcrumb{
+  display:flex;align-items:center;gap:5px;min-height:26px;padding:0 9px;
+  flex:1 1 180px;min-width:0;border:1px solid #adc0d0;background:#fff;
+}
+.windows-cpanel__breadcrumb button{
+  border:0;background:none;color:#28374a;cursor:pointer;padding:2px;
+}
+/* Original a259.addressIcon/currentLocation and shared Win7 25px
+ * address control: the current segment is text; only ancestors navigate.
+ * 18px image is source-pinned for the active panel, never an emoji. */
+.windows-cpanel__breadcrumb.is-source-win7{
+  height:25px;min-height:25px;
+  border:1px solid rgba(0,0,0,.67);
+  border-radius:2px;
+  background:rgba(255,255,255,.67);
+  box-shadow:0 0 0 1px #ffffff77,inset 0 0 0 1px #fff;
+  padding:0 6px;
+}
+.windows-cpanel__address-icon{
+  flex:none;display:block;object-fit:contain;
+  width:18px;height:18px;
+}
+.windows-cpanel__crumb-current{
+  white-space:nowrap;color:#28374a;
+}
+.windows-cpanel__breadcrumb [data-test-cpanel-location]{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.windows-cpanel__addressbar input{
+  flex:0 1 190px;min-width:120px;max-width:100%;
+  height:26px;padding:4px 7px;border:1px solid #adc0d0;
+  background:#fff;color:#111;
+}
+.windows-cpanel__content{min-height:0;flex:1;overflow:auto}
+.windows-cpanel__home h2{
+  margin:0 0 20px;padding:24px;border-bottom:1px solid #d4d4d4;
+  font-weight:400;font-size:20px;color:#333;
+}
+.windows-cpanel__tile{
+  display:flex;align-items:center;gap:16px;text-align:left;
+  margin:0 24px 14px;padding:8px 14px;border:1px solid transparent;
+  color:#145f99;background:transparent;cursor:pointer;font-size:16px;
+}
+.windows-cpanel__tile:hover{background:#ecf5fd;border-color:#a9d2f0}
+.windows-cpanel__results{padding:24px}
+.windows-cpanel__result{display:flex;gap:12px;margin-bottom:16px}
+.windows-cpanel__result>div{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.windows-cpanel__link,.windows-cpanel__task{
+  border:0;background:none;padding:0;text-align:left;cursor:pointer;color:#1267a8
+}
+.windows-cpanel__link{font-size:20px}
+.windows-cpanel__task:hover,.windows-cpanel__link:hover{text-decoration:underline}
+.windows-cpanel__display{padding:12px 24px}
+.windows-cpanel__display h2{font-size:20px;font-weight:400;margin:12px 0 20px}
+.windows-cpanel__display-preview{
+  border:1px solid #222;padding:8px;margin-bottom:16px;display:flex;justify-content:center;
+}
+.windows-cpanel__display-preview img{display:block;max-width:208px;width:100%;object-fit:contain}
+.windows-cpanel__display fieldset{border:0;margin:0;padding:0;min-width:0}
+.windows-cpanel__display label{
+  display:flex;align-items:center;gap:12px;margin:0 0 16px;
+}
+.windows-cpanel__display label select{width:min(290px,70%);max-width:100%;height:27px}
+.windows-cpanel__display label{justify-content:space-between;max-width:490px}
+.windows-cpanel__footer{
+  margin:32px 0 0;display:flex;justify-content:flex-end;gap:10px;
+}
+.windows-cpanel__footer button{min-width:75px;padding:5px 13px}
+@media(max-width:480px){
+  .windows-cpanel__addressbar input{flex:1 1 100%}
+  .windows-cpanel__display{padding:10px 16px}
+}
+
+/* Source cpanel.js ra programs: px-8 py-6 heading, disabled Organize,
+ * column header, selectable program rows, and source 16px program icons. */
+.windows-cpanel__programs-heading{padding:24px 32px}
+.windows-cpanel__programs-heading h2{font-weight:400;font-size:20px;margin:0 0 10px}
+.windows-cpanel__programs-heading p{margin:0}
+.windows-cpanel__programs-menu{
+  background:#f0f4f7;padding:7px 10px;border-top:1px solid #c8d2dc;
+  border-bottom:1px solid #c8d2dc
+}
+.windows-cpanel__programs-menu button{
+  border:0;background:transparent;color:#6b6b6b
+}
+.windows-cpanel__programs-table{overflow:auto;max-width:100%}
+.windows-cpanel__programs-table table{
+  width:100%;border-collapse:collapse;text-align:left;white-space:nowrap
+}
+.windows-cpanel__programs-table th{
+  background:#f3f7fa;border-right:1px solid #cad5e0;border-bottom:1px solid #cad5e0;
+  padding:7px 10px;font-weight:400;min-width:95px
+}
+.windows-cpanel__programs-table th:first-child{min-width:200px;width:48%}
+.windows-cpanel__programs-table td{padding:3px 10px}
+.windows-cpanel__programs-table tr.is-selected{background:#cbe6fc}
+.windows-cpanel__programs-table tr:not(.is-selected):hover{background:#edf7ff}
+.windows-cpanel__program-select{
+  display:flex;align-items:center;gap:8px;padding:4px 0;
+  border:0;background:transparent;color:inherit;text-align:left;
+  width:100%;cursor:pointer;font:inherit
+}
+
+/* Pinned cpanel.js Xt Accounts / Kt.pageLinks: source guest account card,
+ * account-edit links disabled when user=null, account exit → Switch view. */
+.windows-cpanel__accounts{padding:24px;min-width:0}
+.windows-cpanel__accounts h2{font-size:20px;font-weight:400;margin:0 0 22px}
+.windows-cpanel__account-layout{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;justify-content:space-between}
+.windows-cpanel__account-links{display:flex;flex-direction:column;align-items:flex-start;gap:15px;min-width:180px;flex:1}
+.windows-cpanel__account-links button{
+  padding:0;border:0;background:none;color:#1467a7;cursor:pointer;font:inherit;
+  text-align:left
+}
+.windows-cpanel__account-links button:not(:disabled):hover{text-decoration:underline}
+.windows-cpanel__account-links button:disabled{cursor:default;opacity:.5}
+.windows-cpanel__account-card{
+  display:flex;align-items:center;gap:14px;min-width:220px;padding:12px 18px;
+  border:1px solid #bad0e5;background:linear-gradient(#fff,#e9f2fb)
+}
+.windows-cpanel__account-card img{object-fit:contain}
+.windows-cpanel__account-card>div{display:flex;flex-direction:column;gap:5px}
+.windows-cpanel__account-card strong{font-weight:500;font-size:19px}
+.windows-cpanel__account-card span{color:#555}
+
+/* Pinned cpanel.js qe notification-area and system-icons two-page panel.
+ * The source has a large fixed px-32 inset; clamp to fit mobile Win7 shell. */
+.windows-cpanel__notification{display:flex;flex-direction:column;height:100%}
+.windows-cpanel__notification-body{
+  flex:1;overflow:auto;padding:20px clamp(14px,9vw,128px);
+  display:flex;flex-direction:column;gap:9px
+}
+.windows-cpanel__notification h2{font-weight:400;font-size:20px;margin:0}
+.windows-cpanel__notification p{margin:2px 0 10px}
+.windows-cpanel__notification-list{
+  border:1px solid #b5c3d2;overflow:auto;min-height:96px;
+  background:#fff;padding:12px;flex-shrink:1
+}
+.windows-cpanel__notification-head,
+.windows-cpanel__notification-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;
+  min-width:265px;margin-bottom:14px;
+}
+.windows-cpanel__notification-row>span{
+  display:flex;align-items:center;gap:10px;min-width:0
+}
+.windows-cpanel__notification-row img{object-fit:contain}
+.windows-cpanel__notification-row select{max-width:100%;min-width:0}
+.windows-cpanel__notification-link{
+  color:#1267a8;background:none;border:0;padding:2px 0;
+  text-align:left;cursor:pointer;align-self:flex-start
+}
+.windows-cpanel__notification-link:disabled{opacity:.5;cursor:default}
+.windows-cpanel__notification-check{display:flex;align-items:center;gap:8px}
+.windows-cpanel__notification-footer{
+  padding:10px clamp(14px,9vw,128px);display:flex;justify-content:flex-end;
+  gap:9px;border-top:1px solid #c0cbd6;background:#eef3f8;
+}
+.windows-cpanel__notification-footer button{min-width:72px}
+
+/* Pinned cpanel.js te/oe source Action Center, px-8/py-6 content,
+ * empty-state white bordered notice, disabled side-pane controls. */
+.windows-cpanel__action{display:flex;min-height:100%;min-width:0}
+.windows-cpanel__action-sidebar{
+  display:flex;flex-direction:column;align-items:stretch;gap:12px;
+  padding:24px 16px;border-right:1px solid #c8d4e0;min-width:135px;
+  max-width:190px;background:#f6f9fc
+}
+.windows-cpanel__action-sidebar button{
+  text-align:left;color:#1465a6;background:none;border:0;cursor:pointer
+}
+.windows-cpanel__action-sidebar button:disabled{opacity:.45;cursor:default}
+.windows-cpanel__action-content{flex:1;padding:24px 32px;min-width:0}
+.windows-cpanel__action-content h2{font-size:20px;font-weight:400;margin:0 0 14px}
+.windows-cpanel__action-content>p{margin:0 0 24px}
+.windows-cpanel__action-empty,.windows-cpanel__action-message{
+  border:1px solid #ccc;padding:16px 24px;background:#fff
+}
+.windows-cpanel__action-message{margin-bottom:12px;overflow-wrap:anywhere}
+.windows-cpanel__action-message p{white-space:pre-wrap}
+@media(max-width:480px){
+  .windows-cpanel__action{flex-direction:column}
+  .windows-cpanel__action-sidebar{max-width:none;padding:8px 14px}
+  .windows-cpanel__action-content{padding:16px}
+}
+
+
+/* Original ue/Te source Backup and Restore: Win7 side pane, two grouped
+ * actions, progress/result status, and browser-only ZIP download/upload. */
+.windows-cpanel__backup{display:flex;min-height:100%;min-width:0}
+.windows-cpanel__backup-sidebar{
+  flex:0 0 175px;background:#f6f9fc;border-right:1px solid #c8d4e0;
+  padding:24px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:18px
+}
+.windows-cpanel__backup-sidebar button{
+  background:none;border:0;padding:0;color:#1267a8;text-align:left;
+  cursor:pointer;font:inherit
+}
+.windows-cpanel__backup-sidebar button:disabled{color:#8c979f;cursor:default}
+.windows-cpanel__backup-content{flex:1;min-width:0;padding:24px 32px}
+.windows-cpanel__backup-content h2{font-weight:400;font-size:20px;margin:0 0 20px}
+.windows-cpanel__backup-group{
+  border:1px solid #b3c7d5;margin:0 0 24px;background:#fff;min-width:0
+}
+.windows-cpanel__backup-group h3{
+  background:#e9f2fc;border-bottom:1px solid #b3c7d5;
+  color:#1c4770;font-size:15px;font-weight:400;margin:0;padding:9px 14px
+}
+.windows-cpanel__backup-row{
+  padding:16px 24px;display:flex;flex-wrap:wrap;
+  gap:12px;align-items:flex-start;justify-content:space-between
+}
+.windows-cpanel__backup-row p{margin:0 0 7px}
+.windows-cpanel__backup-row button{
+  flex:none;padding:5px 12px;border:1px solid #9db0c0;border-radius:3px;
+  background:linear-gradient(#fff,#e1ebf4);color:#222;cursor:pointer
+}
+.windows-cpanel__backup-row button:disabled{opacity:.55;cursor:default}
+.windows-cpanel__backup-status{
+  border:1px solid #a4b6c7;padding:14px 16px;margin:0 0 16px;
+  display:flex;flex-direction:column;gap:9px
+}
+.windows-cpanel__backup-status[data-test-backup-status="error"]{border-color:#bb5555}
+.windows-cpanel__backup-status progress{width:100%;max-width:320px}
+@media(max-width:520px){
+  .windows-cpanel__backup{flex-direction:column}
+  .windows-cpanel__backup-sidebar{
+    flex:0 0 auto;flex-direction:row;flex-wrap:wrap;gap:8px 16px;
+    padding:10px 14px;border-right:0;border-bottom:1px solid #c8d4e0
+  }
+  .windows-cpanel__backup-content{padding:16px}
+  .windows-cpanel__backup-row{padding:12px}
+}
+
+/* Original cpanel.js a259 uses the shared listview-main "tiles" root mode
+ * for the complete 3097 registry, not a six-link vertical shortcut menu.
+ * Cap widths and wrap source tile rows for narrow simulated desktops. */
+.windows-cpanel__source-list{
+  display:flex;flex-wrap:wrap;align-content:flex-start;
+  gap:4px;padding:8px 20px 24px;
+}
+.windows-cpanel__source-list .windows-cpanel__tile{
+  width:215px;min-height:60px;margin:0;padding:6px 8px;
+  gap:11px;align-items:center;font-size:14px;line-height:19px;
+  overflow-wrap:anywhere
+}
+.windows-cpanel__source-list .windows-cpanel__tile img{
+  width:44px;height:44px;object-fit:contain;flex:none
+}
+.windows-cpanel__source-list .windows-cpanel__tile:disabled{
+  cursor:default;opacity:.56
+}
+.windows-cpanel__source-list .windows-cpanel__tile:disabled:hover{
+  border-color:transparent;background:transparent
+}
+.windows-cpanel__results button:disabled{cursor:default;opacity:.55}
+.windows-cpanel__results button:disabled:hover{text-decoration:none}
+@media(max-width:480px){
+  .windows-cpanel__source-list{padding:8px 12px 18px}
+  .windows-cpanel__source-list .windows-cpanel__tile{
+    width:calc(50% - 2px);min-width:125px;gap:7px;font-size:12px
+  }
+  .windows-cpanel__source-list .windows-cpanel__tile img{
+    width:32px;height:32px
+  }
+}

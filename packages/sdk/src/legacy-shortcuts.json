@@ -1,0 +1,13 @@
+[
+  {
+    "key": "web_contacts",
+    "lbl": "Contacts",
+    "icon": "/apps/contacts/icon.webp",
+    "width": 780,
+    "height": 520,
+    "resizable": true,
+    "target": {
+      "path": "/apps/contacts/index.html"
+    }
+  }
+]

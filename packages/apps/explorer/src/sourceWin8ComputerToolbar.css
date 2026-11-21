@@ -1,0 +1,82 @@
+/*
+ * Original pinned legacy-win7@26b9f0ce:
+ * src/modules/apps/computer.js renders window-menubar asToolbar and the
+ * same icon-only eight-mode View menu / 192px vertical slider in every OS
+ * theme, including Win8/Win81; bin.js inherits Computer.
+ * src/modules/themes/theme-win8-scss.js:
+ * - .win8 .winui-menubar background var(--theme-surface), padding 1px,
+ *   gap 1px and transparent-border buttons
+ * - hover rgba(146,200,253,.2) with outline #8acfff
+ * - focus rgba(146,200,253,.4) with outline #58b1fc
+ * - .winui-menu theme surface, alpha-black border, 4px shadow,
+ *   translucent selected hover and 1px accent outline
+ * - .window__addressbar white with 6px padding
+ * Stay strictly scoped to these two real themes; avoid changing the Win7
+ * and Win10 dedicated toolbar implementations and unported other skins.
+ */
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8{
+  color:#000;background:#fff;font:12px/1.4 "Segoe UI",Tahoma,sans-serif;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-address{
+  background:#fff;color:#000;padding:6px;
+  border-bottom:1px solid rgba(0,0,0,.1333333333);
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command{
+  background:var(--theme-surface,#f0f0f0);
+  color:#000;gap:1px;padding:1px;
+  border-top:0;border-bottom:1px solid rgba(0,0,0,.1333333333);
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command>button,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize>button,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command .explorer-view__trigger{
+  color:#000;background:transparent;
+  border:1px solid transparent;border-radius:0;
+  box-shadow:none;min-height:26px;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command>button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize>button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command .explorer-view__trigger:hover{
+  background:rgba(146,200,253,.2);color:#000;border-color:transparent;
+  box-shadow:0 0 0 1px #8acfff;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command>button:not(:disabled):focus-visible,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize>button:focus-visible,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command .explorer-view__trigger[aria-expanded="true"],
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-command .explorer-view__trigger:focus-visible{
+  background:rgba(146,200,253,.4);color:#000;border-color:transparent;
+  box-shadow:0 0 0 1px #58b1fc;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize__menu,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-view__menu{
+  color:#000;background:var(--theme-surface,#f0f0f0);
+  border:1px solid rgba(0,0,0,.4);border-radius:0;
+  box-shadow:4px 4px 3px -2px rgba(0,0,0,.5333333333);
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize__menu button[role="menuitem"],
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-view__choices button{
+  color:#000;background:transparent;
+  border:1px solid transparent;border-radius:0;box-shadow:none;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize__menu button[role="menuitem"]:not(:disabled):hover,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize__menu button[role="menuitem"]:not(:disabled):focus-visible,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-view__choices button:not(:disabled):hover,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-view__choices button:not(:disabled):focus-visible,
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-view__choices button.is-selected{
+  background:rgba(146,200,253,.2);color:#000;
+  box-shadow:0 0 0 1px #8acfff;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-organize__menu button:disabled{
+  color:#808080;opacity:1;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-navigation{
+  background:#fff;border-right:1px solid rgba(0,0,0,.1333333333);
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-navigation__home{
+  color:#000;border:1px solid transparent;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-navigation__home:not(:disabled):hover{
+  background:rgba(146,200,253,.2);box-shadow:0 0 0 1px #8acfff;
+}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"]) .explorer-stage.is-source-win8 .explorer-status{
+  color:#000;background:var(--theme-surface,#f0f0f0);
+}

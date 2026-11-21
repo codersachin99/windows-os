@@ -1,0 +1,1 @@
+export {TaskbarSettingsApp} from "./TaskbarSettingsApp";
