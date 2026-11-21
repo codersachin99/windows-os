@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FileClipboard, VirtualFileStore } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths,desktopDownloadableFiles } from "./desktopFileActions";
+import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths } from "./desktopFileActions";
 
 const icons = [
   { id: "computer" },
@@ -62,6 +62,32 @@ describe("source desktop file selection and shared clipboard", () => {
     const targetLink={...link,file:{...link.file,
       targetPath:"/EXTERNAL/computer/drive0/Users/Guest/Documents/Other.lnk"}};
     expect(desktopDownloadableFiles([targetLink],[link.id])).toEqual([]);
+  });
+
+  it("uses frozen shortcut.path for clipboard, excluding program-only links and unsafe targets",()=>{
+    const target="/EXTERNAL/computer/drive0/Users/Guest/Documents/Real Folder";
+    const alias="/EXTERNAL/computer/drive0/Users/Guest/Desktop/Real Folder - Shortcut.lnk";
+    const a={id:"file:"+alias,file:{entry:{
+      uri:alias,name:"Real Folder - Shortcut.lnk",type:"file" as const
+    },targetPath:target}};
+    const b={id:"file:"+target,file:{entry:{
+      uri:target,name:"Real Folder",type:"directory" as const
+    }}};
+    const ordinary={id:"file:/Desktop/Note.txt",file:{entry:{
+      uri:"/Desktop/Note.txt",name:"Note.txt",type:"file" as const
+    }}};
+    const executable={id:"file:/Desktop/App.lnk",file:{entry:{
+      uri:"/Desktop/App.lnk",name:"App.lnk",type:"file" as const
+    },targetPath:null}};
+    const host={...executable,id:"host",file:{...executable.file,
+      targetPath:"/host/Desktop/stolen.txt"}};
+    const traversal={...executable,id:"traversal",file:{...executable.file,
+      targetPath:"/EXTERNAL/computer/drive0/Users/Guest/../../etc/config.txt"}};
+    const items=[{id:"computer"},a,b,ordinary,executable,host,traversal];
+    expect(desktopSourceClipboardPaths(items,[
+      a.id,b.id,ordinary.id,executable.id,"computer",host.id,traversal.id,a.id
+    ])).toEqual([target,"/Desktop/Note.txt"]);
+    expect(desktopSourceClipboardPaths(items,[executable.id,"computer"])).toEqual([]);
   });
 
   it("moves and copies between Explorer and Desktop through one shared clipboard", async () => {
