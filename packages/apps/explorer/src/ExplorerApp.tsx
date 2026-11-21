@@ -5,6 +5,7 @@ import {
   sourceMountedSearchRoots,
   parseSourceShortcut, parseSourcePathShortcut,
   createSourcePathDesktopShortcuts, createSourceGuestArchive, sourceCanCompressSelection,
+  extractSourceGuestZip, sourceCanExtractGuestZip,
   sourcePrograms, sourceIsShortcutEntry,
   sourceShortcutIconValue,
   readSourceShortcutText,
@@ -694,8 +695,11 @@ export function ExplorerApp({
       .map(uri=>visible.find(entry=>entry.uri===uri))
       .filter((entry):entry is FileEntry=>Boolean(entry))
     :[];
+  const canExtractGuestZip=Boolean(!isBin&&contextSelection.length===1&&
+    contextSelection[0].type==="file"&&!contextSelection[0].originalPath&&
+    sourceCanExtractGuestZip(state.path,contextSelection[0].uri));
   const contextItemMenu=sourceExplorerItemMenu({
-    selected:contextSelection,canRecycle:Boolean(trashPath)
+    selected:contextSelection,canRecycle:Boolean(trashPath),canExtractGuestZip
   });
   const sourceDesktopPath=volume?.desktopPath??null;
   const canSendToDesktop=Boolean(!isBin&&sourceDesktopPath&&contextSelection.length&&
@@ -733,9 +737,19 @@ export function ExplorerApp({
       case "copy":copySelection("copy");break;
       case "delete":requestDelete();break;
       case "rename":requestRename();break;
+      case "extract-here":{
+        if(!canExtractGuestZip)return;
+        const archivePath=contextSelection[0].uri;
+        const folder=state.path;
+        void execute(async()=>{
+          const created=await extractSourceGuestZip(fileStore,folder,archivePath);
+          if(created.length)session.select(created[0]);
+        });
+        break;
+      }
       // Send to is the source parent submenu, not a terminal action.
-      // Archive/extraction/Properties need migrated backing services.
-      case "send-to":case "extract-here":case "properties":break;
+      // Original Properties still needs a source-backed settings pane.
+      case "send-to":case "properties":break;
     }
   };
   const detailsSourceWidth=theme==="win7"?SOURCE_COMPUTER_DETAILS_COLUMN_WIDTH:undefined;
