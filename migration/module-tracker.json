@@ -1796,9 +1796,12 @@
         "packages/ui/src/SourceTaskbarMenu.tsx",
         "packages/ui/src/DesktopShell.tsx",
         "tests/e2e/source-taskbar-context-keyboard.spec.ts",
-        "migration/TASKBAR-CONTEXT-KEYBOARD-SOURCE.md"
+        "migration/TASKBAR-CONTEXT-KEYBOARD-SOURCE.md",
+        "packages/ui/src/sourceWin7ClassicContrast.css",
+        "tests/e2e/source-win7-classic-rtl-context-themes.spec.ts",
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
       ],
-      "verification": "React source taskbar background/pin/running context keyboard entry, disabled menuitem bypass, ArrowUp/Down roving and Escape exact-origin focus; exact-head CI and original paired pixel capture pending; source module not complete"
+      "verification": "React source taskbar background/pin/running context keyboard entry, disabled menuitem bypass, ArrowUp/Down roving and Escape exact-origin focus; exact-head CI and original paired pixel capture pending; source module not complete; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending"
     },
     {
       "source": "src/modules/shell/taskbar-macos.js",
@@ -1950,9 +1953,12 @@
         "packages/ui/src/sourceDesktopContextThemes.css",
         "packages/ui/src/sourceWin7BasicVariants.css",
         "tests/e2e/source-win7-aero-context-themes.spec.ts",
-        "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md"
+        "migration/WIN7-AERO-DESKTOP-TASKBAR-MENUS-SOURCE.md",
+        "packages/ui/src/sourceWin7ClassicContrast.css",
+        "tests/e2e/source-win7-classic-rtl-context-themes.spec.ts",
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
       ],
-      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending"
+      "verification": "bounded original Win7/Aero1-4/Basic1 source Desktop/taskbar menu paint and Basic1 tray scope isolation; exact-head CI, complete shell/window/theme and pinned source paired screenshots pending; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending"
     },
     {
       "source": "src/modules/system/mediacenter.js",
@@ -2413,9 +2419,11 @@
         "tests/e2e/source-final-theme-catalog.spec.ts",
         "migration/AERO-BASIC-SOURCE.md",
         "packages/ui/src/sourceStartContextThemes.css",
-        "tests/e2e/source-start-context-theme-families.spec.ts"
+        "tests/e2e/source-start-context-theme-families.spec.ts",
+        "tests/e2e/source-win7-classic-rtl-context-themes.spec.ts",
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
       ],
-      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending"
+      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending"
     },
     {
       "source": "src/modules/themes/theme-win7-scss.js",
