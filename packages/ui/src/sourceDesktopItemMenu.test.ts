@@ -49,6 +49,41 @@ describe("pinned main.js DesktopItemMenu source order and predicates",()=>{
     expect(sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,
       canCompressGuest:true}).some(a=>a.id==="send-to")).toBe(false);
   });
+  it("original Desktop Extract here precedes Send to and enables only a real Guest ZIP",()=>{
+    const input={
+      id:"file:/EXTERNAL/computer/drive0/Users/Guest/Desktop/Bundle.zip",
+      isFile:true,multiple:false,fileType:"file" as const,fileName:"Bundle.zip"
+    };
+    expect(sourceDesktopItemMenu(input).map(item=>item.id)).toEqual([
+      "open","extract-here","send-to","download","cut","copy",
+      "delete","rename","properties"
+    ]);
+    expect(sourceDesktopItemMenu(input).find(a=>a.id==="extract-here"))
+      .toEqual({id:"extract-here",label:"Extract here",disabled:true});
+    expect(sourceDesktopItemMenu({...input,canExtractGuestZip:true})
+      .find(a=>a.id==="extract-here")?.disabled).toBe(false);
+    expect(sourceDesktopItemMenu({
+      ...input,multiple:true,canExtractGuestZip:true
+    }).some(a=>a.id==="extract-here")).toBe(false);
+  });
+  it("original Desktop path-backed shortcut can extract a real Guest ZIP target",()=>{
+    const link={
+      id:"file:/EXTERNAL/computer/drive0/Users/Guest/Desktop/Project.lnk",
+      isFile:true,multiple:false,fileType:"file" as const,
+      fileName:"Project.lnk",archiveName:"Project.zip",canExtractGuestZip:true
+    };
+    expect(sourceDesktopItemMenu(link).find(a=>a.id==="extract-here"))
+      .toMatchObject({label:"Extract here",disabled:false});
+    expect(sourceDesktopItemMenu({...link,archiveName:"Notes.txt"})
+      .some(a=>a.id==="extract-here")).toBe(false);
+    for(const archiveName of ["Project.rar","Project.7z","Project.tar","Project.gz"]){
+      expect(sourceDesktopItemMenu({...link,archiveName})
+        .find(a=>a.id==="extract-here")?.disabled).toBe(true);
+    }
+    expect(sourceDesktopItemMenu({id:"computer",isFile:false,multiple:false,
+      archiveName:"Fake.zip",canExtractGuestZip:true})
+      .some(a=>a.id==="extract-here")).toBe(false);
+  });
   it("folder and .lnk omit source download and multiple selection omits Open/Rename",()=>{
     for(const type of [
       {fileName:"Projects",fileType:"directory" as const},
