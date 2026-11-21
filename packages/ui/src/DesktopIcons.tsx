@@ -1123,7 +1123,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             }}
             onClick={()=>{
               if(action.id==="send-to"){
-                setMenu(current=>current?{...current,sendToOpen:!current.sendToOpen}:current);
+                setMenu(current=>current?{...current,sendToOpen:true}:current);
                 focusSendTo();
               }else runItemAction(action.id,contextItem);
             }}>
