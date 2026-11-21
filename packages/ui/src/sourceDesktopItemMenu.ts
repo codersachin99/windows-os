@@ -3,8 +3,8 @@
  * DesktopItemMenu computed items() and watcher(data).
  *
  * Original order and hide predicates are independent from React DOM,
- * while safety-disabled actions remain visible until the corresponding
- * source engine (pinning, archives and Properties) has been migrated.
+ * while unavailable actions remain visibly disabled until their source-backed
+ * services have been migrated (including Properties).
  */
 export type SourceDesktopItemMenuAction =
   "open"|"empty-bin"|"pin"|"send-desktop"|"send-to"|"download"|
@@ -18,6 +18,7 @@ export interface SourceDesktopItemMenuInput{
   programInstalled?:boolean;
   pinned?:boolean;
   canPin?:boolean;
+  canCompressGuest?:boolean;
   trashCount?:number;
 }
 export interface SourceDesktopItemMenuEntry{
@@ -44,7 +45,7 @@ export function sourceDesktopItemMenu(
   if(!input.multiple&&!input.isFile&&!sourceIsSystem&&input.programInstalled)
     add("send-desktop","Send to Desktop");
   if(input.isFile){
-    add("send-to","Send to ▸",true); // source Compressed Folder requires archive engine
+    add("send-to","Send to ▸",!input.canCompressGuest); // original has compressed ZIP child
     if(canDownload)add("download","Download");
     add("cut","Cut");
     add("copy","Copy");
