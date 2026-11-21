@@ -1,3 +1,14 @@
+## 21 November 2026 — Desktop source path-backed shortcut Download parity
+
+Frozen legacy DesktopItemMenu code in src/modules/system/main.js (DesktopItemMenu) collects this.paths via selected this.getShortcut(id).path, not the JSON .lnk filename. Its Download tests downloadablePaths from these real paths and calls download(this.downloadablePaths). Previous React multi-file Download was fixed for direct desktop icons, but incorrectly excluded Explorer-created path-backed .lnk ZIP targets.
+
+Corrected packages/ui/src/desktopFileActions.ts: desktopDownloadableFiles dereferences validated targetPath for path-backed .lnk, checks normalized mounted Guest root scope again, filters path extension excluding .lnk, returns real target name and uri for byte-identical browser Download. Ordinary program-only .lnk, folders, synthetic icons, host/traversal paths remain excluded. Changes committed b794e50. Added pure unit tests (190b13c) and source e2e in source-desktop-multi-download.spec.ts (a26d613) using real Explorer Send to Desktop .lnk pointing to ZIP in Documents. Tests assert exact archive name/content; no target deletion/host download.
+
+Preserved source multi-selection and original ZIP extraction helper fix (4aa5439) after earlier CI #44909579800 failed 4 browser cases (792 passed) due multi-upload selected icons. CI #44913595324 (a5c8f0d) started as exact-head acceptance for that correction, but is an earlier snapshot than the new path-backed Download changes. Run a new opt-in exact-head [run-ci] after all changes to verify TS/units/source/artwork/Contacts/Vite/focused/full desktop+mobile Playwright. Paired source visual parity across 37 themes not yet possible without LEGACY_SOURCE_READ_TOKEN.
+
+Source still maps Cut/Copy/Delete and Send to compressed ZIP of .lnk path-backed shortcuts via this.paths. Those operations have not been changed in this slice; evaluate next under separate reversible Guest and source evidence tests rather than changing destructive behavior blindly. Keep draft PR #1, frozen source, main untouched, no release.
+
+---
 ## 21 November 2026 — Desktop Extract here browser regressions diagnosed
 
 CI #44908838690 (caf815e) and combined CI #44909579800 (bc45e6e) both failed only four focused Chromium tests (two scenarios x desktop/mobile). The newer run: 792 passed, 2 skipped, 4 failed; TypeScript, units, source inventory, artwork, Contacts audits, Vite all SUCCESS. Both failure cases reported Extract here menu item NOT FOUND after a multi-file upload, not an extractor failure.
