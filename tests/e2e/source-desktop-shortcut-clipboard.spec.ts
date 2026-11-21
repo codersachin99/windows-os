@@ -60,6 +60,8 @@ test("Desktop source path-backed shortcut context Copy copies Guest target not .
   await copy.dblclick();
   await expect(page.locator('[data-test-window="notepad"] .cm-content'))
     .toContainText("exact source content");
+  await page.locator('[data-test-window="notepad"]').last()
+    .getByRole("button",{name:/^Close /}).click();
   const documents=await explorerDocuments(page);
   await expect(documents.locator('[data-test-explorer-item="Linked Copy.txt"]'))
     .toBeVisible();
@@ -77,6 +79,8 @@ test("Desktop source path-backed shortcut Ctrl+X moves real target, leaves .lnk 
   await moved.dblclick();
   await expect(page.locator('[data-test-window="notepad"] .cm-content'))
     .toContainText("move through Guest clipboard");
+  await page.locator('[data-test-window="notepad"]').last()
+    .getByRole("button",{name:/^Close /}).click();
   const documents=await explorerDocuments(page);
   await expect(documents.locator('[data-test-explorer-item="Linked Cut.txt"]'))
     .toHaveCount(0);
