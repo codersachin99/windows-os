@@ -54,3 +54,42 @@ export function desktopDownloadableFiles(
   }
   return result;
 }
+
+/**
+ * Frozen src/modules/system/main.js DesktopItemMenu:
+ * selectedKeys -> getShortcut(key).path -> this.paths, then
+ * copyShortcut/cutShortcut dispatch the paths to the shell clipboard.
+ *
+ * An Explorer-created path-backed .lnk is a shortcut to the selected Guest
+ * TARGET, not the selected .lnk JSON file. Program-only .lnk shortcuts have
+ * no path and must not enter the file clipboard. Direct Guest icons retain
+ * their own path. Target URIs are revalidated at the action boundary.
+ *
+ * This intentionally does NOT change Desktop delete, drag, rename or zip
+ * routing, which require their own source/safety acceptance.
+ */
+export function desktopSourceClipboardPaths(
+  items: readonly {id:string;file?:{
+    entry:Pick<FileEntry,"uri"|"name"|"type">;
+    targetPath?:string|null;
+  }}[],
+  selectedKeys:readonly string[]
+):string[]{
+  const selected=new Set(selectedKeys);
+  const paths=new Set<string>();
+  for(const item of items){
+    if(!selected.has(item.id)||!item.file)continue;
+    const entry=item.file.entry;
+    const isLink=entry.type==="file"&&/\.lnk$/i.test(entry.name);
+    if(isLink&&!item.file.targetPath)continue;
+    const path=item.file.targetPath??entry.uri;
+    if(item.file.targetPath){
+      try{
+        if(path!==normalizeFileUri(path)||!path.startsWith(SOURCE_COMPUTER_ROOT+"/"))
+          continue;
+      }catch{continue;}
+    }
+    paths.add(path);
+  }
+  return [...paths];
+}
