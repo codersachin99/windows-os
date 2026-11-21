@@ -1,3 +1,18 @@
+## 21 November 2026 — correct 18 identical RTL browser assertion failures
+
+**Frozen original:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** `feat/0001-faithful-react-foundation`, draft PR #1. `main` and original untouched.
+
+**Exact preceding CI:** [#44878445135](https://github.com/codersachin99/windows-os/actions/runs/44878445135) at `2c7585c` **FAILURE** in focused Chromium browser tests: **716 passed / 18 failed / 2 skipped**. The missing Linux Rollup native dependency was **recovered successfully** and TypeScript, units, locked source/artwork/Contacts audits and Vite build all **PASSED**. Full E2E was skipped because focused browser step failed. Each failure came from new `source-win7-vista-explorer-rtl.spec.ts` line 34: in both desktop and mobile all nine cases expected computed `::before.left="auto"`, Chromium correctly returned the USED numeric coordinate `"174px"` for an absolutely positioned pseudo-element declaring `left:auto;right:27px`. RTL menu surface, border, shadow, gutter content/width assertions had passed before this erroneous test line. This is a CSSOM assertion mistake, **not a proven app style failure**.
+
+**Correction on branch:**
+- [`578df57`](https://github.com/codersachin99/windows-os/commit/578df572baba5ca64c37c14491567d5c0fae366c): assert computed **RTL right offset exactly 27px**, resolved left greater than right, and geometry `left+right+2px≈clientWidth` within 2px rounding; reciprocal **LTR left=27px**, used right, geometry and no negative RTL shadow. Preserves 9 × desktop/mobile cases and all RTL original CSS; no assertion or tests removed.
+- [`d0abb02`](https://github.com/codersachin99/windows-os/commit/d0abb02ba31342ad192f6206a5248bff0fc52f7b): `migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md` root cause, exact CI counts and evidence.
+
+**Current acceptance:** run ONE fresh exact-head `[run-ci]` including TypeScript, units, audits, build, focused and full desktop/mobile Chromium; verify actual outcome before marking RTL task complete. Prior taskbar keyboard [#44877278653](https://github.com/codersachin99/windows-os/actions/runs/44877278653) had passed its focused browser step but the full browser step was still in progress as of latest check. Inspect its terminal status too. Original screenshot pairing still requires private locked-source `LEGACY_SOURCE_READ_TOKEN`. No main merge or release.
+
+---
+
 ## 21 November 2026 — fix exact-head CI Rollup Linux native optional package install
 
 **Frozen source:** `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
