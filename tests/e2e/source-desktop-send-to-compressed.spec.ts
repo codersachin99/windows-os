@@ -89,3 +89,63 @@ test("Desktop multi-selection packs two files and keeps distinct collision-safe 
   await expect(first).toBeVisible();
   await expect(second).toBeVisible();
 });
+
+test("Desktop path-backed .lnk compresses real Documents target, not shortcut JSON",async({page})=>{
+  await logon(page);
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').last();
+  await expect(win).toBeVisible();
+  await win.locator(".explorer-navigation__home").filter({hasText:"Documents"}).click();
+  const bytes=Buffer.from([0,255,18,0,254,7,99]);
+  await win.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"Source Archive Target.bin",mimeType:"application/octet-stream",buffer:bytes
+  });
+  const target=win.locator('[data-test-explorer-item="Source Archive Target.bin"]');
+  await expect(target).toBeVisible();
+  await target.click({button:"right"});
+  const explorerMenu=win.locator('[data-test-explorer-context="item"]');
+  await explorerMenu.locator('[data-test-explorer-item-send-to]').click();
+  await explorerMenu.locator('[data-test-explorer-item-send-to-kind="desktop"]').click();
+  const link=page.locator('[data-test-desktop-file="'+DESKTOP+
+    '/Source Archive Target - Shortcut.lnk"]');
+  await expect(link).toBeVisible();
+  await win.getByRole("button",{name:/^Close /}).click();
+  const compressed=await zipSelected(page,"Source Archive Target - Shortcut.lnk");
+  await compressed.click();
+  // Original shortcut.path points into Documents. The shared ZIP writer
+  // must publish beside that target, not place JSON or archive on Desktop.
+  await expect(page.locator('[data-test-desktop-file="'+DESKTOP+
+    '/Source Archive Target.zip"]')).toHaveCount(0);
+  await expect(link).toBeVisible();
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const docs=page.locator('[data-test-window="computer"]').last();
+  await docs.locator(".explorer-navigation__home").filter({hasText:"Documents"}).click();
+  const zipped=docs.locator('[data-test-explorer-item="Source Archive Target.zip"]');
+  await expect(zipped).toBeVisible();
+  await expect(docs.locator('[data-test-explorer-item="Source Archive Target.bin"]'))
+    .toBeVisible();
+  await zipped.click({button:"right"});
+  const popup=docs.locator('[data-test-explorer-context="item"]');
+  const download=page.waitForEvent("download");
+  await popup.locator('[data-test-explorer-item-action="download"]').click();
+  const actual=unzipSync(new Uint8Array(await readFile(await (await download).path())));
+  expect(Object.keys(actual)).toEqual(["Source Archive Target.bin"]);
+  expect(Buffer.from(actual["Source Archive Target.bin"])).toEqual(bytes);
+});
+
+test("Desktop program-only .lnk hides source compressed Send to without shortcut.path",async({page})=>{
+  await logon(page);
+  await page.locator('[data-test-desktop-upload-input]').setInputFiles({
+    name:"Program Without Path.lnk",mimeType:"application/json",
+    buffer:Buffer.from('{"exe":"calc","icon":"calc"}')
+  });
+  const icon=page.locator('[data-test-desktop-file="'+DESKTOP+
+    '/Program Without Path.lnk"]');
+  await expect(icon).toBeVisible();
+  await icon.click({button:"right"});
+  const menu=page.locator('[data-test-desktop-menu]');
+  await expect(menu.locator('[data-test-desktop-item-action="send-to"]')).toHaveCount(0);
+  await expect(menu.locator('[data-test-desktop-item-action="copy"]')).toHaveCount(0);
+  await expect(menu.locator('[data-test-desktop-item-action="cut"]')).toHaveCount(0);
+  await expect(icon).toBeVisible();
+});
