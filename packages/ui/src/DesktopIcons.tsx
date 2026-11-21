@@ -27,7 +27,7 @@ import {
   sourceDesktopItemMenu,type SourceDesktopItemMenuAction
 } from "./sourceDesktopItemMenu";
 import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
-  sourceFileIconType,createSourceGuestArchive,sourceCanCompressSelection,
+  sourceFileIconType,createSourceGuestArchive,
   extractSourceGuestZip,sourceCanExtractGuestZip,getParentDirectory,getFileName,
   type FileEntry } from "@windows-os/filesystem";
 import {
