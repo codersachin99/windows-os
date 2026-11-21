@@ -34,9 +34,11 @@
         "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md",
         "packages/apps/explorer/src/sourceExplorerContextTheme.css",
         "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
-        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md"
+        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md",
+        "tests/e2e/source-classic-explorer-disabled-rtl.spec.ts",
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
       ],
-      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending"
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending; Classic Basic2–4 Computer/Bin disabled text directional emboss and nested Send To source affordance tested; exact-head CI and source paired screenshot pending"
     },
     {
       "source": "src/modules/apps/calc.js",
@@ -136,9 +138,11 @@
         "migration/EXPLORER-BIN-CONTEXT-KEYBOARD-SOURCE.md",
         "packages/apps/explorer/src/sourceExplorerContextTheme.css",
         "tests/e2e/source-win7-vista-explorer-rtl.spec.ts",
-        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md"
+        "migration/WIN7-VISTA-EXPLORER-RTL-SOURCE.md",
+        "tests/e2e/source-classic-explorer-disabled-rtl.spec.ts",
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
       ],
-      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending"
+      "verification": "Computer/Bin Explorer root and item menu keyboard focus, directional navigation and exact trigger restoration; exact-head CI + paired screenshot parity pending; entire module unaccepted; Original Win7/Vista RTL Explorer/Bin background and View child menu gutters, -4px shadow, row padding/align, real browser regression; exact-head CI and paired pixel parity pending; Classic Basic2–4 Computer/Bin disabled text directional emboss and nested Send To source affordance tested; exact-head CI and source paired screenshot pending"
     },
     {
       "source": "src/modules/apps/cpanel.js",
@@ -2421,9 +2425,11 @@
         "packages/ui/src/sourceStartContextThemes.css",
         "tests/e2e/source-start-context-theme-families.spec.ts",
         "tests/e2e/source-win7-classic-rtl-context-themes.spec.ts",
-        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md"
+        "migration/WIN7-CLASSIC-RTL-CONTEXT-SOURCE.md",
+        "packages/apps/explorer/src/sourceExplorerContextTheme.css",
+        "tests/e2e/source-classic-explorer-disabled-rtl.spec.ts"
       ],
-      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending"
+      "verification": "source-backed Basic 1-4 bounded shell adaptation; full parity and source-paired visual captures pending; Original Basic2-4 win7-classic RTL menu bevel on real Desktop/taskbar, plus Computer/Bin classic RTL browser regression; exact-head CI and paired source screenshots pending; Classic Basic2–4 Computer/Bin disabled text directional emboss and nested Send To source affordance tested; exact-head CI and source paired screenshot pending"
     },
     {
       "source": "src/modules/themes/theme-win7-scss.js",
