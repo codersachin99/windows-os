@@ -70,3 +70,31 @@ pixel screenshots remain separately blocked pending
 approved read-only frozen private source access
 (`LEGACY_SOURCE_READ_TOKEN`) and scene comparisons.
 No main merge or versioned release is authorized.
+
+## Exact-head browser failure analysis and correction
+
+[CI #44878445135](https://github.com/codersachin99/windows-os/actions/runs/44878445135)
+at `2c7585c` confirms Rollup native-package recovery,
+TypeScript, units, immutable source/artwork/Contacts audits,
+and Vite build all **PASSED**. The focused browser step ran
+**716 passing / 18 failing / 2 skipped**; every failure was
+the same line of the newly introduced RTL test, across
+9 cases × desktop/mobile: `expect(gutter.left).toBe("auto")`
+received `"174px"`. Browser CSSOM reports the **resolved
+used coordinate** for absolutely positioned `::before`
+when `left:auto;right:27px`, not the original declarative
+`auto` token. This is a *test assertion bug*, not
+evidence that the 27px right-hand gutter was missing; the
+previous 2px width, source paint and RTL -4px shadow
+assertions had already passed.
+
+`tests/e2e/source-win7-vista-explorer-rtl.spec.ts`
+now tests the real position instead: CSSOM `right=27px`,
+the resolved `left > right`, and
+`left + right + 2px ≈ element.clientWidth`, with a
+2px layout rounding tolerance. The reciprocal RTL→LTR
+assertion checks `left=27px`, resolved `right > left`,
+the same geometry invariant, and the **absence** of the
+RTL `-4px` shadow. No test or theme was removed,
+the production RTL CSS is unchanged, and no parity
+claim is made before a fresh exact-head CI succeeds.
