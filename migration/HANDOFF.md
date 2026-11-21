@@ -1,3 +1,15 @@
+## 21 November 2026 — Desktop source shortcut Copy/Cut, accepted prior baseline
+
+**Accepted exact-head baseline:** [CI #44913862521](https://github.com/codersachin99/windows-os/actions/runs/44913862521) SUCCESS on `e0dde5bdc39b0a3023e4a3307c62fd3bd414ce52`: TypeScript, all unit/source inventory/artwork/Contacts audits, Vite, focused source regressions and complete desktop/mobile browser. Historical CI #44913595324 failed full browser on a now superseded earlier snapshot; latest exact-head passed, no hidden claim about original side-by-side screenshot parity.
+
+**Frozen next priority:** `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` `src/modules/system/main.js` `DesktopItemMenu` `this.paths` enumerates selected `this.getShortcut(key).path`. `copyShortcut()` and `cutShortcut()` dispatch those target Guest paths, not the Desktop .lnk file. `hidden:!this.paths.length` hides Cut/Copy for program-only shortcuts, unlike earlier React behavior.
+
+**Implemented:** `desktopSourceClipboardPaths` in `packages/ui/src/desktopFileActions.ts` resolves source path-backed .lnk to canonical mounted Guest target and excludes programs, system icons, duplicates, unmounted/traversal paths; direct files/folders retain own path. Wired both Desktop context Cut/Copy and keyboard Ctrl+C/X to the existing Explorer-shared `fileClipboard`. `sourceDesktopItemMenu.ts` hides Cut/Copy when no source paths. New Vitest cases in `desktopFileActions.test.ts`, `sourceDesktopItemMenu.test.ts`; desktop/mobile real source e2e `source-desktop-shortcut-clipboard.spec.ts` checks Explorer-created .lnk Copy & Cut target with Notepad/Explorer content and program-only gate, added to deliberate focused browser gate. See [DESKTOP-SHORTCUT-CLIPBOARD-SOURCE.md](DESKTOP-SHORTCUT-CLIPBOARD-SOURCE.md).
+
+**Next:** run new exact-head `[run-ci]` for full TS, units, pinned source inventory, original asset and Contacts audits, build and all focused/full desktop/mobile Playwright, diagnose any failure without weakening tests. Do not merge/release. Never change original source SHA or `windows-os/main`. The original paired visual test requires `LEGACY_SOURCE_READ_TOKEN` and is still unverified across all 37 themes. Remaining Desktop Delete, Drag and Send to compressed-folder semantics for path-backed link targets are independent safety-sensitive source parity gaps. Draft [PR #1](https://github.com/codersachin99/windows-os/pull/1) remains open.
+
+---
+
 ## 21 November 2026 — Desktop source path-backed shortcut Download parity
 
 Frozen legacy DesktopItemMenu code in src/modules/system/main.js (DesktopItemMenu) collects this.paths via selected this.getShortcut(id).path, not the JSON .lnk filename. Its Download tests downloadablePaths from these real paths and calls download(this.downloadablePaths). Previous React multi-file Download was fixed for direct desktop icons, but incorrectly excluded Explorer-created path-backed .lnk ZIP targets.
