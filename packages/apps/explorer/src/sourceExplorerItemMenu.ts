@@ -6,9 +6,9 @@ import type {FileEntry} from "@windows-os/filesystem";
  * remains Restore / Delete / Properties, handled by sourceBinItemMenu.
  *
  * Keep source ordering and hidden predicates without tying them to React.
- * Original archive extraction, compression and desktop-path shortcuts need
- * independent backing services. Until then, show their source menu
- * affordances only as disabled actions, never as dummy operations.
+ * Original archive extraction still needs a backing service. Compression
+ * is enabled only for live direct children of a mounted Guest folder,
+ * implemented atomically by sourceArchive; unavailable actions remain disabled.
  */
 export type SourceExplorerItemAction=
   "open"|"extract-here"|"send-to"|"download"|
@@ -47,12 +47,15 @@ export const SOURCE_EXPLORER_SEND_TO:readonly SourceExplorerSendToEntry[]=[
   {id:"compress",label:"Compressed (zipped) folder",disabled:true},
   {id:"desktop",label:"Desktop (create shortcut)",disabled:true}
 ];
-/** The original Send to Desktop action becomes enabled only while an actual
- * Guest Desktop and a supported live source path are available. The archive
- * command stays disabled; it has no migrated service. */
-export function sourceExplorerSendToMenu(canCreateDesktop:boolean):SourceExplorerSendToEntry[]{
+/** Original Send to children retain source ordering. Availability is
+ * separately checked against live Guest mounts; neither operation may
+ * read host files or imply an unimplemented archive/extraction service. */
+export function sourceExplorerSendToMenu(
+  canCreateDesktop:boolean,canCompressGuest=false
+):SourceExplorerSendToEntry[]{
   return SOURCE_EXPLORER_SEND_TO.map(entry=>entry.id==="desktop"
-    ?{...entry,disabled:!canCreateDesktop}:entry);
+    ?{...entry,disabled:!canCreateDesktop}:
+    {...entry,disabled:!canCompressGuest});
 }
 export function sourceExplorerItemMenu(
   input:SourceExplorerItemMenuInput
