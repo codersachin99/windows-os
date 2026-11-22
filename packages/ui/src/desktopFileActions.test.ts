@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FileClipboard, VirtualFileStore } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,desktopSourceArchiveSelection } from "./desktopFileActions";
+import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,desktopSourceArchiveSelection,desktopSafeBinDragPaths } from "./desktopFileActions";
 
 const icons = [
   { id: "computer" },
@@ -117,6 +117,40 @@ describe("source desktop file selection and shared clipboard", () => {
     expect(desktopSourceArchiveSelection([programOnly],[alias.id])).toBeNull();
     const outside={...alias,file:{...alias.file,targetPath:"/host/Data.bin"}};
     expect(desktopSourceArchiveSelection([outside],[alias.id])).toBeNull();
+  });
+
+  it("only permits existing extended Bin drag for direct Guest icons, never source .lnk links",()=>{
+    const base="/EXTERNAL/computer/drive0/Users/Guest";
+    const direct={id:"file:direct",file:{entry:{
+      uri:base+"/Desktop/Safe Folder",name:"Safe Folder",type:"directory" as const
+    }}};
+    const directTwo={id:"file:second",file:{entry:{
+      uri:base+"/Desktop/Other.txt",name:"Other.txt",type:"file" as const
+    }}};
+    const link={id:"file:link",file:{entry:{
+      uri:base+"/Desktop/Linked - Shortcut.lnk",
+      name:"Linked - Shortcut.lnk",type:"file" as const
+    },targetPath:base+"/Documents/Linked.bin"}};
+    const program={id:"file:program",file:{entry:{
+      uri:base+"/Desktop/Calc.lnk",name:"Calc.lnk",type:"file" as const
+    },targetPath:null}};
+    const unsafe={id:"file:unsafe",file:{entry:{
+      uri:"/host/Desktop/Other.txt",name:"Other.txt",type:"file" as const
+    }}};
+    const icons=[direct,directTwo,link,program,unsafe,{id:"bin"}];
+    expect(desktopSafeBinDragPaths(icons,[direct.id])).toEqual([
+      base+"/Desktop/Safe Folder"
+    ]);
+    expect(desktopSafeBinDragPaths(icons,[direct.id,directTwo.id])).toEqual([
+      base+"/Desktop/Safe Folder",base+"/Desktop/Other.txt"
+    ]);
+    expect(desktopSafeBinDragPaths(icons,[link.id])).toBeNull();
+    expect(desktopSafeBinDragPaths(icons,[program.id])).toBeNull();
+    expect(desktopSafeBinDragPaths(icons,[direct.id,link.id])).toBeNull();
+    expect(desktopSafeBinDragPaths(icons,[direct.id,"bin"])).toBeNull();
+    expect(desktopSafeBinDragPaths(icons,[unsafe.id])).toBeNull();
+    expect(desktopSafeBinDragPaths(icons,["not-selected"])).toBeNull();
+    expect(desktopSafeBinDragPaths(icons,[])).toBeNull();
   });
 
   it("moves and copies between Explorer and Desktop through one shared clipboard", async () => {
