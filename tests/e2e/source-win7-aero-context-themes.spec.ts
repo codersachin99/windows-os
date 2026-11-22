@@ -39,7 +39,10 @@ for(const theme of win7Family){
     await expect(refresh).toHaveCSS("background-image",/linear-gradient/);
     const view=menu.locator('[data-test-desktop-view]');
     await view.click();
-    await expect(menu.getByRole("menuitemradio",{name:/Large icons/})).toBeVisible();
+    const child=desktop.locator('[data-test-desktop-background-submenu]');
+    await sourceWin7Paint(child);
+    await expect(child).toHaveAttribute("aria-label","View");
+    await expect(child.getByRole("menuitemradio",{name:/Large icons/})).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(menu).toHaveCount(0);
     await expect(desktop).toBeFocused();
