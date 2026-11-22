@@ -20,8 +20,10 @@ async function openDesktopView(page: Page) {
   await desktop.click({button:"right",position:{x:Math.min(440,Math.max(250,(await desktop.boundingBox())!.width - 50)),y:Math.min(300,(await desktop.boundingBox())!.height - 30)}});
   const menu=desktop.locator('[data-test-desktop-menu]');
   await expect(menu).toBeVisible();
-  await menu.getByRole("menuitem",{name:/View/}).click();
-  return menu;
+  await menu.locator('[data-test-desktop-view]').click();
+  const child=desktop.locator('[data-test-desktop-background-submenu]');
+  await expect(child).toHaveAttribute("aria-label","View");
+  return child;
 }
 
 test("desktop icons start in source column-first 80px layout and moving an icon persists",async({page})=>{
