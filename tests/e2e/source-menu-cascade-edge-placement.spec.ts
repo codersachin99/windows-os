@@ -64,7 +64,7 @@ for(const theme of ["win7","winxp","win11dark"] as const){
           else
             expect(box.x+box.width).toBeLessThanOrEqual(rootAfter!.x+6);
         }
-        await child.getByRole(triggerId==="view"?"menuitemradio":"menuitem").first().focus();
+        await child.getByRole(triggerId==="new"?"menuitem":"menuitemradio").first().focus();
         await page.keyboard.press("ArrowLeft");
         await expect(child).toHaveCount(0);
         await expect(trigger).toBeFocused();
