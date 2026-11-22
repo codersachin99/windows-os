@@ -29,7 +29,7 @@ for(const theme of ["win7","winxp","win31","win8","win11dark"] as const){
     await expect(view).toBeFocused();
 
     await page.keyboard.press("ArrowRight");
-    const large=menu.getByRole("menuitemradio",{name:/Large icons/});
+    const large=page.locator("[data-test-desktop-background-submenu]").getByRole("menuitemradio",{name:/Large icons/});
     await expect(large).toBeFocused();
     await page.keyboard.press("ArrowLeft");
     await expect(view).toBeFocused();
