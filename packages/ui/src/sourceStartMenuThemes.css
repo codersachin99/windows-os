@@ -583,3 +583,13 @@ button:not(:disabled):hover{
 button:not(:disabled):hover{
   background:#fff1;color:#fff;border-radius:4px;
 }
+
+/* Frozen startmenu-base.js library hover swaps source "start-docs/pics/music"
+ * artwork into the Win7 avatar region, rather than using the Guest
+ * portrait crop/border. Keep the existing layout dimensions until paired
+ * source screenshots can confirm the whole right-pane geometry. */
+.windows-startmenu__right .windows-startmenu__source-preview{
+  object-fit:contain;
+  border:0;
+  border-radius:0;
+}
