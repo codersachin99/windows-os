@@ -1,3 +1,15 @@
+## 22 November 2026 — exact original Win7 Start library icon blobs and 400-ms hover
+
+Accepted prior checkpoint: [CI #45002955097](https://github.com/codersachin99/windows-os/actions/runs/45002955097) SUCCESS at 48383e4 (source Win7/Vista/Basic Guest Documents/Pictures/Music link navigation; focused/full desktop/mobile). The original-vs-React visual job was skipped, not verified.
+
+Frozen legacy-win7@26b9f0ce7 source `src/modules/shell/startmenu-base.js`: original start-docs/start-pics/start-music image keys for right-pane links; hover/leave calls showLinkIcon(key or empty), which defers avatar replacement by 400 ms; no preview when `isBaseTheme`/custom/useBaseAssets. Six original binaries (standard WebP plus base SVG) fetched as base64 from immutable legacy SHA and written to target via `create_blob`/`create_tree`/`create_commit`/lease-protected `update_ref`, all byte-identical original Git blob SHA checks. Atomic binary import commit 7ec98fca. Hashed paths under apps/web/public/assets/images preserved. New pinned expected hashes in `scripts/import-source-theme-assets.py` theme `win7`, so target-only CI audits all six.
+
+New `packages/assets/src/index.ts` `sourceWin7StartLibraryArtwork` and `sourceWin7StartLibraryIcon(theme,key)` maps standard WebP and Basic source SVG without substitutions; `StartMenu.tsx` now swaps Guest avatar to proper image on delayed 400-ms mouseenter, restores on delayed mouseleave for Win7/Vista/Aero family, disables preview for Basic. `sourceStartMenuThemes.css` prevents portrait cropping/borders on source icon, keeping existing candidate avatar box until paired visual geometry verified. Added `packages/assets/src/sourceWin7StartLibraries.test.ts` and `tests/e2e/source-win7-start-library-artwork.spec.ts` with image-load, avatar-restore, and Basic no-preview assertions in desktop/mobile Chromium, focused CI list updated. Prior `WIN7-START-USER-LIBRARIES-SOURCE.md` reconciled to this later import. Detailed source proof: [WIN7-START-LIBRARY-HOVER-ARTWORK-SOURCE.md](WIN7-START-LIBRARY-HOVER-ARTWORK-SOURCE.md).
+
+Next: trigger [run-ci] at exact new head to pass TS, all unit tests, pinned source inventory, full original hash manifest artwork, Contacts audit, Vite build, focused and full desktop/mobile Playwright; diagnose failures before further features. Source useBaseAssets/custom theme preview rules and original full menu layout still need screenshot comparison across 37 source themes. `LEGACY_SOURCE_READ_TOKEN` not configured, paired visual job skipped. No merge/release, main/pinned source untouched.
+
+---
+
 ## 22 November 2026 — Win7/Vista/Basic Start user-library links restored
 
 Last checked existing CI: [#44994511592](https://github.com/codersachin99/windows-os/actions/runs/44994511592) at 4da2277 SUCCESS (source Desktop mixed-selection path count); [#44995958802](https://github.com/codersachin99/windows-os/actions/runs/44995958802) at d6900c2 SUCCESS (Win7-family touch search focus), including focused/full desktop/mobile browser. Visual capture skipped because LEGACY_SOURCE_READ_TOKEN is missing. Never conflate these accepted prior SHAs with subsequent new work.
