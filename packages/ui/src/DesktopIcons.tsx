@@ -32,7 +32,7 @@ import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
   type FileEntry } from "@windows-os/filesystem";
 import {
   desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,
-  desktopSourceArchiveSelection
+  desktopSourceArchiveSelection,desktopSafeBinDragPaths
 } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
@@ -525,18 +525,18 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       if (current.moved) {
         ignoreClick.current = true;
         if (current.id !== "bin" && onRecycleBin(event.clientX, event.clientY)) {
-          const selectedFiles = current.keys.map(key =>
-            items.find(item => item.id === key)?.file
-          );
-          const trashPath = sourceFilesystemRuntime.snapshot()?.trashPath;
-          if (selectedFiles.some(file => !file)) {
-            setError("System icons cannot be moved to Recycle Bin.");
-          } else if (!trashPath) {
+          // The original main.js dropIcons() only repositions shortcuts.
+          // React's additional drag-to-Bin feature must never treat a
+          // path-backed or program-only .lnk as a safe trash source. Explicit
+          // menu/keyboard Delete continues through source target confirmation.
+          const paths=desktopSafeBinDragPaths(items,current.keys);
+          const trashPath=sourceFilesystemRuntime.snapshot()?.trashPath;
+          if(!paths){
+            setError("Only direct Guest Desktop items can be dragged to Recycle Bin. Use Delete for shortcuts.");
+          }else if(!trashPath){
             setError("The original Recycle Bin is not mounted.");
-          } else {
-            void fileStore.trashMany(
-              selectedFiles.map(file => file!.entry.uri), trashPath
-            ).then(() => {
+          }else{
+            void fileStore.trashMany(paths,trashPath).then(() => {
               setSelected([]);
               anchor.current = null;
               setError(null);
