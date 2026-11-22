@@ -1,3 +1,15 @@
+## 22 November 2026 — Bin pointer drag: actual frozen source differs from React extension
+
+Confirmed [CI #44938100831](https://github.com/codersachin99/windows-os/actions/runs/44938100831) SUCCESS on 6741bed (combined Desktop shortcut compression and target Delete). Earlier compression-only [#44937841704](https://github.com/codersachin99/windows-os/actions/runs/44937841704) also SUCCESS. Paired original visual capture not completed.
+
+Frozen legacy-win7@26b9f0ce7 src/modules/system/main.js Desktop icon mixin pressIcon/moveIcons/dropIcons only uses ShortcutMove to reposition selected icon group, unlike Delete keyboard/context handlers which invoke deleteItems on getShortcut(key).path. Existing React drag-to-Bin is an additional feature, NOT source parity; it had an unsafe fallback trashMany(file.entry.uri) for .lnk, deleting the shortcut JSON without confirmation, contradicting source target Delete.
+
+Committed desktopSafeBinDragPaths in packages/ui/src/desktopFileActions.ts and wired DesktopIcons.tsx: only directly mounted canonical Guest files/folders can be dragged into React Bin convenience. Deny path-backed or program-only .lnk, system/unknown/host paths, or groups mixing any forbidden item as one whole batch; show clear alert pointing to explicit source-backed Delete, never delete a .lnk JSON or linked file on drop. Existing direct folder/batch move-to-Bin works unchanged; original icon drag/Explorer transfer code remains.
+
+Added desktopFileActions.test.ts unit safety matrix and new desktop/mobile real pointer E2E source-desktop-bin-drag-guard.spec.ts: Explorer-created Documents target linked on Desktop; drop onto Bin denied; both link and original Documents TXT intact, Bin contains neither; program-only link denied. Included new focused browser test in opt-in .github/workflows/react-checks.yml. Full source evidence: [DESKTOP-BIN-DRAG-SAFETY-SOURCE.md](DESKTOP-BIN-DRAG-SAFETY-SOURCE.md). Previous green CI predates this slice. Request exact-head [run-ci] for all TS/unit/source inventory/artwork/Contacts/Vite/focused/full desktop+mobile browser and repair genuine failures. Do not merge PR #1, mutate source/main, or claim pixel parity across 37 themes.
+
+---
+
 ## 22 November 2026 — Desktop path-backed shortcut Delete is target-based; restore regression
 
 **Source proof:** frozen `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776` `src/modules/system/main.js` `DesktopItemMenu.deleteShortcut()` calls `deleteItems(this.paths)`, with `this.paths=selected.map(this.getShortcut).filter(shortcut=>shortcut.path).map(shortcut=>shortcut.path)`; keyboard `deleteSelectedIcons()` uses the same `getShortcut(key).path` selection. File-backed Desktop .lnk created by Explorer Send to Desktop points to real Guest target in Documents, not the .lnk JSON URI.
