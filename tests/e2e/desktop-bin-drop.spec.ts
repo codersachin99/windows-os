@@ -8,8 +8,10 @@ async function login(page: Page) {
 async function createFolder(page: Page, name: string) {
   await page.locator("#desktop-icons").click({ button: "right", position: { x: 295, y: 290 } });
   const menu = page.locator("[data-test-desktop-menu]");
-  await menu.getByRole("menuitem", { name: /^New/ }).click();
-  await menu.getByRole("menuitem", { name: "Folder" }).click();
+  await menu.locator('[data-test-desktop-new]').click();
+  const child=page.locator('[data-test-desktop-background-submenu]');
+  await expect(child).toHaveAttribute("aria-label","New");
+  await child.getByRole("menuitem",{name:"Folder",exact:true}).click();
   const editor = page.locator("[data-test-desktop-rename]");
   await expect(editor).toBeVisible();
   await editor.fill(name);
