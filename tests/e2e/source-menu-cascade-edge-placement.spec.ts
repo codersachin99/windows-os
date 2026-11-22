@@ -17,8 +17,12 @@ async function desktopMenuAt(desktop:Locator,edge:"left"|"right"){
   const bounds=await desktop.boundingBox();
   expect(bounds).not.toBeNull();
   await desktop.click({button:"right",position:{
-    x:edge==="left"?12:Math.max(12,bounds!.width-12),
-    y:Math.min(100,Math.max(12,bounds!.height-20))
+    // The Guest desktop places real icons at the upper-left corner.
+    // Use the known empty 260x200 source test location for the
+    // "room-to-the-right" case, not an icon in the first column.
+    x:edge==="left"?Math.min(260,Math.max(12,bounds!.width-90))
+      :Math.max(12,bounds!.width-12),
+    y:Math.min(200,Math.max(12,bounds!.height-20))
   }});
   const root=desktop.locator("[data-test-desktop-menu]");
   await expect(root).toBeVisible();
