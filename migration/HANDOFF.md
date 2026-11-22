@@ -1,3 +1,15 @@
+## 22 November 2026 — frozen Recycle Bin does not open deleted folders before Restore
+
+Most recent previously accepted checkpoint: [CI #45018661202](https://github.com/codersachin99/windows-os/actions/runs/45018661202) completed **SUCCESS** at 7d162af, verifying previous original Win7 Start hover artwork, TS, unit, source inventory/byte-identical artwork/Contacts, Vite and focused/full Chromium desktop/mobile. No paired original screenshots, `visual-capture` skipped.
+
+Found source discrepancy in immutable legacy-win7@26b9f0ce7 `src/modules/apps/computer.js open(e)`: guards *all* entries with `e.uri.includes(this.trashPath)` BEFORE dispatch to shortcut/file/openFolder; `src/modules/apps/bin.js` hoists Computer to `trashPath`. Candidate ExplorerApp `openEntry` checked directory first, allowing deleted folder double-click/Enter to navigate into the Bin tree. Fixed `packages/apps/explorer/src/ExplorerApp.tsx` to reject all `isBin` types first (same existing 'Restore this item...' alert as deleted files); normal Computer directory navigation unaffected, as are Restore and Delete confirmation lifecycle.
+
+New `tests/e2e/source-bin-folder-open-guard.spec.ts` creates a real nested folder, recycles the parent, tests no Bin address/Back-history change for pointer double-click and Enter, then restores and checks nested folder survives. Three source skins win7/winxp/win11 x Chromium desktop/mobile. Focused Actions browser test list updated. See [BIN-OPEN-GUARD-SOURCE.md](BIN-OPEN-GUARD-SOURCE.md) for exact source trace and limits.
+
+Next: deliberate `[run-ci]` checkpoint of THIS new head (TS, all units, source inventory/byte-identical artwork/Contacts, Vite, targeted/full desktop+mobile Playwright). Repair any real browser test failures; keep branch PR #1 draft, no release or main/immutable source changes. Original paired pixel comparison of 37 theme IDs remains blocked on LEGACY_SOURCE_READ_TOKEN.
+
+---
+
 ## 22 November 2026 — exact original Win7 Start library icon blobs and 400-ms hover
 
 Accepted prior checkpoint: [CI #45002955097](https://github.com/codersachin99/windows-os/actions/runs/45002955097) SUCCESS at 48383e4 (source Win7/Vista/Basic Guest Documents/Pictures/Music link navigation; focused/full desktop/mobile). The original-vs-React visual job was skipped, not verified.
