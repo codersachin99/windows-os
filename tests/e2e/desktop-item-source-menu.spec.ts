@@ -86,7 +86,7 @@ test("source Desktop file menu can download exact Guest bytes and safely empty B
     .toHaveCount(0);
 });
 
-test("source Desktop multi-select removes Open and Rename from item context",async({page})=>{
+test("source Desktop menu counts selected Guest paths, not Computer and other system icons",async({page})=>{
   await logon(page);
   await makeText(page);
   const text=page.locator('[data-test-desktop-file="'+
@@ -95,11 +95,33 @@ test("source Desktop multi-select removes Open and Rename from item context",asy
   await page.locator('[data-test-desktop-icon="computer"]')
     .click({modifiers:["Control"]});
   await expect(text).toHaveAttribute("data-test-desktop-selected","true");
-  const menu=await rightClick(page,'[data-test-desktop-file="'+
+  await expect(page.locator('[data-test-desktop-icon="computer"]'))
+    .toHaveAttribute("data-test-desktop-selected","true");
+  let menu=await rightClick(page,'[data-test-desktop-file="'+
     DESKTOP+'/New Text Document.txt"]');
-  const actions=menu.locator("[data-test-desktop-item-action]");
-  // Playwright's text matcher requires a single element. Source menu
-  // multiselect has five commands, so assert the excluded action IDs.
+  // Frozen DesktopItemMenu.isMultiple is this.paths.length > 1; Computer
+  // has no real shortcut.path and MUST NOT hide the single-path actions.
+  await expect(menu.locator('[data-test-desktop-item-action="open"]')).toBeVisible();
+  await expect(menu.locator('[data-test-desktop-item-action="rename"]')).toBeVisible();
+  await expect(menu.locator('[data-test-desktop-item-action="delete"]'))
+    .toBeEnabled();
+  await page.keyboard.press("Escape");
+
+  // Two actual Guest file paths DO form a source multiple selection.
+  await page.locator('[data-test-desktop-upload-input]').setInputFiles({
+    name:"Second Selected Data.txt",mimeType:"text/plain",buffer:Buffer.from("second")
+  });
+  const second=page.locator('[data-test-desktop-file="'+
+    DESKTOP+'/Second Selected Data.txt"]');
+  await expect(second).toBeVisible();
+  await text.click();
+  await second.click({modifiers:["Control"]});
+  await page.locator('[data-test-desktop-icon="computer"]')
+    .click({modifiers:["Control"]});
+  await expect(text).toHaveAttribute("data-test-desktop-selected","true");
+  await expect(second).toHaveAttribute("data-test-desktop-selected","true");
+  menu=await rightClick(page,'[data-test-desktop-file="'+
+    DESKTOP+'/New Text Document.txt"]');
   await expect(menu.locator('[data-test-desktop-item-action="open"]')).toHaveCount(0);
   await expect(menu.locator('[data-test-desktop-item-action="rename"]')).toHaveCount(0);
   await expect(menu.locator('[data-test-desktop-item-action="delete"]'))
