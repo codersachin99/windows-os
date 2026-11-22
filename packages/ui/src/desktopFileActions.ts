@@ -110,3 +110,34 @@ export function desktopSourceArchiveSelection(
   const folder=getParentDirectory(paths[0]);
   return sourceCanCompressSelection(folder,paths)?{folder,paths}:null;
 }
+
+/**
+ * Desktop pointer drag onto Recycle Bin is an existing React convenience,
+ * NOT a capability asserted by frozen main.js (its dropIcons repositions
+ * shortcuts). Restrict the convenience to real, direct Desktop Guest entries.
+ * A path-backed .lnk is a pointer to a DIFFERENT Guest document; implicitly
+ * recycling the JSON shortcut or its target on a drag would risk data loss.
+ * Program-only .lnk, synthetic system icons and mixed groups are rejected
+ * atomically. Explicit source Delete has a separate confirmation lifecycle.
+ */
+export function desktopSafeBinDragPaths(
+  items: readonly {id:string;file?:{
+    entry:Pick<FileEntry,"uri"|"name"|"type">;targetPath?:string|null
+  }}[],
+  selectedKeys:readonly string[]
+):string[]|null{
+  if(!selectedKeys.length)return null;
+  const byId=new Map(items.map(item=>[item.id,item]));
+  const paths=new Set<string>();
+  for(const id of selectedKeys){
+    const file=byId.get(id)?.file;
+    if(!file||/\\.lnk$/i.test(file.entry.name)||file.targetPath)return null;
+    try{
+      const path=file.entry.uri;
+      if(path!==normalizeFileUri(path)||!path.startsWith(SOURCE_COMPUTER_ROOT+"/"))
+        return null;
+      paths.add(path);
+    }catch{return null;}
+  }
+  return paths.size?[...paths]:null;
+}
