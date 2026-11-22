@@ -609,6 +609,11 @@ export function ExplorerApp({
     child.style.left=placement.left+"px";
     child.style.top=placement.top+"px";
     child.dataset.side=placement.side;
+    // Like Send to, a View/New cascade may stack above or below the
+    // parent on narrow screens. Traversing other root rows must not
+    // dismiss it before the pointer reaches the child.
+    child.dataset.cascade=placement.top>=bounds.height||
+      placement.top+child.offsetHeight<=0?"stacked":"adjacent";
   },[context?.kind,context?.viewOpen,context?.newOpen,context?.x,context?.y]);
   const copyExplorerPath=()=>{
     const path=state.path;
@@ -1073,6 +1078,8 @@ export function ExplorerApp({
         if(!button||button.parentElement!==contextRef.current)return;
         if(button.hasAttribute("data-test-explorer-context-view")||
           button.hasAttribute("data-test-explorer-context-new"))return;
+        if((context.viewOpen||context.newOpen)&&
+          backgroundSubmenuRef.current?.dataset.cascade==="stacked")return;
         if(context.viewOpen||context.newOpen)setContext(current=>current?{
           ...current,viewOpen:false,newOpen:false
         }:current);
@@ -1177,7 +1184,8 @@ export function ExplorerApp({
       {context.kind === "background" && <>
         <button role="menuitem" aria-expanded={context.viewOpen}
           aria-haspopup="menu" data-test-explorer-context-view=""
-          onPointerMove={()=>setContext(current=>current&&!current.viewOpen
+          onPointerMove={()=>setContext(current=>current&&!current.viewOpen&&
+            !(current.newOpen&&backgroundSubmenuRef.current?.dataset.cascade==="stacked")
             ? {...current,viewOpen:true,newOpen:false}:current)}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
@@ -1217,7 +1225,8 @@ export function ExplorerApp({
         {!isBin&&<>
           <button role="menuitem" aria-expanded={context.newOpen}
             aria-haspopup="menu" data-test-explorer-context-new=""
-            onPointerMove={()=>setContext(current=>current&&!current.newOpen
+            onPointerMove={()=>setContext(current=>current&&!current.newOpen&&
+              !(current.viewOpen&&backgroundSubmenuRef.current?.dataset.cascade==="stacked")
               ? {...current,newOpen:true,viewOpen:false}:current)}
             onKeyDown={event=>{
               if(event.key==="ArrowRight"){
