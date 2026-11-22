@@ -33,6 +33,14 @@ FILES: dict[str, dict[str, str]] = {
     },
     "win7": {
         "personal.ccbfdd3a.webp": "1c1649d47ab3c405afb49ce2fa45e3a9cd937725",
+        # Original startmenu-base.js "start-docs/pics/music" artwork.
+        # Non-Basic right-pane hovered icon and Basic source vector variants.
+        "start-docs.68e567fd.webp": "a82934c9371838320975f1c909bb2f4389a1c079",
+        "start-pics.90cdea88.webp": "5285250096ad9a789020a51f6b00a08548205465",
+        "start-music.7d1b9e60.webp": "b0a08bc345b84669b8d16505b85bdb88508c2d65",
+        "start-docs-base.d4ace145.svg": "fe868511c13fdb1c4c10e16d3784b1f3bf6e0b60",
+        "start-pics-base.b5f2d859.svg": "0567f7ac8f8483e8e0857dda99bf2685d97acd4e",
+        "start-music-base.74611945.svg": "0670bea5472a2c9169fba7f269028656922489ef",
     },
     "win2k": {
         "logo2k.15140c8b.webp": "028a0e1cd4f9eab7c472482312189eeecd0fc0df",
