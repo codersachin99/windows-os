@@ -3,7 +3,7 @@ import {createPortal} from "react-dom";
 import {sourceIsXpFamily,sourceIsAeroFamily,type DesktopAction,type ThemeId} from "@windows-os/contracts";
 import "./sourceStartMenuThemes.css";
 import "./sourceStartContextThemes.css";
-import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt} from "@windows-os/assets";
+import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt,sourceWin7StartLibraryIcon,type SourceWin7LibraryKey} from "@windows-os/assets";
 import {
   parseSourceShortcut,parseSourcePathShortcut,readSourceShortcutText,
   sourceExecutablePath,matchesSourceKind,SOURCE_START_MENU_PROGRAMS,sourcePrograms,
@@ -69,6 +69,22 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
   const startSearchRef=useRef<HTMLInputElement>(null);
+  const libraryHoverTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const [libraryPreview,setLibraryPreview]=useState<SourceWin7LibraryKey|null>(null);
+  // Frozen startmenu-base.js showLinkIcon(key) waits 400 ms before
+  // replacing the Guest avatar with a real source "start-docs/pics/music"
+  // preview; isBaseTheme disables this avatar preview region entirely.
+  const previewWin7Library=(key:SourceWin7LibraryKey|null)=>{
+    if(libraryHoverTimer.current!==null)clearTimeout(libraryHoverTimer.current);
+    libraryHoverTimer.current=null;
+    if(!isWin7StartFamily||theme.startsWith("basic-"))return;
+    libraryHoverTimer.current=setTimeout(()=>{
+      setLibraryPreview(key);
+      libraryHoverTimer.current=null;
+    },400);
+  };
+  useEffect(()=>()=>{if(libraryHoverTimer.current!==null)
+    clearTimeout(libraryHoverTimer.current);},[]);
   const contextRef=useRef<HTMLDivElement>(null);
   // The same popup is opened by Win31, Win9x, Win8 and modern Start
   // program buttons. Keep the actual button, not a Win7-only selector.
@@ -566,8 +582,13 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
             <span>{app.label}</span>
           </button>)}
         </section>}
-        {!isXpTheme&&<img src={legacyArt.guestAvatar}
-          alt="Guest" className="windows-startmenu__avatar" />}
+        {!isXpTheme&&(libraryPreview&&isWin7StartFamily&&!theme.startsWith("basic-")
+          ?<img src={sourceWin7StartLibraryIcon(theme,libraryPreview)}
+            alt="" aria-hidden="true" className="windows-startmenu__avatar windows-startmenu__source-preview"
+            data-test-startmenu-library-preview={libraryPreview}
+            data-source-artwork="original"/>
+          :<img src={legacyArt.guestAvatar}
+            alt="Guest" className="windows-startmenu__avatar" />)}
         {!isXpTheme&&<strong>Guest</strong>}
         {isWin11Theme&&<div className="windows-startmenu__win11-actions"
           data-test-win11-start-actions="">
@@ -615,6 +636,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
           .map(folder=><button type="button" key={folder}
             className="windows-startmenu__source-library-link"
             data-test-startmenu-link={folder.toLowerCase()}
+            data-source-library-icon={sourceWin7StartLibraryIcon(theme,folder.toLowerCase() as SourceWin7LibraryKey)}
+            onMouseEnter={()=>previewWin7Library(folder.toLowerCase() as SourceWin7LibraryKey)}
+            onMouseLeave={()=>previewWin7Library(null)}
             onClick={()=>openWin7StartLibrary(folder)}>
             {folder}
           </button>)}
