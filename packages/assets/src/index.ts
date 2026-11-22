@@ -1,6 +1,37 @@
 import {sourceIsXpFamily} from "@windows-os/contracts";
 export const LEGACY_REVISION = "26b9f0ce7a1665dee89a7c81824bec09e2c75776" as const;
 
+/**
+ * Frozen src/modules/shell/startmenu-base.js "start-docs", "start-pics"
+ * and "start-music" icon keys. These six image files were imported via
+ * their original Git blobs; their SHA-1 Git blob IDs equal the immutable
+ * legacy-win7@LEGACY_REVISION objects, without re-encoding or substitution.
+ * Source isBaseTheme hides avatar hover previews; preserve the base images
+ * for theme-specific source artwork mapping, not as forced preview widgets.
+ */
+export const sourceWin7StartLibraryArtwork=Object.freeze({
+  documents:Object.freeze({
+    standard:"/assets/images/start-docs.68e567fd.webp",
+    base:"/assets/images/start-docs-base.d4ace145.svg"
+  }),
+  pictures:Object.freeze({
+    standard:"/assets/images/start-pics.90cdea88.webp",
+    base:"/assets/images/start-pics-base.b5f2d859.svg"
+  }),
+  music:Object.freeze({
+    standard:"/assets/images/start-music.7d1b9e60.webp",
+    base:"/assets/images/start-music-base.74611945.svg"
+  })
+});
+export type SourceWin7LibraryKey=keyof typeof sourceWin7StartLibraryArtwork;
+export function sourceWin7StartLibraryIcon(
+  theme:string,key:SourceWin7LibraryKey
+):string{
+  return theme.startsWith("basic-")
+    ?sourceWin7StartLibraryArtwork[key].base
+    :sourceWin7StartLibraryArtwork[key].standard;
+}
+
 // Exact asset file names and bytes come from legacy-win7 at LEGACY_REVISION.
 // Keep source names and paths. Do not substitute emoji or approximated artwork.
 export const legacyArt = {
