@@ -1,3 +1,13 @@
+## 22 November 2026 — Win7-family Start search focus is desktop-only on initial open
+
+Frozen source `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`, `src/modules/shell/startmenu-base.js`: `watch.isOpen(t)` schedules `focusSearch` only if `!isTouchDevice()`. Existing React `StartMenu.tsx` set unconditional `autoFocus` on non-XP Search causing touch keyboards to appear immediately for Win7/Vista/Basic Start. Only the Win7-family path was changed; Win10/Win11 Start focus retains existing behavior pending separate source audit.
+
+`StartMenu.tsx`: `startSearchRef` plus conditional `useLayoutEffect` on mount focuses the Win7-family Search only when `navigator.maxTouchPoints===0` and pointer media query is not coarse, with `preventScroll`; `autoFocus={!isWin7StartFamily}` preserves other flavors. Input remains editable/tappable. Touch detection is browser approximation of original utility, not false claim of byte-identical implementation.
+
+New `tests/e2e/source-start-search-touch-focus.spec.ts` tests `win7`, `winvista`, `basic-1` on Chromium desktop/mobile: Search immediately focused on desktop only, mobile tap explicitly focuses, typing works; focused CI list updated. See [START-SEARCH-TOUCH-FOCUS-SOURCE.md](START-SEARCH-TOUCH-FOCUS-SOURCE.md). Previous #44994511592 on `4da2277` had passed targeted browser regression and was still on full boot/Contacts step when this later slice began; it predates Start changes. New exact-head `[run-ci]` required and may reveal genuine test issues, to be fixed without weakening source behavior. No merge/release or 37-theme visual parity claim. Keep pinned legacy and main unchanged.
+
+---
+
 ## 22 November 2026 — targeted CI failure: old Desktop icon-count assertion replaced
 
 Checkpoint [CI #44990550774](https://github.com/codersachin99/windows-os/actions/runs/44990550774) at `faaa7ea` completed FAILURE solely at focused browser step, with two cases in `tests/e2e/desktop-item-source-menu.spec.ts` (chromium-desktop and chromium-mobile): `source Desktop multi-select removes Open and Rename from item context` expected no Open when selected Computer + one text file. The real pinned legacy-win7 `src/modules/system/main.js DesktopItemMenu.isMultiple` counts selected `shortcut.path` entries, not highlighted Computer icon; Computer has no path. New implementation is source-correct; old test was stale. TypeScript, unit tests, source inventory, byte-identical theme artwork/Contacts audits and production build passed earlier steps.
