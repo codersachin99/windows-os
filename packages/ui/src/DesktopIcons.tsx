@@ -1238,26 +1238,13 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             if(event.key==="ArrowRight"){
               event.preventDefault();
               setMenu(current => current?{...current,view:true,sortOpen:false,newOpen:false}:current);
-              window.requestAnimationFrame(()=>menuHost.current
+              window.requestAnimationFrame(()=>backgroundSubmenuHost.current
                 ?.querySelector<HTMLButtonElement>('[role="menuitemradio"]')
                 ?.focus({preventScroll:true}));
             }
           }}
           onClick={() => setMenu(current => current
             ? {...current,view:true,sortOpen:false,newOpen:false}:current)}>View ▸</button>
-        {menu.view && <>
-          {([["lg","Large icons"],["md","Medium icons"],["sm","Small icons"]] as const)
-            .map(([value,label]) => <button key={value} role="menuitemradio"
-              aria-checked={options.iconSize === value}
-              onClick={() => changeSettings(() => layout.setIconSize(value as DesktopIconSize))}>
-              {options.iconSize === value ? "✓ " : "　"}{label}</button>)}
-          <button role="menuitemcheckbox" aria-checked={options.autoArrange}
-            onClick={() => changeSettings(() => layout.setAutoArrange(!options.autoArrange))}>
-            {options.autoArrange ? "✓ " : "　"}Auto arrange icons</button>
-          <button role="menuitemcheckbox" aria-checked={options.showIcons}
-            onClick={() => changeSettings(() => layout.setShowIcons(!options.showIcons))}>
-            {options.showIcons ? "✓ " : "　"}Show desktop icons</button>
-        </>}
         <button role="menuitem" aria-expanded={menu.sortOpen}
           aria-haspopup="menu" data-test-desktop-sort=""
           onPointerEnter={() => setMenu(current=>current&&!current.sortOpen
@@ -1266,30 +1253,13 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             if(event.key==="ArrowRight"){
               event.preventDefault();
               setMenu(current=>current?{...current,sortOpen:true,view:false,newOpen:false}:current);
-              window.requestAnimationFrame(()=>menuHost.current
+              window.requestAnimationFrame(()=>backgroundSubmenuHost.current
                 ?.querySelector<HTMLButtonElement>('[data-test-desktop-sort-name]')
                 ?.focus({preventScroll:true}));
             }
           }}
           onClick={()=>setMenu(current=>current
             ?{...current,sortOpen:true,view:false,newOpen:false}:current)}>Sort by ▸</button>
-        {menu.sortOpen&&<>
-          {([
-            ["name","Name"],["size","Size"],["type","Item type"],["date","Date modified"]
-          ] as const).map(([key,label])=>
-            <button key={key} role="menuitemradio"
-              data-test-desktop-sort-name={key==="name"?"":undefined}
-              data-test-desktop-sort-key={key}
-              aria-checked={sortChoice.key===key}
-              onClick={()=>applyDesktopSort(key)}>
-              {sortChoice.key===key?"✓ ":"　"}{label}</button>)}
-          {([["asc","Ascending"],["desc","Descending"]] as const)
-            .map(([direction,label])=><button key={direction}
-              role="menuitemradio" data-test-desktop-sort-direction={direction}
-              aria-checked={sortChoice.asc===(direction==="asc")}
-              onClick={()=>applyDesktopSort(sortChoice.key,direction==="asc")}>
-              {sortChoice.asc===(direction==="asc")?"✓ ":"　"}{label}</button>)}
-        </>}
         <button role="menuitem" onClick={() => {setMenu(null);setOptions(layout.snapshot());}}>
           Refresh</button>
         <button role="menuitem" disabled={!clipboardState.paths.length}
@@ -1313,7 +1283,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             if(event.key==="ArrowRight"){
               event.preventDefault();
               setMenu(current => current?{...current,newOpen:true,view:false,sortOpen:false}:current);
-              window.requestAnimationFrame(()=>menuHost.current
+              window.requestAnimationFrame(()=>backgroundSubmenuHost.current
                 ?.querySelector<HTMLButtonElement>('[data-test-desktop-new-folder]')
                 ?.focus({preventScroll:true}));
             }
@@ -1321,6 +1291,66 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           onClick={() => setMenu(current => current
             ? {...current,newOpen:true,view:false,sortOpen:false}:current)}>
           New ▸</button>
+        <button role="menuitem" data-test-desktop-display=""
+          onClick={openDisplaySettings}>Display</button>
+        <button role="menuitem" disabled data-test-desktop-gadgets=""
+          title="Original Gadgets application is not yet migrated">Gadgets</button>
+        <button role="menuitem" data-test-desktop-personalize=""
+          onClick={openPersonalization}>Personalize</button>
+      </>}
+    </div>}
+    {menu?.id===null&&(menu.view||menu.sortOpen||menu.newOpen)&&
+      <div ref={backgroundSubmenuHost} role="menu"
+        className="windows-desktop__menu windows-desktop__submenu"
+        data-test-desktop-background-submenu=""
+        aria-label={menu.view?"View":menu.sortOpen?"Sort by":"New"}
+        style={{left:0,top:0}}
+        onContextMenu={event=>{event.preventDefault();event.stopPropagation();}}
+        onKeyDown={event=>{
+          if(sourceMenuArrowFocus(backgroundSubmenuHost.current,event.target,event.key)){
+            event.preventDefault();event.stopPropagation();return;
+          }
+          if(event.key==="ArrowLeft"){
+            event.preventDefault();event.stopPropagation();
+            const parent=menu.view?"[data-test-desktop-view]":
+              menu.sortOpen?"[data-test-desktop-sort]":"[data-test-desktop-new]";
+            setMenu(current=>current?{
+              ...current,view:false,sortOpen:false,newOpen:false
+            }:current);
+            window.requestAnimationFrame(()=>menuHost.current
+              ?.querySelector<HTMLButtonElement>(parent)?.focus({preventScroll:true}));
+          }
+        }}>
+        {menu.view && <>
+          {([["lg","Large icons"],["md","Medium icons"],["sm","Small icons"]] as const)
+            .map(([value,label]) => <button key={value} role="menuitemradio"
+              aria-checked={options.iconSize === value}
+              onClick={() => changeSettings(() => layout.setIconSize(value as DesktopIconSize))}>
+              {options.iconSize === value ? "✓ " : "　"}{label}</button>)}
+          <button role="menuitemcheckbox" aria-checked={options.autoArrange}
+            onClick={() => changeSettings(() => layout.setAutoArrange(!options.autoArrange))}>
+            {options.autoArrange ? "✓ " : "　"}Auto arrange icons</button>
+          <button role="menuitemcheckbox" aria-checked={options.showIcons}
+            onClick={() => changeSettings(() => layout.setShowIcons(!options.showIcons))}>
+            {options.showIcons ? "✓ " : "　"}Show desktop icons</button>
+        </>}
+        {menu.sortOpen&&<>
+          {([
+            ["name","Name"],["size","Size"],["type","Item type"],["date","Date modified"]
+          ] as const).map(([key,label])=>
+            <button key={key} role="menuitemradio"
+              data-test-desktop-sort-name={key==="name"?"":undefined}
+              data-test-desktop-sort-key={key}
+              aria-checked={sortChoice.key===key}
+              onClick={()=>applyDesktopSort(key)}>
+              {sortChoice.key===key?"✓ ":"　"}{label}</button>)}
+          {([["asc","Ascending"],["desc","Descending"]] as const)
+            .map(([direction,label])=><button key={direction}
+              role="menuitemradio" data-test-desktop-sort-direction={direction}
+              aria-checked={sortChoice.asc===(direction==="asc")}
+              onClick={()=>applyDesktopSort(sortChoice.key,direction==="asc")}>
+              {sortChoice.asc===(direction==="asc")?"✓ ":"　"}{label}</button>)}
+        </>}
         {menu.newOpen && <>
           <button role="menuitem" data-test-desktop-new-folder=""
             onClick={() => newDesktopItem("folder")}>Folder</button>
@@ -1331,14 +1361,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
           <button role="menuitem" data-test-desktop-new-text=""
             onClick={() => newDesktopItem("text")}>Text Document</button>
         </>}
-        <button role="menuitem" data-test-desktop-display=""
-          onClick={openDisplaySettings}>Display</button>
-        <button role="menuitem" disabled data-test-desktop-gadgets=""
-          title="Original Gadgets application is not yet migrated">Gadgets</button>
-        <button role="menuitem" data-test-desktop-personalize=""
-          onClick={openPersonalization}>Personalize</button>
-      </>}
-    </div>}
+      </div>}
     <input type="file" multiple hidden ref={uploadInput}
       aria-label="Upload files to Desktop" data-test-desktop-upload-input=""
       onChange={event=>{
