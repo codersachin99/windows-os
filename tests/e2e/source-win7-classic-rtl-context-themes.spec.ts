@@ -56,7 +56,10 @@ for(const theme of themes){
       await expect(refresh).toHaveCSS("background-color",theme.hover);
       await expect(refresh).toHaveCSS("color","rgb(255, 255, 255)");
       await menu.locator("[data-test-desktop-view]").click();
-      await expect(menu.getByRole("menuitemradio",{name:/Large icons/}))
+      const child=icons.locator('[data-test-desktop-background-submenu]');
+      await sourceClassicPaint(child,theme,direction);
+      await expect(child).toHaveAttribute("aria-label","View");
+      await expect(child.getByRole("menuitemradio",{name:/Large icons/}))
         .toBeVisible();
       await page.keyboard.press("Escape");
       await expect(menu).toHaveCount(0);
