@@ -58,6 +58,9 @@
       "@windows-os/ui/menu-position": [
         "packages/ui/src/sourceDesktopMenuPosition.ts"
       ],
+      "@windows-os/ui/menu-cascade": [
+        "packages/ui/src/sourceCascadingSubmenuPlacement.ts"
+      ],
       "@windows-os/ui/menu-keyboard": [
         "packages/ui/src/sourceMenuKeyboard.ts"
       ],
