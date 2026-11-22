@@ -131,7 +131,7 @@ export function desktopSafeBinDragPaths(
   const paths=new Set<string>();
   for(const id of selectedKeys){
     const file=byId.get(id)?.file;
-    if(!file||/\\.lnk$/i.test(file.entry.name)||file.targetPath)return null;
+    if(!file||/\.lnk$/i.test(file.entry.name)||file.targetPath)return null;
     try{
       const path=file.entry.uri;
       if(path!==normalizeFileUri(path)||!path.startsWith(SOURCE_COMPUTER_ROOT+"/"))
