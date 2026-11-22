@@ -43,20 +43,20 @@ test("final source Sort by supports all columns, ascending and descending",async
   await desktopGuest(page);
   const menu=await desktopMenu(page);
   await menu.locator("[data-test-desktop-sort]").click();
-  await expect(menu.locator("[data-test-desktop-sort-key]")).toHaveCount(4);
-  await expect(menu.locator("[data-test-desktop-sort-direction]")).toHaveCount(2);
-  await expect(menu.locator('[data-test-desktop-sort-key="name"]'))
+  await expect(page.locator("[data-test-desktop-sort-key]")).toHaveCount(4);
+  await expect(page.locator("[data-test-desktop-sort-direction]")).toHaveCount(2);
+  await expect(page.locator('[data-test-desktop-sort-key="name"]'))
     .toHaveAttribute("aria-checked","true");
-  await menu.locator('[data-test-desktop-sort-key="size"]').click();
+  await page.locator('[data-test-desktop-sort-key="size"]').click();
   await expect(menu).toHaveCount(0);
   const next=await desktopMenu(page);
   await next.locator("[data-test-desktop-sort]").click();
-  await expect(next.locator('[data-test-desktop-sort-key="size"]'))
+  await expect(page.locator('[data-test-desktop-sort-key="size"]'))
     .toHaveAttribute("aria-checked","true");
-  await next.locator('[data-test-desktop-sort-direction="desc"]').click();
+  await page.locator('[data-test-desktop-sort-direction="desc"]').click();
   const finalMenu=await desktopMenu(page);
   await finalMenu.locator("[data-test-desktop-sort]").click();
-  await expect(finalMenu.locator('[data-test-desktop-sort-direction="desc"]'))
+  await expect(page.locator('[data-test-desktop-sort-direction="desc"]'))
     .toHaveAttribute("aria-checked","true");
 });
 test("source Desktop Upload here writes actual imported files to Guest folder",async({page})=>{
@@ -111,10 +111,10 @@ test("source measured desktop menu flips inside viewport as View/New expand",asy
   await expect(menu).toBeVisible();
   await inDesktop();
   await menu.getByRole("menuitem",{name:/View/}).click();
-  await expect(menu.getByRole("menuitemradio",{name:/Small icons/})).toBeVisible();
+  await expect(page.locator("[data-test-desktop-background-submenu]").getByRole("menuitemradio",{name:/Small icons/})).toBeVisible();
   await inDesktop();
   await menu.getByRole("menuitem",{name:/New/}).click();
-  await expect(menu.locator("[data-test-desktop-new-text]")).toBeVisible();
+  await expect(page.locator("[data-test-desktop-new-text]")).toBeVisible();
   await inDesktop();
 });
 
@@ -125,7 +125,7 @@ test("final source Desktop View, Sort by, New keyboard children stay exclusive",
   const sort=menu.locator("[data-test-desktop-sort]");
   await sort.focus();
   await sort.press("ArrowRight");
-  await expect(menu.locator('[data-test-desktop-sort-key="name"]'))
+  await expect(page.locator('[data-test-desktop-sort-key="name"]'))
     .toBeFocused();
   await expect(menu.locator("[data-test-desktop-view]"))
     .toHaveAttribute("aria-expanded","false");
@@ -137,12 +137,12 @@ test("final source Desktop View, Sort by, New keyboard children stay exclusive",
   const view=menu.locator("[data-test-desktop-view]");
   await view.focus();
   await view.press("ArrowRight");
-  await expect(menu.getByRole("menuitemradio",{name:/Small icons/})).toBeVisible();
+  await expect(page.locator("[data-test-desktop-background-submenu]").getByRole("menuitemradio",{name:/Small icons/})).toBeVisible();
   await expect(sort).toHaveAttribute("aria-expanded","false");
   const news=menu.locator("[data-test-desktop-new]");
   await news.focus();
   await news.press("ArrowRight");
-  await expect(menu.locator("[data-test-desktop-new-folder]")).toBeFocused();
+  await expect(page.locator("[data-test-desktop-new-folder]")).toBeFocused();
   await expect(view).toHaveAttribute("aria-expanded","false");
   await expect(sort).toHaveAttribute("aria-expanded","false");
 });
