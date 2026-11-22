@@ -1,3 +1,15 @@
+## 22 November 2026 — Win7/Vista/Basic Start user-library links restored
+
+Last checked existing CI: [#44994511592](https://github.com/codersachin99/windows-os/actions/runs/44994511592) at 4da2277 SUCCESS (source Desktop mixed-selection path count); [#44995958802](https://github.com/codersachin99/windows-os/actions/runs/44995958802) at d6900c2 SUCCESS (Win7-family touch search focus), including focused/full desktop/mobile browser. Visual capture skipped because LEGACY_SOURCE_READ_TOKEN is missing. Never conflate these accepted prior SHAs with subsequent new work.
+
+Frozen `legacy-win7@26b9f0ce7` `src/modules/shell/startmenu-base.js` `shortcuts()` renders `data-test-startmenu-link=documents/pictures/music` in Start right pane, with `this.open('computer', this.userPath + '/Documents'/'Pictures'/'Music')`. React `packages/ui/src/StartMenu.tsx` omitted all three and only offered generic Games/Computer/etc. Now adds all three links before Games for `isWin7StartFamily`, routing `OPEN_APP` Computer with file path derived from permissioned Guest `desktopPath`'s parent; mount/launcher missing yields visible error. Win10 source separately routes rail Documents to `open('computer')`, untouched. No direct host filesystem access, no frozen source or main modifications.
+
+Added `tests/e2e/source-win7-start-user-libraries.spec.ts`: real win7, winvista, basic-1 Start links each navigate to mounted Guest `/Users/Guest/Documents`, `/Pictures`, `/Music`; actual Explorer address asserted; Explorer closed before next link. Win10 rail separate behavior asserted. Included in focused CI. Documentation: [WIN7-START-USER-LIBRARIES-SOURCE.md](WIN7-START-USER-LIBRARIES-SOURCE.md). Exact original theme-specific start-docs/start-pics/start-music images and 37-theme paired screenshots still pending; this is a bounded FUNCTIONAL link parity fix, not pixel parity.
+
+Next: deliberately trigger exact-head `[run-ci]`; verify TS, all unit tests, pinned source inventory/artwork/Contacts, Vite, focused + full desktop/mobile Playwright. Repair any genuine failures before merging or releasing. PR #1 remains draft, frozen legacy SHA and windows-os/main immutable.
+
+---
+
 ## 22 November 2026 — Win7-family Start search focus is desktop-only on initial open
 
 Frozen source `codersachin99/legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`, `src/modules/shell/startmenu-base.js`: `watch.isOpen(t)` schedules `focusSearch` only if `!isTouchDevice()`. Existing React `StartMenu.tsx` set unconditional `autoFocus` on non-XP Search causing touch keyboards to appear immediately for Win7/Vista/Basic Start. Only the Win7-family path was changed; Win10/Win11 Start focus retains existing behavior pending separate source audit.
