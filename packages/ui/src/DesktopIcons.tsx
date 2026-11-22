@@ -1239,7 +1239,9 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       </> : <>
         <button role="menuitem" aria-expanded={menu.view}
           aria-haspopup="menu" data-test-desktop-view=""
-          onPointerEnter={() => setMenu(current => current && !current.view
+          onPointerEnter={() => setMenu(current => current && !current.view &&
+            !(backgroundSubmenuHost.current?.dataset.cascade==="stacked" &&
+              (current.sortOpen||current.newOpen))
             ? {...current,view:true,sortOpen:false,newOpen:false} : current)}
           onKeyDown={event => {
             if(event.key==="ArrowRight"){
@@ -1254,7 +1256,9 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             ? {...current,view:true,sortOpen:false,newOpen:false}:current)}>View ▸</button>
         <button role="menuitem" aria-expanded={menu.sortOpen}
           aria-haspopup="menu" data-test-desktop-sort=""
-          onPointerEnter={() => setMenu(current=>current&&!current.sortOpen
+          onPointerEnter={() => setMenu(current=>current&&!current.sortOpen &&
+            !(backgroundSubmenuHost.current?.dataset.cascade==="stacked" &&
+              (current.view||current.newOpen))
             ?{...current,sortOpen:true,view:false,newOpen:false}:current)}
           onKeyDown={event=>{
             if(event.key==="ArrowRight"){
@@ -1284,7 +1288,9 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             Map Directory</button>}
         <button role="menuitem" aria-expanded={menu.newOpen}
           aria-haspopup="menu" data-test-desktop-new=""
-          onPointerEnter={() => setMenu(current => current && !current.newOpen
+          onPointerEnter={() => setMenu(current => current && !current.newOpen &&
+            !(backgroundSubmenuHost.current?.dataset.cascade==="stacked" &&
+              (current.view||current.sortOpen))
             ? {...current,newOpen:true,view:false,sortOpen:false}:current)}
           onKeyDown={event => {
             if(event.key==="ArrowRight"){
