@@ -1,3 +1,17 @@
+## 22 November 2026 — Desktop context-menu isMultiple counts real selected paths
+
+Previous accepted checkpoint: [CI #44984857015](https://github.com/codersachin99/windows-os/actions/runs/44984857015) SUCCESS on d8b5efb (Desktop Bin pointer shortcut data-loss guard), with TypeScript, units, original source inventory/artwork/Contacts audits, build, focused/full desktop/mobile Playwright. Paired frozen original-vs-React screenshots across 37 theme IDs not yet verified.
+
+Frozen source proof at legacy-win7@26b9f0ce7 src/modules/system/main.js DesktopItemMenu: data watcher maps selected ids to getShortcut(key).path, excludes system icons without real path; computed isMultiple is this.paths.length > 1. openItemMenu retains the clicked selected icon within selected group. Previous React contextKeys.length>1 incorrectly hid Open, Rename, Properties and Extract here when Computer, Bin or a program-only .lnk was selected alongside just one real Guest file.
+
+Implemented packages/ui/src/desktopFileActions.ts desktopSourceItemMenuPathCount(items,selectedKeys): counts validated real path-bearing shortcut ICONS including distinct aliases of same target, ignoring system/program-only/host/stale icons. Existing file clipboard continues to deduplicate actual target URIs; menu cardinality deliberately differs. packages/ui/src/DesktopIcons.tsx uses that count for contextMultiple both in sourceDesktopItemMenu input and source Guest ZIP Extract here predicate. Existing menu order, real ZIP/Download/Copy/Cut/Delete and other services untouched.
+
+Regression: packages/ui/src/desktopFileActions.test.ts new cardinality matrix, and tests/e2e/source-desktop-context-path-count.spec.ts tests real mixed Computer+ZIP preserving Open/Rename/Extract here (including actual extracted Guest file), mixed two files+Computer hiding single-item actions, and program-only link+one file showing source single-item actions. Focused desktop/mobile Playwright CI list updated, full browser suite still enabled. See [DESKTOP-CONTEXT-PATH-COUNT-SOURCE.md](DESKTOP-CONTEXT-PATH-COUNT-SOURCE.md).
+
+Next: run new exact-head [run-ci] to verify TS/units/pinned source inventory/artwork/Contacts/Vite/targeted and full desktop+mobile browser; diagnose any failure without weakening source assertions. Keep draft PR #1, main and original SHA unchanged, no release. After acceptance advance Start menu, Computer/Bin and all-theme pixel/function parity. Paired screenshot capture requires LEGACY_SOURCE_READ_TOKEN.
+
+---
+
 ## 22 November 2026 — Bin pointer drag: actual frozen source differs from React extension
 
 Confirmed [CI #44938100831](https://github.com/codersachin99/windows-os/actions/runs/44938100831) SUCCESS on 6741bed (combined Desktop shortcut compression and target Delete). Earlier compression-only [#44937841704](https://github.com/codersachin99/windows-os/actions/runs/44937841704) also SUCCESS. Paired original visual capture not completed.
