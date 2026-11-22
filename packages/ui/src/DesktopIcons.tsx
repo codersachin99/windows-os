@@ -32,7 +32,8 @@ import { importDroppedFiles, SHELL_DRAG_TYPE, sourceProgramsById,
   type FileEntry } from "@windows-os/filesystem";
 import {
   desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,
-  desktopSourceArchiveSelection,desktopSafeBinDragPaths
+  desktopSourceArchiveSelection,desktopSafeBinDragPaths,
+  desktopSourceItemMenuPathCount
 } from "./desktopFileActions";
 import { nativeDesktopIconDropTarget } from "./desktopNativeDrop";
 import { explorerDropTargetAt } from "./desktopExplorerDrop";
@@ -937,10 +938,13 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const contextItem=items.find(item=>item.id===menu?.id);
   const contextKeys=menu?.id&&selected.includes(menu.id)?selected:
     menu?.id?[menu.id]:[];
+  // Frozen DesktopItemMenu.isMultiple counts source shortcut.path entries,
+  // not selected system/program icons or distinct transferred target URIs.
+  const contextMultiple=desktopSourceItemMenuPathCount(items,contextKeys)>1;
   const archiveRequest=desktopSourceArchiveSelection(items,contextKeys);
   const canCompressGuest=Boolean(contextItem?.file&&archiveRequest);
   const archivePath=contextItem?.file?.targetPath??contextItem?.file?.entry.uri;
-  const canExtractGuestZip=Boolean(contextItem?.file&&contextKeys.length===1&&
+  const canExtractGuestZip=Boolean(contextItem?.file&&!contextMultiple&&
     archivePath&&sourceCanExtractGuestZip(getParentDirectory(archivePath),archivePath));
   const downloadableFiles=desktopDownloadableFiles(items,contextKeys);
   const clipboardSourcePaths=desktopSourceClipboardPaths(items,contextKeys);
@@ -955,7 +959,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     hasClipboardSourcePaths:clipboardSourcePaths.length>0,
     programInstalled:Boolean(
       contextItem.app&&sourceProgramsById.get(contextItem.app.id)?.installPath),
-    multiple:contextKeys.length>1,
+    multiple:contextMultiple,
     canPin:Boolean(contextItem.app && appRegistry.get(contextItem.id)),
     canCompressGuest,
     pinned:pinned.includes(contextItem.id),
