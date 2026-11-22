@@ -68,6 +68,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     theme==="basic-3"||theme==="basic-4";
   const isWin11Theme=theme==="win11"||theme==="win11dark";
   const menuRef=useRef<HTMLElement>(null);
+  const startSearchRef=useRef<HTMLInputElement>(null);
   const contextRef=useRef<HTMLDivElement>(null);
   // The same popup is opened by Win31, Win9x, Win8 and modern Start
   // program buttons. Keep the actual button, not a Win7-only selector.
@@ -87,6 +88,15 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   useEffect(()=>sourceRecentPrograms.subscribe(setRecentIds),[]);
   useEffect(()=>sourceStartPreferences.subscribe(setStartPreferences),[]);
   const [query, setQuery] = useState("");
+  // Frozen startmenu-base.js Win7/Vista watcher: when Start opens, call
+  // focusSearch ONLY on non-touch devices. Avoid virtual keyboard popups
+  // on touch and preserve existing focus rules in the other Start families.
+  useLayoutEffect(()=>{
+    if(!isWin7StartFamily)return;
+    const touch=navigator.maxTouchPoints>0||
+      window.matchMedia("(pointer: coarse)").matches;
+    if(!touch)startSearchRef.current?.focus({preventScroll:true});
+  },[isWin7StartFamily]);
   const [allPrograms, setAllPrograms] = useState(false);
   const [win11Page,setWin11Page]=useState(1);
   const win11TouchY=useRef<number|null>(null);
@@ -516,9 +526,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
           {allPrograms ? "‹ Back" : "All Programs ▸"}
         </button>}
         {!isXpTheme&&<label className="windows-startmenu__search">
-          <input value={query} onChange={e => setQuery(e.target.value)}
+          <input ref={startSearchRef} value={query} onChange={e => setQuery(e.target.value)}
             placeholder="Search programs and files" aria-label="Search programs and files"
-            data-test-startmenu-search="" autoFocus
+            data-test-startmenu-search="" autoFocus={!isWin7StartFamily}
             onKeyDown={event=>{
               if(event.key!=="Enter"||!programs.length)return;
               event.preventDefault();
