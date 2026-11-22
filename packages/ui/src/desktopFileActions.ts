@@ -141,3 +141,29 @@ export function desktopSafeBinDragPaths(
   }
   return paths.size?[...paths]:null;
 }
+
+/**
+ * Pinned main.js DesktopItemMenu: watcher stores selected shortcut.path
+ * entries in this.paths, then isMultiple is `this.paths.length > 1`.
+ * Count source path-bearing SELECTED ICONS, not highlighted icon count and
+ * not the distinct URI count returned by the transfer clipboard.
+ *
+ * Selecting Computer/Bin or a program-only .lnk alongside ONE real Guest
+ * file does not hide Open/Rename/Properties/Extract here in the original.
+ * Two different shortcut icons pointing at one target count as two paths.
+ * Reuse the validated target-path resolution from the actual clipboard;
+ * invalid and unmounted shortcut targets cannot force extra menu actions.
+ */
+export function desktopSourceItemMenuPathCount(
+  items: Parameters<typeof desktopSourceClipboardPaths>[0],
+  selectedKeys: readonly string[]
+):number{
+  const byId=new Map(items.map(item=>[item.id,item]));
+  let count=0;
+  for(const id of new Set(selectedKeys)){
+    const item=byId.get(id);
+    if(item?.file&&desktopSourceClipboardPaths([item],[id]).length>0)
+      count++;
+  }
+  return count;
+}
