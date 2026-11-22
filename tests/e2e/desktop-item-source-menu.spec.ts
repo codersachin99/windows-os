@@ -18,8 +18,12 @@ async function makeText(page:Page){
   const desktop=page.locator("#desktop-icons");
   await desktop.click({button:"right",position:{x:270,y:230}});
   const menu=page.locator('[data-test-desktop-menu]');
-  await menu.getByRole("menuitem",{name:/New/}).click();
-  await menu.getByRole("menuitem",{name:"Text Document",exact:true}).click();
+  await menu.locator('[data-test-desktop-new]').click();
+  // Source BaseMenu New is a sibling flyout, not an inline root child.
+  const child=desktop.locator('[data-test-desktop-background-submenu]');
+  await expect(child).toBeVisible();
+  await expect(child).toHaveAttribute("aria-label","New");
+  await child.getByRole("menuitem",{name:"Text Document",exact:true}).click();
   const rename=page.locator('[data-test-desktop-rename]');
   await expect(rename).toHaveValue("New Text Document");
   await rename.press("Enter");
