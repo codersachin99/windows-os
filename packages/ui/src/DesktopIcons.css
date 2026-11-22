@@ -27,6 +27,20 @@
   background:linear-gradient(#f8fcff,#e6f0fb); border:1px solid #6b98b8;
   box-shadow:2px 4px 12px #0007; font:12px "Segoe UI",Tahoma,sans-serif;
 }
+/* Source BaseMenu cascades are sibling popups, not children in the
+ * scroll-clipped root. Narrow desktop viewports constrain measured width. */
+.windows-desktop__menu.windows-desktop__submenu {
+  z-index:3501;
+  width:min(194px,calc(100% - 8px));
+  max-height:calc(100% - 8px);
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.windows-desktop__menu.windows-desktop__submenu button{
+  flex:0 0 auto;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
 .windows-desktop__menu button {
   min-height:27px; text-align:left; border:1px solid transparent;
   background:transparent; color:inherit; padding:5px 10px; font:inherit;
