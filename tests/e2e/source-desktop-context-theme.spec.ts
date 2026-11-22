@@ -51,7 +51,7 @@ for(const source of variants){
     await expect(refresh).toHaveCSS("color",source.text);
     const view=menu.locator("[data-test-desktop-view]");
     await view.click();
-    await expect(menu.getByRole("menuitemradio",{name:"Large icons"})).toBeVisible();
+    await expect(page.locator("[data-test-desktop-background-submenu]").getByRole("menuitemradio",{name:"Large icons"})).toBeVisible();
     await expect(menu).toHaveCSS("background-color",source.surface);
     await page.keyboard.press("Escape");
     await expect(menu).toHaveCount(0);
