@@ -16,6 +16,7 @@ import {
 } from "./desktopCreate";
 import { hitDesktopRecycleBin } from "./desktopDrop";
 import {sourceDesktopMenuPosition} from "./sourceDesktopMenuPosition";
+import {sourceCascadingSubmenuPlacement} from "./sourceCascadingSubmenuPlacement";
 import {SOURCE_FINAL_DESKTOP_MENU_FLAGS} from "./sourceDesktopMenuFlags";
 import {
   SOURCE_DESKTOP_DEFAULT_SORT,sourceNextDesktopSort,sourceSortDesktopItems,
@@ -114,6 +115,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const uploadInput = useRef<HTMLInputElement>(null);
   const menuHost = useRef<HTMLDivElement>(null);
   const sendToMenuHost = useRef<HTMLDivElement>(null);
+  const backgroundSubmenuHost = useRef<HTMLDivElement>(null);
   // Context can open on a specific icon or the Desktop background.
   // Keep the real invoking element for Escape rather than losing focus.
   const menuReturnFocus = useRef<HTMLElement|null>(null);
@@ -656,7 +658,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     if (event.button !== 0 || !options.showIcons || press.current) return;
     const target = event.target as HTMLElement;
     if (target.closest(
-      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-send-to-submenu], [data-test-desktop-create], [data-test-desktop-confirm], .windows-desktop__layout-error"
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-background-submenu], [data-test-desktop-send-to-submenu], [data-test-desktop-create], [data-test-desktop-confirm], .windows-desktop__layout-error"
     )) return;
     const bounds = list.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -676,7 +678,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     if (!menu) return;
     const dismiss = (event: PointerEvent) => {
       if (!(event.target instanceof Element && event.target.closest(
-        "[data-test-desktop-menu], [data-test-desktop-send-to-submenu]"))) {
+        "[data-test-desktop-menu], [data-test-desktop-background-submenu], [data-test-desktop-send-to-submenu]"))) {
         setMenu(null);
       }
     };
@@ -727,7 +729,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const acceptsNativeDesktopDrop = (event: import("react").DragEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
     if (target.closest(
-      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-send-to-submenu], [data-test-desktop-confirm], .windows-desktop__layout-error"
+      "[data-test-desktop-icon], [data-test-desktop-menu], [data-test-desktop-background-submenu], [data-test-desktop-send-to-submenu], [data-test-desktop-confirm], .windows-desktop__layout-error"
     )) return false;
     const types = Array.from(event.dataTransfer.types);
     return types.includes(SHELL_DRAG_TYPE) || types.includes("Files");
@@ -865,6 +867,58 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     if(menu.x===position.x&&menu.y===position.y)return;
     setMenu(current=>current?{...current,x:position.x,y:position.y}:current);
   },[menu,area]);
+  // The original WinUI BaseMenu measures a submenu against its parent row.
+  // Keep Desktop View, Sort and New in a separate sibling popup: an inline
+  // child would enlarge the parent and the parent's scroll clip would cut
+  // the flyout off rather than opening right / flipping left at the edge.
+  useLayoutEffect(()=>{
+    if(!menu||menu.id!==null||(!menu.view&&!menu.sortOpen&&!menu.newOpen))return;
+    const parent=menuHost.current,child=backgroundSubmenuHost.current;
+    const host=list.current;
+    const selector=menu.view?"[data-test-desktop-view]":
+      menu.sortOpen?"[data-test-desktop-sort]":"[data-test-desktop-new]";
+    const trigger=parent?.querySelector<HTMLElement>(selector);
+    if(!parent||!child||!host||!trigger)return;
+    const root=parent.getBoundingClientRect();
+    const row=trigger.getBoundingClientRect();
+    const sy=root.height/(parent.offsetHeight||root.height)||1;
+    const placement=sourceCascadingSubmenuPlacement(
+      {left:menu.x,top:menu.y,width:parent.offsetWidth,height:parent.offsetHeight},
+      {top:menu.y+(row.top-root.top)/sy},
+      {width:child.offsetWidth,height:child.offsetHeight},
+      {width:host.clientWidth,height:host.clientHeight}
+    );
+    child.style.left=menu.x+placement.left+"px";
+    child.style.top=menu.y+placement.top+"px";
+    child.dataset.side=placement.side;
+    child.dataset.cascade=placement.top>=parent.offsetHeight||
+      placement.top+child.offsetHeight<=0?"stacked":"adjacent";
+  },[menu?.id,menu?.view,menu?.sortOpen,menu?.newOpen,menu?.x,menu?.y,area]);
+
+  // "Send to" uses the identical measured edge rule. Its former fixed
+  // 27px index positioning did not match theme-specific row heights or
+  // horizontal flips when context menus opened close to screen edges.
+  useLayoutEffect(()=>{
+    if(!menu?.id||!menu.sendToOpen)return;
+    const parent=menuHost.current,child=sendToMenuHost.current,host=list.current;
+    const trigger=parent?.querySelector<HTMLElement>(
+      '[data-test-desktop-item-action="send-to"]');
+    if(!parent||!child||!host||!trigger)return;
+    const root=parent.getBoundingClientRect(),row=trigger.getBoundingClientRect();
+    const sy=root.height/(parent.offsetHeight||root.height)||1;
+    const placement=sourceCascadingSubmenuPlacement(
+      {left:menu.x,top:menu.y,width:parent.offsetWidth,height:parent.offsetHeight},
+      {top:menu.y+(row.top-root.top)/sy},
+      {width:child.offsetWidth,height:child.offsetHeight},
+      {width:host.clientWidth,height:host.clientHeight}
+    );
+    child.style.left=menu.x+placement.left+"px";
+    child.style.top=menu.y+placement.top+"px";
+    child.dataset.side=placement.side;
+    child.dataset.cascade=placement.top>=parent.offsetHeight||
+      placement.top+child.offsetHeight<=0?"stacked":"adjacent";
+  },[menu?.id,menu?.sendToOpen,menu?.x,menu?.y,area]);
+
   // Pinned main.js DesktopMenu: Copy path and Upload here operate on
   // the source-mounted Guest desktop, never on the host filesystem.
   const copyDesktopPath = () => {
@@ -965,19 +1019,6 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     pinned:pinned.includes(contextItem.id),
     trashCount
   }):[];
-  // The child is a separate popup so the root menu's source scroll clamp
-  // cannot clip it. Flip left near the screen edge as the original does.
-  const submenuWidth=194;
-  const menuWidth=menuHost.current?.offsetWidth??submenuWidth;
-  const rightSpace=menu?area.width-(menu.x+menuWidth):0;
-  const leftSpace=menu?.x??0;
-  const sendToX=!menu?0:rightSpace>=submenuWidth
-    ?menu.x+menuWidth:leftSpace>=submenuWidth
-    ?menu.x-submenuWidth:rightSpace>=leftSpace
-    ?Math.max(0,area.width-submenuWidth):0;
-  const sendToY=menu ? Math.max(0,Math.min(
-    menu.y+4+Math.max(0,itemActions.findIndex(action=>action.id==="send-to"))*27,
-    area.height-42)) : 0;
   const focusSendTo=()=>window.requestAnimationFrame(()=>
     sendToMenuHost.current?.querySelector<HTMLButtonElement>(
       '[data-test-desktop-send-to-kind="compress"]')?.focus({preventScroll:true}));
@@ -1021,7 +1062,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     onPointerDown={startBand}
     onClick={event => {
       if (ignoreClick.current) {ignoreClick.current=false;return;}
-      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-send-to-submenu], [data-test-desktop-create], [data-test-desktop-confirm]")) return;
+      if ((event.target as HTMLElement).closest("[data-test-desktop-menu], [data-test-desktop-background-submenu], [data-test-desktop-send-to-submenu], [data-test-desktop-create], [data-test-desktop-confirm]")) return;
       if ((event.target as HTMLElement).closest("[data-test-desktop-icon]")) return;
       setSelected([]);anchor.current=null;dispatch({ type:"SELECT_ICON", id:null });
     }}
@@ -1329,7 +1370,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
         className="windows-desktop__menu windows-desktop__send-to-menu"
         data-test-desktop-send-to-submenu=""
         aria-label="Send to"
-        style={{left:sendToX,top:sendToY}}
+        style={{left:0,top:0}}
         onContextMenu={event=>{event.preventDefault();event.stopPropagation();}}
         onKeyDown={event=>{
           if(sourceMenuArrowFocus(sendToMenuHost.current,event.target,event.key)){
