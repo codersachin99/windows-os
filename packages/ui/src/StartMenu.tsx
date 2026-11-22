@@ -7,7 +7,7 @@ import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellA
 import {
   parseSourceShortcut,parseSourcePathShortcut,readSourceShortcutText,
   sourceExecutablePath,matchesSourceKind,SOURCE_START_MENU_PROGRAMS,sourcePrograms,
-  sourceProgramsById, SOURCE_WIN2K_START_SEARCH_PATH, type FileEntry
+  sourceProgramsById, SOURCE_WIN2K_START_SEARCH_PATH, getParentDirectory, type FileEntry
 } from "@windows-os/filesystem";
 import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
 import {createSourceDesktopShortcut} from "./desktopCreate";
@@ -251,6 +251,22 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
+  };
+  /**
+   * Frozen startmenu-base.js shortcuts(): Documents, Pictures and Music
+   * each open Computer at this.userPath/<folder>, not Computer home.
+   * Derive Guest's home from the permissioned Desktop mount; never route
+   * a Start link to an unmounted or host filesystem path.
+   */
+  const openWin7StartLibrary=(folder:"Documents"|"Pictures"|"Music")=>{
+    const desktop=sourceFilesystemRuntime.snapshot()?.desktopPath;
+    const app=appRegistry.get("computer");
+    if(!desktop||!app){
+      setContextError("Guest Computer or home folder is not mounted.");
+      return;
+    }
+    setContextError("");
+    dispatch({type:"OPEN_APP",app,file:{path:getParentDirectory(desktop)+"/"+folder}});
   };
   /** Win8 Search uses the same Guest association boundary as Computer.
    * Shortcut links are resolved only against the Guest VFS, with a depth
@@ -595,6 +611,13 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
           </div>
         </div>}
         <hr />
+        {isWin7StartFamily&&(["Documents","Pictures","Music"] as const)
+          .map(folder=><button type="button" key={folder}
+            className="windows-startmenu__source-library-link"
+            data-test-startmenu-link={folder.toLowerCase()}
+            onClick={()=>openWin7StartLibrary(folder)}>
+            {folder}
+          </button>)}
         <button data-test-open-games="" onClick={() => {
           const games=appRegistry.get("games");
           if(games)dispatch({type:"OPEN_APP",app:games});
