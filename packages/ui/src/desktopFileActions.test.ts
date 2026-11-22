@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FileClipboard, VirtualFileStore } from "@windows-os/filesystem";
-import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,desktopSourceArchiveSelection,desktopSafeBinDragPaths } from "./desktopFileActions";
+import { desktopSelectedFilePaths,desktopDownloadableFiles,desktopSourceClipboardPaths,desktopSourceArchiveSelection,desktopSafeBinDragPaths,desktopSourceItemMenuPathCount } from "./desktopFileActions";
 
 const icons = [
   { id: "computer" },
@@ -151,6 +151,46 @@ describe("source desktop file selection and shared clipboard", () => {
     expect(desktopSafeBinDragPaths(icons,[unsafe.id])).toBeNull();
     expect(desktopSafeBinDragPaths(icons,["not-selected"])).toBeNull();
     expect(desktopSafeBinDragPaths(icons,[])).toBeNull();
+  });
+
+  it("counts original menu shortcut.path entries rather than highlighted icons or unique URIs",()=>{
+    const root="/EXTERNAL/computer/drive0/Users/Guest";
+    const target=root+"/Documents/Duplicated.txt";
+    const file={id:"real",file:{entry:{
+      uri:root+"/Desktop/Original.txt",name:"Original.txt",type:"file" as const
+    }}};
+    const aliasA={id:"alias-a",file:{entry:{
+      uri:root+"/Desktop/A.lnk",name:"A.lnk",type:"file" as const
+    },targetPath:target}};
+    const aliasB={id:"alias-b",file:{entry:{
+      uri:root+"/Desktop/B.lnk",name:"B.lnk",type:"file" as const
+    },targetPath:target}};
+    const program={id:"program",file:{entry:{
+      uri:root+"/Desktop/Calc.lnk",name:"Calc.lnk",type:"file" as const
+    },targetPath:null}};
+    const untrusted={id:"untrusted",file:{entry:{
+      uri:root+"/Desktop/Unsafe.lnk",name:"Unsafe.lnk",type:"file" as const
+    },targetPath:"/host/secrets.txt"}};
+    const items=[{id:"computer"},{id:"bin"},file,aliasA,aliasB,program,untrusted];
+    expect(desktopSourceItemMenuPathCount(items,["computer","bin"])).toBe(0);
+    expect(desktopSourceItemMenuPathCount(items,[
+      "computer","bin","program","untrusted","real"
+    ])).toBe(1);
+    expect(desktopSourceItemMenuPathCount(items,[
+      "computer","real","alias-a"
+    ])).toBe(2);
+    expect(desktopSourceItemMenuPathCount(items,[
+      "alias-a","alias-b"
+    ])).toBe(2);
+    // FileClipboard deduplicates identical target paths, but frozen menu
+    // counts two independent selected shortcut.path entries.
+    expect(desktopSourceClipboardPaths(items,["alias-a","alias-b"])).toEqual([
+      target
+    ]);
+    expect(desktopSourceItemMenuPathCount(items,[
+      "alias-a","alias-a","bin","stale"
+    ])).toBe(1);
+    expect(desktopSourceItemMenuPathCount(items,[])).toBe(0);
   });
 
   it("moves and copies between Explorer and Desktop through one shared clipboard", async () => {
