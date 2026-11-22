@@ -253,10 +253,14 @@ export function ExplorerApp({
     catch (cause) { setMessage(cause instanceof Error ? cause.message : "File operation failed"); }
   };
   const openEntry = (path: string, type: "directory" | "file") => {
-    if (type === "directory") {
-      void execute(() => session.open(path));
-    } else if (isBin) {
+    // Frozen computer.js open(item): a URI inside this.trashPath is never
+    // opened, BEFORE its type dispatch. bin.js hoists the same Explorer to
+    // trashPath. Do not let deleted directories bypass this guard and expose
+    // recursive browsing of items that have not been restored.
+    if (isBin) {
       setMessage("Restore this item from the Recycle Bin before opening it.");
+    } else if (type === "directory") {
+      void execute(() => session.open(path));
     } else if (/\.txt$/i.test(path)) {
       onOpenTextFile(path);
     } else if (matchesSourceKind({
