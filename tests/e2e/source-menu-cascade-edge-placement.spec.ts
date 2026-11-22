@@ -111,3 +111,49 @@ test("Computer and Bin View cascade use the same measured side placement",async(
     await win.getByRole("button",{name:/^Close /}).click();
   }
 });
+
+
+/** On a phone neither 205px Explorer menu fits beside its parent. The
+ * stacked fallback must survive pointer motion across the source rows
+ * between the parent and child, including another cascade trigger.
+ */
+test("mobile Computer and Bin stacked View/New remain reachable across parent rows",async({page},info)=>{
+  test.skip(info.project.name!=="chromium-mobile","narrow touch viewport regression");
+  await guest(page,"win7");
+  for(const app of ["computer","bin"] as const){
+    await page.locator('[data-test-desktop-icon="'+app+'"]').dblclick();
+    const win=page.locator('[data-test-window="'+app+'"]');
+    await expect(win).toBeVisible();
+    const content=win.locator(".explorer-content");
+    const area=await content.boundingBox();
+    expect(area).not.toBeNull();
+    const openMenu=async()=>{
+      await content.click({button:"right",position:{
+        x:Math.max(12,area!.width-12),y:Math.max(12,area!.height-12)
+      }});
+      const root=win.locator('[data-test-explorer-context="background"]');
+      await expect(root).toBeVisible();
+      return root;
+    };
+    const root=await openMenu();
+    await root.locator("[data-test-explorer-context-view]").click();
+    const child=root.locator("[data-test-explorer-background-submenu]");
+    await expect(child).toHaveAttribute("data-cascade","stacked");
+    await root.getByRole("menuitem",{name:"Refresh"}).hover();
+    await expect(child).toBeVisible();
+    await child.getByRole("menuitemradio").first().focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(child).toHaveCount(0);
+    await expect(root.locator("[data-test-explorer-context-view]")).toBeFocused();
+    if(app==="computer"){
+      await root.locator("[data-test-explorer-context-new]").click();
+      await expect(child).toHaveAttribute("data-cascade","stacked");
+      await root.locator("[data-test-explorer-context-view]").hover();
+      await expect(child).toHaveAttribute("aria-label","New");
+      await expect(child.getByRole("menuitem",{name:"Folder"})).toBeVisible();
+    }
+    await page.keyboard.press("Escape");
+    await expect(root).toHaveCount(0);
+    await win.getByRole("button",{name:/^Close /}).click();
+  }
+});
