@@ -119,6 +119,11 @@ test("Computer and Bin View cascade use the same measured side placement",async(
  */
 test("mobile Computer and Bin stacked View/New remain reachable across parent rows",async({page},info)=>{
   test.skip(info.project.name!=="chromium-mobile","narrow touch viewport regression");
+  // Pixel 7's default 412px CSS viewport fits two 205px cascades with
+  // the source 2px overlap, so the correct placement there is to flip left.
+  // Use a truly narrow touch viewport where neither lateral side fits;
+  // this case must exercise the stacked pointer corridor, not edge-flip.
+  await page.setViewportSize({width:360,height:800});
   await guest(page,"win7");
   for(const app of ["computer","bin"] as const){
     await page.locator('[data-test-desktop-icon="'+app+'"]').dblclick();
