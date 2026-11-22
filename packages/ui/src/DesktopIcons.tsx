@@ -1208,8 +1208,15 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
             aria-expanded={action.id==="send-to"?Boolean(menu.sendToOpen):undefined}
             disabled={action.disabled}
             title={action.disabled?"Original action not yet migrated or unavailable":undefined}
-            onPointerEnter={()=>setMenu(current=>current?.id===contextItem.id
-              ?{...current,sendToOpen:action.id==="send-to"&&!action.disabled}:current)}
+            onPointerEnter={()=>setMenu(current=>{
+              if(!current||current.id!==contextItem.id)return current;
+              const open=action.id==="send-to"&&!action.disabled;
+              // On narrow viewports the submenu is stacked below/above
+              // the root: crossing another row must not close the child.
+              if(!open&&current.sendToOpen&&
+                sendToMenuHost.current?.dataset.cascade==="stacked")return current;
+              return {...current,sendToOpen:open};
+            })}
             onFocus={()=>{
               if(action.id!=="send-to"&&menu.sendToOpen)
                 setMenu(current=>current?{...current,sendToOpen:false}:current);
@@ -1390,7 +1397,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     </div>}
     {menu?.id&&menu.sendToOpen&&canCompressGuest&&
       <div ref={sendToMenuHost} role="menu"
-        className="windows-desktop__menu windows-desktop__send-to-menu"
+        className="windows-desktop__menu windows-desktop__send-to-menu windows-desktop__submenu"
         data-test-desktop-send-to-submenu=""
         aria-label="Send to"
         style={{left:0,top:0}}
