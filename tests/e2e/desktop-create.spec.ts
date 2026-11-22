@@ -11,8 +11,10 @@ async function newItem(page: Page, type: string) {
   const desktopArea = page.locator("#desktop-icons");
   await desktopArea.click({ button: "right", position: { x: 295, y: 290 } });
   const menu = page.locator("[data-test-desktop-menu]");
-  await menu.getByRole("menuitem", { name: /^New/ }).click();
-  await menu.getByRole("menuitem", { name: type, exact: true }).click();
+  await menu.locator('[data-test-desktop-new]').click();
+  const child = desktopArea.locator('[data-test-desktop-background-submenu]');
+  await expect(child).toHaveAttribute("aria-label", "New");
+  await child.getByRole("menuitem", { name: type, exact: true }).click();
 }
 
 test("desktop New Folder creates actual Guest folder and immediately offers source rename", async ({ page }) => {
