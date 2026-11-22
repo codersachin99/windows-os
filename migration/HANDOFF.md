@@ -1,3 +1,13 @@
+## 22 November 2026 — targeted CI failure: old Desktop icon-count assertion replaced
+
+Checkpoint [CI #44990550774](https://github.com/codersachin99/windows-os/actions/runs/44990550774) at `faaa7ea` completed FAILURE solely at focused browser step, with two cases in `tests/e2e/desktop-item-source-menu.spec.ts` (chromium-desktop and chromium-mobile): `source Desktop multi-select removes Open and Rename from item context` expected no Open when selected Computer + one text file. The real pinned legacy-win7 `src/modules/system/main.js DesktopItemMenu.isMultiple` counts selected `shortcut.path` entries, not highlighted Computer icon; Computer has no path. New implementation is source-correct; old test was stale. TypeScript, unit tests, source inventory, byte-identical theme artwork/Contacts audits and production build passed earlier steps.
+
+Committed `tests/e2e/desktop-item-source-menu.spec.ts` correction: first verify Computer+one Guest text file retains Open/Rename and enabled Delete, then upload second genuine file and select both files+Computer to verify Open/Rename hidden and Delete still enabled. Retains previous test value with now source-accurate stronger coverage; does not relax production code or remove any test. `tests/e2e/source-desktop-context-path-count.spec.ts` already independently validates ZIP extraction, multi-file and program-only scenarios.
+
+Next: opt in exact-head `[run-ci]`; inspect targeted and complete desktop/mobile regressions, fix any real failure, update durable acceptance; keep PR #1 draft, `windows-os/main` and frozen legacy SHA unchanged. Original-vs-React 37-theme paired visual capture still unverified without `LEGACY_SOURCE_READ_TOKEN`.
+
+---
+
 ## 22 November 2026 — Desktop context-menu isMultiple counts real selected paths
 
 Previous accepted checkpoint: [CI #44984857015](https://github.com/codersachin99/windows-os/actions/runs/44984857015) SUCCESS on d8b5efb (Desktop Bin pointer shortcut data-loss guard), with TypeScript, units, original source inventory/artwork/Contacts audits, build, focused/full desktop/mobile Playwright. Paired frozen original-vs-React screenshots across 37 theme IDs not yet verified.
