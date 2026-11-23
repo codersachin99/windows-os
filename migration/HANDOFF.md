@@ -1,3 +1,15 @@
+## 23 November 2026 — Win95/Win98/Win2k Start stacked submenu pointer corridor parity
+
+Continued after mobile viewport test correction `c42d106` and opt-in run [#45110555028](https://github.com/codersachin99/windows-os/actions/runs/45110555028) (initially in progress; its head predates this new slice, so it **cannot** verify it).
+
+Next source-backed user priority: context submenus in **other apps/Start**, not only Desktop, Computer and Bin. The classic Win95/98/2000 Start menu has its own `sourceWin9xSubmenuPlacement` with mobile Programs **below** and power options **above**; nested flyouts were already measured and triggered correctly, but `SourceWin9xStartMenu.tsx` cleared the branch in ordinary command rows' `onPointerEnter`, or switched branch on pointer crossing another trigger. This can discard a stacked popup as the user travels past an intervening root row toward its child. Fixed it by suppressing **incidental row/other-branch hover** only while the actual measured direction is `below`/`above`; normal adjacent desktop hover and explicit click, power, program launch and ArrowLeft/Escape behavior remain unchanged. No CSS colors, assets, menu source dimensions or VFS changed.
+
+Added three real browser regression cases (desktop/mobile = 6 project cases) in `tests/e2e/source-win9x-shell.spec.ts`: one per Win95/98/2k; narrow 375px phone layout; hover Documents while Programs is stacked, then launch Notepad; hover Find/Search while Shutdown is stacked, then perform Log off. Existing screen geometry/trigger and command tests remain. Existing opt-in focused CI command **already includes this file**, so no workflow logic change needed. Extended `migration/CONTEXT-SUBMENU-CASCADE-EDGE-SOURCE.md`.
+
+Validation pending at this new exact head: TS, units, pinned source/artwork hashes/Contacts audit, Vite, focused and full Chromium desktop/mobile. Do not claim original screenshot parity: 37-theme paired captures still lack private-source checkout token for Actions. Keep `main`, frozen source SHA and draft PR #1 unchanged; no release. Next evaluate the latest actual workflow log, fix any failure, then continue Start/context/Explorer visual and functional parity.
+
+---
+
 ## 23 November 2026 — fix Playwright mobile about:blank viewport pre-navigation assertion
 
 [Exact-head CI #45056170267](https://github.com/codersachin99/windows-os/actions/runs/45056170267) on `d9d0c8e` failed **only** a new mobile stacked-submenu E2E: 856 focused browser passes, 1 failed, 3 skipped. Job `137311774234` explicitly reported `window.innerWidth` = **980**, expected **320**, at the assertion *before* `guest(page, "win7")`. This is Chromium mobile's initial `about:blank` default layout viewport, **not** evidence of a defective menu or a failed responsive app page. The app's `apps/web/index.html` already has `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`.
