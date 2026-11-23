@@ -148,8 +148,11 @@ test("original Backup and Restore downloads a ZIP and restores a removed Guest f
   const area=page.locator("#desktop-icons");
   await area.click({button:"right",position:{x:295,y:290}});
   const menu=page.locator("[data-test-desktop-menu]");
-  await menu.getByRole("menuitem",{name:/^New/}).click();
-  await menu.getByRole("menuitem",{name:"Text Document",exact:true}).click();
+  await menu.locator('[data-test-desktop-new]').click();
+  // Keep the real backup/restore E2E, selecting New from its detached popup.
+  const submenu=page.locator('[data-test-desktop-background-submenu]');
+  await expect(submenu).toHaveAttribute("aria-label","New");
+  await submenu.getByRole("menuitem",{name:"Text Document",exact:true}).click();
   await page.locator("[data-test-desktop-rename]").fill("Backup Sample");
   await page.locator("[data-test-desktop-rename]").press("Enter");
   await expect(page.locator('[data-test-desktop-file="'+desktop+'/Backup Sample.txt"]'))
