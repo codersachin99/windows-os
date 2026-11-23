@@ -1,3 +1,13 @@
+## 23 November 2026 — full browser CI: remaining Shortcut Wizard and Control Panel Backup New-menu selectors fixed
+
+Exact-head [CI #45110895627](https://github.com/codersachin99/windows-os/actions/runs/45110895627) at `51e17e4` completed **FAILURE** only in full browser acceptance, not focused: TypeScript, all units, original-source inventory, original artwork hash audit, Contacts audit, Vite build, Chromium installation and **focused source-shell suite: 863 passed / 3 skipped**. The full E2E run had **1301 passed / 12 failed / 5 skipped**. The prior opt-in [CI #45110555028](https://github.com/codersachin99/windows-os/actions/runs/45110555028) had its focused suite pass as well (857 passed) but the same full-suite stale selectors (1295 passed / 12 failed / 5 skipped).
+
+Inspected actual Actions job `137482761473`: **all 12** were the same migrated Desktop New-menu DOM structure, not errors in app logic or Win9x hover geometry: 10 desktop/mobile Playwright cases in `tests/e2e/shortcut-wizard.spec.ts` (5 tests × 2 projects) waited for `Shortcut` inside the root `data-test-desktop-menu`; 2 (1 × 2 projects) in `tests/e2e/cpanel.spec.ts` waited for `Text Document` under that same root. In correct source-style Desktop context menus the New submenu is a detached sibling `data-test-desktop-background-submenu`. Updated both test files to open the unchanged source `data-test-desktop-new` trigger, assert child `aria-label="New"`, and click real submenu item from that sibling. Kept all original functional coverage: real Guest shortcut wizard and persisted .lnk with Calculator/Notepad/Paint, Browse/Cancel/close and unique naming, and Backup/Restore ZIP import without overwrite. No app source behavior changed in this slice.
+
+**Next:** run exact-head opt-in `[run-ci]` and inspect actual results. If green, add further source-backed UI parity tasks; if browser still fails, repair without blanket skipping. PR #1 stays draft, no main merge or release. Original legacy SHA `26b9f0ce7a1665dee89a7c81824bec09e2c75776` is unchanged. Original-vs-React 37-theme screenshots still cannot be declared equal without source reference capture.
+
+---
+
 ## 23 November 2026 — Win95/Win98/Win2k Start stacked submenu pointer corridor parity
 
 Continued after mobile viewport test correction `c42d106` and opt-in run [#45110555028](https://github.com/codersachin99/windows-os/actions/runs/45110555028) (initially in progress; its head predates this new slice, so it **cannot** verify it).
