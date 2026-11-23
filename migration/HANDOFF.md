@@ -1,3 +1,13 @@
+## 23 November 2026 — fix Playwright mobile about:blank viewport pre-navigation assertion
+
+[Exact-head CI #45056170267](https://github.com/codersachin99/windows-os/actions/runs/45056170267) on `d9d0c8e` failed **only** a new mobile stacked-submenu E2E: 856 focused browser passes, 1 failed, 3 skipped. Job `137311774234` explicitly reported `window.innerWidth` = **980**, expected **320**, at the assertion *before* `guest(page, "win7")`. This is Chromium mobile's initial `about:blank` default layout viewport, **not** evidence of a defective menu or a failed responsive app page. The app's `apps/web/index.html` already has `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`.
+
+Committed test-only fix `c42d106`: preserve `page.setViewportSize({width:320,height:800})`, **navigate and log in first**, then assert the browser's real 320px CSS viewport before opening Computer/Bin and exercising stacked View/New pointer and keyboard behavior. No source features, CSS, or functional assertions were weakened; root cause is Playwright test lifecycle ordering.
+
+Retain the normal opt-in `[run-ci]` trigger on an exact-head verification commit only, rather than enabling CI on every documentation commit. A CI pass is not yet claimed. `main` and the frozen source remain unchanged, draft PR #1 unmerged. After source-shell targeted and full desktop/mobile acceptance, return to unresolved 37-theme reference visual differences.
+
+---
+
 ## 23 November 2026 — resolve sole focused browser failure: mobile test assumed stack despite valid left flip
 
 Current latest full-check [CI #45045984846](https://github.com/codersachin99/windows-os/actions/runs/45045984846) at `328d8fa` completed **FAILURE** solely in one new mobile test: 856 focused browser passes, 1 failed, 3 skipped. TypeScript, full unit suite, pinned source inventory, byte-identical artwork, original Contacts audit and Vite build **PASSED**. Full desktop+mobile browser stage was not reached due to focused failure. Log confirmed actual Computer View child had `data-side="left" data-cascade="adjacent"` while test unconditionally expected `"stacked"` merely because it ran in the mobile project. Left-flipping is explicitly correct whenever two actual measured popups fit; it is not a production-side bug.
