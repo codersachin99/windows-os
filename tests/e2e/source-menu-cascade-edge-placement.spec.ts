@@ -124,8 +124,10 @@ test("mobile Computer and Bin stacked View/New remain reachable across parent ro
   // pixels so two source-sized menus cannot fit on either lateral side.
   // Verify the real browser viewport to avoid false coverage of fallback.
   await page.setViewportSize({width:320,height:800});
-  expect(await page.evaluate(()=>window.innerWidth)).toBe(320);
   await guest(page,"win7");
+  // Mobile Chromium uses the 980px layout viewport on about:blank until
+  // the actual page supplies <meta name="viewport">. Assert AFTER navigation.
+  expect(await page.evaluate(()=>window.innerWidth)).toBe(320);
   for(const app of ["computer","bin"] as const){
     await page.locator('[data-test-desktop-icon="'+app+'"]').dblclick();
     const win=page.locator('[data-test-window="'+app+'"]');
