@@ -10,8 +10,11 @@ async function login(page: Page) {
 async function launchWizard(page: Page): Promise<Locator> {
   await page.locator("#desktop-icons").click({ button: "right", position: { x: 285, y: 290 } });
   const menu = page.locator("[data-test-desktop-menu]");
-  await menu.getByRole("menuitem", { name: /^New/ }).click();
-  await menu.getByRole("menuitem", { name: "Shortcut", exact: true }).click();
+  await menu.locator('[data-test-desktop-new]').click();
+  // The source-sized New flyout is a detached sibling, not a root child.
+  const submenu = page.locator('[data-test-desktop-background-submenu]');
+  await expect(submenu).toHaveAttribute("aria-label","New");
+  await submenu.getByRole("menuitem", { name: "Shortcut", exact: true }).click();
   const win = page.locator('[data-test-window="shortcut"]');
   await expect(win).toBeVisible();
   await expect(win).toHaveAttribute("aria-label", "Shortcut");
