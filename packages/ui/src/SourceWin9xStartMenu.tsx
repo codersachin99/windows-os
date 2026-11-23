@@ -80,6 +80,16 @@ export function SourceWin9xStartMenu({
     left:placement.left,top:placement.top,right:"auto" as const,
     bottom:"auto" as const,maxHeight:placement.maxHeight
   }:undefined;
+  // Narrow Win9x Programs/Shutdown flyouts stack above or below the
+  // classic root. Reaching them can cross other root rows; those incidental
+  // pointer-enter events must not close or switch the open flyout. Intentional
+  // clicks keep their original launch/branch behavior.
+  const stackedCascade=branch!==null&&
+    (placement?.direction==="below"||placement?.direction==="above");
+  const closeOnPointerEnter=()=>{if(!stackedCascade)setBranch(null);};
+  const hoverBranch=(next:Exclude<MenuBranch,null>)=>{
+    if(!stackedCascade&&branch!==next)openBranch(next);
+  };
   const is2k=theme==="win2k";
   const icon=(key:string)=>
     sourceThemeProgramArt(theme,key)??legacySourceIconArtwork(key).src;
@@ -89,7 +99,7 @@ export function SourceWin9xStartMenu({
       className="source-win9x-startmenu__item"
       data-test-win9x-command={key}
       data-test-startmenu-link={attr}
-      onPointerEnter={()=>setBranch(null)}
+      onPointerEnter={closeOnPointerEnter}
       onClick={()=>choose(id)}>
       <img src={icon(key)} width={24} height={24} alt=""/>
       <span>{label}</span>
@@ -105,7 +115,7 @@ export function SourceWin9xStartMenu({
       {mainItem("about","About","about")}
       <div className="source-win9x-startmenu__separator" role="separator"/>
       <div className="source-win9x-startmenu__branch"
-        onPointerEnter={()=>{if(branch!=="programs")openBranch("programs");}}>
+        onPointerEnter={()=>hoverBranch("programs")}>
         <button type="button" role="menuitem" aria-haspopup="menu"
           aria-expanded={branch==="programs"} ref={programsTrigger}
           data-test-win9x-branch="programs"
@@ -146,7 +156,7 @@ export function SourceWin9xStartMenu({
         className="source-win9x-startmenu__item"
         data-test-win9x-command="find"
         data-test-startmenu-link="find"
-        onPointerEnter={()=>setBranch(null)}
+        onPointerEnter={closeOnPointerEnter}
         onClick={()=>{setBranch(null);onSearch();}}>
         <img src={icon("search")} width={24} height={24} alt=""/>
         <span>{is2k?"Search":"Find"}...</span>
@@ -155,7 +165,7 @@ export function SourceWin9xStartMenu({
         className="source-win9x-startmenu__item"
         title="The original source Help service has not been migrated"
         disabled data-test-win9x-command="help"
-        onPointerEnter={()=>setBranch(null)}>
+        onPointerEnter={closeOnPointerEnter}>
         <img src={icon("about")} width={24} height={24} alt=""/>
         <span>Help</span>
       </button>
@@ -164,13 +174,13 @@ export function SourceWin9xStartMenu({
       <button type="button" role="menuitem"
         className="source-win9x-startmenu__item"
         data-test-win9x-command="switchuser"
-        onPointerEnter={()=>setBranch(null)}
+        onPointerEnter={closeOnPointerEnter}
         onClick={()=>onPower("SWITCH_USER")}>
         <img src={icon("accounts")} width={24} height={24} alt=""/>
         <span>Switch user</span>
       </button>
       <div className="source-win9x-startmenu__branch"
-        onPointerEnter={()=>{if(branch!=="shutdown")openBranch("shutdown");}}>
+        onPointerEnter={()=>hoverBranch("shutdown")}>
         <button type="button" role="menuitem" aria-haspopup="menu"
           data-test-win9x-branch="shutdown" ref={shutdownTrigger}
           aria-expanded={branch==="shutdown"}
