@@ -140,3 +140,39 @@ for(const source of classics){
     await expect(page.locator('[data-test-logon-screen]')).toBeVisible();
   });
 }
+
+
+/** The mobile classic fallback stacks Programs below its trigger and Power
+ * above Shutdown. Travel through the uncovered left strip of the original
+ * root menu must not dismiss the popup before the pointer reaches the child.
+ * Intentional clicks still execute the original source commands.
+ */
+for(const source of classics){
+  test(source.id+" narrow classic stacked flyout survives parent-row pointer travel",async({page})=>{
+    await page.setViewportSize({width:375,height:667});
+    const desktop=await classicDesktop(page,source.id);
+    await desktop.locator('[data-test-start-button]').click();
+    const menu=desktop.locator('[data-test-win9x-start-menu]');
+    await menu.locator('[data-test-win9x-branch="programs"]').click();
+    const programs=menu.locator('[data-test-win9x-submenu="programs"]');
+    await expect(programs).toHaveAttribute("data-source-cascade-direction","below");
+    // The child covers the right of the root. Hover at the uncovered
+    // left edge to simulate moving along a real pointer corridor.
+    await menu.locator('[data-test-win9x-command="folder-docs"]')
+      .hover({position:{x:3,y:10}});
+    await expect(programs).toBeVisible();
+    await programs.locator('[data-test-win9x-program="notepad"]').click();
+    await expect(desktop.locator('[data-test-window="notepad"]')).toBeVisible();
+    await expect(menu).toHaveCount(0);
+
+    await desktop.locator('[data-test-start-button]').click();
+    await menu.locator('[data-test-win9x-branch="shutdown"]').click();
+    const power=menu.locator('[data-test-win9x-submenu="shutdown"]');
+    await expect(power).toHaveAttribute("data-source-cascade-direction","above");
+    await menu.locator('[data-test-win9x-command="find"]')
+      .hover({position:{x:3,y:10}});
+    await expect(power).toBeVisible();
+    await power.locator('[data-test-win9x-power="log_off"]').click();
+    await expect(page.locator('[data-test-logon-screen]')).toBeVisible();
+  });
+}
