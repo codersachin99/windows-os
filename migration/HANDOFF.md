@@ -1,3 +1,11 @@
+## 24 November 2026 — first remaining desktop default wallpaper batch
+
+Combined [CI #45363645210](https://github.com/codersachin99/windows-os/actions/runs/45363645210) at `fadb0e6f` started and TypeScript passed; units were running at inspection. Six newly ported login families and mobile regression fix remain pending exact-head acceptance.
+
+Frozen registry 3b8c identifies original image backgrounds for Vista, macOS, ChromeOS, Ubuntu, Kubuntu, Longhorn Slate/Plex, Aero Noir, Oxygen and Whistler; base uses #fffd and Onebit #352b30. React now uses these 12 exact defaults instead of Win7 wallpaper fallback. Five reused original assets and five new binary assets with matching Git hashes. System image picker/whitelist expands 16 to 26, tests updated, new unit and desktop/mobile Guest paint/reload tests added to focused CI. [Source trace](DESKTOP-WALLPAPER-DEFAULTS-SOURCE.md). Pending shell statuses unchanged. Next correct XP variant-specific and older classic default colors, then original shell artwork/UI; keep main/frozen source/draft PR/releases unchanged. Batch CI only after currently running check.
+
+---
+
 ## 24 November 2026 — Vista completes partial logon family routing; mobile Personalize regression repair
 
 [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) at `68590906` finished **FAILURE**: TypeScript/units/source inventory/original art/Contacts/Vite passed; focused Playwright **892 passed, 3 skipped, 1 failed**. Sole failure chromium-mobile source-personalize-appearance.spec.ts:82: sidebar Desktop Background link was hidden by the existing <=530px CSS. Control Panel direct Background test passed. Full browser and visual capture did not run. Browser logs also report existing segoepr.ttf decode failures; investigate font availability separately (do not claim visual parity). Fixed regression route: desktop still clicks direct sidebar link; narrow layout uses real Cancel then visible gallery Background link, with committed tint assertions at both exit and picker and subsequent editor state. No forced clicks or skipped assertions; no change to mobile source UI.

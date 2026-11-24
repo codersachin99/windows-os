@@ -19,6 +19,13 @@ from pathlib import Path
 LEGACY_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
+    "desktop-defaults": {
+        "ubuntu.3588c6cf.webp": "d1761ebf9225b2bbfd33e58109db25bb57b87b08",
+        "winLP.dcaa8b07.jpg": "d6fffa5a68d124180478ccbd03c9bd1642f8784c",
+        "winLS.e359a90f.jpg": "584eb10065dc876d9abf0adfbe3afe3917e013e4",
+        "winW.6a3e313e.webp": "05e4bd28c3ccc906fa594d237698b1225754e960",
+        "winvista.d80b2f4f.webp": "4b17bc426d8d7ddbd429568efc8a81f4af48a845",
+    },
     "boot": {
         "boot-win31.7bac4ac4.webp": "45c51183da1be81aed459cce5b499e2137bd9f29",
         "boot-win95.9bf06d7a.gif": "c8ef1f453edb0e25a9bb8d1cb7f802716e2c3384",

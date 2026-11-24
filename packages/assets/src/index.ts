@@ -268,6 +268,20 @@ export const sourceThemeLogonArtwork=Object.freeze({
   })
 });
 
+/** Pinned 3b8c desktop registry art. These are desktop defaults, not
+ * login artwork unless the source deliberately shares the same asset. */
+export const sourceAdditionalDesktopWallpapers=Object.freeze({
+  winvista:"/assets/images/winvista.d80b2f4f.webp",
+  macos:"/assets/images/macos.54af5cd4.webp",
+  chromeos:"/assets/images/chromeos.eaca6e72.webp",
+  ubuntu:"/assets/images/ubuntu.3588c6cf.webp",
+  kubuntu:"/assets/images/kubuntu.618268f7.webp",
+  winLS:"/assets/images/winLS.e359a90f.jpg",
+  winLP:"/assets/images/winLP.dcaa8b07.jpg",
+  aeroNoir:"/assets/images/aeroNoir.237e6377.webp",
+  oxygen:"/assets/images/oxygen.414aed47.svg",
+  winW:"/assets/images/winW.6a3e313e.webp"
+});
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
   // Pinned built-in registry 3b8c: exact Aero image categories and
@@ -286,6 +300,10 @@ export function sourceShellWallpaper(theme:string):string{
   if(sourceIsXpFamily(theme))return legacyShellThemeAssets.winxp.theme;
   if(theme==="win11")return legacyShellThemeAssets.win11.theme;
   if(theme==="win11dark")return sourceWin11DarkArtwork.wallpaper;
+  if(theme==="base")return "#fffd";
+  if(theme==="onebit")return "#352b30";
+  if(Object.prototype.hasOwnProperty.call(sourceAdditionalDesktopWallpapers,theme))
+    return sourceAdditionalDesktopWallpapers[theme as keyof typeof sourceAdditionalDesktopWallpapers];
   return legacyArt.wallpaperWin7;
 }
 
@@ -303,11 +321,12 @@ export const sourceSystemWallpapers:readonly string[]=Object.freeze([
   legacyShellThemeAssets.win10.theme,
   legacyShellThemeAssets.winxp.theme,
   legacyShellThemeAssets.win11.theme,
-  sourceWin11DarkArtwork.wallpaper
+  sourceWin11DarkArtwork.wallpaper,
+  ...Object.values(sourceAdditionalDesktopWallpapers)
 ]);
-/** Source Basic 2/3/4 background colors are theme defaults, not user URLs. */
+/** Pinned solid theme defaults, not user-supplied CSS or URLs. */
 export function sourceIsSolidThemeWallpaper(path:string):boolean{
-  return path==="#3b6ea4"||path==="#000"||path==="#fff";
+  return path==="#3b6ea4"||path==="#000"||path==="#fff"||path==="#fffd"||path==="#352b30";
 }
 export function sourceIsSystemWallpaper(path:string):boolean{
   return sourceSystemWallpapers.includes(path);

@@ -31,8 +31,8 @@ test("source ChangeBackground system tiles stage changes until Save and Cancel",
   await expect(desktop).toHaveAttribute("data-test-desktop-background",fallback);
   let view=await backgroundView(page);
   const system=view.locator('[data-test-bg-list="system"]');
-  // The locked original supplies 13 former items plus three exact Aero category images.
-  await expect(system.locator("[data-test-bg-item]")).toHaveCount(16);
+  // Sixteen prior source images plus ten newly available desktop defaults.
+  await expect(system.locator("[data-test-bg-item]")).toHaveCount(26);
   for(const original of [
     "architecture.e651db26.webp",
     "landscape.1626b82c.webp",

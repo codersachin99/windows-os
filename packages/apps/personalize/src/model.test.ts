@@ -65,7 +65,17 @@ describe("source ChangeBackground system gallery and solid theme defaults",()=>{
      "/assets/images/win10.743e8c13.webp",
      "/assets/images/winxp.3e41719f.webp",
      "/assets/images/win11.fc00c43d.webp",
-     "/assets/images/win11dark.af52a1ca.webp"
+     "/assets/images/win11dark.af52a1ca.webp",
+     "/assets/images/winvista.d80b2f4f.webp",
+     "/assets/images/macos.54af5cd4.webp",
+     "/assets/images/chromeos.eaca6e72.webp",
+     "/assets/images/ubuntu.3588c6cf.webp",
+     "/assets/images/kubuntu.618268f7.webp",
+     "/assets/images/winLS.e359a90f.jpg",
+     "/assets/images/winLP.dcaa8b07.jpg",
+     "/assets/images/aeroNoir.237e6377.webp",
+     "/assets/images/oxygen.414aed47.svg",
+     "/assets/images/winW.6a3e313e.webp"
    ]);
    expect(new Set(SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS).size)
      .toBe(SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS.length);
@@ -75,8 +85,8 @@ describe("source ChangeBackground system gallery and solid theme defaults",()=>{
      "javascript:alert(1)","/assets/images/missing.webp","data:image/png;base64,AAAA"])
      expect(sourceIsSystemWallpaper(unknown)).toBe(false);
  });
- it("accepts exact three solid Basic defaults but not arbitrary CSS inputs",()=>{
-   for(const value of ["#3b6ea4","#000","#fff"])
+ it("accepts exact source solid defaults but not arbitrary CSS inputs",()=>{
+   for(const value of ["#3b6ea4","#000","#fff","#fffd","#352b30"])
      expect(sourceIsSolidThemeWallpaper(value)).toBe(true);
    for(const value of ["url(https://evil.test/x)","#ff0000","transparent",
      "#fff;opacity:0","https://example.com",""])
