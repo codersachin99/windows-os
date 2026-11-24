@@ -2,6 +2,8 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  winLP:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
+  winW:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
   oxygen:{empty:"/assets/images/bin-oxygen.b6be9ff9.webp",full:"/assets/images/bin-full-oxygen.a82e7824.webp"},
   aeroNoir:{empty:"/assets/images/bin-aeroNoir.12b5ed31.svg",full:"/assets/images/bin-full-aeroNoir.6bcff3f1.webp"},
   kubuntu:{
@@ -52,7 +54,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen","winLP","winW"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -406,3 +408,26 @@ test("original Oxygen Computer and Desktop files use theme-specific folder/gener
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/Oxygen Source Folder");
 });
+
+for(const [theme,start] of Object.entries({"winLP":"/assets/images/start-button-winL.bcbc8d89.webp","winW":"/assets/images/start-button-win2k.650d501c.webp"}) as ["winLP"|"winW",string][]){
+  test("original "+theme+" shared XP core artwork and distinct Start",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src",start);
+    await expect(page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/computer-winxp.8cbae9da.webp");
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const explorer=page.locator('[data-test-window="computer"]').first();
+    await expect(explorer).toBeVisible();
+    for(const [label,art] of [["Documents","/assets/images/folder-docs-winxp.a303ce2a.webp"],["Downloads","/assets/images/folder-winxp.ff1b00c5.webp"],["Music","/assets/images/folder-music-winxp.dc009194.webp"],["Pictures","/assets/images/folder-pics-winxp.05398ea9.webp"],["Videos","/assets/images/folder-videos-winxp.c38aba27.webp"]]){
+      await expect(explorer.locator(".explorer-navigation__home").filter({hasText:label}).locator("img")).toHaveAttribute("src",art);
+    }
+    const desktop=explorer.getByRole("button",{name:"Desktop",exact:true});
+    await expect(desktop.locator("img")).toHaveAttribute("src","/assets/images/desktop-winxp.da2acd23.webp");
+    await desktop.click();
+    await expect(explorer.getByRole("textbox",{name:"Folder address"})).toHaveValue(SOURCE_DESKTOP);
+    await explorer.getByRole("button",{name:"New folder"}).click();
+    const dialog=explorer.getByRole("dialog",{name:"New folder"});
+    await dialog.getByRole("textbox",{name:"New folder name"}).fill("Original "+theme+" Folder");
+    await dialog.getByRole("button",{name:"OK"}).click();
+    await expect(page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Original '+theme+' Folder"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/folder-winxp.ff1b00c5.webp");
+  });
+}

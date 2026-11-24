@@ -68,6 +68,14 @@ FILES: dict[str, dict[str, str]] = {
         "login-winvista.7a523d62.webp": "88fbd430ea5cb10893cb89092c562528ed779464",
         "shutdown.08d3f74a.webp": "6a4478b1e3c9319030f42a09a6aaf79fe0dbef3e",
     },
+    "longhorn-whistler-core-icons": {
+        "start-button-winL.bcbc8d89.webp": "709a9ac6438c19f6b93167799200635822eb36a2",
+        "start-button-win2k.650d501c.webp": "d9557b9d17ff01294c0942fa90102af15586f2e7",
+        "disk-connected-winxp.e32b5363.webp": "834ab0aa5b5350cc57824c161e90d6661025c755",
+        "disk-disconnected-winxp.3537cb22.webp": "7f9315ce6528d8446e520a172852ad6c44feaff8",
+        "desktop-winxp.da2acd23.webp": "1160a65e8e89a32a60e246630060902c1cb9e5ea",
+        "restart-winxp.3e97eeb0.webp": "65bff59571cddac700a989ed785247bf47cb1eb6",
+    },
     "oxygen-core-icons": {
         "computer-oxygen.d170989c.webp": "fa0980be577279f57610f6887fba85bfb2bc9013",
         "bin-oxygen.b6be9ff9.webp": "c38c414f6d0af66cf8be91726c596409307130e6",

@@ -647,7 +647,63 @@ function sourceOxygenIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceOxygenIconArtwork,key)
     ?sourceOxygenIconArtwork[key as keyof typeof sourceOxygenIconArtwork]:null;
 }
+/** Shared verified subset of the original Longhorn Plex and Whistler registries. */
+export const sourceLonghornWhistlerIconArtwork=Object.freeze({
+  "action-center": "/assets/images/action-center-winxp.52f44912.webp",
+  "battery": "/assets/images/battery-winxp.af8edd8a.webp",
+  "bin": "/assets/images/bin-winxp.7d0403fd.webp",
+  "bin-full": "/assets/images/bin-full-winxp.ba3f6193.webp",
+  "calc": "/assets/images/calc-winxp.f79aee6b.webp",
+  "camera": "/assets/images/camera-winxp.b21fe0fe.webp",
+  "cmd": "/assets/images/cmd-winxp.62e75899.webp",
+  "computer": "/assets/images/computer-winxp.8cbae9da.webp",
+  "cpanel": "/assets/images/cpanel-winxp.1b08f5c8.webp",
+  "datetime": "/assets/images/datetime-winxp.d62f4ef6.webp",
+  "default": "/assets/images/default-winxp.4351048b.webp",
+  "desktop": "/assets/images/desktop-winxp.da2acd23.webp",
+  "disk-cd": "/assets/images/disk-cd-winxp.83ac2166.webp",
+  "disk-connected": "/assets/images/disk-connected-winxp.e32b5363.webp",
+  "disk-data": "/assets/images/disk-data-winxp.225dcc03.webp",
+  "disk-disconnected": "/assets/images/disk-disconnected-winxp.3537cb22.webp",
+  "disk-os": "/assets/images/disk-os-winxp.e3c2a016.webp",
+  "display": "/assets/images/display-winxp.da9a9b48.webp",
+  "executable": "/assets/images/executable-winxp.b1d9ded4.webp",
+  "file": "/assets/images/file-winxp.c130b357.webp",
+  "folder": "/assets/images/folder-winxp.ff1b00c5.webp",
+  "folder-docs": "/assets/images/folder-docs-winxp.a303ce2a.webp",
+  "folder-downloads": "/assets/images/folder-winxp.ff1b00c5.webp",
+  "folder-music": "/assets/images/folder-music-winxp.dc009194.webp",
+  "folder-pics": "/assets/images/folder-pics-winxp.05398ea9.webp",
+  "folder-videos": "/assets/images/folder-videos-winxp.c38aba27.webp",
+  "games": "/assets/images/games-winxp.7f048588.webp",
+  "installer": "/assets/images/programs-winxp.f148b05d.webp",
+  "logoff": "/assets/images/logoff-winxp.71dc5ab2.webp",
+  "magnifier": "/assets/images/magnifier-winxp.24194bc4.webp",
+  "media": "/assets/images/media-winxp.c7e33e88.webp",
+  "network": "/assets/images/network-winxp.744648d4.webp",
+  "notepad": "/assets/images/notepad-winxp.82037fb1.webp",
+  "paint": "/assets/images/paint-winxp.7e4e5dac.webp",
+  "personalize": "/assets/images/personal-winxp.01949b73.webp",
+  "player": "/assets/images/player-winxp.e1b486dd.webp",
+  "programs": "/assets/images/programs-winxp.f148b05d.webp",
+  "restart": "/assets/images/restart-winxp.3e97eeb0.webp",
+  "run": "/assets/images/run-winxp.63d23fb9.webp",
+  "shutdown": "/assets/images/shutdown-winxp.f3312ea0.webp",
+  "taskbar": "/assets/images/taskbar-winxp.46a225c9.webp",
+  "text": "/assets/images/text-winxp.35e970dd.webp",
+  "wordpad": "/assets/images/wordpad-winxp.1bde3c38.webp"
+});
+export const sourceLonghornWhistlerStartArtwork=Object.freeze({
+  "winLP": "/assets/images/start-button-winL.bcbc8d89.webp",
+  "winW": "/assets/images/start-button-win2k.650d501c.webp"
+});
+function sourceLonghornWhistlerIcon(theme:"winLP"|"winW",key:string):string|null{
+  if(key==="start")return sourceLonghornWhistlerStartArtwork[theme];
+  return Object.prototype.hasOwnProperty.call(sourceLonghornWhistlerIconArtwork,key)
+    ?sourceLonghornWhistlerIconArtwork[key as keyof typeof sourceLonghornWhistlerIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="winLP"||theme==="winW")return sourceLonghornWhistlerIcon(theme,iconKey);
   if(theme==="oxygen")return sourceOxygenIcon(iconKey);
   if(theme==="aeroNoir")return sourceAeroNoirIcon(iconKey);
   if(theme==="kubuntu")return sourceKubuntuIcon(iconKey);
@@ -701,6 +757,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="winLP"||theme==="winW"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceLonghornWhistlerIcon(theme,kind==="binFull"?"bin-full":kind);
+  }
   if(theme==="oxygen"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceOxygenIcon(kind==="binFull"?"bin-full":kind);

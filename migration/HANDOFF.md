@@ -1,3 +1,10 @@
+## 24 November 2026 — Longhorn Plex/Whistler core icons and combined verification
+
+[CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8` completed SUCCESS: TypeScript, units, inventory, historical artwork audit, Contacts, Vite, focused and full browser suites passed. Visual job skipped. Six newer icon packs and expanded audit are not covered by that checkpoint.
+
+Longhorn Plex and Whistler share 43 exact registry keys (plus distinct Start keys), five new original artwork paths and verified Win2k Start reuse. Source aliases preserved; no guessed Slate registry. Unit and focused browser lifecycle tests added. [Source trace](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md). Combined opt-in [run-ci] requested for Ubuntu/Kubuntu/Aero Noir/Oxygen and previous icon packs plus the expanded default artwork audit. Exact-head acceptance pending. Next Vista and Onebit core artwork and verify CI; no merge/release or full visual parity claim.
+
+---
 ## 24 November 2026 — Oxygen core desktop/Explorer artwork
 
 [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`: TypeScript, units, inventory, historical artwork, Contacts, Vite and focused browser suite passed; full browser suite running at inspection. No redundant CI.
