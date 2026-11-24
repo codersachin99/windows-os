@@ -1,3 +1,9 @@
+## 24 November 2026 — ChromeOS desktop and context menus
+
+Source inherited desktop selection/drag band and ChromeOS WinUI menu geometry/palette across Desktop, Taskbar, Computer/Bin, Notepad and Start portal. Shared real commands, keyboard focus and measured cascade placement retained. Added ChromeOS to existing edge-placement tests and cross-surface menu regression. [Source trace](CHROMEOS-CONTEXT-SOURCE.md). Tests not executed; next ChromeOS Explorer chrome/list selection and menubars, then tray and focused CI. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — ChromeOS launcher
 
 Original f5a6 470px launcher, sorted core/all grid, five recent apps, Google art, real Guest program/file search, account and power actions, shared context. [Source trace](CHROMEOS-LAUNCHER-SOURCE.md). Unit/browser contracts authored; exact ranking/hover/visual parity pending. Previous ChromeOS shelf and XP/Win11 repair also pending execution. Main/frozen source/draft PR unchanged. Next ChromeOS desktop/context and Explorer.

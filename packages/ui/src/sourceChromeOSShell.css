@@ -84,3 +84,40 @@
   .windows-desktop[data-theme="chromeos"] .windows-taskbar__running{min-width:48px}
   .windows-desktop[data-theme="chromeos"] .windows-window:not(.is-maximized){max-height:calc(100dvh - 48px)}
 }
+
+/* Source main.css desktop__icon-item: ChromeOS inherits these base
+ * selection tokens; it does not override them in theme-chromeos-scss. */
+.windows-desktop[data-theme="chromeos"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):hover{
+  background:rgba(0,0,0,.1333333333);border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:focus-visible){
+  background:rgba(0,0,0,.2666666667);border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] .windows-desktop__band{
+  border:1px solid #39f;background:rgba(51,153,255,.2);box-shadow:none;
+}
+
+/* Frozen 48a9 WinUI menu paint, shared by actual desktop, shelf,
+ * Explorer, Notepad and portaled Start actions. Preserve measured
+ * menu positions, source commands and existing cascade side logic. */
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]){
+  box-sizing:border-box;width:min(200px,calc(100vw - 8px));min-width:0;
+  max-width:calc(100vw - 8px);background:#fff;color:#333;
+  border:0;border-radius:2px;padding:8px 0;box-shadow:0 0 6px rgba(0,0,0,.4);
+  font:10pt "Segoe UI",Arial,sans-serif;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"])::before{content:none}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) button{
+  box-sizing:border-box;color:#333;border:0;border-radius:0;
+  background:none;box-shadow:none;text-shadow:none;line-height:20px;
+  min-height:32px;padding:6px 6px 6px 28px;text-align:start;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]):dir(rtl) button{padding:6px 28px 6px 6px}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) button:not(:disabled):is(:hover,:focus,:focus-visible){
+  color:#333;background:rgba(0,0,0,.0666666667);box-shadow:none;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) button:disabled{opacity:.5;filter:grayscale(1);cursor:default}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) :is(hr,.windows-desktop__menu-divider,.explorer-organize__separator){
+  border:0;height:1px;background:#dbdbdb;margin:4px 0;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) kbd{color:inherit}

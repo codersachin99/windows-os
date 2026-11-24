@@ -39,7 +39,7 @@ async function assertInside(popup:Locator,bounds:Locator){
   return box!;
 }
 
-for(const theme of ["win7","winxp","win11dark"] as const){
+for(const theme of ["win7","winxp","win11dark","chromeos"] as const){
   test("source "+theme+" Desktop View Sort New cascade beside root, flips at right edge, retains keyboard",async({page},info)=>{
     const desktop=await guest(page,theme);
     for(const edge of ["left","right"] as const){
