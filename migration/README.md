@@ -1,3 +1,5 @@
+> **24 November 2026 — Kubuntu / Personalize verified:** 757 units, 73 browsers passed (1 skipped). Oxygen WindowMain port awaiting verification. [Source trace](OXYGEN-WINDOW-SOURCE.md).
+
 > **24 November 2026 — Personalize full theme selection:** 35 original non-duplicate theme cards; Kubuntu tray hover fix; focused CI pending.
 
 > **24 November 2026 — Oxygen base shell:** source taskbar gradients and original embedded selection WebP, tests pending; Kubuntu CI browser verification running.

@@ -1,3 +1,9 @@
+## 24 November 2026 — Kubuntu / Personalize verified, Oxygen WindowMain
+
+Exact-head CI [45413134164](https://github.com/codersachin99/windows-os/actions/runs/45413134164) at 01163fe SUCCESS: 159 unit files / 757 tests, 73 browser passed / 1 skipped / zero failed, TypeScript, inventory, artwork, Contacts, Vite build. All 35 theme cards, Kubuntu volume fix and initial Oxygen shell verified in targeted browser suite. Full suite and visual capture skipped. Oxygen WindowMain source theme-oxygen-scss.js: #31363b frame, #474c55 border, 4px radius, #2a2e32 body, active accent glow and inactive shadow, 20px gradient circular controls and 10px logical end spacing; hover close red #da4453. Existing shared lifecycle/SVG fallback retained; accent #3c92c8 is provisional source link color, not verified original registry. New browser coverage authored, not run. Next Oxygen Start button sprite and launcher.
+
+---
+
 ## 24 November 2026 — Complete Personalize theme selection / Kubuntu tray repair
 
 User requested in-app switching to test all themes. Exposed all 35 non-duplicate source IDs (excludes source base and canonical Win7 alias, Windows 7 Aero card remains), added the original fourth Other Themes gallery, source wallpaper previews, existing SET_THEME immediate/persistence route, coverage for each added card and Kubuntu login after reload. Display labels/group placement for previously absent variants are readable adapters; unfinished skins are selectable, not certified. Kubuntu CI 45412140618: 757 units passed, build/inventory/artwork passed; browsers 49 passed / 2 failed / 1 skipped (mute popup disappears on desktop/mobile). Suspected cause: hover filter on tray icon wrapper establishes containing block and relocates absolute popup; apply brightness to trigger/image only. Preserve failing mute assertion; rerun with [run-ci] [kubuntu-check], also includes Personalize and initial Oxygen shell tests. No release/merge.

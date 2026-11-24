@@ -36,3 +36,42 @@
 }
 .windows-desktop[data-theme="oxygen"] .desktop__icon-name:not(:has(input)){color:#fff;text-shadow:1px 1px 2px #000}
 .windows-desktop[data-theme="oxygen"]:dir(rtl) .desktop__icon-name:not(:has(input)){text-shadow:-1px 1px 2px #000}
+
+/* Frozen Oxygen WindowMain and ControlItem from theme-oxygen-scss.js.
+ * The source gradient, dimensions, logical spacing and glow are preserved.
+ * Theme registry accent is pending; use the source link color as fallback. */
+.windows-desktop[data-theme="oxygen"]{
+  --border-color:#474c55;--theme-color:#3c92c8;--link-color:#3c92c8;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window{
+  color:#fff;background:#31363b;border:1px solid var(--border-color);
+  border-radius:4px;box-shadow:0 0 5px #000;backdrop-filter:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window.is-active{
+  box-shadow:0 0 10px 5px var(--theme-color);
+}
+.windows-desktop[data-theme="oxygen"]:not([data-effect-show-window-shadows]) .windows-window{
+  box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__titlebar{background:none;color:#fff;min-height:24px}
+.windows-desktop[data-theme="oxygen"] .windows-window__title{color:#fff;text-shadow:none}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons{
+  align-self:center;align-items:center;justify-content:flex-end;height:24px;
+  flex:none;gap:0;margin:0;border-radius:0;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons button{
+  display:grid;place-items:center;box-sizing:border-box;flex:none;
+  width:20px;min-width:20px;height:20px;margin-inline-end:10px;padding:0;
+  color:#fff;border:1px solid #474c55;border-radius:50%;
+  background:linear-gradient(#40464d,#2f3438) #2a2e32;box-shadow:0 0 2px #000;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons button:not(:disabled):hover{
+  color:var(--theme-color);box-shadow:0 0 3px 1px var(--theme-color);
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons button.windows-window__close:not(:disabled):hover{
+  color:#da4453;box-shadow:0 0 3px 1px #da4453;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__body{
+  background:#2a2e32;color:#fff;border:0;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window.is-maximized{border-radius:0}
