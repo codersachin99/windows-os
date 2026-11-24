@@ -22,6 +22,7 @@ test("source theme variants select exact login screen families and report fallba
     ["winLP","winLS","winLS","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
     ["kubuntu","kubuntu","win7-fallback","pending"],
+    ["winW","winW","winW","pending"],
     ["onebit","onebit","onebit","pending"]
   ] as const;
   for(const [id,screen,renderer,status] of cases){
