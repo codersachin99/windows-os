@@ -521,3 +521,31 @@ for(const [theme,base,selection,active] of [
     await expect(item).toHaveCSS("box-shadow",/inset/);
   });
 }
+
+
+for(const [theme,left,right,radius] of [
+  ["winLP","rgb(66, 113, 178)","rgb(61, 101, 158)","0px"],
+  ["winLS","rgb(255, 255, 255)","rgb(255, 247, 230)","6px"],
+  ["winW","rgb(255, 255, 255)","rgba(0, 0, 0, 0)","0px"]
+] as const){
+  test(theme+" uses the original XP-style Start panel palette and power actions",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await page.locator("[data-test-start-button]").click();
+    const menu=page.locator("[data-test-start-menu]");
+    await expect(menu).toHaveClass(/windows-startmenu--winxp/);
+    await expect(menu).toHaveCSS("border-top-left-radius",radius);
+    await expect(menu.locator(".windows-startmenu__left")).toHaveCSS("background-color",left);
+    await expect(menu.locator(".windows-startmenu__right")).toHaveCSS("background-color",right);
+    await expect(menu.locator("[data-test-startmenu-xp-header] img")).toHaveCount(theme==="winW"?0:1);
+    await expect(menu.locator("[data-test-startmenu-search]")).toHaveCount(0);
+    const footer=menu.locator("[data-test-startmenu-xp-footer]");
+    await expect(footer.getByRole("button",{name:"Restart",exact:true}).locator("img")).toHaveAttribute("src","/assets/images/restart-winxp.3e97eeb0.webp");
+    await expect(footer.getByRole("button",{name:"Log off",exact:true})).toBeVisible();
+    await expect(footer.getByRole("button",{name:"Turn off computer",exact:true})).toBeVisible();
+    await menu.locator("[data-test-all-programs]").click();
+    await expect(menu).toHaveClass(/is-all-programs/);
+    await menu.locator("[data-test-all-programs]").click();
+    await menu.getByRole("button",{name:"Computer",exact:true}).last().click();
+    await expect(page.locator('[data-test-window="computer"]').first()).toBeVisible();
+  });
+}

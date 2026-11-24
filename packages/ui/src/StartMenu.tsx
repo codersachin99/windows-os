@@ -59,7 +59,8 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 
 /** The original All Programs tree is populated from installed .lnk files. */
 export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
-  const isXpTheme=sourceIsXpFamily(theme);
+  const isLonghornWhistler=theme==="winLS"||theme==="winLP"||theme==="winW";
+  const isXpTheme=sourceIsXpFamily(theme)||isLonghornWhistler;
   // Pinned startmenu-base.js supplies recent programs and configured
   // power actions to the shared Win7 renderer, including Vista's
   // isVista/searchStyle variant and all Aero/Basic skins.
@@ -379,7 +380,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       id="start-menu" ref={menuRef} data-test-start-menu="" aria-label="Start menu">
       {isXpTheme&&<header className="windows-startmenu__xp-header"
         data-test-startmenu-xp-header="">
-        <img src={legacyArt.guestAvatar} alt="" width={48} height={48}/>
+        {theme!=="winW"&&<img src={legacyArt.guestAvatar} alt="" width={48} height={48}/> }
         <strong>Guest</strong>
       </header>}
       {theme==="win10"&&<aside className="windows-startmenu__win10-sidebar"
@@ -670,6 +671,8 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       </div>
       {isXpTheme&&<footer className="windows-startmenu__xp-footer"
         data-test-startmenu-xp-footer="">
+        {isLonghornWhistler&&<button type="button" onClick={() => dispatch({type:"RESTART"})}>
+          <img src={sourceThemeProgramArt(theme,"restart")??legacyXpPowerArtwork.shutdown} width={24} height={24} alt=""/>Restart</button>}
         <button type="button" onClick={() => dispatch({type:"LOG_OFF"})}>
           <img src={legacyXpPowerArtwork.logoff} width={20} height={20} alt="" />Log off</button>
         <button type="button" onClick={() => dispatch({type:"SHUTDOWN"})}>

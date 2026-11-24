@@ -1,3 +1,8 @@
+## 24 November 2026 — Longhorn/Whistler XP-style Start skin
+
+Source XP Start structure now selected for Slate/Plex/Whistler; distinct original pane palettes, corners, shadows, Whistler no-avatar header, three power controls and RTL styles. Three desktop/mobile regression contracts cover menu rendering, All Programs navigation and Computer launch. [Source trace](LONGHORN-WHISTLER-START-SOURCE.md). Original flyout and full shortcut/geometry parity pending. Exact-head CI pending; no extra CI trigger. Next theme-specific window chrome and context menu. Main/frozen source/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Longhorn/Whistler desktop and taskbar state styling
 
 Ported source Plex/Slate gradient palettes, Whistler cream tray/taskbar, selected desktop labels, running/active/hover taskbar states and RTL shadows using one shared scoped stylesheet. Three desktop/mobile computed-style regression cases added. [Source trace](LONGHORN-WHISTLER-SHELL-SOURCE.md). Original mask tint, Start/window geometry and full paired visuals pending. No extra CI trigger; exact-head verification pending. Next original theme Start/menu/window chrome and remaining shell families. Frozen source/main/draft PR/releases unchanged.

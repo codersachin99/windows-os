@@ -87,3 +87,73 @@
   color:#000;
 }
 .windows-desktop[data-theme="winW"] .windows-taskbar__tray button:hover{background:none}
+
+/* Source startmenu-winxp.js and theme-winlonghorn/theme-winW overrides.
+ * Shared React navigation remains inline, not the original All Programs flyout. */
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu--winxp{
+  width:min(384px,calc(100vw - 8px));max-height:calc(100dvh - 44px);
+  min-height:0;grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:auto minmax(0,1fr) auto;gap:0;padding:0;
+  overflow:hidden;border-radius:0;color:#fff;
+  background:linear-gradient(#ffffff80,transparent 5px,#ffffff4d 50px,#ffffff4d 85%,#0000001a) var(--item-color);
+  border-color:transparent;box-shadow:inset 0 0 3px #000,2px 5px 2px #0008;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]):dir(rtl) .windows-startmenu--winxp{
+  left:auto;right:0;box-shadow:inset 0 0 3px #000,-2px 5px 2px #0008;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__xp-header{
+  min-height:60px;padding:6px;gap:12px;background:none;box-shadow:none;
+  border-bottom:1px solid #5c91d0;text-shadow:none;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-startmenu__xp-header img{
+  border:2px solid #fff;border-radius:4px;box-shadow:1px 1px 3px #333;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]):dir(rtl) .windows-startmenu__xp-header img{box-shadow:-1px 1px 3px #333}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__xp-footer{
+  padding:4px;gap:0;background:none;border:0;box-shadow:none;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__xp-footer button{
+  background:none;border:1px solid transparent;border-radius:0;
+  color:#fff;margin:5px 0;padding:4px;display:flex;align-items:center;gap:5px;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__xp-footer img{width:24px;height:24px;object-fit:contain}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__xp-footer button:is(:hover,:focus-visible){
+  color:#000;background:var(--item-color--hover);
+}
+.windows-desktop[data-theme="winLP"] .windows-startmenu__left{background:#4271b2;color:#fff}
+.windows-desktop[data-theme="winLP"] .windows-startmenu__right{background:#3d659e;border:0;border-inline-start:1px solid #5c91d0}
+.windows-desktop[data-theme="winLP"] :is(.windows-startmenu__program,.windows-startmenu__right button,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button){color:#fff}
+.windows-desktop[data-theme="winLS"] .windows-startmenu--winxp{
+  border-radius:6px 6px 0 0;
+  background:linear-gradient(to right,#0003,transparent 20px),linear-gradient(to left,#0003,transparent 20px),linear-gradient(#ffffff80,transparent 5px,#ffffff4d 50px,#ffffff4d 85%,#0000001a) var(--item-color);
+}
+.windows-desktop[data-theme="winLS"] .windows-startmenu__xp-header{border-bottom:2px solid #ea9c55}
+.windows-desktop[data-theme="winLS"] .windows-startmenu__left{background:#fff;color:#544c46}
+.windows-desktop[data-theme="winLS"] .windows-startmenu__right{background:#fff7e6;border:0;border-inline-start:1px solid #f9ecdc}
+.windows-desktop[data-theme="winLS"] :is(.windows-startmenu__program,.windows-startmenu__right button,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button){color:#000}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) :is(.windows-startmenu__program,.windows-startmenu__right button,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button):is(:hover,:focus-visible){
+  background:var(--item-color--hover);border-color:transparent;
+}
+.windows-desktop[data-theme="winW"] .windows-startmenu--winxp{
+  width:min(381px,calc(100vw - 8px));bottom:37px;
+  padding-inline-start:10px;border:1px solid #000;
+  background:linear-gradient(to right,#5096f8 0 10%,#3070d0 50%);
+  box-shadow:2px 5px 2px #0008;
+}
+.windows-desktop[data-theme="winW"]:dir(rtl) .windows-startmenu--winxp{
+  background:linear-gradient(to left,#5096f8 0 10%,#3070d0 50%);box-shadow:-2px 5px 2px #0008;
+}
+.windows-desktop[data-theme="winW"] .windows-startmenu__xp-header{min-height:0;padding:10px 6px;border:0;font-size:16pt}
+.windows-desktop[data-theme="winW"] .windows-startmenu__left{
+  background:#fff;color:#000;border-radius:10px;box-shadow:2px 2px 3px #0008;
+}
+.windows-desktop[data-theme="winW"]:dir(rtl) .windows-startmenu__left{box-shadow:-2px 2px 3px #0008}
+.windows-desktop[data-theme="winW"] .windows-startmenu__right{background:none;border:0}
+.windows-desktop[data-theme="winW"] .windows-startmenu__right button{color:#fff}
+.windows-desktop[data-theme="winW"] :is(.windows-startmenu__program,.windows-startmenu__right button,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button,.windows-startmenu__xp-footer button):is(:hover,:focus-visible){
+  background:#cdd3e1;border-color:#38659a;color:#000;
+}
+.windows-desktop[data-theme="winW"] .windows-startmenu__xp-footer{background:#5096f8;padding-inline-end:5px}
+.windows-desktop:is([data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__right hr{
+  border:0;height:1px;background:linear-gradient(to right,transparent,#ccc 30%,#ccc 70%,transparent);
+}
