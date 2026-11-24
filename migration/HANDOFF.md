@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu WindowMain chrome
+
+Ported original active/inactive frame, titlebar and circular controls; shared lifecycle and responsive dock/top reserve. [Source trace](UBUNTU-WINDOW-SOURCE.md). Browser regression authored, not executed. Next desktop selection/context and Explorer. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu Activities / Launchpad
 
 Ported original overview grid, page controls and grouped real Guest program/settings/file search. Shared Activities and dock toggle. [Source trace](UBUNTU-LAUNCHPAD-SOURCE.md). New tests authored, pending execution. Next Ubuntu window chrome, desktop/context and Explorer. Main/frozen source/draft PR unchanged.

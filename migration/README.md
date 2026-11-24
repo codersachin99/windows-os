@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu WindowMain:** source frame, caption controls and bounded windows; tests pending. [Source trace](UBUNTU-WINDOW-SOURCE.md).
+
 > **24 November 2026 — Ubuntu Activities:** source Launchpad grid, paging, app/settings/file search; tests pending. [Source trace](UBUNTU-LAUNCHPAD-SOURCE.md).
 
 > **24 November 2026 — Ubuntu shell:** original top bar and vertical recent/running dock, maximized bounds; prior ChromeOS focused CI passed. New tests pending. [Source trace](UBUNTU-SHELL-SOURCE.md).

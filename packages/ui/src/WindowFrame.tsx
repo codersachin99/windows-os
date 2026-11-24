@@ -18,7 +18,11 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
   const drag = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const style: CSSProperties = win.maximized
     ? { inset: theme==="macos"?"var(--taskbar-height, 28px) 0 var(--source-macos-dock-reserve, 74px) 0":theme==="ubuntu"?"var(--taskbar-height, 32px) 0 0 var(--source-ubuntu-dock-width, 64px)":"0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
-    : { left: win.x, top: win.y, width: win.width, height: win.height, zIndex: win.z };
+    : theme==="ubuntu"
+      ? {left:`clamp(var(--source-ubuntu-dock-width, 64px), ${win.x}px, max(var(--source-ubuntu-dock-width, 64px), calc(100% - min(${win.width}px, calc(100% - var(--source-ubuntu-dock-width, 64px))))))`,
+          top:`clamp(var(--taskbar-height, 32px), ${win.y}px, max(var(--taskbar-height, 32px), calc(100% - min(${win.height}px, calc(100% - var(--taskbar-height, 32px))))))`,
+          width:win.width,height:win.height,zIndex:win.z}
+      : { left: win.x, top: win.y, width: win.width, height: win.height, zIndex: win.z };
 
   const pointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0 || win.maximized || (event.target as HTMLElement).closest("button")) return;
