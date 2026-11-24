@@ -1,3 +1,11 @@
+## 24 November 2026 — Ubuntu Guest logon and logon-only System menu
+
+Previous Personalize [CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) was still in the targeted browser stage when inspected; TS/units/source/artwork/Contacts/Vite passed. Oxygen and Kubuntu remain unverified at their new heads.
+
+Frozen Ubuntu 94a5 + taskbar c56e now have a source-backed Guest renderer with 88px original circular Guest art, 20px padding, 192px original logo, source-only top bar containing Restart/Shutdown System menu and actual simulator lifecycle. Added original SVG assets with matching Git hashes, audit, SSR/browser cases and keyboard dismissal, source catalog and focused workflow. [Source trace](UBUNTU-LOGON-SOURCE.md). 16/19 partial renderer families; Vista/macOS/ChromeOS still fallback; Ubuntu shell pending. Source background composite, exact power glyph, account auth/loading and screenshots remain unverified. Batch exact-head CI after prior run, keep main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — original Kubuntu Guest logon
 
 Previous [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) is still running its targeted browser stage at inspection; earlier TS/units/source/artwork/Contacts/Vite passed. Oxygen head `1d491607` is not yet covered by CI. No parallel full run requested.

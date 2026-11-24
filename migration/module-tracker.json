@@ -2215,8 +2215,15 @@
       "source": "src/modules/themes/logon-ubuntu.js",
       "sha": "4dd628e377aa0e8ec676e8b10577b47ca1fe8376",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceUbuntuLogon.tsx",
+        "packages/ui/src/sourceUbuntuLogon.css",
+        "packages/ui/src/sourceUbuntuLogon.test.tsx",
+        "tests/e2e/source-ubuntu-logon.spec.ts",
+        "migration/UBUNTU-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed-slice; exact-head CI and full visual/functional parity pending"
     },
     {
       "source": "src/modules/themes/logon-win10.js",

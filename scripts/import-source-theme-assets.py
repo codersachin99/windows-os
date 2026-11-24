@@ -53,6 +53,10 @@ FILES: dict[str, dict[str, str]] = {
         # logon-winw.js source misc.logowhistler verified from pinned Git blob.
         "logowhistler.73c9045c.webp": "c0528d4a30f97f83400939ae891bc2ae54d863bb",
     },
+    "ubuntu": {
+        "guest-ubuntu.e2037acf.svg": "496b816c138dd8c57f9007437798cf4b1516b509",
+        "logo-ubuntu.b06d4c47.svg": "a1f643846d1a2b1d95de2ea7b589ae451dd8f92e",
+    },
     "kubuntu": {
         "kubuntu.618268f7.webp": "78bd1d5c479b065a613f3425ea54129a9a0d7e70",
     },

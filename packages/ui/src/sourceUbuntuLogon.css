@@ -1,0 +1,73 @@
+/* Frozen logon-ubuntu.css + taskbar-ubuntu.css logon-only menubar.
+ * Base bg-white/10 treatment over a dark backing; precise source composite
+ * and small viewport adjustments remain subject to paired capture. */
+.windows-logon.source-ubuntu-logon{
+  display:flex;position:relative;align-items:center;justify-content:center;
+  overflow:hidden;color:#fff;background:linear-gradient(#ffffff1a,#ffffff1a),#000;
+  font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-ubuntu-logon__menubar{
+  position:absolute;top:0;left:0;right:0;height:32px;
+  background:#131313;color:#fff;z-index:3;
+}
+.source-ubuntu-logon__tray{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;
+}
+.source-ubuntu-logon__tray>button{
+  width:40px;height:28px;border:0;border-radius:4px;
+  display:grid;place-items:center;background:transparent;color:inherit;cursor:pointer;
+}
+.source-ubuntu-logon__tray>button:hover,.source-ubuntu-logon__tray>button:focus{
+  background:rgba(255,255,255,.2);
+}
+.source-ubuntu-logon__power{
+  position:absolute;right:4px;top:calc(100% + 4px);box-sizing:border-box;
+  width:240px;max-width:calc(100vw - 8px);padding:8px;
+  color:#fff;background:#1d1d1d;border:1px solid #3e3e3e;border-radius:8px;
+}
+.source-ubuntu-logon__power button{
+  display:block;width:100%;padding:6px 12px;text-align:start;
+  background:transparent;color:inherit;border:0;border-radius:4px;font:inherit;cursor:pointer;
+}
+.source-ubuntu-logon__power button:hover,.source-ubuntu-logon__power button:focus{
+  background:rgba(255,255,255,.2);
+}
+.source-ubuntu-logon__account{
+  position:relative;display:flex;align-items:center;flex-direction:column;gap:16px;
+  transform:translateY(-48px);max-width:100%;text-align:center;
+}
+.source-ubuntu-logon__avatar{
+  box-sizing:content-box;display:grid;place-items:center;width:88px;height:88px;
+  padding:20px;border:0;border-radius:50%;background:#2b2b2b;
+  cursor:pointer;transition:box-shadow .2s;
+}
+.source-ubuntu-logon__avatar img{display:block;width:88px;height:88px;object-fit:contain}
+.source-ubuntu-logon__avatar:hover,.source-ubuntu-logon__avatar:focus{
+  box-shadow:0 0 0 4px rgba(255,255,255,.2);
+}
+.source-ubuntu-logon__account h1{margin:0;font-size:30px;font-weight:700}
+.source-ubuntu-logon__form-button{
+  min-width:140px;padding:6px 10px;border:1px solid transparent;border-radius:6px;
+  color:inherit;font:inherit;cursor:pointer;
+  background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.4)),rgba(0,0,0,.4);
+  transition:.1s;
+}
+.source-ubuntu-logon__form-button:focus{
+  border-color:rgba(255,255,255,.6);box-shadow:inset 0 0 0 2px rgba(0,0,0,.2);
+}
+.source-ubuntu-logon__form-button:active{transform:scale(.95)}
+.source-ubuntu-logon__brand{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  width:192px;max-width:90vw;
+}
+.source-ubuntu-logon__brand img{display:block;width:100%;height:auto}
+.source-ubuntu-logon__unavailable{
+  position:absolute;z-index:2;box-sizing:border-box;width:min(360px,calc(100% - 32px));
+  padding:20px;background:#272727;color:#fff;border:1px solid #fff6;border-radius:6px;
+  text-align:center;
+}
+@media(max-height:420px){
+  .source-ubuntu-logon__account{gap:8px;transform:translateY(-20px)}
+  .source-ubuntu-logon__avatar{padding:12px}
+  .source-ubuntu-logon__brand{width:128px;bottom:8px}
+}
