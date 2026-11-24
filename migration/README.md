@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS Volume:** original meter, five exact icons and functional Guest media mixer. [Source trace](MACOS-VOLUME-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS Battery:** original battery popup, browser capability and functional Guest display brightness; unit/browser contracts authored. [Source trace](MACOS-BATTERY-SOURCE.md).
 
 > **24 November 2026 — macOS Action Center:** original empty summary, shared lifecycle and real Control Panel route; notification delivery pending. [Source trace](MACOS-ACTION-CENTER-SOURCE.md).

@@ -8,6 +8,8 @@ import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {sourceMacOSPopupTransition,type SourceMacOSPopupId} from "./sourceMacOSPopup";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
+import {SourceMacOSVolume} from "./SourceMacOSVolume";
+import {SOURCE_GUEST_AUDIO_INITIAL,type SourceGuestAudio} from "./sourceGuestAudio";
 import {SourceMacOSBattery} from "./SourceMacOSBattery";
 import {SourceMacOSActionCenter} from "./SourceMacOSActionCenter";
 import {SourceMacOSNetwork} from "./SourceMacOSNetwork";
@@ -64,6 +66,7 @@ interface DesktopShellProps {
 }
 
 interface ApplicationContentProps {
+  guestAudio:SourceGuestAudio;
   appId: string;
   filePath?: string;
   windowId: string;
@@ -84,7 +87,7 @@ interface ApplicationContentProps {
   onAeroAppearanceDiscard():void;
 }
 function ApplicationContent({
-  appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,
+  appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,guestAudio,
   windows, onRequestCloseWindow, theme,wallpaper,
   trayPreferences,onTrayPreferencesChange,visualEffects,onVisualEffectsChange,
   aeroAppearance,onAeroAppearancePreview,onAeroAppearanceSave,onAeroAppearanceDiscard
@@ -173,7 +176,7 @@ function ApplicationContent({
     onRegisterClose={handler => registerClose(windowId, handler)} />;
   if (appId === "ie") return <InternetExplorerApp />;
   if (appId === "chrome") return <ChromeApp onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})} />;
-  if (appId === "player") return <PlayerApp initialFilePath={filePath}
+  if (appId === "player") return <PlayerApp initialFilePath={filePath} systemVolume={guestAudio.volume} systemMuted={guestAudio.muted}
     onClose={() => dispatch({ type:"CLOSE_WINDOW", id:windowId })}
     onRegisterClose={handler => registerClose(windowId,handler)} />;
   if (appId === "snipping") return <SnippingApp
@@ -299,6 +302,7 @@ export function DesktopShell({
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
+  const [guestAudio,setGuestAudio]=useState<SourceGuestAudio>(SOURCE_GUEST_AUDIO_INITIAL);
   const setMacPopupOpen=(id:SourceMacOSPopupId,open:boolean)=>{
     setMacPopup(current=>sourceMacOSPopupTransition(current,id,open));
     if(open)setShowHiddenTray(false);
@@ -313,6 +317,7 @@ export function DesktopShell({
     if(macPopup==="network"&&!sourceTrayVisible(trayPreferences).includes("TaskbarNetwork"))
       setMacPopup(null);
     if(macPopup==="battery"&&!sourceTrayVisible(trayPreferences).includes("TaskbarBattery"))setMacPopup(null);
+    if(macPopup==="volume"&&!sourceTrayVisible(trayPreferences).includes("TaskbarVolume"))setMacPopup(null);
     if(macPopup==="datetime"&&!trayPreferences.showClockIcon)setMacPopup(null);
   },[macPopup,trayPreferences]);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
@@ -544,7 +549,7 @@ export function DesktopShell({
           dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme} guestAudio={guestAudio}
             wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange}
@@ -570,7 +575,7 @@ export function DesktopShell({
           dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme} guestAudio={guestAudio}
             wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange}
@@ -737,6 +742,8 @@ export function DesktopShell({
               <SourceMacOSNetwork key={item.id} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
               state.theme==="macos"&&item.id==="TaskbarBattery"?
               <SourceMacOSBattery key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
+              state.theme==="macos"&&item.id==="TaskbarVolume"?
+              <SourceMacOSVolume key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}

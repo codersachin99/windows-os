@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS Volume and Guest audio
+
+Original c561 vertical meter, mute toggle, exact five original volume artwork blobs, shared Guest audio state applied to actual Player media element (local × system volume and combined mute). Unit thresholds and actual media property browser contract authored. [Source trace](MACOS-VOLUME-SOURCE.md). Prior CI #45395440100 full interactions running at inspection; no redundant trigger. Next notification history/delivery, remaining macOS parity and consolidated verification. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS Battery and display
 
 Ported source a88c battery percentage/charging/power source, original battery vector, shared popup owner, balanced/saver presets and 0.6–1.2 Guest brightness filter. Real browser BatteryManager capability only, unavailable fallback, listeners cleaned up. Unit and browser contracts authored (mocked battery events, actual display filter). [Source trace](MACOS-BATTERY-SOURCE.md). Previous CI #45395440100 full interactions running at inspection; no redundant trigger. Next original Volume/audio capability and notification delivery. Main/frozen source/draft PR/releases unchanged.

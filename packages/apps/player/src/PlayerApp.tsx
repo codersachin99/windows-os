@@ -15,7 +15,7 @@ interface PlayerFile {
  path:string; name:string; kind:SourcePlayerKind; src:string; entry:FileEntry;
 }
 interface PlayerAppProps {
- initialFilePath?:string;onClose():void;onRegisterClose?(handler:()=>void):()=>void;
+ initialFilePath?:string;systemVolume?:number;systemMuted?:boolean;onClose():void;onRegisterClose?(handler:()=>void):()=>void;
 }
 const INITIAL_OPEN_TYPES=[
  {extension:"mp3",label:"Audio files (*.mp3; *.wav; *.ogg)"},
@@ -26,7 +26,7 @@ const INITIAL_OPEN_TYPES=[
 /** Source player.js 9b15: Music/Videos/Pictures, original state machine and controls.
  * Only Guest virtual files are played. Browser codecs/autoplay remain authoritative.
  */
-export function PlayerApp({initialFilePath,onClose,onRegisterClose}:PlayerAppProps){
+export function PlayerApp({initialFilePath,systemVolume=100,systemMuted=false,onClose,onRegisterClose}:PlayerAppProps){
  const [library,setLibrary]=useState<SourcePlayerLibrary>(SOURCE_PLAYER_INITIAL.library);
  const [file,setFile]=useState<PlayerFile|null>(null);
  const [openDialog,setOpenDialog]=useState(false);
@@ -85,9 +85,9 @@ export function PlayerApp({initialFilePath,onClose,onRegisterClose}:PlayerAppPro
  },[]);
  useEffect(()=>{
    const player=mediaRef.current;if(!player)return;
-   player.volume=sourcePlayerEffectiveVolume(volume);
-   player.muted=muted;
- },[volume,muted,file]);
+   player.volume=sourcePlayerEffectiveVolume(volume,systemVolume);
+   player.muted=muted||systemMuted;
+ },[volume,muted,file,systemVolume,systemMuted]);
  const close=useCallback(()=>{
    if(openDialog)return;
    ++epoch.current;stopCurrent();closeRef.current();
@@ -213,7 +213,7 @@ export function PlayerApp({initialFilePath,onClose,onRegisterClose}:PlayerAppPro
        <button type="button" aria-label="Next" disabled={!file}
          onClick={()=>{if(sourcePlayerStep(0,list.length,1)>=0)select();}}>▶▶</button>
        <button type="button" aria-label={muted?"Unmute":"Mute"}
-         onClick={()=>setMuted(v=>!v)}>{muted||volume===0?"◖":"◖))"}</button>
+         onClick={()=>setMuted(v=>!v)}>{muted||systemMuted||volume===0||systemVolume===0?"◖":"◖))"}</button>
        {showAll&&<input type="range" aria-label="Volume" min={0} max={100} step={1}
          value={volume} onChange={event=>setVolume(Number(event.target.value))}/>}
      </div>
