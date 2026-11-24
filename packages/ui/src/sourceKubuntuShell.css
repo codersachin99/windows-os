@@ -50,3 +50,49 @@
 .windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:focus-visible)::before{opacity:.7}
 .windows-desktop[data-theme="kubuntu"] .desktop__icon-name:not(:has(input)){color:#fcfcfc;text-shadow:1px 1px 2px #000}
 .windows-desktop[data-theme="kubuntu"]:dir(rtl) .desktop__icon-name:not(:has(input)){text-shadow:-1px 1px 2px #000}
+
+/* Source Kubuntu WindowMain and ControlItem, module 582b.
+ * Use the common WindowFrame and exact source fallback SVG glyphs. */
+.windows-desktop[data-theme="kubuntu"] .windows-window{
+  color:#fff;background:#31363b;border:1px solid #4f585f;border-radius:4px;
+  box-shadow:0 0 15px 2px rgba(0,0,0,.5333333333);backdrop-filter:none;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window.is-active{
+  box-shadow:0 0 20px 3px rgba(0,0,0,.6666666667);
+}
+.windows-desktop[data-theme="kubuntu"]:not([data-effect-show-window-shadows]) .windows-window{
+  box-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__titlebar{
+  background:none;color:#fff;min-height:24px;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__title{color:#fff;text-shadow:none}
+.windows-desktop[data-theme="kubuntu"] .windows-window__buttons{
+  align-self:center;flex:none;gap:0;margin:0;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__buttons button{
+  display:grid;place-items:center;width:24px;min-width:24px;height:24px;
+  flex:none;padding:0;margin-inline-start:5px;border:1px solid transparent;
+  border-radius:50%;color:#fff;background:none;box-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__buttons button:not(:disabled):hover{
+  color:#31363b;background:#fcfcfc;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__buttons button.windows-window__close{
+  color:#31363b;background:#fcfcfc;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__buttons button.windows-window__close:hover{
+  background:#da4453;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window.is-active .windows-window__buttons button.windows-window__close{
+  background:#da4453;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window.is-active .windows-window__buttons button.windows-window__close:hover{
+  background:#ff98a2;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window__body{
+  background:#2a2e32;color:#fff;border:0;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-window.is-maximized{
+  border-radius:0;
+}

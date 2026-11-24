@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu verified / Kubuntu WindowMain:** Ubuntu 757 unit tests and 53 browser tests passed, 1 browser skipped; Kubuntu frame/control port pending verification. [Source trace](KUBUNTU-WINDOW-SOURCE.md).
+
 > **24 November 2026 — Kubuntu base shell:** original dark taskbar and desktop selection, tests pending; Ubuntu CI remains in progress. [Source trace](KUBUNTU-SHELL-SOURCE.md).
 
 > **24 November 2026 — Ubuntu CI regression repair:** 49 passed / 4 failed / 1 skipped; corrected clock containing block and view-specific double-tap state. Focused rerun pending.

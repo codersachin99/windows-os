@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu verified / Kubuntu WindowMain
+
+Ubuntu rerun [45409926204](https://github.com/codersachin99/windows-os/actions/runs/45409926204) at 711015d passed all gates: 159 unit files, 757 tests; focused browser 53 passed / 1 skipped / 0 failed. Full browser and visual capture intentionally skipped. Kubuntu WindowMain source module 582b: #31363b frame, #4f585f border, 4px radius, active/inactive shadows, #2a2e32 body, 24px circular controls with 5px logical spacing, red active and white inactive close. Common WindowFrame lifecycle and fallback glyphs retained. Maximized square frame is shared shell adaptation. Exact static-dialog sizing, app body paint and inactive-state screenshot comparison remain pending; new browser contract not run. Next Kubuntu Start menu.
+
+---
+
 ## 24 November 2026 — Kubuntu base shell initial slice
 
 Kubuntu starts from original theme-kubuntu-scss.js module 582b and uses the source base taskbar, not the Ubuntu dock. Ported isolated taskbar/desktop paint, 47px compact tasks, active/inactive group states, optional glass blur and icon selection alpha layer. #3daee9 is the provisional Breeze accent pending exact registry verification. Shared base geometry and commands retained. Kubuntu shell browser regression authored, not run; no new CI while Ubuntu rerun 45409926204 is active. Next Kubuntu window chrome and launcher after checking Ubuntu results.
