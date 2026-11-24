@@ -1,3 +1,9 @@
+## 24 November 2026 — Oxygen tray and focused verification
+
+Oxygen tray/DateTime source slice: shared base Guest Action Center, notification history, browser connectivity/battery, Guest brightness/audio, numeric date and marked 128px analog clock. Reuse verified Kubuntu base tray geometry by broadening selectors, retain Kubuntu-only glass and override Oxygen with original #40464d/#2f3438 gradient, #474c55 border, 4px corners, logical shadow, source calendar picker and hover borders. Static icon wrappers retain popup positioning; source hover paint on trigger. Browser date settings remain disabled; native connectivity/brightness/audio unavailable. Added Oxygen tray test and focused [run-ci] [oxygen-check] suite (all Oxygen/Kubuntu specs, shared cascade, shell and Personalize); build/unit/source/artwork gates retained. Results pending. Exact Start sprite, full icon map, accent and visual parity still unresolved. Next inspect actual CI results before further theme slices.
+
+---
+
 ## 24 November 2026 — Oxygen context and Explorer
 
 Oxygen WinUI context/Explorer source slice: original #40464d/#2f3438 gradient, #474c55 borders, 4px menu corners, inset accent hover, double gradient separators, directional submenu highlight; desktop/taskbar/Explorer/Notepad and body-portaled Start contexts. Shared measured cascade engine retained; added Oxygen to existing desktop cascade edge test. Explorer address/search, navigation and list gradient selection pseudo-layer, details headers and status/menubar ported; selection still owned by Guest filesystem. Added context and Explorer tests, including file upload and fast view changes; tests not run yet. Accent fallback remains provisional; exact original popup icon/checkmark and native widget details partial. Next interactive tray/DateTime and focused verification.

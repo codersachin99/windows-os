@@ -1,3 +1,5 @@
+> **24 November 2026 — Oxygen tray/DateTime:** shared interactive tray and original gradient calendar, focused CI pending. [Source trace](OXYGEN-TRAY-SOURCE.md).
+
 > **24 November 2026 — Oxygen context/Explorer:** original gradients and WinUI selection, tests pending. [Source trace](OXYGEN-CONTEXT-EXPLORER-SOURCE.md).
 
 > **24 November 2026 — Oxygen Start:** shared original Kubuntu-family layout with Oxygen gradient and artwork, browser tests pending. [Source trace](OXYGEN-START-SOURCE.md).

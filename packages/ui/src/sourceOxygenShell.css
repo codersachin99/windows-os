@@ -21,7 +21,7 @@
   background-size:100% 2px,100% 100%;background-position:50% 100%,center;background-repeat:no-repeat;
 }
 .windows-desktop[data-theme="oxygen"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):hover{filter:brightness(1.1)}
-.windows-desktop[data-theme="oxygen"] .windows-taskbar__tray-icon:hover{
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__tray-icon:not(:has(button)):hover{
   background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 0%,#fff5 15%,transparent 80%);
   background-size:100% 1px,100% 100%;background-position:50% 0,center;background-repeat:no-repeat;
 }
@@ -121,3 +121,26 @@
 .windows-desktop[data-theme="oxygen"] .notepad-status{
   color:#fff;background:#2a2e32;border-top:1px solid var(--border-color);box-shadow:none;
 }
+
+/* Original Oxygen taskbar-popup and ColorCalendar skin over shared base tray.
+ * Keep the verified static icon wrappers so hover never changes the popup
+ * containing block. Apply visual states only to the interactive trigger. */
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;
+  border:1px solid #474c55;border-radius:4px;box-shadow:1px 1px 5px #000;
+}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  box-shadow:-1px 1px 5px #000;
+}
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){
+  background-color:transparent;
+  background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 0%,#fff5 15%,transparent 80%);
+  background-size:100% 1px,100% 100%;background-position:50% 0,center;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-weekdays{background:none;border:0}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-days button{border:1px solid transparent}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-days button:not(:disabled):hover{border-color:var(--border-color)}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar button.is-today{background:var(--theme-color);border-color:var(--theme-color)}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-picker{background:#2a2e32;border:1px solid var(--border-color);padding:3px}
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-calendar-picker,.source-macos-calendar-year-arrows) button{border:1px solid transparent}
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-calendar-picker,.source-macos-calendar-year-arrows) button:hover{border-color:var(--border-color)}
