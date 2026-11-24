@@ -1,3 +1,15 @@
+## 24 November 2026 — Explorer resize CI green; Control Panel Background appearance rollback
+
+[Coordinate repair CI #45355394198](https://github.com/codersachin99/windows-os/actions/runs/45355394198) at `929c943e` is now **SUCCESS**: TypeScript, units, pinned inventory, original artwork, Contacts audit, Vite, focused and full desktop/mobile Playwright all passed. Visual capture was skipped. This certifies the earlier Explorer root coordinate correction, not the later Personalize changes.
+
+The previous Personalize sidebar rollback was already committed at the resumed head `2f9b526a`. The separate Control Panel search task "Change desktop background" opens another Personalize window through `DesktopShell.ApplicationContent.onOpenProgram`, bypassing the sidebar rollback. The global Aero preview could therefore remain active in the Background picker. In `7ce054a5` this specific launch restores committed appearance before dispatching OPEN_APP; the original independent window behavior remains. Frozen personalize.js ChangeAppearance.back() (lines 730–733) restores stored color/transparency; this is a React cross-window route consistency correction, not a claim that the source Control Panel implements the identical route.
+
+`ef94c191` adds actual desktop/mobile browser coverage in source-cpanel-program-launch.spec.ts: save red, preview unsaved opaque turquoise, switch to the existing Control Panel by taskbar, launch Background, assert saved translucent red, then return to appearance and check committed controls. `79756aa9` adds the entire source-personalize-appearance.spec.ts to the existing opt-in targeted suite (previously only in full suite). Both previous sidebar and new Control Panel regression must pass. Fresh exact-head [run-ci] requested after documentation; not yet verified. No local checkout/network was available in this session.
+
+Next: inspect exact-head CI and repair any failures; continue pinned Desktop/Start/Computer/Bin and remaining theme logon renderers. Source `26b9f0ce7a1665dee89a7c81824bec09e2c75776`, main `9bb90a41a8ec76d3b983b1c02c2774029f659539`, draft PR #1 and releases unchanged. Paired original screenshot comparison still requires source read access. No cleanup workflow recreated.
+
+---
+
 ## 24 November 2026 — one-time cleanup removed; Personalize view-exit rollback
 
 User requested deletion of the temporary cleanup workflow after the successful one-time cleanup. Verified actual counts in [run #45355161254](https://github.com/codersachin99/windows-os/actions/runs/45355161254): **105 artifacts, 1,068,010,786 bytes reclaimed; zero failures, zero caches, zero remaining artifacts/caches at completion**. Deleted workflow in commit `0d3ff09e`; shorter 2/3-day retention remains.
