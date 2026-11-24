@@ -392,10 +392,18 @@ export function DesktopShell({
     return () => { if (closeHandlers.current.get(id) === handler) closeHandlers.current.delete(id); };
   }, []);
   const requestClose = useCallback((id: string) => {
+    // A source ChangeAppearance color chip previews immediately, but the
+    // selection is committed only by Save. React passive effect cleanup
+    // happens *after* the window DOM disappears: that leaves a visible
+    // unsaved tint when the titlebar Close/Alt+F4 completes. Discard in the
+    // same close event before removing this specific Personalize window.
+    // Keep the PersonalizeApp unmount cleanup for other removal routes.
+    if (state.windows.some(win=>win.id===id&&win.appId==="personalize"))
+      onAeroAppearanceDiscard();
     const handler = closeHandlers.current.get(id);
     if (handler) handler();
     else dispatch({ type: "CLOSE_WINDOW", id });
-  }, [dispatch]);
+  }, [dispatch,state.windows,onAeroAppearanceDiscard]);
   useEffect(() => {
     const keydown = (event: KeyboardEvent) => {
       if (state.phase !== "desktop" || event.repeat) return;
