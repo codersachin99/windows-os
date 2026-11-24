@@ -5,6 +5,7 @@ import "./sourceThemeLogon.css";
 import {SourceClassicLogon} from "./SourceClassicLogon";
 import {SourceWin8Logon} from "./SourceWin8Logon";
 import {SourceOnebitLogon} from "./SourceOnebitLogon";
+import {SourceWinLLogon} from "./SourceWinLLogon";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -34,6 +35,12 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
   // power actions with its original dark/sand palette, without inventing
   // the source account/captcha backend or claiming shell parity.
   if(sourceScreens.logon==="onebit")return <SourceOnebitLogon
+    theme={theme} shellStatus={status} onGuest={onGuest}
+    onShutdown={onShutdown} onRestart={onRestart}/>;
+
+  // Both source theme IDs winLS and winLP map to one shared WinL logon.
+  // Preserve the original Guest and power actions; the shell is pending.
+  if(sourceScreens.logon==="winLS")return <SourceWinLLogon
     theme={theme} shellStatus={status} onGuest={onGuest}
     onShutdown={onShutdown} onRestart={onRestart}/>;
 
