@@ -1,3 +1,5 @@
+> **24 November 2026 — original macOS Guest logon:** Two original assets with Git SHA equality, cover wallpaper, 150px avatar, source centered action order and real simulator callbacks. SSR/browser regressions. 18/19 partial logon families; macOS shell pending. [Source trace](MACOS-LOGON-SOURCE.md). Previous CI still running; batch latest theme slices. No full parity claim.
+
 > **24 November 2026 — original ChromeOS Guest logon:** Two original assets with Git SHA equality, double 24px blur, 100px avatar-only Guest and source footer actions with live clock. SSR/browser regressions. 17/19 partial logon families; ChromeOS shell pending. [Source trace](CHROMEOS-LOGON-SOURCE.md). Previous CI still running; batch latest theme slices. No full parity claim.
 
 > **24 November 2026 — original Ubuntu Guest logon:** Original guest and logo SVGs with Git SHA equality, 88px avatar, source logon-only top System menu and Guest/power lifecycle, SSR and browser regression coverage. 16/19 partial logon families; Ubuntu shell pending. [Source trace](UBUNTU-LOGON-SOURCE.md). Prior Personalize CI still running; batch latest three theme slices. No full parity claim.

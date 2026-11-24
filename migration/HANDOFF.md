@@ -1,3 +1,11 @@
+## 24 November 2026 — original macOS Guest logon
+
+Previous [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) still in targeted browser stage at inspection; TypeScript/units/source/artwork/Contacts/Vite passed. Oxygen/Kubuntu/Ubuntu/ChromeOS unverified.
+
+Original macOS ff91 now has partial source-specific renderer: cover wallpaper, black/50 blur(10px), original 150px round avatar-only Guest, source centered Shutdown/Switch User/Restart footer with 36px circles and rotated restart glyph. Two original assets copied by exact Git SHA; asset audit, SSR and desktop/mobile E2E including actual power callbacks, catalog and focused workflow added. [Source trace](MACOS-LOGON-SOURCE.md). 18/19 partial login families; Vista only fallback. macOS shell pending. Exact glyphs, authentication/loading, paired screenshot parity pending. Batch CI once previous finishes; source lock/main/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — original ChromeOS Guest logon
 
 Previous [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) still in targeted browser stage when inspected; TS/units/source/artwork/Contacts/Vite passed. Oxygen/Kubuntu/Ubuntu remain unverified.

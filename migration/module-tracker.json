@@ -2185,8 +2185,15 @@
       "source": "src/modules/themes/logon-macos.js",
       "sha": "8ed6bce001e3c01632d39a6c0e52787e0c2f023b",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceMacOSLogon.tsx",
+        "packages/ui/src/sourceMacOSLogon.css",
+        "packages/ui/src/sourceMacOSLogon.test.tsx",
+        "tests/e2e/source-macos-logon.spec.ts",
+        "migration/MACOS-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed-slice; exact-head CI and full visual/functional parity pending"
     },
     {
       "source": "src/modules/themes/logon-onebit.js",
