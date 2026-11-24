@@ -31,7 +31,7 @@ entry is intentionally omitted.
 | `chromeos` | `chromeos` | 1 | Pending theme-specific implementation |
 | `ubuntu` | `ubuntu` | 1 | Pending theme-specific implementation |
 | `kubuntu` | `kubuntu` | 1 | Pending theme-specific implementation |
-| `winLS` | `winLS`, `winLP` | 2 | Original shared winL boot GIF/view; logon/shell/pixel parity pending |
+| `winLS` | `winLS`, `winLP` | 2 | Original shared WinL boot and Guest logon with exact login-winL wallpaper, 512×320 frame and Guest/power actions; form/shell/pixel parity pending |
 | `aeroNoir` | `aeroNoir` | 1 | Pending theme-specific implementation |
 | `oxygen` | `oxygen` | 1 | Pending theme-specific implementation |
 | `winW` | `winW` | 1 | Original boot WinW image/view; logon/shell/pixel parity pending |
@@ -60,8 +60,8 @@ even though `win7` itself is not a key in the final source
   renderers. The existing **Win7** login remains intact. Win31, Win95, Win98 and Win2k use a shared classic Guest logon;
   Win8 and Win8.1 share a source-purple screen; Onebit now has its distinct dark/sand Guest/power screen; Win10 reuses the
   source-modern account structure with its own background and CSS.
-  **10 of 19** logon families now have at least an incremental renderer;
-  the other **9** screen families expose
+  **11 of 19** logon families now have at least an incremental renderer;
+  the other **8** screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
   renderer now supports **11 of the 19 configured boot families**
