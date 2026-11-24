@@ -6,6 +6,7 @@ import {SourceClassicLogon} from "./SourceClassicLogon";
 import {SourceWin8Logon} from "./SourceWin8Logon";
 import {SourceOnebitLogon} from "./SourceOnebitLogon";
 import {SourceWinLLogon} from "./SourceWinLLogon";
+import {SourceWinWLogon} from "./SourceWinWLogon";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -41,6 +42,11 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
   // Both source theme IDs winLS and winLP map to one shared WinL logon.
   // Preserve the original Guest and power actions; the shell is pending.
   if(sourceScreens.logon==="winLS")return <SourceWinLLogon
+    theme={theme} shellStatus={status} onGuest={onGuest}
+    onShutdown={onShutdown} onRestart={onRestart}/>;
+
+  // Frozen Whistler logon-winw.js is a distinct WinW family, not Win7.
+  if(sourceScreens.logon==="winW")return <SourceWinWLogon
     theme={theme} shellStatus={status} onGuest={onGuest}
     onShutdown={onShutdown} onRestart={onRestart}/>;
 
