@@ -1,3 +1,11 @@
+## 24 November 2026 — Kubuntu core desktop/Explorer artwork
+
+Combined [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`: TS/units/inventory/exact art/Contacts/Vite passed; focused browser stage running at inspection. No redundant CI.
+
+Pinned Kubuntu registry now supplies 27 core mappings via 26 paths (19 new hash-matched, seven reused). Exact Computer/folder alias and Ubuntu/shared Videos, CD, connected/disconnected disks, richtext, ZIP and shortcut aliases; distinct empty/full Bin, source Start, Desktop, special folders and selected app/file types. Unit and existing focused browser lifecycle regression added. [Source trace](KUBUNTU-CORE-ICONS-SOURCE.md). Ubuntu and Kubuntu slices await exact-head verification. KDE shell remains pending. Next Aero Noir/Oxygen core icons after checking CI. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu core desktop/Explorer artwork
 
 Combined [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`: TS, units, inventory, exact artwork, Contacts audit and Vite passed; focused browser stage still running at inspection. No redundant CI.

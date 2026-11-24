@@ -2,6 +2,10 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  kubuntu:{
+    empty:"/assets/images/bin-kubuntu.9e105407.webp",
+    full:"/assets/images/bin-full-kubuntu.52b4bff6.webp"
+  },
   ubuntu:{
     empty:"/assets/images/bin-ubuntu.509f78ac.webp",
     full:"/assets/images/bin-full-ubuntu.2faf5a4b.webp"
@@ -46,7 +50,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -260,4 +264,51 @@ test("original Ubuntu Computer and Desktop files use theme-specific folder/gener
   const opened=page.locator('[data-test-window="computer"]').last();
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/Ubuntu Source Folder");
+});
+
+
+test("original Kubuntu Computer and Desktop files use theme-specific folder/generic-file artwork",async({page})=>{
+  await sourceThemeDesktop(page,"kubuntu");
+  const computerIcon=page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon');
+  await expect(computerIcon).toHaveAttribute("src",
+    "/assets/images/computer-kubuntu.21e2af5f.svg");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+  await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src","/assets/images/start-button-kubuntu.70b91e6e.svg");
+  await expect(explorer.locator(".explorer-navigation__home").first().locator("img"))
+    .toHaveAttribute("src","/assets/images/computer-kubuntu.21e2af5f.svg");
+  for(const [label,art] of [["Documents","/assets/images/folder-docs-kubuntu.bc09a419.svg"],["Downloads","/assets/images/folder-download-kubuntu.3ddfc03d.svg"],["Music","/assets/images/folder-music-kubuntu.bdd260b5.svg"],["Pictures","/assets/images/folder-pics-kubuntu.372cdadd.svg"],["Videos","/assets/images/folder-videos-ubuntu.c9f591cb.svg"]]){
+    const shortcut=explorer.locator(".explorer-navigation__home").filter({hasText:label});
+    await expect(shortcut.locator("img")).toHaveAttribute("src",art);
+  }
+  const desktopShortcut=explorer.getByRole("button",{name:"Desktop",exact:true});
+  await expect(desktopShortcut.locator("img")).toHaveAttribute("src","/assets/images/desktop-kubuntu.caba3657.webp");
+  await desktopShortcut.click();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP);
+  await explorer.getByRole("button",{name:"New folder"}).click();
+  const dialog=explorer.getByRole("dialog",{name:"New folder"});
+  await dialog.getByRole("textbox",{name:"New folder name"})
+    .fill("Kubuntu Source Folder");
+  await dialog.getByRole("button",{name:"OK"}).click();
+  const folder=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Kubuntu Source Folder"]');
+  await expect(folder).toBeVisible();
+  await expect(folder.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/computer-kubuntu.21e2af5f.svg");
+
+  await explorer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Source Unknown.abc",
+      mimeType:"application/octet-stream",
+      buffer:Buffer.from([0x31,0x32,0x33])});
+  const unknown=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Source Unknown.abc"]');
+  await expect(unknown).toBeVisible();
+  await expect(unknown.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/file-kubuntu.7dae3497.webp");
+
+  await folder.dblclick();
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
+  const opened=page.locator('[data-test-window="computer"]').last();
+  await expect(opened.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP+"/Kubuntu Source Folder");
 });

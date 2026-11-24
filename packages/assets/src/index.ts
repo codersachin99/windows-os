@@ -545,7 +545,42 @@ function sourceUbuntuIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceUbuntuIconArtwork,key)
     ?sourceUbuntuIconArtwork[key as keyof typeof sourceUbuntuIconArtwork]:null;
 }
+/** Pinned Kubuntu core registry. Computer/folder and Ubuntu aliases are intentional. */
+export const sourceKubuntuIconArtwork=Object.freeze({
+  "computer":"/assets/images/computer-kubuntu.21e2af5f.svg",
+  "bin":"/assets/images/bin-kubuntu.9e105407.webp",
+  "bin-full":"/assets/images/bin-full-kubuntu.52b4bff6.webp",
+  "folder":"/assets/images/computer-kubuntu.21e2af5f.svg",
+  "file":"/assets/images/file-kubuntu.7dae3497.webp",
+  "start":"/assets/images/start-button-kubuntu.70b91e6e.svg",
+  "folder-docs":"/assets/images/folder-docs-kubuntu.bc09a419.svg",
+  "folder-downloads":"/assets/images/folder-download-kubuntu.3ddfc03d.svg",
+  "folder-music":"/assets/images/folder-music-kubuntu.bdd260b5.svg",
+  "folder-pics":"/assets/images/folder-pics-kubuntu.372cdadd.svg",
+  "folder-videos":"/assets/images/folder-videos-ubuntu.c9f591cb.svg",
+  "disk-os":"/assets/images/disk-os-kubuntu.367266ba.webp",
+  "disk-data":"/assets/images/disk-data-kubuntu.dae58e0b.webp",
+  "disk-cd":"/assets/images/disk-cd-ubuntu.8116cfe5.svg",
+  "disk-connected":"/assets/images/disk-connected-ubuntu.bcb836ee.svg",
+  "disk-disconnected":"/assets/images/disk-disconnected-ubuntu.6f41bf79.svg",
+  "calc":"/assets/images/calc-kubuntu.1cae644c.webp",
+  "cpanel":"/assets/images/cpanel-kubuntu.34a12acd.webp",
+  "notepad":"/assets/images/notepad-kubuntu.3cbb25e5.webp",
+  "cmd":"/assets/images/cmd-kubuntu.38e94c40.webp",
+  "text":"/assets/images/text-kubuntu.3a6c3fc7.webp",
+  "richtext":"/assets/images/richtext-ubuntu.31b42436.svg",
+  "executable":"/assets/images/executable-kubuntu.07e7f7b2.webp",
+  "shortcut":"/assets/images/shortcut-win10.c8f56fdb.webp",
+  "media":"/assets/images/media-kubuntu.d9fc4ff6.webp",
+  "zip":"/assets/images/zip-ubuntu.cef6da1f.svg",
+  "desktop":"/assets/images/desktop-kubuntu.caba3657.webp"
+});
+function sourceKubuntuIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceKubuntuIconArtwork,key)
+    ?sourceKubuntuIconArtwork[key as keyof typeof sourceKubuntuIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="kubuntu")return sourceKubuntuIcon(iconKey);
   if(theme==="ubuntu")return sourceUbuntuIcon(iconKey);
   if(theme==="chromeos")return sourceChromeOSIcon(iconKey);
   if(theme==="macos")return sourceMacOSIcon(iconKey);
@@ -596,6 +631,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="kubuntu"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceKubuntuIcon(kind==="binFull"?"bin-full":kind);
+  }
   if(theme==="ubuntu"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceUbuntuIcon(kind==="binFull"?"bin-full":kind);

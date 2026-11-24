@@ -1,3 +1,5 @@
+> **24 November 2026 — Kubuntu core artwork:** 27 source keys, 26 exact paths (19 new, seven reused), intentional source aliases and lifecycle regression coverage. [Source trace](KUBUNTU-CORE-ICONS-SOURCE.md). Existing CI running; exact-head tests pending.
+
 > **24 November 2026 — Ubuntu core artwork:** 27 source registry keys, 26 new hash-verified assets and one reused shortcut alias. Unit and browser lifecycle regressions. [Source trace](UBUNTU-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
 
 > **24 November 2026 — browser verification repair:** CI #45364747459 passed 724 unit tests, failed six targeted browser cases (947 passed, 3 skipped). Restore six full-viewport logon roots, update stale wallpaper count, add viewport and hit-target geometry regressions. New opt-in CI requested with macOS/ChromeOS icons; exact-head pending.
