@@ -2257,8 +2257,15 @@
       "source": "src/modules/themes/logon-winw.js",
       "sha": "8c3c6f076e29ccc7524a6a2110ae2e8c19b146fc",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceWinWLogon.tsx",
+        "packages/ui/src/sourceWinWLogon.css",
+        "packages/ui/src/sourceWinWLogon.test.tsx",
+        "tests/e2e/source-winw-logon.spec.ts",
+        "migration/WINW-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed Guest/Power/Whistler mark, full original account form, spinner and screen/shell parity pending"
     },
     {
       "source": "src/modules/themes/logon-winxp.js",
