@@ -1,3 +1,5 @@
+> **24 November 2026 — Longhorn/Whistler window chrome:** original frames, caption states and embedded Whistler PNG plus lifecycle regression coverage. [Source trace](LONGHORN-WHISTLER-WINDOW-SOURCE.md). Exact-head CI pending.
+
 > **24 November 2026 — Longhorn/Whistler Start:** shared XP structure and distinct source skins, Restart control and regression coverage. [Source trace](LONGHORN-WHISTLER-START-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Longhorn/Whistler shell styling:** original desktop selection and taskbar state palettes now implemented in a shared stylesheet; regression contracts added. [Source trace](LONGHORN-WHISTLER-SHELL-SOURCE.md). Visual and exact-head CI pending.

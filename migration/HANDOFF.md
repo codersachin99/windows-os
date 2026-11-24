@@ -1,3 +1,8 @@
+## 24 November 2026 — Longhorn/Whistler window frame chrome
+
+Ported original Plex/Slate/Whistler window frame palettes, active/inactive title treatment, 20px caption controls, maximized state and RTL styling. Original Whistler embedded PNG copied directly from frozen CSS. Added real Guest window lifecycle regression contracts. [Source trace](LONGHORN-WHISTLER-WINDOW-SOURCE.md). App bodies, exact glyph variants, context and Explorer chrome pending. Exact-head CI pending; no redundant trigger. Main/frozen reference/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Longhorn/Whistler XP-style Start skin
 
 Source XP Start structure now selected for Slate/Plex/Whistler; distinct original pane palettes, corners, shadows, Whistler no-avatar header, three power controls and RTL styles. Three desktop/mobile regression contracts cover menu rendering, All Programs navigation and Computer launch. [Source trace](LONGHORN-WHISTLER-START-SOURCE.md). Original flyout and full shortcut/geometry parity pending. Exact-head CI pending; no extra CI trigger. Next theme-specific window chrome and context menu. Main/frozen source/draft PR/releases unchanged.

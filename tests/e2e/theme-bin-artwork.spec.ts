@@ -549,3 +549,41 @@ for(const [theme,left,right,radius] of [
     await expect(page.locator('[data-test-window="computer"]').first()).toBeVisible();
   });
 }
+
+
+for(const [theme,radius,activeColor,buttonColor] of [
+  ["winLP","10px","rgb(80, 135, 217)","rgb(87, 134, 195)"],
+  ["winLS","8px","rgb(79, 78, 80)","rgb(255, 255, 255)"],
+  ["winW","0px","rgb(53, 115, 214)","rgb(255, 255, 255)"]
+] as const){
+  test(theme+" original frame and control styles follow Guest window lifecycle",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]').first();
+    await expect(win).toHaveAttribute("data-source-window-active","true");
+    await expect(win).toHaveCSS("border-top-left-radius",radius);
+    await expect(win).toHaveCSS("background-color",activeColor);
+    await expect(win).toHaveCSS("background-image",theme==="winW"?/data:image\/png;base64/:/linear-gradient/);
+    const caption=win.locator(".windows-window__titlebar");
+    await expect(caption).toHaveCSS("opacity","1");
+    await expect(win.locator(".windows-window__title")).toHaveCSS("color","rgb(255, 255, 255)");
+    const max=win.locator('[data-source-window-control="maximize"]');
+    await expect(max).toHaveCSS("width","20px");
+    await expect(max).toHaveCSS("height","20px");
+    await expect(max).toHaveCSS("color",buttonColor);
+    await max.click();
+    await expect(win).toHaveClass(/is-maximized/);
+    await expect(win).toHaveCSS("border-top-left-radius","0px");
+    await expect(win).toHaveCSS("padding-top","0px");
+    await win.locator('[data-source-window-control="restore"]').click();
+    await expect(win).not.toHaveClass(/is-maximized/);
+    await expect(win).toHaveCSS("border-top-left-radius",radius);
+    await win.locator('[data-source-window-control="minimize"]').click();
+    await expect(win).toHaveCount(0);
+    const button=page.locator('[data-test-taskbar-pin="computer"][data-test-taskbar-pin-running="true"],[data-test-taskbar-running-group="computer"]');
+    await button.first().click();
+    await expect(win).toBeVisible();
+    await win.locator('[data-source-window-control="close"]').click();
+    await expect(win).toHaveCount(0);
+  });
+}

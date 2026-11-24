@@ -157,3 +157,81 @@
 .windows-desktop:is([data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__right hr{
   border:0;height:1px;background:linear-gradient(to right,transparent,#ccc 30%,#ccc 70%,transparent);
 }
+
+/* Frozen original WindowMain/ControlItem chrome, scoped to the three
+ * historical themes. Keep shared React drag/focus/lifecycle and glyphs.
+ * Whistler's embedded PNG below is copied verbatim from the source CSS. */
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window{
+  padding:5px 4px 4px;backdrop-filter:none;box-shadow:none;
+}
+.windows-desktop[data-theme="winLP"] .windows-window{
+  border:0;border-radius:10px 10px 0 0;background:var(--item-color);
+}
+.windows-desktop[data-theme="winLP"] .windows-window.is-active{
+  background-image:linear-gradient(#5a93db 2px,#5089d7 4px 15px,#73b1f6 32px,#6790cc 34px);
+  box-shadow:inset -1px 0 2px #73b1f6;
+}
+.windows-desktop[data-theme="winLP"]:dir(rtl) .windows-window.is-active{box-shadow:inset 1px 0 2px #73b1f6}
+.windows-desktop[data-theme="winLS"] .windows-window{
+  border:1px solid #000;border-radius:8px 8px 0 0;
+  background:linear-gradient(to right,transparent,#fff5,transparent) #4f4e50;
+  box-shadow:inset 0 1px 0 #fff8;
+}
+.windows-desktop[data-theme="winLS"] .windows-window.is-active{
+  background:linear-gradient(to right,transparent,#fff5,transparent) var(--item-color);
+  box-shadow:inset 0 0 0 1px #fff5;
+}
+.windows-desktop[data-theme="winW"] .windows-window{
+  border:1px solid #6c9be6;border-radius:0;background:#2c60b2;box-shadow:none;
+}
+.windows-desktop[data-theme="winW"] .windows-window.is-active{
+  --source-whistler-title-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAAsCAMAAAAHH4uhAAAAkFBMVEVSl/k1c9Z4qf8zcNBOkvA+fd9MiOA2e9g/f+Ixa8gwacM/fdk4d9pPk/U6edw1ctQ9edNKieVIht8vZ780b8t0o/YuZbxJi+lBguRFheBAfNUtYbNKju9HiuxNjeg3dddDfM9CesxAeMk3b8MvZLYrXq5NkfNEhehIg9lFgdc0cdM8dcw3ccs7ccE5b741ar2clewbAAABR0lEQVRIx9WU21KDMBRF1QBCUgoBDLTBFhB7v/z/35kMOUYBRS4Psh7PsHIymc1+0Ljubpemr4L9Pkls2zSXy8Viu31sRWv9xSeFYcAhSaJFS4GQ500tUgoiIbZdFx0HoanFIADR902zLmI8Z9F1NxtKLYvSOF6tCFmvvz6O5zkOFjjOdCIQx3Bp04SZ/AQpnhUyCtOIlIJICMyiSAcNRHnpacQgANH3YSY/qosYz09sCYDA9y+XSKAfByGIwlhRqoZAV0cV8aqoYIbQ6YQqIABuQyR/EQFhu23V0XimZq8OFGEj/Mh1EeMfN3aJ/2pjmvaqDtjYWwQM4/fqgJkMwFzFrrL6Hr7xYnd16CiME41PjscXxfkMszCMIqSAGWPyuOFiEBwOWZbnRZHnWVYU1+vt9ia438uS87JkLFQwxvm7gHM5Gyx+AKQVPhVt71htAAAAAElFTkSuQmCC");
+  background-image:var(--source-whistler-title-image),linear-gradient(to right,#5297f9 60%,transparent 61%),linear-gradient(#5297f9,transparent);
+  background-color:#3573d6;background-size:43px 31px,100% 40px,98% 30px;
+  background-repeat:no-repeat;background-position:60% 0,0 0,0 40px;
+}
+.windows-desktop[data-theme="winW"]:dir(rtl) .windows-window.is-active{
+  background-image:var(--source-whistler-title-image),linear-gradient(to left,#5297f9 60%,transparent 61%),linear-gradient(#5297f9,transparent);
+  background-position:40% 0,100% 0,100% 40px;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window__titlebar{
+  opacity:.8;margin-bottom:5px;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window.is-active .windows-window__titlebar{opacity:1}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window__title{
+  color:#fff;font-weight:bold;text-shadow:0 0 5px #000;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window__buttons{
+  margin:0;margin-inline-start:8px;align-self:flex-start;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-window__buttons button{
+  width:20px;height:20px;min-width:20px;margin:1px;
+  border:1px solid #5786c3;border-radius:3px;
+  color:#5786c3;box-shadow:0 2px 0 #92bdf7,inset 0 1px 0 #8fb8ea;
+  background:linear-gradient(#86afe1,#6699da);
+}
+.windows-desktop[data-theme="winLP"] .windows-window__control-glyph{filter:drop-shadow(1px 1px 0 #8eb7ed)}
+.windows-desktop[data-theme="winLS"] .windows-window__buttons button{
+  color:#fff;border-color:#555;box-shadow:none;
+  background:linear-gradient(#fff8,#666a);
+}
+.windows-desktop[data-theme="winLS"] .windows-window__control-glyph{filter:drop-shadow(0 -1px 0 #000a)}
+.windows-desktop[data-theme="winLS"] .windows-window__buttons button.windows-window__close{
+  background:linear-gradient(#ff9f8d,#c6555c);
+  box-shadow:inset 0 2px 3px #f9e9b6,inset 0 -1px 3px #a73a44;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window__buttons button:not(:disabled):hover{
+  backdrop-filter:brightness(1.2);filter:brightness(1.12);
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-window__buttons button:not(:disabled):active{background:linear-gradient(#666a,#fff8)}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-window__buttons button.windows-window__close:not(:disabled):active{background:linear-gradient(#c6555c,#ff9f8d)}
+.windows-desktop[data-theme="winW"] .windows-window__buttons button{
+  width:20px;height:20px;min-width:20px;color:#fff;border:1px solid #729de2;
+  border-radius:0;box-shadow:none;background:transparent;
+}
+.windows-desktop[data-theme="winW"] .windows-window__buttons button.windows-window__close{margin-inline-start:3px}
+.windows-desktop[data-theme="winW"] .windows-window__buttons button:not(:disabled):hover{border-color:#86abe6}
+.windows-desktop[data-theme="winW"] .windows-window__buttons button:not(:disabled):active{background:#3335;border-color:#000}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-window.is-maximized{padding:0;border-radius:0}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-window.is-maximized .windows-window__titlebar{margin-top:3px}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-window.is-maximized .windows-window__buttons{margin:0;margin-inline-end:4px}
