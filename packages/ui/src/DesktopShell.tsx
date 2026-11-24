@@ -558,13 +558,21 @@ export function DesktopShell({
             kind:"background",x:event.clientX,y:event.clientY
           });
         }}>
-        <button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
+        {state.theme==="macos"?<span className="source-macos-menubar-title" data-test-macos-active-title="">
+          {state.windows.find(win=>!win.minimized&&win.z===highestVisibleWindowZ)?.title??"Finder"}
+        </span>:<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
           data-test-start-button="" aria-label="Open Start menu"
           aria-expanded={state.startOpen}
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
-        </button>
-        <div className="windows-taskbar__running">
+        </button>}
+        <div className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
+          {state.theme==="macos"&&<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
+          data-test-start-button="" aria-label="Open Start menu"
+          aria-expanded={state.startOpen}
+          onClick={() => dispatch({ type: "TOGGLE_START" })}>
+          <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
+        </button>}
           {pinnedPrograms.map(programId=>{
             const app=appRegistry.get(programId);
             if(!app)return null;

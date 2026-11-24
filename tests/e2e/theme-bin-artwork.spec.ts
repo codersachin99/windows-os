@@ -798,3 +798,27 @@ test("macOS original desktop selection and traffic-light window controls",async(
   await close.click();
   await expect(win).toHaveCount(0);
 });
+
+
+test("macOS top menu bar and bottom dock preserve launch and maximize",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const bar=page.locator('[data-test-taskbar="base"]');
+  const dock=page.locator("[data-test-macos-dock]");
+  await expect(bar).toHaveCSS("height","28px");
+  await expect(bar).toHaveCSS("background-color","rgb(32, 32, 32)");
+  await expect(dock).toHaveCSS("background-color","rgb(15, 15, 15)");
+  const bounds=await bar.boundingBox(),dockBounds=await dock.boundingBox(),viewport=page.viewportSize();
+  expect(bounds!.y).toBe(0);
+  expect(Math.abs(dockBounds!.y+dockBounds!.height-(viewport!.height-8))).toBeLessThan(2);
+  await expect(dock.locator("[data-test-start-button] img")).toHaveCSS("width","48px");
+  await dock.locator("[data-test-start-button]").click();
+  await expect(page.locator("[data-test-start-menu]")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').first();
+  await expect(page.locator("[data-test-macos-active-title]")).toContainText("Computer");
+  await win.locator('[data-source-window-control="maximize"]').click();
+  const max=await win.boundingBox();
+  expect(max!.y).toBe(28);
+  expect(max!.y+max!.height).toBeLessThanOrEqual(dockBounds!.y+1);
+});

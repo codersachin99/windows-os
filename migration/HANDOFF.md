@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS top bar and dock geometry
+
+Ported 28px top bar, active title, separate bottom dock with original 48px icons and running/stacked indicators. Shared Start, pin/running and tray actions retained; maximized windows reserve top/dock work area. [Source trace](MACOS-TOPBAR-DOCK-SOURCE.md). Source Apple menu, Spotlight, exact dock groups and Launchpad pending. Browser contract authored, CI pending; no duplicate trigger. Next macOS context menus and Explorer plus dock grouping. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS desktop and window chrome
 
 Checked CI at 75f7708: PR-filtered run lookup and combined statuses both returned empty; conclusion unknown, no duplicate trigger. Ported original macOS desktop selected icon/label and rename styles, dark active/inactive frame, 28px titlebar and left-leading traffic-light controls. Added computed-style/lifecycle browser contract. [Source trace](MACOS-DESKTOP-WINDOW-SOURCE.md). Next top menu bar/dock geometry, context menus and Explorer. Main/frozen source/draft PR/releases unchanged; tests pending.

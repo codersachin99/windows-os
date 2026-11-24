@@ -72,3 +72,69 @@
 }
 .windows-desktop[data-theme="macos"] .windows-window.is-maximized,
 .windows-desktop[data-theme="macos"] .windows-window.is-maximized :is(.windows-window__titlebar,.windows-window__body){border-radius:0}
+
+/* Original taskbar-macos.css and dock-macos.css geometry.
+ * Existing shell pin/running controls become the bottom dock; the top
+ * bar retains tray and active title. Apple menu, Spotlight, source dock
+ * groups/recent list and native tray popup contracts are separate work. */
+.windows-desktop[data-theme="macos"]{
+  --taskbar-height:28px;
+  --source-macos-dock-reserve:74px;
+}
+.windows-desktop[data-theme="macos"] .windows-desktop__workspace{
+  inset:var(--taskbar-height) 0 var(--source-macos-dock-reserve);
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar{
+  top:0;bottom:auto;height:var(--taskbar-height);
+  background:#202020;border:0;box-shadow:none;backdrop-filter:none;
+  color:#fff;padding:0 8px;justify-content:space-between;
+}
+.windows-desktop[data-theme="macos"] .source-macos-menubar-title{
+  flex:1;min-width:0;padding-inline:8px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:700;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running{
+  position:fixed;inset:auto auto 8px 50%;transform:translateX(-50%);
+  box-sizing:border-box;display:flex;flex:none;gap:4px;
+  width:max-content;max-width:calc(100vw - 16px);height:66px;
+  padding:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+  border:1px solid #fff9;border-radius:16px;background:#0f0f0f;
+  box-shadow:0 0 0 1px #0f0f0f;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running::-webkit-scrollbar{display:none}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running :is(.windows-taskbar__application,.windows-taskbar__start){
+  position:relative;display:flex;align-items:center;justify-content:center;
+  box-sizing:border-box;flex:0 0 48px;width:48px;min-width:48px;height:48px;
+  margin:0;padding:0;border:0;border-radius:4px;
+  background:none;box-shadow:none;overflow:visible;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running :is(.windows-taskbar__application,.windows-taskbar__start) img{
+  width:48px;height:48px;object-fit:contain;filter:none;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running :is(.windows-taskbar__application,.windows-taskbar__start):active img{filter:brightness(.4)}
+.windows-desktop[data-theme="macos"] .windows-taskbar__item-label{display:none}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running :is(.is-running,[data-test-taskbar-running-group],.windows-taskbar__start.is-active)::after{
+  content:"";position:absolute;top:100%;left:calc(50% - 2px);
+  width:4px;height:4px;border-radius:99px;background:#fff9;
+  box-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__running .is-stacked::before{
+  content:"";position:absolute;top:calc(100% + 1px);left:calc(50% - 7px);
+  width:14px;height:2px;border-radius:2px;background:#fffb;
+  box-shadow:0 0 4px #fff8;pointer-events:none;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__clock{
+  flex-direction:row;gap:8px;font-weight:700;color:#fff;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__tray{gap:8px;min-width:0}
+.windows-desktop[data-theme="macos"] .windows-taskbar__tray-icon{height:28px;min-width:24px}
+.windows-desktop[data-theme="macos"] .windows-taskbar__hidden-items{
+  bottom:auto;top:calc(100% + 6px);background:#2d2d2d;border-color:#000;border-radius:10px;
+}
+.windows-desktop[data-theme="macos"] .windows-taskbar__show-desktop{height:20px;width:12px;background:none;border-color:#fff4}
+.windows-desktop[data-theme="macos"] .windows-startmenu{bottom:var(--source-macos-dock-reserve)}
+@media(max-width:650px){
+  .windows-desktop[data-theme="macos"] .windows-taskbar__tray{gap:4px}
+  .windows-desktop[data-theme="macos"] .windows-taskbar__tray-icon{min-width:16px}
+  .windows-desktop[data-theme="macos"] .windows-taskbar__clock{gap:4px}
+}

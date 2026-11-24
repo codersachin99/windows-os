@@ -17,7 +17,7 @@ interface WindowFrameProps {
 export function WindowFrame({ window: win, theme, dispatch, children, onRequestClose,active=false,peekTarget=false }: WindowFrameProps) {
   const drag = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const style: CSSProperties = win.maximized
-    ? { inset: "0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
+    ? { inset: theme==="macos"?"var(--taskbar-height, 28px) 0 var(--source-macos-dock-reserve, 74px) 0":"0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
     : { left: win.x, top: win.y, width: win.width, height: win.height, zIndex: win.z };
 
   const pointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
