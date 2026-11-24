@@ -138,3 +138,15 @@
   .windows-desktop[data-theme="macos"] .windows-taskbar__tray-icon{min-width:16px}
   .windows-desktop[data-theme="macos"] .windows-taskbar__clock{gap:4px}
 }
+
+/* The source dock renders three groups with 20px inter-group gap,
+ * 4px intra-group gap and 1px dividers. Scroll the whole dock on mobile. */
+.windows-desktop[data-theme="macos"] .windows-taskbar__running{gap:20px}
+.windows-desktop[data-theme="macos"] .source-macos-dock-group{
+  flex:none;display:flex;align-items:center;gap:4px;min-width:0;height:48px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-dock-group:not(:first-child){position:relative}
+.windows-desktop[data-theme="macos"] .source-macos-dock-divider{
+  position:absolute;inset-inline-start:-10px;top:0;height:48px;
+  width:1px;background:#fff4;pointer-events:none;
+}

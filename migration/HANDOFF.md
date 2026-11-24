@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS dock groups
+
+Implemented source three-group dock ordering (Computer/Launchpad/pins/Control Panel, recent plus running, Bin) with deduplication, registered app actions, source gaps/dividers and existing window activation. Added grouping unit and launch/minimize/restore browser contracts. [Source trace](MACOS-DOCK-GROUPS-SOURCE.md). Dock Bin state, tooltip, Apple menu, Spotlight and Launchpad remain pending. Exact-head CI not available; no extra trigger. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS top bar and dock geometry
 
 Ported 28px top bar, active title, separate bottom dock with original 48px icons and running/stacked indicators. Shared Start, pin/running and tray actions retained; maximized windows reserve top/dock work area. [Source trace](MACOS-TOPBAR-DOCK-SOURCE.md). Source Apple menu, Spotlight, exact dock groups and Launchpad pending. Browser contract authored, CI pending; no duplicate trigger. Next macOS context menus and Explorer plus dock grouping. Main/frozen source/draft PR/releases unchanged.

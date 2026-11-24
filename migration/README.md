@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS dock groups:** original fixed/recent/running/Bin groups, source dividers and actual window actions. [Source trace](MACOS-DOCK-GROUPS-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS top bar/dock:** distinct top bar and bottom dock geometry, shared launch/window actions and regression contract. [Source trace](MACOS-TOPBAR-DOCK-SOURCE.md). Verification pending.
 
 > **24 November 2026 — macOS desktop/window:** original selection and dark traffic-light frame styling, browser regression contract. [Source trace](MACOS-DESKTOP-WINDOW-SOURCE.md). CI conclusion unavailable.

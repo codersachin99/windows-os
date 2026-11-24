@@ -2,7 +2,8 @@ import {useCallback,useEffect,useLayoutEffect,useRef,useState,type CSSProperties
 import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
   sourceAeroAppearanceSave,type SourceAeroAppearance,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
-import { appRegistry,fileStore,sourceTaskbarPreferences } from "@windows-os/sdk";
+import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms } from "@windows-os/sdk";
+import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
@@ -287,6 +288,8 @@ export function DesktopShell({
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
+  const [dockRecent,setDockRecent]=useState(()=>sourceRecentPrograms.snapshot());
+  useEffect(()=>sourceRecentPrograms.subscribe(setDockRecent),[]);
   const [taskbarConfig,setTaskbarConfig]=useState(()=>sourceTaskbarPreferences.snapshot());
   const [aeroPeeking,setAeroPeeking]=useState(false);
   const [livePreview,setLivePreview]=useState<{appId:string;left:number}|null>(null);
@@ -294,6 +297,7 @@ export function DesktopShell({
   const previewShowTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const previewHideTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const taskbarGroups=sourceTaskbarGroups(state.windows,pinnedPrograms);
+  const macDockGroups=sourceMacOSDockGroups(pinnedPrograms,dockRecent,state.windows.map(win=>win.appId));
   const buttonMode=taskbarConfig.type;
   const canAeroPeek=(state.theme==="win7"||sourceIsAeroFamily(state.theme))&&taskbarConfig.useAeroPeek;
   const previewDesktop=canAeroPeek&&aeroPeeking;
@@ -567,12 +571,47 @@ export function DesktopShell({
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
         </button>}
         <div className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
-          {state.theme==="macos"&&<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
-          data-test-start-button="" aria-label="Open Start menu"
-          aria-expanded={state.startOpen}
-          onClick={() => dispatch({ type: "TOGGLE_START" })}>
-          <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
-        </button>}
+          {state.theme==="macos"?macDockGroups.map((ids,index)=>
+            <div key={index} className="source-macos-dock-group" data-test-macos-dock-group={index}>
+              {index>0&&<span className="source-macos-dock-divider" aria-hidden="true"/>}
+              {ids.map(id=>{
+                if(id==="launchpad")return <button key={id}
+                  className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
+                  data-test-start-button="" data-test-macos-dock-item={id}
+                  aria-label="Open Start menu" aria-expanded={state.startOpen} title="Launchpad"
+                  onClick={()=>dispatch({type:"TOGGLE_START"})}>
+                  <img src={sourceShellAsset(state.theme,"start")??legacyArt.startOrb} alt="" draggable={false}/>
+                </button>;
+                const app=appRegistry.get(id);
+                if(!app)return null;
+                const instances=state.windows.filter(win=>win.appId===id);
+                const pinned=pinnedPrograms.includes(id);
+                return <button key={id} type="button"
+                  className={"windows-taskbar__application"+(pinned?" is-pinned":"")+
+                    (instances.length?" is-running":"")+(instances.length>1?" is-stacked":"")+
+                    (instances.some(win=>!win.minimized&&win.z===highestVisibleWindowZ)?" is-active":"")}
+                  data-test-macos-dock-item={id}
+                  data-test-taskbar-pin={pinned?id:undefined}
+                  data-test-taskbar-pin-running={pinned?Boolean(instances.length):undefined}
+                  data-test-taskbar-running-group={!pinned&&instances.length?id:undefined}
+                  data-test-taskbar-group-size={instances.length}
+                  title={app.label} aria-label={"Open or switch to "+app.label}
+                  onMouseEnter={event=>showTaskbarPreview(id,event.currentTarget)}
+                  onMouseLeave={schedulePreviewHide}
+                  onContextMenu={event=>{
+                    event.preventDefault();event.stopPropagation();
+                    taskbarContextReturnFocus.current=event.currentTarget;
+                    const rect=event.currentTarget.getBoundingClientRect();
+                    setTaskbarContext({kind:"item",id,x:rect.left+rect.width/2,y:rect.top});
+                  }}
+                  onClick={()=>{
+                    if(instances.length)activateTaskbarGroup(instances);
+                    else{dismissLivePreview();dispatch({type:"OPEN_APP",app});}
+                  }}>
+                  <img src={sourceThemeProgramArt(state.theme,id)??app.icon} alt="" width={48} height={48}/>
+                </button>;
+              })}
+            </div>):<>
           {pinnedPrograms.map(programId=>{
             const app=appRegistry.get(programId);
             if(!app)return null;
@@ -647,6 +686,7 @@ export function DesktopShell({
                 aria-hidden="true">{app?.label??win.title}</span>}
             </button>;
           })}
+          </>}
         </div>
         <div className="windows-taskbar__tray">
           <button title="Show hidden icons" aria-label="Show hidden icons"

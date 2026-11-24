@@ -822,3 +822,23 @@ test("macOS top menu bar and bottom dock preserve launch and maximize",async({pa
   expect(max!.y).toBe(28);
   expect(max!.y+max!.height).toBeLessThanOrEqual(dockBounds!.y+1);
 });
+
+test("macOS dock keeps fixed groups and recent/running apps without duplicates",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const dock=page.locator("[data-test-macos-dock]");
+  const ids=async(group:number)=>dock.locator('[data-test-macos-dock-group="'+group+'"] [data-test-macos-dock-item]').evaluateAll(
+    nodes=>nodes.map(node=>node.getAttribute("data-test-macos-dock-item")));
+  expect(await ids(0)).toEqual(["computer","launchpad","cpanel"]);
+  expect(await ids(2)).toEqual(["bin"]);
+  await dock.locator('[data-test-macos-dock-item="computer"]').click();
+  const win=page.locator('[data-test-window="computer"]').first();
+  await expect(win).toBeVisible();
+  await expect(dock.locator('[data-test-macos-dock-item="computer"]')).toHaveClass(/is-running/);
+  await win.locator('[data-source-window-control="minimize"]').click();
+  await dock.locator('[data-test-macos-dock-item="computer"]').click();
+  await expect(win).toBeVisible();
+  await win.locator('[data-source-window-control="close"]').click();
+  await dock.locator('[data-test-macos-dock-item="bin"]').click();
+  await expect(page.locator('[data-test-window="bin"]')).toBeVisible();
+  expect(await ids(2)).toEqual(["bin"]);
+});
