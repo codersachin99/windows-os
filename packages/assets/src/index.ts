@@ -224,6 +224,10 @@ export const sourceThemeLogonArtwork=Object.freeze({
   winW:Object.freeze({
     logo:"/assets/images/logowhistler.73c9045c.webp"
   }),
+  chromeos:Object.freeze({
+    background:"/assets/images/chromeos.eaca6e72.webp",
+    guest:"/assets/images/usertile12.75a9eb89.webp"
+  }),
   ubuntu:Object.freeze({
     guest:"/assets/images/guest-ubuntu.e2037acf.svg",
     logo:"/assets/images/logo-ubuntu.b06d4c47.svg"

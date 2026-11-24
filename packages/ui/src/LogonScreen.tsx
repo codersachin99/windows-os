@@ -11,6 +11,7 @@ import {SourceAeroNoirLogon} from "./SourceAeroNoirLogon";
 import {SourceOxygenLogon} from "./SourceOxygenLogon";
 import {SourceKubuntuLogon} from "./SourceKubuntuLogon";
 import {SourceUbuntuLogon} from "./SourceUbuntuLogon";
+import {SourceChromeOSLogon} from "./SourceChromeOSLogon";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -51,6 +52,10 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
 
   // Frozen Whistler logon-winw.js is a distinct WinW family, not Win7.
   if(sourceScreens.logon==="winW")return <SourceWinWLogon
+    theme={theme} shellStatus={status} onGuest={onGuest}
+    onShutdown={onShutdown} onRestart={onRestart}/>;
+
+  if(sourceScreens.logon==="chromeos")return <SourceChromeOSLogon
     theme={theme} shellStatus={status} onGuest={onGuest}
     onShutdown={onShutdown} onRestart={onRestart}/>;
 

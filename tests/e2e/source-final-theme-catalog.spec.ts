@@ -24,6 +24,7 @@ test("source theme variants select exact login screen families and report fallba
     ["oxygen","oxygen","oxygen","pending"],
     ["kubuntu","kubuntu","kubuntu","pending"],
     ["ubuntu","ubuntu","ubuntu","pending"],
+    ["chromeos","chromeos","chromeos","pending"],
     ["winW","winW","winW","pending"],
     ["onebit","onebit","onebit","pending"]
   ] as const;

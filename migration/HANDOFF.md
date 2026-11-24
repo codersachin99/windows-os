@@ -1,3 +1,11 @@
+## 24 November 2026 — original ChromeOS Guest logon
+
+Previous [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) still in targeted browser stage when inspected; TS/units/source/artwork/Contacts/Vite passed. Oxygen/Kubuntu/Ubuntu remain unverified.
+
+ChromeOS source module 5af3 and CSS now have a dedicated partial Guest renderer: two 24px blurred layers (original wallpaper and black/60), original 100px usertile12 avatar, avatar-only Guest, Shutdown/Restart/Switch User footer pills, decorative status and live HH:mm clock. Original wallpaper/avatar copied with identical Git blob hashes. Added audit, SSR and desktop/mobile E2E, catalog and focused suite. [Source trace](CHROMEOS-LOGON-SOURCE.md). Now 17/19 partial login families, Vista/macOS remaining fallback; shell pending. Exact source account/locale/glyphs/visual acceptance still outstanding. Batch CI after previous completes. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu Guest logon and logon-only System menu
 
 Previous Personalize [CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) was still in the targeted browser stage when inspected; TS/units/source/artwork/Contacts/Vite passed. Oxygen and Kubuntu remain unverified at their new heads.

@@ -2157,8 +2157,15 @@
       "source": "src/modules/themes/logon-chromeos.js",
       "sha": "cb923f36f90d9e6705cba568543dbac3892eefda",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceChromeOSLogon.tsx",
+        "packages/ui/src/sourceChromeOSLogon.css",
+        "packages/ui/src/sourceChromeOSLogon.test.tsx",
+        "tests/e2e/source-chromeos-logon.spec.ts",
+        "migration/CHROMEOS-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed-slice; exact-head CI and full visual/functional parity pending"
     },
     {
       "source": "src/modules/themes/logon-kubuntu.js",
