@@ -258,6 +258,10 @@ export const sourceThemeLogonArtwork=Object.freeze({
     restart:"/assets/images/restart-kubuntu.5c766c73.svg",
     shutdown:"/assets/images/shutdown-kubuntu.146c3ea3.svg"
   }),
+  winxp:Object.freeze({
+    logo:"/assets/images/logoxp.9b034658.png",
+    guest:legacyArt.guestAvatar
+  }),
   win11:Object.freeze({
     guest:"/assets/images/guest-win10.a110df5a.webp",
     background:legacyShellThemeAssets.win11.theme
@@ -374,39 +378,6 @@ export const legacyThemeProgramArtwork=Object.freeze({
     bin:"/assets/images/bin-win10.e0f739cc.webp",
     games:"/assets/images/games-win10.63f82076.webp",
     cpanel:"/assets/images/cpanel-win10.d3d1d446.webp"
-  }),
-  winxp:Object.freeze({
-    notepad:"/assets/images/notepad-winxp.82037fb1.webp",
-    games:"/assets/images/games-winxp.7f048588.webp",
-    personalize:"/assets/images/personal-winxp.01949b73.webp",
-    cpanel:"/assets/images/cpanel-winxp.1b08f5c8.webp",
-    calc:"/assets/images/calc-winxp.f79aee6b.webp",
-    cmd:"/assets/images/cmd-winxp.62e75899.webp",
-    "action-center":"/assets/images/action-center-winxp.52f44912.webp",
-    "network":"/assets/images/network-winxp.744648d4.webp",
-    "battery":"/assets/images/battery-winxp.af8edd8a.webp",
-    "datetime":"/assets/images/datetime-winxp.d62f4ef6.webp",
-    "camera":"/assets/images/camera-winxp.b21fe0fe.webp",
-    "magnifier":"/assets/images/magnifier-winxp.24194bc4.webp",
-    "paint":"/assets/images/paint-winxp.7e4e5dac.webp",
-    "player":"/assets/images/player-winxp.e1b486dd.webp",
-    "run":"/assets/images/run-winxp.63d23fb9.webp",
-    "display":"/assets/images/display-winxp.da9a9b48.webp",
-    "programs":"/assets/images/programs-winxp.f148b05d.webp",
-    "personal":"/assets/images/personal-winxp.01949b73.webp",
-    "taskbar":"/assets/images/taskbar-winxp.46a225c9.webp",
-    "wordpad":"/assets/images/wordpad-winxp.1bde3c38.webp",
-    "text":"/assets/images/text-winxp.35e970dd.webp",
-    "executable":"/assets/images/executable-winxp.b1d9ded4.webp",
-    "media":"/assets/images/media-winxp.c7e33e88.webp",
-    "folder-docs":"/assets/images/folder-docs-winxp.a303ce2a.webp",
-    "folder-pics":"/assets/images/folder-pics-winxp.05398ea9.webp",
-    "folder-music":"/assets/images/folder-music-winxp.dc009194.webp",
-    "folder-videos":"/assets/images/folder-videos-winxp.c38aba27.webp",
-    "disk-os":"/assets/images/disk-os-winxp.e3c2a016.webp",
-    "disk-cd":"/assets/images/disk-cd-winxp.83ac2166.webp",
-    "disk-data":"/assets/images/disk-data-winxp.225dcc03.webp",
-    "default":"/assets/images/default-winxp.4351048b.webp"
   }),
   win11:Object.freeze({
     notepad:"/assets/images/notepad-win11.2e4af294.webp",
