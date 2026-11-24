@@ -5,8 +5,8 @@ import "./sourceStartMenuThemes.css";
 import "./sourceStartContextThemes.css";
 import {legacyArt,legacySourceIconArtwork,legacySourceCustomIconURL,sourceShellAsset,legacyXpPowerArtwork,sourceThemeProgramArt,sourceWin7StartLibraryIcon,type SourceWin7LibraryKey} from "@windows-os/assets";
 import {
-  parseSourceShortcut,parseSourcePathShortcut,readSourceShortcutText,
-  sourceExecutablePath,matchesSourceKind,SOURCE_START_MENU_PROGRAMS,sourcePrograms,
+  parseSourceShortcut,readSourceShortcutText,
+  SOURCE_START_MENU_PROGRAMS,sourcePrograms,
   sourceProgramsById, SOURCE_WIN2K_START_SEARCH_PATH, getParentDirectory, type FileEntry
 } from "@windows-os/filesystem";
 import {appRegistry,fileStore,sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
@@ -21,6 +21,7 @@ import {SourceWin8StartScreen} from "./SourceWin8StartScreen";
 import {SourceWin31ProgramManager} from "./SourceWin31ProgramManager";
 import {SourceWin9xStartMenu} from "./SourceWin9xStartMenu";
 import {SourceHistoricalProgramsFlyout} from "./SourceHistoricalProgramsFlyout";
+import {openGuestSearchFile} from "./sourceGuestSearchOpen";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -297,40 +298,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
    * Shortcut links are resolved only against the Guest VFS, with a depth
    * limit so self-referential or cyclic links cannot hang Start.
    */
-  const openSearchFile=async(entry:FileEntry,depth=0):Promise<string|null>=>{
-    if(depth>=8)return "Shortcut target contains too many redirects.";
-    try{
-      const actual=await fileStore.stat(entry.uri);
-      if(!actual||actual.originalPath)return "Search result is no longer available.";
-      const launch=(id:string,filePath?:string):string|null=>{
-        const app=appRegistry.get(id);
-        if(!app)return "The original "+id+" application has not been migrated yet.";
-        dispatch({type:"OPEN_APP",app,...(filePath?{file:{path:filePath}}:{})});
-        return null;
-      };
-      if(actual.type==="directory")return launch("computer",actual.uri);
-      if(/\.txt$/i.test(actual.name))return launch("notepad",actual.uri);
-      if(matchesSourceKind(actual,"picture"))return launch("photo",actual.uri);
-      if(/\.(?:mp3|wav|ogg|oga|m4a|aac|flac|mp4|webm|ogv|mov|m4v|avi)$/i.test(actual.name))
-        return launch("player",actual.uri);
-      if(/\.lnk$/i.test(actual.name)){
-        const contents=await readSourceShortcutText(fileStore,actual.uri);
-        const target=parseSourcePathShortcut(contents);
-        if(target){
-          const resolved=await fileStore.stat(target.path);
-          if(!resolved||resolved.originalPath)return "Shortcut target no longer exists.";
-          return openSearchFile(resolved,depth+1);
-        }
-        const source=parseSourceShortcut(contents);
-        return source?launch(source.exe):"The original Windows shortcut data is invalid.";
-      }
-      const installed=sourcePrograms.find(program=>sourceExecutablePath(program)===actual.uri);
-      if(installed)return launch(installed.id);
-      return "No original application association has been migrated for this file type.";
-    }catch(cause){
-      return cause instanceof Error?cause.message:"Could not open Guest search result.";
-    }
-  };
+  const openSearchFile=(entry:FileEntry)=>openGuestSearchFile(dispatch,entry);
   // Source startmenu-base.js also renders a recent-program list on Win7.
   // Preserve the existing launch grid pending complete Win7 structural parity.
   const recentSection=startPreferences.storeRecentApps&&

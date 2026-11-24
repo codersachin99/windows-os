@@ -5,6 +5,7 @@ import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgra
 import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms } from "@windows-os/sdk";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
+import {SourceMacOSSpotlight} from "./SourceMacOSSpotlight";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
@@ -705,6 +706,7 @@ export function DesktopShell({
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
+          {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch}/>}
           {trayPreferences.showClockIcon&&<div data-test-tray-clock=""><Clock/></div>}
         </div>
         <button className="windows-taskbar__show-desktop" aria-label="Show desktop"

@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS Spotlight
+
+Ported source Spotlight tray trigger and centered dark search surface. Shared mounted Guest search with cancellation/trash exclusion and shared file association resolver extracted from Win8 Start; application and file result navigation, real launch and Escape restoration. [Source trace](MACOS-SPOTLIGHT-SOURCE.md). Original ranking/grouping and global shortcut pending, tests authored but not executed. Next original Launchpad. Main/frozen source/draft PR/releases unchanged; no extra CI trigger.
+
+---
+
 ## 24 November 2026 — macOS Apple menu
 
 Ported original seven-command Apple menu, exact bundled Apple glyph and source popup palette. Connected Settings/About/Account and Guest power actions, with accounts route, arrow navigation and Escape restoration. Help and Support disabled pending destination verification. [Source trace](MACOS-APPLE-MENU-SOURCE.md). Browser contract authored, tests pending. Next Spotlight and original Launchpad. No extra CI trigger; main/frozen source/draft PR/releases unchanged.

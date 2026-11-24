@@ -865,3 +865,38 @@ test("macOS Apple menu opens real Guest Account and About, supports Escape",asyn
   await expect(page.locator('[data-test-window="about"]')).toBeVisible();
   await expect(popup).toHaveCount(0);
 });
+
+
+test("macOS Spotlight searches registered applications and real Guest documents",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const trigger=page.locator("[data-test-spotlight-button]");
+  await trigger.click();
+  const spotlight=page.locator("[data-test-spotlight]");
+  const input=spotlight.locator("[data-test-spotlight-input]");
+  await expect(spotlight).toBeVisible();
+  await input.fill("Notepad");
+  await expect(spotlight.locator('[data-test-spotlight-app="notepad"]')).toBeVisible();
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(spotlight).toHaveCount(0);
+  await page.locator('[data-test-window="notepad"] [data-source-window-control="close"]').click();
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await explorer.getByRole("button",{name:"Desktop",exact:true}).click();
+  await explorer.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"Spotlight Guest Target.txt",mimeType:"text/plain",buffer:Buffer.from("Spotlight Guest document")
+  });
+  const path=SOURCE_DESKTOP+"/Spotlight Guest Target.txt";
+  await expect(page.locator('[data-test-desktop-file="'+path+'"]')).toBeVisible();
+  await trigger.click();
+  await input.fill("Spotlight Guest Target");
+  const file=spotlight.locator('[data-test-spotlight-file="'+path+'"]');
+  await expect(file).toBeVisible();
+  await file.click();
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(spotlight).toHaveCount(0);
+  await trigger.click();
+  await input.press("Escape");
+  await expect(spotlight).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
