@@ -50,6 +50,11 @@ export function PersonalizeApp({
     setView("theme");
   };
   const openBackground=()=>{
+    // Source ChangeAppearance.back() restores committed color and
+    // transparency before leaving the editor. The persistent React
+    // sidebar is another exit path: discard here just as on Cancel,
+    // rather than carrying a temporary tint into ChangeBackground.
+    if(view==="appearance")onAeroAppearanceDiscard();
     setSelectedBg(wallpaper);
     setView("background");
   };
