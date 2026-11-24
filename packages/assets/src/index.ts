@@ -258,10 +258,6 @@ export const sourceThemeLogonArtwork=Object.freeze({
     restart:"/assets/images/restart-kubuntu.5c766c73.svg",
     shutdown:"/assets/images/shutdown-kubuntu.146c3ea3.svg"
   }),
-  winxp:Object.freeze({
-    logo:"/assets/images/logoxp.9b034658.png",
-    guest:legacyArt.guestAvatar
-  }),
   win11:Object.freeze({
     guest:"/assets/images/guest-win10.a110df5a.webp",
     background:legacyShellThemeAssets.win11.theme
@@ -649,8 +645,13 @@ function sourceOxygenIcon(key:string):string|null{
 }
 /** Shared verified subset of the original Longhorn Plex and Whistler registries. */
 export const sourceLonghornWhistlerIconArtwork=Object.freeze({
+  "about": "/assets/images/about-winxp.4d3ad58f.webp",
+  "access": "/assets/images/access-winxp.c88ef204.webp",
+  "accounts": "/assets/images/accounts-winxp.f09bda44.webp",
   "action-center": "/assets/images/action-center-winxp.52f44912.webp",
+  "arrow": "/assets/images/arrow-winxp.b58eda4d.webp",
   "battery": "/assets/images/battery-winxp.af8edd8a.webp",
+  "battery-charging": "/assets/images/battery-charging-winxp.321f84b7.webp",
   "bin": "/assets/images/bin-winxp.7d0403fd.webp",
   "bin-full": "/assets/images/bin-full-winxp.ba3f6193.webp",
   "calc": "/assets/images/calc-winxp.f79aee6b.webp",
@@ -676,21 +677,38 @@ export const sourceLonghornWhistlerIconArtwork=Object.freeze({
   "folder-pics": "/assets/images/folder-pics-winxp.05398ea9.webp",
   "folder-videos": "/assets/images/folder-videos-winxp.c38aba27.webp",
   "games": "/assets/images/games-winxp.7f048588.webp",
+  "help": "/assets/images/help-winxp.6b449d71.webp",
   "installer": "/assets/images/programs-winxp.f148b05d.webp",
+  "keyboard": "/assets/images/keyboard-winxp.648c2cdc.webp",
   "logoff": "/assets/images/logoff-winxp.71dc5ab2.webp",
   "magnifier": "/assets/images/magnifier-winxp.24194bc4.webp",
   "media": "/assets/images/media-winxp.c7e33e88.webp",
+  "mouse": "/assets/images/mouse-winxp.c5534a40.webp",
   "network": "/assets/images/network-winxp.744648d4.webp",
+  "network-off": "/assets/images/network-off-winxp.60414007.webp",
   "notepad": "/assets/images/notepad-winxp.82037fb1.webp",
   "paint": "/assets/images/paint-winxp.7e4e5dac.webp",
   "personalize": "/assets/images/personal-winxp.01949b73.webp",
   "player": "/assets/images/player-winxp.e1b486dd.webp",
   "programs": "/assets/images/programs-winxp.f148b05d.webp",
+  "recorder": "/assets/images/sound-winxp.1ff35c0e.webp",
   "restart": "/assets/images/restart-winxp.3e97eeb0.webp",
   "run": "/assets/images/run-winxp.63d23fb9.webp",
+  "search": "/assets/images/search-winxp.92dbc7ef.webp",
   "shutdown": "/assets/images/shutdown-winxp.f3312ea0.webp",
+  "sound": "/assets/images/sound-winxp.1ff35c0e.webp",
+  "sound-muted": "/assets/images/volume-muted-winxp.70d8b244.webp",
+  "sound-unmuted": "/assets/images/sound-winxp.1ff35c0e.webp",
+  "speech": "/assets/images/speech-winxp.a5b18330.webp",
+  "system": "/assets/images/system-winxp.74879c1e.webp",
   "taskbar": "/assets/images/taskbar-winxp.46a225c9.webp",
   "text": "/assets/images/text-winxp.35e970dd.webp",
+  "update": "/assets/images/update-winxp.85628670.webp",
+  "volume-0": "/assets/images/sound-winxp.1ff35c0e.webp",
+  "volume-100": "/assets/images/sound-winxp.1ff35c0e.webp",
+  "volume-32": "/assets/images/sound-winxp.1ff35c0e.webp",
+  "volume-65": "/assets/images/sound-winxp.1ff35c0e.webp",
+  "volume-muted": "/assets/images/volume-muted-winxp.70d8b244.webp",
   "wordpad": "/assets/images/wordpad-winxp.1bde3c38.webp"
 });
 // Slate explicitly inherits the XP icon pack in the frozen theme catalog.
@@ -699,8 +717,10 @@ export const sourceLonghornWhistlerStartArtwork=Object.freeze({
   "winLP": "/assets/images/start-button-winL.bcbc8d89.webp",
   "winW": "/assets/images/start-button-win2k.650d501c.webp"
 });
-function sourceLonghornWhistlerIcon(theme:"winLS"|"winLP"|"winW",key:string):string|null{
-  if(key==="start")return sourceLonghornWhistlerStartArtwork[theme];
+function sourceLonghornWhistlerIcon(theme:"winLS"|"winLP"|"winW"|"winxp",key:string):string|null{
+  if(key==="start")return theme==="winxp"?legacyShellThemeAssets.winxp.start:sourceLonghornWhistlerStartArtwork[theme];
+  // Compatibility key used by the existing React Control Panel adapter.
+  if(key==="personal")return sourceLonghornWhistlerIconArtwork.personalize;
   return Object.prototype.hasOwnProperty.call(sourceLonghornWhistlerIconArtwork,key)
     ?sourceLonghornWhistlerIconArtwork[key as keyof typeof sourceLonghornWhistlerIconArtwork]:null;
 }
@@ -775,10 +795,7 @@ export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win10;
     return icons[iconKey]??null;
   }
-  if(sourceIsXpFamily(theme)){
-    const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.winxp;
-    return icons[iconKey]??null;
-  }
+  if(sourceIsXpFamily(theme))return sourceLonghornWhistlerIcon("winxp",iconKey);
   if(theme==="win11"||theme==="win11dark"){
     const icons:Readonly<Record<string,string>>=legacyThemeProgramArtwork.win11;
     return icons[iconKey]??null;

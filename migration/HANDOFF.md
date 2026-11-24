@@ -1,3 +1,8 @@
+## 24 November 2026 — Complete shared XP-family icon registry
+
+66 exact XP override keys (65 shared by Slate/Plex/Whistler, distinct source Start as applicable); 57 distinct XP files, 15 new hash-matched original files. Consolidated partial XP and Longhorn maps; retained personal compatibility key. Unit coverage expanded to all original shared keys, XP browser folder navigation and HTTP availability of new art. [Source trace](XP-COMPLETE-ICONS-SOURCE.md). Exact-head CI pending; latest push-triggered run lookup still unavailable through PR-only connector. Next theme-specific desktop/taskbar layouts and source verification. Main/frozen source/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Longhorn Slate icon inheritance resolved
 
 Frozen theme catalog explicitly sets Slate iconPack=winxp; pinned XP and Plex registries differ only in Start. Slate now shares 43 original mapped keys plus original XP Start and distinct wallpaper; no new binary imports. Unit/browser regression tests extended for Slate, including actual Bin and folder operations. [Source evidence](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md). Latest combined push CI lookup remains unavailable through PR-only run listing; no redundant trigger. Next finish remaining XP-family shared registry keys and then shell layout. Main/frozen source/draft PR/releases unchanged.

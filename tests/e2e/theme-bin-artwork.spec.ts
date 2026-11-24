@@ -411,7 +411,7 @@ test("original Oxygen Computer and Desktop files use theme-specific folder/gener
     .toHaveValue(SOURCE_DESKTOP+"/Oxygen Source Folder");
 });
 
-for(const [theme,start] of Object.entries({"winLS":"/assets/images/start-button-winxp.a3485adf.webp","winLP":"/assets/images/start-button-winL.bcbc8d89.webp","winW":"/assets/images/start-button-win2k.650d501c.webp"}) as ["winLS"|"winLP"|"winW",string][]){
+for(const [theme,start] of Object.entries({"winxp":"/assets/images/start-button-winxp.a3485adf.webp","winLS":"/assets/images/start-button-winxp.a3485adf.webp","winLP":"/assets/images/start-button-winL.bcbc8d89.webp","winW":"/assets/images/start-button-win2k.650d501c.webp"}) as ["winxp"|"winLS"|"winLP"|"winW",string][]){
   test("original "+theme+" shared XP core artwork and distinct Start",async({page})=>{
     await sourceThemeDesktop(page,theme);
     await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src",start);
@@ -480,5 +480,15 @@ test("Onebit uses the original shared monochrome icons for Guest folders and fil
     const response=await page.request.get(path);
     expect(response.ok(),path).toBeTruthy();
     expect(response.headers()["content-type"],path).toContain("image/svg+xml");
+  }
+});
+
+
+test("original XP registry remaining artwork is available as exact WebP files",async({page})=>{
+  await sourceThemeDesktop(page,"winxp");
+  for(const filename of ["about-winxp.4d3ad58f.webp","access-winxp.c88ef204.webp","arrow-winxp.b58eda4d.webp","accounts-winxp.f09bda44.webp","battery-charging-winxp.321f84b7.webp","help-winxp.6b449d71.webp","keyboard-winxp.648c2cdc.webp","mouse-winxp.c5534a40.webp","network-off-winxp.60414007.webp","sound-winxp.1ff35c0e.webp","volume-muted-winxp.70d8b244.webp","search-winxp.92dbc7ef.webp","speech-winxp.a5b18330.webp","system-winxp.74879c1e.webp","update-winxp.85628670.webp"]){
+    const response=await page.request.get("/assets/images/"+filename);
+    expect(response.ok(),filename).toBeTruthy();
+    expect(response.headers()["content-type"],filename).toContain("image/webp");
   }
 });
