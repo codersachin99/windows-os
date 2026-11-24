@@ -109,3 +109,33 @@ test("Computer item Send to cascade repositions without losing a live Guest file
   await expect(root).toHaveCount(0);
   await expect(item).toBeVisible();
 });
+
+test("Desktop View context flyout remeasures on viewport change without enlarging parent",async({page})=>{
+  await page.setViewportSize({width:1100,height:800});
+  await page.goto("/?theme=win7");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  const desktop=page.locator("#desktop-icons");
+  await desktop.click({button:"right",position:{x:260,y:200}});
+  const root=desktop.locator("[data-test-desktop-menu]");
+  await expect(root).toBeVisible();
+  const before=(await root.boundingBox())!.height;
+  await root.locator("[data-test-desktop-view]").click();
+  const child=desktop.locator("[data-test-desktop-background-submenu]");
+  await expect(child).toHaveAttribute("data-cascade","adjacent");
+  await bounded(root,page);
+  await bounded(child,page);
+  await page.setViewportSize({width:320,height:800});
+  await expect(child).toHaveAttribute("data-cascade","stacked");
+  await bounded(root,page);
+  await bounded(child,page);
+  expect(Math.abs((await root.boundingBox())!.height-before)).toBeLessThan(2);
+  await page.setViewportSize({width:1100,height:800});
+  await expect(child).toHaveAttribute("data-cascade","adjacent");
+  await bounded(child,page);
+  await child.getByRole("menuitemradio").first().focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(child).toHaveCount(0);
+  await expect(root.locator("[data-test-desktop-view]")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(root).toHaveCount(0);
+});
