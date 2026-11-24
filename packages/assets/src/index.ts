@@ -511,7 +511,42 @@ function sourceChromeOSIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceChromeOSIconArtwork,key)
     ?sourceChromeOSIconArtwork[key as keyof typeof sourceChromeOSIconArtwork]:null;
 }
+/** Pinned Ubuntu core desktop/Explorer registry, including source shortcut alias. */
+export const sourceUbuntuIconArtwork=Object.freeze({
+  "computer":"/assets/images/computer-ubuntu.ab0d9786.webp",
+  "bin":"/assets/images/bin-ubuntu.509f78ac.webp",
+  "bin-full":"/assets/images/bin-full-ubuntu.2faf5a4b.webp",
+  "folder":"/assets/images/folder-ubuntu.73afbe73.svg",
+  "file":"/assets/images/file-ubuntu.2f731416.svg",
+  "start":"/assets/images/start-button-ubuntu.a6d206e0.webp",
+  "folder-docs":"/assets/images/folder-docs-ubuntu.d9b020ee.svg",
+  "folder-downloads":"/assets/images/folder-downloads-ubuntu.367c96da.svg",
+  "folder-music":"/assets/images/folder-music-ubuntu.c191048c.svg",
+  "folder-pics":"/assets/images/folder-pics-ubuntu.f0402adf.svg",
+  "folder-videos":"/assets/images/folder-videos-ubuntu.c9f591cb.svg",
+  "disk-os":"/assets/images/disk-os-ubuntu.21cd56d7.webp",
+  "disk-data":"/assets/images/disk-data-ubuntu.2dd831a0.webp",
+  "disk-cd":"/assets/images/disk-cd-ubuntu.8116cfe5.svg",
+  "disk-connected":"/assets/images/disk-connected-ubuntu.bcb836ee.svg",
+  "disk-disconnected":"/assets/images/disk-disconnected-ubuntu.6f41bf79.svg",
+  "calc":"/assets/images/calc-ubuntu.52ed0dee.svg",
+  "cpanel":"/assets/images/cpanel-ubuntu.0464e08d.webp",
+  "notepad":"/assets/images/notepad-ubuntu.cc9f1715.webp",
+  "cmd":"/assets/images/cmd-ubuntu.393c1f91.webp",
+  "text":"/assets/images/text-ubuntu.733fe14c.webp",
+  "richtext":"/assets/images/richtext-ubuntu.31b42436.svg",
+  "executable":"/assets/images/executable-ubuntu.55e207d7.webp",
+  "shortcut":"/assets/images/shortcut-win10.c8f56fdb.webp",
+  "media":"/assets/images/media-ubuntu.991db543.svg",
+  "zip":"/assets/images/zip-ubuntu.cef6da1f.svg",
+  "desktop":"/assets/images/desktop-ubuntu.ca166b4b.webp"
+});
+function sourceUbuntuIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceUbuntuIconArtwork,key)
+    ?sourceUbuntuIconArtwork[key as keyof typeof sourceUbuntuIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="ubuntu")return sourceUbuntuIcon(iconKey);
   if(theme==="chromeos")return sourceChromeOSIcon(iconKey);
   if(theme==="macos")return sourceMacOSIcon(iconKey);
   if(theme==="win2k")return sourceWin2kProgramArtwork[iconKey]??null;
@@ -561,6 +596,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="ubuntu"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceUbuntuIcon(kind==="binFull"?"bin-full":kind);
+  }
   if(theme==="chromeos"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceChromeOSIcon(kind==="binFull"?"bin-full":kind);

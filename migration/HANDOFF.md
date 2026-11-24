@@ -1,3 +1,11 @@
+## 24 November 2026 — Ubuntu core desktop/Explorer artwork
+
+Combined [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`: TS, units, inventory, exact artwork, Contacts audit and Vite passed; focused browser stage still running at inspection. No redundant CI.
+
+Pinned Ubuntu registry now supplies 27 core keys via 27 exact paths (26 new hash-matched, one existing shortcut alias). Computer, distinct empty/full Bin, generic and special folders, five disk states, Start, Desktop navigation, core application/file types. Shared resolver + unit and existing focused theme-bin-artwork E2E for actual trash lifecycle and folder/file creation. [Source trace](UBUNTU-CORE-ICONS-SOURCE.md). Exact-head verification pending; Ubuntu shell stays pending. Next Kubuntu core icon registry, then Aero Noir/Oxygen. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — repair failed focused browser verification
 
 [CI #45364747459](https://github.com/codersachin99/windows-os/actions/runs/45364747459) at `2b5b818d` **failed** after TypeScript, 724 UI unit tests (139 files), source inventory, byte-identical artwork, Contacts audit and Vite passed. Focused browser: 947 passed, 3 skipped, 6 failed. Both Control Panel Background tests expected stale 16 instead of actual 30; updated count, retained asset/save assertions. Oxygen desktop/mobile interaction timed out; mobile log shows footer intercepting Switch User. Ubuntu desktop/mobile first logon interaction timed out (exact failing action not logged). Inspection found six newer theme logon roots override shared fixed inset:0 with position:relative, shrinking to contents and overlapping footer/menu with Guest controls. Restored fixed full-viewport root for Oxygen, Ubuntu, Kubuntu, ChromeOS, macOS, Aero Noir; preserve internal original positioning. Added viewport bounds regressions in catalog and explicit non-overlap checks for Oxygen/Ubuntu before real clicks. Ubuntu timeout root cause remains hypothesis until verified. No forced clicks, skip, or timeout inflation.
