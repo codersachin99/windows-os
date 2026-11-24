@@ -9,13 +9,15 @@ import {sourceUbuntuProgramMatches} from "./sourceUbuntuLaunchpad";
 import "./sourceKubuntuStartMenu.css";
 
 interface Props{
+  theme?:"kubuntu"|"oxygen";
   rootRef:RefObject<HTMLElement|null>;items:readonly SourceWin11AllApp[];recentIds:readonly string[];
   dispatch:Dispatch<DesktopAction>;onLaunch(id:string):void;
   onOpenFile(file:FileEntry):Promise<string|null>;
   onContext(event:ReactMouseEvent<HTMLButtonElement>,id:string):void;
 }
-/** Frozen startmenu-kubuntu.js 8753 / shared f0aa, bfe9. */
-export function SourceKubuntuStartMenu({rootRef,items,recentIds,dispatch,onLaunch,onOpenFile,onContext}:Props){
+/** Frozen startmenu-kubuntu.js 8753 / shared f0aa, bfe9.
+ * Oxygen's source theme explicitly styles this same launcher. */
+export function SourceKubuntuStartMenu({theme="kubuntu",rootRef,items,recentIds,dispatch,onLaunch,onOpenFile,onContext}:Props){
   const [query,setQuery]=useState("");
   const [found,setFound]=useState<{text:string;files:FileEntry[]}>({text:"",files:[]});
   const [revision,setRevision]=useState(0);
@@ -50,7 +52,7 @@ export function SourceKubuntuStartMenu({rootRef,items,recentIds,dispatch,onLaunc
     },120);
     return()=>{window.clearTimeout(timer);controller.abort();};
   },[text,revision]);
-  const icon=(id:string)=>sourceThemeProgramArt("kubuntu",id)??appRegistry.get(id)?.icon??legacySourceIconArtwork(id).src;
+  const icon=(id:string)=>sourceThemeProgramArt(theme,id)??appRegistry.get(id)?.icon??legacySourceIconArtwork(id).src;
   const openSetting=(id:string)=>{const app=appRegistry.get("cpanel");if(app)dispatch({type:"OPEN_APP",app,file:{path:id}});};
   const openFile=async(file:FileEntry)=>{const failure=await onOpenFile(file);if(failure)setError(failure);};
   const openResult=(i:number)=>{
@@ -71,10 +73,10 @@ export function SourceKubuntuStartMenu({rootRef,items,recentIds,dispatch,onLaunc
     <img src={src} width={32} height={32} alt=""/><span>{label}{detail&&<small>{detail}</small>}</span>
   </button>;
   return <nav ref={rootRef} id="start-menu" className="source-kubuntu-start"
-    data-test-start-menu="" data-test-kubuntu-start="" data-source-start-theme="kubuntu" aria-label="Start menu">
+    data-test-start-menu="" data-test-kubuntu-start={theme==="kubuntu"?"":undefined} data-test-oxygen-start={theme==="oxygen"?"":undefined} data-source-start-theme={theme} aria-label="Start menu">
     <header>
       <button type="button" aria-label="Guest account" onClick={()=>openSetting("accounts")}>
-        <img src={sourceThemeLogonArtwork.kubuntu.guest} width={32} height={32} alt=""/><span>Guest</span>
+        <img src={sourceThemeLogonArtwork[theme].guest} width={32} height={32} alt=""/><span>Guest</span>
       </button>
       <input ref={search} type="search" aria-label="Search programs and files" placeholder="Search programs"
         data-test-start-search="" data-test-start-menu-search="" value={query}
@@ -98,7 +100,7 @@ export function SourceKubuntuStartMenu({rootRef,items,recentIds,dispatch,onLaunc
       {text&&<div ref={results} className="source-kubuntu-results" data-test-start-results="">
         {apps.length>0&&<section data-test-start-group="apps"><h3>Applications</h3>{apps.map((item,i)=>result(i,item.label,icon(item.id),undefined,item.id))}</section>}
         {settings.length>0&&<section data-test-start-group="settings"><h3>System Settings</h3>{settings.map((item,i)=>result(apps.length+i,item.item.label,icon("cpanel")))}</section>}
-        {files.length>0&&<section data-test-start-group="files"><h3>Files</h3>{files.map((file,i)=>result(apps.length+settings.length+i,file.name,sourceShellAsset("kubuntu",file.type==="directory"?"folder":"file")??legacyArt.file,file.uri))}</section>}
+        {files.length>0&&<section data-test-start-group="files"><h3>Files</h3>{files.map((file,i)=>result(apps.length+settings.length+i,file.name,sourceShellAsset(theme,file.type==="directory"?"folder":"file")??legacyArt.file,file.uri))}</section>}
         {busy&&<p role="status">Searching…</p>}{!busy&&!count&&!error&&<p>No items match your search.</p>}{error&&<p role="alert">{error}</p>}
       </div>}
     </div>

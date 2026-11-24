@@ -1,3 +1,9 @@
+## 24 November 2026 — Oxygen shared source launcher
+
+Oxygen source theme-oxygen-scss.js explicitly styles .startmenu__wrapper.is-kubuntu. Reused SourceKubuntuStartMenu with typed theme parameter, keyed remount per theme, themed Guest/application/file artwork and separate test hooks. Original 6px rounded gradient wrapper, #474c55 border and source shadow; same 320px body, sorted program list, recents, grouped Guest search, account and six footer actions, existing shared context callbacks. Tests for Oxygen source paint, icon, launch, recents, settings, Documents and logoff authored, not executed. Exact source Start button sprite mapping not yet located; retained existing button art, no invented sprite. Footer glyphs, full app icon registry and exact settings task-level results remain partial. No additional CI marker; next Oxygen context/Explorer, then tray and focused batch.
+
+---
+
 ## 24 November 2026 — Kubuntu / Personalize verified, Oxygen WindowMain
 
 Exact-head CI [45413134164](https://github.com/codersachin99/windows-os/actions/runs/45413134164) at 01163fe SUCCESS: 159 unit files / 757 tests, 73 browser passed / 1 skipped / zero failed, TypeScript, inventory, artwork, Contacts, Vite build. All 35 theme cards, Kubuntu volume fix and initial Oxygen shell verified in targeted browser suite. Full suite and visual capture skipped. Oxygen WindowMain source theme-oxygen-scss.js: #31363b frame, #474c55 border, 4px radius, #2a2e32 body, active accent glow and inactive shadow, 20px gradient circular controls and 10px logical end spacing; hover close red #da4453. Existing shared lifecycle/SVG fallback retained; accent #3c92c8 is provisional source link color, not verified original registry. New browser coverage authored, not run. Next Oxygen Start button sprite and launcher.

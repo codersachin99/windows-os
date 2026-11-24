@@ -327,8 +327,8 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     {theme==="chromeos"?
       <SourceChromeOSLauncher rootRef={menuRef} items={win11AllApps} recentIds={startPreferences.storeRecentApps?recentIds:[]}
         dispatch={dispatch} onLaunch={openApp} onOpenFile={openSearchFile} onContext={openProgramContext}/>:
-    theme==="kubuntu"?
-      <SourceKubuntuStartMenu rootRef={menuRef} items={win11AllApps} recentIds={startPreferences.storeRecentApps?recentIds:[]}
+    (theme==="kubuntu"||theme==="oxygen")?
+      <SourceKubuntuStartMenu key={theme} theme={theme} rootRef={menuRef} items={win11AllApps} recentIds={startPreferences.storeRecentApps?recentIds:[]}
         dispatch={dispatch} onLaunch={openApp} onOpenFile={openSearchFile} onContext={openProgramContext}/>:
     theme==="ubuntu"?
       <SourceUbuntuLaunchpad rootRef={menuRef} items={win11AllApps} dispatch={dispatch}

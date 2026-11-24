@@ -1,5 +1,5 @@
 /* Source startmenu-kubuntu.css and 8753 layout; scoped responsive adapter. */
-.windows-desktop[data-theme="kubuntu"] .source-kubuntu-start{
+.windows-desktop:is([data-theme="kubuntu"],[data-theme="oxygen"]) .source-kubuntu-start{
   position:absolute;inset-inline-start:0;bottom:var(--taskbar-height,40px);
   z-index:3500;display:flex;flex-direction:column;box-sizing:border-box;
   width:min(682px,100%);max-height:calc(100dvh - var(--taskbar-height,40px));
@@ -43,4 +43,14 @@
   .source-kubuntu-recent-grid>button{width:100%;height:90px}
   .source-kubuntu-start>footer{gap:2px;padding:4px}
   .source-kubuntu-start>footer button{padding:4px;font-size:11px}
+}
+
+/* Frozen Oxygen theme-oxygen-scss.js specifically overrides
+ * .startmenu__wrapper.is-kubuntu; preserve the shared 8753 layout. */
+.windows-desktop[data-theme="oxygen"] .source-kubuntu-start{
+  color:#fff;border:1px solid #474c55;border-radius:6px;
+  box-shadow:0 0 2px #000;background:linear-gradient(#40464d,#2f3438) #2a2e32;
+}
+.windows-desktop[data-theme="oxygen"] .source-kubuntu-start>header input{
+  background:#2a2e32dd;border-color:var(--border-color);
 }
