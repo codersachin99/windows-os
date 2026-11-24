@@ -1,3 +1,9 @@
+## 24 November 2026 — Aero Noir base shell initial slice
+
+Oxygen rerun 45420655049 at 4942c28 passed all build/unit/source/artwork gates, browser pending when inspected. Aero Noir isolated source taskbar/desktop first slice: original gloss, inset highlight, active/open task gradients, desktop selection brightness/shadow, optional 4px taskbar glass layer and source palette 3b8c/2299 index 3 #6bc35b (65% active alpha when glass on). Exact palette evidence also Kubuntu index 1 #5986ca, Oxygen index 4 #b3e165, Ubuntu index 6 #f0b85b; those previously provisional colors to be corrected in a separate verified batch. Aero Noir CSS uses default source transparency and visual-effects flag, separate appearance Save/Cancel integration and inactive color still pending. Original Start sprite mapping, full window/launcher/context/Explorer/tray and screenshot parity pending. Browser test authored, not executed; no additional CI marker. Next check Oxygen rerun then Aero Noir WindowMain.
+
+---
+
 ## 24 November 2026 — Oxygen focused CI locator repair
 
 Oxygen CI [45416420482](https://github.com/codersachin99/windows-os/actions/runs/45416420482) at 198ad40: TS, 159 unit files / 757 tests, source inventory, original artwork, Contacts and Vite passed; 85 browser passed / 4 failed / 1 skipped. All four failures are two test locator defects reproduced in both projects: Oxygen Start spec expects non-existent .source-oxygen-start-body although original shared layout uses .source-kubuntu-start-body; Notepad menubar spec matches hidden program list plus search result. Correct both locators only, retaining full behavior and styling assertions; no source changes or weakened checks. [run-ci] [oxygen-check] rerun requested. Do not certify Oxygen until rerun completes. Next Aero Noir.

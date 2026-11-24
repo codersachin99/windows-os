@@ -1,0 +1,27 @@
+import {test,expect} from "@playwright/test";
+test("Aero Noir source taskbar and selection retain actual window lifecycle",async({page})=>{
+  await page.goto("/?theme=aeroNoir");
+  await page.locator('[data-test-source-logon-avatar="aeroNoir"]').click({timeout:12000});
+  const shell=page.locator('[data-test-main-screen][data-theme="aeroNoir"]');
+  const bar=shell.locator(".windows-taskbar");
+  await expect(bar).toBeVisible();
+  await expect(bar).toHaveCSS("background-color",/^(rgb\(107, 195, 91\)|rgba\(107, 195, 91, 0\.65\))$/);
+  await expect(bar).toHaveCSS("background-image",/linear-gradient/);
+  const icon=shell.locator('[data-test-desktop-icon="computer"]');
+  await icon.click();
+  await expect(icon).toHaveClass(/is-active/);
+  await expect(icon).toHaveCSS("border-top-left-radius","3px");
+  await expect(icon).toHaveCSS("backdrop-filter","brightness(0.7)");
+  await expect(icon).toHaveCSS("background-image",/linear-gradient/);
+  await icon.dblclick();
+  const win=shell.locator('[data-test-window="computer"]');
+  await expect(win).toBeVisible();
+  const task=bar.locator('[data-test-taskbar-pin="computer"],[data-test-taskbar-running-group="computer"]').first();
+  await expect(task).toHaveClass(/is-active/);
+  await expect(task).toHaveCSS("border-top-left-radius","4px");
+  await win.locator('[data-source-window-control="minimize"]').click();
+  await expect(win).toHaveCount(0);
+  await expect(task).toHaveCSS("border-top-color","rgb(85, 85, 85)");
+  await task.click();
+  await expect(win).toBeVisible();
+});

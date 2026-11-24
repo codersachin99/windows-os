@@ -1,0 +1,53 @@
+/* Frozen theme-aeroNoir-scss.js, registry 3b8c and palette 2299.
+ * Source active color is palette index 3 (#6bc35b). */
+.windows-desktop[data-theme="aeroNoir"]{
+  --theme-color:#6bc35b;--border-color:#888;
+}
+.windows-desktop[data-theme="aeroNoir"][data-effect-enable-glass]{
+  --theme-color:rgba(107,195,91,.65);
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar{
+  isolation:isolate;color:#fff;background-color:var(--theme-color);
+  background-image:linear-gradient(#fff3,#fff4 50%,#0002 50%,#0001);
+  border:0;box-shadow:inset 0 1px #fff8;backdrop-filter:none;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+}
+.windows-desktop[data-theme="aeroNoir"][data-effect-enable-glass] .windows-taskbar::before{
+  backdrop-filter:blur(4px);
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__start{
+  background:none;box-shadow:none;filter:drop-shadow(0 0 1px #fffa);
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__application{
+  color:#fff;background:none;border:1px solid transparent;border-radius:4px;box-shadow:none;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]){
+  border-color:#555;background:linear-gradient(#fff5,#0005);box-shadow:inset 0 0 0 1px #fff5;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):hover{
+  background-image:linear-gradient(#fff5,#0005),radial-gradient(circle at bottom,var(--theme-color) 5%,transparent 50%);
+  backdrop-filter:brightness(1.1);
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]).is-active{
+  background-image:linear-gradient(#0005,#fff5);box-shadow:inset 0 1px 3px #000a;border-color:var(--theme-color);
+}
+.windows-desktop[data-theme="aeroNoir"] :is(.windows-taskbar__application:not(.is-running):not([data-test-taskbar-running-group]):is(.is-active,:hover),.windows-taskbar__tray-icon:hover){
+  background-image:linear-gradient(transparent,#fff8,transparent),linear-gradient(transparent,#0008,transparent),linear-gradient(transparent,#fff8,transparent),linear-gradient(transparent,#0008,transparent);
+  background-size:1px 100%;background-repeat:no-repeat;background-position:0 0,1px 0,100% 0,calc(100% - 1px) 0;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__show-desktop{background:none;border-color:transparent}
+.windows-desktop[data-theme="aeroNoir"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target){
+  background:none;border:1px solid transparent;border-radius:4px;box-shadow:none;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):hover{
+  border-color:var(--theme-color);background:none;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,.is-selected,:focus-visible){
+  backdrop-filter:brightness(.7);border-radius:3px;border-color:var(--theme-color);
+  background:linear-gradient(#fff3,#0003) var(--theme-color);box-shadow:3px 3px 3px #0003;
+}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,.is-selected,:focus-visible){box-shadow:-3px 3px 3px #0003}
+.windows-desktop[data-theme="aeroNoir"] .desktop__icon-name:not(:has(input)){color:#fff;text-shadow:1px 1px 2px #000}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) .desktop__icon-name:not(:has(input)){text-shadow:-1px 1px 2px #000}
