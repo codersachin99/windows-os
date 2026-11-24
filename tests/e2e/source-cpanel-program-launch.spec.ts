@@ -110,3 +110,40 @@ test("source Control Panel does not claim unported appearance and taskbar action
   await notification.click();
   await expect(cpanel.locator("[data-test-cpanel-notification]")).toBeVisible();
 });
+
+
+test("Control Panel direct Background launch restores committed Aero appearance",async({page})=>{
+  await page.goto("/?theme=aero-2");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.getByRole("button",{name:"Open Start menu"}).click();
+  await page.locator("[data-test-open-cpanel]").click();
+  const cpanel=page.locator('[data-test-window="cpanel"]');
+  const input=cpanel.getByRole("searchbox",{name:"Search Control Panel"});
+  await input.fill("change the theme");
+  await cpanel.locator('[data-test-cpanel-result="personalize"]')
+    .getByRole("button",{name:"Change the theme"}).click();
+  const editor=page.locator('[data-test-window="personalize"]').first();
+  const tint=()=>page.locator("[data-test-main-screen]").evaluate(el=>
+    getComputedStyle(el).getPropertyValue("--theme-color").trim());
+  await editor.locator("[data-test-personalize-appearance-link]").click();
+  await editor.locator('[data-test-color-item="#d13438"]').click();
+  await editor.locator("[data-test-color-save]").click();
+  await editor.locator("[data-test-personalize-appearance-link]").click();
+  await editor.locator('[data-test-color-item="#00b294"]').click();
+  await editor.locator("[data-test-color-transparency]").uncheck();
+  await expect.poll(tint).toBe("#00b294");
+
+  // Switch to the already-open Control Panel, not a reload or a simulated route.
+  await page.locator('[data-test-taskbar-running-group="cpanel"]').click();
+  await input.fill("change desktop background");
+  await cpanel.locator('[data-test-cpanel-result="personalize"]')
+    .getByRole("button",{name:"Change desktop background"}).click();
+  const picker=page.locator('[data-test-window="personalize"]').last();
+  await expect(picker.locator('[data-personalize-view="background"]')).toBeVisible();
+  await expect.poll(tint).toBe("rgba(209, 52, 56, 0.65)");
+  await picker.locator('[data-test-button="cancel"]').click();
+  await picker.locator("[data-test-personalize-appearance-link]").click();
+  await expect(picker.locator('[data-test-color-item="#d13438"]'))
+    .toHaveAttribute("aria-pressed","true");
+  await expect(picker.locator("[data-test-color-transparency]")).toBeChecked();
+});
