@@ -73,3 +73,17 @@ test("source Basic theme does not expose Aero color editor",async({page})=>{
   const win=page.locator('[data-test-window="personalize"]');
   await expect(win.locator("[data-test-personalize-appearance-link]")).toHaveCount(0);
 });
+
+test("source ChangeAppearance discards unsaved color and transparency when opening Desktop Background",async({page})=>{
+  const win=await openAppearance(page);
+  await win.locator('[data-test-color-item="#00b294"]').click();
+  await win.locator("[data-test-color-transparency]").uncheck();
+  expect(await tint(page)).toBe("#00b294");
+  await win.locator("[data-test-personalize-open-background]").click();
+  await expect(win.locator("[data-test-personalize]")).toHaveAttribute("data-personalize-view","background");
+  expect(await tint(page)).toBe("rgba(89, 134, 202, 0.65)");
+  await win.locator('[data-test-button="cancel"]').click();
+  await win.locator("[data-test-personalize-appearance-link]").click();
+  await expect(win.locator('[data-test-color-item="#5986ca"]')).toHaveAttribute("aria-pressed","true");
+  await expect(win.locator("[data-test-color-transparency]")).toBeChecked();
+});
