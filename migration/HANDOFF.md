@@ -1,3 +1,9 @@
+## 24 November 2026 — Kubuntu base shell initial slice
+
+Kubuntu starts from original theme-kubuntu-scss.js module 582b and uses the source base taskbar, not the Ubuntu dock. Ported isolated taskbar/desktop paint, 47px compact tasks, active/inactive group states, optional glass blur and icon selection alpha layer. #3daee9 is the provisional Breeze accent pending exact registry verification. Shared base geometry and commands retained. Kubuntu shell browser regression authored, not run; no new CI while Ubuntu rerun 45409926204 is active. Next Kubuntu window chrome and launcher after checking Ubuntu results.
+
+---
+
 ## 24 November 2026 — Ubuntu CI regression repair
 
 Run [45408745508](https://github.com/codersachin99/windows-os/actions/runs/45408745508): TypeScript, all unit tests, source inventory, byte-identical artwork, Contacts source checks and production build passed; focused browser 49 passed / 4 failed / 1 skipped. Both projects reproduced two issues: generic tray position:relative captured Ubuntu clock's absolute centering; rapid view switches retained list item's 400ms double-tap state and opened Notepad. Fix: Ubuntu-only position:static tray, and key Explorer item instances by view mode and URI (selection remains session-owned). Added explicit no-Notepad assertion while preserving rapid view change regression; keep original clock geometry assertion. Rerun with [run-ci] [ubuntu-check]. Results pending. No full browser suite or visual capture. Next: inspect rerun before Kubuntu.

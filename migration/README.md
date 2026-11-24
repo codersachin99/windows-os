@@ -1,3 +1,5 @@
+> **24 November 2026 — Kubuntu base shell:** original dark taskbar and desktop selection, tests pending; Ubuntu CI remains in progress. [Source trace](KUBUNTU-SHELL-SOURCE.md).
+
 > **24 November 2026 — Ubuntu CI regression repair:** 49 passed / 4 failed / 1 skipped; corrected clock containing block and view-specific double-tap state. Focused rerun pending.
 
 > **24 November 2026 — Ubuntu verification:** explicit focused CI batch, centered clock CSS corrected; results pending.

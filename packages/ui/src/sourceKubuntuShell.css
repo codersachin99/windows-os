@@ -1,0 +1,52 @@
+/* Frozen legacy-win7@4e63290 theme-kubuntu-scss.js module 582b.
+ * Original base taskbar layout with Kubuntu-specific surface and state
+ * paint. Existing Guest pin/group/window commands remain shared. */
+.windows-desktop[data-theme="kubuntu"]{
+  --theme-color:#3daee9;
+  --border-color:#fff5;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar{
+  background:#2a2e32;color:#fff;border:0;box-shadow:none;backdrop-filter:none;
+}
+.windows-desktop[data-theme="kubuntu"][data-effect-enable-glass] .windows-taskbar{
+  background:rgba(42,46,50,.8666666667);backdrop-filter:blur(6px);
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__start{
+  border-radius:0;margin-top:0;background:none;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__start img{filter:none}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__start:hover img{filter:brightness(1.2)}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__application{
+  height:100%;color:#fff;background:none;border:0;border-radius:0;box-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__application:not(.is-full-size){
+  flex:0 0 47px;width:47px;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]){
+  background:#fff3;box-shadow:inset 0 3px #fff4;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):is(.is-active,:hover){
+  background:var(--theme-color);
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__application:hover{filter:brightness(1.2)}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__show-desktop{
+  background:none;border-color:transparent;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__show-desktop:hover{background:var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__tray-icon:hover{filter:brightness(1.1)}
+/* Source desktop__icon-item uses a separate accent layer so that
+ * hovering and selecting never fade the original icon or text. */
+.windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target){
+  isolation:isolate;background:none;border:1px solid transparent;border-radius:3px;box-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target)::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:var(--theme-color);opacity:0;border-radius:inherit;
+}
+.windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(:hover,.is-active,:focus-visible){
+  border-color:var(--theme-color);
+}
+.windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):hover::before{opacity:.3}
+.windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:focus-visible)::before{opacity:.7}
+.windows-desktop[data-theme="kubuntu"] .desktop__icon-name:not(:has(input)){color:#fcfcfc;text-shadow:1px 1px 2px #000}
+.windows-desktop[data-theme="kubuntu"]:dir(rtl) .desktop__icon-name:not(:has(input)){text-shadow:-1px 1px 2px #000}
