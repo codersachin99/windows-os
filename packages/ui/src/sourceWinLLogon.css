@@ -1,0 +1,91 @@
+/* Frozen src/styles/themes/logon-winl.css, shared WinL/WinLP source:
+ * white pane within a 512x320 gray gradient login container, 100px
+ * guest-win10 avatar, 50px start-button-winxp brand and original
+ * login-winL background. Narrow screens clamp, not redesign, the source.
+ */
+.windows-logon.source-winl-logon{
+  display:flex;align-items:center;justify-content:center;position:relative;
+  background-color:#2f4969;background-position:0 0;background-size:cover;
+  color:#000;font:14px Tahoma,"Segoe UI",sans-serif;
+}
+.source-winl-logon__container{
+  box-sizing:border-box;width:512px;height:320px;max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - 24px);min-height:0;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:16px 32px 10px;
+  border:1px solid #000;border-radius:6px;
+  background:linear-gradient(90deg,#4e4e4f,#a2a3a3,#4e4e4f);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.3333333333);
+}
+.source-winl-logon__brand{
+  flex:0 0 50px;width:50px;height:50px;object-fit:contain;
+}
+.source-winl-logon__pane{
+  box-sizing:border-box;width:100%;flex:1;min-height:0;
+  display:flex;flex-direction:row;align-items:center;gap:24px;
+  padding:16px 24px;background:#fff;color:#000;
+}
+.source-winl-logon__avatar{
+  display:grid;place-items:center;flex-shrink:0;
+  width:102px;height:102px;padding:0;cursor:pointer;
+  background:#fff;border:1px solid #acacac;border-radius:4px;
+}
+.source-winl-logon__avatar img{
+  display:block;width:100px;height:100px;object-fit:cover;border-radius:3px;
+}
+.source-winl-logon__avatar:focus-visible,
+.source-winl-logon__avatar:hover{
+  outline:none;box-shadow:0 0 0 4px rgba(0,0,0,.2);
+}
+.source-winl-logon__account{
+  min-width:0;display:flex;flex:1;flex-direction:column;
+  align-items:flex-start;justify-content:center;gap:10px;
+}
+.source-winl-logon__account strong{font-size:18px;font-weight:600}
+.source-winl-logon__account span{font-size:13px;line-height:1.35}
+.source-winl-logon__account button{
+  padding:3px 0;background:transparent;border:0;border-radius:2px;
+  text-decoration:underline;color:#000;cursor:pointer;
+  font:14px Tahoma,sans-serif;
+}
+.source-winl-logon__account button:hover{text-decoration:none}
+.source-winl-logon__account button:focus-visible{
+  outline:2px solid rgba(0,0,0,.6);
+}
+.source-winl-logon__power{
+  flex:none;min-height:30px;display:flex;gap:24px;justify-content:center;
+  align-items:center;color:#fff;
+}
+.source-winl-logon__power button{
+  min-width:96px;padding:4px;cursor:pointer;
+  color:#fff;background:transparent;border:0;
+  font:14px Tahoma,sans-serif;text-shadow:1px 1px 1px #000;
+}
+.source-winl-logon__power button:hover,
+.source-winl-logon__power button:focus-visible{text-decoration:underline}
+.source-winl-logon__unavailable{
+  position:absolute;z-index:8;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(320px,calc(100vw - 32px));box-sizing:border-box;
+  background:#fff;color:#000;border:1px solid #000;border-radius:4px;
+  padding:20px;text-align:center;box-shadow:0 8px 24px #0007;
+}
+.source-winl-logon__unavailable p{margin:0 0 18px}
+.source-winl-logon__unavailable button{
+  border:1px solid #7f9db9;background:#fff;padding:5px 18px;cursor:pointer;
+}
+@media(max-width:520px){
+  .source-winl-logon__container{padding:12px 14px 10px}
+  .source-winl-logon__pane{padding:12px;gap:12px}
+  .source-winl-logon__account strong{font-size:16px}
+  .source-winl-logon__account span{font-size:12px}
+}
+@media(max-width:350px){
+  .source-winl-logon__pane{gap:6px}
+  .source-winl-logon__avatar{width:82px;height:82px}
+  .source-winl-logon__avatar img{width:80px;height:80px}
+}
+@media(max-height:340px){
+  .source-winl-logon__container{gap:4px;padding:6px 12px}
+  .source-winl-logon__brand{height:36px;width:36px;flex-basis:36px}
+  .source-winl-logon__pane{padding:6px 12px}
+}
