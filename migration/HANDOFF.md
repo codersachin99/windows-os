@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu focused CI batch
+
+Opt-in `[run-ci] [ubuntu-check]` retains TypeScript, all units, source/artwork checks and build, then exercises Ubuntu logon/shell/launcher/window/context/Explorer/tray plus shared cascade and XP/Win11 shell regression on Chromium projects. Static review corrected shared DateTime wrapper positioning that overrode Ubuntu clock centering; added geometry assertion. CI result pending; no visual capture or release. Next: inspect run, repair actual failures, then Kubuntu.
+
+---
+
 ## 24 November 2026 — Ubuntu tray and DateTime
 
 Integrated shared Guest Action Center/network/battery/volume, exclusive popup owner, original system menu and calendar/analog clock. [Source trace](UBUNTU-TRAY-SOURCE.md). Browser regression authored, not executed. Next focused Ubuntu CI, resolve failures before Kubuntu. Main/frozen source/draft PR unchanged.

@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu verification:** explicit focused CI batch, centered clock CSS corrected; results pending.
+
 > **24 November 2026 — Ubuntu tray:** source system menu and interactive Guest tray/DateTime; tests pending. [Source trace](UBUNTU-TRAY-SOURCE.md).
 
 > **24 November 2026 — Ubuntu Explorer/menubar:** source address, navigation, list selection and status styling; tests pending. [Source trace](UBUNTU-EXPLORER-SOURCE.md).

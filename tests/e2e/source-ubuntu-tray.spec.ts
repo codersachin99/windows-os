@@ -5,6 +5,9 @@ test("Ubuntu source tray shares exclusive popup state, calendar and system menu"
   const tray=page.locator('[data-test-taskbar-tray="ubuntu"]');
   await expect(tray.locator("[data-test-tray-icon]")).toHaveCount(4);
   await expect(tray.locator("[data-test-tray-hidden-toggle]")).toHaveCount(0);
+  const clock=(await tray.locator("[data-test-datetime-trigger]").boundingBox())!;
+  const bar=(await page.locator('[data-test-taskbar="ubuntu"]').boundingBox())!;
+  expect(Math.abs(clock.x+clock.width/2-(bar.x+bar.width/2))).toBeLessThanOrEqual(2);
   await tray.locator("[data-test-volume]").click();
   const volume=tray.locator("[data-test-volume-popup]");
   await expect(volume).toBeVisible();

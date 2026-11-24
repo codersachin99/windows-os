@@ -424,3 +424,15 @@
   .windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu{flex-basis:24px}
   .windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup{width:min(340px,calc(100vw - 16px))}
 }
+
+/* Shared DateTime styles declare a relative wrapper; Ubuntu's source
+ * centers it on the complete top bar, independently of tray width. */
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray .source-macos-datetime{
+  position:absolute;left:50%;transform:translateX(-50%);
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-trigger{
+  display:grid;place-items:center;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-trigger:hover{
+  background:#fff3;
+}
