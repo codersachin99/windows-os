@@ -45,6 +45,10 @@ FILES: dict[str, dict[str, str]] = {
     "win2k": {
         "logo2k.15140c8b.webp": "028a0e1cd4f9eab7c472482312189eeecd0fc0df",
     },
+    "winLS": {
+        # logon-winl.js uses this for both source aliases winLS and winLP.
+        "login-winL.d27b081a.webp": "fd22904131ad5ddb4ab5c316edbe9eb19aa01376",
+    },
     "winxp": {
         "logoxp.9b034658.png": "33b3bca96d3c07994b096bf13d2a87a6a05b1196",
         "action-center-winxp.52f44912.webp": "56cc03e77b7ce0097db3addd9463d0d8b22c502f",
