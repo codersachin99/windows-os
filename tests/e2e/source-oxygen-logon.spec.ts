@@ -29,7 +29,10 @@ test("Oxygen uses original source Guest avatar, overlay and centered power artwo
   expect((await page.request.get("/assets/images/oxygen.414aed47.svg")).ok()).toBeTruthy();
   const power=(await login.locator(".source-oxygen-logon__power").boundingBox())!;
   expect(Math.abs(power.x+power.width/2-page.viewportSize()!.width/2)).toBeLessThan(2);
-  await login.getByRole("button",{name:"Switch User"}).click();
+  const switchUser=login.getByRole("button",{name:"Switch User"});
+  const switchBounds=(await switchUser.boundingBox())!;
+  expect(switchBounds.y+switchBounds.height).toBeLessThan(power.y);
+  await switchUser.click();
   await expect(login.getByRole("dialog",{name:"Account login"})).toBeVisible();
   await login.getByRole("button",{name:"Back"}).click();
   await guest.click();

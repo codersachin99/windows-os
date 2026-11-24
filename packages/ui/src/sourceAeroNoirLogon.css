@@ -4,7 +4,7 @@
  * / shutdown-kubuntu artwork. Only the bounded Guest login is ported.
  */
 .windows-logon.source-aeronoir-logon{
-  display:flex;align-items:center;justify-content:center;position:relative;
+  display:flex;align-items:center;justify-content:center;position:fixed;inset:0;
   overflow:hidden;background-color:#111;background-size:300%;background-position:center center;
   color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
 }

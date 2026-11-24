@@ -1,7 +1,7 @@
 /* Pinned logon-chromeos.css; shared logon-base Guest pane.
  * Footer wraps on narrow screens as a React viewport accommodation. */
 .windows-logon.source-chromeos-logon{
-  position:relative;display:flex;justify-content:center;align-items:center;
+  position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
   overflow:hidden;background:#fff;color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
 }
 .source-chromeos-logon__overlay-top,.source-chromeos-logon__overlay-bottom{

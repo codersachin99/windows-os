@@ -1,3 +1,5 @@
+> **24 November 2026 — browser verification repair:** CI #45364747459 passed 724 unit tests, failed six targeted browser cases (947 passed, 3 skipped). Restore six full-viewport logon roots, update stale wallpaper count, add viewport and hit-target geometry regressions. New opt-in CI requested with macOS/ChromeOS icons; exact-head pending.
+
 > **24 November 2026 — ChromeOS core icon artwork:** 27 original registry keys, 20 exact paths (19 imported, one reused). Shared empty/full Bin and folder aliases preserved, actual trash lifecycle tests. [Source trace](CHROMEOS-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
 
 > **24 November 2026 — macOS core icon artwork:** 24 pinned registry keys, 20 exact original file paths, shared desktop/Explorer/Bin resolution with unit and browser regressions. [Source trace](MACOS-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.

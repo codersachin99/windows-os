@@ -1,7 +1,7 @@
 /* Frozen logon-macos.css, ff91, and the shared Guest pane.
  * Source glyph names are retained by role; local SVG shapes approximate Iconify. */
 .windows-logon.source-macos-logon{
-  display:flex;position:relative;align-items:center;justify-content:center;
+  display:flex;position:fixed;inset:0;align-items:center;justify-content:center;
   overflow:hidden;background-size:cover;background-position:center;
   color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
 }

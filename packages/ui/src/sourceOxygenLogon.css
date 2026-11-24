@@ -1,7 +1,7 @@
 /* Source logon-oxygen.css + logon-base pane (gap 16px, translateY -48px).
  * Short viewport accommodation is a React safety adaptation. */
 .windows-logon.source-oxygen-logon{
-  position:relative;display:flex;align-items:center;justify-content:center;
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
   overflow:hidden;color:#fff;background-size:cover;background-position:center;
   font:14px "Segoe UI",Tahoma,sans-serif;
 }

@@ -2,7 +2,7 @@
  * 300% background, 150px translucent Guest, 48px rounded power art.
  * Small viewport accommodation is intentionally a React adaptation. */
 .windows-logon.source-kubuntu-logon{
-  position:relative;display:flex;align-items:center;justify-content:center;
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
   overflow:hidden;color:#fff;background-size:300%;background-position:center;
   font:14px "Segoe UI",Tahoma,sans-serif;
 }

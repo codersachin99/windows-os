@@ -2,7 +2,7 @@
  * Base bg-white/10 treatment over a dark backing; precise source composite
  * and small viewport adjustments remain subject to paired capture. */
 .windows-logon.source-ubuntu-logon{
-  display:flex;position:relative;align-items:center;justify-content:center;
+  display:flex;position:fixed;inset:0;align-items:center;justify-content:center;
   overflow:hidden;color:#fff;background:linear-gradient(#ffffff1a,#ffffff1a),#000;
   font:14px "Segoe UI",Tahoma,sans-serif;
 }

@@ -44,6 +44,14 @@ test("source theme variants select exact login screen families and report fallba
     await expect(login).toHaveAttribute("data-source-logon-theme",screen);
     await expect(login).toHaveAttribute("data-source-logon-renderer",renderer);
     await expect(login).toHaveAttribute("data-source-shell-status",status);
+    if(["aeroNoir","oxygen","kubuntu","ubuntu","chromeos","macos"].includes(id)){
+      const bounds=(await login.boundingBox())!;
+      const viewport=page.viewportSize()!;
+      expect(bounds.x,id+" left").toBeCloseTo(0,0);
+      expect(bounds.y,id+" top").toBeCloseTo(0,0);
+      expect(bounds.width,id+" width").toBeCloseTo(viewport.width,0);
+      expect(bounds.height,id+" height").toBeCloseTo(viewport.height,0);
+    }
     await expect(page.locator('[data-test-main-screen]')).toHaveCount(0);
   }
 });

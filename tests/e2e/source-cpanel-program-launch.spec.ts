@@ -55,9 +55,9 @@ test("source Control Panel Change desktop background opens actual Background vie
   const personalize=page.locator('[data-test-window="personalize"]');
   await expect(personalize.locator('[data-personalize-view="background"]'))
     .toBeVisible();
-  // The three byte-imported Aero category images extend the original 13 to 16.
+  // Original imported image gallery now contains 30 distinct source paths.
   await expect(personalize.locator('[data-test-bg-list="system"] [data-test-bg-item]'))
-    .toHaveCount(16);
+    .toHaveCount(30);
   for(const original of [
     "architecture.e651db26.webp",
     "landscape.1626b82c.webp",

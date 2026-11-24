@@ -36,7 +36,11 @@ test("Ubuntu login has original Guest icon, footer logo and logon-only top syste
   await expect(menu).toHaveCount(0);
   await expect(trigger).toBeFocused();
   await trigger.click();
-  await login.getByRole("button",{name:"Switch User"}).click();
+  const switchUser=login.getByRole("button",{name:"Switch User"});
+  const bounds=(await switchUser.boundingBox())!;
+  const menuBounds=(await menu.boundingBox())!;
+  expect(bounds.y).toBeGreaterThan(menuBounds.y+menuBounds.height);
+  await switchUser.click();
   await expect(menu).toHaveCount(0);
   await expect(login.getByRole("dialog",{name:"Account login"})).toBeVisible();
   await login.getByRole("button",{name:"Back"}).click();
