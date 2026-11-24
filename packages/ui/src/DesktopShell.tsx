@@ -759,7 +759,7 @@ export function DesktopShell({
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch} open={macPopup==="spotlight"} setOpen={open=>setMacPopupOpen("spotlight",open)}/>}
-          {trayPreferences.showClockIcon&&(state.theme==="macos"?<SourceMacOSDateTime open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
+          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime baseLayout={state.theme==="chromeos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
         </div>
         {state.theme!=="macos"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           data-test-show-desktop=""

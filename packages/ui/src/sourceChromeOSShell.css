@@ -191,3 +191,42 @@
 .windows-desktop[data-theme="chromeos"] .source-macos-notification>div{flex:1;min-width:0;overflow-wrap:anywhere}
 .windows-desktop[data-theme="chromeos"] .source-macos-notification p{margin:4px 0;white-space:pre-wrap}
 .windows-desktop[data-theme="chromeos"] .source-macos-notification button{align-self:start;border:0;background:none;color:#333;font-size:18px}
+
+/* Base 4e5e/ada7 DateTime uses calendar beside a 128px marked analog
+ * clock and digital seconds. ChromeOS inherits base calendar paint. */
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime{height:36px;flex:0 0 56px}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-trigger{
+  display:grid;place-items:center;width:56px;height:36px;padding:0;border:0;border-radius:99px;background:none;color:#333;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-trigger:is(:focus,[aria-expanded="true"]){background:#0002}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-popup{
+  position:fixed;top:auto;bottom:calc(var(--taskbar-height) + 16px);inset-inline-end:12px;
+  z-index:4900;box-sizing:border-box;width:max-content;max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - var(--taskbar-height) - 28px);overflow:auto;
+  background:var(--source-chromeos-shelf);color:#333;border-radius:10px;
+  padding:12px;box-shadow:0 2px 8px #0003;text-align:start;
+  font:10pt/1.4 "Segoe UI",Arial,sans-serif;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-popup button{border:0;background:none;color:inherit;font:inherit}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-popup>button{display:block;text-align:start;padding:4px 0;color:#1967d2}
+.windows-desktop[data-theme="chromeos"] .source-datetime-content{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:12px 0}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar{width:252px;max-width:100%;text-align:center}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar header{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:center;margin-bottom:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-monthyear{grid-column:2/span 5;grid-row:1;display:flex;justify-content:center}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-monthyear button{padding:4px 2px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-arrow{width:32px;height:32px;font-size:20px!important}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-arrow:nth-child(2){grid-column:1;grid-row:1}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-arrow:nth-child(3){grid-column:7;grid-row:1}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-calendar-weekdays,.source-macos-calendar-days){display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-weekdays{font-weight:600;margin-bottom:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-days button{padding:4px 8px;min-width:0}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-days button.is-outside{opacity:.4}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,1fr);background:#fff;min-height:168px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-picker button{padding:8px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar button:not(:disabled):is(:hover,:focus-visible){background:#0001}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar button[aria-pressed="true"]{background:#0002}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar button.is-today{background:#0004;opacity:1}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-year-arrows{display:flex;justify-content:space-between}
+.windows-desktop[data-theme="chromeos"] .source-chromeos-clock{display:flex;flex-direction:column;align-items:center;gap:8px;color:#000;flex:none}
+.windows-desktop[data-theme="chromeos"] .source-chromeos-clock time{font-variant-numeric:tabular-nums}
+.windows-desktop[data-theme="chromeos"] .source-chromeos-date-settings:disabled{opacity:.5;cursor:default}

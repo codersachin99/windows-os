@@ -1,3 +1,9 @@
+## 24 November 2026 — ChromeOS DateTime and focused verification
+
+Shared calendar plus original 128px analog marked face and digital seconds, source time formulas and date reset. Native date settings disabled honestly. [Source trace](CHROMEOS-DATETIME-SOURCE.md). Added focused [run-ci] [chromeos-check] verification including ChromeOS specs, cascade edges and prior XP/Win11 artwork repair; all nonbrowser gates preserved. Latest batch results pending. Next repair exact-head failures, then Ubuntu. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — ChromeOS shared tray
 
 Reused base source Action Center, Network, Battery and Volume functionality with theme-scoped light bottom popups and 400px notification toast. Three original network images byte verified and audited. Shared Guest brightness/audio and popup ownership; real account/session boundaries unchanged. [Source trace](CHROMEOS-TRAY-SOURCE.md). Browser regression authored, unexecuted. Next DateTime analog/digital calendar variant and focused ChromeOS CI including XP/Win11 artwork correction. Main/frozen source/draft PR/releases unchanged.

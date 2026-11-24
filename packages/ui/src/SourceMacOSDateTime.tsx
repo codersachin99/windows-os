@@ -1,10 +1,12 @@
 import {useEffect,useRef,useState} from "react";
+import {SourceAnalogClock} from "./SourceAnalogClock";
+import {sourceClockDigital} from "./sourceClock";
 import {sourceCalendarDays,sourceCalendarMonth,sourceCalendarSameDay} from "./sourceCalendar";
 
 const fullDate=(d:Date)=>d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
 const monthLabel=(d:Date)=>d.toLocaleDateString("en-US",{month:"long"});
 
-export function SourceMacOSDateTime({onOpen,open,setOpen}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void}){
+export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseLayout?:boolean}){
   const [now,setNow]=useState(()=>new Date());
   const [month,setMonth]=useState(()=>sourceCalendarMonth(now,0));
   const [selected,setSelected]=useState(now);
@@ -37,15 +39,16 @@ export function SourceMacOSDateTime({onOpen,open,setOpen}:{onOpen:()=>void;open:
       }
     }}>
     <button ref={trigger} type="button" className="source-macos-datetime-trigger"
-      data-test-macos-datetime-trigger="" aria-label="Date and time" aria-haspopup="dialog" aria-expanded={open}
+      data-test-macos-datetime-trigger="" data-test-datetime-trigger="" aria-label="Date and time" aria-haspopup="dialog" aria-expanded={open}
       onClick={()=>{if(open)setOpen(false);else{onOpen();reset();setOpen(true);}}}>
       <time dateTime={now.toISOString()} className="windows-taskbar__clock">
-        <span>{now.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",hourCycle:"h23"})}</span>
+        <span>{sourceClockDigital(now)}</span>
         <span>{now.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}</span>
       </time>
     </button>
-    {open&&<div role="dialog" aria-label="Calendar" className="source-macos-datetime-popup" data-test-macos-datetime-popup="">
+    {open&&<div role="dialog" aria-label="Calendar" className="source-macos-datetime-popup" data-test-macos-datetime-popup="" data-test-datetime-popup="">
       <button type="button" className="source-macos-calendar-today" onClick={reset}>{fullDate(now)}</button>
+      <div className="source-datetime-content">
       <section className="source-macos-calendar">
         <header>
           <div className="source-macos-calendar-monthyear">
@@ -85,6 +88,9 @@ export function SourceMacOSDateTime({onOpen,open,setOpen}:{onOpen:()=>void;open:
           </div>
         </>}
       </section>
+      {baseLayout&&<SourceAnalogClock now={now}/>}
+      </div>
+      {baseLayout&&<button type="button" className="source-chromeos-date-settings" disabled title="Native date settings are unavailable in the browser build">Change date and time settings...</button>}
     </div>}
   </div>;
 }

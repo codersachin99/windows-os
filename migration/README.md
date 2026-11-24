@@ -1,3 +1,5 @@
+> **24 November 2026 — ChromeOS DateTime:** source calendar and live analog/digital clocks; opt-in focused ChromeOS CI includes previous XP/Win11 regression. [Source trace](CHROMEOS-DATETIME-SOURCE.md). Results pending.
+
 > **24 November 2026 — ChromeOS tray:** shared functional Action Center, Network, Battery, Volume, light popups and exact network artwork. [Source trace](CHROMEOS-TRAY-SOURCE.md). Tests pending.
 
 > **24 November 2026 — ChromeOS Explorer:** original navigation, addressbar, list selection and menubar paint. [Source trace](CHROMEOS-EXPLORER-SOURCE.md). Tests pending.
