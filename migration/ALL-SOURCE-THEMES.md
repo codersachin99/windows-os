@@ -34,7 +34,7 @@ entry is intentionally omitted.
 | `winLS` | `winLS`, `winLP` | 2 | Original shared WinL boot and Guest logon with exact login-winL wallpaper, 512×320 frame and Guest/power actions; form/shell/pixel parity pending |
 | `aeroNoir` | `aeroNoir` | 1 | Pending theme-specific implementation |
 | `oxygen` | `oxygen` | 1 | Pending theme-specific implementation |
-| `winW` | `winW` | 1 | Original boot WinW image/view; logon/shell/pixel parity pending |
+| `winW` | `winW` | 1 | Original boot and Whistler-branded Guest logon; byte-identical logowhistler, blue rail and orange Welcome; auth/shell/pixel parity pending |
 | `onebit` | `onebit` | 1 | Original-source Guest/Power logon palette and four-color pixel-avatar adapter; captcha/full shell/screenshot parity pending |
 
 **Separate canonical ID:** `win7` maps to `{boot:"win7",logon:"win7"}`
@@ -60,8 +60,8 @@ even though `win7` itself is not a key in the final source
   renderers. The existing **Win7** login remains intact. Win31, Win95, Win98 and Win2k use a shared classic Guest logon;
   Win8 and Win8.1 share a source-purple screen; Onebit now has its distinct dark/sand Guest/power screen; Win10 reuses the
   source-modern account structure with its own background and CSS.
-  **11 of 19** logon families now have at least an incremental renderer;
-  the other **8** screen families expose
+  **12 of 19** logon families now have at least an incremental renderer;
+  the other **7** screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
   renderer now supports **11 of the 19 configured boot families**
