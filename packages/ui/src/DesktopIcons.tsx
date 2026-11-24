@@ -1188,6 +1188,17 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
       aria-hidden="true" />}
     {menu && <div ref={menuHost} role="menu" className="windows-desktop__menu"
       data-test-desktop-menu="" style={{ left: menu.x, top: menu.y }}
+      onPointerMove={event=>{
+        if(menu.id!==null||!(menu.view||menu.sortOpen||menu.newOpen))return;
+        const row=(event.target as HTMLElement).closest<HTMLButtonElement>('button[role="menuitem"]');
+        if(!row||!event.currentTarget.contains(row)||row.hasAttribute("aria-haspopup"))return;
+        // Match Explorer's source BaseMenu behavior: an adjacent cascade
+        // closes when a normal root command is hovered. On narrow screens,
+        // crossing root rows may be necessary to reach a stacked child.
+        if(backgroundSubmenuHost.current?.dataset.cascade==="stacked")return;
+        setMenu(current=>current&&current.id===null
+          ?{...current,view:false,sortOpen:false,newOpen:false}:current);
+      }}
       onKeyDown={event=>{
         if(sourceMenuArrowFocus(menuHost.current,event.target,event.key)){
           event.preventDefault();return;
