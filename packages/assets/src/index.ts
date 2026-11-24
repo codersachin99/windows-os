@@ -224,6 +224,12 @@ export const sourceThemeLogonArtwork=Object.freeze({
   winW:Object.freeze({
     logo:"/assets/images/logowhistler.73c9045c.webp"
   }),
+  oxygen:Object.freeze({
+    background:"/assets/images/oxygen.414aed47.svg",
+    guest:legacyArt.guestAvatar,
+    restart:"/assets/images/restart-oxygen.d4450a1a.webp",
+    shutdown:"/assets/images/shutdown-oxygen.62df7a25.webp"
+  }),
   aeroNoir:Object.freeze({
     background:"/assets/images/aeroNoir.237e6377.webp",
     guest:"/assets/images/guest-win10.a110df5a.webp",

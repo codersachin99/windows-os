@@ -21,6 +21,7 @@ test("source theme variants select exact login screen families and report fallba
     ["winLS","winLS","winLS","pending"],
     ["winLP","winLS","winLS","pending"],
     ["aeroNoir","aeroNoir","aeroNoir","pending"],
+    ["oxygen","oxygen","oxygen","pending"],
     ["kubuntu","kubuntu","win7-fallback","pending"],
     ["winW","winW","winW","pending"],
     ["onebit","onebit","onebit","pending"]

@@ -1,3 +1,11 @@
+## 24 November 2026 — original Oxygen Guest logon
+
+Previous Personalize [CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) at `68590906` passed TypeScript, units, source inventory/artwork/Contacts checks and Vite; targeted browser stage was still running at last inspection. No new green claim yet.
+
+Oxygen no longer uses Win7 fallback. Frozen `logon-oxygen.js`/CSS and shared logon-base define its separate 128px circular Guest avatar, 6px padding, black/50 overlay blur(10px), white gradient controls, bottom-centered 40px power art. Three original binary assets copied with equal source/destination Git SHAs and registered in checksum audit. New source adapter, SSR contract and real desktop/mobile browser spec plus catalog/focused workflow updated. [Oxygen source trace](OXYGEN-LOGON-SOURCE.md). Now 14/19 partial login renderer families, five explicit fallback; entire Oxygen shell pending. Batch exact-head opt-in CI after previous run finishes. Keep frozen source, main, draft PR #1 and releases unchanged; original paired screenshots not certified.
+
+---
+
 ## 24 November 2026 — Explorer resize CI green; Control Panel Background appearance rollback
 
 [Coordinate repair CI #45355394198](https://github.com/codersachin99/windows-os/actions/runs/45355394198) at `929c943e` is now **SUCCESS**: TypeScript, units, pinned inventory, original artwork, Contacts audit, Vite, focused and full desktop/mobile Playwright all passed. Visual capture was skipped. This certifies the earlier Explorer root coordinate correction, not the later Personalize changes.

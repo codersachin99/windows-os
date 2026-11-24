@@ -2194,8 +2194,15 @@
       "source": "src/modules/themes/logon-oxygen.js",
       "sha": "3d19d65b193351846644f12fe4d6cbeb4c4a3b83",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceOxygenLogon.tsx",
+        "packages/ui/src/sourceOxygenLogon.css",
+        "packages/ui/src/sourceOxygenLogon.test.tsx",
+        "tests/e2e/source-oxygen-logon.spec.ts",
+        "migration/OXYGEN-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed-slice; exact-head CI and full visual/functional parity pending"
     },
     {
       "source": "src/modules/themes/logon-ubuntu.js",
