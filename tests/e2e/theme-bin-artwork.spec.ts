@@ -2,6 +2,7 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  onebit:{empty:"/assets/images/bin-onebit.b4ba1ed0.svg",full:"/assets/images/bin-onebit.b4ba1ed0.svg"},
   winLP:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
   winW:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
   oxygen:{empty:"/assets/images/bin-oxygen.b6be9ff9.webp",full:"/assets/images/bin-full-oxygen.a82e7824.webp"},
@@ -54,7 +55,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen","winLP","winW"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen","winLP","winW","onebit"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -86,7 +87,7 @@ for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chr
     const empty=page.getByRole("alertdialog",{name:"Confirm empty Recycle Bin"});
     await empty.getByRole("button",{name:"Yes"}).click();
     await expect(image).toHaveAttribute("src",artwork[theme].empty);
-    if(theme==="chromeos"){
+    if(theme==="chromeos"||theme==="onebit"){
       await icon.dblclick();
       await expect(page.locator('[data-test-window="bin"]').last().locator('[data-test-explorer-item="'+name+'"]')).toHaveCount(0);
     }
@@ -449,5 +450,34 @@ test("Vista uses all source shell overrides without changing shared Computer art
     const response=await page.request.get(path);
     expect(response.ok(),path).toBeTruthy();
     expect(response.headers()["content-type"],path).toContain("image/webp");
+  }
+});
+
+
+test("Onebit uses the original shared monochrome icons for Guest folders and files",async({page})=>{
+  await sourceThemeDesktop(page,"onebit");
+  await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src","/assets/images/start-onebit.76d1ba55.svg");
+  await expect(page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/computer-onebit.ce54e8ef.svg");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+  for(const label of ["Documents","Downloads","Music","Pictures","Videos"]){
+    await expect(explorer.locator(".explorer-navigation__home").filter({hasText:label}).locator("img")).toHaveAttribute("src","/assets/images/folder-onebit.11d8e8ae.svg");
+  }
+  const desktop=explorer.getByRole("button",{name:"Desktop",exact:true});
+  await expect(desktop.locator("img")).toHaveAttribute("src","/assets/images/desktop-onebit.1ee5fa8d.svg");
+  await desktop.click();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"})).toHaveValue(SOURCE_DESKTOP);
+  await explorer.getByRole("button",{name:"New folder"}).click();
+  const dialog=explorer.getByRole("dialog",{name:"New folder"});
+  await dialog.getByRole("textbox",{name:"New folder name"}).fill("Onebit Source Folder");
+  await dialog.getByRole("button",{name:"OK"}).click();
+  await expect(page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Onebit Source Folder"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/folder-onebit.11d8e8ae.svg");
+  await explorer.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({name:"Onebit Unknown.abc",mimeType:"application/octet-stream",buffer:Buffer.from([0x31])});
+  await expect(page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Onebit Unknown.abc"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/file-onebit.86e331c1.svg");
+  for(const path of ["/assets/images/computer-onebit.ce54e8ef.svg","/assets/images/bin-onebit.b4ba1ed0.svg","/assets/images/folder-onebit.11d8e8ae.svg","/assets/images/file-onebit.86e331c1.svg","/assets/images/start-onebit.76d1ba55.svg","/assets/images/disk-onebit.f548a0b4.svg","/assets/images/calc-onebit.7ec329f9.svg","/assets/images/cpanel-onebit.97f4504b.svg","/assets/images/notepad-onebit.b01fbf08.svg","/assets/images/cmd-onebit.79f55a17.svg","/assets/images/text-onebit.885050ef.svg","/assets/images/default-onebit.aa73533f.svg","/assets/images/shortcut-onebit.25a406da.svg","/assets/images/media-onebit.e7e32a4b.svg","/assets/images/zip-onebit.75fd7aa6.svg","/assets/images/desktop-onebit.1ee5fa8d.svg","/assets/images/power-onebit.9672be1f.svg"]){
+    const response=await page.request.get(path);
+    expect(response.ok(),path).toBeTruthy();
+    expect(response.headers()["content-type"],path).toContain("image/svg+xml");
   }
 });

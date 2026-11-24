@@ -720,7 +720,44 @@ function sourceVistaIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceVistaIconArtwork,key)
     ?sourceVistaIconArtwork[key as keyof typeof sourceVistaIconArtwork]:null;
 }
+/** Original Onebit core artwork; shared Bin, folder, disk and text aliases are intentional. */
+export const sourceOnebitIconArtwork=Object.freeze({
+  "computer": "/assets/images/computer-onebit.ce54e8ef.svg",
+  "bin": "/assets/images/bin-onebit.b4ba1ed0.svg",
+  "bin-full": "/assets/images/bin-onebit.b4ba1ed0.svg",
+  "folder": "/assets/images/folder-onebit.11d8e8ae.svg",
+  "file": "/assets/images/file-onebit.86e331c1.svg",
+  "start": "/assets/images/start-onebit.76d1ba55.svg",
+  "folder-docs": "/assets/images/folder-onebit.11d8e8ae.svg",
+  "folder-downloads": "/assets/images/folder-onebit.11d8e8ae.svg",
+  "folder-music": "/assets/images/folder-onebit.11d8e8ae.svg",
+  "folder-pics": "/assets/images/folder-onebit.11d8e8ae.svg",
+  "folder-videos": "/assets/images/folder-onebit.11d8e8ae.svg",
+  "disk-os": "/assets/images/disk-onebit.f548a0b4.svg",
+  "disk-data": "/assets/images/disk-onebit.f548a0b4.svg",
+  "disk-cd": "/assets/images/disk-onebit.f548a0b4.svg",
+  "disk-connected": "/assets/images/disk-onebit.f548a0b4.svg",
+  "disk-disconnected": "/assets/images/disk-onebit.f548a0b4.svg",
+  "calc": "/assets/images/calc-onebit.7ec329f9.svg",
+  "cpanel": "/assets/images/cpanel-onebit.97f4504b.svg",
+  "notepad": "/assets/images/notepad-onebit.b01fbf08.svg",
+  "cmd": "/assets/images/cmd-onebit.79f55a17.svg",
+  "text": "/assets/images/text-onebit.885050ef.svg",
+  "richtext": "/assets/images/text-onebit.885050ef.svg",
+  "executable": "/assets/images/default-onebit.aa73533f.svg",
+  "shortcut": "/assets/images/shortcut-onebit.25a406da.svg",
+  "media": "/assets/images/media-onebit.e7e32a4b.svg",
+  "zip": "/assets/images/zip-onebit.75fd7aa6.svg",
+  "desktop": "/assets/images/desktop-onebit.1ee5fa8d.svg",
+  "default": "/assets/images/default-onebit.aa73533f.svg",
+  "power": "/assets/images/power-onebit.9672be1f.svg"
+});
+function sourceOnebitIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceOnebitIconArtwork,key)
+    ?sourceOnebitIconArtwork[key as keyof typeof sourceOnebitIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="onebit")return sourceOnebitIcon(iconKey);
   if(theme==="winvista")return sourceVistaIcon(iconKey);
   if(theme==="winLP"||theme==="winW")return sourceLonghornWhistlerIcon(theme,iconKey);
   if(theme==="oxygen")return sourceOxygenIcon(iconKey);
@@ -776,6 +813,7 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="onebit")return kind==="theme"?sourceShellWallpaper(theme):sourceOnebitIcon(kind==="binFull"?"bin-full":kind);
   if(theme==="winvista")return kind==="theme"?sourceShellWallpaper(theme):sourceVistaIcon(kind==="binFull"?"bin-full":kind);
   if(theme==="winLP"||theme==="winW"){
     if(kind==="theme")return sourceShellWallpaper(theme);

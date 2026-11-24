@@ -1,3 +1,10 @@
+## 24 November 2026 — Onebit core monochrome artwork
+
+Combined opt-in CI requested at `496ed05`; connector lookup still returns no PR-triggered run. Last confirmed green [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974). No redundant trigger.
+
+Onebit: 29 exact keys, 17 original SVGs with Git blob equality, intentional shared Bin/folder/disk/text/default aliases, source Start and desktop navigation. Added unit and focused browser tests; verify real trash contents even though Bin art stays constant. [Source trace](ONEBIT-CORE-ICONS-SOURCE.md). Exact-head verification pending. Next investigate Slate icon fallback and remaining theme shell/layout parity. Main/frozen source/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Vista complete icon override registry
 
 Combined opt-in CI requested at `496ed05`; the commit workflow lookup did not return a run (connector filters PR runs). Last confirmed full green remains [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`. No duplicate opt-in trigger.
