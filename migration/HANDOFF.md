@@ -1,3 +1,15 @@
+## 24 November 2026 — adjacent Desktop context submenu hover reconciliation
+
+The immediately preceding [CI #45352806191](https://github.com/codersachin99/windows-os/actions/runs/45352806191) at `66e4f621` passed TypeScript, units, source inventory/artwork, Contacts audit and Vite; focused browser regressions remained in progress when inspected. The last completed green head remains `089e56e6` ([CI #45341894836](https://github.com/codersachin99/windows-os/actions/runs/45341894836): 873 focused / 1325 full browser passes, 3 / 5 skips). Neither result certifies the changes below.
+
+**New bounded Desktop parity correction:** moving the pointer from an open adjacent View/Sort/New cascade to Refresh or another ordinary root command previously left that child open. The shared Explorer background popup already closes adjacent children on ordinary row hover but preserves stacked children when the screen is too narrow for either side. In `packages/ui/src/DesktopIcons.tsx`, root pointer movement now uses the same policy. It does not affect item context Send to, menu action semantics, geometry or source skin. On narrow screens the existing stacked traversal protection remains active.
+
+Added an actual desktop/mobile Chromium test to `tests/e2e/source-menu-cascade-edge-placement.spec.ts`: all three adjacent branches close when hovering Refresh while root stays open and expanded state resets; at 320px New remains open across ordinary/alternate branch rows, and ArrowLeft/Escape restore source keyboard behavior. The existing focused gate includes this test file. See [CONTEXT-SUBMENU-CASCADE-EDGE-SOURCE.md](CONTEXT-SUBMENU-CASCADE-EDGE-SOURCE.md).
+
+**Next:** inspect the preceding resize run and new exact-head opt-in CI, repair any failures, then advance source-backed shell functionality. Do not claim new code passes until CI completes; source-versus-React visual capture still blocked without `LEGACY_SOURCE_READ_TOKEN`. Keep frozen legacy `26b9f0ce7a1665dee89a7c81824bec09e2c75776`, main `9bb90a41a8ec76d3b983b1c02c2774029f659539`, draft PR #1 and releases unchanged.
+
+---
+
 ## 24 November 2026 — GREEN exact-head CI plus live Desktop/Explorer/Bin cascade resize fix
 
 **Certified preceding head:** [GitHub Actions #45341894836](https://github.com/codersachin99/windows-os/actions/runs/45341894836) at `089e56e6b170bf189a4cb5db81573df9d471a4af` completed **SUCCESS**. It passed TypeScript; unit groups **132 + 715**; pinned legacy inventory, original theme binary-artwork and Contacts audits; production Vite build; focused Playwright **873 passed / 3 skipped**; full desktop/mobile Playwright **1,325 passed / 5 skipped**. This includes repaired Aero Noir computed CSS and actual Personalize titlebar/Alt+F4 color-preview rollback. Original-vs-React visual-capture Action **skipped** due missing `LEGACY_SOURCE_READ_TOKEN`. Therefore neither paired screenshots nor full visual parity are certified.
