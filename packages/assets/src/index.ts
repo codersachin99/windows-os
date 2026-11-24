@@ -216,6 +216,11 @@ export const sourceThemeLogonArtwork=Object.freeze({
     background:legacyShellThemeAssets.win10.theme
   }),
   win2k:Object.freeze({banner:"/assets/images/logo2k.15140c8b.webp"}),
+  winLS:Object.freeze({
+    background:"/assets/images/login-winL.d27b081a.webp",
+    brand:"/assets/images/start-button-winxp.a3485adf.webp",
+    guest:"/assets/images/guest-win10.a110df5a.webp"
+  }),
   winxp:Object.freeze({
     logo:"/assets/images/logoxp.9b034658.png",
     guest:legacyArt.guestAvatar
