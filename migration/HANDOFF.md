@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu Desktop and WinUI context menus
+
+Source per-icon selection and shared dark menu palette across Desktop, Explorer, menubars and Start portal. Existing measured cascade geometry retained, Ubuntu added to edge/keyboard coverage. [Source trace](UBUNTU-CONTEXT-SOURCE.md). Tests pending. Next Explorer chrome and menubar, then tray/DateTime. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu WindowMain chrome
 
 Ported original active/inactive frame, titlebar and circular controls; shared lifecycle and responsive dock/top reserve. [Source trace](UBUNTU-WINDOW-SOURCE.md). Browser regression authored, not executed. Next desktop selection/context and Explorer. Main/frozen source/draft PR unchanged.

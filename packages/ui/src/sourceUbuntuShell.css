@@ -128,3 +128,53 @@
   max-height:calc(100% - var(--taskbar-height));
   min-height:0;
 }
+
+/* Frozen Ubuntu 709b desktop icon and WinUI BaseMenu palette.
+ * Background is painted on image and name, not the entire shortcut.
+ * Keep the existing drag/drop target paint and measured cascade geometry. */
+.windows-desktop[data-theme="ubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(:hover,.is-active,:focus-visible){
+  background:none;border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="ubuntu"] .desktop__icon-icon,
+.windows-desktop[data-theme="ubuntu"] .desktop__icon-name:not(:has(input)){
+  border-radius:5px;
+}
+.windows-desktop[data-theme="ubuntu"] .desktop__icon-name:not(:has(input)){
+  color:#fff;padding:0 3px;text-shadow:1px 1px #000;
+}
+.windows-desktop[data-theme="ubuntu"]:dir(rtl) .desktop__icon-name:not(:has(input)){
+  text-shadow:-1px 1px #000;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):hover :is(.desktop__icon-icon,.desktop__icon-name:not(:has(input))){
+  background-color:#fff3;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:focus-visible) :is(.desktop__icon-icon,.desktop__icon-name:not(:has(input))){
+  background-color:var(--theme-color);
+}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]){
+  box-sizing:border-box;background:#1d1d1d;color:#fff;
+  border:1px solid #4b4b4b;border-radius:10px;padding:3px;
+  font:10pt "Segoe UI",Arial,sans-serif;box-shadow:0 4px 12px #0007;
+}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"])::before{
+  content:"";position:absolute;top:3px;bottom:3px;inset-inline-start:27px;width:1px;
+  box-shadow:inset 1px 0 0 #4b4b4b;pointer-events:none;
+}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]):dir(rtl)::before{box-shadow:inset -1px 0 0 #4b4b4b}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]) button{
+  position:relative;color:inherit;background:none;border:1px solid transparent;
+  border-radius:6px;box-shadow:none;text-shadow:none;text-align:start;
+}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]) button:not(:disabled):is(:hover,:focus,:focus-visible){
+  color:#fff;background:#3e3e3e;border-color:transparent;box-shadow:none;
+}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]) button:disabled{opacity:.5;cursor:default}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]) :is(hr,.windows-desktop__menu-divider,.explorer-organize__separator){
+  border:0;height:1px;background:#4b4b4b;margin:3px 0;box-shadow:inset 0 1px #4b4b4b;
+}
+:is(.windows-desktop[data-theme="ubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="ubuntu"]) kbd{color:inherit}
+/* Desktop menus are measured in local workspace coordinates, not the
+ * full viewport: prevent the 64px dock reserve clipping narrow cascades. */
+.windows-desktop[data-theme="ubuntu"] .windows-desktop__menu{
+  max-width:calc(100% - 8px);
+}
