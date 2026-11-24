@@ -13,6 +13,7 @@ describe("frozen Onebit BaseLogon Guest/power renderer",()=>{
     expect(html).toContain('data-source-logon-renderer="onebit"');
     expect(html).toContain('data-source-shell-status="pending"');
     expect(html).toContain('data-test-source-logon-avatar="onebit"');
+    expect(html).toContain('data-test-source-onebit-avatar-canvas=""');
     expect(html).toContain('data-test-logon-shutdown=""');
     expect(html).toContain('data-test-logon-restart=""');
     expect(html).toContain("Guest");
