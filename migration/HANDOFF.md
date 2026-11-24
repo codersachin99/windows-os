@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu tray and DateTime
+
+Integrated shared Guest Action Center/network/battery/volume, exclusive popup owner, original system menu and calendar/analog clock. [Source trace](UBUNTU-TRAY-SOURCE.md). Browser regression authored, not executed. Next focused Ubuntu CI, resolve failures before Kubuntu. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu Explorer and application menubars
 
 Ported original dark address, navigation, search, list selection, status and shared Notepad/Explorer menubars. Real Guest file operations unchanged; browser contracts authored, not executed. [Source trace](UBUNTU-EXPLORER-SOURCE.md). Next Ubuntu tray, DateTime and system menu, then focused verification. Main/frozen source/draft PR unchanged.

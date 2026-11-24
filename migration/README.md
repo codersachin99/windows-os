@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu tray:** source system menu and interactive Guest tray/DateTime; tests pending. [Source trace](UBUNTU-TRAY-SOURCE.md).
+
 > **24 November 2026 — Ubuntu Explorer/menubar:** source address, navigation, list selection and status styling; tests pending. [Source trace](UBUNTU-EXPLORER-SOURCE.md).
 
 > **24 November 2026 — Ubuntu Desktop/context:** source icon selection and dark WinUI menus; shared cascade regression extended. Tests pending. [Source trace](UBUNTU-CONTEXT-SOURCE.md).

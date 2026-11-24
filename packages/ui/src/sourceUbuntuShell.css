@@ -198,3 +198,229 @@
   border-radius:0 0 15px 15px;box-shadow:none;
 }
 .windows-desktop[data-theme="ubuntu"] .windows-window.is-maximized .notepad-status{border-radius:0}
+
+/* Shared source tray components 98a6, f0ed, e0ee, a88c, c561 and 4e5e.
+ * Same React services as macOS; Ubuntu source taskbar-ubuntu.css paint. */
+/* Source TaskbarDatetime and ColorCalendar: macOS calendar-only popup. */
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime{position:relative;height:32px;flex:none}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-trigger{
+  height:100%;padding:0 4px;border:0;border-radius:4px;background:none;color:#fff;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 4px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;max-width:calc(100vw - 16px);
+  max-height:calc(100dvh - var(--taskbar-height) - 16px);overflow:auto;
+  background:#1d1d1d;border:1px solid #3e3e3e;border-radius:8px;
+  padding:10px;color:#fff;box-shadow:0 4px 12px #0005;text-align:start;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup button{
+  font:inherit;border:0;background:none;color:inherit;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup>button{
+  padding:8px;text-align:start;width:100%;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar{
+  width:min(300px,calc(100vw - 54px));padding:8px;box-sizing:content-box;text-align:center;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar header{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) repeat(2,32px);
+  align-items:center;gap:4px;margin-bottom:8px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-monthyear{
+  grid-column:1/span 5;text-align:start;font-weight:600;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-monthyear button{padding:4px 2px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar button.source-macos-calendar-arrow,
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-year-arrows button{
+  background:#fff2;border-radius:4px;font-size:20px;line-height:32px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar button.source-macos-calendar-arrow:active{background:#fff4}
+.windows-desktop[data-theme="ubuntu"] :is(.source-macos-calendar-weekdays,.source-macos-calendar-days){
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));justify-items:center;align-items:center;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-weekdays{margin-bottom:8px;color:#fff9}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-days{row-gap:4px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-days button{
+  width:28px;height:32px;padding:0;border-radius:99px;font-size:20px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-days button.is-outside{opacity:.4}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-picker{
+  min-height:184px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:4px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-picker button{border-radius:99px;padding:8px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar button:is(.is-today,[aria-pressed="true"]){background:var(--theme-color);color:#000;opacity:1}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-year-arrows{display:flex;justify-content:space-between}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-year-arrows button{width:32px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup button:focus-visible{outline:2px solid #fff9;outline-offset:1px}
+@media(max-width:650px){
+  .windows-desktop[data-theme="ubuntu"] .source-macos-datetime-trigger time span:last-child{display:none}
+}
+
+/* Source TaskbarMacOS: 40px non-date items in fixed source order.
+ * Retain explicit Guest notification preferences; the Windows-only
+ * hidden chevron is shown only when such preferences actually hide items. */
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray{gap:0}
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray-icon{
+  flex:0 0 40px;width:40px;min-width:40px;height:32px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network{position:relative}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-trigger{
+  display:grid;place-items:center;width:100%;height:32px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-trigger[data-network-online="false"] svg{opacity:.5}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 4px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;width:min(250px,calc(100vw - 16px));
+  padding:10px;background:#1d1d1d;border:1px solid #3e3e3e;
+  border-radius:8px;box-shadow:0 4px 12px #0005;color:#fff;text-align:start;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-popup>*{padding:8px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-status{display:flex;align-items:center;gap:12px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-status svg{flex:none}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-status p{margin:4px 0}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-status small{opacity:.65}
+.windows-desktop[data-theme="ubuntu"] .source-macos-network-popup>button{
+  display:block;width:100%;border:0;background:none;color:inherit;font:inherit;text-align:center;opacity:.5;
+}
+@media(max-width:650px){
+  .windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray-icon{flex-basis:24px;width:24px;min-width:24px}
+  .windows-desktop[data-theme="ubuntu"] .source-macos-network-trigger svg{width:18px;height:18px}
+}
+
+/* Original f0ed Action Center summary, using the shared macOS popup paint. */
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center{position:relative}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-trigger{
+  display:grid;place-items:center;width:100%;height:32px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 4px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;width:min(260px,calc(100vw - 16px));
+  padding:10px;background:#1d1d1d;border:1px solid #3e3e3e;border-radius:8px;
+  box-shadow:0 4px 12px #0005;color:#fff;text-align:start;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-summary{
+  display:flex;align-items:center;gap:8px;padding:8px;font-size:20px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-summary img{flex:none;object-fit:contain}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-popup>button{
+  display:block;width:100%;padding:8px;border:0;border-radius:3px;
+  background:none;color:inherit;text-align:center;font:inherit;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-action-center-popup>button:is(:hover,:focus-visible){background:#fff1;text-decoration:underline}
+
+/* Source a88c macOS battery popup, display range and radio presets. */
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery{position:relative}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-trigger{
+  display:grid;place-items:center;width:100%;height:32px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 4px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;width:min(250px,calc(100vw - 16px));
+  max-height:calc(100dvh - var(--taskbar-height) - 16px);overflow:auto;
+  padding:10px;background:#1d1d1d;border:1px solid #3e3e3e;border-radius:8px;
+  box-shadow:0 4px 12px #0005;color:#fff;text-align:start;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup>div{padding:8px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-heading{display:flex;justify-content:space-between;margin-bottom:8px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup fieldset{
+  margin:0;padding:8px;border:0;display:flex;flex-direction:column;gap:4px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup legend{padding:0 8px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup input{accent-color:var(--theme-color)}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-display{display:flex;flex-direction:column;gap:4px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup input[type="range"]{width:100%;margin:4px 0}
+.windows-desktop[data-theme="ubuntu"] .source-macos-battery-popup small{display:block;opacity:.65;margin-top:4px}
+
+/* Source c561 shared volume meter (32 x 146, 130px slider) and mute. */
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume{position:relative}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-trigger{
+  display:grid;place-items:center;width:100%;height:32px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 4px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;
+  gap:8px;padding:18px 26px;background:#1d1d1d;border:1px solid #3e3e3e;
+  border-radius:8px;box-shadow:0 4px 12px #0005;color:#fff;
+  max-height:calc(100dvh - var(--taskbar-height) - 16px);overflow:auto;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-meter{
+  display:grid;place-items:center;width:32px;height:146px;flex:none;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-meter input{
+  writing-mode:vertical-lr;direction:rtl;width:20px;height:130px;
+  margin:0;accent-color:var(--theme-color);
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-mute{
+  display:grid;place-items:center;width:48px;height:48px;flex:none;
+  background:none;border:0;border-radius:4px;color:inherit;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-volume-mute:is(:hover,:focus-visible){background:#fff1}
+
+/* Source taskbar-macos.css notification: top-right, 360px, hover close. */
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification{
+  position:fixed;top:calc(var(--taskbar-height) + 16px);inset-inline-end:16px;
+  z-index:4901;display:flex;gap:8px;box-sizing:border-box;
+  width:min(360px,calc(100vw - 32px));padding:12px;color:#fff;background:#4b4b4b;
+  border:1px solid #fff3;border-radius:8px;box-shadow:0 0 0 1px #0006;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification img{flex:none}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification>div{min-width:0;overflow-wrap:anywhere}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification p{margin:4px 0 0;white-space:pre-wrap}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification button{
+  position:absolute;top:-8px;inset-inline-start:-8px;width:24px;height:24px;
+  padding:0;line-height:1;border-radius:50%;background:#4b4b4b;color:#fff;
+  border:1px solid #fff3;box-shadow:0 0 1px 1px #0006;opacity:0;transition:opacity .2s;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification:is(:hover,:focus-within) button{opacity:1}
+@media(hover:none){.windows-desktop[data-theme="ubuntu"] .source-macos-notification button{opacity:1}}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification-history{
+  display:flex;flex-direction:column;gap:4px;padding:8px;max-height:40vh;overflow:auto;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification-history button{
+  text-align:start;overflow-wrap:anywhere;background:none;border:0;color:inherit;padding:4px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification-history button:is(:hover,:focus-visible){text-decoration:underline;background:#fff1}
+
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu{
+  position:relative;display:grid;place-items:center;flex:0 0 40px;height:32px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-trigger{
+  display:grid;place-items:center;width:100%;height:28px;border:0;border-radius:4px;background:none;color:#fff;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-trigger:is(:hover,:focus,[aria-expanded="true"]){background:#fff3}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-popup{
+  position:absolute;top:100%;inset-inline-end:4px;margin-top:4px;z-index:4900;
+  box-sizing:border-box;width:min(240px,calc(100vw - 8px));padding:8px;
+  background:#1d1d1d;color:#fff;border:1px solid #3e3e3e;border-radius:8px;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-popup button{
+  display:block;width:100%;text-align:start;padding:6px 12px;color:inherit;background:none;border:0;border-radius:6px;font:inherit;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-popup button:not(:disabled):is(:hover,:focus){background:#3e3e3e}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-popup button:disabled{opacity:.5}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu .source-macos-apple-popup hr{border:0;height:1px;background:#4b4b4b;margin:3px 0}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-trigger{border-radius:99px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup{
+  position:absolute;top:100%;left:50%;right:auto;transform:translateX(-50%);margin-top:4px;width:max-content;
+}
+.windows-desktop[data-theme="ubuntu"] .source-datetime-content{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px}
+.windows-desktop[data-theme="ubuntu"] .source-chromeos-clock{display:flex;flex-direction:column;align-items:center;gap:8px;color:#fff}
+.windows-desktop[data-theme="ubuntu"] .source-chromeos-clock svg{width:140px;height:140px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-days button{width:32px;height:32px;font-size:inherit}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar-picker{background:#1d1d1d}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar button:is(:hover,:focus-visible){background:#fff3}
+.windows-desktop[data-theme="ubuntu"] .source-macos-calendar button:is(.is-today,[aria-pressed="true"]){background:var(--theme-color);color:#fff}
+.windows-desktop[data-theme="ubuntu"] .source-chromeos-date-settings:disabled{opacity:.5}
+@media(max-width:650px){
+  .windows-desktop[data-theme="ubuntu"] .source-ubuntu-system-menu{flex-basis:24px}
+  .windows-desktop[data-theme="ubuntu"] .source-macos-datetime-popup{width:min(340px,calc(100vw - 16px))}
+}

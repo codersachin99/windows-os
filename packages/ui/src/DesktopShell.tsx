@@ -304,7 +304,7 @@ export function DesktopShell({
     win.minimized?highest:Math.max(highest,win.z),-Infinity);
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
-  const sharedTray=state.theme==="macos"||state.theme==="chromeos";
+  const sharedTray=state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu";
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
   const [guestAudio,setGuestAudio]=useState<SourceGuestAudio>(SOURCE_GUEST_AUDIO_INITIAL);
@@ -762,7 +762,7 @@ export function DesktopShell({
         </div>}
         {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)||macPopup!==null}/>}
         <div className="windows-taskbar__tray" data-test-taskbar-tray={sharedTray||state.theme==="ubuntu"?state.theme:undefined}>
-          {(state.theme!=="macos"||sourceTrayHidden(trayPreferences).length>0)&&<button title="Show hidden icons" aria-label="Show hidden icons"
+          {(state.theme!=="ubuntu"&&(state.theme!=="macos"||sourceTrayHidden(trayPreferences).length>0))&&<button title="Show hidden icons" aria-label="Show hidden icons"
             data-test-tray-hidden-toggle="" onClick={()=>{setMacPopup(null);setShowHiddenTray(v=>!v);}}>▴</button>}
           {showHiddenTray&&sourceTrayHidden(trayPreferences).length>0&&
             <div className="windows-taskbar__hidden-items" data-test-tray-hidden-items=""
@@ -785,7 +785,8 @@ export function DesktopShell({
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch} open={macPopup==="spotlight"} setOpen={open=>setMacPopupOpen("spotlight",open)}/>}
-          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime baseLayout={state.theme==="chromeos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
+          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime ubuntu={state.theme==="ubuntu"} baseLayout={state.theme!=="macos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
+          {state.theme==="ubuntu"&&<SourceMacOSAppleMenu ubuntu dispatch={dispatch} open={macPopup==="apple"} setOpen={open=>setMacPopupOpen("apple",open)}/>}
         </div>
         {state.theme!=="macos"&&state.theme!=="ubuntu"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           data-test-show-desktop=""

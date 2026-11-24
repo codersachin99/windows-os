@@ -16,7 +16,7 @@ type Command=typeof SOURCE_MACOS_APPLE_MENU[number]["id"];
 
 /** Source taskbar-macos.js + shared 98a6 menuItems. All actions are
  * Guest-local; unverified external support destination stays disabled. */
-export function SourceMacOSAppleMenu({dispatch,open,setOpen}:{dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void}){
+export function SourceMacOSAppleMenu({dispatch,open,setOpen,ubuntu=false}:{dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void;ubuntu?:boolean}){
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   const popup=useRef<HTMLDivElement>(null);
@@ -48,29 +48,29 @@ export function SourceMacOSAppleMenu({dispatch,open,setOpen}:{dispatch:Dispatch<
     const app=appRegistry.get(id==="about"?"about":"cpanel");
     if(app)dispatch({type:"OPEN_APP",app,...(id==="account"?{file:{path:"accounts"}}:{})});
   };
-  return <div className="source-macos-apple" ref={root}
+  return <div className={ubuntu?"source-ubuntu-system-menu":"source-macos-apple"} ref={root}
     onKeyDown={event=>{
       if(event.key==="Escape"&&open){event.preventDefault();event.stopPropagation();close(true);}
     }}>
     <button type="button" ref={trigger} className="source-macos-apple-trigger"
-      aria-label="Apple menu" aria-haspopup="menu" aria-expanded={open}
+      aria-label={ubuntu?"System menu":"Apple menu"} aria-haspopup="menu" aria-expanded={open}
       data-test-menu-button=""
       onClick={()=>open?close():show()}
       onKeyDown={event=>{if(event.key==="ArrowDown"&&!open){event.preventDefault();show();}}}>
-      <svg width="17" height="20" viewBox="0 0 1408 1664" aria-hidden="true">
+      {ubuntu?<svg width="14" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M8 1v6M4 3.5a6 6 0 1 0 8 0"/></svg>:<svg width="17" height="20" viewBox="0 0 1408 1664" aria-hidden="true">
         <path fill="currentColor" d="M1393 1215q-39 125-123 250q-129 196-257 196q-49 0-140-32q-86-32-151-32q-61 0-142 33q-81 34-132 34q-152 0-301-259Q0 1144 0 902q0-228 113-374q113-144 284-144q72 0 177 30q104 30 138 30q45 0 143-34q102-34 173-34q119 0 213 65q52 36 104 100q-79 67-114 118q-65 94-65 207q0 124 69 223t158 126M1017 42q0 61-29 136q-30 75-93 138q-54 54-108 72q-37 11-104 17q3-149 78-257Q835 41 1011 0q1 3 2.5 11t2.5 11q0 4 .5 10t.5 10"/>
-      </svg>
+      </svg>}
     </button>
-    {open&&<div ref={popup} role="menu" aria-label="Apple menu"
+    {open&&<div ref={popup} role="menu" aria-label={ubuntu?"System menu":"Apple menu"}
       className="source-macos-apple-popup" data-test-menu-popup=""
       onKeyDown={event=>{
         if(sourceMenuArrowFocus(popup.current,event.target,event.key))event.preventDefault();
         if(event.key==="Tab")close();
       }}>
-      {SOURCE_MACOS_APPLE_MENU.map(item=><div key={item.id}>
+      {SOURCE_MACOS_APPLE_MENU.map((item,index)=><div key={item.id}>
         <button type="button" role="menuitem" data-test-macos-apple-action={item.id}
           disabled={item.id==="help"} onClick={()=>act(item.id)}>{item.label}</button>
-        {"divider" in item&&item.divider&&<hr role="separator"/>}
+        {(ubuntu?[2,3].includes(index):"divider" in item&&item.divider)&&<hr role="separator"/>}
       </div>)}
     </div>}
   </div>;
