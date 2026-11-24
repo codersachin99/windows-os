@@ -1,3 +1,5 @@
+> **24 November 2026 — Longhorn/Whistler shell styling:** original desktop selection and taskbar state palettes now implemented in a shared stylesheet; regression contracts added. [Source trace](LONGHORN-WHISTLER-SHELL-SOURCE.md). Visual and exact-head CI pending.
+
 > **24 November 2026 — XP-family complete registry:** 66 exact source override keys, shared with Slate/Plex/Whistler except Start, 15 newly verified assets. [Source trace](XP-COMPLETE-ICONS-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Slate icon inheritance resolved:** Frozen theme catalog explicitly inherits XP. Existing 43 shared source mappings plus XP Start and distinct Slate wallpaper wired; unit and browser regression tests added. [Source evidence](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md). Exact-head CI pending.

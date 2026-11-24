@@ -492,3 +492,32 @@ test("original XP registry remaining artwork is available as exact WebP files",a
     expect(response.headers()["content-type"],filename).toContain("image/webp");
   }
 });
+
+
+// Frozen Longhorn/Whistler source desktop selection + taskbar state rules.
+for(const [theme,base,selection,active] of [
+  ["winLP","rgb(80, 135, 217)","rgb(132, 185, 236)","rgb(117, 190, 237)"],
+  ["winLS","rgb(79, 78, 80)","rgb(241, 193, 138)","rgb(117, 190, 237)"],
+  ["winW","rgb(244, 244, 240)","rgb(0, 78, 152)","rgb(166, 207, 255)"]
+] as const){
+  test(theme+" source desktop selection and active taskbar palette",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    const bar=page.locator('[data-test-taskbar="base"]');
+    await expect(bar).toHaveCSS("background-color",base);
+    await expect(bar).toHaveCSS("backdrop-filter","none");
+    if(theme!=="winW")await expect(bar).toHaveCSS("background-image",/linear-gradient/);
+    else await expect(bar.locator(".windows-taskbar__clock")).toHaveCSS("color","rgb(0, 0, 0)");
+    const icon=page.locator('[data-test-desktop-icon="computer"]');
+    await icon.click();
+    await expect(icon).toHaveClass(/is-active/);
+    await expect(icon).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
+    await expect(icon.locator(".desktop__icon-name")).toHaveCSS("background-color",selection);
+    await icon.dblclick();
+    await expect(page.locator('[data-test-window="computer"]').first()).toBeVisible();
+    await page.mouse.move(1,1);
+    const item=bar.locator(".windows-taskbar__application.is-active");
+    await expect(item).toHaveCount(1);
+    await expect(item).toHaveCSS("background-color",active);
+    await expect(item).toHaveCSS("box-shadow",/inset/);
+  });
+}

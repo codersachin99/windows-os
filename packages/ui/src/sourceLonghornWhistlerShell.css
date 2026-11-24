@@ -1,0 +1,89 @@
+/* Frozen legacy-win7@26b9f0c, theme-winlonghorn-scss.js and theme-winW-scss.js.
+ * Bounded desktop selection and taskbar palette/state port. The image element
+ * is not the original background-mask icon renderer; preserve artwork pixels.
+ * Do not claim exact selection-mask, Start, window or tray-popup geometry. */
+.windows-desktop[data-theme="winLP"]{
+  --background-color:#d9e6f4;--border-color:#d8d8d8;
+  --item-color:#5087d9;--item-color--hover:#84b9ec;
+}
+.windows-desktop[data-theme="winLS"]{
+  --background-color:#eae8ea;--border-color:#d6d6d6;
+  --item-color:#4f4e50;--item-color--hover:#f1c18a;
+}
+.windows-desktop[data-theme="winW"]{
+  --border-color:#808080;--item-color--hover:#004e98;
+  font-family:"Segoe UI",sans-serif;font-size:9pt;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-desktop__shortcut:is(:hover,.is-active){
+  background:none;border-color:transparent;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .desktop__icon-name{
+  color:#fff;text-shadow:1px 1px 0 #000;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]):dir(rtl) .desktop__icon-name{
+  text-shadow:-1px 1px 0 #000;
+}
+.windows-desktop[data-theme="winW"] .desktop__icon-name{
+  text-shadow:1px 1px 2px #000,0 0 2px #000;
+}
+.windows-desktop[data-theme="winW"]:dir(rtl) .desktop__icon-name{
+  text-shadow:-1px 1px 2px #000,0 0 2px #000;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-desktop__shortcut.is-active .desktop__icon-name{
+  background-color:var(--item-color--hover);
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .desktop__icon-icon,
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-taskbar img{
+  image-rendering:pixelated;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar{
+  background:linear-gradient(#fff8 7%,#fff4 10%,#0004 90%,#0003 97%) var(--item-color);
+  border-top:0;box-shadow:none;backdrop-filter:none;color:#fff;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__application{
+  margin:0 2px;border-radius:0;border:1px solid transparent;
+  background:none;box-shadow:none;color:#fff;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]){
+  background-color:#75beed;border-color:#0005;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):hover{
+  border-color:#0007;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__application:hover img{
+  filter:brightness(1.3);
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__application.is-active{
+  background-color:#75beed;box-shadow:inset 0 0 5px 2px #fff;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__tray{padding:0 5px}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .windows-taskbar__show-desktop{
+  background:none;border-color:transparent;
+}
+.windows-desktop[data-theme="winW"] .windows-taskbar{
+  background:#f4f4f0;color:#000;border-top:1px solid var(--border-color);
+  box-shadow:inset 0 -1px 0 #bcbeb8;backdrop-filter:none;
+}
+.windows-desktop[data-theme="winW"] .windows-taskbar__application{
+  height:87%;margin:3px .5px;border:1px solid transparent;
+  background-color:transparent;box-shadow:none;color:#000;
+}
+.windows-desktop[data-theme="winW"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):hover{
+  border-color:#d1d7e5;background-color:#d9e7fa;
+}
+.windows-desktop[data-theme="winW"] .windows-taskbar__application.is-active{
+  padding-top:3px;border-color:#95b5d6;background-color:#a6cfff;
+  box-shadow:inset 1px 1px 3px #0003;
+}
+.windows-desktop[data-theme="winW"]:dir(rtl) .windows-taskbar__application.is-active{
+  box-shadow:inset -1px 1px 3px #0003;
+}
+.windows-desktop[data-theme="winW"] .windows-taskbar__application.is-active:hover{background-color:#1e67c4}
+.windows-desktop[data-theme="winW"] .windows-taskbar__tray{
+  margin:3px;padding:0 5px;border:1px solid #d6d7c9;
+  box-shadow:inset 0 0 2px #0004;
+}
+.windows-desktop[data-theme="winW"] :is(.windows-taskbar__tray button,.windows-taskbar__clock){
+  color:#000;
+}
+.windows-desktop[data-theme="winW"] .windows-taskbar__tray button:hover{background:none}

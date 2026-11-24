@@ -2561,15 +2561,23 @@
       "source": "src/modules/themes/theme-winW-scss.js",
       "sha": "70bf83d82d033065c1458bb6b73a96bf9e2a4a69",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceLonghornWhistlerShell.css",
+        "tests/e2e/theme-bin-artwork.spec.ts",
+        "migration/LONGHORN-WHISTLER-SHELL-SOURCE.md"
+      ]
     },
     {
       "source": "src/modules/themes/theme-winlonghorn-scss.js",
       "sha": "16222a96acbeb3e4645dfc31689e412f3754eeb4",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/sourceLonghornWhistlerShell.css",
+        "tests/e2e/theme-bin-artwork.spec.ts",
+        "migration/LONGHORN-WHISTLER-SHELL-SOURCE.md"
+      ]
     },
     {
       "source": "src/modules/themes/theme-winvista-scss.js",

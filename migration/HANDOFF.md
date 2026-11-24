@@ -1,3 +1,8 @@
+## 24 November 2026 — Longhorn/Whistler desktop and taskbar state styling
+
+Ported source Plex/Slate gradient palettes, Whistler cream tray/taskbar, selected desktop labels, running/active/hover taskbar states and RTL shadows using one shared scoped stylesheet. Three desktop/mobile computed-style regression cases added. [Source trace](LONGHORN-WHISTLER-SHELL-SOURCE.md). Original mask tint, Start/window geometry and full paired visuals pending. No extra CI trigger; exact-head verification pending. Next original theme Start/menu/window chrome and remaining shell families. Frozen source/main/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Complete shared XP-family icon registry
 
 66 exact XP override keys (65 shared by Slate/Plex/Whistler, distinct source Start as applicable); 57 distinct XP files, 15 new hash-matched original files. Consolidated partial XP and Longhorn maps; retained personal compatibility key. Unit coverage expanded to all original shared keys, XP browser folder navigation and HTTP availability of new art. [Source trace](XP-COMPLETE-ICONS-SOURCE.md). Exact-head CI pending; latest push-triggered run lookup still unavailable through PR-only connector. Next theme-specific desktop/taskbar layouts and source verification. Main/frozen source/draft PR/releases unchanged.
