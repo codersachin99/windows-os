@@ -579,7 +579,41 @@ function sourceKubuntuIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceKubuntuIconArtwork,key)
     ?sourceKubuntuIconArtwork[key as keyof typeof sourceKubuntuIconArtwork]:null;
 }
+/** Pinned Aero Noir core icons; source folder/disk aliases retained. */
+export const sourceAeroNoirIconArtwork=Object.freeze({
+  "computer": "/assets/images/computer-aeroNoir.1a117c0c.webp",
+  "bin": "/assets/images/bin-aeroNoir.12b5ed31.svg",
+  "bin-full": "/assets/images/bin-full-aeroNoir.6bcff3f1.webp",
+  "folder": "/assets/images/folder-aeroNoir.0a237526.svg",
+  "file": "/assets/images/file-aeroNoir.a9c655e6.svg",
+  "folder-docs": "/assets/images/folder-docs-aeroNoir.e177413f.svg",
+  "folder-downloads": "/assets/images/folder-downloads-aeroNoir.95a9aee9.svg",
+  "folder-music": "/assets/images/folder-aeroNoir.0a237526.svg",
+  "folder-pics": "/assets/images/folder-aeroNoir.0a237526.svg",
+  "folder-videos": "/assets/images/folder-aeroNoir.0a237526.svg",
+  "disk-os": "/assets/images/disk-os-aeroNoir.54eed116.svg",
+  "disk-data": "/assets/images/disk-data-aeroNoir.ea90c364.svg",
+  "disk-cd": "/assets/images/disc-aeroNoir.fac45aa1.svg",
+  "disk-connected": "/assets/images/disk-data-aeroNoir.ea90c364.svg",
+  "disk-disconnected": "/assets/images/disk-data-aeroNoir.ea90c364.svg",
+  "calc": "/assets/images/calc-aeroNoir.75c6cdda.svg",
+  "cpanel": "/assets/images/cpanel-aeroNoir.9ba00864.webp",
+  "notepad": "/assets/images/notepad-aeroNoir.87d75ca0.webp",
+  "cmd": "/assets/images/cmd-aeroNoir.6b41da99.webp",
+  "text": "/assets/images/text-aeroNoir.dc3a397c.svg",
+  "richtext": "/assets/images/richtext-aeroNoir.0a8b71f5.webp",
+  "executable": "/assets/images/executable-aeroNoir.229e3731.webp",
+  "shortcut": "/assets/images/shortcut-aeroNoir.cd6dda1d.svg",
+  "media": "/assets/images/media-aeroNoir.c443b1a1.webp",
+  "zip": "/assets/images/zip-aeroNoir.20c3456d.webp",
+  "desktop": "/assets/images/desktop-aeroNoir.3821791a.svg"
+});
+function sourceAeroNoirIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceAeroNoirIconArtwork,key)
+    ?sourceAeroNoirIconArtwork[key as keyof typeof sourceAeroNoirIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="aeroNoir")return sourceAeroNoirIcon(iconKey);
   if(theme==="kubuntu")return sourceKubuntuIcon(iconKey);
   if(theme==="ubuntu")return sourceUbuntuIcon(iconKey);
   if(theme==="chromeos")return sourceChromeOSIcon(iconKey);
@@ -631,6 +665,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="aeroNoir"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceAeroNoirIcon(kind==="binFull"?"bin-full":kind);
+  }
   if(theme==="kubuntu"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceKubuntuIcon(kind==="binFull"?"bin-full":kind);

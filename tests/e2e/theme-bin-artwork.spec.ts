@@ -2,6 +2,7 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  aeroNoir:{empty:"/assets/images/bin-aeroNoir.12b5ed31.svg",full:"/assets/images/bin-full-aeroNoir.6bcff3f1.webp"},
   kubuntu:{
     empty:"/assets/images/bin-kubuntu.9e105407.webp",
     full:"/assets/images/bin-full-kubuntu.52b4bff6.webp"
@@ -50,7 +51,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -311,4 +312,50 @@ test("original Kubuntu Computer and Desktop files use theme-specific folder/gene
   const opened=page.locator('[data-test-window="computer"]').last();
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/Kubuntu Source Folder");
+});
+
+test("original Aero Noir Computer and Desktop files use theme-specific folder/generic-file artwork",async({page})=>{
+  await sourceThemeDesktop(page,"aeroNoir");
+  const computerIcon=page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon');
+  await expect(computerIcon).toHaveAttribute("src",
+    "/assets/images/computer-aeroNoir.1a117c0c.webp");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+
+  await expect(explorer.locator(".explorer-navigation__home").first().locator("img"))
+    .toHaveAttribute("src","/assets/images/computer-aeroNoir.1a117c0c.webp");
+  for(const [label,art] of [["Documents","/assets/images/folder-docs-aeroNoir.e177413f.svg"],["Downloads","/assets/images/folder-downloads-aeroNoir.95a9aee9.svg"],["Music","/assets/images/folder-aeroNoir.0a237526.svg"],["Pictures","/assets/images/folder-aeroNoir.0a237526.svg"],["Videos","/assets/images/folder-aeroNoir.0a237526.svg"]]){
+    const shortcut=explorer.locator(".explorer-navigation__home").filter({hasText:label});
+    await expect(shortcut.locator("img")).toHaveAttribute("src",art);
+  }
+  const desktopShortcut=explorer.getByRole("button",{name:"Desktop",exact:true});
+  await expect(desktopShortcut.locator("img")).toHaveAttribute("src","/assets/images/desktop-aeroNoir.3821791a.svg");
+  await desktopShortcut.click();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP);
+  await explorer.getByRole("button",{name:"New folder"}).click();
+  const dialog=explorer.getByRole("dialog",{name:"New folder"});
+  await dialog.getByRole("textbox",{name:"New folder name"})
+    .fill("Aero Noir Source Folder");
+  await dialog.getByRole("button",{name:"OK"}).click();
+  const folder=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Aero Noir Source Folder"]');
+  await expect(folder).toBeVisible();
+  await expect(folder.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/folder-aeroNoir.0a237526.svg");
+
+  await explorer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Source Unknown.abc",
+      mimeType:"application/octet-stream",
+      buffer:Buffer.from([0x31,0x32,0x33])});
+  const unknown=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Source Unknown.abc"]');
+  await expect(unknown).toBeVisible();
+  await expect(unknown.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/file-aeroNoir.a9c655e6.svg");
+
+  await folder.dblclick();
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
+  const opened=page.locator('[data-test-window="computer"]').last();
+  await expect(opened.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP+"/Aero Noir Source Folder");
 });

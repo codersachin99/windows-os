@@ -1,3 +1,11 @@
+## 24 November 2026 — Aero Noir core desktop/Explorer artwork and audit coverage
+
+[CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8` passed TypeScript, unit, inventory, historical artwork, Contacts and Vite steps; focused browser stage still running at inspection. No redundant run.
+
+Aero Noir: 26 original registry keys via 21 hash-matched original files, source folder and disk aliases, distinct Bin states. No Start registry key; existing fallback retained. Added unit and focused browser regressions. Corrected artwork verifier CLI to include every registered pack by default (previous seven-group default missed newer artwork). [Source trace](AERONOIR-CORE-ICONS-SOURCE.md). Exact-head verification pending. Next Oxygen core art and inspect outstanding CI before batching. Frozen source/main/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Kubuntu core desktop/Explorer artwork
 
 Combined [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`: TS/units/inventory/exact art/Contacts/Vite passed; focused browser stage running at inspection. No redundant CI.
