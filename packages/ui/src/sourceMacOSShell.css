@@ -236,3 +236,25 @@
   width:17px;height:12px;position:absolute;top:100%;transform:translateX(-50%);
   background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='17' height='12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M18.293-.5L8.5 9.293-1.293-.5h19.586z' stroke='%230F0F0F'/%3E%3Cpath d='M17.293-.5L8.5 8.293-.293-.5h17.586z' fill='%232D2D2D' stroke='%23ADADAD'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Cpath d='M0 0h17v12H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
 }
+
+/* Frozen theme-macos-scss.js .macos .winui-menu. All actual menu
+ * surfaces including body-portaled Launchpad contexts share the original
+ * paint; existing root and cascading placement remains authoritative. */
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]){
+  background:#2d2d2d;color:#fff;border:1px solid #000;border-radius:8px;
+  padding:4px;min-width:min(220px,calc(100vw - 8px));max-width:calc(100vw - 8px);
+  box-shadow:0 2px 8px #0006;
+}
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"])::before{content:none}
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]) button{
+  background:none;color:inherit;border:1px solid transparent;border-radius:3px;
+  box-shadow:none;text-shadow:none;padding-block:6px;text-align:start;
+}
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]) button:not(:disabled):is(:hover,:focus-visible){
+  background:#0451d0;color:#fff;border-color:transparent;
+}
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]) button:disabled{opacity:.5;cursor:default}
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]) :is(hr,.windows-desktop__menu-divider){
+  border:0;height:1px;width:calc(100% - 28px);background:#fff3;margin:4px auto;
+}
+:is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]) kbd{color:inherit}

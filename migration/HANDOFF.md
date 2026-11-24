@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS WinUI context and CI repair
+
+Recovered push-triggered workflow history: [CI #45374111162](https://github.com/codersachin99/windows-os/actions/runs/45374111162) green at 496ed05; [CI #45387916534](https://github.com/codersachin99/windows-os/actions/runs/45387916534) failed one stale Vista Start artwork unit assertion (732 passed; TypeScript passed, browser gates skipped). Corrected expectation to exact original Vista Start, preserve generic fallback guards. Original macOS dark menu skin now shared across Desktop, Dock, Explorer child/root, Launchpad portal and app dropdowns; browser contracts added. [Source trace](MACOS-CONTEXT-SOURCE.md). One consolidated [run-ci] requested; current head unverified. Next inspect CI, fix failures, then macOS Explorer chrome and menubars. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS dock Bin and tooltips
 
 Shared mounted Guest trash count hook, synchronized original empty/full Bin artwork on Desktop and Dock, source tooltip paint and embedded pointer, viewport-safe portal and keyboard access. Existing upload/delete/empty browser contract extended and tooltip regression authored. [Source trace](MACOS-DOCK-DETAILS-SOURCE.md). Exact-head tests pending. Next macOS context and Explorer skins; consolidated CI afterward. Main/frozen source/draft PR/releases unchanged; no extra CI trigger.

@@ -952,3 +952,61 @@ test("macOS dock tooltip has original paint and stays inside the viewport",async
   await page.mouse.move(1,100);
   await expect(tooltip).toHaveCount(0);
 });
+
+test("macOS original dark Desktop and Dock context palette",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  await page.locator("#desktop-icons").click({button:"right",position:{x:260,y:200}});
+  const root=page.locator("[data-test-desktop-menu]");
+  await expect(root).toHaveCSS("background-color","rgb(45, 45, 45)");
+  await expect(root).toHaveCSS("border-top-left-radius","8px");
+  const refresh=root.getByRole("menuitem",{name:"Refresh"});
+  await refresh.hover();
+  await expect(refresh).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await page.keyboard.press("Escape");
+  await expect(root).toHaveCount(0);
+  await page.locator('[data-test-macos-dock-item="computer"]').click({button:"right"});
+  const dockMenu=page.locator(".windows-taskbar__context");
+  await expect(dockMenu).toBeVisible();
+  await expect(dockMenu).toHaveCSS("background-color","rgb(45, 45, 45)");
+  await page.keyboard.press("Escape");
+  await expect(dockMenu).toHaveCount(0);
+});
+
+test("macOS original Computer cascading menu and Launchpad portal retain actions",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const paint=async(menu:ReturnType<Page["locator"]>)=>{
+    await expect(menu).toBeVisible();
+    await expect(menu).toHaveCSS("background-color","rgb(45, 45, 45)");
+    await expect(menu).toHaveCSS("border-top-color","rgb(0, 0, 0)");
+    await expect(menu).toHaveCSS("border-top-left-radius","8px");
+  };
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').first();
+  const content=win.locator(".explorer-content");
+  const bounds=await content.boundingBox();
+  await content.click({button:"right",position:{x:Math.max(10,bounds!.width-12),y:Math.max(10,bounds!.height-12)}});
+  const menu=win.locator('[data-test-explorer-context="background"]');
+  await paint(menu);
+  const view=menu.locator("[data-test-explorer-context-view]");
+  await view.hover();
+  await expect(view).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await view.click();
+  const child=menu.locator("[data-test-explorer-background-submenu]");
+  await paint(child);
+  await expect(child.getByRole("menuitemradio")).toHaveCount(8);
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await win.locator('[data-source-window-control="close"]').click();
+  await page.locator("[data-test-start-button]").click();
+  const launchpad=page.locator("[data-test-launchpad]");
+  await launchpad.locator("[data-test-start-search]").fill("Notepad");
+  await launchpad.locator('[data-test-launchpad-program="notepad"]').click({button:"right"});
+  const popup=page.locator('body > [data-test-start-program-context="notepad"]');
+  await paint(popup);
+  const pin=popup.locator('[data-test-start-context-action="pin"]');
+  await pin.hover();
+  await expect(pin).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await pin.click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator('[data-test-taskbar-pin="notepad"]')).toBeVisible();
+});

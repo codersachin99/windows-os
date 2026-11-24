@@ -46,12 +46,17 @@ describe("pinned source XP/Win10/Win11 shell artwork mapping",()=>{
     expect(sourceThemeProgramArt("win10","notepad")).toBeNull();
   });
   it("never substitutes source artwork for Win7 and unported shell themes",()=>{
-    for(const theme of ["win7","winvista","win31","unknown"]){
+    for(const theme of ["win7","win31","unknown"]){
       expect(sourceShellAsset(theme,"start")).toBeNull();
       expect(sourceShellAsset(theme,"computer")).toBeNull();
       expect(sourceShellAsset(theme,"bin")).toBeNull();
     }
     expect(legacyArt.startOrb).toBe("/assets/images/start-button.b35eae12.webp");
+  });
+  it("uses the exact Vista Start override without inventing generic Vista assets",()=>{
+    expect(sourceShellAsset("winvista","start")).toBe("/assets/images/start-button-winvista.f48c809a.webp");
+    for(const kind of ["computer","bin","binFull","folder","file"] as const)
+      expect(sourceShellAsset("winvista",kind)).toBeNull();
   });
   it("uses pinned XP logoff/shutdown artwork instead of generated icons",()=>{
     expect(legacyXpPowerArtwork.logoff).toMatch(/logoff-winxp\.71dc5ab2\.webp$/);
