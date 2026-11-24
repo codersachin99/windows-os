@@ -135,6 +135,27 @@ export function ExplorerApp({
   const contextReturnFocus=useRef<HTMLElement|null>(null);
   const sendToRef=useRef<HTMLDivElement>(null);
   const backgroundSubmenuRef=useRef<HTMLDivElement>(null);
+  // The source BaseMenu re-measures popups against the current viewport.
+  // Explorer/Bin previously measured only on open: rotating a phone or
+  // resizing desktop Chromium stranded an already-open cascade offscreen.
+  // Keep geometry changes separate from context identity and keyboard focus.
+  const [contextViewport,setContextViewport]=useState(()=>{
+    return {
+      width:typeof window==="undefined"?960:window.innerWidth,
+      height:typeof window==="undefined"?720:window.innerHeight
+    };
+  });
+  useEffect(()=>{
+    if(!context)return;
+    const onResize=()=>{
+      const width=window.innerWidth,height=window.innerHeight;
+      setContextViewport(prev=>prev.width===width&&prev.height===height
+        ?prev:{width,height});
+    };
+    onResize();
+    window.addEventListener("resize",onResize);
+    return ()=>window.removeEventListener("resize",onResize);
+  },[Boolean(context)]);
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [subfolders, setSubfolders] = useState(
     initialSourceSearch?.subfolders ?? initialFind?.subfolders ?? false);
@@ -561,10 +582,10 @@ export function ExplorerApp({
     const position=sourceDesktopMenuPosition(
       {x:context.anchorX,y:context.anchorY},
       {width:element.offsetWidth,height:element.offsetHeight},
-      {width:window.innerWidth,height:window.innerHeight});
+      contextViewport);
     if(context.x===position.x&&context.y===position.y)return;
     setContext(current=>current?{...current,...position}:current);
-  },[context]);
+  },[context,contextViewport]);
   // Source ExplorerMenu's nested BaseMenu is positioned to the side of
   // the row and flips across the desktop edge. Keep it out of the parent
   // flex layout so opening Send to never changes parent item height.
@@ -579,7 +600,7 @@ export function ExplorerApp({
     const placement=sourceExplorerSubmenuPlacement(
       {left:a.left,top:a.top,width:a.width,height:a.height},
       {top:b.top},{width:child.offsetWidth,height:child.offsetHeight},
-      {width:window.innerWidth,height:window.innerHeight});
+      contextViewport);
     child.style.left=placement.left+"px";
     child.style.top=placement.top+"px";
     child.dataset.side=placement.side;
@@ -589,7 +610,7 @@ export function ExplorerApp({
     // must not collapse the submenu mid-trajectory.
     child.dataset.cascade=placement.top>=a.height||
       placement.top+child.offsetHeight<=0?"stacked":"adjacent";
-  },[context?.kind,context?.sendToOpen,context?.x,context?.y]);
+  },[context?.kind,context?.sendToOpen,context?.x,context?.y,contextViewport]);
   // The original Computer/Bin background View and Computer New commands use
   // the same separate side-flipping BaseMenu as item Send to. Position it
   // against its trigger after layout, without changing root menu height.
@@ -605,7 +626,7 @@ export function ExplorerApp({
     const placement=sourceExplorerSubmenuPlacement(
       {left:bounds.left,top:bounds.top,width:bounds.width,height:bounds.height},
       {top:row.top},{width:child.offsetWidth,height:child.offsetHeight},
-      {width:window.innerWidth,height:window.innerHeight});
+      contextViewport);
     child.style.left=placement.left+"px";
     child.style.top=placement.top+"px";
     child.dataset.side=placement.side;
@@ -614,7 +635,7 @@ export function ExplorerApp({
     // dismiss it before the pointer reaches the child.
     child.dataset.cascade=placement.top>=bounds.height||
       placement.top+child.offsetHeight<=0?"stacked":"adjacent";
-  },[context?.kind,context?.viewOpen,context?.newOpen,context?.x,context?.y]);
+  },[context?.kind,context?.viewOpen,context?.newOpen,context?.x,context?.y,contextViewport]);
   const copyExplorerPath=()=>{
     const path=state.path;
     if(!path){setMessage("No mounted folder path is available.");return;}
