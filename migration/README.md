@@ -1,3 +1,5 @@
+> **24 November 2026 — notifications:** shared SDK history and timed macOS toast; source remote feed pending. [Source trace](MACOS-NOTIFICATION-SOURCE.md).
+
 > **24 November 2026 — macOS Volume:** original meter, five exact icons and functional Guest media mixer. [Source trace](MACOS-VOLUME-SOURCE.md). Tests pending.
 
 > **24 November 2026 — macOS Battery:** original battery popup, browser capability and functional Guest display brightness; unit/browser contracts authored. [Source trace](MACOS-BATTERY-SOURCE.md).

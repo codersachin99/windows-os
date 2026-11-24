@@ -468,3 +468,28 @@
   background:none;border:0;border-radius:4px;color:inherit;
 }
 .windows-desktop[data-theme="macos"] .source-macos-volume-mute:is(:hover,:focus-visible){background:#fff1}
+
+/* Source taskbar-macos.css notification: top-right, 360px, hover close. */
+.windows-desktop[data-theme="macos"] .source-macos-notification{
+  position:fixed;top:calc(var(--taskbar-height) + 16px);inset-inline-end:16px;
+  z-index:4901;display:flex;gap:8px;box-sizing:border-box;
+  width:min(360px,calc(100vw - 32px));padding:12px;color:#fff;background:#4b4b4b;
+  border:1px solid #fff3;border-radius:10px;box-shadow:0 0 0 1px #0006;
+}
+.windows-desktop[data-theme="macos"] .source-macos-notification img{flex:none}
+.windows-desktop[data-theme="macos"] .source-macos-notification>div{min-width:0;overflow-wrap:anywhere}
+.windows-desktop[data-theme="macos"] .source-macos-notification p{margin:4px 0 0;white-space:pre-wrap}
+.windows-desktop[data-theme="macos"] .source-macos-notification button{
+  position:absolute;top:-8px;inset-inline-start:-8px;width:24px;height:24px;
+  padding:0;line-height:1;border-radius:50%;background:#4b4b4b;color:#fff;
+  border:1px solid #fff3;box-shadow:0 0 1px 1px #0006;opacity:0;transition:opacity .2s;
+}
+.windows-desktop[data-theme="macos"] .source-macos-notification:is(:hover,:focus-within) button{opacity:1}
+@media(hover:none){.windows-desktop[data-theme="macos"] .source-macos-notification button{opacity:1}}
+.windows-desktop[data-theme="macos"] .source-macos-notification-history{
+  display:flex;flex-direction:column;gap:4px;padding:8px;max-height:40vh;overflow:auto;
+}
+.windows-desktop[data-theme="macos"] .source-macos-notification-history button{
+  text-align:start;overflow-wrap:anywhere;background:none;border:0;color:inherit;padding:4px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-notification-history button:is(:hover,:focus-visible){text-decoration:underline;background:#fff1}

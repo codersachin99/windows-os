@@ -1,14 +1,14 @@
 import {useEffect,useRef,type Dispatch} from "react";
 import {legacyArt} from "@windows-os/assets";
-import {appRegistry} from "@windows-os/sdk";
+import {appRegistry,type SourceNotificationSnapshot,sourceNotificationSeverity} from "@windows-os/sdk";
 import type {DesktopAction} from "@windows-os/contracts";
 
-/** Original f0ed summary and Control Panel destination. Notification feed
- * migration is separate: until a genuine provider is connected, both this
- * summary and the existing Control Panel page contain no messages. */
-export function SourceMacOSActionCenter({dispatch,open,setOpen}:{
-  dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void
+/** Original f0ed summary and history, backed by shared Guest notification state. */
+export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onSeen}:{
+  dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void;
+  notifications:SourceNotificationSnapshot;onSeen:()=>void
 }){
+  const severity=sourceNotificationSeverity(notifications);
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{
@@ -33,17 +33,20 @@ export function SourceMacOSActionCenter({dispatch,open,setOpen}:{
       }
     }}>
     <button ref={trigger} type="button" className="source-macos-action-center-trigger"
-      data-test-action-center="" aria-label="Action Center" aria-haspopup="dialog"
+      data-test-action-center="" data-notification-severity={severity} aria-label="Action Center" aria-haspopup="dialog"
       aria-expanded={open} title="Action Center"
-      onClick={()=>{if(!open)dispatch({type:"CLOSE_START"});setOpen(!open);}}>
+      onClick={()=>{if(!open){dispatch({type:"CLOSE_START"});onSeen();}setOpen(!open);}}>
       <img src={legacyArt.trayActionCenter} width={16} height={16} alt=""/>
     </button>
     {open&&<div className="source-macos-action-center-popup" role="dialog"
       aria-label="Action Center" data-test-action-center-popup="">
       <div className="source-macos-action-center-summary">
         <img src="/assets/images/action-center-headline.27cc6d83.webp" width={32} height={32} alt=""/>
-        <span data-test-notification-summary="">No new messages</span>
+        <span data-test-notification-summary="">{notifications.history.length===0?"No new messages":notifications.history.length===1?"1 message":notifications.history.length+" messages"}</span>
       </div>
+      {notifications.history.length>0&&<div className="source-macos-notification-history">
+        {notifications.history.map(message=><button key={message.id} type="button" data-test-notification-item="" onClick={openCenter}>{message.title}</button>)}
+      </div>}
       <button type="button" data-test-open-action-center="" onClick={openCenter}>Open Action Center</button>
     </div>}
   </div>;

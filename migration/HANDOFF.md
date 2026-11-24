@@ -1,3 +1,9 @@
+## 24 November 2026 — Guest notification lifecycle
+
+Added shared SDK notification store, FIFO current toast and 8s dismissal, retained history/seen/read states, macOS toast paint, Action Center history and Control Panel shared messages. Unit and SSR escaping contracts authored. [Source trace](MACOS-NOTIFICATION-SOURCE.md). Remote feed/provider and exact original 779a store behavior pending; no synthetic production notifications. Prior CI #45395440100 full interactions still running at inspection. Next consolidate latest-head verification and remaining theme parity. Main/frozen reference/PR unchanged.
+
+---
+
 ## 24 November 2026 — macOS Volume and Guest audio
 
 Original c561 vertical meter, mute toggle, exact five original volume artwork blobs, shared Guest audio state applied to actual Player media element (local × system volume and combined mute). Unit thresholds and actual media property browser contract authored. [Source trace](MACOS-VOLUME-SOURCE.md). Prior CI #45395440100 full interactions running at inspection; no redundant trigger. Next notification history/delivery, remaining macOS parity and consolidated verification. Main/frozen source/draft PR/releases unchanged.

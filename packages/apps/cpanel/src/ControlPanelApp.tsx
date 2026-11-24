@@ -45,13 +45,14 @@ export interface ControlPanelAppProps{
   onTrayPreferencesChange(value:SourceTrayPreferences):void;
   /** Original Vuex Action Center history when available; no fabricated alerts. */
   messages?:readonly SourceControlPanelActionMessage[];
+  onReadMessages?():void;
 }
 /** Source cpanel.js a259 and pinned 3097 registry: breadcrumb/history,
  * original 24-tile root, indexed task search and six genuinely migrated
  * destinations. Other setting/program targets stay visibly disabled. */
 export function ControlPanelApp({
   onClose,onSwitchUser,onOpenProgram,trayPreferences,onTrayPreferencesChange,
-  filesystem,theme="win7",initialLocation=null,messages=[]
+  filesystem,theme="win7",initialLocation=null,messages=[],onReadMessages
 }:ControlPanelAppProps){
   const [history,setHistory]=useState<SourceControlPanelHistory>(
     initialLocation===null?SOURCE_CPANEL_INITIAL_HISTORY:{
@@ -64,6 +65,7 @@ export function ControlPanelApp({
   const [selectedProgram,setSelectedProgram]=useState<string|null>(null);
   const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
+  useEffect(()=>{if(location==="action-center")onReadMessages?.();},[location,onReadMessages]);
   const addressIconKey=sourceCpanelAddressIconKey(location);
   const addressIconSrc=addressIconKey==="cpanel"
     ?legacyArt.cpanel:legacyCpanelTileArtwork[addressIconKey]

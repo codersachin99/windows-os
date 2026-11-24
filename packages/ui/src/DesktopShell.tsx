@@ -1,8 +1,8 @@
-import {useCallback,useEffect,useLayoutEffect,useRef,useState,type CSSProperties,type Dispatch} from "react";
+import {useCallback,useEffect,useLayoutEffect,useRef,useState,useSyncExternalStore,type CSSProperties,type Dispatch} from "react";
 import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
   sourceAeroAppearanceSave,type SourceAeroAppearance,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
-import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms } from "@windows-os/sdk";
+import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms,sourceNotifications,sourceNotificationCurrent,type SourceNotificationSnapshot } from "@windows-os/sdk";
 import {useSourceTrashCount} from "./useSourceTrashCount";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
@@ -11,6 +11,7 @@ import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
 import {SourceMacOSVolume} from "./SourceMacOSVolume";
 import {SOURCE_GUEST_AUDIO_INITIAL,type SourceGuestAudio} from "./sourceGuestAudio";
 import {SourceMacOSBattery} from "./SourceMacOSBattery";
+import {SourceMacOSNotificationToast} from "./SourceMacOSNotificationToast";
 import {SourceMacOSActionCenter} from "./SourceMacOSActionCenter";
 import {SourceMacOSNetwork} from "./SourceMacOSNetwork";
 import {SourceMacOSDateTime} from "./SourceMacOSDateTime";
@@ -67,6 +68,7 @@ interface DesktopShellProps {
 
 interface ApplicationContentProps {
   guestAudio:SourceGuestAudio;
+  notifications:SourceNotificationSnapshot;
   appId: string;
   filePath?: string;
   windowId: string;
@@ -87,7 +89,7 @@ interface ApplicationContentProps {
   onAeroAppearanceDiscard():void;
 }
 function ApplicationContent({
-  appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,guestAudio,
+  appId, filePath, windowId, dispatch, registerClose, onMagnifierScale,guestAudio,notifications,
   windows, onRequestCloseWindow, theme,wallpaper,
   trayPreferences,onTrayPreferencesChange,visualEffects,onVisualEffectsChange,
   aeroAppearance,onAeroAppearancePreview,onAeroAppearanceSave,onAeroAppearanceDiscard
@@ -115,7 +117,8 @@ function ApplicationContent({
     visualEffects={visualEffects} onVisualEffectsChange={onVisualEffectsChange}
     onClose={()=>dispatch({type:"CLOSE_WINDOW",id:windowId})}/>;
   if (appId === "cpanel") return <ControlPanelApp
-    filesystem={fileStore} theme={theme}
+    filesystem={fileStore} theme={theme} messages={notifications.history}
+    onReadMessages={()=>sourceNotifications.markAllRead()}
     initialLocation={filePath==="display"?"display":
       filePath==="notification"?"notification":filePath==="accounts"?"accounts":
       filePath==="action-center"?"action-center":null}
@@ -303,6 +306,10 @@ export function DesktopShell({
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
   const [guestAudio,setGuestAudio]=useState<SourceGuestAudio>(SOURCE_GUEST_AUDIO_INITIAL);
+  const notifications=useSyncExternalStore(sourceNotifications.subscribe,sourceNotifications.snapshot,sourceNotifications.snapshot);
+  const currentNotification=sourceNotificationCurrent(notifications);
+  const dismissNotification=useCallback((id:string)=>sourceNotifications.dismiss(id),[]);
+  useEffect(()=>()=>sourceNotifications.reset(),[]);
   const setMacPopupOpen=(id:SourceMacOSPopupId,open:boolean)=>{
     setMacPopup(current=>sourceMacOSPopupTransition(current,id,open));
     if(open)setShowHiddenTray(false);
@@ -549,7 +556,7 @@ export function DesktopShell({
           dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} filePath={win.file?.path} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme} guestAudio={guestAudio}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme} guestAudio={guestAudio} notifications={notifications}
             wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange}
@@ -575,7 +582,7 @@ export function DesktopShell({
           dispatch={dispatch}
           onRequestClose={() => requestClose(win.id)}>
           <ApplicationContent appId={win.appId} windowId={win.id} dispatch={dispatch}
-            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme} guestAudio={guestAudio}
+            registerClose={registerClose} onMagnifierScale={setMagnifierScale} theme={state.theme} guestAudio={guestAudio} notifications={notifications}
             wallpaper={state.wallpaper} windows={state.windows} onRequestCloseWindow={requestClose}
             trayPreferences={trayPreferences}
             onTrayPreferencesChange={onTrayPreferencesChange}
@@ -738,7 +745,7 @@ export function DesktopShell({
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
             .map(item=>state.theme==="macos"&&item.id==="TaskbarActionCenter"?
-              <SourceMacOSActionCenter key={item.id} dispatch={dispatch} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:state.theme==="macos"&&item.id==="TaskbarNetwork"?
+              <SourceMacOSActionCenter key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:state.theme==="macos"&&item.id==="TaskbarNetwork"?
               <SourceMacOSNetwork key={item.id} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
               state.theme==="macos"&&item.id==="TaskbarBattery"?
               <SourceMacOSBattery key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
@@ -790,6 +797,8 @@ export function DesktopShell({
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
         onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}
         returnFocusTarget={taskbarContextReturnFocus.current}/>}
+      {state.theme==="macos"&&trayPreferences.icons.TaskbarActionCenter!=="off"&&currentNotification&&
+        <SourceMacOSNotificationToast key={currentNotification.id} message={currentNotification} onDismiss={dismissNotification}/>}
       {state.windowLimitError&&
         <div className="windows-desktop__limit-alert" data-test-window-limit-alert="">
           <SourceMessageDialog data={{type:"error",message:state.windowLimitError}}

@@ -250,3 +250,5 @@ export { SOURCE_EMBED_VERSION,SOURCE_EMBED_PREFIX,sourceEmbedOrigins,sourceEmbed
 export {SOURCE_FINAL_DESKTOP_MENU_FLAGS} from "./sourceFinalMenuFlags";
 
 export {SOURCE_FINAL_APP_ALIASES,sourceRegisteredAliases} from "./sourceFinalAppAliases";
+
+export {sourceNotifications,SourceNotificationStore,sourceNotificationCurrent,sourceNotificationSeverity,SOURCE_NOTIFICATION_TIMEOUT,type SourceNotification,type SourceNotificationInput,type SourceNotificationSnapshot,type SourceNotificationType} from "./sourceNotifications";
