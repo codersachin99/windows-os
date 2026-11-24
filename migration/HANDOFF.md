@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu Explorer and application menubars
+
+Ported original dark address, navigation, search, list selection, status and shared Notepad/Explorer menubars. Real Guest file operations unchanged; browser contracts authored, not executed. [Source trace](UBUNTU-EXPLORER-SOURCE.md). Next Ubuntu tray, DateTime and system menu, then focused verification. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu Desktop and WinUI context menus
 
 Source per-icon selection and shared dark menu palette across Desktop, Explorer, menubars and Start portal. Existing measured cascade geometry retained, Ubuntu added to edge/keyboard coverage. [Source trace](UBUNTU-CONTEXT-SOURCE.md). Tests pending. Next Explorer chrome and menubar, then tray/DateTime. Main/frozen source/draft PR unchanged.

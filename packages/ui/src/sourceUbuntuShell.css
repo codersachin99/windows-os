@@ -178,3 +178,23 @@
 .windows-desktop[data-theme="ubuntu"] .windows-desktop__menu{
   max-width:calc(100% - 8px);
 }
+
+/* Original Ubuntu WinUI menubar and WindowMain status surfaces. */
+.windows-desktop[data-theme="ubuntu"] :is(.notepad-menu,.explorer-command){
+  background:#272727;color:#fff;border:0;border-bottom:1px solid #181818;box-shadow:none;
+}
+.windows-desktop[data-theme="ubuntu"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button){
+  background:none;color:#fff;border:1px solid transparent;box-shadow:none;text-shadow:none;
+}
+.windows-desktop[data-theme="ubuntu"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):not(:disabled):is(:focus,:hover,[aria-expanded="true"]){
+  background:#fff3;border-color:transparent;
+}
+.windows-desktop[data-theme="ubuntu"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):disabled{opacity:.5}
+.windows-desktop[data-theme="ubuntu"] .explorer-command select{
+  background:#373737;color:#fff;border:1px solid #181818;border-radius:5px;
+}
+.windows-desktop[data-theme="ubuntu"] .notepad-status{
+  color:#fff;background:#2c2c2c;border-top:1px solid #181818;
+  border-radius:0 0 15px 15px;box-shadow:none;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-window.is-maximized .notepad-status{border-radius:0}

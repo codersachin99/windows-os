@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu Explorer/menubar:** source address, navigation, list selection and status styling; tests pending. [Source trace](UBUNTU-EXPLORER-SOURCE.md).
+
 > **24 November 2026 — Ubuntu Desktop/context:** source icon selection and dark WinUI menus; shared cascade regression extended. Tests pending. [Source trace](UBUNTU-CONTEXT-SOURCE.md).
 
 > **24 November 2026 — Ubuntu WindowMain:** source frame, caption controls and bounded windows; tests pending. [Source trace](UBUNTU-WINDOW-SOURCE.md).
