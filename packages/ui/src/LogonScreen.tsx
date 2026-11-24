@@ -4,6 +4,7 @@ import { legacyArt,sourceThemeLogonArtwork,sourceWin11DarkArtwork } from "@windo
 import "./sourceThemeLogon.css";
 import {SourceClassicLogon} from "./SourceClassicLogon";
 import {SourceWin8Logon} from "./SourceWin8Logon";
+import {SourceOnebitLogon} from "./SourceOnebitLogon";
 
 interface LogonScreenProps {
   theme?:ThemeId;
@@ -28,6 +29,13 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
   if(sourceScreens.logon==="win8")return <SourceWin8Logon
     theme={theme} shellStatus={status} onGuest={onGuest} onShutdown={onShutdown}
     onRestart={onRestart}/>;
+
+  // Onebit is a distinct source BaseLogon theme. Preserve Guest and
+  // power actions with its original dark/sand palette, without inventing
+  // the source account/captcha backend or claiming shell parity.
+  if(sourceScreens.logon==="onebit")return <SourceOnebitLogon
+    theme={theme} shellStatus={status} onGuest={onGuest}
+    onShutdown={onShutdown} onRestart={onRestart}/>;
 
   // The original WinXP source uses a three-region blue login screen,
   // 150×89 XP logo and a Guest row. Only the guest/account backend behavior
