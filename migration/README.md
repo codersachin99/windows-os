@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu Activities:** source Launchpad grid, paging, app/settings/file search; tests pending. [Source trace](UBUNTU-LAUNCHPAD-SOURCE.md).
+
 > **24 November 2026 — Ubuntu shell:** original top bar and vertical recent/running dock, maximized bounds; prior ChromeOS focused CI passed. New tests pending. [Source trace](UBUNTU-SHELL-SOURCE.md).
 
 > **24 November 2026 — ChromeOS DateTime:** source calendar and live analog/digital clocks; opt-in focused ChromeOS CI includes previous XP/Win11 regression. [Source trace](CHROMEOS-DATETIME-SOURCE.md). Results pending.

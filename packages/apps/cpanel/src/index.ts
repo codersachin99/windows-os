@@ -18,3 +18,5 @@ export {
   sourceVisualEffectsRead,sourceVisualEffectsSave,
   type SourceVisualEffects,type SourceVisualEffectsPreset
 } from "./sourceVisualEffects";
+
+export {sourceCpanelSearchRegistry,sourceCpanelIsSupported} from "./sourceRegistry";

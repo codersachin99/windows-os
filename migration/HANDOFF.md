@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu Activities / Launchpad
+
+Ported original overview grid, page controls and grouped real Guest program/settings/file search. Shared Activities and dock toggle. [Source trace](UBUNTU-LAUNCHPAD-SOURCE.md). New tests authored, pending execution. Next Ubuntu window chrome, desktop/context and Explorer. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — Ubuntu top bar and vertical dock
 
 Ported original recent + running item ordering, 64px dock, 32px top bar and maximized workspace bounds; real Guest focus and original artwork. [Source trace](UBUNTU-SHELL-SOURCE.md). Previous focused ChromeOS [CI #45405625966](https://github.com/codersachin99/windows-os/actions/runs/45405625966) passed. New Ubuntu unit/browser contracts authored, not executed. Next original Ubuntu Activities/launcher and window chrome, tray/context/Explorer. Main/frozen source/draft PR unchanged.

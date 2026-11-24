@@ -1,0 +1,50 @@
+/* Frozen startmenu-launchpad.js dad9 and Ubuntu theme 709b. */
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-launchpad{
+  position:fixed;inset:var(--taskbar-height) 0 0 0;z-index:3900;isolation:isolate;
+  display:flex;flex-direction:column;align-items:center;overflow:hidden;
+  background:#222;color:#fff;touch-action:pan-y;
+}
+.source-ubuntu-launchpad-backdrop{position:absolute;inset:0;z-index:-1}
+.source-ubuntu-launchpad>input{
+  flex:none;width:25%;min-width:200px;max-width:85%;margin-top:24px;
+  padding:8px 8px 8px 40px;border:1px solid #fff6;border-radius:6px;
+  background:#2c2c2c;box-shadow:inset 0 1px 4px #000;color:#fff;font:inherit;
+}
+.source-ubuntu-launchpad>input::placeholder{color:#fff9}
+.source-ubuntu-launchpad-grid{
+  width:65%;height:75%;min-height:0;margin:1% auto 16px;
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));
+  align-items:center;justify-items:center;
+}
+.source-ubuntu-launchpad-grid>button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  width:120px;max-width:100%;height:120px;max-height:100%;min-width:0;
+  padding:5px;border:0;border-radius:6px;background:none;color:inherit;font:inherit;text-shadow:0 0 3px #000;
+}
+.source-ubuntu-launchpad-grid>button:not(:disabled):is(:hover,:focus-visible){background:#fff3}
+.source-ubuntu-launchpad-grid>button:disabled{opacity:.5}
+.source-ubuntu-launchpad-grid>button img{width:64px;height:64px;max-width:100%;object-fit:contain}
+.source-ubuntu-launchpad-grid>button span{width:100%;padding:0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source-ubuntu-launchpad-paging{display:flex;gap:12px}
+.source-ubuntu-launchpad-paging button{width:12px;height:12px;border:0;border-radius:50%;padding:0;background:#fff8}
+.source-ubuntu-launchpad-paging button[aria-current="page"]{background:#fff}
+.source-ubuntu-results{width:50%;max-height:calc(100% - 120px);overflow:auto;margin-top:32px;display:flex;flex-direction:column;gap:16px}
+.source-ubuntu-results section{background:#0006;padding:12px;border-radius:12px}
+.source-ubuntu-results button{border:0;background:none;color:inherit;font:inherit;padding:8px;border-radius:8px;min-width:0}
+.source-ubuntu-results button:is(:hover,.is-selected,:focus-visible){background:#fff2}
+.source-ubuntu-results button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.source-ubuntu-result-apps{display:flex;flex-wrap:wrap;gap:8px}
+.source-ubuntu-result-apps button{width:112px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.source-ubuntu-result-apps button span{max-width:100%}
+.source-ubuntu-result-group{display:flex;gap:16px}
+.source-ubuntu-result-group header{width:112px;flex:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.source-ubuntu-result-group>div{display:flex;flex-direction:column;flex:1;min-width:0}
+.source-ubuntu-result-group button{display:flex;align-items:center;gap:12px;text-align:left}
+.source-ubuntu-results>p{text-align:center;color:#fffB}
+@media(max-width:760px){
+  .source-ubuntu-launchpad-grid{width:calc(100% - 76px);margin-inline:68px 8px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .source-ubuntu-launchpad-grid>button img{width:48px;height:48px}
+  .source-ubuntu-results{width:calc(100% - 76px);margin-inline:68px 8px}
+  .source-ubuntu-result-group header{width:64px}
+}
+@media(max-height:420px){.source-ubuntu-launchpad>input{margin-top:8px}.source-ubuntu-launchpad-grid>button{gap:2px}.source-ubuntu-launchpad-grid>button img{height:36px;width:36px}}

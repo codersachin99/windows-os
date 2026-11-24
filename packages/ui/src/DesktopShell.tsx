@@ -122,7 +122,7 @@ function ApplicationContent({
     onReadMessages={()=>sourceNotifications.markAllRead()}
     initialLocation={filePath==="display"?"display":
       filePath==="notification"?"notification":filePath==="accounts"?"accounts":
-      filePath==="action-center"?"action-center":null}
+      filePath==="action-center"?"action-center":filePath==="programs"?"programs":filePath==="backup"?"backup":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     onOpenProgram={(id,view)=>{

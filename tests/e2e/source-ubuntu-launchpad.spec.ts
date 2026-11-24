@@ -1,0 +1,23 @@
+import {test,expect} from "@playwright/test";
+test("Ubuntu Activities and dock share the source launchpad and grouped search",async({page})=>{
+  await page.goto("/?theme=ubuntu");
+  await page.locator('[data-test-source-logon-avatar="ubuntu"]').click({timeout:12000});
+  await page.locator("[data-test-activities-button]").click();
+  const launcher=page.locator("[data-test-ubuntu-launchpad]");
+  await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveCSS("background-color","rgb(34, 34, 34)");
+  const search=launcher.getByRole("searchbox");
+  await expect(search).toHaveAttribute("placeholder","Type to search");
+  await search.fill("Notepad");
+  await expect(launcher.locator('[data-test-start-group="apps"] [data-test-program="notepad"]')).toBeVisible();
+  await search.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(launcher).toHaveCount(0);
+  await page.locator("[data-test-start-button]").click();
+  await expect(launcher).toBeVisible();
+  await search.fill("display");
+  await expect(launcher.locator('[data-test-start-group="settings"]')).toBeVisible();
+  await launcher.locator('[data-test-start-group="settings"]').getByRole("button",{name:"Display",exact:true}).click();
+  await expect(page.locator('[data-test-window="cpanel"]')).toBeVisible();
+  await expect(launcher).toHaveCount(0);
+});
