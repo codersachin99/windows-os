@@ -1653,7 +1653,14 @@
       "sha": "7e4a0acc73eeaa9c0c61810d23a2babff9e6f63d",
       "area": "shell",
       "status": "in-progress",
-      "evidence": []
+      "evidence": [
+        "packages/ui/src/LogonScreen.tsx",
+        "packages/ui/src/sourceThemeLogon.css",
+        "packages/ui/src/sourceVistaLogon.test.tsx",
+        "tests/e2e/source-vista-logon.spec.ts",
+        "migration/VISTA-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed-slice; exact-head CI and full visual/functional parity pending"
     },
     {
       "source": "src/modules/shell/logon.js",

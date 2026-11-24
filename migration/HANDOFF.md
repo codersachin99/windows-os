@@ -1,3 +1,13 @@
+## 24 November 2026 — Vista completes partial logon family routing; mobile Personalize regression repair
+
+[Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) at `68590906` finished **FAILURE**: TypeScript/units/source inventory/original art/Contacts/Vite passed; focused Playwright **892 passed, 3 skipped, 1 failed**. Sole failure chromium-mobile source-personalize-appearance.spec.ts:82: sidebar Desktop Background link was hidden by the existing <=530px CSS. Control Panel direct Background test passed. Full browser and visual capture did not run. Browser logs also report existing segoepr.ttf decode failures; investigate font availability separately (do not claim visual parity). Fixed regression route: desktop still clicks direct sidebar link; narrow layout uses real Cancel then visible gallery Background link, with committed tint assertions at both exit and picker and subsequent editor state. No forced clicks or skipped assertions; no change to mobile source UI.
+
+Vista is implemented via original shared logon-win7.js module 8ba0d isVista branch rather than inventing a separate source module. Original Vista wallpaper and shared shutdown sprite copied with equal Git hashes. Source Windows Vista Professional branding, framed Guest and power art, audit, SSR all 37 IDs / 19 unique families and desktop/mobile Vista checks. [Source trace](VISTA-LOGON-SOURCE.md). All 19 source logon families now have partial renderers; no known configured fallback, not full visual/auth/shell parity.
+
+One combined opt-in CI requested for mobile regression repair and the six Oxygen/Kubuntu/Ubuntu/ChromeOS/macOS/Vista slices. Exact-head result pending. Frozen reference, main, draft PR #1, releases unchanged. Next: inspect new CI, fix failures and resume remaining desktop shell/Start/Explorer/Bin skins.
+
+---
+
 ## 24 November 2026 — original macOS Guest logon
 
 Previous [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) still in targeted browser stage at inspection; TypeScript/units/source/artwork/Contacts/Vite passed. Oxygen/Kubuntu/Ubuntu/ChromeOS unverified.

@@ -174,12 +174,15 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
     );
   }
 
+  // Source logon-win7.js 8ba0d handles Vista itself: same framed avatar,
+  // different wallpaper and Windows Vista Professional footer.
+  const isVista=sourceScreens.logon==="winvista";
   return (
-    <main className="windows-logon is-win7" data-test-logon-screen
+    <main className={"windows-logon is-win7"+(isVista?" source-vista-logon":"")} data-test-logon-screen
       data-source-theme-id={theme} data-source-logon-theme={sourceScreens.logon}
       data-source-shell-status={status}
-      data-source-logon-renderer={sourceScreens.logon==="win7"?"win7":"win7-fallback"}
-      style={{ backgroundImage: `url("${legacyArt.logonBackground}")` }}>
+      data-source-logon-renderer={isVista?"winvista":sourceScreens.logon==="win7"?"win7":"win7-fallback"}
+      style={{ backgroundImage: `url("${isVista?sourceThemeLogonArtwork.winvista.background:legacyArt.logonBackground}")` }}>
       <div className="windows-logon__centre logon__pane">
         <div className="windows-logon__guest-area">
           <span className="windows-logon__hint windows-logon__hint--guest logon__instruction is-guest">
@@ -189,7 +192,8 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
             </svg>
           </span>
           <button className="windows-logon__avatar is-win7 avatar-button has-frame can-click" onClick={onGuest}
-            data-test-avatar="win7" aria-label="Log in as Guest"
+            data-test-avatar="win7" data-test-source-logon-avatar={isVista?"winvista":undefined}
+            aria-label="Log in as Guest"
             style={{ backgroundImage: `url("${legacyArt.accountFrame}")` }}>
             <span className="avatar-mask"><img className="avatar-image" src={legacyArt.guestAvatar} alt="Guest avatar" /></span>
           </button>
@@ -212,15 +216,19 @@ export function LogonScreen({ theme="win7",onGuest, onShutdown, onRestart }: Log
         </div>
       </div>
       <footer className="windows-logon__footer logon__brand">
-        <img className="logon__brand-icon" src={legacyArt.win7Brand} alt="" width={26} height={26} />
-        <span>Windows<sup>®</sup> 7</span>
-        <span className="windows-logon__simulator">Simulator</span>
+        <img className="logon__brand-icon" src={legacyArt.win7Brand} alt="" width={isVista?32:26} height={isVista?32:26} />
+        {isVista?<><span>Windows Vista<sup>®</sup></span>
+          <span className="windows-logon__simulator">Professional</span></>:<>
+          <span>Windows<sup>®</sup> 7</span>
+          <span className="windows-logon__simulator">Simulator</span>
+        </>}
       </footer>
-      <div className="windows-logon__power shutdown-group">
+      <div className="windows-logon__power shutdown-group"
+        style={isVista?{backgroundImage:`url("${sourceThemeLogonArtwork.winvista.shutdown}")`}:undefined}>
         <button className="windows-logon__shutdown shutdown-button" title="Shut down"
           data-test-logon-shutdown="" aria-label="Shut down" onClick={onShutdown}>⏻</button>
         <button className="windows-logon__power-arrow shutdown-dropdown" aria-label="Power options"
-          onClick={() => setShowPower(!showPower)}>▴</button>
+          aria-expanded={showPower} onClick={() => setShowPower(!showPower)}>▴</button>
         {showPower && (
           <div className="windows-logon__power-menu winui-menu">
             <button data-test-logon-restart="" onClick={onRestart}>Restart</button>

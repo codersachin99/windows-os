@@ -79,7 +79,16 @@ test("source ChangeAppearance discards unsaved color and transparency when openi
   await win.locator('[data-test-color-item="#00b294"]').click();
   await win.locator("[data-test-color-transparency]").uncheck();
   expect(await tint(page)).toBe("#00b294");
-  await win.locator("[data-test-personalize-open-background]").click();
+  const sidebar=win.locator("[data-test-personalize-open-background]");
+  // Desktop exposes the persistent sidebar; the <=530px layout hides it.
+  // On mobile use the actual source-style Back/Cancel and gallery link.
+  if(await sidebar.isVisible()){
+    await sidebar.click();
+  }else{
+    await win.locator("[data-test-color-cancel]").click();
+    expect(await tint(page)).toBe("rgba(89, 134, 202, 0.65)");
+    await win.locator("[data-test-personalize-background-link]").click();
+  }
   await expect(win.locator("[data-test-personalize]")).toHaveAttribute("data-personalize-view","background");
   expect(await tint(page)).toBe("rgba(89, 134, 202, 0.65)");
   await win.locator('[data-test-button="cancel"]').click();

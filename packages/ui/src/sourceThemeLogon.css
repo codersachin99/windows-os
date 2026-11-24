@@ -178,3 +178,35 @@
   .source-win11-logon__account{gap:10px;padding:10px}
   .source-win11-logon__avatar,.source-win11-logon__avatar img{width:100px;height:100px}
 }
+
+
+/* Source logon-win7.js 8ba0d branches on Vista: original cover wallpaper,
+ * shared Win7 avatar and source 32px brand, 30px title and 24px suffix.
+ * Power art is the original common 42px + 24px group, not a new skin. */
+.windows-logon.source-vista-logon{background-size:cover}
+.source-vista-logon .windows-logon__footer{
+  bottom:24px;gap:8px;font-size:30px;font-weight:400;
+  text-shadow:1px 3px 3px rgba(0,0,0,.5333333333);
+}
+.source-vista-logon .windows-logon__footer sup{font-size:12px}
+.source-vista-logon .windows-logon__footer .windows-logon__simulator{
+  align-self:flex-end;font-size:24px;font-weight:100;
+}
+.source-vista-logon .windows-logon__power{
+  right:32px;bottom:24px;background-size:cover;background-repeat:no-repeat;
+}
+.source-vista-logon .windows-logon__shutdown,
+.source-vista-logon .windows-logon__power-arrow{
+  border:0;background:transparent;box-shadow:none;color:transparent;
+}
+.source-vista-logon .windows-logon__shutdown{width:42px}
+.source-vista-logon .windows-logon__power-arrow{width:24px}
+@media(max-width:650px){
+  .source-vista-logon .windows-logon__footer{bottom:56px;gap:4px;font-size:20px}
+  .source-vista-logon .windows-logon__footer .windows-logon__simulator{font-size:16px}
+  .source-vista-logon .windows-logon__power{right:8px;bottom:10px}
+}
+@media(max-width:340px){
+  .source-vista-logon .windows-logon__footer{font-size:17px}
+  .source-vista-logon .windows-logon__footer .windows-logon__simulator{font-size:14px}
+}
