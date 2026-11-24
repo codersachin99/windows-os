@@ -18,7 +18,8 @@ test("source theme variants select exact login screen families and report fallba
     ["win8","win8","win8","partial"],
     ["win81","win8","win8","partial"],
     ["win11dark","win11","win11","partial"],
-    ["winLP","winLS","win7-fallback","pending"],
+    ["winLS","winLS","winLS","pending"],
+    ["winLP","winLS","winLS","pending"],
     ["aeroNoir","aeroNoir","win7-fallback","pending"],
     ["kubuntu","kubuntu","win7-fallback","pending"],
     ["onebit","onebit","onebit","pending"]
