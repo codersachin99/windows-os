@@ -8,6 +8,7 @@ import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {sourceMacOSPopupTransition,type SourceMacOSPopupId} from "./sourceMacOSPopup";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
+import {SourceMacOSBattery} from "./SourceMacOSBattery";
 import {SourceMacOSActionCenter} from "./SourceMacOSActionCenter";
 import {SourceMacOSNetwork} from "./SourceMacOSNetwork";
 import {SourceMacOSDateTime} from "./SourceMacOSDateTime";
@@ -297,18 +298,21 @@ export function DesktopShell({
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
+  const [macBrightness,setMacBrightness]=useState(1);
   const setMacPopupOpen=(id:SourceMacOSPopupId,open:boolean)=>{
     setMacPopup(current=>sourceMacOSPopupTransition(current,id,open));
     if(open)setShowHiddenTray(false);
   };
   useEffect(()=>{
     if(state.theme!=="macos"||state.startOpen)setMacPopup(null);
+    if(state.theme!=="macos")setMacBrightness(1);
   },[state.theme,state.startOpen]);
   useEffect(()=>{
     if(macPopup==="action-center"&&!sourceTrayVisible(trayPreferences).includes("TaskbarActionCenter"))
       setMacPopup(null);
     if(macPopup==="network"&&!sourceTrayVisible(trayPreferences).includes("TaskbarNetwork"))
       setMacPopup(null);
+    if(macPopup==="battery"&&!sourceTrayVisible(trayPreferences).includes("TaskbarBattery"))setMacPopup(null);
     if(macPopup==="datetime"&&!trayPreferences.showClockIcon)setMacPopup(null);
   },[macPopup,trayPreferences]);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
@@ -494,10 +498,11 @@ export function DesktopShell({
   const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
-      style={win7Colors?{
+      data-source-display-brightness={state.theme==="macos"?macBrightness:undefined}
+      style={{...(win7Colors?{
         "--theme-color":win7Colors.active,
         "--theme-color--inactive":win7Colors.inactive??undefined
-      } as CSSProperties:undefined}
+      }:{}),filter:state.theme==="macos"&&macBrightness!==1?`brightness(${macBrightness})`:undefined} as CSSProperties}
       data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
       data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}
       data-source-aero-peeking={previewDesktop?"true":undefined}
@@ -730,6 +735,8 @@ export function DesktopShell({
             .map(item=>state.theme==="macos"&&item.id==="TaskbarActionCenter"?
               <SourceMacOSActionCenter key={item.id} dispatch={dispatch} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:state.theme==="macos"&&item.id==="TaskbarNetwork"?
               <SourceMacOSNetwork key={item.id} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
+              state.theme==="macos"&&item.id==="TaskbarBattery"?
+              <SourceMacOSBattery key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}

@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS Battery and display
+
+Ported source a88c battery percentage/charging/power source, original battery vector, shared popup owner, balanced/saver presets and 0.6–1.2 Guest brightness filter. Real browser BatteryManager capability only, unavailable fallback, listeners cleaned up. Unit and browser contracts authored (mocked battery events, actual display filter). [Source trace](MACOS-BATTERY-SOURCE.md). Previous CI #45395440100 full interactions running at inspection; no redundant trigger. Next original Volume/audio capability and notification delivery. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS Action Center summary
 
 Resolved missing Action Center and Battery source modules via taskbar-base lazy imports (chunk-517d7f56 f0ed, chunk-391f23b6 a88c). Ported source empty message summary, bundled headline, shared popup ownership and actual cpanel/action-center route; browser regression authored. [Source trace](MACOS-ACTION-CENTER-SOURCE.md). Feed/history/severity/toast delivery still pending; no fabricated messages or push permission. Previous CI #45395440100 full interactions running at inspection; no redundant trigger. Next battery popup and source Guest display brightness, then volume and notification history. Main/frozen source/draft PR/releases unchanged.

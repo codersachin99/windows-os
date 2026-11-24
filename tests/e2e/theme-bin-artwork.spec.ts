@@ -1196,3 +1196,36 @@ test("macOS original Action Center summary and real Control Panel destination",a
   await expect(panel.locator("[data-test-cpanel-action-center]")).toBeVisible();
   await expect(panel.locator("[data-test-no-messages]")).toBeVisible();
 });
+
+test("macOS original Battery popup reflects browser capability and changes Guest brightness",async({page})=>{
+  await page.addInitScript(()=>{
+    const battery=Object.assign(new EventTarget(),{level:.73,charging:false});
+    Object.defineProperty(navigator,"getBattery",{configurable:true,value:()=>Promise.resolve(battery)});
+    window.addEventListener("source-test-charging",()=>{
+      battery.charging=true;
+      battery.level=.81;
+      battery.dispatchEvent(new Event("chargingchange"));
+      battery.dispatchEvent(new Event("levelchange"));
+    });
+  });
+  await sourceThemeDesktop(page,"macos");
+  const desktop=page.locator("[data-test-main-screen]");
+  const trigger=page.locator("[data-test-battery]");
+  await trigger.click();
+  const popup=page.locator("[data-test-battery-popup]");
+  await expect(popup).toBeVisible();
+  await expect(popup.locator("[data-test-battery-percent]")).toHaveText("73%");
+  await expect(popup.getByRole("status")).toContainText("Power source: Battery");
+  await page.evaluate(()=>window.dispatchEvent(new Event("source-test-charging")));
+  await expect(popup.locator("[data-test-battery-percent]")).toHaveText("81%");
+  await expect(popup.getByRole("status")).toContainText("Power source: Power Adapter");
+  await popup.getByRole("radio",{name:"Power saver"}).check();
+  await expect(desktop).toHaveCSS("filter","brightness(0.6)");
+  await popup.getByRole("slider",{name:"Display brightness"}).fill("1.2");
+  await expect(desktop).toHaveCSS("filter","brightness(1.2)");
+  await popup.getByRole("radio",{name:"Balanced"}).check();
+  await expect(desktop).toHaveCSS("filter","none");
+  await page.keyboard.press("Escape");
+  await expect(popup).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});

@@ -416,3 +416,28 @@
   background:none;color:inherit;text-align:center;font:inherit;
 }
 .windows-desktop[data-theme="macos"] .source-macos-action-center-popup>button:is(:hover,:focus-visible){background:#fff1;text-decoration:underline}
+
+/* Source a88c macOS battery popup, display range and radio presets. */
+.windows-desktop[data-theme="macos"] .source-macos-battery{position:relative}
+.windows-desktop[data-theme="macos"] .source-macos-battery-trigger{
+  display:grid;place-items:center;width:100%;height:28px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="macos"] .source-macos-battery-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 8px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;width:min(250px,calc(100vw - 16px));
+  max-height:calc(100dvh - var(--taskbar-height) - 16px);overflow:auto;
+  padding:10px;background:#2d2d2d;border:1px solid #000;border-radius:10px;
+  box-shadow:0 4px 12px #0005;color:#fff;text-align:start;
+}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup>div{padding:8px}
+.windows-desktop[data-theme="macos"] .source-macos-battery-heading{display:flex;justify-content:space-between;margin-bottom:8px}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup fieldset{
+  margin:0;padding:8px;border:0;display:flex;flex-direction:column;gap:4px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup legend{padding:0 8px}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup input{accent-color:#0451d0}
+.windows-desktop[data-theme="macos"] .source-macos-battery-display{display:flex;flex-direction:column;gap:4px}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup input[type="range"]{width:100%;margin:4px 0}
+.windows-desktop[data-theme="macos"] .source-macos-battery-popup small{display:block;opacity:.65;margin-top:4px}
