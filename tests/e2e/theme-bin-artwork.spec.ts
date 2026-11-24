@@ -1010,3 +1010,38 @@ test("macOS original Computer cascading menu and Launchpad portal retain actions
   await page.keyboard.press("Escape");
   await expect(page.locator('[data-test-taskbar-pin="notepad"]')).toBeVisible();
 });
+
+test("macOS Computer and Bin original active chrome and file selection",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').first();
+  await expect(win.locator(".explorer-address")).toHaveCSS("background-color","rgb(38, 38, 38)");
+  await expect(win.locator(".explorer-navigation")).toHaveCSS("background-color","rgb(56, 56, 56)");
+  await expect(win.locator(".explorer-content")).toHaveCSS("background-color","rgb(30, 30, 30)");
+  await expect(win.locator(".explorer-status")).toHaveCSS("background-color","rgb(38, 38, 38)");
+  const back=win.getByRole("button",{name:"Back",exact:true});
+  await expect(back).toBeDisabled();
+  const desktop=win.getByRole("button",{name:"Desktop",exact:true});
+  await desktop.click();
+  await expect(desktop).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await expect(win.getByRole("textbox",{name:"Folder address"})).toHaveValue(SOURCE_DESKTOP);
+  await expect(back).toBeEnabled();
+  await back.click();
+  await expect(win.getByRole("textbox",{name:"Folder address"})).toHaveValue("Computer");
+  await desktop.click();
+  await win.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"Mac Explorer Selection.txt",mimeType:"text/plain",buffer:Buffer.from("Guest file")
+  });
+  await win.getByRole("combobox",{name:"Explorer view"}).selectOption("details");
+  const item=win.locator('[data-test-explorer-item="Mac Explorer Selection.txt"]');
+  await item.click();
+  await expect(item).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await expect(win.locator(".explorer-columns")).toHaveCSS("border-bottom-color","rgba(255, 255, 255, 0.267)");
+  await page.locator('[data-test-macos-dock-item="bin"]').click();
+  const bin=page.locator('[data-test-window="bin"]').first();
+  await expect(bin.locator(".explorer-navigation")).toHaveCSS("background-color","rgb(56, 56, 56)");
+  await expect(win.locator(".explorer-navigation")).toHaveCSS("background-color","rgb(20, 20, 20)");
+  await expect(win.locator(".explorer-address")).toHaveCSS("background-color","rgb(20, 20, 20)");
+  await bin.locator('[data-source-window-control="close"]').click();
+  await expect(win.locator(".explorer-status")).toHaveCSS("background-color","rgb(38, 38, 38)");
+});

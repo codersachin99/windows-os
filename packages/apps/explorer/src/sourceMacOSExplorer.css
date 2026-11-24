@@ -1,0 +1,101 @@
+/* Frozen legacy-win7@26b9f0c theme-macos-scss.js: WindowMain,
+ * addressbar, computer pane navigation and listview paint. */
+.windows-desktop[data-theme="macos"] .explorer-stage{
+  --mac-explorer-chrome:#141414;
+  --mac-explorer-navigation:#141414;
+  color:#fff;background:#1e1e1e;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .explorer-stage{
+  --mac-explorer-chrome:#262626;
+  --mac-explorer-navigation:#383838;
+}
+.windows-desktop[data-theme="macos"] :is(.explorer-address,.explorer-search-controls,.explorer-status){
+  background:var(--mac-explorer-chrome);color:#fff;
+  box-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .explorer-address{
+  margin:0;padding:6px 4px;
+}
+.windows-desktop[data-theme="macos"] .explorer-address__location-wrapper{
+  background:none;border:0;box-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .explorer-address__location-wrapper input{
+  color:inherit;
+}
+.windows-desktop[data-theme="macos"] :is(.explorer-address__search,.explorer-search-controls input:not([type="checkbox"])){
+  background:#fff1;border:1px solid #fff3;border-radius:3px;color:inherit;
+}
+.windows-desktop[data-theme="macos"] :is(.explorer-address__search,.explorer-search-controls input:not([type="checkbox"])):focus{
+  outline:none;box-shadow:0 0 0 3px #2c6c98;
+}
+.windows-desktop[data-theme="macos"] .explorer-search-controls{
+  border-bottom:1px solid #000;
+}
+.windows-desktop[data-theme="macos"] .explorer-search-controls [role="status"]{color:inherit}
+.windows-desktop[data-theme="macos"] :is(.explorer-address>button,.explorer-search-controls>button){
+  border:0;border-radius:6px;color:inherit;background:#555;
+  box-shadow:0 0 0 1px #0003;
+}
+.windows-desktop[data-theme="macos"] :is(.explorer-address>button,.explorer-search-controls>button):not(:disabled):is(:active,:focus-visible){
+  background:linear-gradient(#34a3f4,#258bda);
+}
+.windows-desktop[data-theme="macos"] .explorer-address>button:disabled{
+  filter:contrast(.5) grayscale(.5);
+}
+.windows-desktop[data-theme="macos"] .explorer-navigation{
+  background:var(--mac-explorer-navigation);padding:12px 8px;
+  border:0;border-inline-end:1px solid #000;
+}
+.windows-desktop[data-theme="macos"] .explorer-navigation__home{
+  color:inherit;border-radius:3px;text-align:start;
+}
+.windows-desktop[data-theme="macos"] .explorer-navigation__home[aria-current="location"]{
+  background:#fff2;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .explorer-navigation__home[aria-current="location"]{
+  background:#0451d0;
+}
+.windows-desktop[data-theme="macos"] .explorer-content:not(.is-drop-target){
+  background:#1e1e1e;color:inherit;
+}
+.windows-desktop[data-theme="macos"] .explorer-empty{color:#fffa}
+.windows-desktop[data-theme="macos"] .explorer-columns{
+  color:inherit;background:none;border:0;border-bottom:1px solid #fff4;
+  padding:4px 0;
+}
+.windows-desktop[data-theme="macos"] .explorer-columns .listview__header-column{
+  border:0;border-inline-end:1px solid #fff3;padding:0 4px;color:inherit;
+}
+.windows-desktop[data-theme="macos"] .explorer-list .explorer-item:not(.is-drop-target){
+  color:inherit;border:1px solid transparent;border-radius:3px;box-shadow:none;background:none;
+}
+.windows-desktop[data-theme="macos"] .explorer-list:is(.has-details,.has-content) .explorer-item:nth-child(even):not(.is-drop-target){
+  background:#ffffff09;
+}
+.windows-desktop[data-theme="macos"] .explorer-list:is(.has-details,.has-content,.has-list,.has-tiles,.is-small) .explorer-item:is(.is-selected,.is-active,:focus):not(.is-drop-target){
+  background:#0451d0;
+}
+.windows-desktop[data-theme="macos"] .explorer-list.has-icons:not(.is-small) .explorer-item{
+  gap:2px;
+}
+.windows-desktop[data-theme="macos"] .explorer-list.has-icons:not(.is-small) .listview__item-iconbox{
+  box-sizing:border-box;border-radius:3px;padding:8px;
+}
+.windows-desktop[data-theme="macos"] .explorer-list.has-icons:not(.is-small) .listview__item-label{
+  border-radius:3px;padding-inline:4px;
+}
+.windows-desktop[data-theme="macos"] .explorer-list.has-icons:not(.is-small) .explorer-item:is(.is-selected,.is-active,:focus) .listview__item-iconbox{
+  background:#fff2;
+}
+.windows-desktop[data-theme="macos"] .explorer-list.has-icons:not(.is-small) .explorer-item:is(.is-selected,.is-active,:focus) .listview__item-label{
+  background:#0451d0;
+}
+.windows-desktop[data-theme="macos"] .explorer-status{
+  border-top:1px solid #000;border-radius:0 0 10px 10px;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-maximized .explorer-status{border-radius:0}
+@media(max-width:580px){
+  .windows-desktop[data-theme="macos"] .explorer-navigation{
+    padding:3px;border:0;border-bottom:1px solid #000;
+  }
+}

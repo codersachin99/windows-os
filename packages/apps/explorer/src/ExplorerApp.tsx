@@ -54,6 +54,7 @@ import "./sourceWin8ComputerToolbar.css";
 import "./sourceWin31Explorer.css";
 import "./sourceWin9xExplorer.css";
 import "./sourceLonghornWhistlerExplorer.css";
+import "./sourceMacOSExplorer.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;
@@ -922,6 +923,7 @@ export function ExplorerApp({
         onSearch={searchInComputer} onClose={() => setShowCompanion(false)} /> :
       <aside className="explorer-navigation">
         <button className="explorer-navigation__home"
+          aria-current={state.path===(recycleBinPath??"/")?"location":undefined}
           onClick={() => void execute(() => session.open(recycleBinPath ?? "/"))}>
           <img src={isBin
             ? sourceShellAsset(theme,visible.length?"binFull":"bin") ?? legacyArt.recycleBin
