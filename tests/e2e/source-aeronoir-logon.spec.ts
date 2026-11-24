@@ -13,7 +13,8 @@ test("source Aero Noir renders dark blurred Guest screen and functional original
   await expect(login).toHaveAttribute("data-source-logon-renderer","aeroNoir");
   await expect(login).toHaveAttribute("data-source-shell-status","pending");
   await expect(login).toHaveCSS("background-image",/aeroNoir\.237e6377\.webp/);
-  await expect(login).toHaveCSS("background-size","300%");
+  // CSS computes the source 300% single-axis shorthand to 300% auto.
+  await expect(login).toHaveCSS("background-size","300% auto");
   const overlay=login.locator(".source-aeronoir-logon__overlay");
   await expect(overlay).toHaveCSS("background-color","rgba(0, 0, 0, 0.5)");
   await expect(overlay).toHaveCSS("backdrop-filter","blur(10px)");
