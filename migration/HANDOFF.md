@@ -1,3 +1,9 @@
+## 24 November 2026 — Historical All Programs flyout
+
+Implemented separate flat sorted source-style All Programs for Slate/Plex/Whistler, shared viewport placement, theme artwork, hover/click/keyboard navigation and Escape return. Updated previous inline-tree assertion and added three real launch/viewport contracts. [Source trace](HISTORICAL-ALL-PROGRAMS-SOURCE.md). Exact-head CI pending; next consolidated CI and repair, then remaining themes. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Longhorn/Whistler application menubar adapters
 
 Source menu-bar palettes and popup states ported for actual Notepad and Computer/Bin Organize toolbar; RTL, disabled and focus styles. Six desktop/mobile regression contracts authored for status toggle and Organize Escape/focus restoration. [Source trace](LONGHORN-WHISTLER-MENUBAR-SOURCE.md). Other application menu consumers and original All Programs flyout remain pending. No extra CI trigger; exact-head verification pending. Main/frozen source/draft PR/releases unchanged.

@@ -543,8 +543,9 @@ for(const [theme,left,right,radius] of [
     await expect(footer.getByRole("button",{name:"Log off",exact:true})).toBeVisible();
     await expect(footer.getByRole("button",{name:"Turn off computer",exact:true})).toBeVisible();
     await menu.locator("[data-test-all-programs]").click();
-    await expect(menu).toHaveClass(/is-all-programs/);
-    await menu.locator("[data-test-all-programs]").click();
+    await expect(page.locator("[data-test-historical-programs-flyout]")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-test-historical-programs-flyout]")).toHaveCount(0);
     await menu.getByRole("button",{name:"Computer",exact:true}).last().click();
     await expect(page.locator('[data-test-window="computer"]').first()).toBeVisible();
   });
@@ -729,5 +730,37 @@ for(const [theme,border,hover] of [
     await page.keyboard.press("Escape");
     await expect(drop).toHaveCount(0);
     await expect(trigger).toBeFocused();
+  });
+}
+
+for(const theme of ["winLP","winLS","winW"] as const){
+  test(theme+" flat All Programs flyout stays within viewport and launches an app",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await page.locator("[data-test-start-button]").click();
+    const start=page.locator("[data-test-start-menu]");
+    const trigger=start.locator("[data-test-all-programs]");
+    await trigger.click();
+    const flyout=page.locator("[data-test-historical-programs-flyout]");
+    await expect(flyout).toBeVisible();
+    await expect(start).toBeVisible();
+    const labels=await flyout.getByRole("menuitem").allTextContents();
+    expect(labels.length).toBeGreaterThan(1);
+    expect(labels).toEqual([...labels].sort((a,b)=>a.localeCompare(b)));
+    const rect=await flyout.boundingBox();
+    const viewport=page.viewportSize();
+    expect(rect).not.toBeNull();
+    expect(viewport).not.toBeNull();
+    expect(rect!.x).toBeGreaterThanOrEqual(0);
+    expect(rect!.y).toBeGreaterThanOrEqual(0);
+    expect(rect!.x+rect!.width).toBeLessThanOrEqual(viewport!.width);
+    expect(rect!.y+rect!.height).toBeLessThanOrEqual(viewport!.height);
+    await page.keyboard.press("Escape");
+    await expect(flyout).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await trigger.press("ArrowDown");
+    await expect(flyout).toBeVisible();
+    await flyout.locator('[data-test-source-program="notepad"]').click();
+    await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+    await expect(flyout).toHaveCount(0);
   });
 }

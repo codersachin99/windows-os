@@ -20,6 +20,7 @@ import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
 import {SourceWin8StartScreen} from "./SourceWin8StartScreen";
 import {SourceWin31ProgramManager} from "./SourceWin31ProgramManager";
 import {SourceWin9xStartMenu} from "./SourceWin9xStartMenu";
+import {SourceHistoricalProgramsFlyout} from "./SourceHistoricalProgramsFlyout";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -115,6 +116,8 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
     if(!touch)startSearchRef.current?.focus({preventScroll:true});
   },[isWin7StartFamily]);
   const [allPrograms, setAllPrograms] = useState(false);
+  const [historicalFlyoutOpen,setHistoricalFlyoutOpen]=useState(false);
+  const historicalTriggerRef=useRef<HTMLButtonElement>(null);
   const [win11Page,setWin11Page]=useState(1);
   const win11TouchY=useRef<number|null>(null);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -218,7 +221,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       if(!(event.target instanceof Node))return;
       if(menuRef.current?.contains(event.target))return;
       if(event.target instanceof Element
-        &&event.target.closest("[data-test-start-program-context]"))return;
+        &&event.target.closest("[data-test-start-program-context],[data-test-historical-programs-flyout]"))return;
       const start=document.querySelector('[data-test-start-button]');
       if(start?.contains(event.target))return;
       dispatch({type:"CLOSE_START"});
@@ -245,6 +248,11 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         });
         return;
       }
+      if(historicalFlyoutOpen){
+        setHistoricalFlyoutOpen(false);
+        historicalTriggerRef.current?.focus({preventScroll:true});
+        return;
+      }
       if(win11PowerOpen){
         setWin11PowerOpen(false);
         return;
@@ -264,7 +272,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[dispatch,programContext,win11PowerOpen,win10PowerOpen,win10AccountOpen,onEscapeClose]);
+  },[dispatch,programContext,historicalFlyoutOpen,win11PowerOpen,win10PowerOpen,win10AccountOpen,onEscapeClose]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
@@ -553,11 +561,15 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
         {isWin11Theme&&recentSection}
         {contextError&&<p role="alert" data-test-start-context-error=""
           className="windows-startmenu__empty">{contextError}</p>}
-        {!query && <button type="button" className="windows-startmenu__all-programs"
+        {!query && (isLonghornWhistler?<SourceHistoricalProgramsFlyout
+          theme={theme} triggerRef={historicalTriggerRef} menuRef={menuRef}
+          open={historicalFlyoutOpen} onOpenChange={setHistoricalFlyoutOpen}
+          items={win11AllApps} contextOpen={Boolean(programContext)}
+          onLaunch={openApp} onContext={openProgramContext}/>:<button type="button" className="windows-startmenu__all-programs"
           data-test-all-programs=""
           onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null);setWin11Page(1); }}>
           {allPrograms ? "‹ Back" : "All Programs ▸"}
-        </button>}
+        </button>)}
         {!isXpTheme&&<label className="windows-startmenu__search">
           <input ref={startSearchRef} value={query} onChange={e => setQuery(e.target.value)}
             placeholder="Search programs and files" aria-label="Search programs and files"

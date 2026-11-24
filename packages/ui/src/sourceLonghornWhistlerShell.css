@@ -295,3 +295,36 @@
 .windows-desktop[data-theme="winW"] :is(.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu) kbd{color:inherit}
 .windows-desktop[data-theme="winW"] :is(.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu):dir(rtl){box-shadow:-2px 2px 3px #0005}
 .windows-desktop[data-theme="winLP"]:dir(rtl) :is(.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu) button{text-shadow:-1px 1px 0 #0005}
+
+/* Original XP-style flat All Programs flyout. Body portal uses explicit
+ * theme attributes so it cannot inherit unrelated host styles. */
+.source-historical-programs{
+  position:fixed;z-index:4700;box-sizing:border-box;
+  width:min(240px,calc(100vw - 8px));max-height:min(85vh,calc(100dvh - 8px));
+  overflow:auto;scrollbar-width:thin;padding:0 0 0 5px;
+  border:1px solid #8e9496;background:#fff;color:#000;
+  box-shadow:inset .5px 0 #fff,inset 4px 0 #6b7275,3px 3px 3px #0008;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.source-historical-programs:dir(rtl){
+  padding:0 5px 0 0;box-shadow:inset -.5px 0 #fff,inset -4px 0 #6b7275,-3px 3px 3px #0008;
+}
+.source-historical-programs button{
+  width:100%;display:flex;align-items:center;gap:4px;
+  padding:4px 6px;border:1px solid transparent;background:none;color:inherit;
+  text-align:start;font:inherit;
+}
+.source-historical-programs button img{flex:none;object-fit:contain}
+.source-historical-programs button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source-historical-programs button:disabled{opacity:.5}
+.source-historical-programs[data-source-historical-programs-theme="winLP"]{background:#5087d9;color:#fff;box-shadow:none;border-color:#41659f}
+.source-historical-programs[data-source-historical-programs-theme="winLP"] button:not(:disabled):is(:hover,:focus-visible){background:#84b9ec;color:#000}
+.source-historical-programs[data-source-historical-programs-theme="winLS"]{width:min(200px,calc(100vw - 8px));height:70vh}
+.source-historical-programs[data-source-historical-programs-theme="winLS"] button:not(:disabled):is(:hover,:focus-visible){background:#f1c18a;color:#000}
+.source-historical-programs[data-source-historical-programs-theme="winW"] button:not(:disabled):is(:hover,:focus-visible){background:#cdd3e1;border-color:#38659a}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .windows-startmenu__all-programs{
+  display:flex;align-items:center;justify-content:center;gap:6px;font-weight:bold;
+}
+.windows-desktop[data-theme="winLP"] .windows-startmenu__all-programs img{filter:hue-rotate(90deg) saturate(.5) drop-shadow(1px 1px 0 #fffa)}
+.windows-desktop[data-theme="winLS"] .windows-startmenu__all-programs img{filter:grayscale(1)}
+.windows-desktop[data-theme="winW"] .windows-startmenu__all-programs img{filter:grayscale(1) brightness(2)}
