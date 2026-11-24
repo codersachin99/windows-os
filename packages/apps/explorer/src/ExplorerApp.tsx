@@ -57,6 +57,7 @@ import "./sourceLonghornWhistlerExplorer.css";
 import "./sourceMacOSExplorer.css";
 import "./sourceChromeOSExplorer.css";
 import "./sourceUbuntuExplorer.css";
+import "./sourceKubuntuExplorer.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;

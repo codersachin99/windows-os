@@ -1,3 +1,5 @@
+> **24 November 2026 — Kubuntu context/Explorer:** dark WinUI menus, shared menubar, navigation, list selection and status, tests pending. [Source trace](KUBUNTU-CONTEXT-EXPLORER-SOURCE.md).
+
 > **24 November 2026 — Kubuntu Start:** original list/recent grid/search/footer, tests pending. [Source trace](KUBUNTU-START-SOURCE.md).
 
 > **24 November 2026 — Ubuntu verified / Kubuntu WindowMain:** Ubuntu 757 unit tests and 53 browser tests passed, 1 browser skipped; Kubuntu frame/control port pending verification. [Source trace](KUBUNTU-WINDOW-SOURCE.md).

@@ -96,3 +96,45 @@
 .windows-desktop[data-theme="kubuntu"] .windows-window.is-maximized{
   border-radius:0;
 }
+
+/* Source 582b WinUI context paint; keep measured root and child geometry.
+ * Body-portaled Start contexts do not inherit the desktop variables. */
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]){
+  --kubuntu-menu-accent:var(--theme-color,#3daee9);
+  box-sizing:border-box;background:rgba(42,46,50,.8666666667);color:#fff;
+  border:1px solid #fff5;border-radius:3px;box-shadow:0 0 5px #0006;
+  font:10pt "Segoe UI",Arial,sans-serif;
+}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"])::before{content:none}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]) button{
+  color:#fff;background:none;border:1px solid transparent;border-radius:3px;
+  box-shadow:none;text-shadow:none;text-align:start;
+}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]) button:not(:disabled):hover{
+  background:color-mix(in srgb,var(--kubuntu-menu-accent) 30%,transparent);
+  border-color:var(--kubuntu-menu-accent);
+}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]) button:not(:disabled):is(:focus,.is-selected,.is-active){
+  background:color-mix(in srgb,var(--kubuntu-menu-accent) 70%,transparent);
+  border-color:var(--kubuntu-menu-accent);
+}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]) button:disabled{color:#777;opacity:1;cursor:default}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]) :is(hr,.windows-desktop__menu-divider,.explorer-organize__separator){
+  border:0;height:1px;background:transparent;box-shadow:0 1px 0 #fff5;margin:3px 0;
+}
+:is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]) kbd{color:inherit}
+
+/* Source WinUI menubar and statusbar. */
+.windows-desktop[data-theme="kubuntu"] :is(.notepad-menu,.explorer-command){
+  background:linear-gradient(#fff1,#0001);color:#fff;border:0;box-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button){
+  background:none;color:#fff;border:1px solid transparent;box-shadow:none;text-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):not(:disabled):is(:hover,:focus,[aria-expanded="true"]){
+  background:var(--theme-color);
+}
+.windows-desktop[data-theme="kubuntu"] .explorer-command select{
+  color:#fff;background:#31363b;border:1px solid var(--border-color);border-radius:3px;
+}
+.windows-desktop[data-theme="kubuntu"] .notepad-status{color:#fff;background:#2a2e32;border-top:1px solid var(--border-color);box-shadow:none}

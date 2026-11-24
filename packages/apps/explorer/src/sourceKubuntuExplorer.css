@@ -1,0 +1,36 @@
+/* Frozen theme-kubuntu-scss.js 582b WindowMain, Treeview, Listview. */
+.windows-desktop[data-theme="kubuntu"] .explorer-stage{background:#2a2e32;color:#fff;font:10pt/1.4 "Segoe UI",Arial,sans-serif}
+.windows-desktop[data-theme="kubuntu"] .explorer-address{background:#2a2e32;color:#fff;border-color:var(--border-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-address__location-wrapper{background:#fff3;border:0;border-radius:3px;box-shadow:none}
+.windows-desktop[data-theme="kubuntu"] .explorer-address__location-wrapper input{color:#fff}
+.windows-desktop[data-theme="kubuntu"] .explorer-address__location-wrapper input:focus{outline:1px solid var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] :is(.explorer-address__search,.explorer-search-controls input:not([type="checkbox"])){
+  color:#fff;background:#1b1e20;border:1px solid var(--border-color);border-radius:3px;transition:border-color .3s;
+}
+.windows-desktop[data-theme="kubuntu"] :is(.explorer-address__search,.explorer-search-controls input:not([type="checkbox"])):is(:hover,:focus){border-color:var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] :is(.explorer-address button,.explorer-search-controls>button){
+  color:#fff;background:#31363b;border:1px solid var(--border-color);border-radius:3px;box-shadow:none;transition:border-color .3s;
+}
+.windows-desktop[data-theme="kubuntu"] :is(.explorer-address button,.explorer-search-controls>button):not(:disabled):hover{border-color:var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] :is(.explorer-address button,.explorer-search-controls>button):not(:disabled):active{background:var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-search-controls{background:#2a2e32;color:#fff;border-color:var(--border-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-navigation{background:#2a2e32;border:0;border-inline-end:1px solid var(--border-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-navigation__home{color:#fff;text-align:start}
+.windows-desktop[data-theme="kubuntu"] .explorer-navigation__home:not(:disabled):hover{background:color-mix(in srgb,var(--theme-color) 30%,transparent)}
+.windows-desktop[data-theme="kubuntu"] .explorer-navigation__home[aria-current="location"]{background:var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] :is(.explorer-navigation small,.explorer-empty){color:#fff9}
+.windows-desktop[data-theme="kubuntu"] .explorer-content:not(.is-drop-target){background:#2a2e32;color:#fff}
+.windows-desktop[data-theme="kubuntu"] .explorer-columns{background:none;color:#fff;border-color:var(--border-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-columns .listview__header-column{color:#fff;border-color:var(--border-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-list .explorer-item:not(.is-drop-target){
+  position:relative;isolation:isolate;color:#fff;background:none;border:1px solid transparent;border-radius:3px;box-shadow:none;
+}
+.windows-desktop[data-theme="kubuntu"] .explorer-list .explorer-item:not(.is-drop-target)::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--theme-color);opacity:0;border-radius:inherit;
+}
+.windows-desktop[data-theme="kubuntu"] .explorer-list .explorer-item:not(.is-drop-target):not(:disabled):is(:hover,:focus,.is-selected,.is-active){border-color:var(--theme-color)}
+.windows-desktop[data-theme="kubuntu"] .explorer-list .explorer-item:not(.is-drop-target):not(:disabled):hover::before{opacity:.3}
+.windows-desktop[data-theme="kubuntu"] .explorer-list .explorer-item:not(.is-drop-target):not(:disabled):is(:focus,.is-selected,.is-active)::before{opacity:.7}
+.windows-desktop[data-theme="kubuntu"] .explorer-list .explorer-item :is(.listview__item-info,.listview__item-label){color:#fff}
+.windows-desktop[data-theme="kubuntu"] .explorer-status{color:#fff;background:#2a2e32;border-top:1px solid var(--border-color)}
+@media(max-width:580px){.windows-desktop[data-theme="kubuntu"] .explorer-navigation{border:0;border-bottom:1px solid var(--border-color)}}

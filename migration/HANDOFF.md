@@ -1,3 +1,9 @@
+## 24 November 2026 — Kubuntu context and Explorer
+
+Ported source 582b dark translucent WinUI context/menu paint, 3px borders, disabled/hover/focus states, shared menubars and Explorer address/search/nav/list/status across Computer and Bin. Accent row layer remains separate from content; portal fallback accent is provisional #3daee9. Menu color-mix is a paint adapter; original optional popup glass blur deferred to avoid establishing a new containing block for fixed cascades. Existing measured cascade geometry unchanged, expanded regression to Kubuntu. No CI requested this slice; tests unexecuted. Next: Kubuntu interactive tray/DateTime and consolidated verification.
+
+---
+
 ## 24 November 2026 — Kubuntu Start menu
 
 Kubuntu original launcher module 8753 and bfe9, shared f0aa: Guest account header, search, 256px alphabetical program pane, 320px body, four-column 100px recent tiles, grouped overlay, Documents (opens Computer as source), Games, Settings, Restart, Shutdown and Log off. Uses existing source program registry, shared ranked program/Control Panel search and mounted Guest files, program context hook and actual session commands. Responsive compact grid and footer are adapters; temporary footer glyphs are not exact source Iconify artwork, current account label is Guest, settings results are supported panels rather than all original task-level entries. Tests authored, not executed. Next Kubuntu context menus/Explorer.
