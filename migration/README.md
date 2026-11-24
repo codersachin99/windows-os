@@ -1,3 +1,5 @@
+> **24 November 2026 — Consolidated verification:** static artwork inventory comparison (301 checksum entries matched); historical flyout height correction; one opt-in full CI requested. Results pending.
+
 > **24 November 2026 — Historical All Programs flyout:** Slate/Plex/Whistler flat source list with viewport bounds, keyboard and app launch. [Source trace](HISTORICAL-ALL-PROGRAMS-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Longhorn/Whistler application menubars:** Notepad and Computer/Bin toolbar source palettes and dropdown styles, real action regression contracts. [Source trace](LONGHORN-WHISTLER-MENUBAR-SOURCE.md). Exact-head CI pending.

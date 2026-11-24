@@ -1,3 +1,9 @@
+## 24 November 2026 — Consolidated historical shell verification requested
+
+Static review of head 82b823d: all 301 registered artwork checksum entries match the frozen legacy-files.tsv inventory (target-byte audit still needs CI); previous XP program overrides preserved. Confirmed resolver signatures and original wallpaper paths, Start markup and taskbar selectors. Bounded flyout to original 288px base height, retaining Slate override and viewport cap; explicit left/right placement state type. One opt-in [run-ci] push requests TypeScript, unit, source audit, build, targeted and full Playwright suite; results not yet available. No visual capture or release. Next inspect actual CI jobs, fix failures before further theme work. Main and frozen source unchanged.
+
+---
+
 ## 24 November 2026 — Historical All Programs flyout
 
 Implemented separate flat sorted source-style All Programs for Slate/Plex/Whistler, shared viewport placement, theme artwork, hover/click/keyboard navigation and Escape return. Updated previous inline-tree assertion and added three real launch/viewport contracts. [Source trace](HISTORICAL-ALL-PROGRAMS-SOURCE.md). Exact-head CI pending; next consolidated CI and repair, then remaining themes. Main/frozen source/draft PR/releases unchanged.

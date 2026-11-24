@@ -25,7 +25,7 @@ export function SourceHistoricalProgramsFlyout({theme,triggerRef,menuRef,open,on
   const panel=useRef<HTMLDivElement>(null);
   const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const focusOnOpen=useRef(false);
-  const [position,setPosition]=useState({left:4,top:4,side:"right"});
+  const [position,setPosition]=useState<{left:number;top:number;side:"left"|"right"}>({left:4,top:4,side:"right"});
   const cancelClose=()=>{if(timer.current!==null){clearTimeout(timer.current);timer.current=null;}};
   const scheduleClose=()=>{
     cancelClose();
