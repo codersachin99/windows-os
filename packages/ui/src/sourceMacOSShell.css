@@ -1,0 +1,74 @@
+/* Frozen legacy-win7@26b9f0c, theme-macos-scss.js:
+ * bounded desktop icon and WindowMain adapter. Host layout, taskbar/dock,
+ * app-specific bodies and exact control glyphs are separate parity tasks. */
+.windows-desktop[data-theme="macos"] .windows-desktop__shortcut{
+  gap:2px;padding:0;
+}
+.windows-desktop[data-theme="macos"] .windows-desktop__shortcut:is(:hover,.is-active):not(.is-drop-target):not(.is-native-icon-drop-target){
+  background:none;border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .desktop__icon-box{border-radius:3px}
+.windows-desktop[data-theme="macos"] .windows-desktop__shortcut.is-active .desktop__icon-box{
+  background:#0003;box-shadow:inset 0 0 0 2px #fff4;
+}
+.windows-desktop[data-theme="macos"] .desktop__icon-name{
+  color:#fff;font-weight:600;border-radius:3px;padding:0 4px;
+  text-shadow:0 1px #000,0 1px 4px #0009;
+}
+.windows-desktop[data-theme="macos"] .windows-desktop__shortcut.is-active .desktop__icon-name{
+  background:#0451d0;text-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .windows-desktop__rename-input{
+  color:#fff;background:#1e1e1e;border:0;outline:none;
+  box-shadow:0 0 0 3px #5f77ed;border-radius:3px;
+}
+.windows-desktop[data-theme="macos"] .windows-window{
+  padding:0;border:1px solid #000;border-radius:10px;
+  background:#1e1e1e;backdrop-filter:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window__titlebar{
+  position:relative;flex:0 0 28px;height:28px;
+  padding-inline:68px;margin:0;border-radius:10px 10px 0 0;
+  background:#141414;box-shadow:inset 0 1px #fff2;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .windows-window__titlebar{
+  background:#262626;
+}
+.windows-desktop[data-theme="macos"] .windows-window__titlebar>img{display:none}
+.windows-desktop[data-theme="macos"] .windows-window__title{
+  text-align:center;color:#fff;text-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window__buttons{
+  position:absolute;inset-inline-start:4px;top:4px;
+  margin:0;gap:0;align-items:center;
+}
+.windows-desktop[data-theme="macos"] .windows-window__buttons button{
+  position:relative;width:20px;height:20px;min-width:20px;
+  order:1;display:inline-flex;align-items:center;justify-content:center;
+  padding:0;border:0;border-radius:0;box-shadow:none;
+  color:#0009;background:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window__buttons button.windows-window__close{
+  order:0;width:20px;color:#0009;background:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window__buttons button::before{
+  content:"";position:absolute;width:12px;height:12px;
+  border-radius:50%;background:#383838;pointer-events:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window__buttons button .windows-window__control-glyph{
+  position:relative;z-index:1;width:8px;height:8px;opacity:0;
+}
+.windows-desktop[data-theme="macos"] .windows-window__buttons:is(:hover,:focus-within) button:not(:disabled) .windows-window__control-glyph{opacity:1}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .windows-window__buttons button[data-source-window-control="minimize"]:not(:disabled)::before,
+.windows-desktop[data-theme="macos"] .windows-window__buttons:is(:hover,:focus-within) button[data-source-window-control="minimize"]:not(:disabled)::before{background:#fdbd30}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .windows-window__buttons button:is([data-source-window-control="maximize"],[data-source-window-control="restore"]):not(:disabled)::before,
+.windows-desktop[data-theme="macos"] .windows-window__buttons:is(:hover,:focus-within) button:is([data-source-window-control="maximize"],[data-source-window-control="restore"]):not(:disabled)::before{background:#36cc40}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .windows-window__buttons button.windows-window__close:not(:disabled)::before,
+.windows-desktop[data-theme="macos"] .windows-window__buttons:is(:hover,:focus-within) button.windows-window__close:not(:disabled)::before{background:#fd5858}
+.windows-desktop[data-theme="macos"] .windows-window__buttons button:not(:disabled):active{color:#000c;filter:brightness(1.3)}
+.windows-desktop[data-theme="macos"] .windows-window__body{
+  border:0;border-top:1px solid #000;border-radius:0 0 10px 10px;
+  background:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-maximized,
+.windows-desktop[data-theme="macos"] .windows-window.is-maximized :is(.windows-window__titlebar,.windows-window__body){border-radius:0}

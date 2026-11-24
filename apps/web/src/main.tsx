@@ -10,6 +10,7 @@ import "../../../packages/ui/src/sourceWin7ClassicContrast.css";
 import "../../../packages/ui/src/sourceWin7BasicVariants.css";
 import "../../../packages/ui/src/sourceWin7AeroTaskbar.css";
 import "../../../packages/ui/src/sourceLonghornWhistlerShell.css";
+import "../../../packages/ui/src/sourceMacOSShell.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>

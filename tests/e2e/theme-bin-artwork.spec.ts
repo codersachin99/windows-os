@@ -764,3 +764,37 @@ for(const theme of ["winLP","winLS","winW"] as const){
     await expect(flyout).toHaveCount(0);
   });
 }
+
+
+test("macOS original desktop selection and traffic-light window controls",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const icon=page.locator('[data-test-desktop-icon="computer"]');
+  await icon.click();
+  await expect(icon).toHaveClass(/is-active/);
+  await expect(icon.locator(".desktop__icon-name")).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await expect(icon.locator(".desktop__icon-name")).toHaveCSS("font-weight","600");
+  await expect(icon.locator(".desktop__icon-box")).toHaveCSS("background-color","rgba(0, 0, 0, 0.2)");
+  await icon.dblclick();
+  const win=page.locator('[data-test-window="computer"]').first();
+  await expect(win).toBeVisible();
+  await expect(win).toHaveCSS("border-top-left-radius","10px");
+  await expect(win.locator(".windows-window__titlebar")).toHaveCSS("background-color","rgb(38, 38, 38)");
+  await expect(win.locator(".windows-window__titlebar")).toHaveCSS("height","28px");
+  const close=win.locator('[data-source-window-control="close"]');
+  const min=win.locator('[data-source-window-control="minimize"]');
+  const max=win.locator('[data-source-window-control="maximize"]');
+  const circle=async(button:ReturnType<Page["locator"]>)=>button.evaluate(el=>getComputedStyle(el,"::before").backgroundColor);
+  expect(await circle(close)).toBe("rgb(253, 88, 88)");
+  expect(await circle(min)).toBe("rgb(253, 189, 48)");
+  expect(await circle(max)).toBe("rgb(54, 204, 64)");
+  const closeBounds=await close.boundingBox(),minBounds=await min.boundingBox(),maxBounds=await max.boundingBox();
+  expect(closeBounds!.x).toBeLessThan(minBounds!.x);
+  expect(minBounds!.x).toBeLessThan(maxBounds!.x);
+  await max.click();
+  await expect(win).toHaveClass(/is-maximized/);
+  await expect(win).toHaveCSS("border-top-left-radius","0px");
+  await win.locator('[data-source-window-control="restore"]').click();
+  await expect(win).toHaveCSS("border-top-left-radius","10px");
+  await close.click();
+  await expect(win).toHaveCount(0);
+});

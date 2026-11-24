@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS desktop/window:** original selection and dark traffic-light frame styling, browser regression contract. [Source trace](MACOS-DESKTOP-WINDOW-SOURCE.md). CI conclusion unavailable.
+
 > **24 November 2026 — Consolidated verification:** static artwork inventory comparison (301 checksum entries matched); historical flyout height correction; one opt-in full CI requested. Results pending.
 
 > **24 November 2026 — Historical All Programs flyout:** Slate/Plex/Whistler flat source list with viewport bounds, keyboard and app launch. [Source trace](HISTORICAL-ALL-PROGRAMS-SOURCE.md). Exact-head CI pending.

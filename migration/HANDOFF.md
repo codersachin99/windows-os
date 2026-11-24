@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS desktop and window chrome
+
+Checked CI at 75f7708: PR-filtered run lookup and combined statuses both returned empty; conclusion unknown, no duplicate trigger. Ported original macOS desktop selected icon/label and rename styles, dark active/inactive frame, 28px titlebar and left-leading traffic-light controls. Added computed-style/lifecycle browser contract. [Source trace](MACOS-DESKTOP-WINDOW-SOURCE.md). Next top menu bar/dock geometry, context menus and Explorer. Main/frozen source/draft PR/releases unchanged; tests pending.
+
+---
+
 ## 24 November 2026 — Consolidated historical shell verification requested
 
 Static review of head 82b823d: all 301 registered artwork checksum entries match the frozen legacy-files.tsv inventory (target-byte audit still needs CI); previous XP program overrides preserved. Confirmed resolver signatures and original wallpaper paths, Start markup and taskbar selectors. Bounded flyout to original 288px base height, retaining Slate override and viewport cap; explicit left/right placement state type. One opt-in [run-ci] push requests TypeScript, unit, source audit, build, targeted and full Playwright suite; results not yet available. No visual capture or release. Next inspect actual CI jobs, fix failures before further theme work. Main and frozen source unchanged.
