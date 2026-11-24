@@ -222,3 +222,17 @@
 .windows-desktop[data-theme="macos"] .source-macos-spotlight-results button small{opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .windows-desktop[data-theme="macos"] .source-macos-spotlight p{padding:8px;margin:0}
 @media(max-width:650px){.windows-desktop[data-theme="macos"] .source-macos-spotlight-trigger{width:24px}}
+
+/* Original macOS dock tooltip and embedded pointer artwork.
+ * Portaled so narrow dock overflow cannot clip the bubble. */
+.source-macos-dock-tooltip{
+  position:fixed;z-index:1000001;transform:translateY(-100%);
+  box-sizing:border-box;max-width:calc(100vw - 8px);padding:8px 16px;
+  border-radius:6px;border:1px solid #fff9;background:#2d2d2d;
+  box-shadow:0 0 0 1px #0f0f0f;color:#fff;white-space:nowrap;
+  font:14px "Segoe UI",Tahoma,sans-serif;pointer-events:none;
+}
+.source-macos-dock-tooltip>span{
+  width:17px;height:12px;position:absolute;top:100%;transform:translateX(-50%);
+  background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='17' height='12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M18.293-.5L8.5 9.293-1.293-.5h19.586z' stroke='%230F0F0F'/%3E%3Cpath d='M17.293-.5L8.5 8.293-.293-.5h17.586z' fill='%232D2D2D' stroke='%23ADADAD'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Cpath d='M0 0h17v12H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+}

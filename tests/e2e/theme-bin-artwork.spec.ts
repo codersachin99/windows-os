@@ -62,6 +62,8 @@ for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chr
     const icon=page.locator('[data-test-desktop-icon="bin"]');
     const image=icon.locator(".desktop__icon-icon");
     await expect(image).toHaveAttribute("src",artwork[theme].empty);
+    const dockBin=page.locator('[data-test-macos-dock-item="bin"] img');
+    if(theme==="macos")await expect(dockBin).toHaveAttribute("src",artwork[theme].empty);
 
     const name="Source "+theme+" Bin Art.txt";
     await page.locator("[data-test-desktop-upload-input]").setInputFiles({
@@ -75,6 +77,7 @@ for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chr
     await deletion.getByRole("button",{name:"Yes"}).click();
     await expect(file).toHaveCount(0);
     await expect(image).toHaveAttribute("src",artwork[theme].full);
+    if(theme==="macos")await expect(dockBin).toHaveAttribute("src",artwork[theme].full);
 
     await icon.dblclick();
     const bin=page.locator('[data-test-window="bin"]').last();
@@ -88,6 +91,7 @@ for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chr
     const empty=page.getByRole("alertdialog",{name:"Confirm empty Recycle Bin"});
     await empty.getByRole("button",{name:"Yes"}).click();
     await expect(image).toHaveAttribute("src",artwork[theme].empty);
+    if(theme==="macos")await expect(dockBin).toHaveAttribute("src",artwork[theme].empty);
     if(theme==="chromeos"||theme==="onebit"){
       await icon.dblclick();
       await expect(page.locator('[data-test-window="bin"]').last().locator('[data-test-explorer-item="'+name+'"]')).toHaveCount(0);
@@ -929,4 +933,22 @@ test("macOS Launchpad uses source program grid, paging, search and real launch",
   await search.press("Escape");
   await expect(launchpad).toHaveCount(0);
   await expect(trigger).toBeFocused();
+});
+
+test("macOS dock tooltip has original paint and stays inside the viewport",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const trigger=page.locator('[data-test-macos-dock-item="launchpad"]');
+  const tooltip=page.locator("[data-test-macos-dock-tooltip]");
+  await trigger.hover();
+  await expect(tooltip).toHaveText("Launchpad");
+  await expect(tooltip).toHaveCSS("background-color","rgb(45, 45, 45)");
+  await expect(tooltip).toHaveCSS("border-top-color","rgba(255, 255, 255, 0.6)");
+  const bounds=await tooltip.boundingBox(),button=await trigger.boundingBox(),viewport=page.viewportSize()!;
+  expect(bounds!.x).toBeGreaterThanOrEqual(0);
+  expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(viewport.width);
+  expect(bounds!.y+bounds!.height).toBeLessThan(button!.y);
+  await page.locator('[data-test-macos-dock-item="computer"]').hover();
+  await expect(tooltip).toHaveText("Computer");
+  await page.mouse.move(1,100);
+  await expect(tooltip).toHaveCount(0);
 });

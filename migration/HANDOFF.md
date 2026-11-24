@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS dock Bin and tooltips
+
+Shared mounted Guest trash count hook, synchronized original empty/full Bin artwork on Desktop and Dock, source tooltip paint and embedded pointer, viewport-safe portal and keyboard access. Existing upload/delete/empty browser contract extended and tooltip regression authored. [Source trace](MACOS-DOCK-DETAILS-SOURCE.md). Exact-head tests pending. Next macOS context and Explorer skins; consolidated CI afterward. Main/frozen source/draft PR/releases unchanged; no extra CI trigger.
+
+---
+
 ## 24 November 2026 — macOS Launchpad
 
 Replaced generic Windows Start fallback with source macOS fullscreen blurred wallpaper, 5x4 program-only grid, 52px icons, search, page dots, wheel/swipe, shared program context and real registered launch. Bounded compact layout and keyboard input, disabled unported apps. [Source trace](MACOS-LAUNCHPAD-SOURCE.md). Browser regression authored, exact-head CI unavailable. Next macOS dock tooltip/Bin state and context/Explorer skins. Main/frozen source/draft PR/releases unchanged; no extra CI trigger.

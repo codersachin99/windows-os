@@ -3,6 +3,8 @@ import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
   sourceAeroAppearanceSave,type SourceAeroAppearance,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms } from "@windows-os/sdk";
+import {useSourceTrashCount} from "./useSourceTrashCount";
+import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
 import {SourceMacOSSpotlight} from "./SourceMacOSSpotlight";
@@ -299,6 +301,8 @@ export function DesktopShell({
   const previewShowTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const previewHideTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const taskbarGroups=sourceTaskbarGroups(state.windows,pinnedPrograms);
+  const macDockRef=useRef<HTMLDivElement>(null);
+  const dockTrashCount=useSourceTrashCount(state.theme==="macos");
   const macDockGroups=sourceMacOSDockGroups(pinnedPrograms,dockRecent,state.windows.map(win=>win.appId));
   const buttonMode=taskbarConfig.type;
   const canAeroPeek=(state.theme==="win7"||sourceIsAeroFamily(state.theme))&&taskbarConfig.useAeroPeek;
@@ -572,7 +576,7 @@ export function DesktopShell({
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
         </button>}
-        <div className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
+        <div ref={macDockRef} className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
           {state.theme==="macos"?macDockGroups.map((ids,index)=>
             <div key={index} className="source-macos-dock-group" data-test-macos-dock-group={index}>
               {index>0&&<span className="source-macos-dock-divider" aria-hidden="true"/>}
@@ -580,7 +584,7 @@ export function DesktopShell({
                 if(id==="launchpad")return <button key={id}
                   className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
                   data-test-start-button="" data-test-macos-dock-item={id}
-                  aria-label="Open Start menu" aria-expanded={state.startOpen} title="Launchpad"
+                  aria-label="Open Start menu" aria-expanded={state.startOpen} data-source-dock-label="Launchpad"
                   onClick={()=>dispatch({type:"TOGGLE_START"})}>
                   <img src={sourceShellAsset(state.theme,"start")??legacyArt.startOrb} alt="" draggable={false}/>
                 </button>;
@@ -597,7 +601,7 @@ export function DesktopShell({
                   data-test-taskbar-pin-running={pinned?Boolean(instances.length):undefined}
                   data-test-taskbar-running-group={!pinned&&instances.length?id:undefined}
                   data-test-taskbar-group-size={instances.length}
-                  title={app.label} aria-label={"Open or switch to "+app.label}
+                  data-source-dock-label={app.label} aria-label={"Open or switch to "+app.label}
                   onMouseEnter={event=>showTaskbarPreview(id,event.currentTarget)}
                   onMouseLeave={schedulePreviewHide}
                   onContextMenu={event=>{
@@ -610,7 +614,7 @@ export function DesktopShell({
                     if(instances.length)activateTaskbarGroup(instances);
                     else{dismissLivePreview();dispatch({type:"OPEN_APP",app});}
                   }}>
-                  <img src={sourceThemeProgramArt(state.theme,id)??app.icon} alt="" width={48} height={48}/>
+                  <img src={(id==="bin"?sourceShellAsset(state.theme,dockTrashCount>0?"binFull":"bin"):sourceThemeProgramArt(state.theme,id))??app.icon} alt="" width={48} height={48}/>
                 </button>;
               })}
             </div>):<>
@@ -690,6 +694,7 @@ export function DesktopShell({
           })}
           </>}
         </div>
+        {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)}/>}
         <div className="windows-taskbar__tray">
           <button title="Show hidden icons" aria-label="Show hidden icons"
             data-test-tray-hidden-toggle="" onClick={()=>setShowHiddenTray(v=>!v)}>▴</button>

@@ -3,6 +3,7 @@ import {
   type Dispatch, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent
 } from "react";
 import type { AppDefinition, DesktopAction, ThemeId } from "@windows-os/contracts";
+import {useSourceTrashCount} from "./useSourceTrashCount";
 import { sourceShellAsset,sourceThemeProgramArt } from "@windows-os/assets";
 import {
   desktopBand, desktopBandHits, desktopBandSelection,
@@ -105,7 +106,7 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
   const [clipboardState, setClipboardState] = useState(() => fileClipboard.snapshot());
   const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
   const [pendingEmptyBin,setPendingEmptyBin]=useState(false);
-  const [trashCount,setTrashCount]=useState(0);
+  const trashCount=useSourceTrashCount();
   const [pinned,setPinned]=useState(()=>taskbarPins.snapshot());
   useEffect(()=>taskbarPins.subscribe(setPinned),[]);
   const [createdId, setCreatedId] = useState<string | null>(null);
@@ -135,24 +136,6 @@ export function DesktopIcons({ apps, dispatch, theme = "win7" }: DesktopIconsPro
     target?.setAttribute("data-desktop-pointer-hover", "true");
   }, []);
 
-
-  // Source DesktopItemMenu Bin action reads the actual mounted trash folder
-  // on the same VFS as Explorer, never an assumed empty or fabricated path.
-  useEffect(()=>{
-    let live=true,revision=0;
-    const refresh=()=>{
-      const token=++revision;
-      const path=sourceFilesystemRuntime.snapshot()?.trashPath;
-      if(!path){if(live)setTrashCount(0);return;}
-      void fileStore.list(path).then(entries=>{
-        if(live&&token===revision)setTrashCount(entries.length);
-      }).catch(()=>{if(live&&token===revision)setTrashCount(0);});
-    };
-    refresh();
-    const unsubFiles=fileStore.subscribe(refresh);
-    const unsubRuntime=sourceFilesystemRuntime.subscribe(refresh);
-    return ()=>{live=false;revision++;unsubFiles();unsubRuntime();};
-  },[]);
 
   // Explorer and Desktop share one file clipboard. The host OS clipboard is
   // intentionally untouched and unmounted data is never fabricated.

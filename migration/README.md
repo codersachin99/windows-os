@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS dock details:** real empty/full Bin artwork, original tooltip and pointer, responsive overflow handling. [Source trace](MACOS-DOCK-DETAILS-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS Launchpad:** source fullscreen program grid, search, paging and real application launch. [Source trace](MACOS-LAUNCHPAD-SOURCE.md). Tests pending.
 
 > **24 November 2026 — macOS Spotlight:** source-style search surface, registered apps and mounted Guest files, shared association resolver and regression contract. [Source trace](MACOS-SPOTLIGHT-SOURCE.md). Tests pending.
