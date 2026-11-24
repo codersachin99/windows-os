@@ -2243,8 +2243,15 @@
       "source": "src/modules/themes/logon-winl.js",
       "sha": "6d91aa061f6737116abe6fa13f81bed14722f3a4",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceWinLLogon.tsx",
+        "packages/ui/src/sourceWinLLogon.css",
+        "packages/ui/src/sourceWinLLogon.test.tsx",
+        "tests/e2e/source-winl-logon.spec.ts",
+        "migration/WINL-LOGON-SOURCE.md"
+      ],
+      "verification": "source Guest and power and byte-identical login art slice; source form, full shell and pixel parity pending"
     },
     {
       "source": "src/modules/themes/logon-winw.js",
