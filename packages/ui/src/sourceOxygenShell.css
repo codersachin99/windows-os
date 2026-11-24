@@ -75,3 +75,49 @@
   background:#2a2e32;color:#fff;border:0;
 }
 .windows-desktop[data-theme="oxygen"] .windows-window.is-maximized{border-radius:0}
+
+/* Oxygen WinUI menu source: dark gradient, double separator and inset
+ * accent highlight. Preserve shared root/child positioning and sizes. */
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]){
+  --oxygen-menu-accent:var(--theme-color,#3c92c8);
+  box-sizing:border-box;color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;
+  border:1px solid #474c55;border-radius:4px;box-shadow:0 0 10px 1px #000;
+  font:10pt "Segoe UI",Arial,sans-serif;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"])::before{content:none}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button{
+  color:#fff;background:none;border:1px solid transparent;border-radius:4px;
+  box-shadow:none;text-shadow:none;text-align:start;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button:not(:disabled):is(:hover,:focus,.is-selected,.is-active){
+  background:var(--oxygen-menu-accent);border-color:transparent;box-shadow:inset 0 1px #0005,inset 0 -1px #fff5;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button:not(:disabled)[aria-haspopup]:is(:hover,:focus,[aria-expanded="true"]){
+  background:linear-gradient(to right,var(--oxygen-menu-accent) 50% 80%,transparent);
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]):dir(rtl) button:not(:disabled)[aria-haspopup]:is(:hover,:focus,[aria-expanded="true"]){
+  background:linear-gradient(to left,var(--oxygen-menu-accent) 50% 80%,transparent);
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button:disabled{color:#fff;opacity:.3;cursor:default}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) :is(hr,.windows-desktop__menu-divider,.explorer-organize__separator){
+  border:0;height:2px;margin:0;background-color:transparent;
+  background-image:linear-gradient(to right,transparent,#4a5158,transparent),linear-gradient(to right,transparent,#0003,transparent);
+  background-position:50% 100%,50% 0%;background-size:100% 1px;background-repeat:no-repeat;box-shadow:none;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) kbd{color:inherit}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu,.explorer-command){
+  background:#2a2e32;color:#fff;border:0;border-bottom:1px solid var(--border-color);box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button){
+  background:none;color:#fff;border:1px solid transparent;box-shadow:none;text-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):not(:disabled):is(:hover,:focus,[aria-expanded="true"]){
+  background:var(--theme-color);box-shadow:inset 0 1px #0003,inset 0 -1px #fff3;
+}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):disabled{opacity:.3}
+.windows-desktop[data-theme="oxygen"] .explorer-command select{
+  color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;border:1px solid #474c55;border-radius:4px;box-shadow:0 0 2px #000;
+}
+.windows-desktop[data-theme="oxygen"] .notepad-status{
+  color:#fff;background:#2a2e32;border-top:1px solid var(--border-color);box-shadow:none;
+}

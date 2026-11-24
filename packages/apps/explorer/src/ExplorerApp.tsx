@@ -58,6 +58,7 @@ import "./sourceMacOSExplorer.css";
 import "./sourceChromeOSExplorer.css";
 import "./sourceUbuntuExplorer.css";
 import "./sourceKubuntuExplorer.css";
+import "./sourceOxygenExplorer.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;

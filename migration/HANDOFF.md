@@ -1,3 +1,9 @@
+## 24 November 2026 — Oxygen context and Explorer
+
+Oxygen WinUI context/Explorer source slice: original #40464d/#2f3438 gradient, #474c55 borders, 4px menu corners, inset accent hover, double gradient separators, directional submenu highlight; desktop/taskbar/Explorer/Notepad and body-portaled Start contexts. Shared measured cascade engine retained; added Oxygen to existing desktop cascade edge test. Explorer address/search, navigation and list gradient selection pseudo-layer, details headers and status/menubar ported; selection still owned by Guest filesystem. Added context and Explorer tests, including file upload and fast view changes; tests not run yet. Accent fallback remains provisional; exact original popup icon/checkmark and native widget details partial. Next interactive tray/DateTime and focused verification.
+
+---
+
 ## 24 November 2026 — Oxygen shared source launcher
 
 Oxygen source theme-oxygen-scss.js explicitly styles .startmenu__wrapper.is-kubuntu. Reused SourceKubuntuStartMenu with typed theme parameter, keyed remount per theme, themed Guest/application/file artwork and separate test hooks. Original 6px rounded gradient wrapper, #474c55 border and source shadow; same 320px body, sorted program list, recents, grouped Guest search, account and six footer actions, existing shared context callbacks. Tests for Oxygen source paint, icon, launch, recents, settings, Documents and logoff authored, not executed. Exact source Start button sprite mapping not yet located; retained existing button art, no invented sprite. Footer glyphs, full app icon registry and exact settings task-level results remain partial. No additional CI marker; next Oxygen context/Explorer, then tray and focused batch.

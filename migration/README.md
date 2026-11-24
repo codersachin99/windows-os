@@ -1,3 +1,5 @@
+> **24 November 2026 — Oxygen context/Explorer:** original gradients and WinUI selection, tests pending. [Source trace](OXYGEN-CONTEXT-EXPLORER-SOURCE.md).
+
 > **24 November 2026 — Oxygen Start:** shared original Kubuntu-family layout with Oxygen gradient and artwork, browser tests pending. [Source trace](OXYGEN-START-SOURCE.md).
 
 > **24 November 2026 — Kubuntu / Personalize verified:** 757 units, 73 browsers passed (1 skipped). Oxygen WindowMain port awaiting verification. [Source trace](OXYGEN-WINDOW-SOURCE.md).
