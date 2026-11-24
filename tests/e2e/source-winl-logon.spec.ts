@@ -17,7 +17,7 @@ for(const theme of ["winLS","winLP"] as const){
     await expect(login).toHaveCSS("background-image",/login-winL\.d27b081a\.webp/);
     const image=await page.request.get("/assets/images/login-winL.d27b081a.webp");
     expect(image.ok()).toBeTruthy();
-    expect(await image.headerValue("content-type")).toContain("image/webp");
+    expect(image.headers()["content-type"]).toContain("image/webp");
     const frame=login.locator(".source-winl-logon__container");
     await expect(frame).toHaveCSS("border-top-left-radius","6px");
     await expect(frame).toHaveCSS("background-image",/linear-gradient/);
