@@ -1,3 +1,5 @@
+> **24 November 2026 — regression repair:** full CI 1507 passed, 5 skipped, 2 failed (same stale XP Desktop navigation assertion). Source-verified XP and inherited Win11 artwork now explicitly tested; new-head verification pending.
+
 > **24 November 2026 — verification checkpoint:** opt-in `[run-ci] [macos-check]` retains all non-browser gates and runs focused macOS browser cases on both Chromium projects. Full CI remains opt-in via `[run-ci]`. Latest batch pending results.
 
 > **24 November 2026 — notifications:** shared SDK history and timed macOS toast; source remote feed pending. [Source trace](MACOS-NOTIFICATION-SOURCE.md).

@@ -123,3 +123,14 @@ describe("byte-identical original Win95/98/2k shell image catalog",()=>{
     expect(sourceThemeProgramArt("win2k","unknown")).toBeNull();
   });
 });
+
+
+describe("original Explorer Desktop navigation artwork",()=>{
+  it("keeps the XP-specific Desktop icon and the inherited Win11 base icon distinct from folders",()=>{
+    expect(sourceThemeProgramArt("winxp","desktop")).toBe("/assets/images/desktop-winxp.da2acd23.webp");
+    expect(sourceThemeProgramArt("win11","desktop")).toBe("/assets/images/desktop.96562ad8.webp");
+    expect(sourceThemeProgramArt("win11dark","desktop")).toBe("/assets/images/desktop.96562ad8.webp");
+    expect(sourceThemeProgramArt("winxp","desktop")).not.toBe(sourceShellAsset("winxp","folder"));
+    expect(sourceThemeProgramArt("win11","desktop")).not.toBe(sourceShellAsset("win11","folder"));
+  });
+});

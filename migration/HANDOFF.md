@@ -1,3 +1,9 @@
+## 24 November 2026 — full CI regression repair
+
+Full CI #45395440100 at d0d3d0b: targeted 1065 passed/3 skipped; full 1507 passed/5 skipped/2 failed. Both failures were the same stale XP Desktop navigation expectation in theme-shell-source.spec.ts (generic folder expected, original desktop-winxp received). Frozen icons.registry.json confirms XP-specific Desktop artwork; Win11 has no override and inherits base desktop. Imported byte-identical base desktop.96562ad8.webp, mapped Win11/Win11dark, updated both browser expectations and unit/hash audit; generic folder tests unchanged. Focused CI #45402373188 at fff2620 passed TypeScript, units, source inventory, artwork and Contacts at inspection; build/browser pending. New regression repair not yet tested, no redundant trigger. Next include repaired theme-shell-source cases in subsequent focused validation, repair any macOS failures. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — focused macOS verification checkpoint
 
 Explicit [run-ci] [macos-check] batch: TypeScript, all units, original inventory/artwork/Contacts audits, Vite build and macOS browser cases in theme-bin-artwork, player and macOS logon across both configured Chromium projects. Does not repeat broad suites; existing full CI and manual dispatch unchanged. Added five already byte-verified volume icons to automatic source artwork audit and all seven popup owner transition pairs to unit coverage. Static checks confirmed WindowFrame active/maximized/control attributes and Launchpad/search hooks. Previous CI #45395440100 still in full interactions at inspection; this is a new-head focused check, not evidence of a passing run. Next inspect and repair exact-head failures before moving to ChromeOS. Main/frozen source/draft PR/releases unchanged.

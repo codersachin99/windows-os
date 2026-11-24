@@ -101,11 +101,13 @@ test("source Computer and Bin Explorer show original XP/Win11 folder, file and n
     const names=theme==="winxp"?{
       computer:"computer-winxp.8cbae9da.webp",
       bin:"bin-winxp.7d0403fd.webp",
+      desktop:"desktop-winxp.da2acd23.webp",
       folder:"folder-winxp.ff1b00c5.webp",
       file:"file-winxp.c130b357.webp"
     }:{
       computer:"computer-win11.fc5b48e4.webp",
       bin:"bin-win11.73608517.webp",
+      desktop:"desktop.96562ad8.webp",
       folder:"folder-win11.49360b7d.webp",
       file:"file-win11.8b2c3723.webp"
     };
@@ -124,7 +126,7 @@ test("source Computer and Bin Explorer show original XP/Win11 folder, file and n
     await expect(computer.locator(".explorer-navigation__home img").first())
       .toHaveAttribute("src",source("computer"));
     await expect(computer.locator(".explorer-navigation__home").filter({hasText:"Desktop"}).locator("img"))
-      .toHaveAttribute("src",source("folder"));
+      .toHaveAttribute("src",source("desktop"));
     await computer.getByRole("button",{name:"New folder"}).click();
     const dialog=computer.getByRole("dialog",{name:"New folder"});
     await dialog.getByRole("textbox",{name:"New folder name"}).fill(folderName);

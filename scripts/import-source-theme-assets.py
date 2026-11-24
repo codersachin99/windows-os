@@ -248,6 +248,10 @@ FILES: dict[str, dict[str, str]] = {
         "executable-mac.73f92274.webp": "ed212fe1af03b6090f7f896c1757ee76962e7c33",
         "shortcut-mac.45146f00.webp": "f3909cf064b096718f9d8ee4205c1326e779d24f",
     },
+    "shared-desktop-navigation": {
+        "desktop.96562ad8.webp": "0b5c0330f4889f55d1831b3a79b8a316966fc03a",
+        "desktop-winxp.da2acd23.webp": "1160a65e8e89a32a60e246630060902c1cb9e5ea",
+    },
     "macos-tray-volume": {
         "volume-0-win10.319871af.webp": "eb0f0fd66412c44de175e1f267a9775af47129f0",
         "volume-32-win10.0c0304cf.webp": "8ea19fcc333559b90803b13291f2b276c101ff32",

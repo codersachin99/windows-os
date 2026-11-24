@@ -380,6 +380,8 @@ export const legacyThemeProgramArtwork=Object.freeze({
     cpanel:"/assets/images/cpanel-win10.d3d1d446.webp"
   }),
   win11:Object.freeze({
+    // Frozen Win11 registry inherits the base Desktop icon (no override).
+    desktop:"/assets/images/desktop.96562ad8.webp",
     notepad:"/assets/images/notepad-win11.2e4af294.webp",
     games:"/assets/images/games-win11.d339e9be.webp",
     personalize:"/assets/images/personal-win11.76af8a1e.webp",
