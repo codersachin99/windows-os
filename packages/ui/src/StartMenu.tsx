@@ -20,6 +20,7 @@ import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
 import {SourceWin8StartScreen} from "./SourceWin8StartScreen";
 import {SourceWin31ProgramManager} from "./SourceWin31ProgramManager";
 import {SourceWin9xStartMenu} from "./SourceWin9xStartMenu";
+import {SourceMacOSLaunchpad} from "./SourceMacOSLaunchpad";
 import {SourceHistoricalProgramsFlyout} from "./SourceHistoricalProgramsFlyout";
 import {openGuestSearchFile} from "./sourceGuestSearchOpen";
 
@@ -320,7 +321,11 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       </div>
     </section>;
   return (<>
-    {(theme==="win8"||theme==="win81")?
+    {theme==="macos"?
+      <SourceMacOSLaunchpad rootRef={menuRef} wallpaper={wallpaper}
+        items={win11AllApps} onLaunch={openApp} onContext={openProgramContext}
+        onClose={()=>dispatch({type:"CLOSE_START"})}/>:
+    (theme==="win8"||theme==="win81")?
       <SourceWin8StartScreen theme={theme} rootRef={menuRef}
         wallpaper={wallpaper} programs={appRegistry.startMenu()}
         onLaunch={openApp} onOpenFile={openSearchFile}

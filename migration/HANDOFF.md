@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS Launchpad
+
+Replaced generic Windows Start fallback with source macOS fullscreen blurred wallpaper, 5x4 program-only grid, 52px icons, search, page dots, wheel/swipe, shared program context and real registered launch. Bounded compact layout and keyboard input, disabled unported apps. [Source trace](MACOS-LAUNCHPAD-SOURCE.md). Browser regression authored, exact-head CI unavailable. Next macOS dock tooltip/Bin state and context/Explorer skins. Main/frozen source/draft PR/releases unchanged; no extra CI trigger.
+
+---
+
 ## 24 November 2026 — macOS Spotlight
 
 Ported source Spotlight tray trigger and centered dark search surface. Shared mounted Guest search with cancellation/trash exclusion and shared file association resolver extracted from Win8 Start; application and file result navigation, real launch and Escape restoration. [Source trace](MACOS-SPOTLIGHT-SOURCE.md). Original ranking/grouping and global shortcut pending, tests authored but not executed. Next original Launchpad. Main/frozen source/draft PR/releases unchanged; no extra CI trigger.

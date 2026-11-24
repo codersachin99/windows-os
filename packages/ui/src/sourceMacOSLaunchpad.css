@@ -1,0 +1,47 @@
+/* Frozen startmenu-launchpad.css and macOS theme overrides. */
+.windows-desktop[data-theme="macos"] .source-macos-launchpad{
+  position:fixed;inset:0;z-index:4500;isolation:isolate;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;gap:0;
+  color:#fff;background:#242424;font:14px "Segoe UI",Tahoma,sans-serif;
+  touch-action:pan-y;
+}
+.source-macos-launchpad-wallpaper{
+  position:absolute;inset:-12px;z-index:-1;background-position:center;background-size:cover;
+  filter:blur(12px);
+}
+.source-macos-launchpad>input{
+  box-sizing:border-box;flex:0 0 24px;width:250px;max-width:90%;height:24px;
+  margin-top:24px;padding:2px 20px;color:#fff;background:#ffffff11;
+  border:1px solid #fff4;border-radius:6px;outline:none;text-align:center;
+  font:inherit;
+}
+.source-macos-launchpad>input:focus{text-align:start}
+.source-macos-launchpad>input::placeholder{color:#fff9}
+.source-macos-launchpad>input::-webkit-search-cancel-button{appearance:none}
+.source-macos-launchpad-grid{
+  width:75%;height:75%;min-height:0;margin:0 auto 16px;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-rows:repeat(4,minmax(0,1fr));align-items:center;justify-items:center;
+}
+.source-macos-launchpad-grid>button{
+  box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;min-width:0;width:100%;max-width:120px;padding:8px 0;border:0;border-radius:12px;
+  color:inherit;background:none;text-shadow:0 0 3px #000;font:inherit;
+}
+.source-macos-launchpad-grid>button:disabled{opacity:.55}
+.source-macos-launchpad-grid>button.is-selected,.source-macos-launchpad-grid>button:focus-visible{background:#fff3}
+.source-macos-launchpad-grid>button:active:not(:disabled) img{filter:brightness(.4)}
+.source-macos-launchpad-grid>button img{width:52px;height:52px;object-fit:contain}
+.source-macos-launchpad-grid>button span{box-sizing:border-box;width:100%;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.source-macos-launchpad-grid>p{grid-column:1/-1;text-shadow:0 0 3px #000}
+.source-macos-launchpad-paging{display:flex;gap:12px;align-items:center;justify-content:center}
+.source-macos-launchpad-paging>button{width:12px;height:12px;box-sizing:border-box;padding:0;border:0;border-radius:50%;background:#fff8}
+.source-macos-launchpad-paging>button[aria-current="page"]{background:#fff;box-shadow:0 0 0 1px #0003}
+@media(max-width:650px){
+  .source-macos-launchpad-grid{width:95%;grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-height:420px){
+  .source-macos-launchpad>input{margin-top:8px}
+  .source-macos-launchpad-grid>button{gap:2px;padding:2px 0}
+  .source-macos-launchpad-grid>button img{width:36px;height:36px}
+}

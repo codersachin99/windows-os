@@ -900,3 +900,33 @@ test("macOS Spotlight searches registered applications and real Guest documents"
   await expect(spotlight).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });
+
+test("macOS Launchpad uses source program grid, paging, search and real launch",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const trigger=page.locator('[data-test-macos-dock-item="launchpad"]');
+  await trigger.click();
+  const launchpad=page.locator("[data-test-launchpad]");
+  await expect(launchpad).toBeVisible();
+  const grid=launchpad.locator("[data-test-launchpad-page]");
+  const viewport=page.viewportSize()!;
+  expect(await grid.locator("[data-test-launchpad-program]").count()).toBeLessThanOrEqual(viewport.width<=650?12:20);
+  const paging=launchpad.locator("[data-test-launchpad-paging-item]");
+  expect(await paging.count()).toBeGreaterThan(1);
+  await paging.nth(1).click();
+  await expect(grid).toHaveAttribute("data-test-launchpad-page","2");
+  const search=launchpad.locator("[data-test-start-search]");
+  await search.fill("Notepad");
+  await expect(grid).toHaveAttribute("data-test-launchpad-page","1");
+  const app=grid.locator('[data-test-launchpad-program="notepad"]');
+  await expect(app).toBeVisible();
+  await expect(app.locator("img")).toHaveCSS("width",viewport.height<=420?"36px":"52px");
+  await search.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(launchpad).toHaveCount(0);
+  await trigger.click();
+  await search.fill("No Matching Application 987654321");
+  await expect(grid.locator("[data-test-launchpad-program]")).toHaveCount(0);
+  await search.press("Escape");
+  await expect(launchpad).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
