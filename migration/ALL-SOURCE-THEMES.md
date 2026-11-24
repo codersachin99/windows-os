@@ -35,7 +35,7 @@ entry is intentionally omitted.
 | `aeroNoir` | `aeroNoir` | 1 | Pending theme-specific implementation |
 | `oxygen` | `oxygen` | 1 | Pending theme-specific implementation |
 | `winW` | `winW` | 1 | Original boot WinW image/view; logon/shell/pixel parity pending |
-| `onebit` | `onebit` | 1 | Pending theme-specific implementation |
+| `onebit` | `onebit` | 1 | Original-source palette and flat pixel-edged Guest/Power logon adapter; full shell/avatar/captcha/visual parity pending |
 
 **Separate canonical ID:** `win7` maps to `{boot:"win7",logon:"win7"}`
 even though `win7` itself is not a key in the final source
@@ -58,10 +58,10 @@ even though `win7` itself is not a key in the final source
   (three blue regions, 150×89 logo, Guest account tile) and **Win11**
   (source wallpaper, dark overlay, original 150px guest-win10 avatar)
   renderers. The existing **Win7** login remains intact. Win31, Win95, Win98 and Win2k use a shared classic Guest logon;
-  Win8 and Win8.1 share a source-purple screen and Win10 reuses the
+  Win8 and Win8.1 share a source-purple screen; Onebit now has its distinct dark/sand Guest/power screen; Win10 reuses the
   source-modern account structure with its own background and CSS.
-  **9 of 19** logon families now have at least an incremental renderer;
-  the other **10** screen families expose
+  **10 of 19** logon families now have at least an incremental renderer;
+  the other **9** screen families expose
   `data-source-logon-renderer="win7-fallback"` and do not pretend to
   use their unported original screen. The optional animated Boot
   renderer now supports **11 of the 19 configured boot families**
