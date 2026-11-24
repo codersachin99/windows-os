@@ -14,8 +14,7 @@ function SearchIcon({size=18}:{size?:number}){
 
 /** Source taskbar-macos.js Spotlight adapter. Real mounted Guest roots only,
  * bounded asynchronous search, shared result launching and no host access. */
-export function SourceMacOSSpotlight({dispatch}:{dispatch:Dispatch<DesktopAction>}){
-  const [open,setOpen]=useState(false);
+export function SourceMacOSSpotlight({dispatch,open,setOpen}:{dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void}){
   const [query,setQuery]=useState("");
   const [result,setResult]=useState<{text:string;files:FileEntry[]}>({text:"",files:[]});
   const [revision,setRevision]=useState(0);

@@ -16,9 +16,8 @@ function WifiGlyph({size=20}:{size?:number}){
     <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
   </svg>;
 }
-export function SourceMacOSNetwork({onOpen}:{onOpen:()=>void}){
+export function SourceMacOSNetwork({onOpen,open,setOpen}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void}){
   const [status,setStatus]=useState(readNetwork);
-  const [open,setOpen]=useState(false);
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{

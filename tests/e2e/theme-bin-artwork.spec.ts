@@ -1144,3 +1144,29 @@ test("macOS source tray order and live browser network popup",async({page,contex
   await expect(popup).toHaveCount(0);
   await expect(network).toBeFocused();
 });
+
+test("macOS popup ownership switches with keyboard as well as pointer",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const apple=page.locator("[data-test-menu-button]");
+  const network=page.locator("[data-test-network]");
+  const spotlight=page.locator("[data-test-spotlight-button]");
+  const clock=page.locator("[data-test-macos-datetime-trigger]");
+  await apple.click();
+  await expect(page.locator("[data-test-menu-popup]")).toBeVisible();
+  await network.focus();
+  await network.press("Enter");
+  await expect(page.locator("[data-test-menu-popup]")).toHaveCount(0);
+  await expect(page.locator("[data-test-network-popup]")).toBeVisible();
+  await spotlight.focus();
+  await spotlight.press("Enter");
+  await expect(page.locator("[data-test-network-popup]")).toHaveCount(0);
+  await expect(page.locator("[data-test-spotlight]")).toBeVisible();
+  await clock.focus();
+  await clock.press("Enter");
+  await expect(page.locator("[data-test-spotlight]")).toHaveCount(0);
+  await expect(page.locator("[data-test-macos-datetime-popup]")).toBeVisible();
+  await page.locator("[data-test-start-button]").focus();
+  await page.locator("[data-test-start-button]").press("Enter");
+  await expect(page.locator("[data-test-macos-datetime-popup]")).toHaveCount(0);
+  await expect(page.locator("[data-test-launchpad]")).toBeVisible();
+});

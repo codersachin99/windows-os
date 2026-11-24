@@ -6,6 +6,7 @@ import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms } f
 import {useSourceTrashCount} from "./useSourceTrashCount";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
+import {sourceMacOSPopupTransition,type SourceMacOSPopupId} from "./sourceMacOSPopup";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
 import {SourceMacOSNetwork} from "./SourceMacOSNetwork";
 import {SourceMacOSDateTime} from "./SourceMacOSDateTime";
@@ -293,6 +294,19 @@ export function DesktopShell({
     win.minimized?highest:Math.max(highest,win.z),-Infinity);
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
+  const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
+  const setMacPopupOpen=(id:SourceMacOSPopupId,open:boolean)=>{
+    setMacPopup(current=>sourceMacOSPopupTransition(current,id,open));
+    if(open)setShowHiddenTray(false);
+  };
+  useEffect(()=>{
+    if(state.theme!=="macos"||state.startOpen)setMacPopup(null);
+  },[state.theme,state.startOpen]);
+  useEffect(()=>{
+    if(macPopup==="network"&&!sourceTrayVisible(trayPreferences).includes("TaskbarNetwork"))
+      setMacPopup(null);
+    if(macPopup==="datetime"&&!trayPreferences.showClockIcon)setMacPopup(null);
+  },[macPopup,trayPreferences]);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
   const [dockRecent,setDockRecent]=useState(()=>sourceRecentPrograms.snapshot());
   useEffect(()=>sourceRecentPrograms.subscribe(setDockRecent),[]);
@@ -570,7 +584,7 @@ export function DesktopShell({
             kind:"background",x:event.clientX,y:event.clientY
           });
         }}>
-        {state.theme==="macos"?<><SourceMacOSAppleMenu dispatch={dispatch}/><span className="source-macos-menubar-title" data-test-macos-active-title="">
+        {state.theme==="macos"?<><SourceMacOSAppleMenu dispatch={dispatch} open={macPopup==="apple"} setOpen={open=>setMacPopupOpen("apple",open)}/><span className="source-macos-menubar-title" data-test-macos-active-title="">
           {state.windows.find(win=>!win.minimized&&win.z===highestVisibleWindowZ)?.title??"Finder"}
         </span></>:<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
           data-test-start-button="" aria-label="Open Start menu"
@@ -696,10 +710,10 @@ export function DesktopShell({
           })}
           </>}
         </div>
-        {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)}/>}
+        {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)||macPopup!==null}/>}
         <div className="windows-taskbar__tray" data-test-taskbar-tray={state.theme==="macos"?"macos":undefined}>
           {(state.theme!=="macos"||sourceTrayHidden(trayPreferences).length>0)&&<button title="Show hidden icons" aria-label="Show hidden icons"
-            data-test-tray-hidden-toggle="" onClick={()=>setShowHiddenTray(v=>!v)}>▴</button>}
+            data-test-tray-hidden-toggle="" onClick={()=>{setMacPopup(null);setShowHiddenTray(v=>!v);}}>▴</button>}
           {showHiddenTray&&sourceTrayHidden(trayPreferences).length>0&&
             <div className="windows-taskbar__hidden-items" data-test-tray-hidden-items=""
               role="group" aria-label="Hidden notification area icons">
@@ -710,13 +724,13 @@ export function DesktopShell({
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
             .map(item=>state.theme==="macos"&&item.id==="TaskbarNetwork"?
-              <SourceMacOSNetwork key={item.id} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
+              <SourceMacOSNetwork key={item.id} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
-          {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch}/>}
-          {trayPreferences.showClockIcon&&(state.theme==="macos"?<SourceMacOSDateTime onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
+          {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch} open={macPopup==="spotlight"} setOpen={open=>setMacPopupOpen("spotlight",open)}/>}
+          {trayPreferences.showClockIcon&&(state.theme==="macos"?<SourceMacOSDateTime open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
         </div>
         {state.theme!=="macos"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           data-test-show-desktop=""

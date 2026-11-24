@@ -4,9 +4,8 @@ import {sourceCalendarDays,sourceCalendarMonth,sourceCalendarSameDay} from "./so
 const fullDate=(d:Date)=>d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
 const monthLabel=(d:Date)=>d.toLocaleDateString("en-US",{month:"long"});
 
-export function SourceMacOSDateTime({onOpen}:{onOpen:()=>void}){
+export function SourceMacOSDateTime({onOpen,open,setOpen}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void}){
   const [now,setNow]=useState(()=>new Date());
-  const [open,setOpen]=useState(false);
   const [month,setMonth]=useState(()=>sourceCalendarMonth(now,0));
   const [selected,setSelected]=useState(now);
   const [picker,setPicker]=useState<"month"|"year"|null>(null);

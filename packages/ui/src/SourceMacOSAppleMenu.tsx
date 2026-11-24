@@ -1,4 +1,4 @@
-import {useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
+import {useEffect,useLayoutEffect,useRef,type Dispatch} from "react";
 import type {DesktopAction} from "@windows-os/contracts";
 import {appRegistry} from "@windows-os/sdk";
 import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
@@ -16,8 +16,7 @@ type Command=typeof SOURCE_MACOS_APPLE_MENU[number]["id"];
 
 /** Source taskbar-macos.js + shared 98a6 menuItems. All actions are
  * Guest-local; unverified external support destination stays disabled. */
-export function SourceMacOSAppleMenu({dispatch}:{dispatch:Dispatch<DesktopAction>}){
-  const [open,setOpen]=useState(false);
+export function SourceMacOSAppleMenu({dispatch,open,setOpen}:{dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void}){
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   const popup=useRef<HTMLDivElement>(null);

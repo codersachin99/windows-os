@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS shared popup ownership
+
+One source-style active popup owner for Apple, Network, Spotlight and DateTime; guarded stale close, keyboard switching and Launchpad/theme/preference cleanup. Unit and browser contracts authored. [Source trace](MACOS-POPUP-OWNERSHIP-SOURCE.md). Action Center module f0ed not located in inspected chunks, so prioritized source-confirmed popup lifecycle rather than inventing behavior. Prior CI #45395440100 full interactions running at inspection; exact-head verification pending. Next Action Center source discovery and remaining tray capabilities. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS tray and network
 
 Original macOS tray order/40px slots, removed Windows-only Show Desktop and unnecessary hidden chevron. Network popup now uses browser connectivity and optional type events with truthful online/offline text, cleanup and Escape; native settings unavailable. [Source trace](MACOS-TRAY-NETWORK-SOURCE.md). Browser offline/online regression authored. CI #45395440100 targeted browsers passed, full interactions running at inspection. No redundant CI; next Action Center/notification and battery/volume capabilities. Main/frozen source/draft PR/releases unchanged.
