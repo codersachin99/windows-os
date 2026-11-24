@@ -35,7 +35,7 @@ entry is intentionally omitted.
 | `aeroNoir` | `aeroNoir` | 1 | Pending theme-specific implementation |
 | `oxygen` | `oxygen` | 1 | Pending theme-specific implementation |
 | `winW` | `winW` | 1 | Original boot WinW image/view; logon/shell/pixel parity pending |
-| `onebit` | `onebit` | 1 | Original-source palette and flat pixel-edged Guest/Power logon adapter; full shell/avatar/captcha/visual parity pending |
+| `onebit` | `onebit` | 1 | Original-source Guest/Power logon palette and four-color pixel-avatar adapter; captcha/full shell/screenshot parity pending |
 
 **Separate canonical ID:** `win7` maps to `{boot:"win7",logon:"win7"}`
 even though `win7` itself is not a key in the final source
