@@ -995,7 +995,7 @@ export function ExplorerApp({
           (state.viewMode.includes("icons") ? "has-icons is-" + state.viewMode.split("-")[0] : "")}>
           {visible.map(item => {
             const icon=sourceComputerIconArtwork(item,shortcutIcons[item.uri],theme);
-            return <SourceListViewItem key={item.uri}
+            return <SourceListViewItem key={state.viewMode+":"+item.uri}
             itemKey={item.uri}
             itemType={sourceIsShortcutEntry(item)?"shortcut":item.type}
             itemLabel={item.name}

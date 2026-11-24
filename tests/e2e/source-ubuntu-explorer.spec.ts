@@ -20,7 +20,11 @@ test("Ubuntu Computer and Bin use source dark surfaces and label selection",asyn
   const view=win.getByRole("combobox",{name:"Explorer view"});
   for(const mode of ["details","tiles","content"]){
     await view.selectOption(mode);
+    await expect(view).toHaveValue(mode);
     await item.click();
+    // A changed view creates new source item instances, never a second tap
+    // on the previous view. Keep the actual fast sequence in this test.
+    await expect(page.locator('[data-test-window="notepad"]')).toHaveCount(0);
     await expect(item).toHaveClass(/is-selected/);
     await expect(item).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
     await expect(item.locator(mode==="content"?".listview__item-info":".listview__item-label")).toHaveCSS("background-color","rgb(233, 84, 32)");

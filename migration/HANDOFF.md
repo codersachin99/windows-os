@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu CI regression repair
+
+Run [45408745508](https://github.com/codersachin99/windows-os/actions/runs/45408745508): TypeScript, all unit tests, source inventory, byte-identical artwork, Contacts source checks and production build passed; focused browser 49 passed / 4 failed / 1 skipped. Both projects reproduced two issues: generic tray position:relative captured Ubuntu clock's absolute centering; rapid view switches retained list item's 400ms double-tap state and opened Notepad. Fix: Ubuntu-only position:static tray, and key Explorer item instances by view mode and URI (selection remains session-owned). Added explicit no-Notepad assertion while preserving rapid view change regression; keep original clock geometry assertion. Rerun with [run-ci] [ubuntu-check]. Results pending. No full browser suite or visual capture. Next: inspect rerun before Kubuntu.
+
+---
+
 ## 24 November 2026 — Ubuntu focused CI batch
 
 Opt-in `[run-ci] [ubuntu-check]` retains TypeScript, all units, source/artwork checks and build, then exercises Ubuntu logon/shell/launcher/window/context/Explorer/tray plus shared cascade and XP/Win11 shell regression on Chromium projects. Static review corrected shared DateTime wrapper positioning that overrode Ubuntu clock centering; added geometry assertion. CI result pending; no visual capture or release. Next: inspect run, repair actual failures, then Kubuntu.

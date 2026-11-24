@@ -1,3 +1,5 @@
+> **24 November 2026 — Ubuntu CI regression repair:** 49 passed / 4 failed / 1 skipped; corrected clock containing block and view-specific double-tap state. Focused rerun pending.
+
 > **24 November 2026 — Ubuntu verification:** explicit focused CI batch, centered clock CSS corrected; results pending.
 
 > **24 November 2026 — Ubuntu tray:** source system menu and interactive Guest tray/DateTime; tests pending. [Source trace](UBUNTU-TRAY-SOURCE.md).
