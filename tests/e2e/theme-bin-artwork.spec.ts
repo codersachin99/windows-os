@@ -2,6 +2,7 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  winLS:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
   onebit:{empty:"/assets/images/bin-onebit.b4ba1ed0.svg",full:"/assets/images/bin-onebit.b4ba1ed0.svg"},
   winLP:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
   winW:{empty:"/assets/images/bin-winxp.7d0403fd.webp",full:"/assets/images/bin-full-winxp.ba3f6193.webp"},
@@ -55,7 +56,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen","winLP","winW","onebit"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen","winLS","winLP","winW","onebit"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -410,7 +411,7 @@ test("original Oxygen Computer and Desktop files use theme-specific folder/gener
     .toHaveValue(SOURCE_DESKTOP+"/Oxygen Source Folder");
 });
 
-for(const [theme,start] of Object.entries({"winLP":"/assets/images/start-button-winL.bcbc8d89.webp","winW":"/assets/images/start-button-win2k.650d501c.webp"}) as ["winLP"|"winW",string][]){
+for(const [theme,start] of Object.entries({"winLS":"/assets/images/start-button-winxp.a3485adf.webp","winLP":"/assets/images/start-button-winL.bcbc8d89.webp","winW":"/assets/images/start-button-win2k.650d501c.webp"}) as ["winLS"|"winLP"|"winW",string][]){
   test("original "+theme+" shared XP core artwork and distinct Start",async({page})=>{
     await sourceThemeDesktop(page,theme);
     await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src",start);

@@ -46,7 +46,7 @@ it("uses shared source Longhorn Plex/Whistler icons with distinct Start and wall
   "text": "/assets/images/text-winxp.35e970dd.webp",
   "wordpad": "/assets/images/wordpad-winxp.1bde3c38.webp"
 };
-  for(const [theme,start,wallpaper] of [["winLP","/assets/images/start-button-winL.bcbc8d89.webp","/assets/images/winLP.dcaa8b07.jpg"],["winW","/assets/images/start-button-win2k.650d501c.webp","/assets/images/winW.6a3e313e.webp"]] as const){
+  for(const [theme,start,wallpaper] of [["winLS","/assets/images/start-button-winxp.a3485adf.webp","/assets/images/winLS.e359a90f.jpg"],["winLP","/assets/images/start-button-winL.bcbc8d89.webp","/assets/images/winLP.dcaa8b07.jpg"],["winW","/assets/images/start-button-win2k.650d501c.webp","/assets/images/winW.6a3e313e.webp"]] as const){
     for(const [key,path] of Object.entries(original))expect(sourceThemeProgramArt(theme,key),key).toBe(path);
     for(const kind of ["computer","bin","folder","file"] as const)expect(sourceShellAsset(theme,kind)).toBe(original[kind]);
     expect(sourceShellAsset(theme,"start")).toBe(start);
@@ -59,6 +59,7 @@ it("uses shared source Longhorn Plex/Whistler icons with distinct Start and wall
     expect(sourceThemeProgramArt(theme,"__proto__")).toBeNull();
     expect(sourceThemeProgramArt(theme,"unported")).toBeNull();
   }
+  expect(sourceShellAsset("winLS","start")).not.toBe(sourceShellAsset("winLP","start"));
   expect(sourceShellAsset("winxp","start")).toBe("/assets/images/start-button-winxp.a3485adf.webp");
   expect(sourceShellAsset("win2k","start")).toBe("/assets/images/start-button-win2k.650d501c.webp");
 });

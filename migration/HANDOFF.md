@@ -1,3 +1,8 @@
+## 24 November 2026 — Longhorn Slate icon inheritance resolved
+
+Frozen theme catalog explicitly sets Slate iconPack=winxp; pinned XP and Plex registries differ only in Start. Slate now shares 43 original mapped keys plus original XP Start and distinct wallpaper; no new binary imports. Unit/browser regression tests extended for Slate, including actual Bin and folder operations. [Source evidence](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md). Latest combined push CI lookup remains unavailable through PR-only run listing; no redundant trigger. Next finish remaining XP-family shared registry keys and then shell layout. Main/frozen source/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Onebit core monochrome artwork
 
 Combined opt-in CI requested at `496ed05`; connector lookup still returns no PR-triggered run. Last confirmed green [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974). No redundant trigger.

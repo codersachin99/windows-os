@@ -693,11 +693,13 @@ export const sourceLonghornWhistlerIconArtwork=Object.freeze({
   "text": "/assets/images/text-winxp.35e970dd.webp",
   "wordpad": "/assets/images/wordpad-winxp.1bde3c38.webp"
 });
+// Slate explicitly inherits the XP icon pack in the frozen theme catalog.
 export const sourceLonghornWhistlerStartArtwork=Object.freeze({
+  "winLS": legacyShellThemeAssets.winxp.start,
   "winLP": "/assets/images/start-button-winL.bcbc8d89.webp",
   "winW": "/assets/images/start-button-win2k.650d501c.webp"
 });
-function sourceLonghornWhistlerIcon(theme:"winLP"|"winW",key:string):string|null{
+function sourceLonghornWhistlerIcon(theme:"winLS"|"winLP"|"winW",key:string):string|null{
   if(key==="start")return sourceLonghornWhistlerStartArtwork[theme];
   return Object.prototype.hasOwnProperty.call(sourceLonghornWhistlerIconArtwork,key)
     ?sourceLonghornWhistlerIconArtwork[key as keyof typeof sourceLonghornWhistlerIconArtwork]:null;
@@ -759,7 +761,7 @@ function sourceOnebitIcon(key:string):string|null{
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
   if(theme==="onebit")return sourceOnebitIcon(iconKey);
   if(theme==="winvista")return sourceVistaIcon(iconKey);
-  if(theme==="winLP"||theme==="winW")return sourceLonghornWhistlerIcon(theme,iconKey);
+  if(theme==="winLS"||theme==="winLP"||theme==="winW")return sourceLonghornWhistlerIcon(theme,iconKey);
   if(theme==="oxygen")return sourceOxygenIcon(iconKey);
   if(theme==="aeroNoir")return sourceAeroNoirIcon(iconKey);
   if(theme==="kubuntu")return sourceKubuntuIcon(iconKey);
@@ -815,7 +817,7 @@ export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
   if(theme==="onebit")return kind==="theme"?sourceShellWallpaper(theme):sourceOnebitIcon(kind==="binFull"?"bin-full":kind);
   if(theme==="winvista")return kind==="theme"?sourceShellWallpaper(theme):sourceVistaIcon(kind==="binFull"?"bin-full":kind);
-  if(theme==="winLP"||theme==="winW"){
+  if(theme==="winLS"||theme==="winLP"||theme==="winW"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceLonghornWhistlerIcon(theme,kind==="binFull"?"bin-full":kind);
   }

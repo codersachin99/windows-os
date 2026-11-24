@@ -1,3 +1,5 @@
+> **24 November 2026 — Slate icon inheritance resolved:** Frozen theme catalog explicitly inherits XP. Existing 43 shared source mappings plus XP Start and distinct Slate wallpaper wired; unit and browser regression tests added. [Source evidence](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
 > **24 November 2026 — Onebit core artwork:** 29 exact registry keys, 17 hash-matched SVGs, original aliases and actual trash/file regressions. [Source trace](ONEBIT-CORE-ICONS-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Vista icon overrides:** All eleven theme-specific source keys imported byte-identically; shared fallback artwork preserved, regression coverage and full audit updated. [Source trace](VISTA-CORE-ICONS-SOURCE.md). Exact-head CI pending.

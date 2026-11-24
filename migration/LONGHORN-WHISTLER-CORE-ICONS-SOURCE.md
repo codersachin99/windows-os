@@ -10,3 +10,7 @@ Frozen legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776, src/config/icons.re
 - restart-winxp.3e97eeb0.webp — 65bff59571cddac700a989ed785247bf47cb1eb6
 
 Original shared icons, distinct Start and existing theme wallpaper, actual trash lifecycle and desktop folder regression tests. No separate winLS registry in pinned file; this slice deliberately does not guess its icon selection. Remaining keys, shell layout, visual comparisons and exact-head tests pending.
+
+## Slate inheritance resolved — 24 November 2026
+
+Frozen source `src/modules/chunks/shared~plugin-cssvar~sandbox~vue-app~vue-store.js` (blob `592e07c9f70bfff5e684467b080dfa062945b919`, lines 548–560) explicitly declares `winLS: { name: "Windows Longhorn (Slate)", bg: "winLS", iconPack: "winxp", ... }`. The icon registry (blob `21db2d896ba9c1477f67239795c0991f0df7fbc7`) contains no winLS group because it inherits XP. Comparing the complete XP and Plex registry objects reveals exactly one differing key (start), with no extra keys in either object. Slate therefore reuses the same 43 already verified common paths plus original XP Start, while keeping its own wallpaper. No new assets or guessed mappings. Shared unit and browser tests include all three variants. Remaining non-core XP keys and shell geometry are not claimed complete. Exact-head CI pending.
