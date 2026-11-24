@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS menubars:** source active/inactive Notepad and Computer/Bin menubar/status paint and regression contracts. [Source trace](MACOS-MENUBAR-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS Explorer:** original active/inactive Computer/Bin chrome, navigation and selection paint; browser regression authored. [Source trace](MACOS-EXPLORER-SOURCE.md). Previous CI running browsers; new head pending.
 
 > **24 November 2026 — macOS context and CI repair:** original dark WinUI palettes across Desktop/Dock/Explorer/Launchpad; corrected one stale Vista unit expectation from CI #45387916534. [Source trace](MACOS-CONTEXT-SOURCE.md). Consolidated opt-in CI requested.

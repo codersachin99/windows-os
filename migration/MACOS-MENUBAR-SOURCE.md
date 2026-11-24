@@ -1,0 +1,5 @@
+# macOS application menubars — 24 November 2026
+
+Frozen legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776 src/modules/themes/theme-macos-scss.js (830ffcc0b17505f054600b627fcbbd1e750148b4): winui-menubar #141414, WindowMain active #262626, 4px padding, 60% white text, 3px item radius, #fff1 hover, #fff3 focus/active with white text; statusbar active/inactive dark surfaces. Scoped actual Notepad menu/status and shared Computer/Bin toolbar, disabled states, original separators, existing popup palette, RTL placement and existing actions. Existing Explorer native View select remains a target adapter; exact menu geometry, other app menubars and paired visual proof pending. Browser contracts authored for real status toggle, inactive window transition and Organize Escape/focus restoration; not executed at new head.
+
+Previous CI #45395440100 at d0d3d0b: TypeScript, unit tests, inventory, artwork/Contacts audits and Vite passed; targeted browsers still running at inspection. No duplicate CI trigger.

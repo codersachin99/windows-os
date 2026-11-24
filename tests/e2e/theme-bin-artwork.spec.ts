@@ -1045,3 +1045,53 @@ test("macOS Computer and Bin original active chrome and file selection",async({p
   await bin.locator('[data-source-window-control="close"]').click();
   await expect(win.locator(".explorer-status")).toHaveCSS("background-color","rgb(38, 38, 38)");
 });
+
+test("macOS original Notepad menu and statusbar follow real menu actions",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  await page.locator("[data-test-start-button]").click();
+  const start=page.locator("[data-test-launchpad]");
+  await start.locator("[data-test-start-search]").fill("Notepad");
+  await start.locator('[data-test-launchpad-program="notepad"]').click();
+  const win=page.locator('[data-test-window="notepad"]').first();
+  const bar=win.locator(".notepad-menu");
+  await expect(bar).toHaveCSS("background-color","rgb(38, 38, 38)");
+  const trigger=bar.getByRole("button",{name:"View",exact:true});
+  const initial=await win.locator(".notepad-status").count();
+  await trigger.click();
+  await expect(trigger).toHaveCSS("background-color","rgba(255, 255, 255, 0.2)");
+  const menu=bar.locator(".notepad-menu__dropdown");
+  await expect(menu).toHaveCSS("background-color","rgb(45, 45, 45)");
+  const status=menu.getByRole("button",{name:/Status Bar/});
+  await status.hover();
+  await expect(status).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await status.click();
+  await expect(menu).toHaveCount(0);
+  await expect(win.locator(".notepad-status")).toHaveCount(initial?0:1);
+  if(initial){
+    await trigger.click();
+    await menu.getByRole("button",{name:/Status Bar/}).click();
+  }
+  await expect(win.locator(".notepad-status")).toHaveCSS("background-color","rgb(38, 38, 38)");
+  await page.locator('[data-test-macos-dock-item="computer"]').click();
+  await expect(bar).toHaveCSS("background-color","rgb(20, 20, 20)");
+  await expect(win.locator(".notepad-status")).toHaveCSS("background-color","rgb(20, 20, 20)");
+});
+
+test("macOS original Explorer Organize menubar keeps keyboard and popup behavior",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').first();
+  const bar=win.locator(".explorer-command");
+  await expect(bar).toHaveCSS("background-color","rgb(38, 38, 38)");
+  const trigger=bar.locator("[data-test-explorer-organize] > button");
+  await trigger.click();
+  await expect(trigger).toHaveCSS("background-color","rgba(255, 255, 255, 0.2)");
+  const menu=bar.locator(".explorer-organize__menu");
+  await expect(menu).toHaveCSS("background-color","rgb(45, 45, 45)");
+  const option=menu.locator('button:not(:disabled)').first();
+  await option.hover();
+  await expect(option).toHaveCSS("background-color","rgb(4, 81, 208)");
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});

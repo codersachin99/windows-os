@@ -258,3 +258,49 @@
   border:0;height:1px;width:calc(100% - 28px);background:#fff3;margin:4px auto;
 }
 :is(.windows-desktop[data-theme="macos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="macos"]) kbd{color:inherit}
+
+/* Original WinUI menubar and WindowMain active/inactive surfaces.
+ * Adapt the existing Notepad and Explorer toolbar components without
+ * changing menu ownership, command availability or measured placement. */
+.windows-desktop[data-theme="macos"] :is(.notepad-menu,.explorer-command){
+  background:#141414;color:#fff9;border:0;padding:4px;box-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-active :is(.notepad-menu,.explorer-command){
+  background:#262626;
+}
+.windows-desktop[data-theme="macos"] .notepad-menu{
+  flex:0 0 auto;min-height:30px;box-sizing:border-box;
+}
+.windows-desktop[data-theme="macos"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button){
+  color:#fff9;border:1px solid transparent;border-radius:3px;background:none;box-shadow:none;text-shadow:none;
+}
+.windows-desktop[data-theme="macos"] :is(.notepad-menu__section>button,.explorer-command>button,.explorer-organize>button,.explorer-view>button):not(:disabled):hover{
+  background:#fff1;border-color:transparent;
+}
+.windows-desktop[data-theme="macos"] :is(.notepad-menu__section>button,.explorer-command>button,.explorer-organize>button,.explorer-view>button):not(:disabled):is(:active,:focus,[aria-expanded="true"]){
+  color:#fff;background:#fff3;border-color:transparent;
+}
+.windows-desktop[data-theme="macos"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):disabled{
+  opacity:.5;cursor:default;
+}
+.windows-desktop[data-theme="macos"] .explorer-command select{
+  color:#fff;background:#383838;border:1px solid #fff3;border-radius:3px;
+}
+.windows-desktop[data-theme="macos"] .explorer-command select:focus-visible{
+  outline:2px solid #2c6c98;outline-offset:1px;
+}
+.windows-desktop[data-theme="macos"] :is(.explorer-organize__separator,.notepad-menu__dropdown hr){
+  border:0;height:1px;width:calc(100% - 28px);margin:4px auto;background:#fff3;
+}
+.windows-desktop[data-theme="macos"] .explorer-organize__menu button[role="menuitem"]:disabled{
+  color:inherit;opacity:.5;
+}
+.windows-desktop[data-theme="macos"] .notepad-menu__dropdown{
+  left:auto;inset-inline-start:0;
+}
+.windows-desktop[data-theme="macos"] .notepad-status{
+  color:#fff;background:#141414;border-top:1px solid #000;
+  border-radius:0 0 10px 10px;box-shadow:none;
+}
+.windows-desktop[data-theme="macos"] .windows-window.is-active .notepad-status{background:#262626}
+.windows-desktop[data-theme="macos"] .windows-window.is-maximized .notepad-status{border-radius:0}

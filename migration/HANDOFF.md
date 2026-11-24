@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS application menubars
+
+Ported source active/inactive Notepad menu/status and shared Computer/Bin menubar paint, original hover/pressed text and background, separators, RTL and disabled states. Existing command and dropdown behavior preserved. Browser contracts for real status toggle and Organize Escape/focus restoration authored. [Source trace](MACOS-MENUBAR-SOURCE.md). [CI #45395440100](https://github.com/codersachin99/windows-os/actions/runs/45395440100) still running targeted browsers at inspection; no redundant trigger. Next repair any browser failures, then remaining macOS shell details. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS Explorer chrome
 
 [CI #45395440100](https://github.com/codersachin99/windows-os/actions/runs/45395440100) at d0d3d0b passed TypeScript, units, inventory, artwork/Contacts audits and Vite build; targeted browsers in progress. Ported active/inactive source address/status/navigation surfaces, dark list body, split icon selection, details rows and active folder highlight to shared Computer/Bin. Real history/upload/selection and active window regression authored. [Source trace](MACOS-EXPLORER-SOURCE.md). New head unverified, no redundant CI. Next inspect browser results then macOS menubars. Main/frozen source/draft PR/releases unchanged.
