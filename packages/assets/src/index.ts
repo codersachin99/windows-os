@@ -221,6 +221,9 @@ export const sourceThemeLogonArtwork=Object.freeze({
     brand:"/assets/images/start-button-winxp.a3485adf.webp",
     guest:"/assets/images/guest-win10.a110df5a.webp"
   }),
+  winW:Object.freeze({
+    logo:"/assets/images/logowhistler.73c9045c.webp"
+  }),
   winxp:Object.freeze({
     logo:"/assets/images/logoxp.9b034658.png",
     guest:legacyArt.guestAvatar
