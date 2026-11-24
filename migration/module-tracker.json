@@ -2171,8 +2171,15 @@
       "source": "src/modules/themes/logon-onebit.js",
       "sha": "d98f2c98ecfef57011c7489331dfa5c3ff8af11a",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceOnebitLogon.tsx",
+        "packages/ui/src/sourceOnebitLogon.css",
+        "packages/ui/src/sourceOnebitLogon.test.tsx",
+        "tests/e2e/source-onebit-logon.spec.ts",
+        "migration/ONEBIT-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed Guest and power slice; original avatar/captcha/pixel parity and full shell pending"
     },
     {
       "source": "src/modules/themes/logon-oxygen.js",
