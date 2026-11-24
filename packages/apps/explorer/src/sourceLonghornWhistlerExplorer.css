@@ -1,0 +1,84 @@
+/* Frozen legacy-win7@26b9f0c, theme-winlonghorn-scss.js and theme-winW-scss.js:
+ * addressbar, sidepane, listview and statusbar. Shared ExplorerSession still
+ * owns history and all file operations. This is a bounded styling adapter,
+ * not a claim that the original breadcrumb/group DOM has been ported. */
+.windows-desktop[data-theme="winLP"] .explorer-stage{
+  --source-explorer-hover:linear-gradient(#f1fcff,#c2dcff);
+  --source-explorer-selected:linear-gradient(#f1fcff,#c2dcff);
+  --source-explorer-hover-border:#dbdbe4;
+  --source-explorer-selected-border:#7a9acc;
+  --source-explorer-status:#d9e6f4;
+}
+.windows-desktop[data-theme="winLS"] .explorer-stage{
+  --source-explorer-hover:linear-gradient(#fef9ee,#fdf0df);
+  --source-explorer-selected:linear-gradient(#f9f0d4,#f3d7ab);
+  --source-explorer-hover-border:#fdf1e1;
+  --source-explorer-selected-border:#ecddcc;
+  --source-explorer-status:#eae8ea;
+}
+.windows-desktop[data-theme="winW"] .explorer-stage{
+  --source-explorer-status:#ebebe4;
+}
+.windows-desktop[data-theme="winLP"] .explorer-address{
+  background:linear-gradient(#366ec8,#5f94e5);
+  margin-block:0;
+}
+.windows-desktop[data-theme="winLS"] .explorer-address{
+  background:none;margin-block:0;
+}
+.windows-desktop[data-theme="winW"] .explorer-address{
+  background:#ebebe4;margin-bottom:0;border-bottom:1px solid #bcbcbc;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .explorer-address__location-wrapper,
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .explorer-address__search{
+  background-color:#fff;
+}
+.windows-desktop[data-theme="winLP"] .explorer-address__label{color:#fff}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]){
+  color:#f9f9f9;padding:2px 4px;min-width:24px;min-height:24px;
+  border-color:transparent;opacity:1;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]){border-radius:50%}
+.windows-desktop[data-theme="winLP"] .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]){
+  background:linear-gradient(#969d9c,#777274);
+  box-shadow:inset 1px 1px 2px #fffa,0 2px 2px #000a;
+}
+.windows-desktop[data-theme="winLP"]:dir(rtl) .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]){
+  box-shadow:inset -1px 1px 2px #fffa,0 2px 2px #000a;
+}
+.windows-desktop[data-theme="winLP"] .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]):not(:disabled){
+  background:linear-gradient(#7ab4fe,#3f77d0);
+}
+.windows-desktop:is([data-theme="winLS"],[data-theme="winW"]) .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]){
+  --source-history-color:#ccc;
+  background:linear-gradient(145deg,#fff,#fff,transparent 30%) var(--source-history-color);
+  box-shadow:0 .5px 0 1px #aaa;
+}
+.windows-desktop:is([data-theme="winLS"],[data-theme="winW"]):dir(rtl) .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]){
+  background:linear-gradient(-145deg,#fff,#fff,transparent 30%) var(--source-history-color);
+}
+.windows-desktop:is([data-theme="winLS"],[data-theme="winW"]) .explorer-address > button:is([aria-label="Back"],[aria-label="Forward"]):not(:disabled){
+  --source-history-color:#6ac32f;box-shadow:0 .5px 0 1px #009e00;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .explorer-navigation{
+  background:#fff;border:0;
+}
+.windows-desktop[data-theme="winLP"] .explorer-navigation{padding:5px}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .explorer-item{
+  border:1px solid transparent;border-radius:3px;box-shadow:inset 0 0 0 1px #fff8;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .explorer-item:hover{
+  background:var(--source-explorer-hover);border-color:var(--source-explorer-hover-border);
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"]) .explorer-item:is(.is-active,.is-selected,:focus){
+  background:var(--source-explorer-selected);border-color:var(--source-explorer-selected-border);
+}
+.windows-desktop[data-theme="winW"] .explorer-item{border-radius:0}
+.windows-desktop[data-theme="winW"] .explorer-item:is(.is-active,.is-selected,:focus,:hover){
+  color:#fff;background:#2a6ac8;border-color:transparent;
+}
+.windows-desktop:is([data-theme="winLP"],[data-theme="winLS"],[data-theme="winW"]) .explorer-status{
+  background:var(--source-explorer-status);color:#000;border-top:1px solid #0003;
+  box-shadow:inset 0 1px 0 #fff;
+}
+.windows-desktop[data-theme="winW"] .explorer-status{border-top-color:#bcbcbc}

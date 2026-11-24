@@ -1,3 +1,9 @@
+## 24 November 2026 — Longhorn/Whistler Explorer chrome
+
+Scoped Explorer stylesheet ports original addressbar gradients, enabled/disabled history palette, white navigation pane, selection gradients and statusbar colors. Computer/Bin shared render path, file/history operations untouched. Added desktop/mobile regression contracts for actual Back/Forward and folder creation/selection. [Source trace](LONGHORN-WHISTLER-EXPLORER-SOURCE.md). Original structural/glyph parity, application menubar and All Programs flyout pending. No additional CI trigger; exact-head CI pending. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Longhorn/Whistler context-menu skins
 
 Ported original distinct Plex, Slate and Whistler WinUI menu palettes to Desktop, taskbar, Explorer root/child and body-portaled Start contexts via shared scoped CSS. Existing viewport flipping and actions unchanged. Three desktop/mobile regression contracts added for menu paint, hover, nested Explorer View and pin action. [Source trace](LONGHORN-WHISTLER-CONTEXT-SOURCE.md). Exact-head CI pending; no extra trigger. Next Explorer address/navigation/sidepane/statusbar and application menubar. Main/frozen source/draft PR/releases unchanged.

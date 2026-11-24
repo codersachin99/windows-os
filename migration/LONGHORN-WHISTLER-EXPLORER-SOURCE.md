@@ -1,0 +1,4 @@
+# Longhorn / Whistler Explorer chrome — 24 November 2026
+
+Frozen legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776: theme-winlonghorn-scss.js (16222a96acbeb3e4645dfc31689e412f3754eeb4), theme-winW-scss.js (70bf83d82d033065c1458bb6b73a96bf9e2a4a69). Mapped original addressbar and enabled/disabled history buttons (Plex blue gradient, Slate/Whistler green, RTL direction and shadows), white sidepane, source Longhorn list item gradients and borders, Whistler #2a6ac8 selection, and original footer/status colors to the shared Explorer stage used by Computer and Bin. Existing read-only address, search, Up, toolbar, file operations and history behavior preserved. Original source sidepane group structure, exact breadcrumb/navigation glyph geometry, app-specific toolbars and paired visuals still pending. Tests authored for real Back/Forward and folder creation/selection plus computed style; not executed here.
+

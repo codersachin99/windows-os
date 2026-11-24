@@ -642,3 +642,45 @@ for(const [theme,border,hover,textColor] of [
     await expect(page.locator('[data-test-taskbar-pin="notepad"]')).toBeVisible();
   });
 }
+
+
+for(const [theme,status,selectionBorder] of [
+  ["winLP","rgb(217, 230, 244)","rgb(122, 154, 204)"],
+  ["winLS","rgb(234, 232, 234)","rgb(236, 221, 204)"],
+  ["winW","rgb(235, 235, 228)","rgba(0, 0, 0, 0)"]
+] as const){
+  test(theme+" original Explorer chrome tracks real history and item selection",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]').first();
+    const address=win.locator(".explorer-address");
+    const back=win.getByRole("button",{name:"Back",exact:true});
+    const forward=win.getByRole("button",{name:"Forward",exact:true});
+    await expect(back).toBeDisabled();
+    await expect(win.locator(".explorer-navigation")).toHaveCSS("background-color","rgb(255, 255, 255)");
+    await expect(win.locator(".explorer-status")).toHaveCSS("background-color",status);
+    if(theme==="winLP")await expect(address).toHaveCSS("background-image",/linear-gradient/);
+    if(theme==="winLS")await expect(address).toHaveCSS("background-image","none");
+    if(theme==="winW")await expect(address).toHaveCSS("background-color",status);
+    await win.getByRole("button",{name:"Desktop",exact:true}).click();
+    const location=win.getByRole("textbox",{name:"Folder address"});
+    await expect(location).toHaveValue(SOURCE_DESKTOP);
+    await expect(back).toBeEnabled();
+    if(theme!=="winLP")await expect(back).toHaveCSS("background-color","rgb(106, 195, 47)");
+    else await expect(back).toHaveCSS("background-image",/rgb\(122, 180, 254\)/);
+    await back.click();
+    await expect(forward).toBeEnabled();
+    await forward.click();
+    await expect(location).toHaveValue(SOURCE_DESKTOP);
+    await win.getByRole("button",{name:"New folder",exact:true}).click();
+    const dialog=win.getByRole("dialog",{name:"New folder"});
+    await dialog.getByRole("textbox",{name:"New folder name"}).fill("Source Selection Folder");
+    await dialog.getByRole("button",{name:"OK"}).click();
+    const item=win.locator('[data-test-explorer-item="Source Selection Folder"]');
+    await item.click();
+    await expect(item).toHaveClass(/is-selected/);
+    await expect(item).toHaveCSS("border-top-color",selectionBorder);
+    if(theme==="winW")await expect(item).toHaveCSS("background-color","rgb(42, 106, 200)");
+    else await expect(item).toHaveCSS("background-image",/linear-gradient/);
+  });
+}

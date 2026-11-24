@@ -1,3 +1,5 @@
+> **24 November 2026 — Longhorn/Whistler Explorer:** source navigation, address, selection and status palettes implemented; regression contracts added. [Source trace](LONGHORN-WHISTLER-EXPLORER-SOURCE.md). Exact-head CI pending.
+
 > **24 November 2026 — Longhorn/Whistler context menus:** distinct source WinUI palettes across Desktop, taskbar, Explorer and Start portal; regression contracts added. [Source trace](LONGHORN-WHISTLER-CONTEXT-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Longhorn/Whistler window chrome:** original frames, caption states and embedded Whistler PNG plus lifecycle regression coverage. [Source trace](LONGHORN-WHISTLER-WINDOW-SOURCE.md). Exact-head CI pending.
