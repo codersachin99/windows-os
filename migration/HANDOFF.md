@@ -1,3 +1,9 @@
+## 24 November 2026 — Kubuntu tray and focused verification
+
+Kubuntu source 582b base taskbar: enabled shared Guest Action Center, browser connectivity and battery, Guest brightness/audio, numeric date and base calendar with 128px analog clock. Dark translucent source surfaces, 3px popup corners, calendar borders/accent, optional glass. Absolute tray anchoring avoids fixed-position containing block from taskbar blur; viewport sizing is adapter. Browser capability limitations and disabled native settings remain. Focused [run-ci] [kubuntu-check] runs all build/unit/source/artwork gates, Kubuntu specs plus shared cascade and prior shell regressions. CI pending; no visual capture/release. Next diagnose real results, resolve failures before next theme.
+
+---
+
 ## 24 November 2026 — Kubuntu context and Explorer
 
 Ported source 582b dark translucent WinUI context/menu paint, 3px borders, disabled/hover/focus states, shared menubars and Explorer address/search/nav/list/status across Computer and Bin. Accent row layer remains separate from content; portal fallback accent is provisional #3daee9. Menu color-mix is a paint adapter; original optional popup glass blur deferred to avoid establishing a new containing block for fixed cascades. Existing measured cascade geometry unchanged, expanded regression to Kubuntu. No CI requested this slice; tests unexecuted. Next: Kubuntu interactive tray/DateTime and consolidated verification.

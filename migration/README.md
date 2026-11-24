@@ -1,3 +1,5 @@
+> **24 November 2026 — Kubuntu tray/DateTime:** shared functional tray, calendar and focused CI batch, results pending. [Source trace](KUBUNTU-TRAY-SOURCE.md).
+
 > **24 November 2026 — Kubuntu context/Explorer:** dark WinUI menus, shared menubar, navigation, list selection and status, tests pending. [Source trace](KUBUNTU-CONTEXT-EXPLORER-SOURCE.md).
 
 > **24 November 2026 — Kubuntu Start:** original list/recent grid/search/footer, tests pending. [Source trace](KUBUNTU-START-SOURCE.md).

@@ -6,7 +6,7 @@ import {sourceCalendarDays,sourceCalendarMonth,sourceCalendarSameDay} from "./so
 const fullDate=(d:Date)=>d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
 const monthLabel=(d:Date)=>d.toLocaleDateString("en-US",{month:"long"});
 
-export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,ubuntu=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseLayout?:boolean;ubuntu?:boolean}){
+export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,numericDate=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseLayout?:boolean;numericDate?:boolean}){
   const [now,setNow]=useState(()=>new Date());
   const [month,setMonth]=useState(()=>sourceCalendarMonth(now,0));
   const [selected,setSelected]=useState(now);
@@ -43,7 +43,7 @@ export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,ubuntu
       onClick={()=>{if(open)setOpen(false);else{onOpen();reset();setOpen(true);}}}>
       <time dateTime={now.toISOString()} className="windows-taskbar__clock">
         <span>{sourceClockDigital(now)}</span>
-        <span>{ubuntu?now.toLocaleDateString("en-US"):now.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}</span>
+        <span>{numericDate?now.toLocaleDateString("en-US"):now.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}</span>
       </time>
     </button>
     {open&&<div role="dialog" aria-label="Calendar" className="source-macos-datetime-popup" data-test-macos-datetime-popup="" data-test-datetime-popup="">
