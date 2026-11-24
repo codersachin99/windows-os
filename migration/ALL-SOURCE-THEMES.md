@@ -32,7 +32,7 @@ entry is intentionally omitted.
 | `ubuntu` | `ubuntu` | 1 | Pending theme-specific implementation |
 | `kubuntu` | `kubuntu` | 1 | Pending theme-specific implementation |
 | `winLS` | `winLS`, `winLP` | 2 | Original shared WinL boot and Guest logon with exact login-winL wallpaper, 512×320 frame and Guest/power actions; form/shell/pixel parity pending |
-| `aeroNoir` | `aeroNoir` | 1 | Pending theme-specific implementation |
+| `aeroNoir` | `aeroNoir` | 1 | Source dark Guest logon with original wallpaper, blurred overlay, 150px avatar and iconified power; account/shell/pixel parity pending |
 | `oxygen` | `oxygen` | 1 | Pending theme-specific implementation |
 | `winW` | `winW` | 1 | Original boot and Whistler-branded Guest logon; byte-identical logowhistler, blue rail and orange Welcome; auth/shell/pixel parity pending |
 | `onebit` | `onebit` | 1 | Original-source Guest/Power logon palette and four-color pixel-avatar adapter; captcha/full shell/screenshot parity pending |
