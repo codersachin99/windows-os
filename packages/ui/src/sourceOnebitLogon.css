@@ -21,6 +21,7 @@
 }
 .source-onebit-logon__instruction{margin:0 0 4px;line-height:1.5}
 .source-onebit-logon__avatar{
+  position:relative;
   appearance:none;display:grid;place-items:center;
   flex:none;width:96px;height:96px;padding:12px;
   background:transparent;border:0;border-radius:0;
@@ -30,6 +31,10 @@
 }
 .source-onebit-logon__avatar img{
   display:block;width:64px;height:64px;object-fit:contain;
+}
+.source-onebit-logon__pixel-avatar{
+  position:absolute;left:12px;top:12px;width:64px;height:64px;
+  image-rendering:pixelated;pointer-events:none;
 }
 .source-onebit-logon__avatar:hover,
 .source-onebit-logon__avatar:focus-visible{
