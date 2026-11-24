@@ -1,3 +1,11 @@
+## 24 November 2026 — finish original desktop default mapping and correct stale Ubuntu test
+
+Combined [CI #45363645210](https://github.com/codersachin99/windows-os/actions/runs/45363645210) at `fadb0e6f` **failed**: TypeScript passed; UI unit suite 721 passed, 1 failed (137 files passed, 1 failed). Sole failure sourceOnebitLogon.test.tsx:25 expected obsolete Ubuntu Win7 fallback. Corrected to assert actual Ubuntu renderer and no Onebit leakage/no fallback. All subsequent stages skipped; no browser acceptance yet.
+
+Frozen registry 3b8c: exact XP Olive Green autumn, Royale follows, Silver azul, Zune ascent; Win31 #bfbdc0, Win95 #007d7b, Win98 #57a8a8, Win2k #3b6ea4. Four exact original images copied with verified Git hashes. Desktop defaults and existing Personalize previews corrected together; solid colors remain outside safe image whitelist. Gallery 26 -> 30; source artwork mappings for icons/preview legacy paths unchanged; desktop/preview tests updated to original expectations and preserve existing shell palette checks. All 37 configured/canonical theme IDs now have explicit source defaults or shared canonical wallpaper. Existing manually selected backgrounds remain valid. [Source trace](CLASSIC-XP-WALLPAPER-SOURCE.md). New combined opt-in CI requested after prior failed. Main/frozen reference/draft PR/releases unchanged. Next check CI, then theme-specific Computer/Bin/folder assets.
+
+---
+
 ## 24 November 2026 — first remaining desktop default wallpaper batch
 
 Combined [CI #45363645210](https://github.com/codersachin99/windows-os/actions/runs/45363645210) at `fadb0e6f` started and TypeScript passed; units were running at inspection. Six newly ported login families and mobile regression fix remain pending exact-head acceptance.

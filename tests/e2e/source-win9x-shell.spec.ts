@@ -2,13 +2,13 @@ import {expect,test,type Page} from "@playwright/test";
 
 const classics=[
   {id:"win95",surface:"rgb(189, 190, 189)",accent:"rgb(0, 0, 123)",
-    wallpaper:"/assets/images/win95.fcef1b3b.webp",
+    wallpaper:"#007d7b",
     start:"/assets/images/start-button-classic.ec7b0b9f.webp",find:"Find..."},
   {id:"win98",surface:"rgb(192, 199, 200)",accent:"rgb(6, 8, 166)",
-    wallpaper:"/assets/images/win95.fcef1b3b.webp",
+    wallpaper:"#57a8a8",
     start:"/assets/images/start-button-classic.ec7b0b9f.webp",find:"Find..."},
   {id:"win2k",surface:"rgb(212, 208, 200)",accent:"rgb(8, 39, 103)",
-    wallpaper:"/assets/images/default-win2k.1c1f7fa2.png",
+    wallpaper:"#3b6ea4",
     start:"/assets/images/start-button-win2k.650d501c.webp",find:"Search..."}
 ] as const;
 

@@ -9,7 +9,11 @@ const original=[
   ["winLP","/assets/images/winLP.dcaa8b07.jpg"],
   ["aeroNoir","/assets/images/aeroNoir.237e6377.webp"],
   ["oxygen","/assets/images/oxygen.414aed47.svg"],
-  ["winW","/assets/images/winW.6a3e313e.webp"]
+  ["winW","/assets/images/winW.6a3e313e.webp"],
+  ["winxpG","/assets/images/autumn.41774694.webp"],
+  ["winxpR","/assets/images/follows.3e030a12.webp"],
+  ["winxpS","/assets/images/azul.3af33f73.webp"],
+  ["winxpZ","/assets/images/ascent.7c62e722.webp"]
 ] as const;
 
 for(const [theme,path] of original){
@@ -30,7 +34,11 @@ for(const [theme,path] of original){
 }
 for(const [theme,color,computed] of [
   ["base","#fffd","rgba(255, 255, 255, 0.867)"],
-  ["onebit","#352b30","rgb(53, 43, 48)"]
+  ["onebit","#352b30","rgb(53, 43, 48)"],
+  ["win31","#bfbdc0","rgb(191, 189, 192)"],
+  ["win95","#007d7b","rgb(0, 125, 123)"],
+  ["win98","#57a8a8","rgb(87, 168, 168)"],
+  ["win2k","#3b6ea4","rgb(59, 110, 164)"]
 ] as const){
   test("source "+theme+" desktop uses exact solid default",async({page})=>{
     await page.goto("/?theme="+theme);

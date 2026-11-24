@@ -1,4 +1,11 @@
 import {expect,test} from "@playwright/test";
+const xpWallpaper=(theme:string)=>({
+  winxpG:"/assets/images/autumn.41774694.webp",
+  winxpR:"/assets/images/follows.3e030a12.webp",
+  winxpS:"/assets/images/azul.3af33f73.webp",
+  winxpZ:"/assets/images/ascent.7c62e722.webp"
+} as Record<string,string>)[theme]??"/assets/images/winxp.3e41719f.webp";
+
 
 /**
  * Final source app.config.json contains 36 named themeScreens entries,
@@ -129,8 +136,7 @@ for(const [theme,border,right,accent] of [
     await expect(desktop).toHaveCSS("--source-startmenu-right",right);
     await expect(desktop).toHaveCSS("--source-accent",accent);
     await expect(page.locator('[data-test-desktop-background]'))
-      .toHaveAttribute("data-test-desktop-background",
-        "/assets/images/winxp.3e41719f.webp");
+      .toHaveAttribute("data-test-desktop-background",xpWallpaper(theme));
     await expect(page.locator('[data-test-start-button] img'))
       .toHaveAttribute("src","/assets/images/start-button-winxp.a3485adf.webp");
     await page.locator('[data-test-start-button]').click();

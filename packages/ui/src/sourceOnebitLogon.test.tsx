@@ -19,10 +19,11 @@ describe("frozen Onebit BaseLogon Guest/power renderer",()=>{
     expect(html).toContain("Guest");
     expect(html).not.toContain('data-source-logon-renderer="win7-fallback"');
   });
-  it("does not mislabel unported Ubuntu logon as the Onebit adaptation",()=>{
+  it("does not mislabel the original Ubuntu logon as the Onebit adaptation",()=>{
     const html=renderToStaticMarkup(<LogonScreen theme="ubuntu"
       onGuest={noop} onShutdown={noop} onRestart={noop}/>);
-    expect(html).toContain('data-source-logon-renderer="win7-fallback"');
+    expect(html).toContain('data-source-logon-renderer="ubuntu"');
+    expect(html).not.toContain('data-source-logon-renderer="win7-fallback"');
     expect(html).toContain('data-source-logon-theme="ubuntu"');
     expect(html).not.toContain('source-onebit-logon__pane');
   });

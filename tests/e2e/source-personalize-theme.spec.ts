@@ -1,4 +1,11 @@
 import {expect,test,type Page} from "@playwright/test";
+const xpWallpaper=(theme:string)=>({
+  winxpG:"/assets/images/autumn.41774694.webp",
+  winxpR:"/assets/images/follows.3e030a12.webp",
+  winxpS:"/assets/images/azul.3af33f73.webp",
+  winxpZ:"/assets/images/ascent.7c62e722.webp"
+} as Record<string,string>)[theme]??"/assets/images/winxp.3e41719f.webp";
+
 async function openPersonalize(page:Page){
   await page.goto("/");
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
@@ -117,16 +124,20 @@ test("Personalize switches original Win95, Win98 and Win2k while keeping 3 class
   const win=await openPersonalize(page);
   const chooser=win.locator('[data-test-personalize]');
   for(const classic of [
-    {id:"win95",wallpaper:"/assets/images/win95.fcef1b3b.webp",
+    {id:"win95",wallpaper:"#007d7b",
       bg:"rgb(189, 190, 189)"},
-    {id:"win98",wallpaper:"/assets/images/win95.fcef1b3b.webp",
+    {id:"win98",wallpaper:"#57a8a8",
       bg:"rgb(192, 199, 200)"},
-    {id:"win2k",wallpaper:"/assets/images/default-win2k.1c1f7fa2.png",
+    {id:"win2k",wallpaper:"#3b6ea4",
       bg:"rgb(212, 208, 200)"}
   ]){
     const tile=chooser.locator('[data-test-personalize-theme="'+classic.id+'"]');
     await expect(tile).toBeVisible();
-    await expect(tile.locator("img")).toHaveAttribute("src",classic.wallpaper);
+    await expect(tile.locator("img")).toHaveCount(0);
+    await expect(tile.locator(".windows-personalize__theme-solid")).toBeVisible();
+    expect(await tile.locator(".windows-personalize__theme-solid").evaluate(el=>(el as HTMLElement).style.backgroundColor)).toBe(
+      {"win95":"rgb(0, 125, 123)","win98":"rgb(87, 168, 168)","win2k":"rgb(59, 110, 164)"}[classic.id]);
+
     await tile.click();
     await expect(tile).toHaveAttribute("aria-pressed","true");
     const desktop=page.locator('[data-test-main-screen]');
@@ -144,7 +155,7 @@ test("Personalize switches original Win95, Win98 and Win2k while keeping 3 class
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme","win2k");
   await expect(page.locator('[data-test-desktop-background]'))
     .toHaveAttribute("data-test-desktop-background",
-      "/assets/images/default-win2k.1c1f7fa2.png");
+      "#3b6ea4");
 });
 
 test("Win11 Dark chooses exact pinned source wallpaper/Start and native dark shell",async({page})=>{
@@ -204,8 +215,8 @@ test("Win11 Dark chooses exact pinned source wallpaper/Start and native dark she
 });
 
 /** Original personalize.css swatches, not inferred from the wallpaper:
- * all XP variants share the exact original XP image but have their own
- * 25px source palette marker. Check desktop and mobile Playwright projects. */
+ * XP variants use their exact original background and their own 25px
+ * source palette marker. Check desktop and mobile Playwright projects. */
 test("Personalize offers all seven original XP palettes with persistent selection",async({page})=>{
   const win=await openPersonalize(page);
   const cases=[
@@ -220,8 +231,7 @@ test("Personalize offers all seven original XP palettes with persistent selectio
   for(const [theme,border,paint] of cases){
     const item=win.locator('[data-test-personalize-theme="'+theme+'"]');
     await expect(item).toBeVisible();
-    await expect(item.locator("img")).toHaveAttribute(
-      "src","/assets/images/winxp.3e41719f.webp");
+    await expect(item.locator("img")).toHaveAttribute("src",xpWallpaper(theme));
     const swatch=item.locator('[data-test-personalize-color="'+theme+'"]');
     await expect(swatch).toHaveCSS("border-top-color",border);
     const renderedPaint=await swatch.evaluate(element=>{
@@ -234,8 +244,7 @@ test("Personalize offers all seven original XP palettes with persistent selectio
       .toHaveAttribute("data-theme",theme);
     await expect(item).toHaveAttribute("aria-pressed","true");
     await expect(page.locator('[data-test-desktop-background]'))
-      .toHaveAttribute("data-test-desktop-background",
-        "/assets/images/winxp.3e41719f.webp");
+      .toHaveAttribute("data-test-desktop-background",xpWallpaper(theme));
   }
   await page.reload();
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});

@@ -280,7 +280,11 @@ export const sourceAdditionalDesktopWallpapers=Object.freeze({
   winLP:"/assets/images/winLP.dcaa8b07.jpg",
   aeroNoir:"/assets/images/aeroNoir.237e6377.webp",
   oxygen:"/assets/images/oxygen.414aed47.svg",
-  winW:"/assets/images/winW.6a3e313e.webp"
+  winW:"/assets/images/winW.6a3e313e.webp",
+  winxpG:"/assets/images/autumn.41774694.webp",
+  winxpR:"/assets/images/follows.3e030a12.webp",
+  winxpS:"/assets/images/azul.3af33f73.webp",
+  winxpZ:"/assets/images/ascent.7c62e722.webp"
 });
 /** Original source ChangeTheme save() also changes the active background. */
 export function sourceShellWallpaper(theme:string):string{
@@ -292,18 +296,20 @@ export function sourceShellWallpaper(theme:string):string{
   if(theme==="basic-2")return "#3b6ea4";
   if(theme==="basic-3")return "#000";
   if(theme==="basic-4")return "#fff";
-  if(theme==="win95"||theme==="win98")return legacyShellThemeAssets.win95.theme;
-  if(theme==="win2k")return legacyShellThemeAssets.win2k.theme;
+  if(theme==="win31")return "#bfbdc0";
+  if(theme==="win95")return "#007d7b";
+  if(theme==="win98")return "#57a8a8";
+  if(theme==="win2k")return "#3b6ea4";
   if(theme==="win8")return sourceWin8ShellArtwork.win8Wallpaper;
   if(theme==="win81")return sourceWin8ShellArtwork.win81Wallpaper;
   if(theme==="win10")return legacyShellThemeAssets.win10.theme;
-  if(sourceIsXpFamily(theme))return legacyShellThemeAssets.winxp.theme;
   if(theme==="win11")return legacyShellThemeAssets.win11.theme;
   if(theme==="win11dark")return sourceWin11DarkArtwork.wallpaper;
   if(theme==="base")return "#fffd";
   if(theme==="onebit")return "#352b30";
   if(Object.prototype.hasOwnProperty.call(sourceAdditionalDesktopWallpapers,theme))
     return sourceAdditionalDesktopWallpapers[theme as keyof typeof sourceAdditionalDesktopWallpapers];
+  if(sourceIsXpFamily(theme))return legacyShellThemeAssets.winxp.theme;
   return legacyArt.wallpaperWin7;
 }
 
@@ -326,7 +332,7 @@ export const sourceSystemWallpapers:readonly string[]=Object.freeze([
 ]);
 /** Pinned solid theme defaults, not user-supplied CSS or URLs. */
 export function sourceIsSolidThemeWallpaper(path:string):boolean{
-  return path==="#3b6ea4"||path==="#000"||path==="#fff"||path==="#fffd"||path==="#352b30";
+  return ["#3b6ea4","#000","#fff","#fffd","#352b30","#bfbdc0","#007d7b","#57a8a8"].includes(path);
 }
 export function sourceIsSystemWallpaper(path:string):boolean{
   return sourceSystemWallpapers.includes(path);

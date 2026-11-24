@@ -316,3 +316,11 @@
 @media(max-width:760px){
   .windows-personalize__color-list{grid-template-columns:repeat(4,64px);gap:4px}
 }
+
+/* Source classic registry uses solid background previews, not bitmap art. */
+.windows-personalize__theme-preview:not(.is-win7-family)>.windows-personalize__theme-solid{
+  display:block;width:112px;height:70px;border:1px solid #a7b7c6;
+}
+@media(max-width:530px){
+  .windows-personalize__theme-preview:not(.is-win7-family)>.windows-personalize__theme-solid{width:98px;height:62px}
+}

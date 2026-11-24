@@ -75,7 +75,11 @@ describe("source ChangeBackground system gallery and solid theme defaults",()=>{
      "/assets/images/winLP.dcaa8b07.jpg",
      "/assets/images/aeroNoir.237e6377.webp",
      "/assets/images/oxygen.414aed47.svg",
-     "/assets/images/winW.6a3e313e.webp"
+     "/assets/images/winW.6a3e313e.webp",
+     "/assets/images/autumn.41774694.webp",
+     "/assets/images/follows.3e030a12.webp",
+     "/assets/images/azul.3af33f73.webp",
+     "/assets/images/ascent.7c62e722.webp"
    ]);
    expect(new Set(SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS).size)
      .toBe(SOURCE_PERSONALIZE_SYSTEM_BACKGROUNDS.length);
@@ -86,10 +90,16 @@ describe("source ChangeBackground system gallery and solid theme defaults",()=>{
      expect(sourceIsSystemWallpaper(unknown)).toBe(false);
  });
  it("accepts exact source solid defaults but not arbitrary CSS inputs",()=>{
-   for(const value of ["#3b6ea4","#000","#fff","#fffd","#352b30"])
+   for(const value of ["#3b6ea4","#000","#fff","#fffd","#352b30","#bfbdc0","#007d7b","#57a8a8"])
      expect(sourceIsSolidThemeWallpaper(value)).toBe(true);
    for(const value of ["url(https://evil.test/x)","#ff0000","transparent",
      "#fff;opacity:0","https://example.com",""])
      expect(sourceIsSolidThemeWallpaper(value)).toBe(false);
  });
+});
+
+it("uses exact source defaults for classic and XP variant theme previews",()=>{
+  for(const theme of ["win95","win98","win2k","winxpG","winxpR","winxpS","winxpZ"]){
+    expect(SOURCE_PERSONALIZE_THEMES.find(x=>x.id===theme)?.preview,theme).toBe(sourceShellWallpaper(theme));
+  }
 });

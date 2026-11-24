@@ -1,5 +1,5 @@
 import type {ThemeId} from "@windows-os/contracts";
-import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers,sourceWin8ShellArtwork,sourceWin11DarkArtwork} from "@windows-os/assets";
+import {legacyArt,legacyShellThemeAssets,sourceSystemWallpapers,sourceWin8ShellArtwork,sourceWin11DarkArtwork,sourceShellWallpaper} from "@windows-os/assets";
 
 /** Pinned source built-in theme registry (webpack 3b8c and 2299).
  * Exact original names, source Aero palettes, solid Basic background
@@ -24,16 +24,16 @@ export const SOURCE_PERSONALIZE_THEMES:readonly SourcePersonalizeTheme[]=[
   {id:"basic-2",label:"Windows Classic",group:"basic",preview:"#3b6ea4"},
   {id:"basic-3",label:"High Contrast Black",group:"basic",preview:"#000"},
   {id:"basic-4",label:"High Contrast White",group:"basic",preview:"#fff"},
-  {id:"win95",label:"Windows 95",group:"wins",preview:legacyShellThemeAssets.win95.theme},
-  {id:"win98",label:"Windows 98",group:"wins",preview:legacyShellThemeAssets.win95.theme},
-  {id:"win2k",label:"Windows 2000",group:"wins",preview:legacyShellThemeAssets.win2k.theme},
+  {id:"win95",label:"Windows 95",group:"wins",preview:sourceShellWallpaper("win95")},
+  {id:"win98",label:"Windows 98",group:"wins",preview:sourceShellWallpaper("win98")},
+  {id:"win2k",label:"Windows 2000",group:"wins",preview:sourceShellWallpaper("win2k")},
   {id:"winxp",label:"Windows XP",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
   {id:"winxpE",label:"Windows XP (E)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
-  {id:"winxpG",label:"Windows XP (G)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpG",label:"Windows XP (G)",group:"wins",preview:sourceShellWallpaper("winxpG")},
   {id:"winxpN",label:"Windows XP (N)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
-  {id:"winxpR",label:"Windows XP (R)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
-  {id:"winxpS",label:"Windows XP (S)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
-  {id:"winxpZ",label:"Windows XP (Z)",group:"wins",preview:legacyShellThemeAssets.winxp.theme},
+  {id:"winxpR",label:"Windows XP (R)",group:"wins",preview:sourceShellWallpaper("winxpR")},
+  {id:"winxpS",label:"Windows XP (S)",group:"wins",preview:sourceShellWallpaper("winxpS")},
+  {id:"winxpZ",label:"Windows XP (Z)",group:"wins",preview:sourceShellWallpaper("winxpZ")},
   {id:"win8",label:"Windows 8",group:"wins",preview:sourceWin8ShellArtwork.win8Wallpaper},
   {id:"win81",label:"Windows 8.1",group:"wins",preview:sourceWin8ShellArtwork.win81Wallpaper},
   {id:"win10",label:"Windows 10",group:"wins",preview:legacyShellThemeAssets.win10.theme},

@@ -20,6 +20,10 @@ LEGACY_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
     "desktop-defaults": {
+        "autumn.41774694.webp": "c26ab7b1be0c6532ab1e7a84a90d713ed9d4f79d",
+        "follows.3e030a12.webp": "125a6c75c12dcb47054eada034328c5d11c9aaa7",
+        "azul.3af33f73.webp": "dfc568bad42969b77034573e31b6c6cbafa5a84f",
+        "ascent.7c62e722.webp": "ba6303a12c3eb5eff1e0e68379c481d4801d4e70",
         "ubuntu.3588c6cf.webp": "d1761ebf9225b2bbfd33e58109db25bb57b87b08",
         "winLP.dcaa8b07.jpg": "d6fffa5a68d124180478ccbd03c9bd1642f8784c",
         "winLS.e359a90f.jpg": "584eb10065dc876d9abf0adfbe3afe3917e013e4",
