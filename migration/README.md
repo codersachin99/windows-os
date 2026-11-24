@@ -1,3 +1,5 @@
+> **24 November 2026 — Oxygen CI:** 757 units and 85 browser tests passed; 4 failures traced to two selector defects. Corrected test selectors, rerun pending.
+
 > **24 November 2026 — Oxygen tray/DateTime:** shared interactive tray and original gradient calendar, focused CI pending. [Source trace](OXYGEN-TRAY-SOURCE.md).
 
 > **24 November 2026 — Oxygen context/Explorer:** original gradients and WinUI selection, tests pending. [Source trace](OXYGEN-CONTEXT-EXPLORER-SOURCE.md).

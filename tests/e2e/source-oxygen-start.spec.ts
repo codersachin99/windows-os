@@ -10,7 +10,7 @@ test("Oxygen Start source list, recents, grouped search and Guest commands",asyn
   await expect(menu).toHaveCSS("border-top-color","rgb(71, 76, 85)");
   await expect(menu).toHaveCSS("background-image",/linear-gradient/);
   await expect(menu.getByRole("button",{name:"Guest account"}).locator("img")).toHaveAttribute("src","/assets/images/guest.1a7eab2b.webp");
-  await expect(menu.locator(".source-oxygen-start-body")).toHaveCSS("height","320px");
+  await expect(menu.locator(".source-kubuntu-start-body")).toHaveCSS("height","320px");
   const list=menu.locator("[data-test-start-menu-all]");
   await expect(list.locator('[data-test-program="notepad"] img')).toHaveAttribute("width","32");
   await expect(list.locator('[data-test-program="notepad"] img')).toHaveAttribute("src","/assets/images/notepad-oxygen.9f263926.webp");

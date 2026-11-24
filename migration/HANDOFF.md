@@ -1,3 +1,9 @@
+## 24 November 2026 — Oxygen focused CI locator repair
+
+Oxygen CI [45416420482](https://github.com/codersachin99/windows-os/actions/runs/45416420482) at 198ad40: TS, 159 unit files / 757 tests, source inventory, original artwork, Contacts and Vite passed; 85 browser passed / 4 failed / 1 skipped. All four failures are two test locator defects reproduced in both projects: Oxygen Start spec expects non-existent .source-oxygen-start-body although original shared layout uses .source-kubuntu-start-body; Notepad menubar spec matches hidden program list plus search result. Correct both locators only, retaining full behavior and styling assertions; no source changes or weakened checks. [run-ci] [oxygen-check] rerun requested. Do not certify Oxygen until rerun completes. Next Aero Noir.
+
+---
+
 ## 24 November 2026 — Oxygen tray and focused verification
 
 Oxygen tray/DateTime source slice: shared base Guest Action Center, notification history, browser connectivity/battery, Guest brightness/audio, numeric date and marked 128px analog clock. Reuse verified Kubuntu base tray geometry by broadening selectors, retain Kubuntu-only glass and override Oxygen with original #40464d/#2f3438 gradient, #474c55 border, 4px corners, logical shadow, source calendar picker and hover borders. Static icon wrappers retain popup positioning; source hover paint on trigger. Browser date settings remain disabled; native connectivity/brightness/audio unavailable. Added Oxygen tray test and focused [run-ci] [oxygen-check] suite (all Oxygen/Kubuntu specs, shared cascade, shell and Personalize); build/unit/source/artwork gates retained. Results pending. Exact Start sprite, full icon map, accent and visual parity still unresolved. Next inspect actual CI results before further theme slices.

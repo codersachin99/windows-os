@@ -43,7 +43,7 @@ test("Oxygen Notepad source menubar retains real View action",async({page})=>{
   await page.locator("[data-test-start-button]").click();
   const launcher=page.locator("[data-test-oxygen-start]");
   await launcher.locator("[data-test-start-search]").fill("Notepad");
-  await launcher.locator('[data-test-program="notepad"]').click();
+  await launcher.locator('[data-test-start-group="apps"] [data-test-program="notepad"]').click();
   const win=page.locator('[data-test-window="notepad"]').first();
   const bar=win.locator(".notepad-menu");
   await expect(bar).toHaveCSS("background-color","rgb(42, 46, 50)");
