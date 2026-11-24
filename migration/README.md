@@ -1,3 +1,5 @@
+> **24 November 2026 — Longhorn/Whistler application menubars:** Notepad and Computer/Bin toolbar source palettes and dropdown styles, real action regression contracts. [Source trace](LONGHORN-WHISTLER-MENUBAR-SOURCE.md). Exact-head CI pending.
+
 > **24 November 2026 — Longhorn/Whistler Explorer:** source navigation, address, selection and status palettes implemented; regression contracts added. [Source trace](LONGHORN-WHISTLER-EXPLORER-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Longhorn/Whistler context menus:** distinct source WinUI palettes across Desktop, taskbar, Explorer and Start portal; regression contracts added. [Source trace](LONGHORN-WHISTLER-CONTEXT-SOURCE.md). Exact-head CI pending.

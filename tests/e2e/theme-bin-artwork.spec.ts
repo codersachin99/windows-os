@@ -684,3 +684,50 @@ for(const [theme,status,selectionBorder] of [
     else await expect(item).toHaveCSS("background-image",/linear-gradient/);
   });
 }
+
+
+for(const [theme,border,hover] of [
+  ["winLP","rgb(65, 101, 159)","rgb(44, 104, 161)"],
+  ["winLS","rgb(124, 124, 124)","rgb(201, 200, 203)"],
+  ["winW","rgb(144, 144, 144)","rgb(56, 101, 154)"]
+] as const){
+  test(theme+" source Notepad menubar and actual status toggle",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await page.locator("[data-test-start-button]").click();
+    const start=page.locator("[data-test-start-menu]");
+    await start.locator('[data-test-program="notepad"]').first().click();
+    const win=page.locator('[data-test-window="notepad"]').first();
+    await expect(win).toBeVisible();
+    const bar=win.locator(".notepad-menu");
+    if(theme==="winW")await expect(bar).toHaveCSS("background-color","rgb(235, 235, 228)");
+    else await expect(bar).toHaveCSS("background-image",/linear-gradient/);
+    const initial=await win.locator(".notepad-status").count();
+    await bar.getByRole("button",{name:"View",exact:true}).click();
+    const drop=bar.locator(".notepad-menu__dropdown");
+    await expect(drop).toHaveCSS("border-top-color",border);
+    const status=drop.getByRole("button",{name:/Status Bar/});
+    await status.hover();
+    await expect(status).toHaveCSS("border-top-color",hover);
+    await status.click();
+    await expect(win.locator(".notepad-status")).toHaveCount(initial===0?1:0);
+    await expect(drop).toHaveCount(0);
+  });
+  test(theme+" source Explorer Organize menu paint and keyboard dismissal",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]').first();
+    const bar=win.locator(".explorer-command");
+    if(theme==="winW")await expect(bar).toHaveCSS("background-color","rgb(235, 235, 228)");
+    else await expect(bar).toHaveCSS("background-image",/linear-gradient/);
+    const trigger=bar.locator("[data-test-explorer-organize] > button");
+    await trigger.click();
+    const drop=bar.locator(".explorer-organize__menu");
+    await expect(drop).toHaveCSS("border-top-color",border);
+    const option=drop.locator('button:not(:disabled)').first();
+    await option.hover();
+    await expect(option).toHaveCSS("border-top-color",hover);
+    await page.keyboard.press("Escape");
+    await expect(drop).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
+}

@@ -1,3 +1,9 @@
+## 24 November 2026 — Longhorn/Whistler application menubar adapters
+
+Source menu-bar palettes and popup states ported for actual Notepad and Computer/Bin Organize toolbar; RTL, disabled and focus styles. Six desktop/mobile regression contracts authored for status toggle and Organize Escape/focus restoration. [Source trace](LONGHORN-WHISTLER-MENUBAR-SOURCE.md). Other application menu consumers and original All Programs flyout remain pending. No extra CI trigger; exact-head verification pending. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Longhorn/Whistler Explorer chrome
 
 Scoped Explorer stylesheet ports original addressbar gradients, enabled/disabled history palette, white navigation pane, selection gradients and statusbar colors. Computer/Bin shared render path, file/history operations untouched. Added desktop/mobile regression contracts for actual Back/Forward and folder creation/selection. [Source trace](LONGHORN-WHISTLER-EXPLORER-SOURCE.md). Original structural/glyph parity, application menubar and All Programs flyout pending. No additional CI trigger; exact-head CI pending. Main/frozen source/draft PR/releases unchanged.
