@@ -1,3 +1,10 @@
+## 24 November 2026 — Oxygen core desktop/Explorer artwork
+
+[CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`: TypeScript, units, inventory, historical artwork, Contacts, Vite and focused browser suite passed; full browser suite running at inspection. No redundant CI.
+
+Oxygen: 28 registry keys, 25 exact files (23 new, 2 reused), original folder/disk aliases, distinct Bin states and power icons. No Start/Videos source keys; fallback retained. Unit and focused browser tests added; all new assets in audit. [Source trace](OXYGEN-CORE-ICONS-SOURCE.md). Exact-head verification pending. Next inspect CI, batch six newest core packs and expanded audit; then continue remaining theme artwork/layouts. Frozen source/main/draft PR/releases unchanged.
+
+---
 ## 24 November 2026 — Aero Noir core desktop/Explorer artwork and audit coverage
 
 [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8` passed TypeScript, unit, inventory, historical artwork, Contacts and Vite steps; focused browser stage still running at inspection. No redundant run.

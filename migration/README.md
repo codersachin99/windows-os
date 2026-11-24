@@ -1,3 +1,5 @@
+> **24 November 2026 — Oxygen core artwork:** 28 original keys, 25 hash-matched paths (23 new, 2 reused), original aliases and lifecycle regression coverage. [Source trace](OXYGEN-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
 > **24 November 2026 — Aero Noir core artwork:** 26 original keys, 21 hash-matched paths, original aliases and lifecycle regressions. Artwork CLI now audits all registered groups by default. [Source trace](AERONOIR-CORE-ICONS-SOURCE.md). Exact-head CI pending.
 
 > **24 November 2026 — Kubuntu core artwork:** 27 source keys, 26 exact paths (19 new, seven reused), intentional source aliases and lifecycle regression coverage. [Source trace](KUBUNTU-CORE-ICONS-SOURCE.md). Existing CI running; exact-head tests pending.

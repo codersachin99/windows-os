@@ -612,7 +612,43 @@ function sourceAeroNoirIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceAeroNoirIconArtwork,key)
     ?sourceAeroNoirIconArtwork[key as keyof typeof sourceAeroNoirIconArtwork]:null;
 }
+/** Pinned Oxygen core artwork. Preserve original folder and disk aliases. */
+export const sourceOxygenIconArtwork=Object.freeze({
+  "computer": "/assets/images/computer-oxygen.d170989c.webp",
+  "bin": "/assets/images/bin-oxygen.b6be9ff9.webp",
+  "bin-full": "/assets/images/bin-full-oxygen.a82e7824.webp",
+  "folder": "/assets/images/folder-oxygen.b048f163.webp",
+  "file": "/assets/images/file-oxygen.7a4e1a22.webp",
+  "folder-docs": "/assets/images/folder-docs-oxygen.c90421ab.webp",
+  "folder-downloads": "/assets/images/folder-oxygen.b048f163.webp",
+  "folder-music": "/assets/images/folder-music-oxygen.cd81f2bb.webp",
+  "folder-pics": "/assets/images/folder-pics-oxygen.4782ad04.webp",
+  "disk-os": "/assets/images/disk-oxygen.9b235af5.webp",
+  "disk-data": "/assets/images/disk-oxygen.9b235af5.webp",
+  "disk-cd": "/assets/images/disk-cd-oxygen.c2083455.webp",
+  "disk-connected": "/assets/images/disk-removable-oxygen.baaa39fa.webp",
+  "disk-disconnected": "/assets/images/disk-removable-oxygen.baaa39fa.webp",
+  "calc": "/assets/images/calc-oxygen.d1995bc6.webp",
+  "cpanel": "/assets/images/cpanel-oxygen.ddd1bb31.webp",
+  "notepad": "/assets/images/notepad-oxygen.9f263926.webp",
+  "cmd": "/assets/images/cmd-oxygen.b7d25079.webp",
+  "text": "/assets/images/text-oxygen.95901e25.webp",
+  "richtext": "/assets/images/richtext-oxygen.f5743000.webp",
+  "executable": "/assets/images/executable-oxygen.33e505c2.webp",
+  "shortcut": "/assets/images/shortcut-oxygen.f9210347.webp",
+  "media": "/assets/images/media-oxygen.1799a7a7.webp",
+  "zip": "/assets/images/zip-oxygen.38e964f7.webp",
+  "desktop": "/assets/images/desktop-oxygen.d7075bf2.webp",
+  "logoff": "/assets/images/logoff-oxygen.051fb842.webp",
+  "restart": "/assets/images/restart-oxygen.d4450a1a.webp",
+  "shutdown": "/assets/images/shutdown-oxygen.62df7a25.webp"
+});
+function sourceOxygenIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceOxygenIconArtwork,key)
+    ?sourceOxygenIconArtwork[key as keyof typeof sourceOxygenIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="oxygen")return sourceOxygenIcon(iconKey);
   if(theme==="aeroNoir")return sourceAeroNoirIcon(iconKey);
   if(theme==="kubuntu")return sourceKubuntuIcon(iconKey);
   if(theme==="ubuntu")return sourceUbuntuIcon(iconKey);
@@ -665,6 +701,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="oxygen"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceOxygenIcon(kind==="binFull"?"bin-full":kind);
+  }
   if(theme==="aeroNoir"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceAeroNoirIcon(kind==="binFull"?"bin-full":kind);

@@ -2,6 +2,7 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  oxygen:{empty:"/assets/images/bin-oxygen.b6be9ff9.webp",full:"/assets/images/bin-full-oxygen.a82e7824.webp"},
   aeroNoir:{empty:"/assets/images/bin-aeroNoir.12b5ed31.svg",full:"/assets/images/bin-full-aeroNoir.6bcff3f1.webp"},
   kubuntu:{
     empty:"/assets/images/bin-kubuntu.9e105407.webp",
@@ -51,7 +52,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos","ubuntu","kubuntu","aeroNoir","oxygen"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -358,4 +359,50 @@ test("original Aero Noir Computer and Desktop files use theme-specific folder/ge
   const opened=page.locator('[data-test-window="computer"]').last();
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/Aero Noir Source Folder");
+});
+
+test("original Oxygen Computer and Desktop files use theme-specific folder/generic-file artwork",async({page})=>{
+  await sourceThemeDesktop(page,"oxygen");
+  const computerIcon=page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon');
+  await expect(computerIcon).toHaveAttribute("src",
+    "/assets/images/computer-oxygen.d170989c.webp");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+
+  await expect(explorer.locator(".explorer-navigation__home").first().locator("img"))
+    .toHaveAttribute("src","/assets/images/computer-oxygen.d170989c.webp");
+  for(const [label,art] of [["Documents","/assets/images/folder-docs-oxygen.c90421ab.webp"],["Downloads","/assets/images/folder-oxygen.b048f163.webp"],["Music","/assets/images/folder-music-oxygen.cd81f2bb.webp"],["Pictures","/assets/images/folder-pics-oxygen.4782ad04.webp"]]){
+    const shortcut=explorer.locator(".explorer-navigation__home").filter({hasText:label});
+    await expect(shortcut.locator("img")).toHaveAttribute("src",art);
+  }
+  const desktopShortcut=explorer.getByRole("button",{name:"Desktop",exact:true});
+  await expect(desktopShortcut.locator("img")).toHaveAttribute("src","/assets/images/desktop-oxygen.d7075bf2.webp");
+  await desktopShortcut.click();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP);
+  await explorer.getByRole("button",{name:"New folder"}).click();
+  const dialog=explorer.getByRole("dialog",{name:"New folder"});
+  await dialog.getByRole("textbox",{name:"New folder name"})
+    .fill("Oxygen Source Folder");
+  await dialog.getByRole("button",{name:"OK"}).click();
+  const folder=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Oxygen Source Folder"]');
+  await expect(folder).toBeVisible();
+  await expect(folder.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/folder-oxygen.b048f163.webp");
+
+  await explorer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Source Unknown.abc",
+      mimeType:"application/octet-stream",
+      buffer:Buffer.from([0x31,0x32,0x33])});
+  const unknown=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Source Unknown.abc"]');
+  await expect(unknown).toBeVisible();
+  await expect(unknown.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/file-oxygen.7a4e1a22.webp");
+
+  await folder.dblclick();
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
+  const opened=page.locator('[data-test-window="computer"]').last();
+  await expect(opened.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP+"/Oxygen Source Folder");
 });
