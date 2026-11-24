@@ -167,6 +167,7 @@ export function PersonalizeApp({
         {gallery("aero","Aero Themes")}
         {gallery("basic","Basic and High Contrast Themes")}
         {gallery("wins","Other Windows Themes")}
+        {gallery("others","Other Themes")}
         <div className="windows-personalize__preview">
           <span>Selected theme</span>
           <strong>{SOURCE_PERSONALIZE_THEMES.find(item=>item.id===theme)?.label

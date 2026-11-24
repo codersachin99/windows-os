@@ -33,7 +33,8 @@
   background:none;border-color:transparent;
 }
 .windows-desktop[data-theme="kubuntu"] .windows-taskbar__show-desktop:hover{background:var(--theme-color)}
-.windows-desktop[data-theme="kubuntu"] .windows-taskbar__tray-icon:hover{filter:brightness(1.1)}
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__tray-icon:hover>button,
+.windows-desktop[data-theme="kubuntu"] .windows-taskbar__tray-icon:hover>img{filter:brightness(1.1)}
 /* Source desktop__icon-item uses a separate accent layer so that
  * hovering and selecting never fade the original icon or text. */
 .windows-desktop[data-theme="kubuntu"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target){

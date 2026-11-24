@@ -1,3 +1,9 @@
+## 24 November 2026 — Complete Personalize theme selection / Kubuntu tray repair
+
+User requested in-app switching to test all themes. Exposed all 35 non-duplicate source IDs (excludes source base and canonical Win7 alias, Windows 7 Aero card remains), added the original fourth Other Themes gallery, source wallpaper previews, existing SET_THEME immediate/persistence route, coverage for each added card and Kubuntu login after reload. Display labels/group placement for previously absent variants are readable adapters; unfinished skins are selectable, not certified. Kubuntu CI 45412140618: 757 units passed, build/inventory/artwork passed; browsers 49 passed / 2 failed / 1 skipped (mute popup disappears on desktop/mobile). Suspected cause: hover filter on tray icon wrapper establishes containing block and relocates absolute popup; apply brightness to trigger/image only. Preserve failing mute assertion; rerun with [run-ci] [kubuntu-check], also includes Personalize and initial Oxygen shell tests. No release/merge.
+
+---
+
 ## 24 November 2026 — Oxygen base shell initial slice
 
 Kubuntu CI [45412140618](https://github.com/codersachin99/windows-os/actions/runs/45412140618) passed TypeScript, units, inventory, artwork, Contacts and production build; browser pending when inspected. Independent Oxygen first slice from frozen theme-oxygen-scss.js at 26b9f0ce7: base bottom taskbar with dark gradient/top highlight and active/open glow, desktop icon label shadow and original embedded WebP 8px border-image selection transferred directly (whitespace normalization only). Shared window commands retained; source start sprite states and popup/window/Start/Explorer/menubar remain pending. New browser regression authored, not run. No CI marker on this isolated slice. Next inspect Kubuntu browser outcome, repair if needed, then Oxygen window chrome.

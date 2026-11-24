@@ -6,22 +6,26 @@ import {
 import {
  sourceIsSystemWallpaper,sourceIsSolidThemeWallpaper,sourceShellWallpaper
 } from "@windows-os/assets";
-import {SOURCE_XP_THEME_IDS,SOURCE_WIN7_THEME_METADATA} from "@windows-os/contracts";
+import {SOURCE_XP_THEME_IDS,SOURCE_WIN7_THEME_METADATA,SOURCE_THEME_CATALOG_IDS} from "@windows-os/contracts";
 
 describe("original built-in source 3b8c registry and 2299 gallery",()=>{
- it("offers the exact four Aero and four Basic cards and 15 existing Windows cards",()=>{
+ it("exposes every source theme except the excluded base and canonical win7 alias",()=>{
    expect(SOURCE_PERSONALIZE_THEMES.map(x=>x.id)).toEqual([
      "aero-1","aero-2","aero-3","aero-4",
      "basic-1","basic-2","basic-3","basic-4",
-     "win95","win98","win2k","winxp","winxpE","winxpG",
+     "win31","win95","win98","win2k","winxp","winxpE","winxpG",
      "winxpN","winxpR","winxpS","winxpZ",
-     "win8","win81","win10","win11","win11dark"
+     "winvista","win8","win81","win10","win11","win11dark",
+     "macos","chromeos","ubuntu","kubuntu","winLS","winLP","aeroNoir","oxygen","winW","onebit"
    ]);
    expect(sourcePersonalizeGroup("aero").map(x=>x.id))
      .toEqual(["aero-1","aero-2","aero-3","aero-4"]);
    expect(sourcePersonalizeGroup("basic").map(x=>x.id))
      .toEqual(["basic-1","basic-2","basic-3","basic-4"]);
-   expect(sourcePersonalizeGroup("wins")).toHaveLength(15);
+   expect(sourcePersonalizeGroup("wins")).toHaveLength(17);
+   expect(sourcePersonalizeGroup("others")).toHaveLength(10);
+   expect(new Set(SOURCE_PERSONALIZE_THEMES.map(x=>x.id))).toEqual(new Set(SOURCE_THEME_CATALOG_IDS.filter(id=>id!=="base"&&id!=="win7")));
+   for(const item of sourcePersonalizeGroup("others"))expect(item.preview).toBe(sourceShellWallpaper(item.id));
    expect(SOURCE_PERSONALIZE_THEMES.filter(x=>x.id.startsWith("winxp")).map(x=>x.id))
      .toEqual([...SOURCE_XP_THEME_IDS]);
  });

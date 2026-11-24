@@ -79,7 +79,7 @@ jobs:
       # Kubuntu batch preserves the same build and unit gates.
       - name: Kubuntu focused browser regressions
         if: github.event_name == 'push' && contains(github.event.head_commit.message, '[kubuntu-check]')
-        run: npx playwright test tests/e2e/source-kubuntu-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts
+        run: npx playwright test tests/e2e/source-kubuntu-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts tests/e2e/source-personalize-theme.spec.ts tests/e2e/source-oxygen-shell.spec.ts
       # Catch focus, source menu and pin regressions before the expensive
       # complete desktop + mobile Chromium acceptance suite.
       - name: Source shell targeted browser regressions

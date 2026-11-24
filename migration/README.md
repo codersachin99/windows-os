@@ -1,3 +1,5 @@
+> **24 November 2026 — Personalize full theme selection:** 35 original non-duplicate theme cards; Kubuntu tray hover fix; focused CI pending.
+
 > **24 November 2026 — Oxygen base shell:** source taskbar gradients and original embedded selection WebP, tests pending; Kubuntu CI browser verification running.
 
 > **24 November 2026 — Kubuntu tray/DateTime:** shared functional tray, calendar and focused CI batch, results pending. [Source trace](KUBUNTU-TRAY-SOURCE.md).

@@ -21,7 +21,7 @@ async function openPersonalize(page:Page){
 test("source Desktop Personalize changes shell, artwork and wallpaper in place",async({page})=>{
   const win=await openPersonalize(page);
   const chooser=win.locator("[data-test-personalize]");
-  await expect(chooser.locator("[data-test-personalize-group]")).toHaveCount(3);
+  await expect(chooser.locator("[data-test-personalize-group]")).toHaveCount(4);
   const xp=chooser.locator('[data-test-personalize-theme="winxp"]');
   const eleven=chooser.locator('[data-test-personalize-theme="win11"]');
   await expect(xp.locator("img")).toHaveAttribute("src",
@@ -358,4 +358,33 @@ test("source Aero per-variant colors use original palette and alpha on real shel
     await expect(frame).toHaveCSS("background-image",/linear-gradient/);
     await frame.getByRole("button",{name:"Close Computer"}).click();
   }
+});
+
+test("Personalize exposes all original non-duplicate themes and switches live",async({page})=>{
+  const win=await openPersonalize(page);
+  const chooser=win.locator("[data-test-personalize]");
+  await expect(chooser.locator("[data-test-personalize-theme]")).toHaveCount(35);
+  for(const [id,wallpaper] of [
+    ["win31","#bfbdc0"],["winvista","/assets/images/winvista.d80b2f4f.webp"],
+    ["macos","/assets/images/macos.54af5cd4.webp"],
+    ["chromeos","/assets/images/chromeos.eaca6e72.webp"],
+    ["ubuntu","/assets/images/ubuntu.3588c6cf.webp"],
+    ["winLS","/assets/images/winLS.e359a90f.jpg"],
+    ["winLP","/assets/images/winLP.dcaa8b07.jpg"],
+    ["aeroNoir","/assets/images/aeroNoir.237e6377.webp"],
+    ["oxygen","/assets/images/oxygen.414aed47.svg"],
+    ["winW","/assets/images/winW.6a3e313e.webp"],
+    ["onebit","#352b30"],["kubuntu","/assets/images/kubuntu.618268f7.webp"]
+  ] as const){
+    const card=chooser.locator('[data-test-personalize-theme="'+id+'"]');
+    if(wallpaper.startsWith("#"))await expect(card.locator(".windows-personalize__theme-solid")).toBeVisible();
+    else await expect(card.locator("img")).toHaveAttribute("src",wallpaper);
+    await card.click();
+    await expect(page.locator("[data-test-main-screen]")).toHaveAttribute("data-theme",id);
+    await expect(card).toHaveAttribute("aria-pressed","true");
+    await expect(page.locator("[data-test-desktop-background]")).toHaveAttribute("data-test-desktop-background",wallpaper);
+  }
+  await page.reload();
+  await page.locator('[data-test-source-logon-avatar="kubuntu"]').click({timeout:12000});
+  await expect(page.locator("[data-test-main-screen]")).toHaveAttribute("data-theme","kubuntu");
 });
