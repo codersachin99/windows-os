@@ -1,3 +1,9 @@
+## 24 November 2026 — Ubuntu top bar and vertical dock
+
+Ported original recent + running item ordering, 64px dock, 32px top bar and maximized workspace bounds; real Guest focus and original artwork. [Source trace](UBUNTU-SHELL-SOURCE.md). Previous focused ChromeOS [CI #45405625966](https://github.com/codersachin99/windows-os/actions/runs/45405625966) passed. New Ubuntu unit/browser contracts authored, not executed. Next original Ubuntu Activities/launcher and window chrome, tray/context/Explorer. Main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — ChromeOS DateTime and focused verification
 
 Shared calendar plus original 128px analog marked face and digital seconds, source time formulas and date reset. Native date settings disabled honestly. [Source trace](CHROMEOS-DATETIME-SOURCE.md). Added focused [run-ci] [chromeos-check] verification including ChromeOS specs, cascade edges and prior XP/Win11 artwork repair; all nonbrowser gates preserved. Latest batch results pending. Next repair exact-head failures, then Ubuntu. Main/frozen source/draft PR unchanged.

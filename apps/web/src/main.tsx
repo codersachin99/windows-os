@@ -12,6 +12,7 @@ import "../../../packages/ui/src/sourceWin7AeroTaskbar.css";
 import "../../../packages/ui/src/sourceLonghornWhistlerShell.css";
 import "../../../packages/ui/src/sourceMacOSShell.css";
 import "../../../packages/ui/src/sourceChromeOSShell.css";
+import "../../../packages/ui/src/sourceUbuntuShell.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>

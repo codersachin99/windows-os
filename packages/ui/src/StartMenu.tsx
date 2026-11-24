@@ -226,7 +226,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       if(event.target instanceof Element
         &&event.target.closest("[data-test-start-program-context],[data-test-historical-programs-flyout]"))return;
       const start=document.querySelector('[data-test-start-button]');
-      if(start?.contains(event.target))return;
+      if(start?.contains(event.target)||event.target instanceof Element&&event.target.closest("[data-test-activities-button]"))return;
       dispatch({type:"CLOSE_START"});
     };
     const escape=(event:KeyboardEvent)=>{

@@ -1,0 +1,80 @@
+/* Frozen legacy-win7@4e63290: dock-ubuntu.css, taskbar-ubuntu.css and
+ * theme-ubuntu-scss.js. Scope geometry to the Ubuntu Guest shell. */
+.windows-desktop[data-theme="ubuntu"]{
+  --taskbar-height:32px;--source-ubuntu-dock-width:64px;
+  --theme-color:#e95420;font-size:10pt;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-desktop__workspace{
+  inset:var(--taskbar-height) 0 0 var(--source-ubuntu-dock-width);
+}
+.windows-desktop[data-theme="ubuntu"] .windows-desktop__wallpaper{
+  inset:var(--taskbar-height) 0 0;height:calc(100% - var(--taskbar-height));
+}
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar{
+  top:0;bottom:auto;height:var(--taskbar-height);padding:0;gap:0;
+  color:#fff;background:#131313;border:0;box-shadow:none;backdrop-filter:none;
+  justify-content:space-between;overflow:visible;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-activities{
+  display:flex;align-items:center;min-width:0;height:100%;max-width:45%;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-activities button{
+  padding:4px 8px;background:none;border:0;color:inherit;white-space:nowrap;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-activities strong{
+  padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock{
+  position:fixed;top:var(--taskbar-height);bottom:0;left:0;
+  width:var(--source-ubuntu-dock-width);padding:4px;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  background:#0009;box-sizing:border-box;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-list{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;min-height:0;width:100%;overflow-y:auto;scrollbar-width:none;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-item{flex:none}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-item.has-separator{display:flex;flex-direction:column}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-item.has-separator::before{
+  content:"";width:100%;height:1px;background:#fff5;margin:4px 0;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-button{
+  position:relative;display:grid;place-items:center;flex:none;width:52px;height:52px;
+  padding:8px;border:0;border-radius:12px;color:inherit;background:transparent;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-button img{
+  display:block;width:36px;height:36px;object-fit:contain;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-button:is(:hover,.is-running){
+  background:#fff3;
+}
+.windows-desktop[data-theme="ubuntu"] .source-ubuntu-dock-button.is-running::after{
+  content:"";position:absolute;left:0;top:calc(50% - 3px);
+  width:6px;height:6px;border-radius:99px;background:var(--theme-color);
+}
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray{
+  gap:0;min-width:0;height:100%;color:#fff;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray-icon{
+  width:40px;min-width:40px;height:100%;display:grid;place-items:center;
+}
+.windows-desktop[data-theme="ubuntu"] [data-test-tray-clock]{
+  position:absolute;left:50%;transform:translateX(-50%);
+}
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__clock{
+  flex-direction:row-reverse;gap:8px;color:#fff;padding:0 8px;min-width:0;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-taskbar__hidden-items{
+  top:calc(100% + 4px);bottom:auto;background:#1d1d1d;border:1px solid #3e3e3e;border-radius:8px;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-startmenu{
+  left:var(--source-ubuntu-dock-width);max-width:calc(100vw - var(--source-ubuntu-dock-width));bottom:0;
+}
+@media(max-width:600px){
+  .windows-desktop[data-theme="ubuntu"] .source-ubuntu-activities{max-width:26%}
+  .windows-desktop[data-theme="ubuntu"] .source-ubuntu-activities strong{display:none}
+  .windows-desktop[data-theme="ubuntu"] .windows-taskbar__tray-icon{width:24px;min-width:24px}
+  .windows-desktop[data-theme="ubuntu"] .windows-taskbar__clock{font-size:10px;gap:3px;padding:0}
+  .windows-desktop[data-theme="ubuntu"] .windows-taskbar__clock span:last-child{display:none}
+}

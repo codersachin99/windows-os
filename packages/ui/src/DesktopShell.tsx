@@ -6,6 +6,7 @@ import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms,sou
 import {useSourceTrashCount} from "./useSourceTrashCount";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
+import {sourceUbuntuDockItems} from "./sourceUbuntuDockItems";
 import {sourceMacOSPopupTransition,type SourceMacOSPopupId} from "./sourceMacOSPopup";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
 import {SourceMacOSVolume} from "./SourceMacOSVolume";
@@ -340,7 +341,7 @@ export function DesktopShell({
   const previewHideTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const taskbarGroups=sourceTaskbarGroups(state.windows,pinnedPrograms);
   const macDockRef=useRef<HTMLDivElement>(null);
-  const dockTrashCount=useSourceTrashCount(state.theme==="macos");
+  const dockTrashCount=useSourceTrashCount(state.theme==="macos"||state.theme==="ubuntu");
   const macDockGroups=sourceMacOSDockGroups(pinnedPrograms,dockRecent,state.windows.map(win=>win.appId));
   const buttonMode=taskbarConfig.type;
   const canAeroPeek=(state.theme==="win7"||sourceIsAeroFamily(state.theme))&&taskbarConfig.useAeroPeek;
@@ -596,7 +597,7 @@ export function DesktopShell({
             onAeroAppearanceDiscard={onAeroAppearanceDiscard} />
         </WindowFrame>
       ))}
-      <footer className="windows-taskbar" data-test-taskbar="base"
+      <footer className="windows-taskbar" data-test-taskbar={state.theme==="ubuntu"?"ubuntu":"base"}
         data-source-chromeos-maximized={state.theme==="chromeos"?state.windows.some(win=>win.maximized&&!win.minimized):undefined}
         data-taskbar-button-type={buttonMode} tabIndex={-1}
         onContextMenu={event=>{
@@ -610,13 +611,38 @@ export function DesktopShell({
         }}>
         {state.theme==="macos"?<><SourceMacOSAppleMenu dispatch={dispatch} open={macPopup==="apple"} setOpen={open=>setMacPopupOpen("apple",open)}/><span className="source-macos-menubar-title" data-test-macos-active-title="">
           {state.windows.find(win=>!win.minimized&&win.z===highestVisibleWindowZ)?.title??"Finder"}
-        </span></>:<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
+        </span></>:state.theme==="ubuntu"?<div className="source-ubuntu-activities">
+          <button type="button" data-test-activities-button="" aria-expanded={state.startOpen}
+            onClick={()=>dispatch({type:"TOGGLE_START"})}>Activities</button>
+          <strong data-test-ubuntu-active-title="">{state.windows.find(win=>!win.minimized&&win.z===highestVisibleWindowZ)?.title??""}</strong>
+        </div>:<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
           data-test-start-button="" aria-label="Open Start menu"
           aria-expanded={state.startOpen}
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
           <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
         </button>}
-        <div ref={macDockRef} className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
+        {state.theme==="ubuntu"?<nav className="source-ubuntu-dock" data-test-dock="" aria-label="Application dock">
+          <div className="source-ubuntu-dock-list">
+            {sourceUbuntuDockItems(dockRecent,state.windows.map(win=>win.appId)).map(id=>{
+              const app=appRegistry.get(id);
+              if(!app)return null;
+              const running=state.windows.filter(win=>win.appId===id).sort((a,b)=>b.z-a.z);
+              return <div key={id} className={"source-ubuntu-dock-item"+(id==="bin"?" has-separator":"")}>
+                <button type="button" data-test-dock-item="" data-source-ubuntu-dock-id={id}
+                  className={"source-ubuntu-dock-button"+(running.length?" is-running":"")}
+                  aria-label={"Open or switch to "+app.label} title={app.label}
+                  onClick={()=>{dispatch({type:"CLOSE_START"});if(running[0])dispatch({type:"FOCUS_WINDOW",id:running[0].id});else dispatch({type:"OPEN_APP",app});}}>
+                  <img src={(id==="bin"?sourceShellAsset(state.theme,dockTrashCount>0?"binFull":"bin"):sourceThemeProgramArt(state.theme,id))??app.icon} alt="" width={36} height={36}/>
+                </button>
+              </div>;
+            })}
+          </div>
+          <button type="button" className={"source-ubuntu-dock-button"+(state.startOpen?" is-running":"")}
+            data-test-start-button="" aria-label="Open Start menu" aria-expanded={state.startOpen}
+            onClick={()=>dispatch({type:"TOGGLE_START"})}>
+            <img src={sourceShellAsset(state.theme,"start")??legacyArt.startOrb} alt="" width={36} height={36}/>
+          </button>
+        </nav>:<div ref={macDockRef} className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
           {state.theme==="macos"?macDockGroups.map((ids,index)=>
             <div key={index} className="source-macos-dock-group" data-test-macos-dock-group={index}>
               {index>0&&<span className="source-macos-dock-divider" aria-hidden="true"/>}
@@ -733,9 +759,9 @@ export function DesktopShell({
             </button>;
           })}
           </>}
-        </div>
+        </div>}
         {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)||macPopup!==null}/>}
-        <div className="windows-taskbar__tray" data-test-taskbar-tray={sharedTray?state.theme:undefined}>
+        <div className="windows-taskbar__tray" data-test-taskbar-tray={sharedTray||state.theme==="ubuntu"?state.theme:undefined}>
           {(state.theme!=="macos"||sourceTrayHidden(trayPreferences).length>0)&&<button title="Show hidden icons" aria-label="Show hidden icons"
             data-test-tray-hidden-toggle="" onClick={()=>{setMacPopup(null);setShowHiddenTray(v=>!v);}}>▴</button>}
           {showHiddenTray&&sourceTrayHidden(trayPreferences).length>0&&
@@ -761,7 +787,7 @@ export function DesktopShell({
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch} open={macPopup==="spotlight"} setOpen={open=>setMacPopupOpen("spotlight",open)}/>}
           {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime baseLayout={state.theme==="chromeos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
         </div>
-        {state.theme!=="macos"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"
+        {state.theme!=="macos"&&state.theme!=="ubuntu"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           data-test-show-desktop=""
           onPointerEnter={event=>{
             if(event.pointerType!=="touch"&&canAeroPeek)setAeroPeeking(true);
