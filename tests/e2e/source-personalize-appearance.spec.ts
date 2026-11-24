@@ -31,6 +31,16 @@ test("source ChangeAppearance previews 32 colors and Cancel/window close rolls b
   expect(await tint(page)).toBe("rgba(89, 134, 202, 0.65)");
 });
 
+test("source ChangeAppearance closes by Alt+F4 without committing its preview",async({page})=>{
+  const win=await openAppearance(page);
+  await win.locator('[data-test-color-item="#00b294"]').click();
+  expect(await tint(page)).toBe("rgba(0, 178, 148, 0.65)");
+  // The shell routes Alt+F4 through requestClose as well as titlebar Close.
+  await page.keyboard.press("Alt+F4");
+  await expect(win).toHaveCount(0);
+  expect(await tint(page)).toBe("rgba(89, 134, 202, 0.65)");
+});
+
 test("source Aero Save persists color/transparency, theme switch restores palette",async({page})=>{
   const win=await openAppearance(page);
   await win.locator('[data-test-color-item="#d13438"]').click();
