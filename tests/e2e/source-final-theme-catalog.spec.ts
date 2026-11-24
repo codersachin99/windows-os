@@ -22,7 +22,7 @@ test("source theme variants select exact login screen families and report fallba
     ["winLP","winLS","winLS","pending"],
     ["aeroNoir","aeroNoir","aeroNoir","pending"],
     ["oxygen","oxygen","oxygen","pending"],
-    ["kubuntu","kubuntu","win7-fallback","pending"],
+    ["kubuntu","kubuntu","kubuntu","pending"],
     ["winW","winW","winW","pending"],
     ["onebit","onebit","onebit","pending"]
   ] as const;

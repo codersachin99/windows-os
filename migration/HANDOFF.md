@@ -1,3 +1,11 @@
+## 24 November 2026 — original Kubuntu Guest logon
+
+Previous [Personalize CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) is still running its targeted browser stage at inspection; earlier TS/units/source/artwork/Contacts/Vite passed. Oxygen head `1d491607` is not yet covered by CI. No parallel full run requested.
+
+Frozen Kubuntu module 17bf and CSS now have their own partial Guest renderer with 300% original wallpaper, 150px avatar opacity .8, blur(10px) black/50 overlay, 48px circular source Restart/Shutdown art, distinct 4/8px button gaps and icon-only hover. Imported exact source wallpaper blob `78bd1d5c`; reused existing verified KDE icons and guest-win10. Added SSR plus desktop/mobile browser cases for source artwork, computed styling, account fallback, Guest and simulator power lifecycle, catalog and focused suite. [Source trace](KUBUNTU-LOGON-SOURCE.md). Now 15/19 partial login families; four fallback (Vista/macOS/ChromeOS/Ubuntu). Kubuntu shell stays pending. Next: inspect running CI, then batch Oxygen/Kubuntu and next source slice with one opt-in check. No changes to frozen source, main, draft PR or releases; paired visual capture remains pending.
+
+---
+
 ## 24 November 2026 — original Oxygen Guest logon
 
 Previous Personalize [CI #45360503128](https://github.com/codersachin99/windows-os/actions/runs/45360503128) at `68590906` passed TypeScript, units, source inventory/artwork/Contacts checks and Vite; targeted browser stage was still running at last inspection. No new green claim yet.

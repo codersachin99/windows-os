@@ -1,0 +1,7 @@
+# Original Kubuntu Guest logon — 24 November 2026
+
+Frozen source `legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776`, `src/modules/themes/logon-kubuntu.js` module 17bf, matching CSS. Original source uses the shared logon-base with 150px circular guest-win10 avatar (opacity .8), source background scaled to 300%, black/50 overlay blur(10px), 6px rounded translucent gradient form controls with text shadow, right-64 bottom-32 power footer (gap 4px), 48px circular images and icon-only white/20 hover. Restart and shutdown buttons have respectively 4px and 8px internal gaps. These are distinct from Aero Noir's 36px power icons and hovered whole-button gradient.
+
+Imported `assets/images/kubuntu.618268f7.webp` with equal source/destination Git blob SHA `78bd1d5c479b065a613f3425ea54129a9a0d7e70`. Already verified original guest-win10 and KDE power SVGs are reused and wallpaper added to the binary import audit. Scoped component/CSS, SSR contract, browser tests for source art and geometry, hover, account fallback, real Guest desktop and power lifecycle, catalog and focused suite updated. Source module in-progress and entire Kubuntu shell pending; no original account auth/loading or full source screenshot claim. Short viewport adaptations are not certified original geometry.
+
+Personalize CI #45360503128 remains in progress at the previous head; Oxygen and Kubuntu will be verified in the next deliberate acceptance batch. Frozen source/main/draft PR #1/releases unchanged.

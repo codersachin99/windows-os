@@ -224,6 +224,12 @@ export const sourceThemeLogonArtwork=Object.freeze({
   winW:Object.freeze({
     logo:"/assets/images/logowhistler.73c9045c.webp"
   }),
+  kubuntu:Object.freeze({
+    background:"/assets/images/kubuntu.618268f7.webp",
+    guest:"/assets/images/guest-win10.a110df5a.webp",
+    restart:"/assets/images/restart-kubuntu.5c766c73.svg",
+    shutdown:"/assets/images/shutdown-kubuntu.146c3ea3.svg"
+  }),
   oxygen:Object.freeze({
     background:"/assets/images/oxygen.414aed47.svg",
     guest:legacyArt.guestAvatar,

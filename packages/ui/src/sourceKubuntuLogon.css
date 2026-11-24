@@ -1,0 +1,66 @@
+/* Frozen logon-kubuntu.css and 17bf power footer:
+ * 300% background, 150px translucent Guest, 48px rounded power art.
+ * Small viewport accommodation is intentionally a React adaptation. */
+.windows-logon.source-kubuntu-logon{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;color:#fff;background-size:300%;background-position:center;
+  font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-kubuntu-logon__overlay{
+  position:absolute;inset:0;pointer-events:none;
+  background-color:rgba(0,0,0,.5);backdrop-filter:blur(10px);
+}
+.source-kubuntu-logon__account{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:16px;transform:translateY(-48px);max-width:100%;text-align:center;
+}
+.source-kubuntu-logon__avatar{
+  display:grid;place-items:center;width:150px;height:150px;
+  padding:0;border:0;border-radius:50%;background:transparent;
+  cursor:pointer;transition:box-shadow .1s;
+}
+.source-kubuntu-logon__avatar img{
+  display:block;width:150px;height:150px;object-fit:contain;border-radius:50%;opacity:.8;
+}
+.source-kubuntu-logon__avatar:hover,.source-kubuntu-logon__avatar:focus{
+  box-shadow:0 0 0 6px rgba(255,255,255,.2);
+}
+.source-kubuntu-logon__account h1{margin:0;font-size:30px;font-weight:400}
+.source-kubuntu-logon__form-button{
+  padding:6px 10px;border:1px solid transparent;border-radius:6px;
+  color:inherit;font:inherit;cursor:pointer;text-shadow:0 0 5px #000;
+  background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.4)),rgba(0,0,0,.4);
+  transition:transform .1s;
+}
+.source-kubuntu-logon__form-button:focus{
+  border-color:rgba(255,255,255,.6);box-shadow:inset 0 0 0 2px rgba(0,0,0,.2);
+}
+.source-kubuntu-logon__form-button:active{transform:scale(.95)}
+.source-kubuntu-logon__power{
+  position:absolute;right:64px;bottom:32px;display:flex;gap:4px;
+}
+.source-kubuntu-logon__power button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;padding:6px;border:1px solid transparent;border-radius:6px;
+  color:inherit;background:transparent;font:inherit;cursor:pointer;
+}
+.source-kubuntu-logon__power button[data-test-logon-shutdown]{gap:8px}
+.source-kubuntu-logon__power img{
+  display:block;width:48px;height:48px;border-radius:50%;
+}
+.source-kubuntu-logon__power button:hover img{
+  background-color:rgba(255,255,255,.2);
+}
+.source-kubuntu-logon__unavailable{
+  position:absolute;z-index:2;box-sizing:border-box;width:min(360px,calc(100% - 32px));
+  padding:20px;background:#222;color:#fff;border:1px solid #fff6;border-radius:6px;
+  text-align:center;
+}
+@media(max-width:640px){
+  .source-kubuntu-logon__power{right:12px;bottom:12px}
+}
+@media(max-height:420px){
+  .source-kubuntu-logon__account{gap:8px;transform:translateY(-42px)}
+  .source-kubuntu-logon__avatar,.source-kubuntu-logon__avatar img{width:100px;height:100px}
+  .source-kubuntu-logon__power{bottom:8px}
+}

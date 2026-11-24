@@ -2164,8 +2164,15 @@
       "source": "src/modules/themes/logon-kubuntu.js",
       "sha": "86d1c1b09116dde5d213f82381e58c66e7fe54d5",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceKubuntuLogon.tsx",
+        "packages/ui/src/sourceKubuntuLogon.css",
+        "packages/ui/src/sourceKubuntuLogon.test.tsx",
+        "tests/e2e/source-kubuntu-logon.spec.ts",
+        "migration/KUBUNTU-LOGON-SOURCE.md"
+      ],
+      "verification": "source-backed-slice; exact-head CI and full visual/functional parity pending"
     },
     {
       "source": "src/modules/themes/logon-macos.js",
