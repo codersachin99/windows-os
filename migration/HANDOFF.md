@@ -1,3 +1,9 @@
+## 24 November 2026 — ChromeOS shelf and window chrome
+
+Ported source 48px shelf, circular launcher, actual maximized radius transition, running/focused indicators, tray and time-only clock, source WindowMain palette and 28px circular controls. [Source trace](CHROMEOS-SHELL-SOURCE.md). Browser lifecycle regression authored. Prior macOS CI #45402373188 passed; XP/Win11 artwork correction and new ChromeOS head pending verification. Next original ChromeOS launcher f5a6, context menus and Explorer. No redundant CI; main/frozen source/draft PR unchanged.
+
+---
+
 ## 24 November 2026 — full CI regression repair
 
 Full CI #45395440100 at d0d3d0b: targeted 1065 passed/3 skipped; full 1507 passed/5 skipped/2 failed. Both failures were the same stale XP Desktop navigation expectation in theme-shell-source.spec.ts (generic folder expected, original desktop-winxp received). Frozen icons.registry.json confirms XP-specific Desktop artwork; Win11 has no override and inherits base desktop. Imported byte-identical base desktop.96562ad8.webp, mapped Win11/Win11dark, updated both browser expectations and unit/hash audit; generic folder tests unchanged. Focused CI #45402373188 at fff2620 passed TypeScript, units, source inventory, artwork and Contacts at inspection; build/browser pending. New regression repair not yet tested, no redundant trigger. Next include repaired theme-shell-source cases in subsequent focused validation, repair any macOS failures. Main/frozen source/draft PR unchanged.

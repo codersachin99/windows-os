@@ -595,6 +595,7 @@ export function DesktopShell({
         </WindowFrame>
       ))}
       <footer className="windows-taskbar" data-test-taskbar="base"
+        data-source-chromeos-maximized={state.theme==="chromeos"?state.windows.some(win=>win.maximized&&!win.minimized):undefined}
         data-taskbar-button-type={buttonMode} tabIndex={-1}
         onContextMenu={event=>{
           if((event.target as HTMLElement).closest("button,[data-test-tray-icon]"))
