@@ -1,3 +1,9 @@
+## 24 November 2026 — focused macOS verification checkpoint
+
+Explicit [run-ci] [macos-check] batch: TypeScript, all units, original inventory/artwork/Contacts audits, Vite build and macOS browser cases in theme-bin-artwork, player and macOS logon across both configured Chromium projects. Does not repeat broad suites; existing full CI and manual dispatch unchanged. Added five already byte-verified volume icons to automatic source artwork audit and all seven popup owner transition pairs to unit coverage. Static checks confirmed WindowFrame active/maximized/control attributes and Launchpad/search hooks. Previous CI #45395440100 still in full interactions at inspection; this is a new-head focused check, not evidence of a passing run. Next inspect and repair exact-head failures before moving to ChromeOS. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Guest notification lifecycle
 
 Added shared SDK notification store, FIFO current toast and 8s dismissal, retained history/seen/read states, macOS toast paint, Action Center history and Control Panel shared messages. Unit and SSR escaping contracts authored. [Source trace](MACOS-NOTIFICATION-SOURCE.md). Remote feed/provider and exact original 779a store behavior pending; no synthetic production notifications. Prior CI #45395440100 full interactions still running at inspection. Next consolidate latest-head verification and remaining theme parity. Main/frozen reference/PR unchanged.
