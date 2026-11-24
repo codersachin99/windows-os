@@ -393,3 +393,26 @@
   .windows-desktop[data-theme="macos"] .windows-taskbar__tray-icon{flex-basis:24px;width:24px;min-width:24px}
   .windows-desktop[data-theme="macos"] .source-macos-network-trigger svg{width:18px;height:18px}
 }
+
+/* Original f0ed Action Center summary, using the shared macOS popup paint. */
+.windows-desktop[data-theme="macos"] .source-macos-action-center{position:relative}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-trigger{
+  display:grid;place-items:center;width:100%;height:28px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 8px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;width:min(260px,calc(100vw - 16px));
+  padding:10px;background:#2d2d2d;border:1px solid #000;border-radius:10px;
+  box-shadow:0 4px 12px #0005;color:#fff;text-align:start;
+}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-summary{
+  display:flex;align-items:center;gap:8px;padding:8px;font-size:20px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-summary img{flex:none;object-fit:contain}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-popup>button{
+  display:block;width:100%;padding:8px;border:0;border-radius:3px;
+  background:none;color:inherit;text-align:center;font:inherit;
+}
+.windows-desktop[data-theme="macos"] .source-macos-action-center-popup>button:is(:hover,:focus-visible){background:#fff1;text-decoration:underline}

@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS Action Center:** original empty summary, shared lifecycle and real Control Panel route; notification delivery pending. [Source trace](MACOS-ACTION-CENTER-SOURCE.md).
+
 > **24 November 2026 — macOS popup lifecycle:** shared source-style active popup owner, stale close guards and keyboard switching contracts. [Source trace](MACOS-POPUP-OWNERSHIP-SOURCE.md). Tests pending.
 
 > **24 November 2026 — macOS tray/network:** source order/40px slots, live browser connectivity popup and regression. [Source trace](MACOS-TRAY-NETWORK-SOURCE.md). Tests pending.

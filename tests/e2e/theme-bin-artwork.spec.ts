@@ -1170,3 +1170,29 @@ test("macOS popup ownership switches with keyboard as well as pointer",async({pa
   await expect(page.locator("[data-test-macos-datetime-popup]")).toHaveCount(0);
   await expect(page.locator("[data-test-launchpad]")).toBeVisible();
 });
+
+test("macOS original Action Center summary and real Control Panel destination",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const trigger=page.locator("[data-test-action-center]");
+  const popup=page.locator("[data-test-action-center-popup]");
+  await trigger.click();
+  await expect(popup).toBeVisible();
+  await expect(popup).toHaveCSS("background-color","rgb(45, 45, 45)");
+  await expect(popup.locator("[data-test-notification-summary]")).toHaveText("No new messages");
+  await page.keyboard.press("Escape");
+  await expect(popup).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.press("Enter");
+  await expect(popup).toBeVisible();
+  await page.locator("[data-test-network]").focus();
+  await page.locator("[data-test-network]").press("Enter");
+  await expect(popup).toHaveCount(0);
+  await expect(page.locator("[data-test-network-popup]")).toBeVisible();
+  await trigger.click();
+  await expect(page.locator("[data-test-network-popup]")).toHaveCount(0);
+  await popup.locator("[data-test-open-action-center]").click();
+  await expect(popup).toHaveCount(0);
+  const panel=page.locator('[data-test-window="cpanel"]').last();
+  await expect(panel.locator("[data-test-cpanel-action-center]")).toBeVisible();
+  await expect(panel.locator("[data-test-no-messages]")).toBeVisible();
+});

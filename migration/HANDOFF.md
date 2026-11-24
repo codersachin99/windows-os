@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS Action Center summary
+
+Resolved missing Action Center and Battery source modules via taskbar-base lazy imports (chunk-517d7f56 f0ed, chunk-391f23b6 a88c). Ported source empty message summary, bundled headline, shared popup ownership and actual cpanel/action-center route; browser regression authored. [Source trace](MACOS-ACTION-CENTER-SOURCE.md). Feed/history/severity/toast delivery still pending; no fabricated messages or push permission. Previous CI #45395440100 full interactions running at inspection; no redundant trigger. Next battery popup and source Guest display brightness, then volume and notification history. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS shared popup ownership
 
 One source-style active popup owner for Apple, Network, Spotlight and DateTime; guarded stale close, keyboard switching and Launchpad/theme/preference cleanup. Unit and browser contracts authored. [Source trace](MACOS-POPUP-OWNERSHIP-SOURCE.md). Action Center module f0ed not located in inspected chunks, so prioritized source-confirmed popup lifecycle rather than inventing behavior. Prior CI #45395440100 full interactions running at inspection; exact-head verification pending. Next Action Center source discovery and remaining tray capabilities. Main/frozen source/draft PR/releases unchanged.

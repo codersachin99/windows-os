@@ -8,6 +8,7 @@ import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {sourceMacOSPopupTransition,type SourceMacOSPopupId} from "./sourceMacOSPopup";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
+import {SourceMacOSActionCenter} from "./SourceMacOSActionCenter";
 import {SourceMacOSNetwork} from "./SourceMacOSNetwork";
 import {SourceMacOSDateTime} from "./SourceMacOSDateTime";
 import {SourceMacOSSpotlight} from "./SourceMacOSSpotlight";
@@ -112,7 +113,8 @@ function ApplicationContent({
   if (appId === "cpanel") return <ControlPanelApp
     filesystem={fileStore} theme={theme}
     initialLocation={filePath==="display"?"display":
-      filePath==="notification"?"notification":filePath==="accounts"?"accounts":null}
+      filePath==="notification"?"notification":filePath==="accounts"?"accounts":
+      filePath==="action-center"?"action-center":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     onOpenProgram={(id,view)=>{
@@ -303,6 +305,8 @@ export function DesktopShell({
     if(state.theme!=="macos"||state.startOpen)setMacPopup(null);
   },[state.theme,state.startOpen]);
   useEffect(()=>{
+    if(macPopup==="action-center"&&!sourceTrayVisible(trayPreferences).includes("TaskbarActionCenter"))
+      setMacPopup(null);
     if(macPopup==="network"&&!sourceTrayVisible(trayPreferences).includes("TaskbarNetwork"))
       setMacPopup(null);
     if(macPopup==="datetime"&&!trayPreferences.showClockIcon)setMacPopup(null);
@@ -723,7 +727,8 @@ export function DesktopShell({
                   data-test-tray-hidden-icon={item.id} alt={item.label}/>)}
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
-            .map(item=>state.theme==="macos"&&item.id==="TaskbarNetwork"?
+            .map(item=>state.theme==="macos"&&item.id==="TaskbarActionCenter"?
+              <SourceMacOSActionCenter key={item.id} dispatch={dispatch} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:state.theme==="macos"&&item.id==="TaskbarNetwork"?
               <SourceMacOSNetwork key={item.id} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
