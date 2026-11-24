@@ -264,6 +264,7 @@ FILES: dict[str, dict[str, str]] = {
         "guest-macos.caf967b3.webp": "0ffc437084814b13509a2e31353ab4b1e33b8f22",
     },
     "chromeos": {
+        "google.d3503fb1.svg": "a971e1d7a9dbfc34674b15dadd401769d6dffd97",
         "chromeos.eaca6e72.webp": "eca88c4b8ba39d9787fa9c52092ea607c89edfd9",
         "usertile12.75a9eb89.webp": "63281c3cc0cf7b5acf125419feacb958aa22a6fe",
     },

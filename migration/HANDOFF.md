@@ -1,3 +1,9 @@
+## 24 November 2026 — ChromeOS launcher
+
+Original f5a6 470px launcher, sorted core/all grid, five recent apps, Google art, real Guest program/file search, account and power actions, shared context. [Source trace](CHROMEOS-LAUNCHER-SOURCE.md). Unit/browser contracts authored; exact ranking/hover/visual parity pending. Previous ChromeOS shelf and XP/Win11 repair also pending execution. Main/frozen source/draft PR unchanged. Next ChromeOS desktop/context and Explorer.
+
+---
+
 ## 24 November 2026 — ChromeOS shelf and window chrome
 
 Ported source 48px shelf, circular launcher, actual maximized radius transition, running/focused indicators, tray and time-only clock, source WindowMain palette and 28px circular controls. [Source trace](CHROMEOS-SHELL-SOURCE.md). Browser lifecycle regression authored. Prior macOS CI #45402373188 passed; XP/Win11 artwork correction and new ChromeOS head pending verification. Next original ChromeOS launcher f5a6, context menus and Explorer. No redundant CI; main/frozen source/draft PR unchanged.
