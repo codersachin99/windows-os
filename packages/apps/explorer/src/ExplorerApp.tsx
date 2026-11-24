@@ -579,12 +579,21 @@ export function ExplorerApp({
   useLayoutEffect(()=>{
     const element=contextRef.current;
     if(!context||!element)return;
+    // Aero's backdrop-filter (and Magnifier's transform) establishes
+    // a containing block for position:fixed. Measure the actual screen
+    // rectangle, then translate the desired viewport point back into
+    // the menu's existing local CSS coordinate system.
+    const rect=element.getBoundingClientRect();
+    const scaleX=rect.width/element.offsetWidth||1;
+    const scaleY=rect.height/element.offsetHeight||1;
     const position=sourceDesktopMenuPosition(
       {x:context.anchorX,y:context.anchorY},
-      {width:element.offsetWidth,height:element.offsetHeight},
+      {width:rect.width,height:rect.height},
       contextViewport);
-    if(context.x===position.x&&context.y===position.y)return;
-    setContext(current=>current?{...current,...position}:current);
+    const x=context.x+(position.x-rect.left)/scaleX;
+    const y=context.y+(position.y-rect.top)/scaleY;
+    if(Math.abs(context.x-x)<.5&&Math.abs(context.y-y)<.5)return;
+    setContext(current=>current?{...current,x,y}:current);
   },[context,contextViewport]);
   // Source ExplorerMenu's nested BaseMenu is positioned to the side of
   // the row and flips across the desktop edge. Keep it out of the parent
