@@ -165,3 +165,36 @@ test("mobile Computer and Bin stacked View/New remain reachable across parent ro
     await win.getByRole("button",{name:/^Close /}).click();
   }
 });
+
+test("Desktop ordinary root commands dismiss adjacent cascades but preserve stacked traversal",async({page})=>{
+  await page.setViewportSize({width:1100,height:800});
+  const desktop=await guest(page,"win7");
+  const root=await desktopMenuAt(desktop,"left");
+  const child=desktop.locator("[data-test-desktop-background-submenu]");
+  const refresh=root.getByRole("menuitem",{name:"Refresh",exact:true});
+  for(const id of ["view","sort","new"] as const){
+    await root.locator("[data-test-desktop-"+id+"]").click();
+    await expect(child).toHaveAttribute("data-cascade","adjacent");
+    await refresh.hover();
+    await expect(child).toHaveCount(0);
+    await expect(root).toBeVisible();
+    await expect(root.locator("[data-test-desktop-"+id+"]")).toHaveAttribute("aria-expanded","false");
+  }
+  await page.keyboard.press("Escape");
+  await expect(root).toHaveCount(0);
+  await page.setViewportSize({width:320,height:800});
+  const narrow=await desktopMenuAt(desktop,"right");
+  await narrow.locator("[data-test-desktop-new]").click();
+  await expect(child).toHaveAttribute("data-cascade","stacked");
+  await narrow.getByRole("menuitem",{name:"Refresh",exact:true}).hover();
+  await expect(child).toHaveAttribute("aria-label","New");
+  await narrow.locator("[data-test-desktop-view]").hover();
+  await expect(child).toHaveAttribute("aria-label","New");
+  await expect(child.getByRole("menuitem",{name:"Folder",exact:true})).toBeVisible();
+  await child.getByRole("menuitem",{name:"Folder",exact:true}).focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(child).toHaveCount(0);
+  await expect(narrow.locator("[data-test-desktop-new]")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(narrow).toHaveCount(0);
+});
