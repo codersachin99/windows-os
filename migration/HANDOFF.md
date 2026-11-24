@@ -1,3 +1,11 @@
+## 24 November 2026 — macOS core desktop/Explorer artwork
+
+Combined [CI #45364747459](https://github.com/codersachin99/windows-os/actions/runs/45364747459) at `2b5b818d`: TypeScript, units, inventory, exact art, Contacts audit and Vite passed; focused browser suite still running at inspection. No second full run.
+
+Pinned icons.registry.json themes.macos now has 24 core key mappings (20 verified original files). Computer, empty/full Bin, file/folder, special folders, five drive aliases, Start, Calc/Control Panel/Notepad/CMD and text/richtext/executable/shortcut. Shared asset resolution reaches Desktop, Explorer navigation, file selection, taskbar/window artwork. Added unit regression and expanded existing focused theme-bin-artwork browser tests to macOS actual delete/empty lifecycle and folder/file creation. [Source trace](MACOS-CORE-ICONS-SOURCE.md). macOS shell remains pending; not full icon registry or visual parity. Next: remaining core theme icon packs and shell geometry. Main, frozen source, draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — finish original desktop default mapping and correct stale Ubuntu test
 
 Combined [CI #45363645210](https://github.com/codersachin99/windows-os/actions/runs/45363645210) at `fadb0e6f` **failed**: TypeScript passed; UI unit suite 721 passed, 1 failed (137 files passed, 1 failed). Sole failure sourceOnebitLogon.test.tsx:25 expected obsolete Ubuntu Win7 fallback. Corrected to assert actual Ubuntu renderer and no Onebit leakage/no fallback. All subsequent stages skipped; no browser acceptance yet.

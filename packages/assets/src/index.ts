@@ -445,7 +445,40 @@ export const sourceWin2kProgramArtwork:Readonly<Record<string,string>>=Object.fr
   "bin-full":"/assets/images/bin-full-win2k.f2dd6793.webp",
   folder:"/assets/images/folder-win2k.6bea372b.webp"
 });
+/** Core macOS icon pack, pinned icons.registry.json themes.macos.
+ * Keep only imported exact artwork; other keys retain explicit fallback. */
+export const sourceMacOSIconArtwork=Object.freeze({
+  "computer":"/assets/images/computer-mac.4c6c5258.webp",
+  "bin":"/assets/images/bin-mac.499e907b.webp",
+  "bin-full":"/assets/images/bin-full-mac.67e3d272.webp",
+  "folder":"/assets/images/folder-mac.248938aa.webp",
+  "file":"/assets/images/file-mac.f9d8e370.webp",
+  "start":"/assets/images/start-button-mac.db7da45a.webp",
+  "folder-docs":"/assets/images/folder-docs-mac.19ef120e.webp",
+  "folder-downloads":"/assets/images/folder-downloads-mac.5a239779.webp",
+  "folder-music":"/assets/images/folder-music-mac.8905b037.webp",
+  "folder-pics":"/assets/images/folder-pics-mac.dfca3097.webp",
+  "folder-videos":"/assets/images/folder-videos-mac.7edd23bf.webp",
+  "disk-os":"/assets/images/disk-mac.c1f755d1.webp",
+  "disk-data":"/assets/images/disk-mac.c1f755d1.webp",
+  "disk-cd":"/assets/images/disk-mac.c1f755d1.webp",
+  "disk-connected":"/assets/images/disk-mac.c1f755d1.webp",
+  "disk-disconnected":"/assets/images/disk-mac.c1f755d1.webp",
+  "calc":"/assets/images/calc-mac.a8be886f.webp",
+  "cpanel":"/assets/images/cpanel-mac.edf3e86a.webp",
+  "notepad":"/assets/images/notepad-mac.82ca5f3f.webp",
+  "cmd":"/assets/images/cmd-mac.4736d145.webp",
+  "text":"/assets/images/text-mac.2378630a.webp",
+  "richtext":"/assets/images/richtext-mac.2378630a.webp",
+  "executable":"/assets/images/executable-mac.73f92274.webp",
+  "shortcut":"/assets/images/shortcut-mac.45146f00.webp"
+});
+function sourceMacOSIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceMacOSIconArtwork,key)
+    ?sourceMacOSIconArtwork[key as keyof typeof sourceMacOSIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="macos")return sourceMacOSIcon(iconKey);
   if(theme==="win2k")return sourceWin2kProgramArtwork[iconKey]??null;
   if((theme==="win95"||theme==="win98")&&iconKey==="shutdown")
     return "/assets/images/power-win95.11d0301d.webp";
@@ -493,6 +526,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="macos"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceMacOSIcon(kind==="binFull"?"bin-full":kind);
+  }
   // Pinned classic Start image, selected only for the new Basic 3/4 shells.
   if((theme==="basic-2"||theme==="basic-3"||theme==="basic-4")&&kind==="start")return legacyArt.win7Brand;
   if(theme==="win95"||theme==="win98")return legacyShellThemeAssets.win95[kind];
