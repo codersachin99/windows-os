@@ -1,0 +1,25 @@
+import {test,expect} from "@playwright/test";
+test("Oxygen source taskbar gradients and embedded selection artwork preserve window commands",async({page})=>{
+  await page.goto("/?theme=oxygen");
+  await page.locator('[data-test-source-logon-avatar="oxygen"]').click({timeout:12000});
+  const shell=page.locator('[data-test-main-screen][data-theme="oxygen"]');
+  const bar=shell.locator(".windows-taskbar");
+  await expect(bar).toHaveCSS("background-color","rgb(42, 46, 50)");
+  await expect(bar).toHaveCSS("background-image",/linear-gradient.*radial-gradient/);
+  const icon=shell.locator('[data-test-desktop-icon="computer"]');
+  await icon.click();
+  await expect(icon).toHaveClass(/is-active/);
+  await expect(icon).toHaveCSS("border-image-source",/data:image\/webp;base64,UklGRq4C/);
+  await expect(icon).toHaveCSS("border-image-width","8px");
+  await icon.dblclick();
+  const win=shell.locator('[data-test-window="computer"]');
+  await expect(win).toBeVisible();
+  const task=bar.locator('[data-test-taskbar-pin="computer"],[data-test-taskbar-running-group="computer"]').first();
+  await expect(task).toHaveClass(/is-active/);
+  await expect(task).toHaveCSS("background-image",/linear-gradient.*radial-gradient/);
+  await win.locator('[data-source-window-control="minimize"]').click();
+  await expect(win).toHaveCount(0);
+  await expect(task).toHaveCSS("background-image",/^linear-gradient/);
+  await task.click();
+  await expect(win).toBeVisible();
+});

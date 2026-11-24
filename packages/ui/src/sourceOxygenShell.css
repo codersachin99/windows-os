@@ -1,0 +1,38 @@
+/* Frozen legacy-win7@26b9f0ce7 theme-oxygen-scss.js.
+ * Original base taskbar and embedded WebP selection border. */
+.windows-desktop[data-theme="oxygen"] .windows-taskbar{
+  color:#fff;background-color:#2a2e32;
+  background-image:linear-gradient(to right,#000,#fff,#000),radial-gradient(ellipse at 50% 100%,#fff3 15%,transparent 80%);
+  background-size:100% 1px,100% 100%;background-position:50% 0,center;
+  background-repeat:no-repeat;border:0;box-shadow:0 0 5px #000d;backdrop-filter:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start{background:none;border-radius:0;margin-top:0}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start img{filter:none}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application{
+  margin:0 1px;color:#fff;background:none;border:1px solid transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]){
+  background-color:transparent;background-image:linear-gradient(to right,transparent,#fff,transparent);
+  background-size:100% 2px;background-position:50% 100%;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application.is-active{
+  background-color:transparent;
+  background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 100%,#fffa 7%,transparent 70%);
+  background-size:100% 2px,100% 100%;background-position:50% 100%,center;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):hover{filter:brightness(1.1)}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__tray-icon:hover{
+  background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 0%,#fff5 15%,transparent 80%);
+  background-size:100% 1px,100% 100%;background-position:50% 0,center;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__show-desktop{background:none;border-color:transparent}
+.windows-desktop[data-theme="oxygen"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target){
+  background:none;border:1px solid transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:hover){
+  background:none;
+  border-image-source:url("data:image/webp;base64,UklGRq4CAABXRUJQVlA4WAoAAAAQAAAAHwAAHwAAQUxQSFABAAABkJxt27FHT7yySjB2aiEr2+mBW6cA81dsPO/n74tt2/awg/n0HtNAREwAqEZWDCtrnLJ89v11uiSTZam/JAx0hg1cnh9tr02Ks1sXF5uzwtjK5sHpWU+wRtrl/ekcg2hBTQsiM3d8e56ukvv2skkQjSCS9aeXDACIfv3aQFUjiGsfzxEA87/O0Sw8/SlD/N8fgnn8jz8xHX9O0Tw8+d2093uRxvzPzdtPQoN5v3y5Rxp4+3iza9NusGg22LQ3L3dXUduKmlbUXt1VRDqiInJ0OJFj6bAcQTpIkJb+/8Ru1dlg1Wyw6rSPoE4LalpQ57CFVlc9rbokng6f6E0IDUK8oVimIRcCeHRIxCwitbsDQNCwzJjDyMNB8K9/kyKyxlhRaQsCdbf8CVkSeAcnL+3sLMmcgxckeSLXDXR6JlRaxnvE2e3Ly61ZsWfcUpXgCapWUDggOAEAAFAIAJ0BKiAAIAA+MRSIQqIhIRgEACADBLSACeYvpNcp/dcyq8mb03PkTz9fRvsCfqR1JfQAHyRD0IiP3vOA+efsYkkuPtE8H5QdQAD+3agQdmb1Pdq//RhX/afySvpwfQrC6HTPf3AmXXYwR+LI1WxVG1/74DOOe5Oz9QIzMt6ERM9n+FKxjtNMmB98PPuthEpWkvkgrub8Lr/I+vkVqHk7aBHSxX+OcQMmCWcUEXj4fF/i5zEhiZEXoxt+R/A5BmV9moL8WWUH/9I6iikl03AxV7cnGDMkLrLMOHdVXUZblvTKnfB1OmvKZ0EnWd9GcbqUcJFKKBmc88ET/g3+TB5LMg8ySQi9fBhyioIy8bftujPeBZ785p89e3Sft6/+lmotD2EUZe38aNES+V07re/gJbLvjMAAAA==");
+  border-image-slice:40% fill;border-image-width:8px;border-image-repeat:stretch;
+}
+.windows-desktop[data-theme="oxygen"] .desktop__icon-name:not(:has(input)){color:#fff;text-shadow:1px 1px 2px #000}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) .desktop__icon-name:not(:has(input)){text-shadow:-1px 1px 2px #000}

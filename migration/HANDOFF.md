@@ -1,3 +1,9 @@
+## 24 November 2026 — Oxygen base shell initial slice
+
+Kubuntu CI [45412140618](https://github.com/codersachin99/windows-os/actions/runs/45412140618) passed TypeScript, units, inventory, artwork, Contacts and production build; browser pending when inspected. Independent Oxygen first slice from frozen theme-oxygen-scss.js at 26b9f0ce7: base bottom taskbar with dark gradient/top highlight and active/open glow, desktop icon label shadow and original embedded WebP 8px border-image selection transferred directly (whitespace normalization only). Shared window commands retained; source start sprite states and popup/window/Start/Explorer/menubar remain pending. New browser regression authored, not run. No CI marker on this isolated slice. Next inspect Kubuntu browser outcome, repair if needed, then Oxygen window chrome.
+
+---
+
 ## 24 November 2026 — Kubuntu tray and focused verification
 
 Kubuntu source 582b base taskbar: enabled shared Guest Action Center, browser connectivity and battery, Guest brightness/audio, numeric date and base calendar with 128px analog clock. Dark translucent source surfaces, 3px popup corners, calendar borders/accent, optional glass. Absolute tray anchoring avoids fixed-position containing block from taskbar blur; viewport sizing is adapter. Browser capability limitations and disabled native settings remain. Focused [run-ci] [kubuntu-check] runs all build/unit/source/artwork gates, Kubuntu specs plus shared cascade and prior shell regressions. CI pending; no visual capture/release. Next diagnose real results, resolve failures before next theme.
