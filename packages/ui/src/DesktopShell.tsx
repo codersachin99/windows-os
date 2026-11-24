@@ -109,7 +109,12 @@ function ApplicationContent({
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     onOpenProgram={(id,view)=>{
       const program=appRegistry.get(id);
-      if(program)dispatch({type:"OPEN_APP",app:program,
+      if(!program)return;
+      // A direct Control Panel Background launch bypasses the existing
+      // Personalize sidebar's ChangeAppearance.back() rollback. Restore
+      // committed Aero chrome before opening the separate Background window.
+      if(id==="personalize"&&view==="background")onAeroAppearanceDiscard();
+      dispatch({type:"OPEN_APP",app:program,
         file:view==="background"?{path:"background"}:undefined});
     }}
     trayPreferences={trayPreferences}
