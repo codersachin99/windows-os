@@ -4,6 +4,7 @@ import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms } from "@windows-os/sdk";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
+import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
 import { CalculatorApp } from "@windows-os/apps/calculator";
@@ -105,7 +106,7 @@ function ApplicationContent({
   if (appId === "cpanel") return <ControlPanelApp
     filesystem={fileStore} theme={theme}
     initialLocation={filePath==="display"?"display":
-      filePath==="notification"?"notification":null}
+      filePath==="notification"?"notification":filePath==="accounts"?"accounts":null}
     onClose={() => dispatch({type:"CLOSE_WINDOW",id:windowId})}
     onSwitchUser={() => dispatch({type:"SWITCH_USER"})}
     onOpenProgram={(id,view)=>{
@@ -562,9 +563,9 @@ export function DesktopShell({
             kind:"background",x:event.clientX,y:event.clientY
           });
         }}>
-        {state.theme==="macos"?<span className="source-macos-menubar-title" data-test-macos-active-title="">
+        {state.theme==="macos"?<><SourceMacOSAppleMenu dispatch={dispatch}/><span className="source-macos-menubar-title" data-test-macos-active-title="">
           {state.windows.find(win=>!win.minimized&&win.z===highestVisibleWindowZ)?.title??"Finder"}
-        </span>:<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
+        </span></>:<button className={"windows-taskbar__start"+(state.startOpen?" is-active":"")}
           data-test-start-button="" aria-label="Open Start menu"
           aria-expanded={state.startOpen}
           onClick={() => dispatch({ type: "TOGGLE_START" })}>

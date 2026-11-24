@@ -842,3 +842,26 @@ test("macOS dock keeps fixed groups and recent/running apps without duplicates",
   await expect(page.locator('[data-test-window="bin"]')).toBeVisible();
   expect(await ids(2)).toEqual(["bin"]);
 });
+
+test("macOS Apple menu opens real Guest Account and About, supports Escape",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const trigger=page.getByRole("button",{name:"Apple menu",exact:true});
+  await trigger.click();
+  const popup=page.locator("[data-test-menu-popup]");
+  await expect(popup).toBeVisible();
+  await expect(popup.getByRole("menuitem")).toHaveCount(7);
+  await expect(popup.getByRole("menuitem",{name:"Help and Support"})).toBeDisabled();
+  await expect(popup.getByRole("menuitem",{name:"Settings"})).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(popup.getByRole("menuitem",{name:"About",exact:true})).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(popup).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await popup.getByRole("menuitem",{name:"Account",exact:true}).click();
+  await expect(page.locator('[data-test-window="cpanel"] [data-test-cpanel-accounts]')).toBeVisible();
+  await trigger.click();
+  await popup.getByRole("menuitem",{name:"About",exact:true}).click();
+  await expect(page.locator('[data-test-window="about"]')).toBeVisible();
+  await expect(popup).toHaveCount(0);
+});

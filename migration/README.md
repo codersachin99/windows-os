@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS Apple menu:** original seven-command menu, exact glyph and Guest actions (external Help pending). [Source trace](MACOS-APPLE-MENU-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS dock groups:** original fixed/recent/running/Bin groups, source dividers and actual window actions. [Source trace](MACOS-DOCK-GROUPS-SOURCE.md). Tests pending.
 
 > **24 November 2026 — macOS top bar/dock:** distinct top bar and bottom dock geometry, shared launch/window actions and regression contract. [Source trace](MACOS-TOPBAR-DOCK-SOURCE.md). Verification pending.

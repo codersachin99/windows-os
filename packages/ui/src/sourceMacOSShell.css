@@ -150,3 +150,34 @@
   position:absolute;inset-inline-start:-10px;top:0;height:48px;
   width:1px;background:#fff4;pointer-events:none;
 }
+
+/* Source taskbar-macos.css Apple dropdown, original fa:apple icon. */
+.windows-desktop[data-theme="macos"] .source-macos-apple{
+  position:relative;height:100%;flex:none;
+}
+.windows-desktop[data-theme="macos"] .source-macos-apple-trigger{
+  display:flex;align-items:center;justify-content:center;height:100%;
+  padding:0 20px;border:0;border-radius:4px;background:none;color:#fff;
+}
+.windows-desktop[data-theme="macos"] .source-macos-apple-trigger:is(:hover,:focus-visible,[aria-expanded="true"]){
+  background:#fff2;
+}
+.windows-desktop[data-theme="macos"] .source-macos-apple-popup{
+  position:absolute;inset-block-start:100%;inset-inline-start:0;
+  width:200px;max-width:calc(100vw - 16px);padding:8px;box-sizing:border-box;
+  z-index:4900;color:#fff;background:rgba(45,45,45,.95);
+  border:1px solid #fff3;border-radius:8px;box-shadow:0 8px 32px #0008;
+}
+.windows-desktop[data-theme="macos"] .source-macos-apple-popup button{
+  width:100%;display:block;padding:5px 8px;text-align:start;
+  color:inherit;background:none;border:0;border-radius:4px;font:inherit;
+  white-space:nowrap;
+}
+.windows-desktop[data-theme="macos"] .source-macos-apple-popup button:not(:disabled):is(:hover,:focus-visible){
+  background:#ffffff1a;
+}
+.windows-desktop[data-theme="macos"] .source-macos-apple-popup button:disabled{opacity:.5}
+.windows-desktop[data-theme="macos"] .source-macos-apple-popup hr{border:0;height:1px;background:#fff3;margin:4px 0}
+@media(max-width:650px){
+  .windows-desktop[data-theme="macos"] .source-macos-apple-trigger{padding:0 8px}
+}

@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS Apple menu
+
+Ported original seven-command Apple menu, exact bundled Apple glyph and source popup palette. Connected Settings/About/Account and Guest power actions, with accounts route, arrow navigation and Escape restoration. Help and Support disabled pending destination verification. [Source trace](MACOS-APPLE-MENU-SOURCE.md). Browser contract authored, tests pending. Next Spotlight and original Launchpad. No extra CI trigger; main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS dock groups
 
 Implemented source three-group dock ordering (Computer/Launchpad/pins/Control Panel, recent plus running, Bin) with deduplication, registered app actions, source gaps/dividers and existing window activation. Added grouping unit and launch/minimize/restore browser contracts. [Source trace](MACOS-DOCK-GROUPS-SOURCE.md). Dock Bin state, tooltip, Apple menu, Spotlight and Launchpad remain pending. Exact-head CI not available; no extra trigger. Main/frozen source/draft PR/releases unchanged.
