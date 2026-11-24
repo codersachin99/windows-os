@@ -1,0 +1,46 @@
+/* Source startmenu-kubuntu.css and 8753 layout; scoped responsive adapter. */
+.windows-desktop[data-theme="kubuntu"] .source-kubuntu-start{
+  position:absolute;inset-inline-start:0;bottom:var(--taskbar-height,40px);
+  z-index:3500;display:flex;flex-direction:column;box-sizing:border-box;
+  width:min(682px,100%);max-height:calc(100dvh - var(--taskbar-height,40px));
+  background:#2a2e32;color:#fff;border:1px solid transparent;border-top-color:#40464d;
+  box-shadow:0 0 2px #000a;overflow:hidden;font:10pt "Segoe UI",Arial,sans-serif;
+}
+.windows-desktop[data-theme="kubuntu"][data-effect-enable-glass] .source-kubuntu-start{
+  background:rgba(42,46,50,.8666666667);backdrop-filter:blur(6px)
+}
+.source-kubuntu-start>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;border-bottom:1px solid #fff3;flex:none}
+.source-kubuntu-start>header>button{display:flex;align-items:center;gap:12px;padding:0 8px;white-space:nowrap}
+.source-kubuntu-start>header img{border-radius:50%;object-fit:contain}
+.source-kubuntu-start>header input{box-sizing:border-box;width:320px;min-width:0;padding:6px 8px;border:1px solid var(--border-color,#fff5);border-radius:3px;background:#2a2e32dd;color:#fff;font:inherit}
+.source-kubuntu-start>header input:focus{outline:1px solid var(--theme-color)}
+.source-kubuntu-start-body{position:relative;display:flex;height:320px;min-height:0;overflow:hidden;flex:0 1 320px;width:100%}
+.source-kubuntu-program-list{box-sizing:border-box;width:256px;flex:none;height:100%;padding:12px;border-inline-end:1px solid #fff3;overflow:auto;scrollbar-width:thin}
+.source-kubuntu-recent-grid{box-sizing:border-box;display:grid;grid-template-columns:repeat(4,100px);align-content:start;padding:12px;overflow:auto;flex:1;min-width:0}
+.source-kubuntu-start-body>section[hidden]{display:none}
+.source-kubuntu-start button{position:relative;isolation:isolate;box-sizing:border-box;background:none;color:inherit;font:inherit;border:1px solid transparent;border-radius:4px}
+.source-kubuntu-start button:not(:disabled):is(:hover,:focus-visible,.is-selected){border-color:var(--theme-color)}
+.source-kubuntu-start button::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:var(--theme-color);border-radius:inherit}
+.source-kubuntu-start button:not(:disabled):is(:hover,:focus-visible,.is-selected)::before{opacity:.4}
+.source-kubuntu-start button:not(:disabled):active::before{opacity:.6}
+.source-kubuntu-start button:disabled{opacity:.5}
+.source-kubuntu-program-list>button,.source-kubuntu-results section>button{display:flex;align-items:center;gap:12px;width:100%;padding:4px 8px;text-align:start;overflow:hidden}
+.source-kubuntu-start button img{flex:none;object-fit:contain}
+.source-kubuntu-program-list>button span,.source-kubuntu-results button span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source-kubuntu-recent-grid>button{width:100px;height:100px;display:flex;align-items:center;flex-direction:column;gap:4px;padding:8px;text-align:center}
+.source-kubuntu-recent-grid>button span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%}
+.source-kubuntu-results{position:absolute;inset:0;background:#2a2e32;overflow:auto;scrollbar-width:thin;padding:16px}
+.source-kubuntu-results h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:inherit}
+.source-kubuntu-results h3::after{content:"";flex:1;height:1px;background:#fff3}
+.source-kubuntu-results section{margin-bottom:8px}
+.source-kubuntu-results button small{display:block;overflow:hidden;text-overflow:ellipsis;opacity:.7}
+.source-kubuntu-start>footer{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;padding:8px;border-top:1px solid #fff3;border-bottom:1px solid #fff3;flex:none}
+.source-kubuntu-start>footer button{display:flex;align-items:center;gap:6px;padding:6px}
+.source-kubuntu-start>footer button span{font-size:16px;line-height:1}
+@media(max-width:682px){
+  .source-kubuntu-program-list{width:42%;padding:6px}
+  .source-kubuntu-recent-grid{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));padding:6px}
+  .source-kubuntu-recent-grid>button{width:100%;height:90px}
+  .source-kubuntu-start>footer{gap:2px;padding:4px}
+  .source-kubuntu-start>footer button{padding:4px;font-size:11px}
+}

@@ -23,6 +23,7 @@ import {SourceWin9xStartMenu} from "./SourceWin9xStartMenu";
 import {SourceChromeOSLauncher} from "./SourceChromeOSLauncher";
 import {SourceMacOSLaunchpad} from "./SourceMacOSLaunchpad";
 import {SourceUbuntuLaunchpad} from "./SourceUbuntuLaunchpad";
+import {SourceKubuntuStartMenu} from "./SourceKubuntuStartMenu";
 import {SourceHistoricalProgramsFlyout} from "./SourceHistoricalProgramsFlyout";
 import {openGuestSearchFile} from "./sourceGuestSearchOpen";
 
@@ -325,6 +326,9 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   return (<>
     {theme==="chromeos"?
       <SourceChromeOSLauncher rootRef={menuRef} items={win11AllApps} recentIds={startPreferences.storeRecentApps?recentIds:[]}
+        dispatch={dispatch} onLaunch={openApp} onOpenFile={openSearchFile} onContext={openProgramContext}/>:
+    theme==="kubuntu"?
+      <SourceKubuntuStartMenu rootRef={menuRef} items={win11AllApps} recentIds={startPreferences.storeRecentApps?recentIds:[]}
         dispatch={dispatch} onLaunch={openApp} onOpenFile={openSearchFile} onContext={openProgramContext}/>:
     theme==="ubuntu"?
       <SourceUbuntuLaunchpad rootRef={menuRef} items={win11AllApps} dispatch={dispatch}

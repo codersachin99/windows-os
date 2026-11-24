@@ -1,3 +1,9 @@
+## 24 November 2026 — Kubuntu Start menu
+
+Kubuntu original launcher module 8753 and bfe9, shared f0aa: Guest account header, search, 256px alphabetical program pane, 320px body, four-column 100px recent tiles, grouped overlay, Documents (opens Computer as source), Games, Settings, Restart, Shutdown and Log off. Uses existing source program registry, shared ranked program/Control Panel search and mounted Guest files, program context hook and actual session commands. Responsive compact grid and footer are adapters; temporary footer glyphs are not exact source Iconify artwork, current account label is Guest, settings results are supported panels rather than all original task-level entries. Tests authored, not executed. Next Kubuntu context menus/Explorer.
+
+---
+
 ## 24 November 2026 — Ubuntu verified / Kubuntu WindowMain
 
 Ubuntu rerun [45409926204](https://github.com/codersachin99/windows-os/actions/runs/45409926204) at 711015d passed all gates: 159 unit files, 757 tests; focused browser 53 passed / 1 skipped / 0 failed. Full browser and visual capture intentionally skipped. Kubuntu WindowMain source module 582b: #31363b frame, #4f585f border, 4px radius, active/inactive shadows, #2a2e32 body, 24px circular controls with 5px logical spacing, red active and white inactive close. Common WindowFrame lifecycle and fallback glyphs retained. Maximized square frame is shared shell adaptation. Exact static-dialog sizing, app body paint and inactive-state screenshot comparison remain pending; new browser contract not run. Next Kubuntu Start menu.
