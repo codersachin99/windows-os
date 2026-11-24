@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS tray and network
+
+Original macOS tray order/40px slots, removed Windows-only Show Desktop and unnecessary hidden chevron. Network popup now uses browser connectivity and optional type events with truthful online/offline text, cleanup and Escape; native settings unavailable. [Source trace](MACOS-TRAY-NETWORK-SOURCE.md). Browser offline/online regression authored. CI #45395440100 targeted browsers passed, full interactions running at inspection. No redundant CI; next Action Center/notification and battery/volume capabilities. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS DateTime popup
 
 Ported original calendar-only topbar clock popup, live short date, full-date reset, 42-cell grid, month/year pickers and source red day selection. Shared date arithmetic with rollover/leap year unit tests and browser navigation contract. [Source trace](MACOS-DATETIME-SOURCE.md). Exact-head tests pending; previous CI #45395440100 still running targeted browsers at inspection. No redundant trigger. Next inspect browser failures then source tray order/action center and remaining capabilities. Main/frozen source/draft PR/releases unchanged.

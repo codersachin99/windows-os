@@ -7,6 +7,7 @@ import {useSourceTrashCount} from "./useSourceTrashCount";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
+import {SourceMacOSNetwork} from "./SourceMacOSNetwork";
 import {SourceMacOSDateTime} from "./SourceMacOSDateTime";
 import {SourceMacOSSpotlight} from "./SourceMacOSSpotlight";
 import { ContactsApp } from "@windows-os/apps/contacts";
@@ -696,9 +697,9 @@ export function DesktopShell({
           </>}
         </div>
         {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)}/>}
-        <div className="windows-taskbar__tray">
-          <button title="Show hidden icons" aria-label="Show hidden icons"
-            data-test-tray-hidden-toggle="" onClick={()=>setShowHiddenTray(v=>!v)}>▴</button>
+        <div className="windows-taskbar__tray" data-test-taskbar-tray={state.theme==="macos"?"macos":undefined}>
+          {(state.theme!=="macos"||sourceTrayHidden(trayPreferences).length>0)&&<button title="Show hidden icons" aria-label="Show hidden icons"
+            data-test-tray-hidden-toggle="" onClick={()=>setShowHiddenTray(v=>!v)}>▴</button>}
           {showHiddenTray&&sourceTrayHidden(trayPreferences).length>0&&
             <div className="windows-taskbar__hidden-items" data-test-tray-hidden-items=""
               role="group" aria-label="Hidden notification area icons">
@@ -708,14 +709,16 @@ export function DesktopShell({
                   data-test-tray-hidden-icon={item.id} alt={item.label}/>)}
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
-            .map(item=><span key={item.id} title={item.label}
+            .map(item=>state.theme==="macos"&&item.id==="TaskbarNetwork"?
+              <SourceMacOSNetwork key={item.id} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
+              <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch}/>}
           {trayPreferences.showClockIcon&&(state.theme==="macos"?<SourceMacOSDateTime onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
         </div>
-        <button className="windows-taskbar__show-desktop" aria-label="Show desktop"
+        {state.theme!=="macos"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           data-test-show-desktop=""
           onPointerEnter={event=>{
             if(event.pointerType!=="touch"&&canAeroPeek)setAeroPeeking(true);
@@ -734,7 +737,7 @@ export function DesktopShell({
             for(const win of state.windows){
               if(!win.minimized)dispatch({type:"MINIMIZE_WINDOW",id:win.id});
             }
-          }} />
+          }} />}
       </footer>
       {livePreview&&state.windows.some(win=>win.appId===livePreview.appId)&&
         <SourceTaskbarLivePreview appId={livePreview.appId}

@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS tray/network:** source order/40px slots, live browser connectivity popup and regression. [Source trace](MACOS-TRAY-NETWORK-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS DateTime:** original calendar-only clock popup and navigation; unit/browser regression authored. [Source trace](MACOS-DATETIME-SOURCE.md). Tests pending.
 
 > **24 November 2026 — macOS menubars:** source active/inactive Notepad and Computer/Bin menubar/status paint and regression contracts. [Source trace](MACOS-MENUBAR-SOURCE.md). Tests pending.

@@ -360,3 +360,36 @@
 @media(max-width:650px){
   .windows-desktop[data-theme="macos"] .source-macos-datetime-trigger time span:last-child{display:none}
 }
+
+/* Source TaskbarMacOS: 40px non-date items in fixed source order.
+ * Retain explicit Guest notification preferences; the Windows-only
+ * hidden chevron is shown only when such preferences actually hide items. */
+.windows-desktop[data-theme="macos"] .windows-taskbar__tray{gap:0}
+.windows-desktop[data-theme="macos"] .windows-taskbar__tray-icon{
+  flex:0 0 40px;width:40px;min-width:40px;height:28px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-network{position:relative}
+.windows-desktop[data-theme="macos"] .source-macos-network-trigger{
+  display:grid;place-items:center;width:100%;height:28px;
+  border:0;border-radius:4px;background:none;color:#fff;padding:0;
+}
+.windows-desktop[data-theme="macos"] .source-macos-network-trigger[data-network-online="false"] svg{opacity:.5}
+.windows-desktop[data-theme="macos"] .source-macos-network-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="macos"] .source-macos-network-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 8px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;width:min(250px,calc(100vw - 16px));
+  padding:10px;background:#2d2d2d;border:1px solid #000;
+  border-radius:10px;box-shadow:0 4px 12px #0005;color:#fff;text-align:start;
+}
+.windows-desktop[data-theme="macos"] .source-macos-network-popup>*{padding:8px}
+.windows-desktop[data-theme="macos"] .source-macos-network-status{display:flex;align-items:center;gap:12px}
+.windows-desktop[data-theme="macos"] .source-macos-network-status svg{flex:none}
+.windows-desktop[data-theme="macos"] .source-macos-network-status p{margin:4px 0}
+.windows-desktop[data-theme="macos"] .source-macos-network-status small{opacity:.65}
+.windows-desktop[data-theme="macos"] .source-macos-network-popup>button{
+  display:block;width:100%;border:0;background:none;color:inherit;font:inherit;text-align:center;opacity:.5;
+}
+@media(max-width:650px){
+  .windows-desktop[data-theme="macos"] .windows-taskbar__tray-icon{flex-basis:24px;width:24px;min-width:24px}
+  .windows-desktop[data-theme="macos"] .source-macos-network-trigger svg{width:18px;height:18px}
+}

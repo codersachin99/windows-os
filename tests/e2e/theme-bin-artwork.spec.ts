@@ -1118,3 +1118,29 @@ test("macOS original DateTime popup navigates months and resets to today",async(
   await expect(popup).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });
+
+test("macOS source tray order and live browser network popup",async({page,context})=>{
+  await sourceThemeDesktop(page,"macos");
+  const tray=page.locator('[data-test-taskbar-tray="macos"]');
+  await expect(tray).toBeVisible();
+  const ids=await tray.locator("[data-test-tray-icon]").evaluateAll(items=>items.map(item=>item.getAttribute("data-test-tray-icon")));
+  expect(ids).toEqual(["TaskbarActionCenter","TaskbarNetwork","TaskbarBattery","TaskbarVolume"]);
+  await expect(tray.locator("[data-test-tray-hidden-toggle]")).toHaveCount(0);
+  await expect(page.locator("[data-test-show-desktop]")).toHaveCount(0);
+  const network=tray.locator("[data-test-network]");
+  await network.click();
+  const popup=tray.locator("[data-test-network-popup]");
+  await expect(popup).toBeVisible();
+  await expect(popup).toHaveCSS("background-color","rgb(45, 45, 45)");
+  await expect(popup.getByRole("button",{name:"Open Network Settings"})).toBeDisabled();
+  try{
+    await context.setOffline(true);
+    await expect(network).toHaveAttribute("data-network-online","false");
+    await expect(popup.getByRole("status")).toContainText("Browser reports offline");
+  }finally{await context.setOffline(false);}
+  await expect(network).toHaveAttribute("data-network-online","true");
+  await expect(popup.getByRole("status")).toContainText("Browser reports online");
+  await page.keyboard.press("Escape");
+  await expect(popup).toHaveCount(0);
+  await expect(network).toBeFocused();
+});
