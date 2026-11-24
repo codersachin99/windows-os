@@ -1095,3 +1095,26 @@ test("macOS original Explorer Organize menubar keeps keyboard and popup behavior
   await expect(menu).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });
+
+test("macOS original DateTime popup navigates months and resets to today",async({page})=>{
+  await sourceThemeDesktop(page,"macos");
+  const trigger=page.locator("[data-test-macos-datetime-trigger]");
+  await trigger.click();
+  const popup=page.locator("[data-test-macos-datetime-popup]");
+  await expect(popup).toBeVisible();
+  await expect(popup).toHaveCSS("background-color","rgb(45, 45, 45)");
+  await expect(popup.locator("[data-test-macos-calendar-day]")).toHaveCount(42);
+  await expect(popup.locator('[aria-current="date"]')).toHaveCSS("background-color","rgb(252, 57, 59)");
+  const month=popup.getByRole("button",{name:"Choose month"});
+  const original=await month.textContent();
+  await popup.getByRole("button",{name:"Next month"}).click();
+  await expect(month).not.toHaveText(original!);
+  await month.click();
+  await popup.getByRole("button",{name:"Feb",exact:true}).click();
+  await expect(month).toHaveText("February");
+  await popup.locator(".source-macos-calendar-today").click();
+  await expect(month).toHaveText(original!);
+  await page.keyboard.press("Escape");
+  await expect(popup).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});

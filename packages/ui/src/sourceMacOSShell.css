@@ -304,3 +304,59 @@
 }
 .windows-desktop[data-theme="macos"] .windows-window.is-active .notepad-status{background:#262626}
 .windows-desktop[data-theme="macos"] .windows-window.is-maximized .notepad-status{border-radius:0}
+
+/* Source TaskbarDatetime and ColorCalendar: macOS calendar-only popup. */
+.windows-desktop[data-theme="macos"] .source-macos-datetime{position:relative;height:28px;flex:none}
+.windows-desktop[data-theme="macos"] .source-macos-datetime-trigger{
+  height:100%;padding:0 4px;border:0;border-radius:4px;background:none;color:#fff;
+}
+.windows-desktop[data-theme="macos"] .source-macos-datetime-trigger:is(:focus,[aria-expanded="true"]){background:#fff2}
+.windows-desktop[data-theme="macos"] .source-macos-datetime-popup{
+  position:fixed;top:calc(var(--taskbar-height) + 8px);inset-inline-end:8px;
+  z-index:4900;box-sizing:border-box;max-width:calc(100vw - 16px);
+  max-height:calc(100dvh - var(--taskbar-height) - 16px);overflow:auto;
+  background:#2d2d2d;border:1px solid #000;border-radius:10px;
+  padding:10px;color:#fff;box-shadow:0 4px 12px #0005;text-align:start;
+}
+.windows-desktop[data-theme="macos"] .source-macos-datetime-popup button{
+  font:inherit;border:0;background:none;color:inherit;
+}
+.windows-desktop[data-theme="macos"] .source-macos-datetime-popup>button{
+  padding:8px;text-align:start;width:100%;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar{
+  width:min(300px,calc(100vw - 54px));padding:8px;box-sizing:content-box;text-align:center;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar header{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) repeat(2,32px);
+  align-items:center;gap:4px;margin-bottom:8px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-monthyear{
+  grid-column:1/span 5;text-align:start;font-weight:600;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-monthyear button{padding:4px 2px}
+.windows-desktop[data-theme="macos"] .source-macos-calendar button.source-macos-calendar-arrow,
+.windows-desktop[data-theme="macos"] .source-macos-calendar-year-arrows button{
+  background:#fff2;border-radius:4px;font-size:20px;line-height:28px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar button.source-macos-calendar-arrow:active{background:#fff4}
+.windows-desktop[data-theme="macos"] :is(.source-macos-calendar-weekdays,.source-macos-calendar-days){
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));justify-items:center;align-items:center;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-weekdays{margin-bottom:8px;color:#fff9}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-days{row-gap:4px}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-days button{
+  width:28px;height:28px;padding:0;border-radius:99px;font-size:20px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-days button.is-outside{opacity:.4}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-picker{
+  min-height:184px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:4px;
+}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-picker button{border-radius:99px;padding:8px}
+.windows-desktop[data-theme="macos"] .source-macos-calendar button:is(.is-today,[aria-pressed="true"]){background:#fc393b;color:#000;opacity:1}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-year-arrows{display:flex;justify-content:space-between}
+.windows-desktop[data-theme="macos"] .source-macos-calendar-year-arrows button{width:32px}
+.windows-desktop[data-theme="macos"] .source-macos-datetime-popup button:focus-visible{outline:2px solid #fff9;outline-offset:1px}
+@media(max-width:650px){
+  .windows-desktop[data-theme="macos"] .source-macos-datetime-trigger time span:last-child{display:none}
+}

@@ -7,6 +7,7 @@ import {useSourceTrashCount} from "./useSourceTrashCount";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {SourceMacOSAppleMenu} from "./SourceMacOSAppleMenu";
+import {SourceMacOSDateTime} from "./SourceMacOSDateTime";
 import {SourceMacOSSpotlight} from "./SourceMacOSSpotlight";
 import { ContactsApp } from "@windows-os/apps/contacts";
 import { NotepadApp } from "@windows-os/apps/notepad";
@@ -712,7 +713,7 @@ export function DesktopShell({
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch}/>}
-          {trayPreferences.showClockIcon&&<div data-test-tray-clock=""><Clock/></div>}
+          {trayPreferences.showClockIcon&&(state.theme==="macos"?<SourceMacOSDateTime onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
         </div>
         <button className="windows-taskbar__show-desktop" aria-label="Show desktop"
           data-test-show-desktop=""

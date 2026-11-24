@@ -1,3 +1,9 @@
+## 24 November 2026 — macOS DateTime popup
+
+Ported original calendar-only topbar clock popup, live short date, full-date reset, 42-cell grid, month/year pickers and source red day selection. Shared date arithmetic with rollover/leap year unit tests and browser navigation contract. [Source trace](MACOS-DATETIME-SOURCE.md). Exact-head tests pending; previous CI #45395440100 still running targeted browsers at inspection. No redundant trigger. Next inspect browser failures then source tray order/action center and remaining capabilities. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS application menubars
 
 Ported source active/inactive Notepad menu/status and shared Computer/Bin menubar paint, original hover/pressed text and background, separators, RTL and disabled states. Existing command and dropdown behavior preserved. Browser contracts for real status toggle and Organize Escape/focus restoration authored. [Source trace](MACOS-MENUBAR-SOURCE.md). [CI #45395440100](https://github.com/codersachin99/windows-os/actions/runs/45395440100) still running targeted browsers at inspection; no redundant trigger. Next repair any browser failures, then remaining macOS shell details. Main/frozen source/draft PR/releases unchanged.

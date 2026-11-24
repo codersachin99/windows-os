@@ -1,3 +1,5 @@
+> **24 November 2026 — macOS DateTime:** original calendar-only clock popup and navigation; unit/browser regression authored. [Source trace](MACOS-DATETIME-SOURCE.md). Tests pending.
+
 > **24 November 2026 — macOS menubars:** source active/inactive Notepad and Computer/Bin menubar/status paint and regression contracts. [Source trace](MACOS-MENUBAR-SOURCE.md). Tests pending.
 
 > **24 November 2026 — macOS Explorer:** original active/inactive Computer/Bin chrome, navigation and selection paint; browser regression authored. [Source trace](MACOS-EXPLORER-SOURCE.md). Previous CI running browsers; new head pending.
