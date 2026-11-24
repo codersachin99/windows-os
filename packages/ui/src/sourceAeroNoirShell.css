@@ -107,3 +107,82 @@
   color:#fff;background-image:linear-gradient(#555,#333);border:1px solid var(--theme-color);
 }
 .windows-desktop[data-theme="aeroNoir"] .windows-window.is-maximized{padding:0;border:0;border-radius:0}
+
+/* Aero Noir startmenu-base.js + theme-aeroNoir-scss.js.
+ * Keep the source two-column sizes at desktop widths and constrain only
+ * the available viewport on compact screens. Isolated tint behind content. */
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu{
+  isolation:isolate;box-sizing:border-box;inset-inline-start:0;left:auto;
+  width:min(414px,100%);height:min(400px,calc(100dvh - 45px));min-height:0;
+  grid-template-columns:minmax(0,248px) minmax(0,140px);gap:8px;padding:8px;
+  color:#fff;border:1px solid var(--theme-color);border-radius:6px 6px 0 0;
+  background:none;box-shadow:inset 0 1px 0 #fff5,2px 2px 10px #000;
+  backdrop-filter:none;
+}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) .windows-startmenu{
+  box-shadow:inset 0 1px 0 #fff5,-2px 2px 10px #000;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:.6;background-color:var(--theme-color);
+}
+.windows-desktop[data-theme="aeroNoir"][data-effect-enable-glass] .windows-startmenu{
+  backdrop-filter:blur(4px);
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__left{
+  min-width:0;min-height:0;justify-content:space-between;
+  border:1px solid var(--theme-color);border-radius:4px 4px 0 0;
+  background:linear-gradient(#555,#333);color:#fff;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__programs{
+  min-height:0;max-height:none;overflow:auto;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right{
+  box-sizing:border-box;min-width:0;min-height:0;overflow-y:auto;
+  padding-top:30px;color:#fff;background:none;border:0;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right .windows-startmenu__avatar{
+  width:57px;height:57px;flex:none;object-fit:cover;
+}
+.windows-desktop[data-theme="aeroNoir"] :is(.windows-startmenu__program,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button){
+  color:#fff;background:none;border:1px solid transparent;border-radius:3px;
+  box-shadow:none;text-shadow:none;
+}
+.windows-desktop[data-theme="aeroNoir"] :is(.windows-startmenu__program,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button):not(:disabled):is(:hover,:focus-visible){
+  backdrop-filter:brightness(.7);border-color:var(--theme-color);
+  background:linear-gradient(#fff3,#0003) var(--theme-color);box-shadow:3px 3px 3px #0003;
+}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) :is(.windows-startmenu__program,.windows-startmenu__all-programs,.windows-startmenu__recent-grid button):not(:disabled):is(:hover,:focus-visible){
+  box-shadow:-3px 3px 3px #0003;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right button{
+  flex-shrink:0;color:#fff;border:1px solid transparent;border-radius:3px;
+  background:none;text-shadow:none;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right button:not(:disabled):is(:hover,:focus-visible){
+  border-color:#333;background:linear-gradient(#fff3,#fff4 50%,#0002 50%,#0001);
+  box-shadow:inset 0 0 0 1px #fff5;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right hr{
+  border:0;border-top:1px solid var(--border-color);flex:none;
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right .windows-startmenu__power{
+  color:#fff;border:1px solid var(--border-color);
+  background:linear-gradient(#555a,#333a);
+}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__right .windows-startmenu__power:hover{filter:brightness(1.2)}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__search{
+  border:1px solid;border-color:#888 #aaa #aaa #888;border-radius:3px;
+  background:linear-gradient(#333,#555);box-shadow:inset 0 0 3px #0008;color:#fff;
+}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) .windows-startmenu__search{border-color:#888 #888 #aaa #aaa}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__search:is(:hover,:focus-within){border-color:var(--theme-color)}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__search:focus-within{background:linear-gradient(#444,#666)}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__search input{color:#fff;background:none}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__search span{color:#fff}
+.windows-desktop[data-theme="aeroNoir"] .windows-startmenu__empty{color:#ddd}
+@media(max-width:413px){
+  .windows-desktop[data-theme="aeroNoir"] .windows-startmenu{
+    grid-template-columns:minmax(0,248fr) minmax(0,140fr);
+  }
+}

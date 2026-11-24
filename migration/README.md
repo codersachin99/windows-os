@@ -1,3 +1,5 @@
+> **24 November 2026 — Aero Noir Start:** source two-column paint and Guest library navigation; browser regression pending. [Source trace](AERONOIR-START-SOURCE.md).
+
 > **24 November 2026 — Oxygen verified / Aero Noir WindowMain:** 89 browser tests passed (1 skipped); original Aero Noir frame and caption buttons ported, new tests pending. [Source trace](AERONOIR-WINDOW-SOURCE.md).
 
 > **24 November 2026 — Aero Noir base shell:** original gloss taskbar and icon selection, verified palette, browser tests pending. [Source trace](AERONOIR-SHELL-SOURCE.md).

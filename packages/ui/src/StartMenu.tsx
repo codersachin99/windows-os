@@ -70,7 +70,8 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   // Pinned startmenu-base.js supplies recent programs and configured
   // power actions to the shared Win7 renderer, including Vista's
   // isVista/searchStyle variant and all Aero/Basic skins.
-  const isWin7StartFamily=theme==="win7"||theme==="winvista"||
+  // Aero Noir uses the same pinned startmenu-base.js two-column launcher.
+  const isWin7StartFamily=theme==="aeroNoir"||theme==="win7"||theme==="winvista"||
     sourceIsAeroFamily(theme)||theme==="basic-1"||theme==="basic-2"||
     theme==="basic-3"||theme==="basic-4";
   const isWin11Theme=theme==="win11"||theme==="win11dark";
