@@ -477,7 +477,42 @@ function sourceMacOSIcon(key:string):string|null{
   return Object.prototype.hasOwnProperty.call(sourceMacOSIconArtwork,key)
     ?sourceMacOSIconArtwork[key as keyof typeof sourceMacOSIconArtwork]:null;
 }
+/** ChromeOS core registry; shared Bin and folder aliases are intentional. */
+export const sourceChromeOSIconArtwork=Object.freeze({
+  "computer":"/assets/images/computer-chromeos.f4f817d9.webp",
+  "bin":"/assets/images/bin-chromeos.6bccf38b.webp",
+  "bin-full":"/assets/images/bin-chromeos.6bccf38b.webp",
+  "folder":"/assets/images/folder-chromeos.fa700781.svg",
+  "file":"/assets/images/file-chromeos.c40dd66d.svg",
+  "start":"/assets/images/start-button-win8.2e5214cc.svg",
+  "folder-docs":"/assets/images/folder-chromeos.fa700781.svg",
+  "folder-downloads":"/assets/images/downloads-chromeos.729e50f7.svg",
+  "folder-music":"/assets/images/folder-chromeos.fa700781.svg",
+  "folder-pics":"/assets/images/folder-chromeos.fa700781.svg",
+  "folder-videos":"/assets/images/folder-chromeos.fa700781.svg",
+  "disk-os":"/assets/images/disk-os-chromeos.8e3d1d59.webp",
+  "disk-data":"/assets/images/disk-data-chromeos.eb3a943a.webp",
+  "disk-cd":"/assets/images/disk-cd-chromeos.f4c2176f.webp",
+  "disk-connected":"/assets/images/disk-data-chromeos.eb3a943a.webp",
+  "disk-disconnected":"/assets/images/disk-data-chromeos.eb3a943a.webp",
+  "calc":"/assets/images/calc-chromeos.a98e0827.webp",
+  "cpanel":"/assets/images/cpanel-chromeos.208392b0.svg",
+  "notepad":"/assets/images/notepad-chromeos.9c15f97a.webp",
+  "cmd":"/assets/images/cmd-chromeos.255c4ab1.webp",
+  "text":"/assets/images/text-chromeos.76d507c5.svg",
+  "executable":"/assets/images/executable-win10.8269999b.webp",
+  "shortcut":"/assets/images/shortcut-win10.c8f56fdb.webp",
+  "media":"/assets/images/media-chromeos.51aced5d.svg",
+  "zip":"/assets/images/zip-chromeos.f405c15d.svg",
+  "desktop":"/assets/images/desktop-chromeos.26c36183.svg",
+  "chrome":"/assets/images/chrome-chromeos.9384cbbf.svg"
+});
+function sourceChromeOSIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceChromeOSIconArtwork,key)
+    ?sourceChromeOSIconArtwork[key as keyof typeof sourceChromeOSIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="chromeos")return sourceChromeOSIcon(iconKey);
   if(theme==="macos")return sourceMacOSIcon(iconKey);
   if(theme==="win2k")return sourceWin2kProgramArtwork[iconKey]??null;
   if((theme==="win95"||theme==="win98")&&iconKey==="shutdown")
@@ -526,6 +561,10 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="chromeos"){
+    if(kind==="theme")return sourceShellWallpaper(theme);
+    return sourceChromeOSIcon(kind==="binFull"?"bin-full":kind);
+  }
   if(theme==="macos"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceMacOSIcon(kind==="binFull"?"bin-full":kind);

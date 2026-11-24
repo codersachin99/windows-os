@@ -1,3 +1,11 @@
+## 24 November 2026 — ChromeOS core desktop/Explorer artwork
+
+Combined [CI #45364747459](https://github.com/codersachin99/windows-os/actions/runs/45364747459) at `2b5b818d`: TS/units/inventory/artwork/Contacts/Vite passed; focused browser stage still running. No parallel full CI.
+
+Pinned ChromeOS registry now supplies 27 keys via 20 original paths (19 imported hash-matched, one existing Start SVG reused). Exact same empty/full Bin alias, generic folder aliases, distinct Downloads, three disk images, application/file type art and explicit desktop navigation. Unit and focused theme-bin-artwork browser coverage for real delete/empty state, Computer, folder/file creation and navigation. [Source trace](CHROMEOS-CORE-ICONS-SOURCE.md). macOS and ChromeOS icon slices await new verification batch. Shell status remains pending. Next Ubuntu/Kubuntu core icons. Frozen source/main/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — macOS core desktop/Explorer artwork
 
 Combined [CI #45364747459](https://github.com/codersachin99/windows-os/actions/runs/45364747459) at `2b5b818d`: TypeScript, units, inventory, exact art, Contacts audit and Vite passed; focused browser suite still running at inspection. No second full run.

@@ -1,3 +1,5 @@
+> **24 November 2026 — ChromeOS core icon artwork:** 27 original registry keys, 20 exact paths (19 imported, one reused). Shared empty/full Bin and folder aliases preserved, actual trash lifecycle tests. [Source trace](CHROMEOS-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
+
 > **24 November 2026 — macOS core icon artwork:** 24 pinned registry keys, 20 exact original file paths, shared desktop/Explorer/Bin resolution with unit and browser regressions. [Source trace](MACOS-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
 
 > **24 November 2026 — classic/XP desktop defaults:** Four exact XP variant wallpapers plus four classic source solid colors, corrected existing gallery previews; 30 available system images. [Source trace](CLASSIC-XP-WALLPAPER-SOURCE.md). CI #45363645210 failed only stale Ubuntu fallback assertion (721 passed); corrected, next opt-in combined check requested.

@@ -2,6 +2,10 @@ import {expect,test,type Page} from "@playwright/test";
 
 const SOURCE_DESKTOP="/EXTERNAL/computer/drive0/Users/Guest/Desktop";
 const artwork={
+  chromeos:{
+    empty:"/assets/images/bin-chromeos.6bccf38b.webp",
+    full:"/assets/images/bin-chromeos.6bccf38b.webp"
+  },
   macos:{
     empty:"/assets/images/bin-mac.499e907b.webp",
     full:"/assets/images/bin-full-mac.67e3d272.webp"
@@ -38,7 +42,7 @@ async function sourceThemeDesktop(page:Page,theme:keyof typeof artwork){
   await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme",theme);
 }
 
-for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos"] as const){
+for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos","chromeos"] as const){
   test("original "+theme+" Recycle Bin artwork follows the actual Guest trash lifecycle",async({page})=>{
     await sourceThemeDesktop(page,theme);
     const icon=page.locator('[data-test-desktop-icon="bin"]');
@@ -70,6 +74,10 @@ for(const theme of ["win95","win98","win2k","winxp","win10","win11","macos"] as 
     const empty=page.getByRole("alertdialog",{name:"Confirm empty Recycle Bin"});
     await empty.getByRole("button",{name:"Yes"}).click();
     await expect(image).toHaveAttribute("src",artwork[theme].empty);
+    if(theme==="chromeos"){
+      await icon.dblclick();
+      await expect(page.locator('[data-test-window="bin"]').last().locator('[data-test-explorer-item="'+name+'"]')).toHaveCount(0);
+    }
   });
 }
 
@@ -154,4 +162,51 @@ test("original macOS Computer and Desktop files use theme-specific folder/generi
   const opened=page.locator('[data-test-window="computer"]').last();
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/macOS Source Folder");
+});
+
+
+test("original ChromeOS Computer and Desktop files use theme-specific folder/generic-file artwork",async({page})=>{
+  await sourceThemeDesktop(page,"chromeos");
+  const computerIcon=page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon');
+  await expect(computerIcon).toHaveAttribute("src",
+    "/assets/images/computer-chromeos.f4f817d9.webp");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+  await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src","/assets/images/start-button-win8.2e5214cc.svg");
+  await expect(explorer.locator(".explorer-navigation__home").first().locator("img"))
+    .toHaveAttribute("src","/assets/images/computer-chromeos.f4f817d9.webp");
+  for(const [label,art] of [["Documents","/assets/images/folder-chromeos.fa700781.svg"],["Downloads","/assets/images/downloads-chromeos.729e50f7.svg"],["Music","/assets/images/folder-chromeos.fa700781.svg"],["Pictures","/assets/images/folder-chromeos.fa700781.svg"],["Videos","/assets/images/folder-chromeos.fa700781.svg"]]){
+    const shortcut=explorer.locator(".explorer-navigation__home").filter({hasText:label});
+    await expect(shortcut.locator("img")).toHaveAttribute("src",art);
+  }
+  const desktopShortcut=explorer.getByRole("button",{name:"Desktop",exact:true});
+  await expect(desktopShortcut.locator("img")).toHaveAttribute("src","/assets/images/desktop-chromeos.26c36183.svg");
+  await desktopShortcut.click();
+  await expect(explorer.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP);
+  await explorer.getByRole("button",{name:"New folder"}).click();
+  const dialog=explorer.getByRole("dialog",{name:"New folder"});
+  await dialog.getByRole("textbox",{name:"New folder name"})
+    .fill("ChromeOS Source Folder");
+  await dialog.getByRole("button",{name:"OK"}).click();
+  const folder=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/ChromeOS Source Folder"]');
+  await expect(folder).toBeVisible();
+  await expect(folder.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/folder-chromeos.fa700781.svg");
+
+  await explorer.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Source Unknown.abc",
+      mimeType:"application/octet-stream",
+      buffer:Buffer.from([0x31,0x32,0x33])});
+  const unknown=page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Source Unknown.abc"]');
+  await expect(unknown).toBeVisible();
+  await expect(unknown.locator(".desktop__icon-icon"))
+    .toHaveAttribute("src","/assets/images/file-chromeos.c40dd66d.svg");
+
+  await folder.dblclick();
+  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
+  const opened=page.locator('[data-test-window="computer"]').last();
+  await expect(opened.getByRole("textbox",{name:"Folder address"}))
+    .toHaveValue(SOURCE_DESKTOP+"/ChromeOS Source Folder");
 });
