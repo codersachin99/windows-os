@@ -2175,11 +2175,13 @@
       "evidence": [
         "packages/ui/src/SourceOnebitLogon.tsx",
         "packages/ui/src/sourceOnebitLogon.css",
+        "packages/ui/src/sourceOnebitAvatarPixelate.ts",
+        "packages/ui/src/sourceOnebitAvatarPixelate.test.ts",
         "packages/ui/src/sourceOnebitLogon.test.tsx",
         "tests/e2e/source-onebit-logon.spec.ts",
         "migration/ONEBIT-LOGON-SOURCE.md"
       ],
-      "verification": "source-backed Guest and power slice; original avatar/captcha/pixel parity and full shell pending"
+      "verification": "source-backed Guest, power and four-color pixel-avatar slice; captcha, exact screen screenshot and full shell pending"
     },
     {
       "source": "src/modules/themes/logon-oxygen.js",
