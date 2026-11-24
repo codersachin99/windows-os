@@ -64,3 +64,48 @@ test("Computer and Recycle Bin open View cascades resize from adjacent to stacke
     await win.getByRole("button",{name:/^Close /}).click();
   }
 });
+
+test("Computer item Send to cascade repositions without losing a live Guest file action",async({page})=>{
+  await page.setViewportSize({width:1100,height:800});
+  await page.goto("/?theme=win7");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]');
+  await expect(win).toBeVisible();
+  await win.locator(".explorer-navigation__home")
+    .filter({hasText:"Documents"}).click();
+  await win.locator('input[type="file"][aria-label="Upload files"]')
+    .setInputFiles({name:"Resize Send To.txt",mimeType:"text/plain",
+      buffer:Buffer.from("source file retained across viewport resize")});
+  const item=win.locator('[data-test-explorer-item="Resize Send To.txt"]');
+  await expect(item).toBeVisible();
+  await item.click({button:"right"});
+  const root=win.locator('[data-test-explorer-context="item"]');
+  await expect(root).toBeVisible();
+  const send=root.locator('[data-test-explorer-item-send-to]');
+  await send.click();
+  const submenu=root.locator('[data-test-explorer-sendto-submenu]');
+  await expect(submenu).toBeVisible();
+  await expect(submenu).toHaveAttribute("data-cascade","adjacent");
+  await bounded(root,page);
+  await bounded(submenu,page);
+  await page.setViewportSize({width:320,height:800});
+  await expect(submenu).toHaveAttribute("data-cascade","stacked");
+  await bounded(root,page);
+  await bounded(submenu,page);
+  const compressed=submenu.locator('[data-test-explorer-item-send-to-kind="compress"]');
+  await expect(compressed).toBeEnabled();
+  // Keyboard navigation must still return to this exact root trigger.
+  await compressed.focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(submenu).toHaveCount(0);
+  await expect(send).toBeFocused();
+  await send.press("ArrowRight");
+  await expect(submenu).toHaveAttribute("data-cascade","stacked");
+  await page.setViewportSize({width:1100,height:800});
+  await expect(submenu).toHaveAttribute("data-cascade","adjacent");
+  await bounded(submenu,page);
+  await page.keyboard.press("Escape");
+  await expect(root).toHaveCount(0);
+  await expect(item).toBeVisible();
+});
