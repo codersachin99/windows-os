@@ -1,3 +1,9 @@
+## 24 November 2026 — Longhorn/Whistler context-menu skins
+
+Ported original distinct Plex, Slate and Whistler WinUI menu palettes to Desktop, taskbar, Explorer root/child and body-portaled Start contexts via shared scoped CSS. Existing viewport flipping and actions unchanged. Three desktop/mobile regression contracts added for menu paint, hover, nested Explorer View and pin action. [Source trace](LONGHORN-WHISTLER-CONTEXT-SOURCE.md). Exact-head CI pending; no extra trigger. Next Explorer address/navigation/sidepane/statusbar and application menubar. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — Longhorn/Whistler window frame chrome
 
 Ported original Plex/Slate/Whistler window frame palettes, active/inactive title treatment, 20px caption controls, maximized state and RTL styling. Original Whistler embedded PNG copied directly from frozen CSS. Added real Guest window lifecycle regression contracts. [Source trace](LONGHORN-WHISTLER-WINDOW-SOURCE.md). App bodies, exact glyph variants, context and Explorer chrome pending. Exact-head CI pending; no redundant trigger. Main/frozen reference/draft PR/releases unchanged.

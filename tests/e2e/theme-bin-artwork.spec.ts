@@ -587,3 +587,58 @@ for(const [theme,radius,activeColor,buttonColor] of [
     await expect(win).toHaveCount(0);
   });
 }
+
+
+for(const [theme,border,hover,textColor] of [
+  ["winLP","rgb(65, 101, 159)","rgb(44, 104, 161)","rgb(255, 255, 255)"],
+  ["winLS","rgb(124, 124, 124)","rgb(201, 200, 203)","rgb(0, 0, 0)"],
+  ["winW","rgb(144, 144, 144)","rgb(56, 101, 154)","rgb(0, 0, 0)"]
+] as const){
+  test(theme+" original context skins on Desktop, Explorer and Start portal",async({page})=>{
+    await sourceThemeDesktop(page,theme);
+    const paint=async(menu:ReturnType<Page["locator"]>)=>{
+      await expect(menu).toBeVisible();
+      await expect(menu).toHaveCSS("border-top-color",border);
+      await expect(menu).toHaveCSS("border-top-left-radius","0px");
+      await expect(menu).toHaveCSS("color",textColor);
+      if(theme==="winLP")await expect(menu).toHaveCSS("background-image",/linear-gradient/);
+      else await expect(menu).toHaveCSS("background-color","rgb(255, 255, 255)");
+    };
+    await page.locator("#desktop-icons").click({button:"right",position:{x:260,y:200}});
+    const root=page.locator("[data-test-desktop-menu]");
+    await paint(root);
+    const refresh=root.getByRole("menuitem",{name:"Refresh"});
+    await refresh.hover();
+    await expect(refresh).toHaveCSS("border-top-color",hover);
+    await page.keyboard.press("Escape");
+    await expect(root).toHaveCount(0);
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]').first();
+    const content=win.locator(".explorer-content");
+    const bounds=await content.boundingBox();
+    expect(bounds).not.toBeNull();
+    await content.click({button:"right",position:{x:Math.max(10,bounds!.width-12),y:Math.max(10,bounds!.height-12)}});
+    const menu=win.locator('[data-test-explorer-context="background"]');
+    await paint(menu);
+    const view=menu.locator("[data-test-explorer-context-view]");
+    await view.hover();
+    await expect(view).toHaveCSS("border-top-color",hover);
+    await view.click();
+    const child=menu.locator("[data-test-explorer-background-submenu]");
+    await paint(child);
+    await expect(child.getByRole("menuitemradio")).toHaveCount(8);
+    await page.keyboard.press("Escape");
+    await expect(menu).toHaveCount(0);
+    await win.locator('[data-source-window-control="close"]').click();
+    await page.locator("[data-test-start-button]").click();
+    const start=page.locator("[data-test-start-menu]");
+    await start.locator('[data-test-program="notepad"]').first().click({button:"right"});
+    const popup=page.locator('body > [data-test-start-program-context="notepad"]');
+    await paint(popup);
+    const pin=popup.locator('[data-test-start-context-action="pin"]');
+    await pin.hover();
+    await expect(pin).toHaveCSS("border-top-color",hover);
+    await pin.click();
+    await expect(page.locator('[data-test-taskbar-pin="notepad"]')).toBeVisible();
+  });
+}
