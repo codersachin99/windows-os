@@ -2143,8 +2143,15 @@
       "source": "src/modules/themes/logon-aeronoir.js",
       "sha": "f69a0540d34b4508cceb3fa1e104c9b1fe8f6aaf",
       "area": "themes",
-      "status": "pending",
-      "evidence": []
+      "status": "in-progress",
+      "evidence": [
+        "packages/ui/src/SourceAeroNoirLogon.tsx",
+        "packages/ui/src/sourceAeroNoirLogon.css",
+        "packages/ui/src/sourceAeroNoirLogon.test.tsx",
+        "tests/e2e/source-aeronoir-logon.spec.ts",
+        "migration/AERONOIR-LOGON-SOURCE.md"
+      ],
+      "verification": "Guest/power and byte-matched original artwork slice; account spinner, shell and visual parity pending"
     },
     {
       "source": "src/modules/themes/logon-chromeos.js",
