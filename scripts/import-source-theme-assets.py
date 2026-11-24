@@ -49,6 +49,10 @@ FILES: dict[str, dict[str, str]] = {
         # logon-winl.js uses this for both source aliases winLS and winLP.
         "login-winL.d27b081a.webp": "fd22904131ad5ddb4ab5c316edbe9eb19aa01376",
     },
+    "winW": {
+        # logon-winw.js source misc.logowhistler verified from pinned Git blob.
+        "logowhistler.73c9045c.webp": "c0528d4a30f97f83400939ae891bc2ae54d863bb",
+    },
     "winxp": {
         "logoxp.9b034658.png": "33b3bca96d3c07994b096bf13d2a87a6a05b1196",
         "action-center-winxp.52f44912.webp": "56cc03e77b7ce0097db3addd9463d0d8b22c502f",
