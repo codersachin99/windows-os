@@ -1,0 +1,103 @@
+/* Pinned legacy-win7 src/styles/themes/logon-winw.css.
+ * Source Whistler has white main, a #295da8 sideways Windows rail,
+ * orange Welcome, navy instructions and faded original Whistler logo.
+ * Mobile clamping avoids overflowing the viewport, not a new visual skin.
+ */
+.windows-logon.source-winw-logon{
+  display:flex;flex-direction:row;justify-content:flex-start;align-items:stretch;
+  position:relative;overflow:hidden;background:#fff;background-image:none;
+  color:#000;font:16px Tahoma,"Segoe UI",sans-serif;
+}
+.source-winw-logon__rail{
+  display:flex;align-items:center;justify-content:center;
+  box-sizing:border-box;width:92px;min-height:100%;padding:24px;
+  background-color:#295da8;color:#fff;
+  writing-mode:sideways-lr;text-transform:uppercase;
+  font-size:36px;font-weight:bold;line-height:1.2;
+  flex-shrink:0;text-align:right;
+}
+.source-winw-logon__main{
+  display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;
+  gap:24px;flex:1;min-width:0;max-width:512px;
+  padding:clamp(24px,22vh,192px) 16px 128px 42px;
+}
+.source-winw-logon__header{
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;
+  position:relative;width:100%;
+}
+.source-winw-logon__header img{
+  position:absolute;right:calc(100% + 16px);top:-24px;
+  width:144px;height:auto;max-width:none;opacity:.3;
+  pointer-events:none;
+}
+.source-winw-logon__header h1{
+  margin:0;color:orange;font-size:clamp(44px,6.5vw,72px);
+  font-weight:bold;line-height:1.1;
+}
+.source-winw-logon__header p{
+  margin:0;color:navy;font-size:16px;font-weight:bold;line-height:1.4;
+}
+.source-winw-logon__account{
+  display:flex;align-items:center;gap:14px;min-width:0;
+  color:navy;
+}
+.source-winw-logon__avatar{
+  display:grid;place-items:center;flex:0 0 auto;
+  width:70px;height:70px;padding:2px;
+  border:1px solid transparent;border-radius:0;
+  background:transparent;cursor:pointer;
+}
+.source-winw-logon__avatar img{
+  display:block;width:64px;height:64px;object-fit:contain;
+}
+.source-winw-logon__avatar:hover,
+.source-winw-logon__avatar:focus-visible{
+  border-color:rgba(0,0,0,.4);outline-offset:2px;outline:1px solid rgba(0,0,0,.4);
+}
+.source-winw-logon__account strong{font-size:16px;font-weight:bold}
+.source-winw-logon__switch{
+  color:navy;background:transparent;border:1px solid transparent;
+  border-radius:2px;text-decoration:underline;
+  cursor:pointer;padding:3px 0;font:14px Tahoma,sans-serif;
+}
+.source-winw-logon__switch:hover{text-decoration:none}
+.source-winw-logon__switch:focus-visible{border-color:rgba(0,0,0,.4);outline:none}
+.source-winw-logon__footer{
+  position:absolute;left:clamp(92px,15vw,128px);right:64px;
+  bottom:48px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:18px;
+}
+.source-winw-logon__power{display:flex;flex-direction:column;gap:4px}
+.source-winw-logon__power button{
+  padding:3px 0;border:1px solid transparent;border-radius:2px;
+  text-decoration:underline;background:transparent;
+  color:#000;cursor:pointer;font:14px Tahoma,sans-serif;
+}
+.source-winw-logon__power button:hover{text-decoration:none}
+.source-winw-logon__power button:focus-visible{border-color:rgba(0,0,0,.4)}
+.source-winw-logon__footer p{
+  flex:0 1 320px;color:#0009;font-size:14px;text-align:right;margin:0;
+}
+.source-winw-logon__unavailable{
+  position:absolute;z-index:8;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(360px,calc(100vw - 32px));padding:18px;box-sizing:border-box;
+  background:#fff;color:#000;box-shadow:0 6px 24px #0006;
+  border:1px solid #295da8;
+}
+.source-winw-logon__unavailable p{margin:0 0 14px}
+.source-winw-logon__unavailable button{
+  padding:5px 14px;border:1px solid #295da8;background:#fff;cursor:pointer;
+}
+@media(max-width:640px){
+  .source-winw-logon__rail{width:56px;padding:10px;font-size:26px}
+  .source-winw-logon__main{padding:28px 12px 132px 18px}
+  .source-winw-logon__header img{position:static;width:84px;height:auto;opacity:.3}
+  .source-winw-logon__header h1{font-size:clamp(35px,9vw,52px)}
+  .source-winw-logon__account{flex-wrap:wrap;gap:8px}
+  .source-winw-logon__footer{left:70px;right:12px;bottom:16px;gap:10px}
+  .source-winw-logon__footer p{font-size:11px;flex-basis:170px}
+}
+@media(max-height:450px){
+  .source-winw-logon__main{padding-top:12px;gap:10px}
+  .source-winw-logon__footer{bottom:8px}
+}
