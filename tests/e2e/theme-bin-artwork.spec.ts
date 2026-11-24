@@ -431,3 +431,23 @@ for(const [theme,start] of Object.entries({"winLP":"/assets/images/start-button-
     await expect(page.locator('[data-test-desktop-file="'+SOURCE_DESKTOP+'/Original '+theme+' Folder"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/folder-winxp.ff1b00c5.webp");
   });
 }
+
+
+test("Vista uses all source shell overrides without changing shared Computer artwork",async({page})=>{
+  await page.goto("/?theme=winvista");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(page.locator('[data-test-main-screen]')).toHaveAttribute("data-theme","winvista");
+  await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src","/assets/images/start-button-winvista.f48c809a.webp");
+  await expect(page.locator('[data-test-desktop-icon="computer"] .desktop__icon-icon')).toHaveAttribute("src","/assets/images/computer.f1f7f519.webp");
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const explorer=page.locator('[data-test-window="computer"]').first();
+  await expect(explorer).toBeVisible();
+  for(const [label,art] of [["Documents","/assets/images/folder-docs-winvista.d37b911b.webp"],["Downloads","/assets/images/folder-downloads-winvista.e9a11f63.webp"],["Music","/assets/images/folder-music-winvista.f77b8b67.webp"],["Pictures","/assets/images/folder-pics-winvista.73e408b9.webp"],["Videos","/assets/images/folder-videos-winvista.e4bb726b.webp"]]){
+    await expect(explorer.locator(".explorer-navigation__home").filter({hasText:label}).locator("img")).toHaveAttribute("src",art);
+  }
+  for(const path of ["/assets/images/calc-winvista.46d50b40.webp","/assets/images/cpanel-winvista.aee2401a.webp","/assets/images/folder-docs-winvista.d37b911b.webp","/assets/images/folder-downloads-winvista.e9a11f63.webp","/assets/images/folder-music-winvista.f77b8b67.webp","/assets/images/folder-pics-winvista.73e408b9.webp","/assets/images/folder-videos-winvista.e4bb726b.webp","/assets/images/gadgets-winvista.9645eb0d.webp","/assets/images/paint-winvista.2f8923fc.webp","/assets/images/start-button-winvista.f48c809a.webp","/assets/images/sticky-winvista.2eb5a2ad.webp"]){
+    const response=await page.request.get(path);
+    expect(response.ok(),path).toBeTruthy();
+    expect(response.headers()["content-type"],path).toContain("image/webp");
+  }
+});

@@ -702,7 +702,26 @@ function sourceLonghornWhistlerIcon(theme:"winLP"|"winW",key:string):string|null
   return Object.prototype.hasOwnProperty.call(sourceLonghornWhistlerIconArtwork,key)
     ?sourceLonghornWhistlerIconArtwork[key as keyof typeof sourceLonghornWhistlerIconArtwork]:null;
 }
+/** All eleven original Vista registry overrides; other keys retain shared artwork. */
+export const sourceVistaIconArtwork=Object.freeze({
+  "calc": "/assets/images/calc-winvista.46d50b40.webp",
+  "cpanel": "/assets/images/cpanel-winvista.aee2401a.webp",
+  "folder-docs": "/assets/images/folder-docs-winvista.d37b911b.webp",
+  "folder-downloads": "/assets/images/folder-downloads-winvista.e9a11f63.webp",
+  "folder-music": "/assets/images/folder-music-winvista.f77b8b67.webp",
+  "folder-pics": "/assets/images/folder-pics-winvista.73e408b9.webp",
+  "folder-videos": "/assets/images/folder-videos-winvista.e4bb726b.webp",
+  "gadgets": "/assets/images/gadgets-winvista.9645eb0d.webp",
+  "paint": "/assets/images/paint-winvista.2f8923fc.webp",
+  "start": "/assets/images/start-button-winvista.f48c809a.webp",
+  "sticky": "/assets/images/sticky-winvista.2eb5a2ad.webp"
+});
+function sourceVistaIcon(key:string):string|null{
+  return Object.prototype.hasOwnProperty.call(sourceVistaIconArtwork,key)
+    ?sourceVistaIconArtwork[key as keyof typeof sourceVistaIconArtwork]:null;
+}
 export function sourceThemeProgramArt(theme:string,iconKey:string):string|null{
+  if(theme==="winvista")return sourceVistaIcon(iconKey);
   if(theme==="winLP"||theme==="winW")return sourceLonghornWhistlerIcon(theme,iconKey);
   if(theme==="oxygen")return sourceOxygenIcon(iconKey);
   if(theme==="aeroNoir")return sourceAeroNoirIcon(iconKey);
@@ -757,6 +776,7 @@ export const legacyXpPowerArtwork = Object.freeze({
 export type SourceShellArtworkKind = keyof typeof legacyShellThemeAssets.winxp;
 /** Other legacy theme IDs must keep their existing original fallback artwork. */
 export function sourceShellAsset(theme: string, kind: SourceShellArtworkKind): string | null {
+  if(theme==="winvista")return kind==="theme"?sourceShellWallpaper(theme):sourceVistaIcon(kind==="binFull"?"bin-full":kind);
   if(theme==="winLP"||theme==="winW"){
     if(kind==="theme")return sourceShellWallpaper(theme);
     return sourceLonghornWhistlerIcon(theme,kind==="binFull"?"bin-full":kind);

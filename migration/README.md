@@ -1,3 +1,5 @@
+> **24 November 2026 — Vista icon overrides:** All eleven theme-specific source keys imported byte-identically; shared fallback artwork preserved, regression coverage and full audit updated. [Source trace](VISTA-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
 > **24 November 2026 — Longhorn Plex and Whistler artwork:** 43 shared exact source keys plus distinct Start icons, five new files and one verified reuse. Previous login-fix CI green; combined opt-in verification requested for newer packs and expanded audit. [Source trace](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md).
 
 > **24 November 2026 — Oxygen core artwork:** 28 original keys, 25 hash-matched paths (23 new, 2 reused), original aliases and lifecycle regression coverage. [Source trace](OXYGEN-CORE-ICONS-SOURCE.md). Exact-head CI pending.

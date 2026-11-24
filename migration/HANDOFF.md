@@ -1,3 +1,10 @@
+## 24 November 2026 — Vista complete icon override registry
+
+Combined opt-in CI requested at `496ed05`; the commit workflow lookup did not return a run (connector filters PR runs). Last confirmed full green remains [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8`. No duplicate opt-in trigger.
+
+Vista has only eleven original overrides; all eleven paths hash-matched and mapped, preserving shared artwork for absent keys. Added unit/browser tests and full artwork audit entries. [Source trace](VISTA-CORE-ICONS-SOURCE.md). Exact-head verification pending. Next Onebit core registry and investigate Slate icon fallback; main, frozen source, draft PR and releases unchanged.
+
+---
 ## 24 November 2026 — Longhorn Plex/Whistler core icons and combined verification
 
 [CI #45368395974](https://github.com/codersachin99/windows-os/actions/runs/45368395974) at `4dd3b3c8` completed SUCCESS: TypeScript, units, inventory, historical artwork audit, Contacts, Vite, focused and full browser suites passed. Visual job skipped. Six newer icon packs and expanded audit are not covered by that checkpoint.
