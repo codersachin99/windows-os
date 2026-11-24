@@ -121,3 +121,22 @@
   border:0;height:1px;background:#dbdbdb;margin:4px 0;
 }
 :is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) kbd{color:inherit}
+
+/* Source 48a9 shared WinUI menubar and WindowMain body/footer. */
+.windows-desktop[data-theme="chromeos"] .windows-window__body{background:#f5f5f5}
+.windows-desktop[data-theme="chromeos"] :is(.notepad-menu,.explorer-command){
+  color:#333;background:#fff;border:0;border-bottom:1px solid #dadce0;
+  padding:0;gap:0;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button){
+  color:inherit;background:none;border:0;border-radius:0;
+  padding:5px 10px;box-shadow:none;text-shadow:none;font:inherit;
+}
+.windows-desktop[data-theme="chromeos"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button):not(:disabled):is(:hover,:focus-visible,[aria-expanded="true"]){
+  background:rgba(0,0,0,.0666666667);
+}
+.windows-desktop[data-theme="chromeos"] .explorer-command label{padding-inline:8px}
+.windows-desktop[data-theme="chromeos"] .explorer-command select{
+  border:1px solid #dadce0;background:#fff;color:#333;border-radius:3px;
+}
+.windows-desktop[data-theme="chromeos"] .notepad-status{background:#f5f5f5;color:#333;border-color:#dadce0}

@@ -1,3 +1,9 @@
+## 24 November 2026 — ChromeOS Explorer and menubar
+
+Ported source addressbar, body/footer, navigation, list view details/icon/tile palettes, status height and shared menubar across Computer/Bin/Notepad. Real Guest file actions, selection and navigation unchanged. [Source trace](CHROMEOS-EXPLORER-SOURCE.md). Browser regressions authored; latest batch untested. Next source tray popups and focused verification. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — ChromeOS desktop and context menus
 
 Source inherited desktop selection/drag band and ChromeOS WinUI menu geometry/palette across Desktop, Taskbar, Computer/Bin, Notepad and Start portal. Shared real commands, keyboard focus and measured cascade placement retained. Added ChromeOS to existing edge-placement tests and cross-surface menu regression. [Source trace](CHROMEOS-CONTEXT-SOURCE.md). Tests not executed; next ChromeOS Explorer chrome/list selection and menubars, then tray and focused CI. Main/frozen source/draft PR/releases unchanged.

@@ -55,6 +55,7 @@ import "./sourceWin31Explorer.css";
 import "./sourceWin9xExplorer.css";
 import "./sourceLonghornWhistlerExplorer.css";
 import "./sourceMacOSExplorer.css";
+import "./sourceChromeOSExplorer.css";
 
 interface ExplorerAppProps {
   onOpenTextFile(path: string): void;

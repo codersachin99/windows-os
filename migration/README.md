@@ -1,3 +1,5 @@
+> **24 November 2026 — ChromeOS Explorer:** original navigation, addressbar, list selection and menubar paint. [Source trace](CHROMEOS-EXPLORER-SOURCE.md). Tests pending.
+
 > **24 November 2026 — ChromeOS context:** original inherited desktop selection and WinUI menu paint, including Start portal and cascade edge regression. [Source trace](CHROMEOS-CONTEXT-SOURCE.md). Tests pending.
 
 > **24 November 2026 — ChromeOS launcher:** original panel/grid, recent programs, Guest search, power/account controls. [Source trace](CHROMEOS-LAUNCHER-SOURCE.md). Verification pending.

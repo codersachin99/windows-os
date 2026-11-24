@@ -1,0 +1,53 @@
+import {test,expect} from "@playwright/test";
+test("ChromeOS Computer and Bin source surfaces, navigation and selection modes",async({page})=>{
+  await page.goto("/?theme=chromeos");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  const win=page.locator('[data-test-window="computer"]').first();
+  await expect(win.locator(".explorer-address")).toHaveCSS("background-color","rgb(51, 103, 214)");
+  await expect(win.locator(".explorer-address__label")).toBeHidden();
+  await expect(win.locator(".explorer-navigation")).toHaveCSS("background-color","rgb(250, 250, 250)");
+  await expect(win.locator(".explorer-content")).toHaveCSS("background-color","rgb(245, 245, 245)");
+  await expect(win.locator(".explorer-command")).toHaveCSS("border-bottom-color","rgb(218, 220, 224)");
+  const desktop=win.getByRole("button",{name:"Desktop",exact:true});
+  await desktop.click();
+  await expect(desktop).toHaveAttribute("aria-current","location");
+  await expect(desktop).toHaveCSS("background-color","rgb(216, 223, 240)");
+  await win.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
+    name:"ChromeOS Selection.txt",mimeType:"text/plain",buffer:Buffer.from("Guest file")
+  });
+  const item=win.locator('[data-test-explorer-item="ChromeOS Selection.txt"]');
+  const view=win.getByRole("combobox",{name:"Explorer view"});
+  await view.selectOption("details");
+  await item.click();
+  await expect(item).toHaveCSS("background-color","rgb(216, 223, 240)");
+  await expect(item).toHaveCSS("padding-top","12px");
+  await expect(win.locator(".explorer-columns")).toHaveCSS("border-bottom-color","rgb(218, 220, 224)");
+  await view.selectOption("tiles");
+  await item.click();
+  await expect(item).toHaveCSS("background-color","rgb(232, 246, 253)");
+  await expect(win.locator(".explorer-status")).toHaveCSS("background-color","rgb(245, 245, 245)");
+  await win.locator('[data-source-window-control="close"]').click();
+  await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+  const bin=page.locator('[data-test-window="bin"]').first();
+  await expect(bin.locator(".explorer-address")).toHaveCSS("background-color","rgb(51, 103, 214)");
+  await expect(bin.locator(".explorer-navigation")).toHaveCSS("background-color","rgb(250, 250, 250)");
+});
+test("ChromeOS Notepad shared menubar keeps real View commands",async({page})=>{
+  await page.goto("/?theme=chromeos");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator("[data-test-start-button]").click();
+  const launcher=page.locator("[data-test-chromeos-launcher]");
+  await launcher.locator("[data-test-start-search]").fill("Notepad");
+  await launcher.locator('[data-test-program="notepad"]').click();
+  const win=page.locator('[data-test-window="notepad"]').first();
+  const bar=win.locator(".notepad-menu");
+  await expect(bar).toHaveCSS("border-bottom-color","rgb(218, 220, 224)");
+  const initial=await win.locator(".notepad-status").count();
+  await bar.getByRole("button",{name:"View",exact:true}).click();
+  const menu=bar.locator(".notepad-menu__dropdown");
+  await expect(menu).toBeVisible();
+  await menu.getByRole("button",{name:/Status Bar/}).click();
+  await expect(menu).toHaveCount(0);
+  await expect(win.locator(".notepad-status")).toHaveCount(initial?0:1);
+});
