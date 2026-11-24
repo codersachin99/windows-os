@@ -264,6 +264,9 @@ FILES: dict[str, dict[str, str]] = {
         "guest-macos.caf967b3.webp": "0ffc437084814b13509a2e31353ab4b1e33b8f22",
     },
     "chromeos": {
+        "network-off.2d8dfd51.webp": "a3629b5a1b158f752810f03b6dd3ce7fdd33aafa",
+        "network-wired.c19a6640.webp": "c1709ddbb3ce0832bc8b3638d33654bf50e58cc2",
+        "network-signal.4305a101.webp": "09de3646e6db7efe16d80a2083cba6ab64bd9a13",
         "google.d3503fb1.svg": "a971e1d7a9dbfc34674b15dadd401769d6dffd97",
         "chromeos.eaca6e72.webp": "eca88c4b8ba39d9787fa9c52092ea607c89edfd9",
         "usertile12.75a9eb89.webp": "63281c3cc0cf7b5acf125419feacb958aa22a6fe",

@@ -303,6 +303,7 @@ export function DesktopShell({
     win.minimized?highest:Math.max(highest,win.z),-Infinity);
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
+  const sharedTray=state.theme==="macos"||state.theme==="chromeos";
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
   const [guestAudio,setGuestAudio]=useState<SourceGuestAudio>(SOURCE_GUEST_AUDIO_INITIAL);
@@ -315,9 +316,10 @@ export function DesktopShell({
     if(open)setShowHiddenTray(false);
   };
   useEffect(()=>{
-    if(state.theme!=="macos"||state.startOpen)setMacPopup(null);
-    if(state.theme!=="macos")setMacBrightness(1);
-  },[state.theme,state.startOpen]);
+    setMacPopup(null);
+    if(!sharedTray)setMacBrightness(1);
+  },[state.theme]);
+  useEffect(()=>{if(state.startOpen)setMacPopup(null);},[state.startOpen]);
   useEffect(()=>{
     if(macPopup==="action-center"&&!sourceTrayVisible(trayPreferences).includes("TaskbarActionCenter"))
       setMacPopup(null);
@@ -510,11 +512,11 @@ export function DesktopShell({
   const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
-      data-source-display-brightness={state.theme==="macos"?macBrightness:undefined}
+      data-source-display-brightness={sharedTray?macBrightness:undefined}
       style={{...(win7Colors?{
         "--theme-color":win7Colors.active,
         "--theme-color--inactive":win7Colors.inactive??undefined
-      }:{}),filter:state.theme==="macos"&&macBrightness!==1?`brightness(${macBrightness})`:undefined} as CSSProperties}
+      }:{}),filter:sharedTray&&macBrightness!==1?`brightness(${macBrightness})`:undefined} as CSSProperties}
       data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
       data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}
       data-source-aero-peeking={previewDesktop?"true":undefined}
@@ -733,7 +735,7 @@ export function DesktopShell({
           </>}
         </div>
         {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)||macPopup!==null}/>}
-        <div className="windows-taskbar__tray" data-test-taskbar-tray={state.theme==="macos"?"macos":undefined}>
+        <div className="windows-taskbar__tray" data-test-taskbar-tray={sharedTray?state.theme:undefined}>
           {(state.theme!=="macos"||sourceTrayHidden(trayPreferences).length>0)&&<button title="Show hidden icons" aria-label="Show hidden icons"
             data-test-tray-hidden-toggle="" onClick={()=>{setMacPopup(null);setShowHiddenTray(v=>!v);}}>▴</button>}
           {showHiddenTray&&sourceTrayHidden(trayPreferences).length>0&&
@@ -745,12 +747,12 @@ export function DesktopShell({
                   data-test-tray-hidden-icon={item.id} alt={item.label}/>)}
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
-            .map(item=>state.theme==="macos"&&item.id==="TaskbarActionCenter"?
-              <SourceMacOSActionCenter key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:state.theme==="macos"&&item.id==="TaskbarNetwork"?
-              <SourceMacOSNetwork key={item.id} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
-              state.theme==="macos"&&item.id==="TaskbarBattery"?
+            .map(item=>sharedTray&&item.id==="TaskbarActionCenter"?
+              <SourceMacOSActionCenter key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:sharedTray&&item.id==="TaskbarNetwork"?
+              <SourceMacOSNetwork key={item.id} baseArtwork={state.theme==="chromeos"} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
+              sharedTray&&item.id==="TaskbarBattery"?
               <SourceMacOSBattery key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
-              state.theme==="macos"&&item.id==="TaskbarVolume"?
+              sharedTray&&item.id==="TaskbarVolume"?
               <SourceMacOSVolume key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
@@ -798,7 +800,7 @@ export function DesktopShell({
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
         onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}
         returnFocusTarget={taskbarContextReturnFocus.current}/>}
-      {state.theme==="macos"&&trayPreferences.icons.TaskbarActionCenter!=="off"&&currentNotification&&
+      {sharedTray&&trayPreferences.icons.TaskbarActionCenter!=="off"&&currentNotification&&
         <SourceMacOSNotificationToast key={currentNotification.id} message={currentNotification} onDismiss={dismissNotification}/>}
       {state.windowLimitError&&
         <div className="windows-desktop__limit-alert" data-test-window-limit-alert="">

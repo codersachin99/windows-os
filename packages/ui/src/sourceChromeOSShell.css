@@ -140,3 +140,54 @@
   border:1px solid #dadce0;background:#fff;color:#333;border-radius:3px;
 }
 .windows-desktop[data-theme="chromeos"] .notepad-status{background:#f5f5f5;color:#333;border-color:#dadce0}
+
+/* Base taskbar f0ed/e0ee/a88c/c561 components, shared with macOS.
+ * ChromeOS retains the original 36px round shelf targets and 10px
+ * light popups above the shelf; placement is viewport-bounded. */
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger){
+  display:grid;place-items:center;width:100%;height:36px;padding:0;
+  border:0;border-radius:50%;background:none;color:#fff;
+}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger):is(:focus,[aria-expanded="true"]){background:#0002}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup){
+  position:fixed;top:auto;bottom:calc(var(--taskbar-height) + 16px);inset-inline-end:12px;
+  z-index:4900;box-sizing:border-box;max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - var(--taskbar-height) - 28px);overflow:auto;
+  background:var(--source-chromeos-shelf);color:#333;border:0;border-radius:10px;
+  text-align:start;font:10pt/1.4 "Segoe UI",Arial,sans-serif;box-shadow:0 2px 8px #0003;
+}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup){width:250px;padding:12px}
+.windows-desktop[data-theme="chromeos"] .source-macos-action-center-summary{display:flex;align-items:center;gap:12px;font-size:20px;padding:8px 0}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-popup,.source-macos-network-popup)>button{
+  display:block;width:100%;padding:12px;border:0;background:none;color:#1967d2;font:inherit;text-align:center;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-action-center-popup>button:hover{text-decoration:underline}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-popup>button:disabled{opacity:.5;cursor:default}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-status{display:flex;align-items:center;gap:12px;padding-block:12px}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-status img{flex:none;object-fit:contain}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-status p{margin:4px 0}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup>div{padding:8px 4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-heading{display:flex;justify-content:space-between;margin-bottom:8px}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup fieldset{display:flex;flex-direction:column;gap:4px;padding:8px 4px;border:0;margin:0}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-display{display:flex;flex-direction:column;gap:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup input{accent-color:#1a73e8}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup small{display:block;opacity:.75}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-popup{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 16px}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-meter{display:grid;place-items:center;width:32px;height:146px;flex:none}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-meter input{writing-mode:vertical-lr;direction:rtl;width:20px;height:130px;margin:0;accent-color:#1a73e8}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-mute{display:grid;place-items:center;width:48px;height:48px;border:0;border-radius:50%;background:none;color:inherit}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-mute:is(:hover,:focus-visible){background:#0002}
+/* The source white volume icon is legible on its darkened shelf;
+   the light popup uses an adaptive dark tint for the same exact glyph. */
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-mute img{filter:brightness(0)}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification-history{display:flex;flex-direction:column;max-height:40vh;overflow:auto}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification-history button{border:0;background:none;color:#1967d2;text-align:start;padding:6px;overflow-wrap:anywhere}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification{
+  position:fixed;bottom:calc(var(--taskbar-height) + 8px);inset-inline-end:12px;
+  z-index:4901;display:flex;gap:16px;width:min(400px,calc(100vw - 24px));
+  box-sizing:border-box;background:var(--source-chromeos-shelf);color:#333;
+  border-radius:10px;padding:12px;box-shadow:0 2px 8px #0003;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification>div{flex:1;min-width:0;overflow-wrap:anywhere}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification p{margin:4px 0;white-space:pre-wrap}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification button{align-self:start;border:0;background:none;color:#333;font-size:18px}

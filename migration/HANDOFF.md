@@ -1,3 +1,9 @@
+## 24 November 2026 — ChromeOS shared tray
+
+Reused base source Action Center, Network, Battery and Volume functionality with theme-scoped light bottom popups and 400px notification toast. Three original network images byte verified and audited. Shared Guest brightness/audio and popup ownership; real account/session boundaries unchanged. [Source trace](CHROMEOS-TRAY-SOURCE.md). Browser regression authored, unexecuted. Next DateTime analog/digital calendar variant and focused ChromeOS CI including XP/Win11 artwork correction. Main/frozen source/draft PR/releases unchanged.
+
+---
+
 ## 24 November 2026 — ChromeOS Explorer and menubar
 
 Ported source addressbar, body/footer, navigation, list view details/icon/tile palettes, status height and shared menubar across Computer/Bin/Notepad. Real Guest file actions, selection and navigation unchanged. [Source trace](CHROMEOS-EXPLORER-SOURCE.md). Browser regressions authored; latest batch untested. Next source tray popups and focused verification. Main/frozen source/draft PR/releases unchanged.
