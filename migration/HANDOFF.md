@@ -1,3 +1,9 @@
+## 25 November 2026 — Onebit tray and consolidated verification
+
+Onebit pinned theme-onebit-scss.js source dark #352b30, sand #e6d4bf, inverted tray popup with 2px outline, today/selected inversion and source clock color. Shared controls extended to Onebit; seven original SVG binaries copied with verified source SHA and importer entries, including original volume thresholds. Battery uses existing capability-based SVG (no dedicated Onebit registry override); exact full source shell/pixel paint still pending. Added browser and unit tests. [run-ci] [tray-check] requests one consolidated opt-in run covering all source-*-tray.spec.ts and Taskbar Settings/Performance, with normal TypeScript/unit/inventory/artwork/build gates. No execution result observed at commit time. Main/releases/pin unchanged. Next inspect CI failures and fix regressions before more feature work.
+
+---
+
 ## 25 November 2026 — Historical Windows interactive tray
 
 Pinned theme-win9x/win31/winW/winlonghorn source tray styles and registry: Win31, Win95/98/2000, Whistler (winW), Longhorn Plex (winLP) and Slate (winLS) now route through shared interactive tray and hidden flyout. Four missing Win2000 network/speaker binaries imported with exact source SHA; XP Action Center/battery reused for historical themes and XP icons for Whistler. Win9x source opaque bevel, palette, gray weekdays, yellow dotted selection and square marks; Win31 square outline; Whistler pale surface and blue today; Longhorn directional borders and Slate shadow. Source-specific paint adapted to React component structure; Win31 calendar uses shared retro treatment, Longhorn inherited icon artwork and full visual parity still pending. Seven browser scenarios and unit mapping test authored, not executed. No new CI requested; next Onebit and consolidated verification. Main/releases/pin unchanged.

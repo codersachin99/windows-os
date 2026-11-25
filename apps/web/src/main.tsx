@@ -22,6 +22,7 @@ import "../../../packages/ui/src/sourceVistaTray.css";
 import "../../../packages/ui/src/sourceXPTray.css";
 import "../../../packages/ui/src/sourceModernTray.css";
 import "../../../packages/ui/src/sourceHistoricalTray.css";
+import "../../../packages/ui/src/sourceOnebitTray.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>

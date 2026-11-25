@@ -4,9 +4,9 @@ import {appRegistry,type SourceNotificationSnapshot,sourceNotificationSeverity} 
 import type {DesktopAction} from "@windows-os/contracts";
 
 /** Original f0ed summary and history, backed by shared Guest notification state. */
-export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onSeen,xpArtwork=false}:{
+export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onSeen,xpArtwork=false,onebitArtwork=false}:{
   dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void;
-  notifications:SourceNotificationSnapshot;onSeen:()=>void;xpArtwork?:boolean
+  notifications:SourceNotificationSnapshot;onSeen:()=>void;xpArtwork?:boolean;onebitArtwork?:boolean
 }){
   const severity=sourceNotificationSeverity(notifications);
   const root=useRef<HTMLDivElement>(null);
@@ -36,12 +36,12 @@ export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onS
       data-test-action-center="" data-notification-severity={severity} aria-label="Action Center" aria-haspopup="dialog"
       aria-expanded={open} title="Action Center"
       onClick={()=>{if(!open){dispatch({type:"CLOSE_START"});onSeen();}setOpen(!open);}}>
-      <img src={xpArtwork?"/assets/images/action-center-winxp.52f44912.webp":legacyArt.trayActionCenter} width={16} height={16} alt=""/>
+      <img src={onebitArtwork?"/assets/images/action-center-onebit.1bd0c609.svg":xpArtwork?"/assets/images/action-center-winxp.52f44912.webp":legacyArt.trayActionCenter} width={16} height={16} alt=""/>
     </button>
     {open&&<div className="source-macos-action-center-popup" role="dialog"
       aria-label="Action Center" data-test-action-center-popup="">
       <div className="source-macos-action-center-summary">
-        <img src="/assets/images/action-center-headline.27cc6d83.webp" width={32} height={32} alt=""/>
+        <img src={onebitArtwork?"/assets/images/action-center-onebit.1bd0c609.svg":"/assets/images/action-center-headline.27cc6d83.webp"} width={32} height={32} alt=""/>
         <span data-test-notification-summary="">{notifications.history.length===0?"No new messages":notifications.history.length===1?"1 message":notifications.history.length+" messages"}</span>
       </div>
       {notifications.history.length>0&&<div className="source-macos-notification-history">

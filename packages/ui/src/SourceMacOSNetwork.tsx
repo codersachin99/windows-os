@@ -16,10 +16,10 @@ function WifiGlyph({size=20}:{size?:number}){
     <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
   </svg>;
 }
-export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtwork=false,retroArtwork=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseArtwork?:boolean;xpArtwork?:boolean;retroArtwork?:boolean}){
+export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtwork=false,retroArtwork=false,onebitArtwork=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseArtwork?:boolean;xpArtwork?:boolean;retroArtwork?:boolean;onebitArtwork?:boolean}){
   const [status,setStatus]=useState(readNetwork);
   const retroNetwork=status.online?"/assets/images/network-win2k.798c0454.png":"/assets/images/network-off-win2k.a6d55774.png";
-  const xpNetwork=retroArtwork?retroNetwork:status.online?"/assets/images/network-winxp.744648d4.webp":"/assets/images/network-off-winxp.60414007.webp";
+  const xpNetwork=onebitArtwork?(status.online?"/assets/images/network-onebit.bc98df3e.svg":"/assets/images/network-off-onebit.a9393cd6.svg"):retroArtwork?retroNetwork:status.online?"/assets/images/network-winxp.744648d4.webp":"/assets/images/network-off-winxp.60414007.webp";
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{
@@ -54,13 +54,13 @@ export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtw
       aria-label="Network" aria-haspopup="dialog" aria-expanded={open} title="Network"
       data-test-network="" data-network-online={status.online}
       onClick={()=>{if(open)setOpen(false);else{onOpen();setOpen(true);}}}>
-      {xpArtwork?<img width={16} height={16} alt="" src={xpNetwork}/>:baseArtwork?<img width={16} height={16} alt="" src={status.online?"/assets/images/network.21b75845.webp":"/assets/images/network-off.2d8dfd51.webp"}/>:<WifiGlyph/>}
+      {(xpArtwork||onebitArtwork)?<img width={16} height={16} alt="" src={xpNetwork}/>:baseArtwork?<img width={16} height={16} alt="" src={status.online?"/assets/images/network.21b75845.webp":"/assets/images/network-off.2d8dfd51.webp"}/>:<WifiGlyph/>}
     </button>
     {open&&<div className="source-macos-network-popup" role="dialog"
       aria-label="Network" data-test-network-popup="">
       <div>{status.online?"Currently connected to":"Not connected"}</div>
       <div className="source-macos-network-status" role="status">
-        {xpArtwork?<img width={32} height={32} alt="" src={xpNetwork}/>:baseArtwork?<img width={32} height={32} alt="" src={!status.online?"/assets/images/network-off.2d8dfd51.webp":/wifi|cellular/.test(status.type)?"/assets/images/network-signal.4305a101.webp":"/assets/images/network-wired.c19a6640.webp"}/>:<WifiGlyph size={32}/> }
+        {(xpArtwork||onebitArtwork)?<img width={32} height={32} alt="" src={xpNetwork}/>:baseArtwork?<img width={32} height={32} alt="" src={!status.online?"/assets/images/network-off.2d8dfd51.webp":/wifi|cellular/.test(status.type)?"/assets/images/network-signal.4305a101.webp":"/assets/images/network-wired.c19a6640.webp"}/>:<WifiGlyph size={32}/> }
         <div>
           <strong data-test-network-name="">{!status.online?"Offline":status.type==="wifi"?"Wireless network connection":status.type==="cellular"?"Mobile broadband connection":"Network"}</strong>
           <p>{status.online?"Browser reports online":"Browser reports offline"}</p>

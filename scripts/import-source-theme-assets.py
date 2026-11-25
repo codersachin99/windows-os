@@ -71,6 +71,13 @@ FILES: dict[str, dict[str, str]] = {
         "shutdown.08d3f74a.webp": "6a4478b1e3c9319030f42a09a6aaf79fe0dbef3e",
     },
     "onebit-core-icons": {
+        "volume-onebit.33ed49b4.svg": "bc31cba88bbb83f8de7beaa4e09b9ab2fa54d0dd",
+        "volume-off-onebit.61d24fcf.svg": "86c79ddb5c3c27f9b8bdbeb8928cbdfd0fc4e5bc",
+        "volume-1-onebit.629e30d3.svg": "7faad1844c728a1b9dc4b8803e9048d5e718d2fd",
+        "volume-0-onebit.44ebf44b.svg": "ae0d435063668be65b8ca4d00637431dd94c7fda",
+        "network-onebit.bc98df3e.svg": "4f5a442e2e5419ab3ee218f20016ef14f16d1abc",
+        "network-off-onebit.a9393cd6.svg": "31e591e23de273c63bb668090341e7d66d108a9f",
+        "action-center-onebit.1bd0c609.svg": "d361690f40d879d4e7b4d70fe63ab96392aa36d5",
         "computer-onebit.ce54e8ef.svg": "e2baedc909a189fdddad1db321485c06ed2d5ee5",
         "bin-onebit.b4ba1ed0.svg": "642007c89d5872342b1d7cdc2675833689eafbbe",
         "folder-onebit.11d8e8ae.svg": "4a2b3e84607400eb15ca05b37161228db920fcc2",

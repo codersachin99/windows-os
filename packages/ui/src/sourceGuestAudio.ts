@@ -26,3 +26,9 @@ export function sourceXPVolumeArt(audio:SourceGuestAudio):string{
 export function sourceRetroVolumeArt(audio:SourceGuestAudio):string{
   return "/assets/images/"+(audio.muted?"sound-muted-win2k.c4df5325.png":"sound-win2k.6b4cee4c.webp");
 }
+
+/** Onebit registry: volume 0 and 32 share the same glyph. */
+export function sourceOnebitVolumeArt(audio:SourceGuestAudio):string{
+  const value=sourceGuestVolume(audio.volume);
+  return "/assets/images/"+(audio.muted?"volume-off-onebit.61d24fcf.svg":value<65?"volume-0-onebit.44ebf44b.svg":value<100?"volume-1-onebit.629e30d3.svg":"volume-onebit.33ed49b4.svg");
+}

@@ -1,3 +1,5 @@
+> **25 November 2026 — Onebit tray:** original palette/artwork and consolidated tray CI. [Source trace](ONEBIT-TRAY-SOURCE.md).
+
 > **25 November 2026 — Historical trays:** Win31/95/98/2000, Whistler and Longhorn shared controls. [Source trace](HISTORICAL-TRAY-SOURCE.md).
 
 > **25 November 2026 — Modern trays:** Win8/81/10/11/11dark functional tray and source-family calendar styling. [Source trace](MODERN-TRAY-SOURCE.md).
