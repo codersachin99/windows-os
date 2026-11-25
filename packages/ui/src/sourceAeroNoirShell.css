@@ -267,3 +267,40 @@
 .windows-desktop[data-theme="aeroNoir"] .explorer-list .explorer-item :is(.listview__item-info,.listview__item-label){color:#fff}
 .windows-desktop[data-theme="aeroNoir"] :is(.explorer-status,.notepad-status){color:#fff;background:#444;border-top:1px solid var(--border-color);box-shadow:none}
 @media(max-width:580px){.windows-desktop[data-theme="aeroNoir"] .explorer-navigation{border:0;border-bottom:1px solid var(--border-color)}}
+
+/* Frozen Aero Noir taskbar-popup, tray-item, ColorCalendar and clock paint.
+ * Reuse base tray geometry; popup background layers adapt the source's
+ * separate dark panels to the shared React dialog structure. */
+.windows-desktop[data-theme="aeroNoir"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  isolation:isolate;color:#fff;
+  background:linear-gradient(#555,#333) padding-box,linear-gradient(var(--theme-color),var(--theme-color)) border-box;
+  border:1px solid var(--theme-color);border-radius:4px;box-shadow:1px 1px 5px 1px #000;
+}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){box-shadow:-1px 1px 5px 1px #000}
+.windows-desktop[data-theme="aeroNoir"][data-effect-enable-glass] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){backdrop-filter:blur(4px)}
+.windows-desktop[data-theme="aeroNoir"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){
+  background-color:transparent;
+  background-image:linear-gradient(transparent,#fff8,transparent),linear-gradient(transparent,#0008,transparent),linear-gradient(transparent,#fff8,transparent),linear-gradient(transparent,#0008,transparent);
+  background-size:1px 100%;background-repeat:no-repeat;background-position:0 0,1px 0,100% 0,calc(100% - 1px) 0;
+}
+.windows-desktop[data-theme="aeroNoir"]:dir(rtl) :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){background-position:100% 0,calc(100% - 1px) 0,0 0,1px 0}
+.windows-desktop[data-theme="aeroNoir"] .windows-taskbar__tray-icon:has(button):hover{background-image:none}
+.windows-desktop[data-theme="aeroNoir"] :is(.source-macos-action-center-popup,.source-macos-network-popup)>button,
+.windows-desktop[data-theme="aeroNoir"] .source-macos-datetime-popup>button,
+.windows-desktop[data-theme="aeroNoir"] .source-macos-volume-mute{
+  color:#fff;border:1px solid transparent;border-radius:3px;
+}
+.windows-desktop[data-theme="aeroNoir"] :is(.source-macos-action-center-popup,.source-macos-network-popup)>button:not(:disabled):hover,
+.windows-desktop[data-theme="aeroNoir"] .source-macos-datetime-popup>button:not(:disabled):hover,
+.windows-desktop[data-theme="aeroNoir"] .source-macos-volume-mute:not(:disabled):is(:hover,:focus-visible){
+  background:linear-gradient(var(--theme-color),transparent);border-color:var(--theme-color);
+}
+.windows-desktop[data-theme="aeroNoir"] .source-macos-calendar-weekdays{background:none;border:0}
+.windows-desktop[data-theme="aeroNoir"] .source-macos-calendar-picker{background:#444;border:1px solid #888}
+.windows-desktop[data-theme="aeroNoir"] .source-macos-calendar button:not(:disabled):is(:hover,:focus-visible){border-color:#888}
+.windows-desktop[data-theme="aeroNoir"] .source-macos-calendar button:is(.is-today,[aria-pressed="true"]){
+  background:linear-gradient(#555a,#333a) var(--theme-color);
+  border:1px solid var(--theme-color);filter:brightness(.9);
+}
+.windows-desktop[data-theme="aeroNoir"] .source-chromeos-clock{color:#fff}
+.windows-desktop[data-theme="aeroNoir"] .source-chromeos-clock svg>line[stroke-width="1"]:not([data-test-clock-hand]){stroke-opacity:.6666666667}

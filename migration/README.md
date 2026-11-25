@@ -1,3 +1,5 @@
+> **25 November 2026 — Aero Noir tray and focused verification:** shared interactive tray, original calendar paint and explicit opt-in CI. [Source trace](AERONOIR-TRAY-SOURCE.md). Results pending.
+
 > **25 November 2026 — Aero Noir context/Explorer:** original WinUI menus and list/navigation/address selection, edge regression extended; tests pending. [Source trace](AERONOIR-CONTEXT-EXPLORER-SOURCE.md).
 
 > **24 November 2026 — Aero Noir Start:** source two-column paint and Guest library navigation; browser regression pending. [Source trace](AERONOIR-START-SOURCE.md).
