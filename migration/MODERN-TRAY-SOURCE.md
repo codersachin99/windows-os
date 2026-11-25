@@ -1,0 +1,3 @@
+# Modern Windows interactive tray
+
+Pinned theme-win8/10/11-scss.js: Win8/81 use accent frame, white content, pale footer and inherited Win7 calendar/analog clock; Win10 dark #1f1f1f popup, 30px square days, accent selection and digital header; Win11 light/dark #f9f9f9/#242424, 6px radius, circular 40px days and source palette. Shared live tray controls and hidden tray lifecycle extended to five IDs. Digital-only modern layout is a source-style adapter (exact legacy datetime component markup not yet audited); exact source volume/network artwork for Win8 and other inherited variants pending. Authored five browser scenarios; no tests executed. Main/releases/pin unchanged. Next historical base families and consolidated verification.

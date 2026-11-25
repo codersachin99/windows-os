@@ -38,26 +38,26 @@
 .windows-desktop[data-source-win7-tray] .source-macos-notification>div{background:#fff;padding:8px}
 .windows-desktop[data-source-win7-tray] .source-macos-notification button{color:#000}
 .windows-desktop[data-source-win7-tray] .source-macos-notification-history button{color:#1171d2}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar-weekdays{background:none;border:0;border-bottom:1px solid #0002;font-weight:normal;margin:0}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar-days{gap:0}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar-days button{border:2px solid transparent;border-radius:3px;padding:0 2px;min-height:24px}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar button:not(:disabled,.is-today):is(:hover,:focus-visible),
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar button[aria-pressed="true"]{color:#1171d2;background:none;border-color:transparent}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar-picker{background:#fff;border:0}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-macos-calendar button.is-today{
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar-weekdays{background:none;border:0;border-bottom:1px solid #0002;font-weight:normal;margin:0}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar-days{gap:0}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar-days button{border:2px solid transparent;border-radius:3px;padding:0 2px;min-height:24px}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button:not(:disabled,.is-today):is(:hover,:focus-visible),
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button[aria-pressed="true"]{color:#1171d2;background:none;border-color:transparent}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar-picker{background:#fff;border:0}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button.is-today{
   color:#1171d2;background:linear-gradient(#fff,#d1e6ff);border:2px dotted #8195ae;border-radius:3px;
 }
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-chromeos-clock{color:#000}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-chromeos-clock svg{
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock{color:#000}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock svg{
   box-sizing:border-box;padding:12.8px;border-radius:50%;
   background:radial-gradient(circle at 80% 100%,#fff8 25%,#ccd6d9 50%,#e0e6e9 50%) #e0e6e9;
   box-shadow:inset 1px 1px 0 1px #bfc4c8,inset -1px 0 0 1.5px #8d8e94,inset -5px 0 0 #b8bec3,inset 0 0 0 5px #e9eaec,inset 0 0 0 7px #98a2ad,inset 3px 3px 0 8px #bfccd3;
 }
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]):dir(rtl) .source-chromeos-clock svg{box-shadow:inset -1px 1px 0 1px #bfc4c8,inset 1px 0 0 1.5px #8d8e94,inset 5px 0 0 #b8bec3,inset 0 0 0 5px #e9eaec,inset 0 0 0 7px #98a2ad,inset -3px 3px 0 8px #bfccd3}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-chromeos-clock svg>line{stroke:#7d8f9b}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-chromeos-clock svg>line[data-test-clock-hand]{stroke:#6d7c86}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-chromeos-clock svg>line[data-test-clock-hand="hour"]{stroke-width:2}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray]) .source-chromeos-clock svg>circle{fill:#6d7c86;r:3px}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]):dir(rtl) .source-chromeos-clock svg{box-shadow:inset -1px 1px 0 1px #bfc4c8,inset 1px 0 0 1.5px #8d8e94,inset 5px 0 0 #b8bec3,inset 0 0 0 5px #e9eaec,inset 0 0 0 7px #98a2ad,inset -3px 3px 0 8px #bfccd3}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock svg>line{stroke:#7d8f9b}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock svg>line[data-test-clock-hand]{stroke:#6d7c86}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock svg>line[data-test-clock-hand="hour"]{stroke-width:2}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock svg>circle{fill:#6d7c86;r:3px}
 
 /* Pinned theme-win7-classic-scss.js: the later popup block overrides
  * the earlier outer bevel and calendar/clock padding. Classic 2 uses

@@ -6,7 +6,7 @@ import {sourceCalendarDays,sourceCalendarMonth,sourceCalendarSameDay} from "./so
 const fullDate=(d:Date)=>d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
 const monthLabel=(d:Date)=>d.toLocaleDateString("en-US",{month:"long"});
 
-export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,numericDate=false,xpLayout=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseLayout?:boolean;numericDate?:boolean;xpLayout?:boolean}){
+export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,numericDate=false,xpLayout=false,modernLayout=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseLayout?:boolean;numericDate?:boolean;xpLayout?:boolean;modernLayout?:boolean}){
   const [now,setNow]=useState(()=>new Date());
   const [month,setMonth]=useState(()=>sourceCalendarMonth(now,0));
   const [selected,setSelected]=useState(now);
@@ -47,7 +47,7 @@ export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,numeri
       </time>
     </button>
     {open&&<div role="dialog" aria-label="Calendar" className="source-macos-datetime-popup" data-test-macos-datetime-popup="" data-test-datetime-popup="">
-      <button type="button" className="source-macos-calendar-today" onClick={reset}>{fullDate(now)}</button>
+      <button type="button" className="source-macos-calendar-today" onClick={reset}>{modernLayout&&<span className="source-modern-digital-time" data-test-source-digital-seconds="">{sourceClockDigital(now,true)}</span>}{fullDate(now)}</button>
       <div className="source-datetime-content">
       <section className="source-macos-calendar">
         <header>
@@ -55,8 +55,8 @@ export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,numeri
             <button type="button" aria-label="Choose month" onClick={()=>setPicker(picker==="month"?null:"month")}>{monthLabel(month)}</button>
             <button type="button" aria-label="Choose year" onClick={()=>{setYearPage(month.getFullYear()-month.getFullYear()%12);setPicker(picker==="year"?null:"year");}}>{month.getFullYear()}</button>
           </div>
-          <button type="button" className="source-macos-calendar-arrow" aria-label="Previous month" onClick={()=>{setPicker(null);setMonth(m=>sourceCalendarMonth(m,-1));}}>‹</button>
-          <button type="button" className="source-macos-calendar-arrow" aria-label="Next month" onClick={()=>{setPicker(null);setMonth(m=>sourceCalendarMonth(m,1));}}>›</button>
+          <button type="button" className="source-macos-calendar-arrow" aria-label="Previous month" onClick={()=>{setPicker(null);setMonth(m=>sourceCalendarMonth(m,-1));}}>{modernLayout?"⌃":"‹"}</button>
+          <button type="button" className="source-macos-calendar-arrow" aria-label="Next month" onClick={()=>{setPicker(null);setMonth(m=>sourceCalendarMonth(m,1));}}>{modernLayout?"⌄":"›"}</button>
         </header>
         {picker==="month"?<div className="source-macos-calendar-picker" aria-label="Months">
           {Array.from({length:12},(_,i)=><button type="button" key={i}
@@ -88,7 +88,7 @@ export function SourceMacOSDateTime({onOpen,open,setOpen,baseLayout=false,numeri
           </div>
         </>}
       </section>
-      {baseLayout&&<SourceAnalogClock now={now} xpLayout={xpLayout}/>}
+      {baseLayout&&!modernLayout&&<SourceAnalogClock now={now} xpLayout={xpLayout}/>}
       </div>
       {baseLayout&&<button type="button" className="source-chromeos-date-settings" disabled title="Native date settings are unavailable in the browser build">Change date and time settings...</button>}
     </div>}

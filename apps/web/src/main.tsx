@@ -20,6 +20,7 @@ import "../../../packages/ui/src/sourceWin7Tray.css";
 import "../../../packages/ui/src/sourceHiddenTray.css";
 import "../../../packages/ui/src/sourceVistaTray.css";
 import "../../../packages/ui/src/sourceXPTray.css";
+import "../../../packages/ui/src/sourceModernTray.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>

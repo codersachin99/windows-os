@@ -1,3 +1,5 @@
+> **25 November 2026 — Modern trays:** Win8/81/10/11/11dark functional tray and source-family calendar styling. [Source trace](MODERN-TRAY-SOURCE.md).
+
 > **25 November 2026 — XP tray:** seven XP variants use shared controls and exact registry artwork. [Source trace](XP-TRAY-SOURCE.md).
 
 > **25 November 2026 — Vista tray:** original flat popup and shared calendar/clock paint with interactive Guest controls. [Source trace](VISTA-TRAY-SOURCE.md).

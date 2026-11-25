@@ -1,3 +1,9 @@
+## 25 November 2026 — Modern Windows interactive tray
+
+Pinned theme-win8/10/11-scss.js: Win8/81 use accent frame, white content, pale footer and inherited Win7 calendar/analog clock; Win10 dark #1f1f1f popup, 30px square days, accent selection and digital header; Win11 light/dark #f9f9f9/#242424, 6px radius, circular 40px days and source palette. Shared live tray controls and hidden tray lifecycle extended to five IDs. Digital-only modern layout is a source-style adapter (exact legacy datetime component markup not yet audited); exact source volume/network artwork for Win8 and other inherited variants pending. Authored five browser scenarios; no tests executed. Main/releases/pin unchanged. Next historical base families and consolidated verification.
+
+---
+
 ## 25 November 2026 — XP family interactive tray
 
 Pinned theme-winxp-scss.js blob 780085761632998d6ad003b3f2b754ab7fcab6ea: XP seven theme IDs use source opaque surface and mirrored four-layer bevel, rounded inset calendar/clock panels, weekday bar overrides and square clock marks. Shared interactive tray and hidden flyout now cover all seven. Original XP registry maps action-center, network/offline, battery/charging and all volume thresholds to specific assets; seven binaries checked against source blob IDs. Shared components accept explicit xpArtwork/xpLayout options; unavailable battery still shows unknown glyph. Source calendar mark bevel is approximated in SVG, inherited Silver header color and full clock paint not certified; native controls unavailable. Added seven browser scenarios and audio mapping unit test, not executed. No new CI requested. Main/releases/pin unchanged. Next remaining historical tray families and consolidated verification.
