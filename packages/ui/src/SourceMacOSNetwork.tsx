@@ -1,4 +1,5 @@
 import {useEffect,useRef,useState} from "react";
+import {sourceNetworkUsesVector,sourceNetworkTrayArt,sourceNetworkConnectionArt} from "./sourceTrayArtwork";
 
 /** Browser connectivity is not an internet reachability probe or native
  * Wi-Fi control. Source's native network adapter is not available here. */
@@ -9,17 +10,18 @@ function connection():BrowserNetwork|undefined{
 function readNetwork(){
   return {online:navigator.onLine,type:connection()?.type??"unknown"};
 }
-function WifiGlyph({size=20}:{size?:number}){
+function WifiGlyph({size=20,offline=false,rotate=false}:{size?:number;offline?:boolean;rotate?:boolean}){
   return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none"
-    stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+    stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
+    style={{opacity:offline?.5:1,transform:rotate?"translateY(4px) rotate(-45deg)":undefined}}>
     <path d="M2 8a16 16 0 0 1 20 0M5.5 11.5a10.5 10.5 0 0 1 13 0M9 15a5 5 0 0 1 6 0"/>
     <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
   </svg>;
 }
-export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtwork=false,retroArtwork=false,onebitArtwork=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseArtwork?:boolean;xpArtwork?:boolean;retroArtwork?:boolean;onebitArtwork?:boolean}){
+export function SourceMacOSNetwork({onOpen,open,setOpen,theme,xpArtwork=false,retroArtwork=false,onebitArtwork=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;theme:string;xpArtwork?:boolean;retroArtwork?:boolean;onebitArtwork?:boolean}){
   const [status,setStatus]=useState(readNetwork);
-  const retroNetwork=status.online?"/assets/images/network-win2k.798c0454.png":"/assets/images/network-off-win2k.a6d55774.png";
-  const xpNetwork=onebitArtwork?(status.online?"/assets/images/network-onebit.bc98df3e.svg":"/assets/images/network-off-onebit.a9393cd6.svg"):retroArtwork?retroNetwork:status.online?"/assets/images/network-winxp.744648d4.webp":"/assets/images/network-off-winxp.60414007.webp";
+  const trayArt=sourceNetworkTrayArt(status.online,xpArtwork,retroArtwork,onebitArtwork);
+  const connectionArt=sourceNetworkConnectionArt(status.online,status.type,xpArtwork,retroArtwork,onebitArtwork);
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{
@@ -54,13 +56,13 @@ export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtw
       aria-label="Network" aria-haspopup="dialog" aria-expanded={open} title="Network"
       data-test-network="" data-network-online={status.online}
       onClick={()=>{if(open)setOpen(false);else{onOpen();setOpen(true);}}}>
-      {(xpArtwork||onebitArtwork)?<img width={16} height={16} alt="" src={xpNetwork}/>:baseArtwork?<img width={16} height={16} alt="" src={status.online?"/assets/images/network.21b75845.webp":"/assets/images/network-off.2d8dfd51.webp"}/>:<WifiGlyph/>}
+      {sourceNetworkUsesVector(theme)?<WifiGlyph offline={!status.online} rotate={theme==="win10"}/>:<img width={16} height={16} alt="" src={trayArt}/>}
     </button>
     {open&&<div className="source-macos-network-popup" role="dialog"
       aria-label="Network" data-test-network-popup="">
       <div>{status.online?"Currently connected to":"Not connected"}</div>
       <div className="source-macos-network-status" role="status">
-        {(xpArtwork||onebitArtwork)?<img width={32} height={32} alt="" src={xpNetwork}/>:baseArtwork?<img width={32} height={32} alt="" src={!status.online?"/assets/images/network-off.2d8dfd51.webp":/wifi|cellular/.test(status.type)?"/assets/images/network-signal.4305a101.webp":"/assets/images/network-wired.c19a6640.webp"}/>:<WifiGlyph size={32}/> }
+        <img width={32} height={32} alt="" src={connectionArt}/>
         <div>
           <strong data-test-network-name="">{!status.online?"Offline":status.type==="wifi"?"Wireless network connection":status.type==="cellular"?"Mobile broadband connection":"Network"}</strong>
           <p>{status.online?"Browser reports online":"Browser reports offline"}</p>

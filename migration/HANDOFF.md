@@ -1,3 +1,9 @@
+## 25 November 2026 — Action Center and network artwork
+
+Pinned f0ed/e0ee and registry: Action Center tray now selects inherited error/warning art (Onebit shared severity SVG) with three original assets imported and Git blob verified. Guest info/success uses normal flag because registry has no corresponding variant; original severity store and missing headline variant behavior remain pending. Network uses vector only for Win10/11/macOS, offline opacity and Win10 rotation; Ubuntu/base families use source image. Popup always uses inherited signal/wired/offline image rather than tray glyph; exact Iconify vector shape and native controls remain pending. Added unit and historical/modern browser assertions; no runtime execution or duplicate CI requested. Battery audit confirms non-macOS uses a source 32px sprite meter and remaining/charging label; port next. Main, frozen source and releases unchanged.
+
+---
+
 ## 25 November 2026 — Inherited tray artwork audit
 
 Frozen icons.registry.json and shared~plugin-cssvar~sandbox~vue-app~vue-store.js confirm default colored volume icons for Win7/Aero/Basic/Vista/Win8/81/Oxygen/Aero Noir; Win10/11/macOS/ChromeOS/Ubuntu/Kubuntu override them; Longhorn Slate uses winxp iconPack and Plex has matching explicit icons. Centralized volume theme mapping in sourceGuestAudio, routed Longhorn network/battery/action-center through XP artwork, imported four missing default volume binaries with exact source SHA, and verified already-present 100% binary. Removed grayscale filtering from default colored mute glyphs, preserving dark high contrast override. Updated four existing tray tests and prototype icon assertions, added mapping unit coverage. No runtime tests executed; no duplicate CI requested. Next audit Action Center severity and shared source network/battery rules; CI result remains inaccessible without push run ID.

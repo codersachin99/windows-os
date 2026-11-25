@@ -1,3 +1,5 @@
+> **25 November 2026 — Action Center/network artwork:** original severity flag and distinct tray/popup network selection.
+
 > **25 November 2026 — Tray artwork:** source registry volume inheritance and Longhorn XP artwork corrected.
 
 > **25 November 2026 — Tray audit:** measured nested popup geometry, keyboard dismissal and calendar focus fixes.

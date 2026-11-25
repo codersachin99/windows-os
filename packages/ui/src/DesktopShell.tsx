@@ -572,7 +572,7 @@ export function DesktopShell({
   const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   const renderTrayItem=(item:typeof SOURCE_TRAY_ITEMS[number],hidden=false)=>sharedTray&&item.id==="TaskbarActionCenter"?
               <SourceMacOSActionCenter onebitArtwork={onebitTray} xpArtwork={xpTrayArtwork} key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open,hidden)}/>:sharedTray&&item.id==="TaskbarNetwork"?
-              <SourceMacOSNetwork onebitArtwork={onebitTray} retroArtwork={retroTray} xpArtwork={xpTrayArtwork} key={item.id} baseArtwork={prototypeTray||win8Tray||modernTray||vistaTray||win7Tray||state.theme==="chromeos"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open,hidden)} onOpen={()=>{dispatch({type:"CLOSE_START"});if(!hidden)setShowHiddenTray(false);}}/>:
+              <SourceMacOSNetwork onebitArtwork={onebitTray} retroArtwork={retroTray} xpArtwork={xpTrayArtwork} key={item.id} theme={state.theme} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open,hidden)} onOpen={()=>{dispatch({type:"CLOSE_START"});if(!hidden)setShowHiddenTray(false);}}/>:
               sharedTray&&item.id==="TaskbarBattery"?
               <SourceMacOSBattery xpArtwork={xpTrayArtwork} key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
               sharedTray&&item.id==="TaskbarVolume"?

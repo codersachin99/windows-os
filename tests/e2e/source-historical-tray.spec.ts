@@ -12,6 +12,7 @@ for(const [theme,surface] of [
     const network=tray.locator("[data-test-network]");
     await network.click();
     await expect(tray.locator("[data-test-network-popup]")).toBeVisible();
+    await expect(tray.locator("[data-test-network-popup] img")).toHaveAttribute("src",/network-(wired|signal)\./);
     if(retro){
       await expect(network.locator("img")).toHaveAttribute("src",/network-win2k/);
       try{await context.setOffline(true);await expect(network.locator("img")).toHaveAttribute("src",/network-off-win2k/);}

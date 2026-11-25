@@ -78,6 +78,7 @@ FILES: dict[str, dict[str, str]] = {
         "network-onebit.bc98df3e.svg": "4f5a442e2e5419ab3ee218f20016ef14f16d1abc",
         "network-off-onebit.a9393cd6.svg": "31e591e23de273c63bb668090341e7d66d108a9f",
         "action-center-onebit.1bd0c609.svg": "d361690f40d879d4e7b4d70fe63ab96392aa36d5",
+        "action-center-base.d153243a.svg": "6a0ac6be0341d40249a8582b1dc89f2975b964d6",
         "computer-onebit.ce54e8ef.svg": "e2baedc909a189fdddad1db321485c06ed2d5ee5",
         "bin-onebit.b4ba1ed0.svg": "642007c89d5872342b1d7cdc2675833689eafbbe",
         "folder-onebit.11d8e8ae.svg": "4a2b3e84607400eb15ca05b37161228db920fcc2",
@@ -279,6 +280,8 @@ FILES: dict[str, dict[str, str]] = {
     },
     "chromeos": {
         "network-off.2d8dfd51.webp": "a3629b5a1b158f752810f03b6dd3ce7fdd33aafa",
+        "action-center-error.e8a7e681.webp": "a15298c34fbf2d89891c00e9e829c2a3a973b905",
+        "action-center-warning.fc9ed53b.webp": "19ab6fd74afdecb04f2011c4f7fdcf38922c3b86",
         "network-wired.c19a6640.webp": "c1709ddbb3ce0832bc8b3638d33654bf50e58cc2",
         "network-signal.4305a101.webp": "09de3646e6db7efe16d80a2083cba6ab64bd9a13",
         "google.d3503fb1.svg": "a971e1d7a9dbfc34674b15dadd401769d6dffd97",

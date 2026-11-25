@@ -1,5 +1,5 @@
 import {useEffect,useRef,type Dispatch} from "react";
-import {legacyArt} from "@windows-os/assets";
+import {sourceActionCenterArt} from "./sourceTrayArtwork";
 import {appRegistry,type SourceNotificationSnapshot,sourceNotificationSeverity} from "@windows-os/sdk";
 import type {DesktopAction} from "@windows-os/contracts";
 
@@ -36,7 +36,7 @@ export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onS
       data-test-action-center="" data-notification-severity={severity} aria-label="Action Center" aria-haspopup="dialog"
       aria-expanded={open} title="Action Center"
       onClick={()=>{if(!open){dispatch({type:"CLOSE_START"});onSeen();}setOpen(!open);}}>
-      <img src={onebitArtwork?"/assets/images/action-center-onebit.1bd0c609.svg":xpArtwork?"/assets/images/action-center-winxp.52f44912.webp":legacyArt.trayActionCenter} width={16} height={16} alt=""/>
+      <img src={sourceActionCenterArt(severity,xpArtwork,onebitArtwork)} width={16} height={16} alt=""/>
     </button>
     {open&&<div className="source-macos-action-center-popup" role="dialog"
       aria-label="Action Center" data-test-action-center-popup="">
