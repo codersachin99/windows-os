@@ -1,3 +1,5 @@
+> **25 November 2026 — Notification artwork:** battery/tray CI green; four original toast icon families imported. [Source trace](NOTIFICATION-ARTWORK-SOURCE.md).
+
 > **25 November 2026 — Battery popup:** original sprite meter, charging overlay, theme-specific status and consolidated verification. [Source trace](BATTERY-TRAY-SOURCE.md).
 
 > **25 November 2026 — Action Center/network artwork:** original severity flag and distinct tray/popup network selection.

@@ -1,3 +1,9 @@
+## 25 November 2026 — Theme notification artwork
+
+Exact-head battery/tray [CI #45592881400](https://github.com/codersachin99/windows-os/actions/runs/45592881400) passed 765 units and 104 browsers, TypeScript, inventory, art and Vite; visual capture skipped. Frozen f0ed selects themeData.icon[notifi-type]; all 12 original error/success/warning images imported byte-identically from four icon families and centralized in sourceTrayArtwork. Toast receives active theme, renders success artwork, keeps 32px image from shrinking, and preserves existing 8-second timer, dismissal and escaped text. Guest info has no source registry entry and stays text-only. Added family and rendered-markup unit assertions. No new CI requested; tests not executed for new head. Source notification store 779a, producer, remote feed and exact balloon paint remain pending. Next locate 779a and audit lifecycle. Main, pin, releases unchanged.
+
+---
+
 ## 25 November 2026 — Battery popup source meter
 
 Confirmed consolidated [CI #45588193465](https://github.com/codersachin99/windows-os/actions/runs/45588193465) on 27e74e7: 761 unit and 104 browser tests passed; TypeScript, inventory, artwork and Vite build green; visual capture skipped. Pinned a88c and chunk-391f23b6.css now use the exact original battery-meter sprite, 32px meter, raw-level <10%/<20% frame selection, -960px charging overlay, full/remaining/charging locale text and original non-macOS brightness label. macOS keeps original separate summary. Unknown browser battery remains unavailable (no fabricated charge); Guest power plans and brightness do not change native device settings. Unit thresholds and browser live updates authored; [run-ci] [tray-check] requested to validate all post-green tray changes. Full pixel parity remains unverified. Next inspect exact-head CI, fix regressions, then source notification toast artwork and lifecycle.
