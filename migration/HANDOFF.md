@@ -1,3 +1,9 @@
+## 25 November 2026 — Inherited tray artwork audit
+
+Frozen icons.registry.json and shared~plugin-cssvar~sandbox~vue-app~vue-store.js confirm default colored volume icons for Win7/Aero/Basic/Vista/Win8/81/Oxygen/Aero Noir; Win10/11/macOS/ChromeOS/Ubuntu/Kubuntu override them; Longhorn Slate uses winxp iconPack and Plex has matching explicit icons. Centralized volume theme mapping in sourceGuestAudio, routed Longhorn network/battery/action-center through XP artwork, imported four missing default volume binaries with exact source SHA, and verified already-present 100% binary. Removed grayscale filtering from default colored mute glyphs, preserving dark high contrast override. Updated four existing tray tests and prototype icon assertions, added mapping unit coverage. No runtime tests executed; no duplicate CI requested. Next audit Action Center severity and shared source network/battery rules; CI result remains inaccessible without push run ID.
+
+---
+
 ## 25 November 2026 — Tray interaction and geometry audit
 
 Audited accumulated tray changes against live branch source. Push-triggered CI result cannot be retrieved by available GitHub connector (PR-only workflow list empty; combined status empty), so no CI outcome claimed. Fixed measured nested flyout height and width based on actual panel rect and viewport (ResizeObserver + resize; RTL included), added document Escape fallback after keyboard focus leaves hidden group, preserved Win7/Vista/Win8 and Win11 today styling on hover/focus, and improved modern header wrapping. Corrected year-picker test locator, closed Notification Area Icons settings after preference edits to test actual Customize navigation, and added nested popup vertical bounds and external-focus Escape regressions. No execution observed and no duplicate CI requested. Main/releases/source pin unchanged. Next inspect push workflow job results when run ID is available, then resolve actual failures and audit inherited art.

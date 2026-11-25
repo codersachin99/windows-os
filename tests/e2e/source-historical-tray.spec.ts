@@ -16,6 +16,8 @@ for(const [theme,surface] of [
       await expect(network.locator("img")).toHaveAttribute("src",/network-win2k/);
       try{await context.setOffline(true);await expect(network.locator("img")).toHaveAttribute("src",/network-off-win2k/);}
       finally{await context.setOffline(false);}
+    }else{
+      await expect(network.locator("img")).toHaveAttribute("src",/network-winxp/);
     }
     const volume=tray.locator("[data-test-volume]");
     await volume.press("Enter");
@@ -23,9 +25,9 @@ for(const [theme,surface] of [
     await expect(mixer).toHaveCSS("background-color",surface);
     await mixer.getByRole("slider").fill("35");
     await expect(mixer.getByRole("slider")).toHaveValue("35");
-    if(retro)await expect(volume.locator("img")).toHaveAttribute("src",/sound-win2k/);
+    await expect(volume.locator("img")).toHaveAttribute("src",retro?/sound-win2k/:/sound-winxp/);
     await mixer.getByRole("button",{name:"Mute system"}).click();
-    if(retro)await expect(volume.locator("img")).toHaveAttribute("src",/sound-muted-win2k/);
+    await expect(volume.locator("img")).toHaveAttribute("src",retro?/sound-muted-win2k/:/volume-muted-winxp/);
     await tray.locator("[data-test-datetime-trigger]").press("Enter");
     await expect(mixer).toHaveCount(0);
     const popup=tray.locator("[data-test-datetime-popup]");

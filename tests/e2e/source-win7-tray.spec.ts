@@ -39,7 +39,7 @@ test("Win7 base tray shares Action Center, live network, battery and volume",asy
   await expect(battery).toHaveCount(0);
   const mixer=tray.locator("[data-test-volume-popup]");
   await mixer.getByRole("slider").fill("40");
-  await expect(volume.locator("img")).toHaveAttribute("src",/volume-32-win10/);
+  await expect(volume.locator("img")).toHaveAttribute("src",/volume-32\.1859a18f\.webp/);
   await mixer.getByRole("button",{name:"Mute system"}).click();
   await expect(mixer.getByRole("slider")).toBeDisabled();
   await page.keyboard.press("Escape");

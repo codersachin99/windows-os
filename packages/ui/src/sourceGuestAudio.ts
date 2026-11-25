@@ -32,3 +32,23 @@ export function sourceOnebitVolumeArt(audio:SourceGuestAudio):string{
   const value=sourceGuestVolume(audio.volume);
   return "/assets/images/"+(audio.muted?"volume-off-onebit.61d24fcf.svg":value<65?"volume-0-onebit.44ebf44b.svg":value<100?"volume-1-onebit.629e30d3.svg":"volume-onebit.33ed49b4.svg");
 }
+
+/** Registry base icons: inherited by Win7, Vista, Win8, Oxygen and Aero Noir. */
+const baseVolumeArtwork={
+  "0":"volume-0.8c249580.webp","32":"volume-32.1859a18f.webp",
+  "65":"volume-65.bf0b7991.webp","100":"volume-100.fb90d926.webp",
+  muted:"volume-muted.e186b3c5.webp"
+} as const;
+export function sourceBaseVolumeArt(audio:SourceGuestAudio):string{
+  const volume=sourceGuestVolume(audio.volume);
+  const key=audio.muted?"muted":volume<32?"0":volume<65?"32":volume<100?"65":"100";
+  return "/assets/images/"+baseVolumeArtwork[key];
+}
+/** Frozen icons.registry.json and theme iconPack inheritance. */
+export function sourceThemeVolumeArt(theme:string,audio:SourceGuestAudio):string{
+  if(theme==="onebit")return sourceOnebitVolumeArt(audio);
+  if(["win31","win95","win98","win2k"].includes(theme))return sourceRetroVolumeArt(audio);
+  if(["winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ","winW","winLP","winLS"].includes(theme))return sourceXPVolumeArt(audio);
+  if(["win10","win11","win11dark","macos","chromeos","ubuntu","kubuntu"].includes(theme))return sourceMacOSVolumeArt(audio);
+  return sourceBaseVolumeArt(audio);
+}

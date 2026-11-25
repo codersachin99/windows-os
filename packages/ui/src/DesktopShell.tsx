@@ -312,7 +312,7 @@ export function DesktopShell({
   const modernTray=["win10","win11","win11dark"].includes(state.theme);
   const retroTray=["win31","win95","win98","win2k"].includes(state.theme);
   const prototypeTray=["winW","winLP","winLS"].includes(state.theme);
-  const xpTrayArtwork=xpTray||retroTray||state.theme==="winW";
+  const xpTrayArtwork=xpTray||retroTray||prototypeTray;
   const onebitTray=state.theme==="onebit";
   const sharedTray=onebitTray||retroTray||prototypeTray||win8Tray||modernTray||xpTray||vistaTray||win7Tray||state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
   // Original taskbar-macos and taskbar-ubuntu render fixed tray items;
@@ -576,7 +576,7 @@ export function DesktopShell({
               sharedTray&&item.id==="TaskbarBattery"?
               <SourceMacOSBattery xpArtwork={xpTrayArtwork} key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
               sharedTray&&item.id==="TaskbarVolume"?
-              <SourceMacOSVolume onebitArtwork={onebitTray} retroArtwork={retroTray} xpArtwork={xpTrayArtwork} key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
+              <SourceMacOSVolume theme={state.theme} key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}

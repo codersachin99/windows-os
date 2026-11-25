@@ -263,6 +263,11 @@ FILES: dict[str, dict[str, str]] = {
     },
     "macos-tray-volume": {
         "volume-0-win10.319871af.webp": "eb0f0fd66412c44de175e1f267a9775af47129f0",
+        "volume-100.fb90d926.webp": "66cfd7789418fdf74519af88fc5b6d80d12e4058",
+        "volume-muted.e186b3c5.webp": "365f4deb6c2198d0164a0d5ac33f5dca61995659",
+        "volume-65.bf0b7991.webp": "3f066e6c9f762b0d45ab7dd3870baaa24c02b6f8",
+        "volume-32.1859a18f.webp": "b26b881eb710087379756b8c592e0024241601e2",
+        "volume-0.8c249580.webp": "891591942f998206d053bda6a82e2ed34ca526a6",
         "volume-32-win10.0c0304cf.webp": "8ea19fcc333559b90803b13291f2b276c101ff32",
         "volume-65-win10.fcea34a7.webp": "cb0af1de2f69894620107c4bbcd739f84b818c04",
         "volume-100-win10.5647dfdd.webp": "ec5394cfefdb2f8b6b67bb42e755668b2eecb96b",

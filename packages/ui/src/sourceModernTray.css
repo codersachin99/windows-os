@@ -4,7 +4,7 @@
 .windows-desktop[data-source-win8-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-datetime-popup)>*:last-child,.windows-desktop[data-source-win8-tray] .source-macos-volume-popup>*:last-child,.windows-desktop[data-source-win8-tray] .source-hidden-tray-customize{background:#f6f6f6;border-top:1px solid #0002;color:#1171d2}
 .windows-desktop[data-source-win8-tray] .source-macos-datetime-popup>button:first-child{color:#000}
 .windows-desktop[data-source-win8-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:#000}
-.windows-desktop[data-source-win8-tray] .source-macos-volume-mute img{filter:brightness(0)}
+.windows-desktop[data-source-win8-tray] .source-macos-volume-mute img{filter:none}
 .windows-desktop[data-source-win8-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){border-radius:0}
 .windows-desktop[data-source-win8-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-datetime-popup)>button{color:#1171d2}
 .windows-desktop[data-source-modern-tray]{--modern-tray-accent:var(--theme-color,#0078d7)}

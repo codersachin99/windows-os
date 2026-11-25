@@ -16,7 +16,7 @@
 .windows-desktop[data-source-vista-tray] .source-hidden-tray-customize{color:#1171d2}
 .windows-desktop[data-source-vista-tray] .source-macos-action-center-summary{font-size:14px}
 .windows-desktop[data-source-vista-tray] :is(.source-macos-volume-meter,.source-macos-volume-mute){color:#000}
-.windows-desktop[data-source-vista-tray] .source-macos-volume-mute img{filter:brightness(0)}
+.windows-desktop[data-source-vista-tray] .source-macos-volume-mute img{filter:none}
 .windows-desktop[data-source-vista-tray] .source-macos-volume-mute:hover{
   border:1px solid #aaddfa;border-radius:3px;
   background:linear-gradient(#fff9,rgba(230,236,245,.8) 90%,#fffc);

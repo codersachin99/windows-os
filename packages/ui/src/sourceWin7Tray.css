@@ -34,7 +34,7 @@
 .windows-desktop[data-source-win7-tray] .source-macos-volume-popup>*{background:#fff;border:1px solid #0008;padding:4px}
 .windows-desktop[data-source-win7-tray] .source-macos-volume-popup .source-macos-volume-meter{width:48px}
 .windows-desktop[data-source-win7-tray] .source-macos-volume-popup .source-macos-volume-mute{border-radius:0;background:#f1f5fb}
-.windows-desktop[data-source-win7-tray] .source-macos-volume-mute img{filter:brightness(0)}
+.windows-desktop[data-source-win7-tray] .source-macos-volume-mute img{filter:none}
 .windows-desktop[data-source-win7-tray] .source-macos-notification>div{background:#fff;padding:8px}
 .windows-desktop[data-source-win7-tray] .source-macos-notification button{color:#000}
 .windows-desktop[data-source-win7-tray] .source-macos-notification-history button{color:#1171d2}
@@ -104,7 +104,7 @@
 }
 .windows-desktop[data-source-win7-tray][data-source-classic-tray] .source-macos-calendar-days button[aria-pressed="true"]{outline:1px dotted #ff3;outline-offset:-2px}
 .windows-desktop[data-source-win7-tray][data-source-classic-tray] .source-chromeos-clock{color:var(--text-color)}
-.windows-desktop[data-source-win7-tray][data-source-classic-tray] .source-macos-volume-mute img{filter:brightness(0)}
+.windows-desktop[data-source-win7-tray][data-source-classic-tray] .source-macos-volume-mute img{filter:none}
 .windows-desktop[data-source-win7-tray][data-source-classic-tray]:is([data-theme="basic-3"],[data-theme="basic-4"]) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){border-color:currentColor}
 .windows-desktop[data-source-win7-tray][data-source-classic-tray]:is([data-theme="basic-3"],[data-theme="basic-4"]) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-datetime-popup,.source-macos-volume-popup,.source-macos-notification)>*{
   color:var(--text-color);background:var(--theme-surface);
