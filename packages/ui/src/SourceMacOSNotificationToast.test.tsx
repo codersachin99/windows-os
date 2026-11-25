@@ -32,3 +32,11 @@ it("renders the original theme artwork and leaves info text-only",()=>{
   expect(html).not.toContain("data-test-notification-artwork");
   expect(html).toContain("Information");
 });
+
+it("chooses the original top/bottom balloon or modern card direction",()=>{
+  for(const [theme,direction] of [["win7","top"],["winxp","top"],["onebit","top"],["macos","bottom"],["ubuntu","bottom"],["win10","card"],["win11dark","card"],["chromeos","card"]]){
+    const html=renderToStaticMarkup(<SourceMacOSNotificationToast theme={theme} message={{id:"direction",type:"success",title:"Title",body:"Body",seen:false,read:false}} onDismiss={()=>{}}/>);
+    expect(html).toContain('data-notification-balloon="'+direction+'"');
+    expect(html).toContain("source-notification-copy");
+  }
+});

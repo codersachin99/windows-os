@@ -1,3 +1,5 @@
+> **25 November 2026 — Notification balloons:** shared geometry and original theme-family paint. [Source trace](NOTIFICATION-BALLOON-SOURCE.md).
+
 > **25 November 2026 — Action Center popup:** source geometry and headline selection; consolidated notification CI green. [Source trace](ACTION-CENTER-POPUP-SOURCE.md).
 
 > **25 November 2026 — Notification service:** injectable timeout/cache and persistent version metadata. [Source trace](NOTIFICATION-SERVICE-SOURCE.md).

@@ -1,3 +1,9 @@
+## 25 November 2026 — WinUI notification balloon styling
+
+Ported frozen vue-app.css .winui-balloon, f0ed direction and theme SCSS paint: 360px nominal balloon, 380px source max, 18px RTL-aware tail, 400px nominal modern cards (source max retained), 32px/40px icon variants, source border/gradient palettes and close controls across Win7/Vista/8, classic/XP/9x/31, prototypes, Win10/11, macOS/Ubuntu/Kubuntu/ChromeOS, Oxygen/Aero Noir and Onebit. React retains fixed desktop-edge placement with viewport bounds rather than original icon-local absolute anchoring (still pending); XP close hover is a simplified source-colored approximation; plain text retained, no executable markup. New markup direction test authored. Latest green bd11935, no new CI requested this slice. Next Control Panel Action Center history source audit, then verify accumulated visual/layout changes. No production feed activated. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — Action Center popup source dimensions
 
 Exact-head [CI #45603617798](https://github.com/codersachin99/windows-os/actions/runs/45603617798) passed 782 unit tests and 104 browser tests, TypeScript, inventory, assets and Vite; visual capture skipped. Pinned f0ed and src/styles/chunks/chunk-517d7f56.css specify 280px popup, 24px headline, 8px summary gap/12px padding, 12px history gap and 16px/24px padding, 12px footer. Applied shared layout with viewport/hidden-tray constraints retained; normal/Onebit headline matches registry. Error/warning headline keys are absent in pinned registry; omit image rather than invent art (actual BaseIcon missing-art rendering still unverified). Existing theme paint and link navigation retained. Added unit and Win7 browser assertions; new head not tested, no duplicate CI requested. Next audit source WinUI balloon styles and anchoring, then Control Panel history. No production feed activated. Main/pin/releases unchanged.

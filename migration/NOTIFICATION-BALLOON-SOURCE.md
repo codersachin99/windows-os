@@ -1,0 +1,5 @@
+# Notification balloon styling
+
+Frozen legacy-win7@26b9f0ce7: src/styles/system/vue-app.css (.winui-balloon), src/modules/chunks/chunk-517d7f56.js f0ed, src/modules/themes/theme-*-scss.js (.winui-balloon and .taskbar__notification rules).
+
+Ported frozen vue-app.css .winui-balloon, f0ed direction and theme SCSS paint: 360px nominal balloon, 380px source max, 18px RTL-aware tail, 400px nominal modern cards (source max retained), 32px/40px icon variants, source border/gradient palettes and close controls across Win7/Vista/8, classic/XP/9x/31, prototypes, Win10/11, macOS/Ubuntu/Kubuntu/ChromeOS, Oxygen/Aero Noir and Onebit. React retains fixed desktop-edge placement with viewport bounds rather than original icon-local absolute anchoring (still pending); XP close hover is a simplified source-colored approximation; plain text retained, no executable markup. New markup direction test authored. Latest green bd11935, no new CI requested this slice. Next Control Panel Action Center history source audit, then verify accumulated visual/layout changes. No production feed activated. Main/pin/releases unchanged.
