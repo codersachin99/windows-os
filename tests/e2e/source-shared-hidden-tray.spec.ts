@@ -14,6 +14,7 @@ for(const theme of ["chromeos","kubuntu","oxygen","aeroNoir","macos","ubuntu"] a
     const settings=cpanel.locator("[data-test-cpanel-notification]");
     await expect(settings).toBeVisible();
     await settings.locator('[data-test-cpanel-notification-icon="TaskbarVolume"] select').selectOption("hidden");
+    await settings.getByRole("button",{name:"OK",exact:true}).click();
     const toggle=tray.locator("[data-test-tray-hidden-toggle]");
     if(theme==="macos"||theme==="ubuntu"){
       // Original dedicated top bars have no base hidden-items popup.
@@ -35,9 +36,16 @@ for(const theme of ["chromeos","kubuntu","oxygen","aeroNoir","macos","ubuntu"] a
     expect(box.x).toBeGreaterThanOrEqual(-2);
     expect(box.y).toBeGreaterThanOrEqual(-2);
     expect(box.x+box.width).toBeLessThanOrEqual(view.width+2);
+    const parent=(await hidden.boundingBox())!;
+    expect(box.y+box.height).toBeLessThanOrEqual(parent.y+2);
     await page.keyboard.press("Escape");
     await expect(mixer).toHaveCount(0);
     await expect(volume).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(hidden).toHaveCount(0);
+    await expect(toggle).toBeFocused();
+    await toggle.click();
+    await page.locator("[data-test-datetime-trigger]").focus();
     await page.keyboard.press("Escape");
     await expect(hidden).toHaveCount(0);
     await expect(toggle).toBeFocused();

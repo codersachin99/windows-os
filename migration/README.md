@@ -1,3 +1,5 @@
+> **25 November 2026 — Tray audit:** measured nested popup geometry, keyboard dismissal and calendar focus fixes.
+
 > **25 November 2026 — Onebit tray:** original palette/artwork and consolidated tray CI. [Source trace](ONEBIT-TRAY-SOURCE.md).
 
 > **25 November 2026 — Historical trays:** Win31/95/98/2000, Whistler and Longhorn shared controls. [Source trace](HISTORICAL-TRAY-SOURCE.md).

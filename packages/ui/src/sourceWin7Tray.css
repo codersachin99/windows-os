@@ -44,7 +44,8 @@
 .windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button:not(:disabled,.is-today):is(:hover,:focus-visible),
 .windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button[aria-pressed="true"]{color:#1171d2;background:none;border-color:transparent}
 .windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar-picker{background:#fff;border:0}
-.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button.is-today{
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button.is-today,
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-calendar button.is-today:is(:hover,:focus-visible){
   color:#1171d2;background:linear-gradient(#fff,#d1e6ff);border:2px dotted #8195ae;border-radius:3px;
 }
 .windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-chromeos-clock{color:#000}
@@ -131,7 +132,8 @@
 .windows-desktop[data-source-win7-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger){color:#000}
 .windows-desktop[data-source-win7-tray] .source-hidden-tray-grid :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup){
   top:auto;bottom:calc(100% + 4px);inset-inline-end:0;
-  max-height:calc(100dvh - var(--taskbar-height) - 124px);
+  max-width:min(calc(100vw - 24px),var(--source-hidden-popup-width,100vw));
+  max-height:var(--source-hidden-popup-height,calc(100dvh - var(--taskbar-height,40px) - 124px));overflow:auto;
 }
 .windows-desktop[data-source-win7-tray] .source-hidden-tray-customize{
   border:1px solid #0008;border-top:0;background:#f1f5fb;color:#1171d2;

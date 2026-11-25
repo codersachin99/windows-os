@@ -111,11 +111,11 @@ for(const [theme,surface,textColor,accent] of [
     await expect(popup.locator("[data-test-source-analog-clock] svg")).toHaveCSS("background-color","rgb(224, 230, 233)");
     await popup.getByRole("button",{name:"Next month"}).click();
     await popup.getByRole("button",{name:"Choose year"}).click();
-    await expect(popup.getByLabel("Years",{exact:true})).toBeVisible();
+    await expect(popup.locator('.source-macos-calendar-picker[aria-label="Years"]')).toBeVisible();
     await popup.getByRole("button",{name:"Previous years"}).click();
     await popup.getByRole("button",{name:"Next years"}).click();
     await clock.press("Escape");
-    await expect(popup.getByLabel("Years",{exact:true})).toHaveCount(0);
+    await expect(popup.locator('.source-macos-calendar-picker[aria-label="Years"]')).toHaveCount(0);
     await clock.press("Escape");
     await expect(popup).toHaveCount(0);
     const volume=tray.locator("[data-test-volume]");
@@ -143,6 +143,7 @@ test("Win7 hidden tray keeps actual components mounted, closes on Escape and cus
   await expect(settings).toBeVisible();
   await settings.locator('[data-test-cpanel-notification-icon="TaskbarVolume"] select').selectOption("hidden");
   await settings.locator('[data-test-cpanel-notification-icon="TaskbarNetwork"] select').selectOption("notifications-only");
+  await settings.getByRole("button",{name:"OK",exact:true}).click();
   const tray=page.locator('[data-test-taskbar-tray="win7"]');
   const toggle=tray.locator("[data-test-tray-hidden-toggle]");
   await expect(toggle).toBeVisible();

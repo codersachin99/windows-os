@@ -1,5 +1,5 @@
-/* Shared base TaskbarHiddenItems adapter for the four non-Win7
- * migrated taskbar-base themes. Top-bar themes have fixed tray items.
+/* Shared base TaskbarHiddenItems adapter for migrated non-Win7
+ * taskbar-base themes. Top-bar themes have fixed tray items.
  * Preserve source-specific popup paint and do not duplicate controls. */
 .windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .windows-taskbar__hidden-items{
   display:flex;flex-direction:column;align-items:stretch;gap:0;
@@ -14,7 +14,7 @@
 }
 .windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-grid :is(.source-macos-network-popup,.source-macos-action-center-popup,.source-macos-battery-popup,.source-macos-volume-popup){
   position:absolute;top:auto;bottom:calc(100% + 4px);inset-inline-end:0;
-  max-width:calc(100vw - 24px);max-height:calc(100dvh - var(--taskbar-height) - 150px);
+  max-width:min(calc(100vw - 24px),var(--source-hidden-popup-width,100vw));max-height:var(--source-hidden-popup-height,calc(100dvh - var(--taskbar-height,40px) - 150px));overflow:auto;
 }
 .windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-customize{
   display:block;width:100%;padding:12px;border:0;border-top:1px solid currentColor;

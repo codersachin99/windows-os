@@ -1,3 +1,9 @@
+## 25 November 2026 — Tray interaction and geometry audit
+
+Audited accumulated tray changes against live branch source. Push-triggered CI result cannot be retrieved by available GitHub connector (PR-only workflow list empty; combined status empty), so no CI outcome claimed. Fixed measured nested flyout height and width based on actual panel rect and viewport (ResizeObserver + resize; RTL included), added document Escape fallback after keyboard focus leaves hidden group, preserved Win7/Vista/Win8 and Win11 today styling on hover/focus, and improved modern header wrapping. Corrected year-picker test locator, closed Notification Area Icons settings after preference edits to test actual Customize navigation, and added nested popup vertical bounds and external-focus Escape regressions. No execution observed and no duplicate CI requested. Main/releases/source pin unchanged. Next inspect push workflow job results when run ID is available, then resolve actual failures and audit inherited art.
+
+---
+
 ## 25 November 2026 — Onebit tray and consolidated verification
 
 Onebit pinned theme-onebit-scss.js source dark #352b30, sand #e6d4bf, inverted tray popup with 2px outline, today/selected inversion and source clock color. Shared controls extended to Onebit; seven original SVG binaries copied with verified source SHA and importer entries, including original volume thresholds. Battery uses existing capability-based SVG (no dedicated Onebit registry override); exact full source shell/pixel paint still pending. Added browser and unit tests. [run-ci] [tray-check] requests one consolidated opt-in run covering all source-*-tray.spec.ts and Taskbar Settings/Performance, with normal TypeScript/unit/inventory/artwork/build gates. No execution result observed at commit time. Main/releases/pin unchanged. Next inspect CI failures and fix regressions before more feature work.

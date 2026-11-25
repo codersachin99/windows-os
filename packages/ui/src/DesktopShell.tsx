@@ -330,6 +330,24 @@ export function DesktopShell({
   const visibleTrayIds=fixedTray?SOURCE_TRAY_ITEMS.filter(item=>trayPreferences.icons[item.id]!=="off").map(item=>item.id):sourceTrayVisible(trayPreferences);
   const hiddenTrayRef=useRef<HTMLDivElement>(null);
   const hiddenToggleRef=useRef<HTMLButtonElement>(null);
+  // Nested flyouts are anchored to the actual hidden panel, not an
+  // assumed taskbar height. Measure both axes after layout/resize.
+  useLayoutEffect(()=>{
+    const panel=hiddenTrayRef.current;
+    if(!showHiddenTray||!interactiveHiddenTray||!panel)return;
+    const measure=()=>{
+      const rect=panel.getBoundingClientRect();
+      const rtl=getComputedStyle(panel).direction==="rtl";
+      const width=rtl?window.innerWidth-rect.left:rect.right;
+      panel.style.setProperty("--source-hidden-popup-width",Math.max(0,Math.floor(width-8))+"px");
+      panel.style.setProperty("--source-hidden-popup-height",Math.max(0,Math.floor(rect.top-8))+"px");
+    };
+    measure();
+    const observer=new ResizeObserver(measure);
+    observer.observe(panel);
+    window.addEventListener("resize",measure);
+    return()=>{observer.disconnect();window.removeEventListener("resize",measure);};
+  },[showHiddenTray,interactiveHiddenTray,state.theme,trayPreferences]);
   const setMacPopupOpen=(id:SourceMacOSPopupId,open:boolean,hidden=false)=>{
     setMacPopup(current=>sourceMacOSPopupTransition(current,id,open));
     if(open&&!hidden)setShowHiddenTray(false);
@@ -343,8 +361,17 @@ export function DesktopShell({
         setShowHiddenTray(false);
       }
     };
+    // Child dialogs stop Escape themselves. If focus has moved outside
+    // the group with Tab, Escape must still close the remaining flyout.
+    const escape=(event:KeyboardEvent)=>{
+      if(event.key!=="Escape"||event.defaultPrevented)return;
+      event.preventDefault();event.stopPropagation();
+      setShowHiddenTray(false);setMacPopup(null);
+      hiddenToggleRef.current?.focus({preventScroll:true});
+    };
     document.addEventListener("pointerdown",outside);
-    return()=>document.removeEventListener("pointerdown",outside);
+    document.addEventListener("keydown",escape);
+    return()=>{document.removeEventListener("pointerdown",outside);document.removeEventListener("keydown",escape);};
   },[showHiddenTray,interactiveHiddenTray]);
   useEffect(()=>{
     setMacPopup(null);
