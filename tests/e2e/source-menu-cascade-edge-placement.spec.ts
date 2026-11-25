@@ -8,7 +8,7 @@ import {expect,test,type Locator,type Page} from "@playwright/test";
  */
 async function guest(page:Page,theme:string){
   await page.goto("/?theme="+theme);
-  await page.locator(theme==="ubuntu"||theme==="kubuntu"||theme==="oxygen"?'[data-test-source-logon-avatar="'+theme+'"]':'[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator(theme==="ubuntu"||theme==="kubuntu"||theme==="oxygen"||theme==="aeroNoir"?'[data-test-source-logon-avatar="'+theme+'"]':'[data-test-avatar="win7"]').click({timeout:12000});
   const desktop=page.locator("#desktop-icons");
   await expect(desktop).toBeVisible();
   return desktop;
@@ -39,7 +39,7 @@ async function assertInside(popup:Locator,bounds:Locator){
   return box!;
 }
 
-for(const theme of ["win7","winxp","win11dark","chromeos","ubuntu","kubuntu","oxygen"] as const){
+for(const theme of ["win7","winxp","win11dark","chromeos","ubuntu","kubuntu","oxygen","aeroNoir"] as const){
   test("source "+theme+" Desktop View Sort New cascade beside root, flips at right edge, retains keyboard",async({page},info)=>{
     const desktop=await guest(page,theme);
     for(const edge of ["left","right"] as const){
