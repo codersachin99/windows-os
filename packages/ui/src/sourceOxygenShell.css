@@ -144,3 +144,24 @@
 .windows-desktop[data-theme="oxygen"] .source-macos-calendar-picker{background:#2a2e32;border:1px solid var(--border-color);padding:3px}
 .windows-desktop[data-theme="oxygen"] :is(.source-macos-calendar-picker,.source-macos-calendar-year-arrows) button{border:1px solid transparent}
 .windows-desktop[data-theme="oxygen"] :is(.source-macos-calendar-picker,.source-macos-calendar-year-arrows) button:hover{border-color:var(--border-color)}
+
+/* Source StartButton 2159: w-14, full-size icon and inherited base
+ * 108x324 three-frame sprite. Hover and open both use its last frame. */
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start{
+  display:flex;align-items:center;justify-content:flex-start;
+  flex:0 0 56px;width:56px;height:100%;margin-top:0;border-radius:0;
+  background:none;
+}
+.windows-desktop[data-theme="oxygen"] .source-startbutton-sprite{
+  display:block;width:100%;height:100%;pointer-events:none;
+  background-repeat:no-repeat;background-size:100% 300%;background-position:0 0;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start:is(:hover,.is-active) .source-startbutton-sprite{
+  background-position:0 100%;
+}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) .source-startbutton-sprite{
+  background-position:100% 0;
+}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) .windows-taskbar__start:is(:hover,.is-active) .source-startbutton-sprite{
+  background-position:100% 100%;
+}

@@ -619,7 +619,10 @@ export function DesktopShell({
           data-test-start-button="" aria-label="Open Start menu"
           aria-expanded={state.startOpen}
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
-          <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />
+          {(state.theme==="aeroNoir"||state.theme==="oxygen")?
+            <span aria-hidden="true" className="source-startbutton-sprite" data-test-source-start-sprite=""
+              style={{backgroundImage:`url("${legacyArt.startOrb}")`}}/>:
+            <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />}
         </button>}
         {state.theme==="ubuntu"?<nav className="source-ubuntu-dock" data-test-dock="" aria-label="Application dock">
           <div className="source-ubuntu-dock-list">

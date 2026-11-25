@@ -1,3 +1,5 @@
+> **25 November 2026 — Source Start sprite:** byte-verified inherited Aero Noir/Oxygen Start states and expanded exact-head CI request. [Source trace](START-SPRITE-SOURCE.md).
+
 > **25 November 2026 — Source palette correction:** Ubuntu, Kubuntu, Oxygen registry accents and Aero Noir inactive glass alpha corrected; tests pending. [Source trace](THEME-REGISTRY-PALETTE-SOURCE.md).
 
 > **25 November 2026 — Aero Noir tray and focused verification:** shared interactive tray, original calendar paint and explicit opt-in CI. [Source trace](AERONOIR-TRAY-SOURCE.md). Results pending.

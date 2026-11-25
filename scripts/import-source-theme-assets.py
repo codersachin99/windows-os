@@ -43,6 +43,8 @@ FILES: dict[str, dict[str, str]] = {
         "boot-winW.052f504e.webp": "3f27d7236654d969a99c3300b283a27973e0c156",
     },
     "win7": {
+        # Base start sprite inherited by Aero Noir and Oxygen.
+        "start-button.b35eae12.webp": "aedd5f662a1bd181ec2193131abc396c0b7d11a9",
         "personal.ccbfdd3a.webp": "1c1649d47ab3c405afb49ce2fa45e3a9cd937725",
         # Original startmenu-base.js "start-docs/pics/music" artwork.
         # Non-Basic right-pane hovered icon and Basic source vector variants.
