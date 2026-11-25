@@ -282,3 +282,5 @@
     width:32px;height:32px
   }
 }
+
+.windows-cpanel__action-copy a{color:var(--link-color,#1465a6);text-decoration:underline;text-underline-offset:2px}

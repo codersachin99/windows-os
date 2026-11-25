@@ -1,3 +1,9 @@
+## 25 November 2026 — Safe notification inline links
+
+Restored source inline notification links in toast and Control Panel history using shared SDK tokenizer, confirmed frozen en-US update-notification-body [changelog](https://visnalize.com/win7simu/changelog). Only absolute HTTP(S) URLs without credentials, control characters or backslashes are accepted; unsupported syntax remains escaped text, no innerHTML. Real links open on explicit user click in a new browsing context with noopener/noreferrer; toast click marks message read and clears pending as f0ed. History already marks all read on entry. Original 7c5c implementation not yet located; full Markdown syntax, source external opener adapter and analytics remain pending. Added three parser and two markup cases. CI #45646864303 for parent passed TypeScript, unit tests and build at time of inspection; browser checks in progress. No extra CI requested. Next inspect exact-head verification and add browser coverage for notification lifecycle. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — Icon-relative notification balloon
 
 Ported f0ed balloon anchoring using the measured Action Center trigger in desktop-local coordinates; source top/bottom directions, RTL alignment, narrow viewport clamping and 18px/24px tail geometry. When the icon is hidden, use the hidden-items toggle until the icon is revealed; if neither is measurable, retain desktop-edge fallback. ResizeObserver tracks tray, icon, desktop and toast dimensions; preference/hidden-panel changes remeasure. Kept toast outside the clipped hidden tray and modern Win10/11/ChromeOS fixed card positioning unchanged. Added four geometry contracts. Requested consolidated [run-ci] [tray-check] after popup/balloon/history changes; exact visual anchor still requires browser observation. No inline links or production feed enabled. Main/pin/releases unchanged.

@@ -26,3 +26,8 @@ describe("original Action Center history",()=>{
     expect(html).not.toContain("data-test-no-messages");
   });
 });
+
+it("renders validated history links without raw HTML",()=>{
+  const html=renderToStaticMarkup(<ActionCenterPanel theme="win7" messages={[{id:"link",type:"success",title:"Update",body:"[changelog](https://example.com) [unsafe](file:///tmp/file)"}]} onBack={()=>{}}/>);
+  expect(html).toContain('href="https://example.com/"');expect(html).toContain('rel="noopener noreferrer"');expect(html).not.toContain('href="file:');
+});

@@ -1,13 +1,13 @@
 import {useEffect,useLayoutEffect,useRef} from "react";
 import {sourceNotificationAnchor} from "./sourceNotificationAnchor";
-import {SOURCE_NOTIFICATION_TIMEOUT,type SourceNotification} from "@windows-os/sdk";
+import {SOURCE_NOTIFICATION_TIMEOUT,sourceNotificationInline,type SourceNotification} from "@windows-os/sdk";
 import {sourceNotificationArt} from "./sourceTrayArtwork";
 import "./sourceNotificationToast.css";
 
 /** Source f0ed taskbar notification: 8-second dismissal, retained history.
- * Plain text only, never source HTML or externally supplied executable markup. */
-export function SourceMacOSNotificationToast({message,onDismiss,theme="macos",anchorRevision=""}:{
-  message:SourceNotification;onDismiss:(id:string)=>void;theme?:string;anchorRevision?:string
+ * Safe inline links; all other content remains escaped React text. */
+export function SourceMacOSNotificationToast({message,onDismiss,onRead,theme="macos",anchorRevision=""}:{
+  message:SourceNotification;onDismiss:(id:string)=>void;onRead?:(id:string)=>void;theme?:string;anchorRevision?:string
 }){
   useEffect(()=>{
     const id=message.id;
@@ -65,7 +65,7 @@ export function SourceMacOSNotificationToast({message,onDismiss,theme="macos",an
   return <aside ref={toastRef} className={"source-macos-notification source-notification-balloon is-"+message.type} data-test-system-notification="" data-notification-balloon={direction}
     data-notification-id={message.id} role="status">
     {artwork&&<img className="source-notification-artwork" data-test-notification-artwork="" width={32} height={32} alt="" src={artwork}/>} 
-    <div className="source-notification-copy"><strong>{message.title}</strong><p>{message.body}</p></div>
+    <div className="source-notification-copy"><strong>{message.title}</strong><p>{sourceNotificationInline(message.body).map((part,i)=>part.kind==="link"?<a key={i} href={part.href} target="_blank" rel="noopener noreferrer" onClick={()=>onRead?.(message.id)}>{part.text}</a>:part.text)}</p></div>
     <button type="button" aria-label="Dismiss notification" data-test-notification-close=""
       onClick={()=>onDismiss(message.id)}>×</button>
   </aside>;

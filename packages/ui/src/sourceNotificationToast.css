@@ -93,3 +93,6 @@
 .windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-anchor]::before{
   inset-inline-end:auto;left:var(--source-balloon-tail-left);right:auto;
 }
+
+.windows-desktop[data-theme] .source-notification-balloon .source-notification-copy a{color:var(--link-color,inherit);text-decoration:underline;text-underline-offset:2px}
+.windows-desktop[data-theme="win10"] .source-notification-balloon .source-notification-copy a{color:var(--theme-color--light,#8bc8ff)}

@@ -40,3 +40,8 @@ it("chooses the original top/bottom balloon or modern card direction",()=>{
     expect(html).toContain("source-notification-copy");
   }
 });
+
+it("renders safe inline links without interpreting unsafe schemes or labels",()=>{
+  const html=renderToStaticMarkup(<SourceMacOSNotificationToast message={{id:"link",type:"success",title:"Update",body:"[<b>changelog</b>](https://example.com) [bad](javascript:alert(1))",seen:false,read:false}} onDismiss={()=>{}}/>);
+  expect(html).toContain('href="https://example.com/"');expect(html).toContain('target="_blank"');expect(html).toContain('rel="noopener noreferrer"');expect(html).toContain("&lt;b&gt;changelog&lt;/b&gt;");expect(html).not.toContain('href="javascript:');
+});
