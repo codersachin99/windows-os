@@ -1,11 +1,12 @@
 import {useEffect,useRef} from "react";
-import {sourceGuestVolume,sourceMacOSVolumeArt,type SourceGuestAudio} from "./sourceGuestAudio";
+import {sourceGuestVolume,sourceMacOSVolumeArt,sourceXPVolumeArt,type SourceGuestAudio} from "./sourceGuestAudio";
 
 /** Source c561: vertical meter and mute toggle. Guest media output only. */
-export function SourceMacOSVolume({audio,onAudio,open,setOpen,onOpen}:{
+export function SourceMacOSVolume({audio,onAudio,open,setOpen,onOpen,xpArtwork=false}:{
   audio:SourceGuestAudio;onAudio:(value:SourceGuestAudio)=>void;
-  open:boolean;setOpen:(open:boolean)=>void;onOpen:()=>void
+  open:boolean;setOpen:(open:boolean)=>void;onOpen:()=>void;xpArtwork?:boolean
 }){
+  const artwork=xpArtwork?sourceXPVolumeArt:sourceMacOSVolumeArt;
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{
@@ -27,7 +28,7 @@ export function SourceMacOSVolume({audio,onAudio,open,setOpen,onOpen}:{
       data-test-volume="" aria-label="System volume"
       title={audio.muted?"Muted":audio.volume+"%"} aria-expanded={open}
       aria-haspopup="dialog" onClick={()=>{if(!open)onOpen();setOpen(!open);}}>
-      <img src={sourceMacOSVolumeArt(audio)} width={16} height={16} alt=""/>
+      <img src={artwork(audio)} width={16} height={16} alt=""/>
     </button>
     {open&&<div className="source-macos-volume-popup" role="dialog"
       aria-label="System volume" data-test-volume-popup="">
@@ -39,7 +40,7 @@ export function SourceMacOSVolume({audio,onAudio,open,setOpen,onOpen}:{
       <button type="button" className="source-macos-volume-mute"
         aria-label={audio.muted?"Unmute system":"Mute system"} aria-pressed={audio.muted}
         onClick={()=>onAudio({...audio,muted:!audio.muted})}>
-        <img width={24} height={24} alt="" src={sourceMacOSVolumeArt({volume:100,muted:audio.muted})}/>
+        <img width={24} height={24} alt="" src={artwork({volume:100,muted:audio.muted})}/>
       </button>
     </div>}
   </div>;

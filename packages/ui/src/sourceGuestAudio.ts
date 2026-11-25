@@ -16,3 +16,8 @@ export function sourceMacOSVolumeArt(audio:SourceGuestAudio):string{
   const key=audio.muted?"muted":volume<32?"0":volume<65?"32":volume<100?"65":"100";
   return "/assets/images/"+artwork[key];
 }
+
+/** XP registry maps all unmuted thresholds to the same source speaker. */
+export function sourceXPVolumeArt(audio:SourceGuestAudio):string{
+  return "/assets/images/"+(audio.muted?"volume-muted-winxp.70d8b244.webp":"sound-winxp.1ff35c0e.webp");
+}

@@ -1,3 +1,5 @@
+> **25 November 2026 — XP tray:** seven XP variants use shared controls and exact registry artwork. [Source trace](XP-TRAY-SOURCE.md).
+
 > **25 November 2026 — Vista tray:** original flat popup and shared calendar/clock paint with interactive Guest controls. [Source trace](VISTA-TRAY-SOURCE.md).
 
 > **25 November 2026 — Shared hidden tray:** remaining migrated base families plus dedicated top-bar source routing. [Source trace](SHARED-HIDDEN-TRAY-SOURCE.md).

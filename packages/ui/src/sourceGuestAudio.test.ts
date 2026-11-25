@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {sourceGuestVolume,sourceMacOSVolumeArt} from "./sourceGuestAudio";
+import {sourceGuestVolume,sourceMacOSVolumeArt,sourceXPVolumeArt} from "./sourceGuestAudio";
 describe("original macOS volume artwork",()=>{
   it("uses exact threshold boundaries",()=>{
     for(const [volume,expected] of [[0,"0"],[31,"0"],[32,"32"],[64,"32"],[65,"65"],[99,"65"],[100,"100"]] as const)
@@ -12,4 +12,9 @@ describe("original macOS volume artwork",()=>{
     expect(sourceGuestVolume(64.9)).toBe(65);
     expect(sourceGuestVolume(NaN)).toBe(100);
   });
+});
+
+it("XP registry uses the same unmuted speaker at every threshold",()=>{
+  for(const volume of [0,32,65,100])expect(sourceXPVolumeArt({volume,muted:false})).toBe("/assets/images/sound-winxp.1ff35c0e.webp");
+  expect(sourceXPVolumeArt({volume:100,muted:true})).toBe("/assets/images/volume-muted-winxp.70d8b244.webp");
 });

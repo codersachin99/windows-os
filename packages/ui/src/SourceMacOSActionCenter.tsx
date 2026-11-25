@@ -4,9 +4,9 @@ import {appRegistry,type SourceNotificationSnapshot,sourceNotificationSeverity} 
 import type {DesktopAction} from "@windows-os/contracts";
 
 /** Original f0ed summary and history, backed by shared Guest notification state. */
-export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onSeen}:{
+export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onSeen,xpArtwork=false}:{
   dispatch:Dispatch<DesktopAction>;open:boolean;setOpen:(open:boolean)=>void;
-  notifications:SourceNotificationSnapshot;onSeen:()=>void
+  notifications:SourceNotificationSnapshot;onSeen:()=>void;xpArtwork?:boolean
 }){
   const severity=sourceNotificationSeverity(notifications);
   const root=useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onS
       data-test-action-center="" data-notification-severity={severity} aria-label="Action Center" aria-haspopup="dialog"
       aria-expanded={open} title="Action Center"
       onClick={()=>{if(!open){dispatch({type:"CLOSE_START"});onSeen();}setOpen(!open);}}>
-      <img src={legacyArt.trayActionCenter} width={16} height={16} alt=""/>
+      <img src={xpArtwork?"/assets/images/action-center-winxp.52f44912.webp":legacyArt.trayActionCenter} width={16} height={16} alt=""/>
     </button>
     {open&&<div className="source-macos-action-center-popup" role="dialog"
       aria-label="Action Center" data-test-action-center-popup="">

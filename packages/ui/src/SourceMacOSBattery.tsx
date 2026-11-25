@@ -50,9 +50,9 @@ function BatteryGlyph({status}:{status:BatteryStatus|null}){
     </>}
   </svg>;
 }
-export function SourceMacOSBattery({open,setOpen,onOpen,brightness,onBrightness}:{
+export function SourceMacOSBattery({open,setOpen,onOpen,brightness,onBrightness,xpArtwork=false}:{
   open:boolean;setOpen:(open:boolean)=>void;onOpen:()=>void;
-  brightness:number;onBrightness:(value:number)=>void
+  brightness:number;onBrightness:(value:number)=>void;xpArtwork?:boolean
 }){
   const status=useSourceBatteryStatus();
   const root=useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ export function SourceMacOSBattery({open,setOpen,onOpen,brightness,onBrightness}
     <button type="button" ref={trigger} className="source-macos-battery-trigger" data-test-battery=""
       aria-label="Battery" title={status?status.percent+"%":"Battery status unavailable"}
       aria-expanded={open} aria-haspopup="dialog" onClick={()=>{if(!open)onOpen();setOpen(!open);}}>
-      <BatteryGlyph status={status}/>
+      {xpArtwork&&status?<img width={16} height={16} alt="" src={status.charging?"/assets/images/battery-charging-winxp.321f84b7.webp":"/assets/images/battery-winxp.af8edd8a.webp"}/>:<BatteryGlyph status={status}/> }
     </button>
     {open&&<div className="source-macos-battery-popup" data-test-battery-popup="" role="dialog" aria-label="Battery">
       <div role="status">
