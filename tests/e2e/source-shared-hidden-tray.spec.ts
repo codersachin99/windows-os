@@ -9,7 +9,13 @@ for(const theme of ["chromeos","kubuntu","oxygen","aeroNoir","macos","ubuntu"] a
     await tray.locator("[data-test-open-action-center]").click();
     const cpanel=page.locator('[data-test-window="cpanel"]').last();
     await expect(cpanel.locator("[data-test-cpanel-action-center]")).toBeVisible();
-    await cpanel.locator("[data-test-cpanel-action-center]").getByRole("button",{name:"Control Panel",exact:true}).click();
+    // Original cpanel handleResize hides the side pane at <=500px.
+    const action=cpanel.locator("[data-test-cpanel-action-center]");
+    const sidebar=action.locator(".windows-cpanel__action-sidebar");
+    const width=await action.evaluate(element=>element.clientWidth);
+    if(width<=500)await expect(sidebar).toBeHidden();
+    else await expect(sidebar).toBeVisible();
+    await cpanel.getByRole("navigation",{name:"Control Panel location"}).getByRole("button",{name:"Control Panel",exact:true}).click();
     await cpanel.locator('[data-test-cpanel-item="notification"]').click();
     const settings=cpanel.locator("[data-test-cpanel-notification]");
     await expect(settings).toBeVisible();

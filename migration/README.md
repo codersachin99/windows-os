@@ -1,3 +1,5 @@
+> **25 November 2026 — Notification browser contracts:** responsive breadcrumb fix and end-to-end lifecycle test. [Source trace](NOTIFICATION-BROWSER-SOURCE.md).
+
 > **25 November 2026 — Notification links:** safe shared inline parser and source read behavior. [Source trace](NOTIFICATION-LINKS-SOURCE.md).
 
 > **25 November 2026 — Notification anchoring:** measured tray icon and hidden-toggle placement. [Source trace](NOTIFICATION-ANCHOR-SOURCE.md).
