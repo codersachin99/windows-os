@@ -82,8 +82,9 @@
   content:"";position:absolute;inset:0;z-index:1;opacity:0;
   background:var(--source-start-sprite) no-repeat;
   background-size:100%;background-position:0 -61px;
-  transition:opacity .4s;
+  transition:opacity 0s;
 }
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"])[data-effect-animate-taskbar] .source-startbutton-sprite::after{transition:opacity .4s}
 .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .windows-taskbar__start:hover .source-startbutton-sprite::after{opacity:1}
 .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .windows-taskbar__start.is-active .source-startbutton-sprite{
   background-position-y:-115px;
@@ -94,7 +95,7 @@
 .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]):dir(rtl) .source-startbutton-sprite{background-position-x:100%}
 .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]):dir(rtl) .source-startbutton-sprite::after{background-position-x:100%}
 @media(prefers-reduced-motion:reduce){
-  .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .source-startbutton-sprite::after{transition:none}
+  .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"])[data-effect-animate-taskbar] .source-startbutton-sprite::after{transition:none}
 }
 .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__application{
   color:#fff;border-radius:2px;

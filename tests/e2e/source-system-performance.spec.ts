@@ -53,7 +53,7 @@ test("source Performance Options Apply persists independent glass/shadow switche
   const persisted=await page.evaluate(()=>
     JSON.parse(localStorage.getItem("windows-os:guest:visual-effects:v1")??"null"));
   expect(persisted).toEqual({
-    preset:"custom",enableGlass:true,showWindowShadows:false
+    preset:"custom",enableGlass:true,showWindowShadows:false,animateTaskbar:false
   });
   await page.reload();
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
@@ -105,4 +105,33 @@ test("source System Properties switches all five original tabs without enabling 
     .toContainText("Visual effects, processor scheduling");
   await system.locator("[data-test-system-performance-open]").click();
   await expect(system.locator("[data-test-performance-options]")).toBeVisible();
+});
+
+test("source taskbar animation independently applies, cancels and persists",async({page})=>{
+  const {system,dialog,desktop}=await openSourcePerformance(page);
+  const animation=dialog.locator("[data-test-vfx-animateTaskbar]");
+  const sprite=desktop.locator("[data-test-source-start-sprite]");
+  const duration=()=>sprite.evaluate(el=>getComputedStyle(el,"::after").transitionDuration);
+  await page.emulateMedia({reducedMotion:"no-preference"});
+  await expect(animation).toBeChecked();
+  await expect(desktop).toHaveAttribute("data-effect-animate-taskbar","");
+  await expect.poll(duration).toBe("0.4s");
+  await animation.uncheck();
+  await expect(dialog.locator('[data-test-vfx-preset="custom"]')).toBeChecked();
+  await expect.poll(duration).toBe("0.4s");
+  await dialog.locator("[data-test-vfx-apply]").click();
+  await expect(desktop).not.toHaveAttribute("data-effect-animate-taskbar","");
+  await expect.poll(duration).toBe("0s");
+  await expect(desktop).toHaveAttribute("data-effect-enable-glass","");
+  await expect(desktop).toHaveAttribute("data-effect-show-window-shadows","");
+  await animation.check();
+  await dialog.locator("[data-test-vfx-cancel]").click();
+  await expect(dialog).toHaveCount(0);
+  await expect.poll(duration).toBe("0s");
+  await system.locator("[data-test-system-performance-open]").click();
+  await expect(animation).not.toBeChecked();
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(desktop).not.toHaveAttribute("data-effect-animate-taskbar","");
+  await expect.poll(duration).toBe("0s");
 });

@@ -5,25 +5,25 @@ import {
   sourceVisualEffectsRead,sourceVisualEffectsSave
 } from "./sourceVisualEffects";
 
-describe("source SystemPerformance Visual Effects (two supported original effects)",()=>{
+describe("source SystemPerformance Visual Effects (three supported original effects)",()=>{
   it("uses source auto defaults and appearance/performance/custom radio behavior",()=>{
     const initial={...SOURCE_DEFAULT_VISUAL_EFFECTS};
     expect(initial).toEqual({
-      preset:"auto",enableGlass:true,showWindowShadows:true
+      preset:"auto",enableGlass:true,showWindowShadows:true,animateTaskbar:true
     });
     const fast=sourceVisualEffectsPreset(initial,"performance");
     expect(fast).toEqual({
-      preset:"performance",enableGlass:false,showWindowShadows:false
+      preset:"performance",enableGlass:false,showWindowShadows:false,animateTaskbar:false
     });
     const custom=sourceVisualEffectsToggle(fast,"enableGlass",true);
     expect(custom).toEqual({
-      preset:"custom",enableGlass:true,showWindowShadows:false
+      preset:"custom",enableGlass:true,showWindowShadows:false,animateTaskbar:false
     });
     expect(sourceVisualEffectsToggle(custom,"showWindowShadows",true).preset)
       .toBe("custom");
     expect(sourceVisualEffectsPreset(custom,"custom")).toEqual(custom);
     expect(sourceVisualEffectsPreset(fast,"appearance")).toEqual({
-      preset:"appearance",enableGlass:true,showWindowShadows:true
+      preset:"appearance",enableGlass:true,showWindowShadows:true,animateTaskbar:true
     });
     expect(sourceVisualEffectsPreset(fast,"auto")).toEqual(initial);
   });
@@ -36,11 +36,24 @@ describe("source SystemPerformance Visual Effects (two supported original effect
     expect(sourceVisualEffectsRead(storage)).toEqual(
       SOURCE_DEFAULT_VISUAL_EFFECTS);
     const draft={preset:"custom" as const,enableGlass:false,
-      showWindowShadows:true};
+      showWindowShadows:true,animateTaskbar:false};
     expect(sourceVisualEffectsSave(storage,draft)).toBe(true);
     expect(saved.get(SOURCE_VISUAL_EFFECTS_KEY)).toBe(
       JSON.stringify(draft));
     expect(sourceVisualEffectsRead(storage)).toEqual(draft);
+  });
+  it("migrates old v1 settings and retains independent animation state",()=>{
+    for(const preset of ["auto","appearance","performance","custom"] as const){
+      const legacy={preset,enableGlass:true,showWindowShadows:false};
+      const next=sourceVisualEffectsRead({getItem:()=>JSON.stringify(legacy)});
+      expect(next).toEqual({...legacy,animateTaskbar:preset!=="performance"});
+      expect(sourceVisualEffectsToggle(next,"animateTaskbar",false)).toEqual({
+        ...next,preset:"custom",animateTaskbar:false
+      });
+    }
+    expect(sourceVisualEffectsRead({getItem:()=>JSON.stringify({
+      preset:"custom",enableGlass:true,showWindowShadows:false,animateTaskbar:"no"
+    })})).toEqual(SOURCE_DEFAULT_VISUAL_EFFECTS);
   });
   it("rejects corrupt, unexpected or unsafe storage without throwing",()=>{
     for(const raw of [

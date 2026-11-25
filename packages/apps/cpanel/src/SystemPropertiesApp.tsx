@@ -23,7 +23,7 @@ interface SystemPropertiesAppProps{
 /** Source src/modules/shell/system.js: SystemProperties advanced tab and its
  * nonresizable SystemPerformance (420x500) Visual Effects child.
  * Host CPU/memory/DEP values and unsupported system setting pages are not
- * fabricated. Only the two migrated source CSS effects are editable. */
+ * fabricated. Only the migrated source CSS effects are editable. */
 export function SystemPropertiesApp({
   visualEffects,onVisualEffectsChange,onClose
 }:SystemPropertiesAppProps){
@@ -47,7 +47,7 @@ export function SystemPropertiesApp({
   const changePreset=(preset:SourceVisualEffectsPreset)=>{
     setDraft(previous=>sourceVisualEffectsPreset(previous,preset));
   };
-  const toggle=(key:"enableGlass"|"showWindowShadows",checked:boolean)=>{
+  const toggle=(key:"enableGlass"|"showWindowShadows"|"animateTaskbar",checked:boolean)=>{
     setDraft(previous=>sourceVisualEffectsToggle(previous,key,checked));
   };
 
@@ -204,6 +204,12 @@ export function SystemPropertiesApp({
             </fieldset>
             <fieldset className="windows-system-performance__options">
               <legend>Visual effects</legend>
+              <label>
+                <input type="checkbox" data-test-vfx-animateTaskbar=""
+                  checked={draft.animateTaskbar}
+                  onChange={event=>toggle("animateTaskbar",event.target.checked)}/>
+                <span>Animations in the taskbar and Start menu</span>
+              </label>
               <label>
                 <input type="checkbox" data-test-vfx-enableGlass=""
                   checked={draft.enableGlass}

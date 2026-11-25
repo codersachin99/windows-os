@@ -518,6 +518,7 @@ export function DesktopShell({
         "--theme-color":win7Colors.active,
         "--theme-color--inactive":win7Colors.inactive??undefined
       }:{}),filter:sharedTray&&macBrightness!==1?`brightness(${macBrightness})`:undefined} as CSSProperties}
+      data-effect-animate-taskbar={visualEffects.animateTaskbar?"":undefined}
       data-effect-enable-glass={visualEffects.enableGlass?"":undefined}
       data-effect-show-window-shadows={visualEffects.showWindowShadows?"":undefined}
       data-source-aero-peeking={previewDesktop?"true":undefined}
