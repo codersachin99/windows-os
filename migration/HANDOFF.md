@@ -1,3 +1,9 @@
+## 25 November 2026 — Battery popup source meter
+
+Confirmed consolidated [CI #45588193465](https://github.com/codersachin99/windows-os/actions/runs/45588193465) on 27e74e7: 761 unit and 104 browser tests passed; TypeScript, inventory, artwork and Vite build green; visual capture skipped. Pinned a88c and chunk-391f23b6.css now use the exact original battery-meter sprite, 32px meter, raw-level <10%/<20% frame selection, -960px charging overlay, full/remaining/charging locale text and original non-macOS brightness label. macOS keeps original separate summary. Unknown browser battery remains unavailable (no fabricated charge); Guest power plans and brightness do not change native device settings. Unit thresholds and browser live updates authored; [run-ci] [tray-check] requested to validate all post-green tray changes. Full pixel parity remains unverified. Next inspect exact-head CI, fix regressions, then source notification toast artwork and lifecycle.
+
+---
+
 ## 25 November 2026 — Action Center and network artwork
 
 Pinned f0ed/e0ee and registry: Action Center tray now selects inherited error/warning art (Onebit shared severity SVG) with three original assets imported and Git blob verified. Guest info/success uses normal flag because registry has no corresponding variant; original severity store and missing headline variant behavior remain pending. Network uses vector only for Win10/11/macOS, offline opacity and Win10 rotation; Ubuntu/base families use source image. Popup always uses inherited signal/wired/offline image rather than tray glyph; exact Iconify vector shape and native controls remain pending. Added unit and historical/modern browser assertions; no runtime execution or duplicate CI requested. Battery audit confirms non-macOS uses a source 32px sprite meter and remaining/charging label; port next. Main, frozen source and releases unchanged.

@@ -1,3 +1,5 @@
+> **25 November 2026 — Battery popup:** original sprite meter, charging overlay, theme-specific status and consolidated verification. [Source trace](BATTERY-TRAY-SOURCE.md).
+
 > **25 November 2026 — Action Center/network artwork:** original severity flag and distinct tray/popup network selection.
 
 > **25 November 2026 — Tray artwork:** source registry volume inheritance and Longhorn XP artwork corrected.

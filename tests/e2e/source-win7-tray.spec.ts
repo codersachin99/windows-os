@@ -3,6 +3,7 @@ test("Win7 base tray shares Action Center, live network, battery and volume",asy
   await page.addInitScript(()=>{
     const battery=Object.assign(new EventTarget(),{level:.73,charging:false});
     Object.defineProperty(navigator,"getBattery",{configurable:true,value:()=>Promise.resolve(battery)});
+    Object.assign(window,{__sourceTestBattery:battery});
   });
   await page.goto("/?theme=win7");
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
@@ -30,6 +31,33 @@ test("Win7 base tray shares Action Center, live network, battery and volume",asy
   await expect(net).toHaveCount(0);
   const battery=tray.locator("[data-test-battery-popup]");
   await expect(battery.locator("[data-test-battery-percent]")).toHaveText("73%");
+  const meter=battery.locator("[data-test-battery-meter]");
+  await expect(meter).toHaveCSS("width","32px");
+  await expect(meter).toHaveCSS("height","32px");
+  await expect(meter).toHaveCSS("background-position-x","-224px");
+  await expect(meter).toHaveCSS("background-image",/battery-meter\.66984ffe\.webp/);
+  await expect(battery.getByRole("status")).toContainText("73% remaining");
+  await expect(battery.locator("[data-test-battery-plug]")).toHaveCount(0);
+  const setBattery=async(level:number,charging:boolean)=>page.evaluate(({level,charging})=>{
+    const manager=(window as unknown as {__sourceTestBattery:EventTarget&{level:number;charging:boolean}}).__sourceTestBattery;
+    Object.assign(manager,{level,charging});
+    manager.dispatchEvent(new Event("levelchange"));
+    manager.dispatchEvent(new Event("chargingchange"));
+  },{level,charging});
+  await setBattery(.099,false);
+  await expect(meter).toHaveCSS("background-position-x","-640px");
+  await expect(battery.locator("[data-test-battery-percent]")).toHaveText("10%");
+  await setBattery(.1,true);
+  await expect(meter).toHaveCSS("background-position-x","-352px");
+  await expect(battery.locator("[data-test-battery-plug]")).toHaveCSS("background-position-x","-960px");
+  await expect(battery.getByRole("status")).toContainText("plugged in, charging");
+  await setBattery(1,true);
+  await expect(battery.getByRole("status")).toContainText("Fully charged (100%)");
+  await setBattery(NaN,false);
+  await expect(battery.locator("[data-test-battery-percent]")).toHaveText("Unavailable");
+  await expect(meter).toHaveCount(0);
+  await setBattery(.73,false);
+  await expect(meter).toHaveCSS("background-position-x","-224px");
   await battery.getByRole("radio",{name:"Power saver"}).check();
   await expect(shell).toHaveCSS("filter","brightness(0.6)");
   await battery.getByRole("radio",{name:"Balanced"}).check();

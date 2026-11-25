@@ -574,7 +574,7 @@ export function DesktopShell({
               <SourceMacOSActionCenter onebitArtwork={onebitTray} xpArtwork={xpTrayArtwork} key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open,hidden)}/>:sharedTray&&item.id==="TaskbarNetwork"?
               <SourceMacOSNetwork onebitArtwork={onebitTray} retroArtwork={retroTray} xpArtwork={xpTrayArtwork} key={item.id} theme={state.theme} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open,hidden)} onOpen={()=>{dispatch({type:"CLOSE_START"});if(!hidden)setShowHiddenTray(false);}}/>:
               sharedTray&&item.id==="TaskbarBattery"?
-              <SourceMacOSBattery xpArtwork={xpTrayArtwork} key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
+              <SourceMacOSBattery theme={state.theme} xpArtwork={xpTrayArtwork} key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
               sharedTray&&item.id==="TaskbarVolume"?
               <SourceMacOSVolume theme={state.theme} key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
               <span key={item.id} title={item.label}

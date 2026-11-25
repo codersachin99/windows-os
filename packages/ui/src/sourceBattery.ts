@@ -5,3 +5,9 @@ export function sourceBrightness(value:number):number{
 export function sourceBatteryPercent(level:number):number|null{
   return Number.isFinite(level)&&level>=0&&level<=1?Math.round(level*100):null;
 }
+
+/** Original a88c sprite frames use the raw measured fraction, not rounded percent. */
+export function sourceBatteryMeterOffset(level:number):number|null{
+  if(sourceBatteryPercent(level)===null)return null;
+  return -32*(level<.1?20:level<.2?11:Math.round(9*level));
+}

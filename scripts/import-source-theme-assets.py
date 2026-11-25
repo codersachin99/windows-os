@@ -310,6 +310,7 @@ FILES: dict[str, dict[str, str]] = {
         "access-winxp.c88ef204.webp": "05ae6bc9213f6fca0b0a5c1cef037701f96ebd5c",
         "arrow-winxp.b58eda4d.webp": "01a3ad5e3893b6ae1bb1f8f3676d5188659f472e",
         "accounts-winxp.f09bda44.webp": "1ed955eb7d81f0ab2ccefed9856d34073b35688f",
+        "battery-meter.66984ffe.webp": "24a6a6926c5bddd09f08296d38dd7aad82028cc9",
         "battery-charging-winxp.321f84b7.webp": "1ae90896f2883b34638b51cf9e368e150b71612f",
         "help-winxp.6b449d71.webp": "eb5fa27e07a8e26c23105c500d5da9921ad9d2e4",
         "keyboard-winxp.648c2cdc.webp": "84caa2cefbaec2cd69fa5af900721668285dc3bd",
