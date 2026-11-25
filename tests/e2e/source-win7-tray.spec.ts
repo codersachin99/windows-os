@@ -131,3 +131,46 @@ for(const [theme,surface,textColor,accent] of [
     await expect(popup).toBeVisible();
   });
 }
+
+test("Win7 hidden tray keeps actual components mounted, closes on Escape and customizes",async({page})=>{
+  await page.goto("/?theme=win7");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator(".windows-taskbar__running").click({button:"right",position:{x:15,y:5}});
+  await page.locator('[data-test-taskbar-context-action="properties"]').click();
+  await page.locator('[data-test-taskbar-settings-customize]').click();
+  const cpanel=page.locator('[data-test-window="cpanel"]').last();
+  const settings=cpanel.locator("[data-test-cpanel-notification]");
+  await expect(settings).toBeVisible();
+  await settings.locator('[data-test-cpanel-notification-icon="TaskbarVolume"] select').selectOption("hidden");
+  await settings.locator('[data-test-cpanel-notification-icon="TaskbarNetwork"] select').selectOption("notifications-only");
+  const tray=page.locator('[data-test-taskbar-tray="win7"]');
+  const toggle=tray.locator("[data-test-tray-hidden-toggle]");
+  await expect(toggle).toBeVisible();
+  await expect(tray.locator("[data-test-volume]")).toHaveCount(0);
+  await toggle.click();
+  const hidden=tray.locator("[data-test-tray-hidden-items]");
+  await expect(hidden).toBeVisible();
+  await expect(hidden.locator("[data-test-tray-hidden-icon]")).toHaveCount(2);
+  const volume=hidden.locator("[data-test-volume]");
+  await volume.click();
+  const mixer=hidden.locator("[data-test-volume-popup]");
+  await expect(mixer).toBeVisible();
+  await mixer.getByRole("slider").fill("35");
+  await expect(mixer.getByRole("slider")).toHaveValue("35");
+  await page.keyboard.press("Escape");
+  await expect(mixer).toHaveCount(0);
+  await expect(volume).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(hidden).toHaveCount(0);
+  await expect(toggle).toBeFocused();
+  await toggle.click();
+  await hidden.locator("[data-test-network]").click();
+  await expect(hidden.locator("[data-test-network-popup]")).toBeVisible();
+  await tray.locator("[data-test-datetime-trigger]").click();
+  await expect(hidden).toHaveCount(0);
+  await expect(tray.locator("[data-test-datetime-popup]")).toBeVisible();
+  await toggle.click();
+  await hidden.locator("[data-test-tray-customize]").click();
+  await expect(hidden).toHaveCount(0);
+  await expect(page.locator('[data-test-window="cpanel"]').last().locator("[data-test-cpanel-notification]")).toBeVisible();
+});
