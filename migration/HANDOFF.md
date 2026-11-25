@@ -1,3 +1,9 @@
+## 25 November 2026 — Action Center popup source dimensions
+
+Exact-head [CI #45603617798](https://github.com/codersachin99/windows-os/actions/runs/45603617798) passed 782 unit tests and 104 browser tests, TypeScript, inventory, assets and Vite; visual capture skipped. Pinned f0ed and src/styles/chunks/chunk-517d7f56.css specify 280px popup, 24px headline, 8px summary gap/12px padding, 12px history gap and 16px/24px padding, 12px footer. Applied shared layout with viewport/hidden-tray constraints retained; normal/Onebit headline matches registry. Error/warning headline keys are absent in pinned registry; omit image rather than invent art (actual BaseIcon missing-art rendering still unverified). Existing theme paint and link navigation retained. Added unit and Win7 browser assertions; new head not tested, no duplicate CI requested. Next audit source WinUI balloon styles and anchoring, then Control Panel history. No production feed activated. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — Notification feed service and device metadata
 
 Ported frozen 779a A() injected service with explicit URL, no-cache request, 5s abort/deadline through JSON decode, validated list entries and URL-scoped storage cache fallback. SourceNotificationStore now persists version, announcement date, session count and pushAsked alongside bounded seen/read IDs; counts once per runtime and retains flags on reset. Service load uses current flags on completion; latest load wins. Cache write failure preserves valid live data (intentional resilience); malformed individual entries skipped, non-array falls back. Five regression cases authored. No production endpoint, automatic feed load, push permission, or telemetry enabled. Requested consolidated [run-ci] [tray-check] for accumulated artwork/state/feed changes. Next inspect exact-head CI then source toast layout/Action Center history parity. Main/pin/releases unchanged.

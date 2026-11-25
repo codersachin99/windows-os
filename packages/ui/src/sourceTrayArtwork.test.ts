@@ -1,5 +1,5 @@
 import {expect,it} from "vitest";
-import {sourceActionCenterArt,sourceNetworkUsesVector,sourceNetworkTrayArt,sourceNetworkConnectionArt,sourceNotificationArt} from "./sourceTrayArtwork";
+import {sourceActionCenterArt,sourceNetworkUsesVector,sourceNetworkTrayArt,sourceNetworkConnectionArt,sourceNotificationArt,sourceActionCenterHeadlineArt} from "./sourceTrayArtwork";
 it("selects source Action Center severity and inherited icon overrides",()=>{
   expect(sourceActionCenterArt(undefined)).toContain("action-center.4d8b33c7");
   expect(sourceActionCenterArt("info",true)).toContain("action-center-winxp.");
@@ -30,5 +30,14 @@ it("resolves all three original notification types in each icon family",()=>{
   for(const {themes,files} of cases)for(const theme of themes){
     (["error","success","warning"] as const).forEach((type,i)=>expect(sourceNotificationArt(theme,type)).toBe("/assets/images/"+files[i]));
     expect(sourceNotificationArt(theme,"info")).toBeUndefined();
+  }
+});
+
+it("uses original 24px headline art only when the source registry defines it",()=>{
+  expect(sourceActionCenterHeadlineArt(undefined)).toContain("action-center-headline.27cc6d83.webp");
+  expect(sourceActionCenterHeadlineArt(undefined,true)).toContain("action-center-onebit.");
+  for(const severity of ["warning","error"] as const){
+    expect(sourceActionCenterHeadlineArt(severity)).toBeUndefined();
+    expect(sourceActionCenterHeadlineArt(severity,true)).toBeUndefined();
   }
 });

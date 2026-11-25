@@ -14,6 +14,11 @@ test("Win7 base tray shares Action Center, live network, battery and volume",asy
   const summary=tray.locator("[data-test-action-center-popup]");
   await expect(summary).toBeVisible();
   await expect(summary.locator("[data-test-notification-summary]")).toHaveText("No new messages");
+  await expect(summary).toHaveCSS("width","280px");
+  const headline=summary.locator("[data-test-action-center-headline]");
+  await expect(headline).toHaveCSS("width","24px");
+  await expect(headline).toHaveCSS("height","24px");
+  await expect(headline).toHaveAttribute("src","/assets/images/action-center-headline.27cc6d83.webp");
   await expect(summary).toHaveCSS("border-top-left-radius","7px");
   await expect(summary).toHaveCSS("border-top-color","rgb(0, 0, 0)");
   await expect(summary).toHaveCSS("background-image",/linear-gradient/);

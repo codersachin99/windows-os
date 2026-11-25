@@ -1,5 +1,5 @@
 import {useEffect,useRef,type Dispatch} from "react";
-import {sourceActionCenterArt} from "./sourceTrayArtwork";
+import {sourceActionCenterArt,sourceActionCenterHeadlineArt} from "./sourceTrayArtwork";
 import {appRegistry,type SourceNotificationSnapshot,sourceNotificationSeverity} from "@windows-os/sdk";
 import type {DesktopAction} from "@windows-os/contracts";
 
@@ -9,6 +9,7 @@ export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onS
   notifications:SourceNotificationSnapshot;onSeen:()=>void;xpArtwork?:boolean;onebitArtwork?:boolean
 }){
   const severity=sourceNotificationSeverity(notifications);
+  const headline=sourceActionCenterHeadlineArt(severity,onebitArtwork);
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{
@@ -39,15 +40,15 @@ export function SourceMacOSActionCenter({dispatch,open,setOpen,notifications,onS
       <img src={sourceActionCenterArt(severity,xpArtwork,onebitArtwork)} width={16} height={16} alt=""/>
     </button>
     {open&&<div className="source-macos-action-center-popup" role="dialog"
-      aria-label="Action Center" data-test-action-center-popup="">
-      <div className="source-macos-action-center-summary">
-        <img src={onebitArtwork?"/assets/images/action-center-onebit.1bd0c609.svg":"/assets/images/action-center-headline.27cc6d83.webp"} width={32} height={32} alt=""/>
+      aria-label="Action Center" data-test-action-center-popup="" style={{width:"min(280px,calc(100vw - 24px))"}}>
+      <div className="source-macos-action-center-summary" style={{gap:8,padding:12}}>
+        {headline&&<img data-test-action-center-headline="" src={headline} width={24} height={24} alt="" style={{flex:"0 0 24px",width:24,height:24,objectFit:"contain"}}/>}
         <span data-test-notification-summary="">{notifications.history.length===0?"No new messages":notifications.history.length===1?"1 message":notifications.history.length+" messages"}</span>
       </div>
-      {notifications.history.length>0&&<div className="source-macos-notification-history">
-        {notifications.history.map(message=><button key={message.id} type="button" data-test-notification-item="" onClick={openCenter}>{message.title}</button>)}
+      {notifications.history.length>0&&<div className="source-macos-notification-history" style={{alignItems:"flex-start",gap:12,padding:"16px 24px"}}>
+        {notifications.history.map(message=><button key={message.id} type="button" data-test-notification-item="" style={{padding:0,maxWidth:"100%"}} onClick={openCenter}>{message.title}</button>)}
       </div>}
-      <button type="button" data-test-open-action-center="" onClick={openCenter}>Open Action Center</button>
+      <button type="button" data-test-open-action-center="" style={{padding:12}} onClick={openCenter}>Open Action Center</button>
     </div>}
   </div>;
 }

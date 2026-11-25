@@ -1,0 +1,5 @@
+# Action Center popup
+
+Frozen legacy-win7@26b9f0ce7, src/modules/chunks/chunk-517d7f56.js module f0ed (f367b48c19249b8214980167c51ae449ea0579e2), src/styles/chunks/chunk-517d7f56.css, src/config/icons.registry.json and assets/locales/en-US.json.
+
+Exact-head [CI #45603617798](https://github.com/codersachin99/windows-os/actions/runs/45603617798) passed 782 unit tests and 104 browser tests, TypeScript, inventory, assets and Vite; visual capture skipped. Pinned f0ed and src/styles/chunks/chunk-517d7f56.css specify 280px popup, 24px headline, 8px summary gap/12px padding, 12px history gap and 16px/24px padding, 12px footer. Applied shared layout with viewport/hidden-tray constraints retained; normal/Onebit headline matches registry. Error/warning headline keys are absent in pinned registry; omit image rather than invent art (actual BaseIcon missing-art rendering still unverified). Existing theme paint and link navigation retained. Added unit and Win7 browser assertions; new head not tested, no duplicate CI requested. Next audit source WinUI balloon styles and anchoring, then Control Panel history. No production feed activated. Main/pin/releases unchanged.

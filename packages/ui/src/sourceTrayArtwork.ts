@@ -39,3 +39,10 @@ export function sourceNotificationArt(theme:string,type:string):string|undefined
     ["win10","win11","win11dark","macos","chromeos","ubuntu","kubuntu"].includes(theme)?"modern":"base";
   return image(notificationArt[family][type]);
 }
+
+/** f0ed resolves action-center-headline[-severity] directly. The pinned
+ * registry has no severity headline variants. Do not substitute tray artwork. */
+export function sourceActionCenterHeadlineArt(severity:"error"|"warning"|undefined,onebitArtwork=false):string|undefined{
+  if(severity)return undefined;
+  return image(onebitArtwork?"action-center-onebit.1bd0c609.svg":"action-center-headline.27cc6d83.webp");
+}
