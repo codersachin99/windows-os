@@ -307,6 +307,10 @@ export function DesktopShell({
   const classicTray=["basic-2","basic-3","basic-4"].includes(state.theme);
   const win7Tray=classicTray||["win7","aero-1","aero-2","aero-3","aero-4","basic-1"].includes(state.theme);
   const sharedTray=win7Tray||state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
+  // Original taskbar-macos and taskbar-ubuntu render fixed tray items;
+  // taskbar-base owns the hidden-items component.
+  const fixedTray=state.theme==="macos"||state.theme==="ubuntu";
+  const interactiveHiddenTray=sharedTray&&!fixedTray;
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
   const [guestAudio,setGuestAudio]=useState<SourceGuestAudio>(SOURCE_GUEST_AUDIO_INITIAL);
@@ -314,8 +318,8 @@ export function DesktopShell({
   const currentNotification=sourceNotificationCurrent(notifications);
   const dismissNotification=useCallback((id:string)=>sourceNotifications.dismiss(id),[]);
   useEffect(()=>()=>sourceNotifications.reset(),[]);
-  const hiddenTrayIds=sourceTrayHidden(trayPreferences);
-  const visibleTrayIds=sourceTrayVisible(trayPreferences);
+  const hiddenTrayIds=fixedTray?[]:sourceTrayHidden(trayPreferences);
+  const visibleTrayIds=fixedTray?SOURCE_TRAY_ITEMS.filter(item=>trayPreferences.icons[item.id]!=="off").map(item=>item.id):sourceTrayVisible(trayPreferences);
   const hiddenTrayRef=useRef<HTMLDivElement>(null);
   const hiddenToggleRef=useRef<HTMLButtonElement>(null);
   const setMacPopupOpen=(id:SourceMacOSPopupId,open:boolean,hidden=false)=>{
@@ -323,7 +327,7 @@ export function DesktopShell({
     if(open&&!hidden)setShowHiddenTray(false);
   };
   useEffect(()=>{
-    if(!showHiddenTray||!win7Tray)return;
+    if(!showHiddenTray||!interactiveHiddenTray)return;
     const outside=(event:PointerEvent)=>{
       if(event.target instanceof Node&&
         !hiddenTrayRef.current?.contains(event.target)&&
@@ -333,7 +337,7 @@ export function DesktopShell({
     };
     document.addEventListener("pointerdown",outside);
     return()=>document.removeEventListener("pointerdown",outside);
-  },[showHiddenTray,win7Tray]);
+  },[showHiddenTray,interactiveHiddenTray]);
   useEffect(()=>{
     setMacPopup(null);
     setShowHiddenTray(false);
@@ -342,14 +346,14 @@ export function DesktopShell({
   useEffect(()=>{if(state.startOpen){setMacPopup(null);setShowHiddenTray(false);}},[state.startOpen]);
   useEffect(()=>{
     const accessible=(id:typeof SOURCE_TRAY_ITEMS[number]["id"])=>
-      visibleTrayIds.includes(id)||(win7Tray&&showHiddenTray&&hiddenTrayIds.includes(id));
+      visibleTrayIds.includes(id)||(interactiveHiddenTray&&showHiddenTray&&hiddenTrayIds.includes(id));
     if(macPopup==="action-center"&&!accessible("TaskbarActionCenter"))setMacPopup(null);
     if(macPopup==="network"&&!accessible("TaskbarNetwork"))setMacPopup(null);
     if(macPopup==="battery"&&!accessible("TaskbarBattery"))setMacPopup(null);
     if(macPopup==="volume"&&!accessible("TaskbarVolume"))setMacPopup(null);
     if(macPopup==="datetime"&&!trayPreferences.showClockIcon)setMacPopup(null);
-    if(win7Tray&&showHiddenTray&&!hiddenTrayIds.length)setShowHiddenTray(false);
-  },[macPopup,trayPreferences,showHiddenTray,win7Tray]);
+    if(interactiveHiddenTray&&showHiddenTray&&!hiddenTrayIds.length)setShowHiddenTray(false);
+  },[macPopup,trayPreferences,showHiddenTray,interactiveHiddenTray,fixedTray]);
   const [pinnedPrograms,setPinnedPrograms]=useState(()=>taskbarPins.snapshot());
   const [dockRecent,setDockRecent]=useState(()=>sourceRecentPrograms.snapshot());
   useEffect(()=>sourceRecentPrograms.subscribe(setDockRecent),[]);
@@ -546,6 +550,7 @@ export function DesktopShell({
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
       data-source-win7-tray={win7Tray?"":undefined}
+      data-source-interactive-hidden-tray={interactiveHiddenTray?"":undefined}
       data-source-classic-tray={classicTray?"":undefined}
       data-source-display-brightness={sharedTray?macBrightness:undefined}
       style={{...(win7Colors?{
@@ -800,7 +805,7 @@ export function DesktopShell({
         </div>}
         {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)||macPopup!==null}/>}
         <div className="windows-taskbar__tray" data-test-taskbar-tray={sharedTray||state.theme==="ubuntu"?state.theme:undefined}>
-          {(win7Tray?hiddenTrayIds.length>0:state.theme!=="ubuntu"&&(state.theme!=="macos"||hiddenTrayIds.length>0))&&
+          {(!fixedTray&&(interactiveHiddenTray?hiddenTrayIds.length>0:true))&&
             <button ref={hiddenToggleRef} title="Show hidden icons" aria-label="Show hidden icons"
               aria-expanded={showHiddenTray} data-test-tray-hidden-toggle=""
               onKeyDown={event=>{if(event.key==="Escape"&&showHiddenTray){event.preventDefault();event.stopPropagation();setShowHiddenTray(false);setMacPopup(null);}}}
@@ -809,13 +814,13 @@ export function DesktopShell({
             <div ref={hiddenTrayRef} className="windows-taskbar__hidden-items" data-test-tray-hidden-items=""
               role="group" aria-label="Hidden notification area icons"
               onKeyDown={event=>{
-                if(event.key==="Escape"&&win7Tray){
+                if(event.key==="Escape"&&interactiveHiddenTray){
                   event.preventDefault();event.stopPropagation();
                   setShowHiddenTray(false);setMacPopup(null);
                   hiddenToggleRef.current?.focus({preventScroll:true});
                 }
               }}>
-              {win7Tray?<><div className="source-hidden-tray-grid">
+              {interactiveHiddenTray?<><div className="source-hidden-tray-grid">
                 {SOURCE_TRAY_ITEMS.filter(item=>hiddenTrayIds.includes(item.id)).map(item=>
                   <div key={item.id} data-test-tray-hidden-icon={item.id}>{renderTrayItem(item,true)}</div>)}
               </div>

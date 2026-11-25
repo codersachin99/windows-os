@@ -1,3 +1,5 @@
+> **25 November 2026 — Shared hidden tray:** remaining migrated base families plus dedicated top-bar source routing. [Source trace](SHARED-HIDDEN-TRAY-SOURCE.md).
+
 > **25 November 2026 — Hidden tray:** real hidden Win7-family components, keyboard lifecycle and Customize link. [Source trace](HIDDEN-TRAY-SOURCE.md).
 
 > **25 November 2026 — Classic tray:** Basic 2–4 interactive opaque tray and calendar palettes; consolidated opt-in CI requested. [Source trace](CLASSIC-TRAY-SOURCE.md).
