@@ -39,9 +39,9 @@
 
 /* Frozen Oxygen WindowMain and ControlItem from theme-oxygen-scss.js.
  * The source gradient, dimensions, logical spacing and glow are preserved.
- * Theme registry accent is pending; use the source link color as fallback. */
+ * Theme registry accent is palette index 4; keep the separate source link color. */
 .windows-desktop[data-theme="oxygen"]{
-  --border-color:#474c55;--theme-color:#3c92c8;--link-color:#3c92c8;
+  --border-color:#474c55;--theme-color:#b3e165;--link-color:#3c92c8;
 }
 .windows-desktop[data-theme="oxygen"] .windows-window{
   color:#fff;background:#31363b;border:1px solid var(--border-color);
@@ -79,7 +79,7 @@
 /* Oxygen WinUI menu source: dark gradient, double separator and inset
  * accent highlight. Preserve shared root/child positioning and sizes. */
 :is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]){
-  --oxygen-menu-accent:var(--theme-color,#3c92c8);
+  --oxygen-menu-accent:var(--theme-color,#b3e165);
   box-sizing:border-box;color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;
   border:1px solid #474c55;border-radius:4px;box-shadow:0 0 10px 1px #000;
   font:10pt "Segoe UI",Arial,sans-serif;

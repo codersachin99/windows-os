@@ -2,7 +2,7 @@
  * theme-ubuntu-scss.js. Scope geometry to the Ubuntu Guest shell. */
 .windows-desktop[data-theme="ubuntu"]{
   --taskbar-height:32px;--source-ubuntu-dock-width:64px;
-  --theme-color:#e95420;font-size:10pt;
+  --theme-color:#f0b85b;font-size:10pt;
 }
 .windows-desktop[data-theme="ubuntu"] .windows-desktop__workspace{
   inset:var(--taskbar-height) 0 0 var(--source-ubuntu-dock-width);

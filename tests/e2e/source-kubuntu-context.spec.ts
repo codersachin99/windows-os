@@ -14,7 +14,7 @@ test("Kubuntu source desktop, Explorer and portaled Start menus",async({page})=>
   const root=desktop.locator("[data-test-desktop-menu]");
   await paint(root);
   await root.getByRole("menuitem",{name:"Refresh",exact:true}).focus();
-  await expect(root.getByRole("menuitem",{name:"Refresh",exact:true})).toHaveCSS("border-top-color","rgb(61, 174, 233)");
+  await expect(root.getByRole("menuitem",{name:"Refresh",exact:true})).toHaveCSS("border-top-color","rgb(89, 134, 202)");
   await root.locator("[data-test-desktop-view]").click();
   await paint(desktop.locator("[data-test-desktop-background-submenu]"));
   await page.keyboard.press("Escape");

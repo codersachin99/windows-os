@@ -2,7 +2,7 @@
  * Original base taskbar layout with Kubuntu-specific surface and state
  * paint. Existing Guest pin/group/window commands remain shared. */
 .windows-desktop[data-theme="kubuntu"]{
-  --theme-color:#3daee9;
+  --theme-color:#5986ca;
   --border-color:#fff5;
 }
 .windows-desktop[data-theme="kubuntu"] .windows-taskbar{
@@ -101,7 +101,7 @@
 /* Source 582b WinUI context paint; keep measured root and child geometry.
  * Body-portaled Start contexts do not inherit the desktop variables. */
 :is(.windows-desktop[data-theme="kubuntu"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="kubuntu"]){
-  --kubuntu-menu-accent:var(--theme-color,#3daee9);
+  --kubuntu-menu-accent:var(--theme-color,#5986ca);
   box-sizing:border-box;background:rgba(42,46,50,.8666666667);color:#fff;
   border:1px solid #fff5;border-radius:3px;box-shadow:0 0 5px #0006;
   font:10pt "Segoe UI",Arial,sans-serif;

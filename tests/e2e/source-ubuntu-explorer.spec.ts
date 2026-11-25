@@ -12,7 +12,7 @@ test("Ubuntu Computer and Bin use source dark surfaces and label selection",asyn
   const desktop=win.getByRole("button",{name:"Desktop",exact:true});
   await desktop.click();
   await expect(desktop).toHaveAttribute("aria-current","location");
-  await expect(desktop).toHaveCSS("background-color","rgb(233, 84, 32)");
+  await expect(desktop).toHaveCSS("background-color","rgb(240, 184, 91)");
   await win.locator('input[type="file"][aria-label="Upload files"]').setInputFiles({
     name:"Ubuntu Selection.txt",mimeType:"text/plain",buffer:Buffer.from("Guest file")
   });
@@ -27,7 +27,7 @@ test("Ubuntu Computer and Bin use source dark surfaces and label selection",asyn
     await expect(page.locator('[data-test-window="notepad"]')).toHaveCount(0);
     await expect(item).toHaveClass(/is-selected/);
     await expect(item).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
-    await expect(item.locator(mode==="content"?".listview__item-info":".listview__item-label")).toHaveCSS("background-color","rgb(233, 84, 32)");
+    await expect(item.locator(mode==="content"?".listview__item-info":".listview__item-label")).toHaveCSS("background-color","rgb(240, 184, 91)");
   }
   await expect(win.locator(".explorer-status")).toHaveCSS("background-color","rgb(44, 44, 44)");
   await win.locator('[data-source-window-control="close"]').click();

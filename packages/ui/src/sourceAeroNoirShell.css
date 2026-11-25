@@ -4,7 +4,7 @@
   --theme-color:#6bc35b;--border-color:#888;
 }
 .windows-desktop[data-theme="aeroNoir"][data-effect-enable-glass]{
-  --theme-color:rgba(107,195,91,.65);
+  --theme-color:rgba(107,195,91,.65);--theme-color--inactive:rgba(107,195,91,.3);
 }
 .windows-desktop[data-theme="aeroNoir"] .windows-taskbar{
   isolation:isolate;color:#fff;background-color:var(--theme-color);

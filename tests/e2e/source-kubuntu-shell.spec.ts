@@ -16,7 +16,7 @@ test("Kubuntu source base taskbar and desktop selection retain real window comma
   await expect(win).toBeVisible();
   const task=bar.locator('[data-test-taskbar-pin="computer"],[data-test-taskbar-running-group="computer"]').first();
   await expect(task).toHaveClass(/is-active/);
-  await expect(task).toHaveCSS("background-color","rgb(61, 174, 233)");
+  await expect(task).toHaveCSS("background-color","rgb(89, 134, 202)");
   await expect(task).toHaveCSS("border-top-left-radius","0px");
   await bar.getByRole("button",{name:"Show desktop",exact:true}).click();
   await expect(win).toBeHidden();

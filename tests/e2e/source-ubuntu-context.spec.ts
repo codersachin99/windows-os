@@ -13,7 +13,7 @@ test("Ubuntu desktop paints selected artwork and original WinUI menus across sur
   await icon.click();
   await expect(icon).toHaveClass(/is-active/);
   await expect(icon).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
-  await expect(icon.locator(".desktop__icon-icon")).toHaveCSS("background-color","rgb(233, 84, 32)");
+  await expect(icon.locator(".desktop__icon-icon")).toHaveCSS("background-color","rgb(240, 184, 91)");
   await expect(icon.locator(".desktop__icon-name")).toHaveCSS("border-top-left-radius","5px");
   const area=(await desktop.boundingBox())!;
   await desktop.click({button:"right",position:{x:Math.min(260,area.width-12),y:Math.min(200,area.height-12)}});

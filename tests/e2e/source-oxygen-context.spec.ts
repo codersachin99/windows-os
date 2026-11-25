@@ -15,7 +15,7 @@ test("Oxygen source desktop, Explorer and portaled Start menus",async({page})=>{
   const root=desktop.locator("[data-test-desktop-menu]");
   await paint(root);
   await root.getByRole("menuitem",{name:"Refresh",exact:true}).focus();
-  await expect(root.getByRole("menuitem",{name:"Refresh",exact:true})).toHaveCSS("background-color","rgb(60, 146, 200)");
+  await expect(root.getByRole("menuitem",{name:"Refresh",exact:true})).toHaveCSS("background-color","rgb(179, 225, 101)");
   await root.locator("[data-test-desktop-view]").click();
   await paint(desktop.locator("[data-test-desktop-background-submenu]"));
   await page.keyboard.press("Escape");
