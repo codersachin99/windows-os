@@ -619,9 +619,9 @@ export function DesktopShell({
           data-test-start-button="" aria-label="Open Start menu"
           aria-expanded={state.startOpen}
           onClick={() => dispatch({ type: "TOGGLE_START" })}>
-          {(state.theme==="aeroNoir"||state.theme==="oxygen")?
+          {(state.theme==="aeroNoir"||state.theme==="oxygen"||state.theme==="win7"||state.theme==="aero-1"||state.theme==="aero-2"||state.theme==="aero-3"||state.theme==="aero-4"||state.theme==="basic-1")?
             <span aria-hidden="true" className="source-startbutton-sprite" data-test-source-start-sprite=""
-              style={{backgroundImage:`url("${legacyArt.startOrb}")`}}/>:
+              style={{backgroundImage:`url("${legacyArt.startOrb}")`,"--source-start-sprite":`url("${legacyArt.startOrb}")`} as CSSProperties}/>:
             <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />}
         </button>}
         {state.theme==="ubuntu"?<nav className="source-ubuntu-dock" data-test-dock="" aria-label="Application dock">

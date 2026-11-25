@@ -65,13 +65,36 @@
   left:0;
   background:linear-gradient(to right, rgba(0, 0, 0, 0.1333333333) 0, rgba(0, 0, 0, 0.1333333333) calc(90% - 20px), rgba(0, 0, 0, 0) 90%)
 }
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__start{
-  flex:0 0 54px;width:54px;
+/* Original .win7 StartButton: 54px wide, cropped 54px frames at
+ * -7/-61/-115px. Basic 1 inherits this same source icon; classic Basic
+ * 2/3/4 instead retain their separate 26px logo and Start text. */
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .windows-taskbar__start{
+  flex:0 0 54px;width:54px;height:100%;margin:0;
   display:grid;place-items:center;
-  background:none;border:0;
+  background:none;border:0;border-radius:0;
 }
-.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__start img{
-  width:40px;height:40px;
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .source-startbutton-sprite{
+  display:block;position:relative;width:100%;height:100%;
+  pointer-events:none;filter:drop-shadow(0 0 1px #fff);
+  background-repeat:no-repeat;background-size:100%;background-position:0 -7px;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .source-startbutton-sprite::after{
+  content:"";position:absolute;inset:0;z-index:1;opacity:0;
+  background:var(--source-start-sprite) no-repeat;
+  background-size:100%;background-position:0 -61px;
+  transition:opacity .4s;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .windows-taskbar__start:hover .source-startbutton-sprite::after{opacity:1}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .windows-taskbar__start.is-active .source-startbutton-sprite{
+  background-position-y:-115px;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .windows-taskbar__start.is-active .source-startbutton-sprite::after{
+  opacity:0;transition:none;
+}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]):dir(rtl) .source-startbutton-sprite{background-position-x:100%}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]):dir(rtl) .source-startbutton-sprite::after{background-position-x:100%}
+@media(prefers-reduced-motion:reduce){
+  .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"]) .source-startbutton-sprite::after{transition:none}
 }
 .windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"]) .windows-taskbar__application{
   color:#fff;border-radius:2px;
