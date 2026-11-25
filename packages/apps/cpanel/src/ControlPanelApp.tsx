@@ -7,6 +7,7 @@ import {SOURCE_CPANEL_REGISTRY,sourceCpanelSearchRegistry,sourceCpanelIsSupporte
   type SourceCpanelMigratedProgram,type SourceCpanelMigratedProgramView,
   type SourceCpanelTask,type SourceCpanelRegistryItem} from "./sourceRegistry";
 import {BackupRestorePanel} from "./BackupRestorePanel";
+import {ActionCenterPanel} from "./ActionCenterPanel";
 import {sourceParseSearch,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {SourceListView} from "@windows-os/ui/listview";
 import {SourceWin7HistoryNav} from "@windows-os/ui/navigation";
@@ -15,7 +16,7 @@ import {
   SOURCE_CPANEL_INITIAL_HISTORY,SOURCE_CPANEL_ZOOM_CHOICES,
   sourceCpanelOpenLocation,sourceCpanelResolutions,
   sourceCpanelStep,sourceCpanelInstalledPrograms,
-  SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,SOURCE_CPANEL_ACTION_CENTER_TEXT,
+  SOURCE_CPANEL_GUEST_ACCOUNT_LINKS,
   type SourceControlPanelActionMessage,
   type SourceControlPanelHistory, type SourceControlPanelLocation
 } from "./model";
@@ -65,7 +66,6 @@ export function ControlPanelApp({
   const [selectedProgram,setSelectedProgram]=useState<string|null>(null);
   const [showSystemIcons,setShowSystemIcons]=useState(false);
   const location=history.entries[history.index];
-  useEffect(()=>{if(location==="action-center")onReadMessages?.();},[location,onReadMessages]);
   const addressIconKey=sourceCpanelAddressIconKey(location);
   const addressIconSrc=addressIconKey==="cpanel"
     ?legacyArt.cpanel:legacyCpanelTileArtwork[addressIconKey]
@@ -177,28 +177,8 @@ export function ControlPanelApp({
         </article>)}
         {!searchResults.length?<p>No items match your search.</p>:null}
       </div>:location==="backup"?<BackupRestorePanel filesystem={filesystem}
-        onBack={()=>open(null)}/>:location==="action-center"?<div className="windows-cpanel__action"
-        data-test-cpanel-action-center="">
-        <aside className="windows-cpanel__action-sidebar">
-          <button type="button" onClick={()=>open(null)}>Control Panel</button>
-          <button type="button" disabled>{SOURCE_CPANEL_ACTION_CENTER_TEXT.changeSettings}</button>
-          <button type="button" disabled>{SOURCE_CPANEL_ACTION_CENTER_TEXT.archived}</button>
-        </aside>
-        <div className="windows-cpanel__action-content">
-          <h2>{SOURCE_CPANEL_ACTION_CENTER_TEXT.title}</h2>
-          <p>{messages.length?
-            SOURCE_CPANEL_ACTION_CENTER_TEXT.hasMessagesInstruction:
-            SOURCE_CPANEL_ACTION_CENTER_TEXT.emptyInstruction}</p>
-          {!messages.length?<p className="windows-cpanel__action-empty"
-            data-test-no-messages="">{SOURCE_CPANEL_ACTION_CENTER_TEXT.empty}</p>:
-            messages.map(message=><article key={message.id}
-              data-test-cpanel-action-message={message.id}
-              className={"windows-cpanel__action-message is-"+message.type}>
-              <strong>{message.title}</strong>
-              <p>{message.body}</p>
-            </article>)}
-        </div>
-      </div>:location==="notification"?<div className="windows-cpanel__notification"
+        onBack={()=>open(null)}/>:location==="action-center"?<ActionCenterPanel theme={theme} messages={messages}
+        onReadMessages={onReadMessages} onBack={()=>open(null)}/>:location==="notification"?<div className="windows-cpanel__notification"
         data-test-cpanel-notification="">
         <div className="windows-cpanel__notification-body">
           <h2>{showSystemIcons?"Turn system icons on or off":"Select which icons and notifications appear on the taskbar"}</h2>

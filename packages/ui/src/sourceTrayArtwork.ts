@@ -25,20 +25,7 @@ export function sourceNetworkConnectionArt(online:boolean,type:string,xpArtwork=
   return image(/wifi|cellular/.test(type)?"network-signal.4305a101.webp":"network-wired.c19a6640.webp");
 }
 
-/** f0ed: themeData.icon["notifi-"+type]. Guest info has no registry icon. */
-const notificationArt={
-  base:{error:"notifi-error.362aae4b.webp",success:"notifi-success.9bd6d775.webp",warning:"notifi-warning.44f565cf.webp"},
-  retro:{error:"error-win2k.ceba73c0.png",success:"success-win2k.7b281bfb.png",warning:"warning-win2k.333f629e.png"},
-  modern:{error:"notifi-error-win10.956ad576.webp",success:"notifi-success-win10.5fdfecb5.webp",warning:"notifi-warning-win10.e1a2a370.webp"},
-  onebit:{error:"close-onebit.a1490e2c.svg",success:"check-onebit.35be58dd.svg",warning:"alert-onebit.809dcd0e.svg"}
-} as const;
-export function sourceNotificationArt(theme:string,type:string):string|undefined{
-  if(type!=="error"&&type!=="success"&&type!=="warning")return undefined;
-  const family=theme==="onebit"?"onebit":
-    ["win31","win95","win98","win2k"].includes(theme)?"retro":
-    ["win10","win11","win11dark","macos","chromeos","ubuntu","kubuntu"].includes(theme)?"modern":"base";
-  return image(notificationArt[family][type]);
-}
+export {sourceNotificationArt} from "@windows-os/assets";
 
 /** f0ed resolves action-center-headline[-severity] directly. The pinned
  * registry has no severity headline variants. Do not substitute tray artwork. */

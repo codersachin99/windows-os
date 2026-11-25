@@ -1,3 +1,9 @@
+## 25 November 2026 — Control Panel Action Center history
+
+Frozen cpanel.js te/oe, handleResize and cpanel.css: Action Center history uses shared original theme-specific 32px severity icons, flex rows (16px gap), 6px logical leading severity border (#c00/#e8a200/#4a4), exact content padding, 768px maximum, preserved whitespace and empty notice. Extracted ActionCenterPanel; source mounted MarkAllRead now runs only when entering page, not every parent rerender. Sidebar hidden at <=500px panel width via container query; full-screen source special case and exact sidebar theme paint still pending. Shared artwork resolver moved to assets and re-exported from tray helper. Source inline links intentionally remain escaped plain text pending safe parser/URL adapter; archived/settings remain disabled as source. Two SSR contracts authored. No runtime testing yet, no duplicate CI requested. Next icon-relative notification anchoring and consolidated CI. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — WinUI notification balloon styling
 
 Ported frozen vue-app.css .winui-balloon, f0ed direction and theme SCSS paint: 360px nominal balloon, 380px source max, 18px RTL-aware tail, 400px nominal modern cards (source max retained), 32px/40px icon variants, source border/gradient palettes and close controls across Win7/Vista/8, classic/XP/9x/31, prototypes, Win10/11, macOS/Ubuntu/Kubuntu/ChromeOS, Oxygen/Aero Noir and Onebit. React retains fixed desktop-edge placement with viewport bounds rather than original icon-local absolute anchoring (still pending); XP close hover is a simplified source-colored approximation; plain text retained, no executable markup. New markup direction test authored. Latest green bd11935, no new CI requested this slice. Next Control Panel Action Center history source audit, then verify accumulated visual/layout changes. No production feed activated. Main/pin/releases unchanged.

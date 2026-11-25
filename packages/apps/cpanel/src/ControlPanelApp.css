@@ -179,32 +179,29 @@
 }
 .windows-cpanel__notification-footer button{min-width:72px}
 
-/* Pinned cpanel.js te/oe source Action Center, px-8/py-6 content,
- * empty-state white bordered notice, disabled side-pane controls. */
-.windows-cpanel__action{display:flex;min-height:100%;min-width:0}
+/* Pinned cpanel.js te/oe and cpanel.css: responsive side pane and severity rows. */
+.windows-cpanel__action{display:flex;min-height:100%;min-width:0;container-type:inline-size}
 .windows-cpanel__action-sidebar{
-  display:flex;flex-direction:column;align-items:stretch;gap:12px;
-  padding:24px 16px;border-right:1px solid #c8d4e0;min-width:135px;
-  max-width:190px;background:#f6f9fc
+  display:flex;flex:0 0 175px;flex-direction:column;align-items:flex-start;
+  padding:24px 16px;border-inline-end:1px solid #c8d4e0;background:#f6f9fc
 }
-.windows-cpanel__action-sidebar button{
-  text-align:left;color:#1465a6;background:none;border:0;cursor:pointer
-}
+.windows-cpanel__action-sidebar button{font:inherit;text-align:start;padding:0;color:#1465a6;background:none;border:0;cursor:pointer}
+.windows-cpanel__action-sidebar button:first-child{margin-bottom:24px}
+.windows-cpanel__action-sidebar button:nth-child(2){margin-bottom:8px}
 .windows-cpanel__action-sidebar button:disabled{opacity:.45;cursor:default}
-.windows-cpanel__action-content{flex:1;padding:24px 32px;min-width:0}
+.windows-cpanel__action-content{flex:1;padding:24px 32px;min-width:0;width:100%;max-width:768px;overflow:auto;box-sizing:border-box}
 .windows-cpanel__action-content h2{font-size:20px;font-weight:400;margin:0 0 14px}
 .windows-cpanel__action-content>p{margin:0 0 24px}
-.windows-cpanel__action-empty,.windows-cpanel__action-message{
-  border:1px solid #ccc;padding:16px 24px;background:#fff
-}
-.windows-cpanel__action-message{margin-bottom:12px;overflow-wrap:anywhere}
-.windows-cpanel__action-message p{white-space:pre-wrap}
-@media(max-width:480px){
-  .windows-cpanel__action{flex-direction:column}
-  .windows-cpanel__action-sidebar{max-width:none;padding:8px 14px}
-  .windows-cpanel__action-content{padding:16px}
-}
-
+.windows-cpanel__action-empty,.windows-cpanel__action-message{border:1px solid #0003;padding:16px 24px;background:transparent}
+.windows-cpanel__action-content .windows-cpanel__action-empty{margin:0}
+.windows-cpanel__action-message{display:flex;align-items:flex-start;gap:16px;margin-bottom:12px;border-inline-start-width:6px;overflow-wrap:anywhere}
+.windows-cpanel__action-message.is-error{border-inline-start-color:#c00}
+.windows-cpanel__action-message.is-warning{border-inline-start-color:#e8a200}
+.windows-cpanel__action-message.is-success{border-inline-start-color:#4a4}
+.windows-cpanel__action-icon{width:32px;height:32px;flex:0 0 32px;object-fit:contain}
+.windows-cpanel__action-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.windows-cpanel__action-copy pre{font:inherit;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+@container(max-width:500px){.windows-cpanel__action-sidebar{display:none}}
 
 /* Original ue/Te source Backup and Restore: Win7 side pane, two grouped
  * actions, progress/result status, and browser-only ZIP download/upload. */
