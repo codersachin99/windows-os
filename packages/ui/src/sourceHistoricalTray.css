@@ -1,0 +1,51 @@
+/* Pinned theme-win9x, win31, winW and winlonghorn source tray paint. */
+.windows-desktop[data-source-retro-tray]{--retro-tray-surface:#bdbebd;--retro-tray-accent:#00007b}
+.windows-desktop[data-source-retro-tray][data-theme="win31"]{--retro-tray-surface:#c0c0c0;--retro-tray-accent:#080abd}
+.windows-desktop[data-source-retro-tray][data-theme="win98"]{--retro-tray-surface:#c0c7c8;--retro-tray-accent:#0608a6}
+.windows-desktop[data-source-retro-tray][data-theme="win2k"]{--retro-tray-surface:#d4d0c8;--retro-tray-accent:#082767}
+.windows-desktop[data-source-retro-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  background:var(--retro-tray-surface);color:#000;border:0;border-radius:0;
+  box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b;
+  backdrop-filter:none;padding:8px;font:11px Tahoma,Arial,sans-serif;
+}
+.windows-desktop[data-source-retro-tray]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){box-shadow:inset 1px -1px #393c39,inset -1px 1px #fff,inset 2px -2px #7b7b7b}
+.windows-desktop[data-source-retro-tray][data-theme="win31"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){box-shadow:0 0 0 1px #000}
+.windows-desktop[data-source-retro-tray] .source-macos-datetime-popup{width:min(440px,calc(100vw - 24px))}
+.windows-desktop[data-source-retro-tray] .source-datetime-content{gap:4px}
+.windows-desktop[data-source-retro-tray] :is(.source-macos-calendar,.source-chromeos-clock){box-sizing:border-box;padding:16px 24px;box-shadow:inset -1px -1px #fff,inset -2px 1px #7b7b7b,inset 1px -2px #7b7b7b,inset 2px 2px #fff}
+.windows-desktop[data-source-retro-tray]:dir(rtl) :is(.source-macos-calendar,.source-chromeos-clock){box-shadow:inset 1px -1px #fff,inset 2px 1px #7b7b7b,inset -1px -2px #7b7b7b,inset -2px 2px #fff}
+.windows-desktop[data-source-retro-tray][data-theme="win31"] :is(.source-macos-calendar,.source-chromeos-clock){box-shadow:none;padding:0 16px}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar{width:238px;max-width:100%}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar header{margin-bottom:8px}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar-monthyear button{background:#fff;padding:4px;box-shadow:inset 1px 1px #000,inset -1px -1px var(--retro-tray-surface),1px 1px #fff,-1px -1px #7b7b7b}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar-arrow{width:24px;height:24px;box-shadow:inset -1px -1px #393c39,inset 1px 1px #fff,inset -2px -2px #7b7b7b}
+.windows-desktop[data-source-retro-tray] :is(.source-macos-calendar-days,.source-macos-calendar-picker){background:#fff;box-shadow:inset 1px 1px #000,inset -1px -1px var(--retro-tray-surface),1px 1px #fff,-1px -1px #7b7b7b;gap:0}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar-weekdays{background:#808080;color:#ddd;font-weight:400}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar-weekdays span{padding:4px 0}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar-days button{padding:2px}
+.windows-desktop[data-source-retro-tray]:not([data-theme="win31"]) .source-macos-calendar-days button.is-outside{visibility:hidden}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar button:is(.is-today,[aria-pressed="true"]){background:var(--retro-tray-accent);color:#fff;border-radius:0}
+.windows-desktop[data-source-retro-tray] .source-macos-calendar button[aria-pressed="true"]{outline:1px dotted #ff3;outline-offset:-1px}
+.windows-desktop[data-source-retro-tray] .source-xp-clock-mark{fill:#808080;stroke:#fff;stroke-width:.5px}
+.windows-desktop[data-source-retro-tray] .source-chromeos-clock svg{margin-bottom:16px}
+.windows-desktop[data-source-retro-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger),.windows-desktop[data-source-retro-tray] .source-hidden-tray-customize{color:#000}
+.windows-desktop[data-source-retro-tray] .source-hidden-tray-customize{color:var(--retro-tray-accent)}
+.windows-desktop[data-source-retro-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-datetime-popup)>button{color:var(--retro-tray-accent)}
+.windows-desktop[data-source-retro-tray] .source-macos-datetime-popup>button:first-child{color:#000}
+.windows-desktop[data-source-retro-tray] .source-macos-volume-mute img{filter:none}
+.windows-desktop[data-source-retro-tray] :is(.source-macos-battery-popup,.source-macos-volume-meter) input{accent-color:var(--retro-tray-accent)}
+.windows-desktop[data-source-retro-tray]:not([data-theme="win31"]) .windows-taskbar__show-desktop{display:none}
+.windows-desktop[data-source-prototype-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){background:var(--background-color,#ebebe4);color:#000;border:2px solid;border-color:#fff #0008 #0008 #fff;border-radius:0;box-shadow:none;backdrop-filter:none}
+.windows-desktop[data-source-prototype-tray]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){border-color:#fff #fff #0008 #0008}
+.windows-desktop[data-source-prototype-tray][data-theme="winW"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){background:#ebebe4}
+.windows-desktop[data-source-prototype-tray][data-theme="winLS"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){border:1px solid #aca899;box-shadow:3px 5px 3px #000a;padding:0}
+.windows-desktop[data-source-prototype-tray][data-theme="winLS"]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){box-shadow:-3px 5px 3px #000a}
+.windows-desktop[data-source-prototype-tray][data-theme="winW"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:#000}
+.windows-desktop[data-source-prototype-tray]:not([data-theme="winW"]) :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:#fff}
+.windows-desktop[data-source-prototype-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:#000}
+.windows-desktop[data-source-prototype-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){background:none}
+.windows-desktop[data-source-prototype-tray] .source-macos-calendar-picker{border:1px solid var(--border-color,#808080);padding:1px}
+.windows-desktop[data-source-prototype-tray] :is(.source-macos-calendar-days,.source-macos-calendar-picker) button.is-today{background:var(--item-color--hover,#cdd3e1);color:#000}
+.windows-desktop[data-source-prototype-tray][data-theme="winW"] :is(.source-macos-calendar-days,.source-macos-calendar-picker) button.is-today,.windows-desktop[data-source-prototype-tray][data-theme="winW"] .source-macos-calendar header button:hover{border:1px solid #38659a;background:#cdd3e1;color:#000}
+.windows-desktop[data-source-prototype-tray] .source-macos-volume-mute img{filter:none}
+.windows-desktop[data-source-prototype-tray] .source-hidden-tray-customize{color:#004e98}

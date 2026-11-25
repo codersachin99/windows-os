@@ -1,12 +1,12 @@
 import {useEffect,useRef} from "react";
-import {sourceGuestVolume,sourceMacOSVolumeArt,sourceXPVolumeArt,type SourceGuestAudio} from "./sourceGuestAudio";
+import {sourceGuestVolume,sourceMacOSVolumeArt,sourceXPVolumeArt,sourceRetroVolumeArt,type SourceGuestAudio} from "./sourceGuestAudio";
 
 /** Source c561: vertical meter and mute toggle. Guest media output only. */
-export function SourceMacOSVolume({audio,onAudio,open,setOpen,onOpen,xpArtwork=false}:{
+export function SourceMacOSVolume({audio,onAudio,open,setOpen,onOpen,xpArtwork=false,retroArtwork=false}:{
   audio:SourceGuestAudio;onAudio:(value:SourceGuestAudio)=>void;
-  open:boolean;setOpen:(open:boolean)=>void;onOpen:()=>void;xpArtwork?:boolean
+  open:boolean;setOpen:(open:boolean)=>void;onOpen:()=>void;xpArtwork?:boolean;retroArtwork?:boolean
 }){
-  const artwork=xpArtwork?sourceXPVolumeArt:sourceMacOSVolumeArt;
+  const artwork=retroArtwork?sourceRetroVolumeArt:xpArtwork?sourceXPVolumeArt:sourceMacOSVolumeArt;
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{

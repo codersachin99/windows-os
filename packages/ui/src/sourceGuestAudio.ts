@@ -21,3 +21,8 @@ export function sourceMacOSVolumeArt(audio:SourceGuestAudio):string{
 export function sourceXPVolumeArt(audio:SourceGuestAudio):string{
   return "/assets/images/"+(audio.muted?"volume-muted-winxp.70d8b244.webp":"sound-winxp.1ff35c0e.webp");
 }
+
+/** Win31/95/98/2000 registry: one unmuted speaker and a separate mute image. */
+export function sourceRetroVolumeArt(audio:SourceGuestAudio):string{
+  return "/assets/images/"+(audio.muted?"sound-muted-win2k.c4df5325.png":"sound-win2k.6b4cee4c.webp");
+}

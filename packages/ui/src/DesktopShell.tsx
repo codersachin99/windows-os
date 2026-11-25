@@ -310,7 +310,10 @@ export function DesktopShell({
   const xpTray=["winxp","winxpE","winxpG","winxpN","winxpR","winxpS","winxpZ"].includes(state.theme);
   const win8Tray=state.theme==="win8"||state.theme==="win81";
   const modernTray=["win10","win11","win11dark"].includes(state.theme);
-  const sharedTray=win8Tray||modernTray||xpTray||vistaTray||win7Tray||state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
+  const retroTray=["win31","win95","win98","win2k"].includes(state.theme);
+  const prototypeTray=["winW","winLP","winLS"].includes(state.theme);
+  const xpTrayArtwork=xpTray||retroTray||state.theme==="winW";
+  const sharedTray=retroTray||prototypeTray||win8Tray||modernTray||xpTray||vistaTray||win7Tray||state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
   // Original taskbar-macos and taskbar-ubuntu render fixed tray items;
   // taskbar-base owns the hidden-items component.
   const fixedTray=state.theme==="macos"||state.theme==="ubuntu";
@@ -540,12 +543,12 @@ export function DesktopShell({
     state.theme,aeroAppearancePreview??aeroAppearance,visualEffects.enableGlass);
   const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   const renderTrayItem=(item:typeof SOURCE_TRAY_ITEMS[number],hidden=false)=>sharedTray&&item.id==="TaskbarActionCenter"?
-              <SourceMacOSActionCenter xpArtwork={xpTray} key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open,hidden)}/>:sharedTray&&item.id==="TaskbarNetwork"?
-              <SourceMacOSNetwork xpArtwork={xpTray} key={item.id} baseArtwork={win8Tray||modernTray||vistaTray||win7Tray||state.theme==="chromeos"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open,hidden)} onOpen={()=>{dispatch({type:"CLOSE_START"});if(!hidden)setShowHiddenTray(false);}}/>:
+              <SourceMacOSActionCenter xpArtwork={xpTrayArtwork} key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open,hidden)}/>:sharedTray&&item.id==="TaskbarNetwork"?
+              <SourceMacOSNetwork retroArtwork={retroTray} xpArtwork={xpTrayArtwork} key={item.id} baseArtwork={prototypeTray||win8Tray||modernTray||vistaTray||win7Tray||state.theme==="chromeos"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open,hidden)} onOpen={()=>{dispatch({type:"CLOSE_START"});if(!hidden)setShowHiddenTray(false);}}/>:
               sharedTray&&item.id==="TaskbarBattery"?
-              <SourceMacOSBattery xpArtwork={xpTray} key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
+              <SourceMacOSBattery xpArtwork={xpTrayArtwork} key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
               sharedTray&&item.id==="TaskbarVolume"?
-              <SourceMacOSVolume xpArtwork={xpTray} key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
+              <SourceMacOSVolume retroArtwork={retroTray} xpArtwork={xpTrayArtwork} key={item.id} audio={guestAudio} onAudio={setGuestAudio} open={macPopup==="volume"} setOpen={open=>setMacPopupOpen("volume",open,hidden)} onOpen={()=>dispatch({type:"CLOSE_START"})}/>:
               <span key={item.id} title={item.label}
               data-test-tray-icon={item.id} className="windows-taskbar__tray-icon">
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
@@ -556,6 +559,8 @@ export function DesktopShell({
       data-source-win7-tray={win7Tray?"":undefined}
       data-source-vista-tray={vistaTray?"":undefined}
       data-source-xp-tray={xpTray?"":undefined}
+      data-source-retro-tray={retroTray?"":undefined}
+      data-source-prototype-tray={prototypeTray?"":undefined}
       data-source-win8-tray={win8Tray?"":undefined}
       data-source-modern-tray={modernTray?"":undefined}
       data-source-interactive-hidden-tray={interactiveHiddenTray?"":undefined}
@@ -844,7 +849,7 @@ export function DesktopShell({
             </div>}
           {SOURCE_TRAY_ITEMS.filter(item=>visibleTrayIds.includes(item.id)).map(item=>renderTrayItem(item))}
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch} open={macPopup==="spotlight"} setOpen={open=>setMacPopupOpen("spotlight",open)}/>}
-          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime xpLayout={xpTray} modernLayout={modernTray} numericDate={win8Tray||modernTray||xpTray||vistaTray||win7Tray||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} baseLayout={state.theme!=="macos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
+          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime xpLayout={xpTray||retroTray} modernLayout={modernTray} numericDate={retroTray||prototypeTray||win8Tray||modernTray||xpTray||vistaTray||win7Tray||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} baseLayout={state.theme!=="macos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
           {state.theme==="ubuntu"&&<SourceMacOSAppleMenu ubuntu dispatch={dispatch} open={macPopup==="apple"} setOpen={open=>setMacPopupOpen("apple",open)}/>}
         </div>
         {state.theme!=="macos"&&state.theme!=="ubuntu"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"

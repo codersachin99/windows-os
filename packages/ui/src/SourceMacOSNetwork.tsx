@@ -16,9 +16,10 @@ function WifiGlyph({size=20}:{size?:number}){
     <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
   </svg>;
 }
-export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtwork=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseArtwork?:boolean;xpArtwork?:boolean}){
+export function SourceMacOSNetwork({onOpen,open,setOpen,baseArtwork=false,xpArtwork=false,retroArtwork=false}:{onOpen:()=>void;open:boolean;setOpen:(open:boolean)=>void;baseArtwork?:boolean;xpArtwork?:boolean;retroArtwork?:boolean}){
   const [status,setStatus]=useState(readNetwork);
-  const xpNetwork=status.online?"/assets/images/network-winxp.744648d4.webp":"/assets/images/network-off-winxp.60414007.webp";
+  const retroNetwork=status.online?"/assets/images/network-win2k.798c0454.png":"/assets/images/network-off-win2k.a6d55774.png";
+  const xpNetwork=retroArtwork?retroNetwork:status.online?"/assets/images/network-winxp.744648d4.webp":"/assets/images/network-off-winxp.60414007.webp";
   const root=useRef<HTMLDivElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   useEffect(()=>{

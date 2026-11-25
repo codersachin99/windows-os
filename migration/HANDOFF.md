@@ -1,3 +1,9 @@
+## 25 November 2026 — Historical Windows interactive tray
+
+Pinned theme-win9x/win31/winW/winlonghorn source tray styles and registry: Win31, Win95/98/2000, Whistler (winW), Longhorn Plex (winLP) and Slate (winLS) now route through shared interactive tray and hidden flyout. Four missing Win2000 network/speaker binaries imported with exact source SHA; XP Action Center/battery reused for historical themes and XP icons for Whistler. Win9x source opaque bevel, palette, gray weekdays, yellow dotted selection and square marks; Win31 square outline; Whistler pale surface and blue today; Longhorn directional borders and Slate shadow. Source-specific paint adapted to React component structure; Win31 calendar uses shared retro treatment, Longhorn inherited icon artwork and full visual parity still pending. Seven browser scenarios and unit mapping test authored, not executed. No new CI requested; next Onebit and consolidated verification. Main/releases/pin unchanged.
+
+---
+
 ## 25 November 2026 — Modern Windows interactive tray
 
 Pinned theme-win8/10/11-scss.js: Win8/81 use accent frame, white content, pale footer and inherited Win7 calendar/analog clock; Win10 dark #1f1f1f popup, 30px square days, accent selection and digital header; Win11 light/dark #f9f9f9/#242424, 6px radius, circular 40px days and source palette. Shared live tray controls and hidden tray lifecycle extended to five IDs. Digital-only modern layout is a source-style adapter (exact legacy datetime component markup not yet audited); exact source volume/network artwork for Win8 and other inherited variants pending. Authored five browser scenarios; no tests executed. Main/releases/pin unchanged. Next historical base families and consolidated verification.

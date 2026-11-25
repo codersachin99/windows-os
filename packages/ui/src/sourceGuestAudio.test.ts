@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {sourceGuestVolume,sourceMacOSVolumeArt,sourceXPVolumeArt} from "./sourceGuestAudio";
+import {sourceGuestVolume,sourceMacOSVolumeArt,sourceXPVolumeArt,sourceRetroVolumeArt} from "./sourceGuestAudio";
 describe("original macOS volume artwork",()=>{
   it("uses exact threshold boundaries",()=>{
     for(const [volume,expected] of [[0,"0"],[31,"0"],[32,"32"],[64,"32"],[65,"65"],[99,"65"],[100,"100"]] as const)
@@ -17,4 +17,9 @@ describe("original macOS volume artwork",()=>{
 it("XP registry uses the same unmuted speaker at every threshold",()=>{
   for(const volume of [0,32,65,100])expect(sourceXPVolumeArt({volume,muted:false})).toBe("/assets/images/sound-winxp.1ff35c0e.webp");
   expect(sourceXPVolumeArt({volume:100,muted:true})).toBe("/assets/images/volume-muted-winxp.70d8b244.webp");
+});
+
+it("historical Windows uses the original 2000 speaker for every unmuted threshold",()=>{
+  for(const volume of [0,32,65,100])expect(sourceRetroVolumeArt({volume,muted:false})).toBe("/assets/images/sound-win2k.6b4cee4c.webp");
+  expect(sourceRetroVolumeArt({volume:100,muted:true})).toBe("/assets/images/sound-muted-win2k.c4df5325.png");
 });
