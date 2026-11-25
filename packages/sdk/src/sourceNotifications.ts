@@ -1,5 +1,6 @@
 import {browserStorage} from "./files";
 import type {SourceRecentStorage} from "./recentPrograms";
+import {sourceSelectNotificationFeed,type SourceFeedEntry,type SourceFeedContext} from "./sourceNotificationFeed";
 
 /** Frozen vue-app 779a lifecycle. Persist only seen/read IDs, never remote
  * content. Trusted Guest publishers supply content; no feed is fetched here. */
@@ -43,6 +44,10 @@ export class SourceNotificationStore{
     if(!ids.length)return;
     this.flags={seen:appendIds(this.flags.seen,ids),read:read?appendIds(this.flags.read,ids):this.flags.read};
     try{this.storage?.setItem(this.key,JSON.stringify(this.flags));}catch{/* Session works without storage. */}
+  }
+  /** Explicit source SetEntries boundary; replaces active feed, not an implicit network call. */
+  replaceFeed(entries:readonly SourceFeedEntry[],context:SourceFeedContext){
+    this.update(sourceSelectNotificationFeed(entries,context,this.flags));
   }
   publish(input:SourceNotificationInput):boolean{
     if(!input.id||!input.title||this.state.history.some(message=>message.id===input.id))return false;

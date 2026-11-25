@@ -1,3 +1,9 @@
+## 25 November 2026 — Source notification feed selection
+
+Ported frozen 779a pure feed targeting/date/version comparisons, localized text fallback, descending history/ascending unseen queue, default success, first-install suppression and version announcement metadata, session count and push eligibility. Explicit SourceNotificationStore.replaceFeed implements original SetEntries using existing flags; it replaces active history/queue and is not automatically invoked. Duplicate IDs are rejected after first eligible entry (React keys/queue safety). Six unit contracts authored. No actual feed URL, remote fetching, cache, push permission, analytics, or version-state persistence wired; no synthetic announcements or permission prompts. Next implement injected feed/cache service and persist version/session metadata, then batch CI. New tests unexecuted; last green 4f6e09f. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — Original notification state lifecycle
 
 Located original 779a in frozen src/modules/runtime/vue-app.js. Source severity is unread error then warning only; Dismiss persists seen ID, MarkAllSeen clears pending without marking read, MarkRead and MarkAllRead clear corresponding pending and persist both flags, Promote puts a known entry first. Ported all these operations and bounded device-local seen/read persistence (50 IDs each; session reset retains flags). History content is not persisted: trusted local publishers can republish to restore flags, while source feed date/target filtering, localization, version announcement, cache/fetch, deferred push ID and Android permission/telemetry are not yet ported. No external service or synthetic production notifications added. Added four unit contracts and extended existing tests. No new CI requested; latest green remains 4f6e09f, newer artwork/lifecycle tests pending. Next implement pure feed selection and version-state adapters, then combined verification. Main/releases/pin unchanged.

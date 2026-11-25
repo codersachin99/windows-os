@@ -1,3 +1,5 @@
+> **25 November 2026 — Notification feed:** targeting, localization, version and session rules. [Source trace](NOTIFICATION-FEED-SOURCE.md).
+
 > **25 November 2026 — Notification state:** original 779a queue/severity and bounded device flags. [Source trace](NOTIFICATION-STATE-SOURCE.md).
 
 > **25 November 2026 — Notification artwork:** battery/tray CI green; four original toast icon families imported. [Source trace](NOTIFICATION-ARTWORK-SOURCE.md).
