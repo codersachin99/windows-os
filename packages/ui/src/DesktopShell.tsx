@@ -304,7 +304,8 @@ export function DesktopShell({
     win.minimized?highest:Math.max(highest,win.z),-Infinity);
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
-  const sharedTray=state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
+  const win7Tray=["win7","aero-1","aero-2","aero-3","aero-4","basic-1"].includes(state.theme);
+  const sharedTray=win7Tray||state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
   const [guestAudio,setGuestAudio]=useState<SourceGuestAudio>(SOURCE_GUEST_AUDIO_INITIAL);
@@ -513,6 +514,7 @@ export function DesktopShell({
   const isSolidBackground=sourceIsSolidThemeWallpaper(state.wallpaper);
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
+      data-source-win7-tray={win7Tray?"":undefined}
       data-source-display-brightness={sharedTray?macBrightness:undefined}
       style={{...(win7Colors?{
         "--theme-color":win7Colors.active,
@@ -779,7 +781,7 @@ export function DesktopShell({
           {SOURCE_TRAY_ITEMS.filter(item=>sourceTrayVisible(trayPreferences).includes(item.id))
             .map(item=>sharedTray&&item.id==="TaskbarActionCenter"?
               <SourceMacOSActionCenter key={item.id} dispatch={dispatch} notifications={notifications} onSeen={()=>sourceNotifications.markAllSeen()} open={macPopup==="action-center"} setOpen={open=>setMacPopupOpen("action-center",open)}/>:sharedTray&&item.id==="TaskbarNetwork"?
-              <SourceMacOSNetwork key={item.id} baseArtwork={state.theme==="chromeos"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
+              <SourceMacOSNetwork key={item.id} baseArtwork={win7Tray||state.theme==="chromeos"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} open={macPopup==="network"} setOpen={open=>setMacPopupOpen("network",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:
               sharedTray&&item.id==="TaskbarBattery"?
               <SourceMacOSBattery key={item.id} open={macPopup==="battery"} setOpen={open=>setMacPopupOpen("battery",open)} onOpen={()=>dispatch({type:"CLOSE_START"})} brightness={macBrightness} onBrightness={setMacBrightness}/>:
               sharedTray&&item.id==="TaskbarVolume"?
@@ -789,7 +791,7 @@ export function DesktopShell({
               <img src={sourceThemeTrayArtwork(state.theme,item.id)??legacyArt[item.asset]} width={16} height={16}
                 alt={item.label}/></span>)}
           {state.theme==="macos"&&<SourceMacOSSpotlight dispatch={dispatch} open={macPopup==="spotlight"} setOpen={open=>setMacPopupOpen("spotlight",open)}/>}
-          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime numericDate={state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} baseLayout={state.theme!=="macos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
+          {trayPreferences.showClockIcon&&(sharedTray?<SourceMacOSDateTime numericDate={win7Tray||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir"} baseLayout={state.theme!=="macos"} open={macPopup==="datetime"} setOpen={open=>setMacPopupOpen("datetime",open)} onOpen={()=>{dispatch({type:"CLOSE_START"});setShowHiddenTray(false);}}/>:<div data-test-tray-clock=""><Clock/></div>)}
           {state.theme==="ubuntu"&&<SourceMacOSAppleMenu ubuntu dispatch={dispatch} open={macPopup==="apple"} setOpen={open=>setMacPopupOpen("apple",open)}/>}
         </div>
         {state.theme!=="macos"&&state.theme!=="ubuntu"&&<button className="windows-taskbar__show-desktop" aria-label="Show desktop"

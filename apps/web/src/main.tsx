@@ -16,6 +16,7 @@ import "../../../packages/ui/src/sourceUbuntuShell.css";
 import "../../../packages/ui/src/sourceKubuntuShell.css";
 import "../../../packages/ui/src/sourceOxygenShell.css";
 import "../../../packages/ui/src/sourceAeroNoirShell.css";
+import "../../../packages/ui/src/sourceWin7Tray.css";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode><App /></React.StrictMode>

@@ -1,3 +1,5 @@
+> **25 November 2026 — Win7 interactive tray:** Aero/Basic 1 source glass, calendar and clock; shared Guest functionality. [Source trace](WIN7-TRAY-SOURCE.md).
+
 > **25 November 2026 — Taskbar animation:** independent Performance Options switch, persisted v1 migration and Start orb fade. [Source trace](TASKBAR-ANIMATION-SOURCE.md).
 
 > **25 November 2026 — Win7 Start orb:** original three-state sprite for Win7/Aero 1–4/Basic 1; classic artwork retained. [Source trace](WIN7-START-SPRITE-SOURCE.md).
