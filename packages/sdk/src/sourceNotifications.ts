@@ -1,8 +1,8 @@
 import {browserStorage} from "./files";
 import type {SourceRecentStorage} from "./recentPrograms";
-import {sourceSelectNotificationFeed,type SourceFeedEntry,type SourceFeedContext} from "./sourceNotificationFeed";
+import {sourceSelectNotificationFeed,sourceNotificationVersionState,sourceNotificationStartSession,sourceNotificationShouldAskPush,type SourceFeedEntry,type SourceFeedContext,type SourceNotificationDeviceState} from "./sourceNotificationFeed";
 
-/** Frozen vue-app 779a lifecycle. Persist only seen/read IDs, never remote
+/** Frozen vue-app 779a lifecycle. Persist device metadata and seen/read IDs, never remote
  * content. Trusted Guest publishers supply content; no feed is fetched here. */
 export type SourceNotificationType="success"|"info"|"warning"|"error";
 export type SourceNotificationInput={id:string;type:SourceNotificationType;title:string;body:string};
@@ -11,9 +11,10 @@ export type SourceNotificationSnapshot=Readonly<{history:readonly SourceNotifica
 export const SOURCE_NOTIFICATION_TIMEOUT=8000;
 export const SOURCE_NOTIFICATION_STORAGE_KEY="windows-os:device:notifications:v1";
 const MAX_IDS=50;
-type NotificationFlags={seen:string[];read:string[]};
-function appendIds(previous:string[],ids:readonly string[]):string[]{
-  return ids.reduce((values,id)=>[...values.filter(value=>value!==id),id].slice(-MAX_IDS),previous);
+type NotificationFlags=SourceNotificationDeviceState;
+
+function appendIds(previous:readonly string[],ids:readonly string[]):string[]{
+  return ids.reduce<string[]>((values,id)=>[...values.filter(value=>value!==id),id].slice(-MAX_IDS),[...previous]);
 }
 function readIds(value:unknown):string[]{
   return Array.isArray(value)?appendIds([],value.filter((id):id is string=>typeof id==="string"&&id.length>0)):[];
@@ -28,11 +29,17 @@ export class SourceNotificationStore{
   private state:SourceNotificationSnapshot={history:[],queue:[]};
   private listeners=new Set<()=>void>();
   private flags:NotificationFlags;
+  private sessionStarted=false;
   constructor(private readonly storage:SourceRecentStorage|undefined=undefined,private readonly key=SOURCE_NOTIFICATION_STORAGE_KEY){
     let parsed:unknown=null;
     try{parsed=JSON.parse(storage?.getItem(key)??"null");}catch{/* unavailable or invalid */}
     const data=parsed&&typeof parsed==="object"?parsed as Record<string,unknown>:{};
-    this.flags={seen:readIds(data.seen),read:readIds(data.read)};
+    this.flags={seen:readIds(data.seen),read:readIds(data.read),
+      ...(typeof data.version==="string"?{version:data.version}:{}),
+      ...(typeof data.announced==="string"||data.announced===null?{announced:data.announced}:{}),
+      ...(typeof data.announcedOn==="string"||data.announcedOn===null?{announcedOn:data.announcedOn}:{}),
+      ...(typeof data.sessions==="number"&&Number.isSafeInteger(data.sessions)&&data.sessions>=0?{sessions:data.sessions}:{}),
+      ...(typeof data.pushAsked==="boolean"?{pushAsked:data.pushAsked}:{})};
   }
   snapshot=()=>this.state;
   subscribe=(listener:()=>void)=>{this.listeners.add(listener);return()=>{this.listeners.delete(listener);};};
@@ -42,9 +49,21 @@ export class SourceNotificationStore{
   }
   private remember(ids:readonly string[],read=false){
     if(!ids.length)return;
-    this.flags={seen:appendIds(this.flags.seen,ids),read:read?appendIds(this.flags.read,ids):this.flags.read};
+    this.flags={...this.flags,seen:appendIds(this.flags.seen,ids),read:read?appendIds(this.flags.read,ids):this.flags.read};
+    this.persist();
+  }
+  private persist(){
     try{this.storage?.setItem(this.key,JSON.stringify(this.flags));}catch{/* Session works without storage. */}
   }
+  /** Source load counts once per runtime, not every feed refresh. */
+  prepareFeedSession(version:string,now:string):SourceNotificationDeviceState{
+    this.flags=sourceNotificationVersionState(this.flags,version,now);
+    if(!this.sessionStarted){this.sessionStarted=true;this.flags=sourceNotificationStartSession(this.flags);}
+    this.persist();
+    return {...this.flags,seen:[...this.flags.seen],read:[...this.flags.read]};
+  }
+  shouldAskPush(force=false):boolean{return sourceNotificationShouldAskPush(this.flags,force);}
+  markPushAsked(){this.flags={...this.flags,pushAsked:true};this.persist();}
   /** Explicit source SetEntries boundary; replaces active feed, not an implicit network call. */
   replaceFeed(entries:readonly SourceFeedEntry[],context:SourceFeedContext){
     this.update(sourceSelectNotificationFeed(entries,context,this.flags));

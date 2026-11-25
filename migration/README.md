@@ -1,3 +1,5 @@
+> **25 November 2026 — Notification service:** injectable timeout/cache and persistent version metadata. [Source trace](NOTIFICATION-SERVICE-SOURCE.md).
+
 > **25 November 2026 — Notification feed:** targeting, localization, version and session rules. [Source trace](NOTIFICATION-FEED-SOURCE.md).
 
 > **25 November 2026 — Notification state:** original 779a queue/severity and bounded device flags. [Source trace](NOTIFICATION-STATE-SOURCE.md).

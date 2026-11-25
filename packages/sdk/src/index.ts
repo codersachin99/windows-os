@@ -254,3 +254,5 @@ export {SOURCE_FINAL_APP_ALIASES,sourceRegisteredAliases} from "./sourceFinalApp
 export {sourceNotifications,SourceNotificationStore,sourceNotificationCurrent,sourceNotificationSeverity,SOURCE_NOTIFICATION_TIMEOUT,type SourceNotification,type SourceNotificationInput,type SourceNotificationSnapshot,type SourceNotificationType} from "./sourceNotifications";
 
 export * from "./sourceNotificationFeed";
+
+export * from "./sourceNotificationService";

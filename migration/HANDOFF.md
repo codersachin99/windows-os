@@ -1,3 +1,9 @@
+## 25 November 2026 — Notification feed service and device metadata
+
+Ported frozen 779a A() injected service with explicit URL, no-cache request, 5s abort/deadline through JSON decode, validated list entries and URL-scoped storage cache fallback. SourceNotificationStore now persists version, announcement date, session count and pushAsked alongside bounded seen/read IDs; counts once per runtime and retains flags on reset. Service load uses current flags on completion; latest load wins. Cache write failure preserves valid live data (intentional resilience); malformed individual entries skipped, non-array falls back. Five regression cases authored. No production endpoint, automatic feed load, push permission, or telemetry enabled. Requested consolidated [run-ci] [tray-check] for accumulated artwork/state/feed changes. Next inspect exact-head CI then source toast layout/Action Center history parity. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — Source notification feed selection
 
 Ported frozen 779a pure feed targeting/date/version comparisons, localized text fallback, descending history/ascending unseen queue, default success, first-install suppression and version announcement metadata, session count and push eligibility. Explicit SourceNotificationStore.replaceFeed implements original SetEntries using existing flags; it replaces active history/queue and is not automatically invoked. Duplicate IDs are rejected after first eligible entry (React keys/queue safety). Six unit contracts authored. No actual feed URL, remote fetching, cache, push permission, analytics, or version-state persistence wired; no synthetic announcements or permission prompts. Next implement injected feed/cache service and persist version/session metadata, then batch CI. New tests unexecuted; last green 4f6e09f. Main/pin/releases unchanged.

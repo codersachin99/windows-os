@@ -1,0 +1,5 @@
+# Notification service
+
+Frozen legacy-win7@26b9f0ce7, src/modules/runtime/vue-app.js module 779a A(), f(), k(), w(). Explicit transport/cache/storage boundary; no production endpoint configured.
+
+Ported frozen 779a A() injected service with explicit URL, no-cache request, 5s abort/deadline through JSON decode, validated list entries and URL-scoped storage cache fallback. SourceNotificationStore now persists version, announcement date, session count and pushAsked alongside bounded seen/read IDs; counts once per runtime and retains flags on reset. Service load uses current flags on completion; latest load wins. Cache write failure preserves valid live data (intentional resilience); malformed individual entries skipped, non-array falls back. Five regression cases authored. No production endpoint, automatic feed load, push permission, or telemetry enabled. Requested consolidated [run-ci] [tray-check] for accumulated artwork/state/feed changes. Next inspect exact-head CI then source toast layout/Action Center history parity. Main/pin/releases unchanged.
