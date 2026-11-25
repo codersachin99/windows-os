@@ -304,7 +304,8 @@ export function DesktopShell({
     win.minimized?highest:Math.max(highest,win.z),-Infinity);
   const [magnifierScale, setMagnifierScale] = useState(1);
   const [showHiddenTray,setShowHiddenTray]=useState(false);
-  const win7Tray=["win7","aero-1","aero-2","aero-3","aero-4","basic-1"].includes(state.theme);
+  const classicTray=["basic-2","basic-3","basic-4"].includes(state.theme);
+  const win7Tray=classicTray||["win7","aero-1","aero-2","aero-3","aero-4","basic-1"].includes(state.theme);
   const sharedTray=win7Tray||state.theme==="macos"||state.theme==="chromeos"||state.theme==="ubuntu"||state.theme==="kubuntu"||state.theme==="oxygen"||state.theme==="aeroNoir";
   const [macPopup,setMacPopup]=useState<SourceMacOSPopupId|null>(null);
   const [macBrightness,setMacBrightness]=useState(1);
@@ -515,6 +516,7 @@ export function DesktopShell({
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
       data-source-win7-tray={win7Tray?"":undefined}
+      data-source-classic-tray={classicTray?"":undefined}
       data-source-display-brightness={sharedTray?macBrightness:undefined}
       style={{...(win7Colors?{
         "--theme-color":win7Colors.active,

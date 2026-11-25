@@ -84,3 +84,50 @@ for(const theme of ["aero-1","aero-2","aero-3","aero-4","basic-1"] as const){
     await expect(clock).toBeFocused();
   });
 }
+
+for(const [theme,surface,textColor,accent] of [
+  ["basic-2","rgb(212, 208, 200)","rgb(0, 0, 0)","rgb(10, 36, 106)"],
+  ["basic-3","rgb(0, 0, 0)","rgb(255, 255, 255)","rgb(128, 0, 128)"],
+  ["basic-4","rgb(255, 255, 255)","rgb(0, 0, 0)","rgb(0, 0, 0)"]
+] as const){
+  test(theme+" classic opaque tray, calendar selection and keyboard lifecycle",async({page})=>{
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    const shell=page.locator('[data-test-main-screen][data-theme="'+theme+'"]');
+    const tray=shell.locator('[data-test-taskbar-tray="'+theme+'"]');
+    const clock=tray.locator("[data-test-datetime-trigger]");
+    await clock.click();
+    const popup=tray.locator("[data-test-datetime-popup]");
+    await expect(popup).toBeVisible();
+    await expect(popup).toHaveCSS("background-color",surface);
+    await expect(popup).toHaveCSS("color",textColor);
+    await expect(popup).toHaveCSS("border-top-left-radius","0px");
+    await expect(popup).toHaveCSS("box-shadow","none");
+    await expect(popup).toHaveCSS("backdrop-filter","none");
+    await expect(popup.locator(".source-macos-calendar header")).toHaveCSS("background-color",accent);
+    const today=popup.locator(".source-macos-calendar-days .is-today");
+    await expect(today).toHaveCSS("background-color",accent);
+    await expect(today).toHaveCSS("outline-style","dotted");
+    await expect(popup.locator("[data-test-source-analog-clock] svg")).toHaveCSS("background-color","rgb(224, 230, 233)");
+    await popup.getByRole("button",{name:"Next month"}).click();
+    await popup.getByRole("button",{name:"Choose year"}).click();
+    await expect(popup.getByLabel("Years",{exact:true})).toBeVisible();
+    await popup.getByRole("button",{name:"Previous years"}).click();
+    await popup.getByRole("button",{name:"Next years"}).click();
+    await clock.press("Escape");
+    await expect(popup.getByLabel("Years",{exact:true})).toHaveCount(0);
+    await clock.press("Escape");
+    await expect(popup).toHaveCount(0);
+    const volume=tray.locator("[data-test-volume]");
+    await volume.press("Enter");
+    const mixer=tray.locator("[data-test-volume-popup]");
+    await expect(mixer).toHaveCSS("background-color",surface);
+    await mixer.getByRole("slider").fill("45");
+    await expect(mixer.getByRole("slider")).toHaveValue("45");
+    await mixer.getByRole("button",{name:"Mute system"}).click();
+    await expect(mixer.getByRole("slider")).toBeDisabled();
+    await clock.press("Enter");
+    await expect(mixer).toHaveCount(0);
+    await expect(popup).toBeVisible();
+  });
+}
