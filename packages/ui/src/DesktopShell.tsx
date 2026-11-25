@@ -921,7 +921,8 @@ export function DesktopShell({
         onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}
         returnFocusTarget={taskbarContextReturnFocus.current}/>}
       {sharedTray&&trayPreferences.icons.TaskbarActionCenter!=="off"&&currentNotification&&
-        <SourceMacOSNotificationToast theme={state.theme} key={currentNotification.id} message={currentNotification} onDismiss={dismissNotification}/>}
+        <SourceMacOSNotificationToast theme={state.theme} key={currentNotification.id} message={currentNotification} onDismiss={dismissNotification}
+          anchorRevision={JSON.stringify([showHiddenTray,visibleTrayIds,hiddenTrayIds,trayPreferences.showClockIcon])}/>}
       {state.windowLimitError&&
         <div className="windows-desktop__limit-alert" data-test-window-limit-alert="">
           <SourceMessageDialog data={{type:"error",message:state.windowLimitError}}

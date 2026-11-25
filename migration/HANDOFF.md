@@ -1,3 +1,9 @@
+## 25 November 2026 — Icon-relative notification balloon
+
+Ported f0ed balloon anchoring using the measured Action Center trigger in desktop-local coordinates; source top/bottom directions, RTL alignment, narrow viewport clamping and 18px/24px tail geometry. When the icon is hidden, use the hidden-items toggle until the icon is revealed; if neither is measurable, retain desktop-edge fallback. ResizeObserver tracks tray, icon, desktop and toast dimensions; preference/hidden-panel changes remeasure. Kept toast outside the clipped hidden tray and modern Win10/11/ChromeOS fixed card positioning unchanged. Added four geometry contracts. Requested consolidated [run-ci] [tray-check] after popup/balloon/history changes; exact visual anchor still requires browser observation. No inline links or production feed enabled. Main/pin/releases unchanged.
+
+---
+
 ## 25 November 2026 — Control Panel Action Center history
 
 Frozen cpanel.js te/oe, handleResize and cpanel.css: Action Center history uses shared original theme-specific 32px severity icons, flex rows (16px gap), 6px logical leading severity border (#c00/#e8a200/#4a4), exact content padding, 768px maximum, preserved whitespace and empty notice. Extracted ActionCenterPanel; source mounted MarkAllRead now runs only when entering page, not every parent rerender. Sidebar hidden at <=500px panel width via container query; full-screen source special case and exact sidebar theme paint still pending. Shared artwork resolver moved to assets and re-exported from tray helper. Source inline links intentionally remain escaped plain text pending safe parser/URL adapter; archived/settings remain disabled as source. Two SSR contracts authored. No runtime testing yet, no duplicate CI requested. Next icon-relative notification anchoring and consolidated CI. Main/pin/releases unchanged.

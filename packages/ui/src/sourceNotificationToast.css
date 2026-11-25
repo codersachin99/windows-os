@@ -82,3 +82,14 @@
 .windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-artwork{filter:brightness(0) saturate(100%) invert(16%) sepia(1%) saturate(5799%) hue-rotate(277deg) brightness(97%) contrast(94%)}
 .windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{top:2px;inset-inline-end:2px;color:transparent;opacity:1;background:url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2h4m8 0h4M0 14h4m8 0h4' stroke='%23352b30' stroke-width='4'/%3E%3Cpath d='M4 8h8' stroke='%23352b30' stroke-width='8'/%3E%3C/svg%3E") center/16px no-repeat}
 .windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button:is(:hover,:focus-visible){box-shadow:0 0 0 2px #e6d4bf,inset 0 0 0 2px #352b30}
+
+/* f0ed: relative to the Action Center item, not the desktop corner.
+ * Use measured desktop-local coordinates to avoid clipping inside hidden tray.
+ * Modern fixed cards retain their own source offsets. */
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-anchor]{
+  position:absolute;left:var(--source-balloon-left);right:auto;
+  top:var(--source-balloon-top);bottom:auto;
+}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-anchor]::before{
+  inset-inline-end:auto;left:var(--source-balloon-tail-left);right:auto;
+}
