@@ -990,3 +990,14 @@
 .windows-desktop[data-theme="win11dark"] .windows-desktop__shortcut.is-active{
   background:#fff2;
 }
+
+/* Original taskbar-base getCenteredWidth / win11 .is-centered:
+ * default is left-aligned; absolute tray only in the centered layout. */
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="false"]{justify-content:flex-start}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="false"] .windows-taskbar__running{flex:1;max-width:none}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="false"] .windows-taskbar__tray{position:relative;inset:auto;flex:none}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="false"] .windows-taskbar__show-desktop{position:relative;inset:auto;flex:0 0 5px}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="true"]{justify-content:center}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="true"] .windows-taskbar__running{flex:0 1 auto;max-width:var(--source-centered-taskbar-width)}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="true"] .windows-taskbar__tray{left:auto;right:auto;inset-inline-end:17px}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-taskbar[data-taskbar-centered="true"] .windows-taskbar__show-desktop{left:auto;right:auto;inset-inline-end:0}

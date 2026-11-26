@@ -1,3 +1,5 @@
+> **26 November 2026 — Centered taskbar:** source default-off preference and measured fit/fallback. [Source trace](TASKBAR-CENTERED-SOURCE.md).
+
 > **26 November 2026 — Taskbar pagination skins:** original theme gradients, borders and embedded arrow artwork. [Source trace](TASKBAR-PAGINATION-SKINS-SOURCE.md).
 
 > **26 November 2026 — Taskbar overflow:** measured capacity, original row navigation and active group selection. [Source trace](TASKBAR-PAGINATION-SOURCE.md).

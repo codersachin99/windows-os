@@ -14,11 +14,12 @@ export type SourceTaskbarButtonMode=
 export interface SourceTaskbarPreferences{
   type:SourceTaskbarButtonMode;
   useAeroPeek:boolean;
+  centered:boolean;
 }
 export const SOURCE_TASKBAR_PREFERENCES_KEY=
   "windows-os:guest:taskbar-preferences:v1";
 export const SOURCE_DEFAULT_TASKBAR_PREFERENCES:SourceTaskbarPreferences=
-  Object.freeze({type:"combine",useAeroPeek:false});
+  Object.freeze({type:"combine",useAeroPeek:false,centered:false});
 export function isSourceTaskbarButtonMode(value:unknown):value is SourceTaskbarButtonMode{
   return value==="combine"||value==="combine-when-full"||value==="no-combine";
 }
@@ -32,7 +33,8 @@ export class SourceTaskbarPreferenceStore{
     const cfg=parsed&&typeof parsed==="object"?parsed as Record<string,unknown>:{};
     this.value={
       type:isSourceTaskbarButtonMode(cfg.type)?cfg.type:"combine",
-      useAeroPeek:typeof cfg.useAeroPeek==="boolean"?cfg.useAeroPeek:false
+      useAeroPeek:typeof cfg.useAeroPeek==="boolean"?cfg.useAeroPeek:false,
+      centered:cfg.centered===true
     };
   }
   snapshot():SourceTaskbarPreferences{return {...this.value};}
@@ -40,11 +42,12 @@ export class SourceTaskbarPreferenceStore{
     this.listeners.add(listener);
     return ()=>{this.listeners.delete(listener);};
   }
-  apply(value:SourceTaskbarPreferences):void{
+  apply(value:Omit<SourceTaskbarPreferences,"centered">&{centered?:boolean}):void{
     const type=isSourceTaskbarButtonMode(value.type)?value.type:"combine";
     const useAeroPeek=value.useAeroPeek===true;
-    if(this.value.type===type&&this.value.useAeroPeek===useAeroPeek)return;
-    this.value={type,useAeroPeek};
+    const centered=value.centered===undefined?this.value.centered:value.centered===true;
+    if(this.value.type===type&&this.value.useAeroPeek===useAeroPeek&&this.value.centered===centered)return;
+    this.value={type,useAeroPeek,centered};
     try{this.storage?.setItem(this.key,JSON.stringify(this.value));}
     catch{/* The active Guest session continues in private-storage mode. */}
     for(const listener of this.listeners)listener(this.snapshot());
@@ -52,3 +55,6 @@ export class SourceTaskbarPreferenceStore{
 }
 export const sourceTaskbarPreferences=
   new SourceTaskbarPreferenceStore(browserStorage());
+
+/** Centering is available for the migrated original Win11 theme family. */
+export function sourceTaskbarCanCenter(theme:string):boolean{return theme==="win11"||theme==="win11dark";}

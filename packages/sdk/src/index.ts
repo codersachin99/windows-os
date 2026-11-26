@@ -237,7 +237,7 @@ export {
 } from "./sourceStartPreferences";
 
 export {
-  sourceTaskbarPreferences,SourceTaskbarPreferenceStore,
+  sourceTaskbarPreferences,SourceTaskbarPreferenceStore,sourceTaskbarCanCenter,
   SOURCE_TASKBAR_PREFERENCES_KEY,SOURCE_DEFAULT_TASKBAR_PREFERENCES,
   isSourceTaskbarButtonMode,
   type SourceTaskbarPreferences,type SourceTaskbarButtonMode

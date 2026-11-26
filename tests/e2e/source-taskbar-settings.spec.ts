@@ -4,19 +4,12 @@ async function guest(page:Page,theme:"win7"|"win11"="win7"){
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
 }
 async function openProperties(page:Page){
-  // Win7's Start orb occupies the left edge. Win11 centers Start and has
-  // a zero-width running lane until a window opens; the left edge is blank.
-  // Exercise a real taskbar-background surface in each original theme.
-  const win11=(await page.locator("[data-test-main-screen]")
-    .getAttribute("data-theme"))==="win11";
-  if(win11){
-    await page.locator(".windows-taskbar").click({
-      button:"right",position:{x:12,y:10}
-    });
+  const bar=page.locator(".windows-taskbar");
+  if(await bar.getAttribute("data-taskbar-centered")==="true"){
+    await bar.click({button:"right",position:{x:12,y:10}});
   }else{
-    await page.locator(".windows-taskbar__running").click({
-      button:"right",position:{x:15,y:5}
-    });
+    // Both left-aligned Win7 and Win11 expose a blank running lane.
+    await page.locator(".windows-taskbar__running").click({button:"right",position:{x:15,y:5}});
   }
   const menu=page.locator('[data-test-taskbar-context="background"]');
   await expect(menu).toBeVisible();
@@ -128,4 +121,27 @@ test("source Aero Peek Cancel drops draft and unsupported Win11 remains disabled
   const win11=await openProperties(page);
   await expect(win11.locator("[data-test-taskbar-settings-aero-peek]"))
     .toBeDisabled();
+});
+
+test("Win11 center setting is transactional, persistent and falls back when groups do not fit",async({page})=>{
+  await page.setViewportSize({width:1280,height:800});
+  await guest(page,"win11");
+  const bar=page.locator(".windows-taskbar");
+  await expect(bar).toHaveAttribute("data-taskbar-centered","false");
+  let win=await openProperties(page);
+  let center=win.locator("[data-test-taskbar-settings-centered]");
+  await expect(center).toBeEnabled();await expect(center).not.toBeChecked();
+  await center.check();await expect(bar).toHaveAttribute("data-taskbar-centered","false");
+  await win.getByRole("button",{name:"Cancel"}).click();
+  win=await openProperties(page);center=win.locator("[data-test-taskbar-settings-centered]");
+  await expect(center).not.toBeChecked();await center.check();
+  await win.locator("[data-test-taskbar-settings-apply]").click();
+  await expect(bar).toHaveAttribute("data-taskbar-centered","true");
+  await win.locator("[data-test-taskbar-settings-ok]").click();
+  await page.reload();await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await expect(bar).toHaveAttribute("data-taskbar-centered","true");
+  await page.setViewportSize({width:320,height:640});
+  await expect(bar).toHaveAttribute("data-taskbar-centered","false");
+  await page.setViewportSize({width:1280,height:800});
+  await expect(bar).toHaveAttribute("data-taskbar-centered","true");
 });

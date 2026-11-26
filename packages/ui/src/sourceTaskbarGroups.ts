@@ -69,3 +69,12 @@ export function sourceTaskbarMaxRow(count:number,capacity:number):number{
 export function sourceTaskbarActiveRow(index:number,capacity:number):number{
   return index<0?0:Math.floor(index/Math.max(1,capacity));
 }
+
+/** Source getCenteredWidth: reserve equal tray space at both edges.
+ * The React show-desktop button is a sibling, so include it in trayWidth. */
+export function sourceTaskbarCenteredWidth(barWidth:number,trayWidth:number,startWidth:number):number{
+  return Math.floor(barWidth-2*trayWidth-startWidth);
+}
+export function sourceTaskbarIsCentered(width:number,count:number,pitch=SOURCE_TASKBAR_ITEM_PITCH):boolean{
+  return width>=0&&count<=Math.floor(width/Math.max(SOURCE_TASKBAR_ITEM_PITCH,pitch));
+}

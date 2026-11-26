@@ -1,7 +1,7 @@
 import {describe,it,expect} from "vitest";
 import type {DesktopWindow} from "@windows-os/contracts";
 import {
-  sourceTaskbarGroups,sourceTaskbarPreviewLeft,sourceTaskbarCapacity,sourceTaskbarMaxRow,sourceTaskbarActiveRow,
+  sourceTaskbarGroups,sourceTaskbarPreviewLeft,sourceTaskbarCenteredWidth,sourceTaskbarIsCentered,sourceTaskbarCapacity,sourceTaskbarMaxRow,sourceTaskbarActiveRow,
   SOURCE_TASKBAR_FINAL_FEATURES,SOURCE_TASKBAR_PEEK_SHOW_DELAY_MS,
   SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS
 } from "./sourceTaskbarGroups";
@@ -52,4 +52,12 @@ it("uses source 55px taskbar capacity, reserving overflow controls and full labe
   expect(sourceTaskbarMaxRow(0,3)).toBe(0);
   expect(sourceTaskbarActiveRow(7,3)).toBe(2);
   expect(sourceTaskbarActiveRow(-1,3)).toBe(0);
+});
+
+it("centers only when all items fit the symmetric source tray reservation",()=>{
+  expect(sourceTaskbarCenteredWidth(1000,180,40)).toBe(600);
+  expect(sourceTaskbarIsCentered(600,10)).toBe(true);
+  expect(sourceTaskbarIsCentered(600,11)).toBe(false);
+  expect(sourceTaskbarIsCentered(600,4,160)).toBe(false);
+  expect(sourceTaskbarIsCentered(-1,0)).toBe(false);
 });

@@ -1,3 +1,9 @@
+## 26 November 2026 — Source centered taskbar preference
+
+Restored frozen taskbar-base bc55 default centered=false, persisted strict boolean with v1 migration, transactional Taskbar Properties checkbox for Win11/Win11dark, and 2ae5 getCenteredWidth symmetry (bar minus twice tray plus sibling show-desktop reservation and Start). Center only when all groups fit; otherwise use left-aligned normal flex tray and pagination. Dedicated docks unchanged. Used measured wider label pitch as existing React safety adapter; exact theme whitelist module e47c not located, only Win11 family enabled from verified theme CSS. Added two unit contracts and desktop/mobile browser preference/resize test; adjusted old Win11 context-menu test helper for left default. Parent CI #45757125603 passed TypeScript, units, artwork/inventory and build when checked, browser step running. No new CI requested yet. Next verify exact-head after current run; audit taskbar search and remaining behaviors. Main/pin/releases unchanged.
+
+---
+
 ## 26 November 2026 — Taskbar pagination theme paint
 
 Ported frozen taskbar scrollbar paint for Aero/Basic1/Vista, Classic/9x, Win31, all seven XP variants and Longhorn Slate (exact source gradient/border/shadow variables and embedded SVG arrows), Win8/10 flat arrows, Win11, Whistler/Longhorn Plex, Aero Noir, Oxygen, Kubuntu, ChromeOS and Onebit. Taskbar-only scoped rules preserve other app scrollbars. Kept 24px reserve for all themes (source Oxygen/Kubuntu width 22px remains a small layout deviation), accessible disabled edge controls and no arbitrary HTML. Added computed Win7 artwork assertions. Consolidated [run-ci] [tray-check] requested for pagination and inline formatting. Exact visual theme comparison and centered-taskbar capacity remain pending. Main/pin/releases unchanged.

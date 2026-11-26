@@ -2,7 +2,7 @@ import {useCallback,useEffect,useLayoutEffect,useRef,useState,useSyncExternalSto
 import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
   sourceAeroAppearanceSave,type SourceAeroAppearance,type DesktopAction,type DesktopState,type DesktopWindow} from "@windows-os/contracts";
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
-import { appRegistry,fileStore,sourceTaskbarPreferences,sourceRecentPrograms,sourceNotifications,sourceNotificationCurrent,type SourceNotificationSnapshot } from "@windows-os/sdk";
+import { appRegistry,fileStore,sourceTaskbarPreferences,sourceTaskbarCanCenter,sourceRecentPrograms,sourceNotifications,sourceNotificationCurrent,type SourceNotificationSnapshot } from "@windows-os/sdk";
 import {useSourceTrashCount} from "./useSourceTrashCount";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
@@ -51,7 +51,7 @@ import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
 import {SourceTaskbarMenu,type SourceTaskbarContext} from "./SourceTaskbarMenu";
 import {SourceTaskbarLivePreview} from "./SourceTaskbarLivePreview";
-import {sourceTaskbarGroups,sourceTaskbarPreviewLeft,sourceTaskbarCapacity,sourceTaskbarMaxRow,sourceTaskbarActiveRow,SOURCE_TASKBAR_FINAL_FEATURES,
+import {sourceTaskbarGroups,sourceTaskbarPreviewLeft,sourceTaskbarCapacity,sourceTaskbarMaxRow,sourceTaskbarActiveRow,sourceTaskbarCenteredWidth,sourceTaskbarIsCentered,SOURCE_TASKBAR_FINAL_FEATURES,
   SOURCE_TASKBAR_PEEK_SHOW_DELAY_MS,SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS} from "./sourceTaskbarGroups";
 import {taskbarPins} from "./sourceTaskbarPins";
 import { ShortcutWizard } from "./ShortcutWizard";
@@ -407,6 +407,9 @@ export function DesktopShell({
   const paginateTaskbar=state.theme!=="macos"&&state.theme!=="ubuntu";
   const taskbarRef=useRef<HTMLElement>(null);
   const [taskbarCapacity,setTaskbarCapacity]=useState(10);
+  const [centeredWidth,setCenteredWidth]=useState<number|null>(null);
+  const wantsCentered=taskbarConfig.centered&&sourceTaskbarCanCenter(state.theme);
+  const centeredTaskbar=wantsCentered&&centeredWidth!==null;
   const [taskbarRow,setTaskbarRow]=useState(0);
   const taskbarGroupKeys=JSON.stringify(taskbarGroups.map(group=>group.key));
   const activeTaskbarIndex=taskbarGroups.findIndex(group=>group.windows.some(win=>!win.minimized&&win.z===highestVisibleWindowZ));
@@ -428,17 +431,17 @@ export function DesktopShell({
         const style=getComputedStyle(element);
         return element.offsetWidth+(parseFloat(style.marginLeft)||0)+(parseFloat(style.marginRight)||0);
       };
-      let available=bar.clientWidth-(parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0);
-      if(state.theme==="win11"||state.theme==="win11dark"){
-        // The centered React lane uses an absolutely positioned tray.
-        // Reserve at least the existing CSS lane limit, even on mobile.
-        available-=Math.max(outer(tray)+outer(desktop)+17,window.innerWidth<=520?230:215);
-      }else available-=outer(tray)+outer(desktop)+gap*2;
-      available-=outer(start)+gap;
+      const barWidth=bar.clientWidth-(parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0);
+      const trayWidth=outer(tray)+outer(desktop)+gap;
+      const startWidth=outer(start)+gap;
+      const available=barWidth-trayWidth-startWidth-gap;
       const item=lane.querySelector<HTMLElement>(".windows-taskbar__application");
       const itemGap=parseFloat(getComputedStyle(lane).columnGap)||0;
       const pitch=buttonMode==="combine"?55:Math.max(55,(item?.offsetWidth??(window.innerWidth<=530?112:156))+itemGap);
-      setTaskbarCapacity(sourceTaskbarCapacity(available,taskbarGroups.length,pitch));
+      const centered=sourceTaskbarCenteredWidth(barWidth,trayWidth,startWidth);
+      const fits=wantsCentered&&sourceTaskbarIsCentered(centered,taskbarGroups.length,pitch);
+      setCenteredWidth(fits?centered:null);
+      setTaskbarCapacity(sourceTaskbarCapacity(fits?centered:available,taskbarGroups.length,pitch));
     };
     measure();
     const observer=new ResizeObserver(measure);
@@ -447,7 +450,7 @@ export function DesktopShell({
     if(tray)observer.observe(tray);
     window.addEventListener("resize",measure);
     return()=>{observer.disconnect();window.removeEventListener("resize",measure);};
-  },[paginateTaskbar,state.theme,buttonMode,taskbarGroupKeys,taskbarGroups.length]);
+  },[paginateTaskbar,state.theme,buttonMode,taskbarGroupKeys,taskbarGroups.length,wantsCentered]);
   useLayoutEffect(()=>{
     setTaskbarRow(sourceTaskbarActiveRow(activeTaskbarIndex,taskbarCapacity));
   },[taskbarCapacity,taskbarGroupKeys,activeTaskbarIndex,state.theme]);
@@ -730,7 +733,8 @@ export function DesktopShell({
       ))}
       <footer ref={taskbarRef} className="windows-taskbar" data-test-taskbar={state.theme==="ubuntu"?"ubuntu":"base"}
         data-source-chromeos-maximized={state.theme==="chromeos"?state.windows.some(win=>win.maximized&&!win.minimized):undefined}
-        data-taskbar-button-type={buttonMode} tabIndex={-1}
+        data-taskbar-button-type={buttonMode} data-taskbar-centered={centeredTaskbar?"true":"false"}
+        style={centeredTaskbar?{"--source-centered-taskbar-width":centeredWidth+"px"} as CSSProperties:undefined} tabIndex={-1}
         onContextMenu={event=>{
           if((event.target as HTMLElement).closest("button,[data-test-tray-icon]"))
             return;

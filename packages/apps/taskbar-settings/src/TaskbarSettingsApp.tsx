@@ -1,7 +1,7 @@
 import {useState} from "react";
 import type {SourceStartPreferences} from "@windows-os/sdk";
 import {sourceStartPreferences,sourceTaskbarPreferences,
-  isSourceTaskbarButtonMode} from "@windows-os/sdk";
+  isSourceTaskbarButtonMode,sourceTaskbarCanCenter} from "@windows-os/sdk";
 import "./TaskbarSettingsApp.css";
 
 export type SourceTaskbarTab="taskbar"|"start"|"toolbars";
@@ -29,7 +29,8 @@ export function TaskbarSettingsApp({
   const dirty=draft.powerButtonAction!==saved.powerButtonAction||
     draft.storeRecentApps!==saved.storeRecentApps||
     taskbarDraft.type!==taskbarSaved.type||
-    taskbarDraft.useAeroPeek!==taskbarSaved.useAeroPeek;
+    taskbarDraft.useAeroPeek!==taskbarSaved.useAeroPeek||
+    taskbarDraft.centered!==taskbarSaved.centered;
   const apply=()=>{
     sourceStartPreferences.apply(draft);
     sourceTaskbarPreferences.apply(taskbarDraft);
@@ -67,7 +68,11 @@ export function TaskbarSettingsApp({
               Auto-hide the taskbar</label>
             <label><input type="checkbox" disabled/>
               Use small icons</label>
-            <label><input type="checkbox" disabled/>
+            <label><input type="checkbox" data-test-taskbar-settings-centered="" disabled={!sourceTaskbarCanCenter(theme)}
+              checked={taskbarDraft.centered} onChange={event=>{
+                const centered=event.currentTarget.checked;
+                setTaskbarDraft(previous=>({...previous,centered}));
+              }}/>
               Center taskbar buttons</label>
           </div>
           <label>Taskbar location on screen:
