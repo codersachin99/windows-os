@@ -1,7 +1,7 @@
 import {describe,it,expect} from "vitest";
 import type {DesktopWindow} from "@windows-os/contracts";
 import {
-  sourceTaskbarGroups,sourceTaskbarPreviewLeft,
+  sourceTaskbarGroups,sourceTaskbarPreviewLeft,sourceTaskbarCapacity,sourceTaskbarMaxRow,sourceTaskbarActiveRow,
   SOURCE_TASKBAR_FINAL_FEATURES,SOURCE_TASKBAR_PEEK_SHOW_DELAY_MS,
   SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS
 } from "./sourceTaskbarGroups";
@@ -41,4 +41,15 @@ describe("final source taskbar app grouping and thumbnail geometry",()=>{
       .toBe(1366-(220*2+8)-10);
     expect(sourceTaskbarPreviewLeft({left:150,width:44},3,320)).toBe(10);
   });
+});
+
+it("uses source 55px taskbar capacity, reserving overflow controls and full label width",()=>{
+  expect(sourceTaskbarCapacity(550,10)).toBe(10);
+  expect(sourceTaskbarCapacity(550,11)).toBe(9);
+  expect(sourceTaskbarCapacity(300,6,160)).toBe(1);
+  expect(sourceTaskbarCapacity(20,8)).toBe(1);
+  expect(sourceTaskbarMaxRow(10,3)).toBe(3);
+  expect(sourceTaskbarMaxRow(0,3)).toBe(0);
+  expect(sourceTaskbarActiveRow(7,3)).toBe(2);
+  expect(sourceTaskbarActiveRow(-1,3)).toBe(0);
 });

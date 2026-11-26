@@ -51,11 +51,12 @@ import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
 import {SourceTaskbarMenu,type SourceTaskbarContext} from "./SourceTaskbarMenu";
 import {SourceTaskbarLivePreview} from "./SourceTaskbarLivePreview";
-import {sourceTaskbarGroups,sourceTaskbarPreviewLeft,SOURCE_TASKBAR_FINAL_FEATURES,
+import {sourceTaskbarGroups,sourceTaskbarPreviewLeft,sourceTaskbarCapacity,sourceTaskbarMaxRow,sourceTaskbarActiveRow,SOURCE_TASKBAR_FINAL_FEATURES,
   SOURCE_TASKBAR_PEEK_SHOW_DELAY_MS,SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS} from "./sourceTaskbarGroups";
 import {taskbarPins} from "./sourceTaskbarPins";
 import { ShortcutWizard } from "./ShortcutWizard";
 import "./sourceTray.css";
+import "./sourceTaskbarPagination.css";
 import "./sourceWin9xShell.css";
 
 interface DesktopShellProps {
@@ -403,6 +404,54 @@ export function DesktopShell({
   const dockTrashCount=useSourceTrashCount(state.theme==="macos"||state.theme==="ubuntu");
   const macDockGroups=sourceMacOSDockGroups(pinnedPrograms,dockRecent,state.windows.map(win=>win.appId));
   const buttonMode=taskbarConfig.type;
+  const paginateTaskbar=state.theme!=="macos"&&state.theme!=="ubuntu";
+  const taskbarRef=useRef<HTMLElement>(null);
+  const [taskbarCapacity,setTaskbarCapacity]=useState(10);
+  const [taskbarRow,setTaskbarRow]=useState(0);
+  const taskbarGroupKeys=JSON.stringify(taskbarGroups.map(group=>group.key));
+  const activeTaskbarIndex=taskbarGroups.findIndex(group=>group.windows.some(win=>!win.minimized&&win.z===highestVisibleWindowZ));
+  const taskbarMaxRow=sourceTaskbarMaxRow(taskbarGroups.length,taskbarCapacity);
+  const visibleTaskbarGroups=paginateTaskbar?taskbarGroups.slice(
+    Math.min(taskbarRow,taskbarMaxRow)*taskbarCapacity,
+    (Math.min(taskbarRow,taskbarMaxRow)+1)*taskbarCapacity):taskbarGroups;
+  useLayoutEffect(()=>{
+    const bar=taskbarRef.current,lane=macDockRef.current;
+    if(!paginateTaskbar||!bar||!lane)return;
+    const measure=()=>{
+      const css=getComputedStyle(bar);
+      const gap=parseFloat(css.columnGap)||0;
+      const start=bar.querySelector<HTMLElement>(".windows-taskbar__start");
+      const tray=bar.querySelector<HTMLElement>(".windows-taskbar__tray");
+      const desktop=bar.querySelector<HTMLElement>(".windows-taskbar__show-desktop");
+      const outer=(element:HTMLElement|null)=>{
+        if(!element)return 0;
+        const style=getComputedStyle(element);
+        return element.offsetWidth+(parseFloat(style.marginLeft)||0)+(parseFloat(style.marginRight)||0);
+      };
+      let available=bar.clientWidth-(parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0);
+      if(state.theme==="win11"||state.theme==="win11dark"){
+        // The centered React lane uses an absolutely positioned tray.
+        // Reserve at least the existing CSS lane limit, even on mobile.
+        available-=Math.max(outer(tray)+outer(desktop)+17,window.innerWidth<=520?230:215);
+      }else available-=outer(tray)+outer(desktop)+gap*2;
+      available-=outer(start)+gap;
+      const item=lane.querySelector<HTMLElement>(".windows-taskbar__application");
+      const itemGap=parseFloat(getComputedStyle(lane).columnGap)||0;
+      const pitch=buttonMode==="combine"?55:Math.max(55,(item?.offsetWidth??(window.innerWidth<=530?112:156))+itemGap);
+      setTaskbarCapacity(sourceTaskbarCapacity(available,taskbarGroups.length,pitch));
+    };
+    measure();
+    const observer=new ResizeObserver(measure);
+    observer.observe(bar);
+    const tray=bar.querySelector(".windows-taskbar__tray");
+    if(tray)observer.observe(tray);
+    window.addEventListener("resize",measure);
+    return()=>{observer.disconnect();window.removeEventListener("resize",measure);};
+  },[paginateTaskbar,state.theme,buttonMode,taskbarGroupKeys,taskbarGroups.length]);
+  useLayoutEffect(()=>{
+    setTaskbarRow(sourceTaskbarActiveRow(activeTaskbarIndex,taskbarCapacity));
+  },[taskbarCapacity,taskbarGroupKeys,activeTaskbarIndex,state.theme]);
+
   const canAeroPeek=(state.theme==="win7"||sourceIsAeroFamily(state.theme))&&taskbarConfig.useAeroPeek;
   const previewDesktop=canAeroPeek&&aeroPeeking;
   const [taskbarContext,setTaskbarContext]=useState<SourceTaskbarContext|null>(null);
@@ -679,7 +728,7 @@ export function DesktopShell({
             onAeroAppearanceDiscard={onAeroAppearanceDiscard} />
         </WindowFrame>
       ))}
-      <footer className="windows-taskbar" data-test-taskbar={state.theme==="ubuntu"?"ubuntu":"base"}
+      <footer ref={taskbarRef} className="windows-taskbar" data-test-taskbar={state.theme==="ubuntu"?"ubuntu":"base"}
         data-source-chromeos-maximized={state.theme==="chromeos"?state.windows.some(win=>win.maximized&&!win.minimized):undefined}
         data-taskbar-button-type={buttonMode} tabIndex={-1}
         onContextMenu={event=>{
@@ -727,7 +776,9 @@ export function DesktopShell({
             onClick={()=>dispatch({type:"TOGGLE_START"})}>
             <img src={sourceShellAsset(state.theme,"start")??legacyArt.startOrb} alt="" width={36} height={36}/>
           </button>
-        </nav>:<div ref={macDockRef} className="windows-taskbar__running" data-test-macos-dock={state.theme==="macos"?"":undefined}>
+        </nav>:<div ref={macDockRef} className="windows-taskbar__running" data-source-taskbar-paged={paginateTaskbar?"":undefined}
+          data-test-taskbar-row={paginateTaskbar?Math.min(taskbarRow,taskbarMaxRow):undefined}
+          data-test-taskbar-capacity={paginateTaskbar?taskbarCapacity:undefined} data-test-macos-dock={state.theme==="macos"?"":undefined}>
           {state.theme==="macos"?macDockGroups.map((ids,index)=>
             <div key={index} className="source-macos-dock-group" data-test-macos-dock-group={index}>
               {index>0&&<span className="source-macos-dock-divider" aria-hidden="true"/>}
@@ -769,7 +820,7 @@ export function DesktopShell({
                 </button>;
               })}
             </div>):<>
-          {pinnedPrograms.map(programId=>{
+          {visibleTaskbarGroups.filter(group=>group.pinned).map(({appId:programId})=>{
             const app=appRegistry.get(programId);
             if(!app)return null;
             const group=taskbarGroups.find(item=>item.appId===programId);
@@ -809,7 +860,7 @@ export function DesktopShell({
                 aria-hidden="true">{app.label}</span>}
             </button>;
           })}
-          {taskbarGroups.filter(group=>!group.pinned).map(group=>{
+          {visibleTaskbarGroups.filter(group=>!group.pinned).map(group=>{
             const windows=group.windows;
             const win=windows.find(item=>!item.minimized)??windows[0];
             if(!win)return null;
@@ -843,6 +894,13 @@ export function DesktopShell({
                 aria-hidden="true">{app?.label??win.title}</span>}
             </button>;
           })}
+          {taskbarMaxRow>0&&<div className="source-taskbar-scrollbar" data-test-taskbar-scrollbar=""
+            role="group" aria-label="Taskbar pages">
+            <button type="button" data-test-taskbar-scroll-prev="" aria-label="Previous taskbar page"
+              disabled={taskbarRow<=0} onClick={()=>{dismissLivePreview();closeTaskbarContext();setTaskbarRow(row=>Math.max(0,row-1));}}/>
+            <button type="button" data-test-taskbar-scroll-next="" aria-label="Next taskbar page"
+              disabled={taskbarRow>=taskbarMaxRow} onClick={()=>{dismissLivePreview();closeTaskbarContext();setTaskbarRow(row=>Math.min(taskbarMaxRow,row+1));}}/>
+          </div>}
           </>}
         </div>}
         {state.theme==="macos"&&<SourceMacOSDockTooltip dockRef={macDockRef} hidden={state.startOpen||Boolean(taskbarContext)||macPopup!==null}/>}

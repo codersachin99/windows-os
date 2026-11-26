@@ -1,3 +1,9 @@
+## 26 November 2026 — Source taskbar overflow pagination
+
+Source taskbar-base.js 2ae5, K=55, E/N scrollbar: measured base taskbar capacity, 24px vertical prev/next controls, source active group row and bounded page indices. Base themes now page pinned and running groups together; macOS/Ubuntu docks unchanged. Reserve actual wider label width and control/gap space to prevent clipping; centered Win11 uses current lane constraints rather than exact source getCenteredWidth (full centered config parity pending). Scrollbar paint is shared approximation pending source theme CSS trace. Added pure capacity tests and mobile/desktop browser paging test using existing local pin storage. New code and prior inline formatting not yet executed. Latest verified a52eeea: 795 units, 106 browsers. No duplicate CI requested. Next verify row behavior and source scrollbar skins. Main/pin/releases unchanged.
+
+---
+
 ## 26 November 2026 — Notification checkpoint verified; source inline formatting
 
 Exact-head CI #45654246277 passed 165 unit files / 795 tests, 106 browser tests (including both notification lifecycle projects), TypeScript, inventory, artwork, build. Visual-capture skipped. Located actual 7c5c in frozen src/modules/chunks/chunk-2d0e1bd0.js (c062ddcf60b66283f768ab2d92c3ac780df3c571): bundled Marked.parseInline, default GFM and sanitize false. Ported common safe flat inline strong/em/strikethrough/code/angle HTTP(S) autolink tokens and shared React renderer for toast/history, retaining explicit URL restrictions, raw HTML escaping, and literal Markdown image syntax (no remote image fetch). No added dependency. Full Marked nesting, bare URLs, escape semantics and reference links are not implemented; security-first subset, not full Markdown parity. Three additional tests authored; no CI rerun requested yet. Notification functional checkpoint green at parent; next resume remaining taskbar source behavior audit. Main/pin/releases unchanged.

@@ -52,3 +52,20 @@ export function sourceTaskbarPreviewLeft(
   return Math.max(10,Math.min(Math.max(10,viewport-width-10),
     button.left+button.width/2-width/2));
 }
+
+/** Frozen taskbar-base 2ae5 K=55 and TaskbarScrollbar E/N.
+ * Reserve the 24px scroll control plus the migrated flex gap on overflow.
+ * Full-size labels may be wider than the source minimum; never clip them. */
+export const SOURCE_TASKBAR_ITEM_PITCH=55;
+export const SOURCE_TASKBAR_SCROLL_WIDTH=24;
+export function sourceTaskbarCapacity(width:number,count:number,pitch=SOURCE_TASKBAR_ITEM_PITCH):number{
+  const size=Math.max(SOURCE_TASKBAR_ITEM_PITCH,pitch);
+  const full=Math.max(1,Math.floor(Math.max(0,width)/size));
+  return count<=full?full:Math.max(1,Math.floor(Math.max(0,width-SOURCE_TASKBAR_SCROLL_WIDTH-4)/size));
+}
+export function sourceTaskbarMaxRow(count:number,capacity:number):number{
+  return Math.max(0,Math.ceil(count/Math.max(1,capacity))-1);
+}
+export function sourceTaskbarActiveRow(index:number,capacity:number):number{
+  return index<0?0:Math.floor(index/Math.max(1,capacity));
+}

@@ -1,0 +1,17 @@
+/* Frozen taskbar-base E/N: 24px vertical row controls. */
+.windows-desktop .windows-taskbar__running[data-source-taskbar-paged]{overflow:hidden;scrollbar-width:none}
+.windows-desktop .windows-taskbar__running[data-source-taskbar-paged] .source-taskbar-scrollbar{
+  display:flex;flex-direction:column;justify-content:space-between;
+  flex:0 0 24px;width:24px;height:100%;margin-inline-start:auto;
+}
+.source-taskbar-scrollbar button{
+  display:grid;place-items:center;width:100%;height:50%;padding:0;
+  border:1px solid #8888;border-radius:2px;color:inherit;
+  background:linear-gradient(#fff4,#0002);cursor:pointer;
+}
+.source-taskbar-scrollbar button::before{
+  content:"";width:0;height:0;border-inline:4px solid transparent;border-bottom:5px solid currentColor;
+}
+.source-taskbar-scrollbar button:last-child::before{transform:rotate(180deg)}
+.source-taskbar-scrollbar button:disabled{opacity:.45;cursor:default}
+.source-taskbar-scrollbar button:not(:disabled):hover{background:#fff5}

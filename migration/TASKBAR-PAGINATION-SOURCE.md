@@ -1,0 +1,5 @@
+# Source taskbar pagination
+
+Frozen legacy-win7@26b9f0ce7: src/modules/shell/taskbar-base.js 2ae5, K, E/N, taskbarItems, updateMaxItemCount and updateTaskbarItems.
+
+Source taskbar-base.js 2ae5, K=55, E/N scrollbar: measured base taskbar capacity, 24px vertical prev/next controls, source active group row and bounded page indices. Base themes now page pinned and running groups together; macOS/Ubuntu docks unchanged. Reserve actual wider label width and control/gap space to prevent clipping; centered Win11 uses current lane constraints rather than exact source getCenteredWidth (full centered config parity pending). Scrollbar paint is shared approximation pending source theme CSS trace. Added pure capacity tests and mobile/desktop browser paging test using existing local pin storage. New code and prior inline formatting not yet executed. Latest verified a52eeea: 795 units, 106 browsers. No duplicate CI requested. Next verify row behavior and source scrollbar skins. Main/pin/releases unchanged.
