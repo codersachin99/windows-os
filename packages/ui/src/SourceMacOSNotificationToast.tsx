@@ -1,7 +1,8 @@
 import {useEffect,useLayoutEffect,useRef} from "react";
 import {sourceNotificationAnchor} from "./sourceNotificationAnchor";
-import {SOURCE_NOTIFICATION_TIMEOUT,sourceNotificationInline,type SourceNotification} from "@windows-os/sdk";
+import {SOURCE_NOTIFICATION_TIMEOUT,type SourceNotification} from "@windows-os/sdk";
 import {sourceNotificationArt} from "./sourceTrayArtwork";
+import {SourceNotificationInline} from "./SourceNotificationInline";
 import "./sourceNotificationToast.css";
 
 /** Source f0ed taskbar notification: 8-second dismissal, retained history.
@@ -65,7 +66,7 @@ export function SourceMacOSNotificationToast({message,onDismiss,onRead,theme="ma
   return <aside ref={toastRef} className={"source-macos-notification source-notification-balloon is-"+message.type} data-test-system-notification="" data-notification-balloon={direction}
     data-notification-id={message.id} role="status">
     {artwork&&<img className="source-notification-artwork" data-test-notification-artwork="" width={32} height={32} alt="" src={artwork}/>} 
-    <div className="source-notification-copy"><strong>{message.title}</strong><p>{sourceNotificationInline(message.body).map((part,i)=>part.kind==="link"?<a key={i} href={part.href} target="_blank" rel="noopener noreferrer" onClick={()=>onRead?.(message.id)}>{part.text}</a>:part.text)}</p></div>
+    <div className="source-notification-copy"><strong>{message.title}</strong><p><SourceNotificationInline body={message.body} onOpen={()=>onRead?.(message.id)}/></p></div>
     <button type="button" aria-label="Dismiss notification" data-test-notification-close=""
       onClick={()=>onDismiss(message.id)}>×</button>
   </aside>;

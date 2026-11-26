@@ -20,3 +20,15 @@ describe("safe source notification inline links",()=>{
     ]);
   });
 });
+
+it("recognizes source common inline emphasis, code, strikethrough and angle autolinks",()=>{
+  expect(sourceNotificationInline("**Bold** _emphasis_ ~~old~~ "+String.fromCharCode(96)+"[literal](https://example.com)"+String.fromCharCode(96)+" <https://example.org>")).toEqual([
+    {kind:"strong",text:"Bold"},{kind:"text",text:" "},{kind:"em",text:"emphasis"},{kind:"text",text:" "},
+    {kind:"del",text:"old"},{kind:"text",text:" "},{kind:"code",text:"[literal](https://example.com)"},{kind:"text",text:" "},
+    {kind:"link",text:"https://example.org",href:"https://example.org/"}
+  ]);
+});
+it("does not fetch markdown images or format underscore identifiers",()=>{
+  const body="![tracker](https://example.com/track) foo_bar_baz";
+  expect(sourceNotificationInline(body)).toEqual([{kind:"text",text:body}]);
+});

@@ -1,6 +1,6 @@
 import {useEffect,useRef} from "react";
 import {sourceNotificationArt} from "@windows-os/assets";
-import {sourceNotificationInline} from "@windows-os/sdk";
+import {SourceNotificationInline} from "@windows-os/ui/notification-inline";
 import {SOURCE_CPANEL_ACTION_CENTER_TEXT as text,type SourceControlPanelActionMessage} from "./model";
 
 /** Original cpanel.js te/oe: mark history read on entering this page.
@@ -28,7 +28,7 @@ export function ActionCenterPanel({theme,messages,onReadMessages,onBack}:{
             className={"windows-cpanel__action-message is-"+message.type}>
             {icon&&<img className="windows-cpanel__action-icon" src={icon} width={32} height={32} alt=""/>}
             <div className="windows-cpanel__action-copy">
-              <strong>{message.title}</strong><pre>{sourceNotificationInline(message.body).map((part,i)=>part.kind==="link"?<a key={i} href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>:part.text)}</pre>
+              <strong>{message.title}</strong><pre><SourceNotificationInline body={message.body}/></pre>
             </div>
           </article>;
         })}

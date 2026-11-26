@@ -1,3 +1,5 @@
+> **26 November 2026 — Notification checkpoint:** 795 unit and 106 browser tests passed; original Marked module located and common safe inline formatting migrated. [Source trace](NOTIFICATION-INLINE-FORMAT-SOURCE.md).
+
 > **25 November 2026 — Notification browser contracts:** responsive breadcrumb fix and end-to-end lifecycle test. [Source trace](NOTIFICATION-BROWSER-SOURCE.md).
 
 > **25 November 2026 — Notification links:** safe shared inline parser and source read behavior. [Source trace](NOTIFICATION-LINKS-SOURCE.md).

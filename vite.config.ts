@@ -12,6 +12,7 @@ export default defineConfig({
       "@windows-os/contracts": app("./packages/contracts/src/index.ts"),
       "@windows-os/assets": app("./packages/assets/src/index.ts"),
       "@windows-os/engine": app("./packages/engine/src/index.ts"),
+      "@windows-os/ui/notification-inline": app("./packages/ui/src/SourceNotificationInline.tsx"),
       "@windows-os/ui/message": app("./packages/ui/src/sourceMessage.tsx"),
       "@windows-os/ui/child-window": app("./packages/ui/src/SourceChildWindow.tsx"),
       "@windows-os/ui/checkbox": app("./packages/ui/src/sourceItemCheckbox.tsx"),

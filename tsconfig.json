@@ -34,6 +34,9 @@
       "@windows-os/engine": [
         "packages/engine/src/index.ts"
       ],
+      "@windows-os/ui/notification-inline": [
+        "packages/ui/src/SourceNotificationInline.tsx"
+      ],
       "@windows-os/ui/message": [
         "packages/ui/src/sourceMessage.tsx"
       ],
