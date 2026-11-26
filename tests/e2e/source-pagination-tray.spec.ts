@@ -8,6 +8,9 @@ test("Win7 source taskbar overflow exposes each pinned program through row navig
   const lane=page.locator(".windows-taskbar__running");
   const prev=lane.locator("[data-test-taskbar-scroll-prev]"),next=lane.locator("[data-test-taskbar-scroll-next]");
   await expect(next).toBeVisible();await expect(prev).toBeDisabled();
+  await expect(lane.locator("[data-test-taskbar-scrollbar]")).toHaveCSS("width","24px");
+  await expect(next).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
+  expect(await next.evaluate(el=>getComputedStyle(el,"::after").backgroundImage)).toContain("data:image/svg+xml");
   const seen:string[]=[];
   for(let index=0;index<pins.length;index++){
     seen.push(...await lane.locator("[data-test-taskbar-pin]").evaluateAll(nodes=>nodes.map(node=>node.getAttribute("data-test-taskbar-pin")??"")));

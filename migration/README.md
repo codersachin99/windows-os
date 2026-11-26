@@ -1,3 +1,5 @@
+> **26 November 2026 — Taskbar pagination skins:** original theme gradients, borders and embedded arrow artwork. [Source trace](TASKBAR-PAGINATION-SKINS-SOURCE.md).
+
 > **26 November 2026 — Taskbar overflow:** measured capacity, original row navigation and active group selection. [Source trace](TASKBAR-PAGINATION-SOURCE.md).
 
 > **26 November 2026 — Notification checkpoint:** 795 unit and 106 browser tests passed; original Marked module located and common safe inline formatting migrated. [Source trace](NOTIFICATION-INLINE-FORMAT-SOURCE.md).

@@ -1,17 +1,168 @@
-/* Frozen taskbar-base E/N: 24px vertical row controls. */
+/* Frozen taskbar-base E/N and vue-app.css .scrollbar__btn.
+ * Taskbar-only adapter; preserve accessible disabled controls at row limits. */
 .windows-desktop .windows-taskbar__running[data-source-taskbar-paged]{overflow:hidden;scrollbar-width:none}
 .windows-desktop .windows-taskbar__running[data-source-taskbar-paged] .source-taskbar-scrollbar{
   display:flex;flex-direction:column;justify-content:space-between;
-  flex:0 0 24px;width:24px;height:100%;margin-inline-start:auto;
+  flex:0 0 24px;width:24px;height:100%;margin-inline-start:auto;box-sizing:border-box;
 }
-.source-taskbar-scrollbar button{
-  display:grid;place-items:center;width:100%;height:50%;padding:0;
-  border:1px solid #8888;border-radius:2px;color:inherit;
-  background:linear-gradient(#fff4,#0002);cursor:pointer;
+.windows-desktop .source-taskbar-scrollbar button{
+  position:relative;display:block;width:100%;height:50%;padding:0;min-height:0;box-sizing:border-box;
+  border:1px solid #666;border-radius:0;color:inherit;background:#eee;cursor:pointer;
 }
-.source-taskbar-scrollbar button::before{
-  content:"";width:0;height:0;border-inline:4px solid transparent;border-bottom:5px solid currentColor;
+.windows-desktop .source-taskbar-scrollbar button:hover{background:#ccc}
+.windows-desktop .source-taskbar-scrollbar button:active{background:#aaa}
+.windows-desktop .source-taskbar-scrollbar button::after{content:"";position:absolute;top:50%;left:50%;width:0;height:0;border:4px solid transparent;border-bottom-color:currentColor;transform:translate(-50%,-70%)}
+.windows-desktop .source-taskbar-scrollbar button:last-child::after{border-color:transparent;border-top-color:currentColor;transform:translate(-50%,-30%)}
+.windows-desktop .source-taskbar-scrollbar button:disabled{opacity:.45;cursor:default}
+.windows-desktop .source-taskbar-scrollbar button:focus-visible{outline:1px dotted currentColor;outline-offset:-2px}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button,.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button{background:none;border:none}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button::before,.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button::before{
+  content:"";position:absolute;inset:0;box-sizing:border-box;opacity:0;border:1px solid #8e8f8f;border-radius:2px;
+  box-shadow:inset 0 0 0 1px #fff6;background:linear-gradient(to right,#f2f2f2 50%,#ebebeb 50%,#cfcfcf) #f2f2f2;
 }
-.source-taskbar-scrollbar button:last-child::before{transform:rotate(180deg)}
-.source-taskbar-scrollbar button:disabled{opacity:.45;cursor:default}
-.source-taskbar-scrollbar button:not(:disabled):hover{background:#fff5}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar:dir(rtl) button::before{background:linear-gradient(to left,#f2f2f2 50%,#ebebeb 50%,#cfcfcf) #f2f2f2}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:is(:hover,:focus-visible)::before,.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button:is(:hover,:focus-visible)::before{opacity:1}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:hover::before{border-color:#3c7fb1;background:linear-gradient(to right,#eaf6fd 50%,#bee6fd 50%,#a7d9f5)}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar:dir(rtl) button:hover::before{background:linear-gradient(to left,#eaf6fd 50%,#bee6fd 50%,#a7d9f5)}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:active::before{border-color:#6d91ab;background:linear-gradient(to right,#e5f4fc,#c4e5f6 30% 50%,#98d1ef 50%,#68b3db)}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar:dir(rtl) button:active::before{background:linear-gradient(to left,#e5f4fc,#c4e5f6 30% 50%,#98d1ef 50%,#68b3db)}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:first-child,.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button:first-child{margin-bottom:1px;height:calc(50% - 1px)}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:last-child,.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button:last-child{margin-top:1px;height:calc(50% - 1px)}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="5.5" viewBox="0 0 9 5.5" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a" x1="249.75" x2="253.25" y1="364.97" y2="371.03" gradientTransform="translate(-247,-365)" gradientUnits="userSpaceOnUse"><stop stop-color="%23000000" offset=".35037"/><stop stop-color="%23fff" stop-opacity=".60186" offset="1"/></linearGradient></defs><path d="m0 5.5h9l-4.5-5.5z" fill="%23fff" fill-opacity=".60258"/><path d="m1 5h7l-3.5061-4z" fill="url(%23a)"/></svg>') center no-repeat}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="basic-1"],[data-theme="winvista"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="5.5" viewBox="0 0 9 5.5" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a" x1="249.75" x2="253.25" y1="371.03" y2="364.97" gradientTransform="matrix(1,0,0,-1,-247,370.5)" gradientUnits="userSpaceOnUse"><stop offset=".303"/><stop stop-color="%23fff" stop-opacity=".60103" offset="1"/></linearGradient></defs><path d="m0 0h9l-4.5 5.5z" fill="%23fff" fill-opacity=".6"/><path d="m1 .5h7l-3.5061 4z" fill="url(%23a)"/></svg>') center no-repeat}
+.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button::before{border-color:var(--border-color,#222);box-shadow:inset 0 0 0 1px #fff3;background:linear-gradient(to right,#fff3,#fff4 50%,#0002 50%,#0001)}
+.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar:dir(rtl) button::before{background:linear-gradient(to left,#fff3,#fff4 50%,#0002 50%,#0001)}
+.windows-desktop:is([data-theme="aeroNoir"]) .source-taskbar-scrollbar button:is(:hover,:active)::before{border-color:var(--theme-color);background-color:var(--theme-color)}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"],[data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .source-taskbar-scrollbar button{
+  background:var(--theme-surface,var(--source-surface,#d4d0c8));color:var(--text-color,var(--source-text,#000));
+  border-color:#d4d0c8 #000 #000 #d4d0c8;
+  box-shadow:inset -1px -1px var(--border-color,#393c39),inset 1px 1px var(--border-color--contrast,#fff),inset -2px -2px var(--text-color--disabled,#7b7b7b)
+}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"],[data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .source-taskbar-scrollbar:dir(rtl) button{border-color:#d4d0c8 #d4d0c8 #000 #000;box-shadow:inset 1px -1px var(--border-color,#393c39),inset -1px 1px var(--border-color--contrast,#fff),inset 2px -2px var(--text-color--disabled,#7b7b7b)}
+.windows-desktop:is([data-theme="basic-2"],[data-theme="basic-3"],[data-theme="basic-4"],[data-theme="win95"],[data-theme="win98"],[data-theme="win2k"]) .source-taskbar-scrollbar button:active{box-shadow:inset 0 0 0 1px var(--border-color,#393c39),inset 0 0 0 2px var(--text-color--disabled,#7b7b7b)}
+.windows-desktop:is([data-theme="win31"]) .source-taskbar-scrollbar button{background:var(--theme-surface,#c0c0c0);border:1px solid #000;box-shadow:inset -1px -1px var(--shade-color--dark,#808080),inset 1px 1px var(--shade-color--light,#fff),inset -2px -2px var(--shade-color--dark,#808080),inset 2px 2px var(--shade-color--light,#fff)}
+.windows-desktop:is([data-theme="win31"]) .source-taskbar-scrollbar:dir(rtl) button{box-shadow:inset 1px -1px var(--shade-color--dark,#808080),inset -1px 1px var(--shade-color--light,#fff),inset 2px -2px var(--shade-color--dark,#808080),inset -2px 2px var(--shade-color--light,#fff)}
+.windows-desktop:is([data-theme="win31"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="7" height="7" viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(-90 3.5 3.5)"><path d="m0 2h3v-2l4 3.5-4 3.5v-2h-3z"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="win31"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="7" height="7" viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(90 3.5 3.5)"><path d="m0 2h3v-2l4 3.5-4 3.5v-2h-3z"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"],[data-theme="winLS"]) .source-taskbar-scrollbar button{border:1px solid var(--scrollbar-border-color);border-radius:3px;box-shadow:var(--scrollbar-shadow);background:var(--scrollbar-bg)}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"],[data-theme="winLS"]) .source-taskbar-scrollbar button:hover{box-shadow:var(--scrollbar-shadow--hover);background:var(--scrollbar-bg--hover);border-color:var(--scrollbar-border-color--hover)}
+.windows-desktop:is([data-theme="winxp"],[data-theme="winxpE"],[data-theme="winxpG"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpS"],[data-theme="winxpZ"],[data-theme="winLS"]) .source-taskbar-scrollbar button:active{background:var(--scrollbar-bg--active);border-color:var(--scrollbar-border-color--active)}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"],[data-theme="win10"]) .source-taskbar-scrollbar button,.windows-desktop:is([data-theme="winW"],[data-theme="winLP"]) .source-taskbar-scrollbar button,.windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar button,.windows-desktop:is([data-theme="kubuntu"]) .source-taskbar-scrollbar button{background:none;border:none}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"],[data-theme="win10"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="7" height="6" viewBox="0 0 7 6" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(0 3.5 3)"><path d="m0 6v-2.5024l3.488-3.4976 3.512 3.4455v2.5545l-3.512-3z" fill="%23606060"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="win8"],[data-theme="win81"],[data-theme="win10"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="7" height="6" viewBox="0 0 7 6" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(180 3.5 3)"><path d="m0 6v-2.5024l3.488-3.4976 3.512 3.4455v2.5545l-3.512-3z" fill="%23606060"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winLP"]) .source-taskbar-scrollbar button{color:#fff;filter:drop-shadow(0 0 1px #000a)}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-taskbar-scrollbar button{color:var(--scrollbar-thumb,#8a8a8a);background:var(--theme-surface,var(--source-surface,#f3f3f3));border:none}
+.windows-desktop:is([data-theme="win11dark"]) .source-taskbar-scrollbar button{--scrollbar-thumb:#a3a3a3}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-taskbar-scrollbar button:hover{filter:brightness(1.2)}
+.windows-desktop:is([data-theme="chromeos"]) .source-taskbar-scrollbar button{color:#606060;border-color:var(--border-color,#aaa)}
+.windows-desktop:is([data-theme="onebit"]) .source-taskbar-scrollbar button{color:#e6d4bf;background:none;border-color:#352b30}
+.windows-desktop:is([data-theme="onebit"]) .source-taskbar-scrollbar button:active{color:#352b30;background:#e6d4bf}
+.windows-desktop:is([data-theme="kubuntu"]) .source-taskbar-scrollbar,.windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar{color:#fff;padding:0 3px;border-radius:10px}
+.windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar{background:#24282b;border:1px solid #1e2224;box-shadow:0 1px 0 #fff2;border-radius:3px}
+
+.windows-desktop:is([data-theme="winxp"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #c8d6fb, #b6cdfb);
+  --scrollbar-bg--hover: linear-gradient(to right, #d8e8ff, #cce1ff);
+  --scrollbar-bg--active: linear-gradient(to right, #abc1fa, #98b0ee);
+  --scrollbar-border-color: #fff;
+  --scrollbar-border-color--hover: #fff;
+  --scrollbar-border-color--active: #fff;
+  --scrollbar-shadow: inset 1px 1px 2px #0001, 0 1px 0 #7c9fd3;
+  --scrollbar-shadow--hover: inset 0 0 1px 1px #8da9e4, 0 1px 0 #7c9fd3;
+}
+.windows-desktop:is([data-theme="winxp"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%234d6185"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxp"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%234d6185"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winxpE"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #f8f8f8, #d4d4d4);
+  --scrollbar-bg--hover: linear-gradient(to right, #fefefe, #d3d3d3);
+  --scrollbar-bg--active: linear-gradient(to left, #fff, #cdcdcd);
+  --scrollbar-border-color: #9b9b9b;
+  --scrollbar-border-color--hover: #686868;
+  --scrollbar-border-color--active: #4c4c4c;
+  --scrollbar-shadow: inset 0 0 0 1px #fff;
+  --scrollbar-shadow--hover: inset 0 0 0 1px #fff;
+}
+.windows-desktop:is([data-theme="winxpE"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxpE"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winxpG"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #a2b38d, #8d9d73);
+  --scrollbar-bg--hover: linear-gradient(to right, #cad7a7, #bac893);
+  --scrollbar-bg--active: linear-gradient(to right, #98aa80, #90a274);
+  --scrollbar-border-color: #fff;
+  --scrollbar-border-color--hover: #fff;
+  --scrollbar-border-color--active: #fff;
+  --scrollbar-shadow: inset 1px 1px 2px #0001, 1px 1px 0 #829061;
+  --scrollbar-shadow--hover: inset 1px 1px 2px #0001, 1px 1px 0 #829061;
+}
+.windows-desktop:is([data-theme="winxpG"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%23fff"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxpG"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%23fff"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winxpN"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #f2f7ff, #bed2ea);
+  --scrollbar-bg--hover: linear-gradient(to right, #fefeff, #bdd1e9);
+  --scrollbar-bg--active: linear-gradient(to left, #fff, #b7cbe3);
+  --scrollbar-border-color: #8599b1;
+  --scrollbar-border-color--hover: #52667e;
+  --scrollbar-border-color--active: #364a62;
+  --scrollbar-shadow: inset 0 0 0 1px #fff;
+  --scrollbar-shadow--hover: inset 0 0 0 1px #fff;
+}
+.windows-desktop:is([data-theme="winxpN"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxpN"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winxpR"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #f2f7ff, #bed2ea);
+  --scrollbar-bg--hover: linear-gradient(to right, #fefeff, #bdd1e9);
+  --scrollbar-bg--active: linear-gradient(to left, #fff, #b7cbe3);
+  --scrollbar-border-color: #8599b1;
+  --scrollbar-border-color--hover: #52667e;
+  --scrollbar-border-color--active: #364a62;
+  --scrollbar-shadow: inset 0 0 0 1px #fff;
+  --scrollbar-shadow--hover: inset 0 0 0 1px #fff;
+}
+.windows-desktop:is([data-theme="winxpR"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxpR"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winxpS"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #fff, #cdcedc);
+  --scrollbar-bg--hover: linear-gradient(to right, #fff, #cdcedc);
+  --scrollbar-bg--active: linear-gradient(to left, #fff, #cdcedc);
+  --scrollbar-border-color: #9495a2;
+  --scrollbar-border-color--hover: #5b6665;
+  --scrollbar-border-color--active: #434848;
+  --scrollbar-shadow: inset 0 0 0 1px #fff;
+  --scrollbar-shadow--hover: inset 0 0 0 1px #fff;
+}
+.windows-desktop:is([data-theme="winxpS"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%233f3d3d"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxpS"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%233f3d3d"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winxpZ"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #fff, #cdcedc);
+  --scrollbar-bg--hover: linear-gradient(to right, #fff, #cdcedc);
+  --scrollbar-bg--active: linear-gradient(to left, #fff, #cdcedc);
+  --scrollbar-border-color: #9495a2;
+  --scrollbar-border-color--hover: #5b6665;
+  --scrollbar-border-color--active: #434848;
+  --scrollbar-shadow: inset 0 0 0 1px #fff;
+  --scrollbar-shadow--hover: inset 0 0 0 1px #fff;
+}
+.windows-desktop:is([data-theme="winxpZ"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winxpZ"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="winLS"]) .source-taskbar-scrollbar{
+  --scrollbar-bg: linear-gradient(to right, #f8f8f8, #d4d4d4);
+  --scrollbar-bg--hover: linear-gradient(to right, #fefefe, #d3d3d3);
+  --scrollbar-bg--active: linear-gradient(to left, #fff, #cdcdcd);
+  --scrollbar-border-color: #9b9b9b;
+  --scrollbar-border-color--hover: #686868;
+  --scrollbar-border-color--active: #4c4c4c;
+  --scrollbar-shadow: inset 0 0 0 1px #fff;
+  --scrollbar-shadow--hover: inset 0 0 0 1px #fff
+}
+.windows-desktop:is([data-theme="winLS"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="winLS"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%235b6473"/></g></svg>') center no-repeat}
+
+.windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%23fff"/></g></svg>') center no-repeat}
+.windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%23fff"/></g></svg>') center no-repeat}
