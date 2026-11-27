@@ -593,3 +593,18 @@ button:not(:disabled):hover{
   border:0;
   border-radius:0;
 }
+
+/* Frozen 53e9 / bfe9 modern Start results panel. */
+.windows-startmenu--win10 .source-win10-search-panel{position:absolute;inset:0;z-index:10;background:#1f1f1f;color:#fff;overflow:auto;padding:16px;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:#0009 transparent}
+.source-win10-search-results{padding:16px;box-sizing:border-box}
+.source-win10-search-results section{margin-bottom:8px}
+.source-win10-search-results h3{font-size:16px;font-weight:bold;margin:0 0 4px;padding:4px 0}
+.source-win10-search-results section>div{padding-inline-start:8px}
+.source-win10-search-results button{display:flex;align-items:center;gap:8px;width:100%;padding:6px;border:0;background:none;color:inherit;font:16px "Segoe UI",Tahoma,sans-serif;text-align:start}
+.source-win10-search-results button:is(.is-selected,:focus-visible,:hover){background:#fff2}
+.source-win10-search-results button:active{background:#fff4}
+.source-win10-search-results button:disabled{opacity:.5}
+.source-win10-search-results button img{flex:none;object-fit:contain}
+.source-win10-search-results button span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source-win10-search-results button small{display:block;opacity:.7;font-size:12px}
+.source-win10-search-results p{opacity:.7}
