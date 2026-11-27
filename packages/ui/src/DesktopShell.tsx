@@ -4,6 +4,7 @@ import {sourceIsAeroFamily,sourceWin7ThemeChromeColors,sourceAeroAppearanceRead,
 import {legacyArt,sourceIsSolidThemeWallpaper,sourceShellAsset,sourceThemeProgramArt,sourceThemeTrayArtwork} from "@windows-os/assets";
 import { appRegistry,fileStore,sourceTaskbarPreferences,sourceTaskbarCanCenter,sourceRecentPrograms,sourceNotifications,sourceNotificationCurrent,type SourceNotificationSnapshot } from "@windows-os/sdk";
 import {useSourceTrashCount} from "./useSourceTrashCount";
+import {SourceTaskbarSearchIcon} from "./SourceTaskbarSearchIcon";
 import {SourceMacOSDockTooltip} from "./SourceMacOSDockTooltip";
 import {sourceMacOSDockGroups} from "./sourceMacOSDockGroups";
 import {sourceUbuntuDockItems} from "./sourceUbuntuDockItems";
@@ -776,9 +777,7 @@ export function DesktopShell({
         </button>}
         {state.theme==="win10"&&<label className="source-taskbar-search" data-test-taskbar-search=""
           onContextMenu={event=>event.stopPropagation()}>
-          <svg aria-hidden="true" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-            <circle cx={10} cy={10} r={6.5}/><path d="m15 15 6 6"/>
-          </svg>
+          <SourceTaskbarSearchIcon/>
           <input ref={taskbarSearchRef} value={taskbarSearch} placeholder="Type here to search"
             aria-label="Type here to search" data-test-taskbar-search-input=""
             onFocus={()=>{
