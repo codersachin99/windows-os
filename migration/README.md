@@ -1,3 +1,5 @@
+> **27 November 2026 — Win10 taskbar search:** source registry, shared Start query, measured capacity and first app-launch contract. Full modern results overlay and verification pending.
+
 > **26 November 2026 — Centered taskbar:** source default-off preference and measured fit/fallback. [Source trace](TASKBAR-CENTERED-SOURCE.md).
 
 > **26 November 2026 — Taskbar pagination skins:** original theme gradients, borders and embedded arrow artwork. [Source trace](TASKBAR-PAGINATION-SKINS-SOURCE.md).
