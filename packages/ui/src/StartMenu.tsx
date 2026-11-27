@@ -32,6 +32,9 @@ interface StartMenuProps {
   onEscapeClose():void;
   theme?:ThemeId;
   wallpaper?:string;
+  taskbarSearch?:string;
+  onTaskbarSearchChange?(value:string):void;
+  onTaskbarSearchFocus?():void;
 }
 interface StartProgramContext{
   id:string;x:number;y:number;
@@ -64,7 +67,7 @@ async function readShortcuts(entries: FileEntry[]): Promise<InstalledShortcut[]>
 }
 
 /** The original All Programs tree is populated from installed .lnk files. */
-export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartMenuProps){
+export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper,taskbarSearch,onTaskbarSearchChange,onTaskbarSearchFocus}:StartMenuProps){
   const isLonghornWhistler=theme==="winLS"||theme==="winLP"||theme==="winW";
   const isXpTheme=sourceIsXpFamily(theme)||isLonghornWhistler;
   // Pinned startmenu-base.js supplies recent programs and configured
@@ -111,7 +114,13 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
   useEffect(()=>taskbarPins.subscribe(setPins),[]);
   useEffect(()=>sourceRecentPrograms.subscribe(setRecentIds),[]);
   useEffect(()=>sourceStartPreferences.subscribe(setStartPreferences),[]);
-  const [query, setQuery] = useState("");
+  const [localQuery,setLocalQuery]=useState("");
+  const usesTaskbarSearch=theme==="win10"&&taskbarSearch!==undefined;
+  const query=usesTaskbarSearch?taskbarSearch:localQuery;
+  const setQuery=(value:string)=>{
+    if(usesTaskbarSearch)onTaskbarSearchChange?.(value);
+    else setLocalQuery(value);
+  };
   // Frozen startmenu-base.js Win7/Vista watcher: when Start opens, call
   // focusSearch ONLY on non-touch devices. Avoid virtual keyboard popups
   // on touch and preserve existing focus rules in the other Start families.
@@ -121,6 +130,10 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       window.matchMedia("(pointer: coarse)").matches;
     if(!touch)startSearchRef.current?.focus({preventScroll:true});
   },[isWin7StartFamily]);
+  useLayoutEffect(()=>{
+    if(usesTaskbarSearch&&document.activeElement?.closest("[data-test-taskbar-search]")==null)
+      menuRef.current?.focus({preventScroll:true});
+  },[usesTaskbarSearch]);
   const [allPrograms, setAllPrograms] = useState(false);
   const [historicalFlyoutOpen,setHistoricalFlyoutOpen]=useState(false);
   const historicalTriggerRef=useRef<HTMLButtonElement>(null);
@@ -227,7 +240,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       if(!(event.target instanceof Node))return;
       if(menuRef.current?.contains(event.target))return;
       if(event.target instanceof Element
-        &&event.target.closest("[data-test-start-program-context],[data-test-historical-programs-flyout]"))return;
+        &&event.target.closest("[data-test-start-program-context],[data-test-historical-programs-flyout],[data-test-taskbar-search]"))return;
       const start=document.querySelector('[data-test-start-button]');
       if(start?.contains(event.target)||event.target instanceof Element&&event.target.closest("[data-test-activities-button]"))return;
       dispatch({type:"CLOSE_START"});
@@ -372,7 +385,13 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
       (allPrograms&&!query?" is-all-programs":"")+
       (theme==="win10"&&win10SidebarExpanded?" is-win10-sidebar-expanded":"")}
       data-source-start-theme={theme}
-      id="start-menu" ref={menuRef} data-test-start-menu="" aria-label="Start menu">
+      id="start-menu" ref={menuRef} data-test-start-menu="" aria-label="Start menu" tabIndex={usesTaskbarSearch?-1:undefined}
+      onKeyDown={event=>{
+        if(!usesTaskbarSearch||event.key.length!==1||event.ctrlKey||event.metaKey||event.altKey||
+          (event.target instanceof Element&&event.target.closest("input,textarea")))return;
+        if(event.key===" "&&event.target instanceof Element&&event.target.closest("button"))return;
+        event.preventDefault();setQuery(query+event.key);onTaskbarSearchFocus?.();
+      }}>
       {isXpTheme&&<header className="windows-startmenu__xp-header"
         data-test-startmenu-xp-header="">
         {theme!=="winW"&&<img src={legacyArt.guestAvatar} alt="" width={48} height={48}/> }
@@ -557,7 +576,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper}:StartM
           onClick={() => { setAllPrograms(!allPrograms); setActiveFolder(null);setWin11Page(1); }}>
           {allPrograms ? "‹ Back" : "All Programs ▸"}
         </button>)}
-        {!isXpTheme&&<label className="windows-startmenu__search">
+        {!isXpTheme&&!usesTaskbarSearch&&<label className="windows-startmenu__search">
           <input ref={startSearchRef} value={query} onChange={e => setQuery(e.target.value)}
             placeholder="Search programs and files" aria-label="Search programs and files"
             data-test-startmenu-search="" autoFocus={!isWin7StartFamily}
