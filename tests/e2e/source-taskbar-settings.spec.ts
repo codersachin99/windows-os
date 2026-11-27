@@ -1,5 +1,5 @@
 import {expect,test,type Page} from "@playwright/test";
-async function guest(page:Page,theme:"win7"|"win11"="win7"){
+async function guest(page:Page,theme:"win7"|"win11"|"win10"="win7"){
   await page.goto("/?theme="+theme);
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
 }
@@ -144,4 +144,27 @@ test("Win11 center setting is transactional, persistent and falls back when grou
   await expect(bar).toHaveAttribute("data-taskbar-centered","false");
   await page.setViewportSize({width:1280,height:800});
   await expect(bar).toHaveAttribute("data-taskbar-centered","true");
+});
+
+test("source Win10 taskbar search opens Start, shares query and launches a registered app",async({page})=>{
+  await guest(page,"win10");
+  const input=page.locator("[data-test-taskbar-search-input]");
+  const menu=page.locator("[data-test-start-menu]");
+  await expect(input).toBeVisible();
+  await expect(input).toHaveAttribute("placeholder","Type here to search");
+  await input.click();
+  await expect(menu).toBeVisible();
+  await input.fill("Notepad");
+  await expect(menu.locator('[data-test-program="notepad"]')).toBeVisible();
+  await input.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await expect(input).toHaveValue("");
+  await input.click();
+  await input.fill("Notepad");
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(menu).toHaveCount(0);
+  await expect(input).toHaveValue("");
+  await guest(page,"win11");
+  await expect(page.locator("[data-test-taskbar-search]")).toHaveCount(0);
 });
