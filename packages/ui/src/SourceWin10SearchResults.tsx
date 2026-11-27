@@ -6,13 +6,14 @@ import {appRegistry,fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {legacyArt,sourceThemeProgramArt,legacySourceIconArtwork} from "@windows-os/assets";
 import {sourceCpanelSearchRegistry,sourceCpanelIsSupported,sourceCpanelIsMigratedProgram,sourceCpanelCanOpenTask,sourceCpanelProgramTaskView} from "@windows-os/apps/cpanel";
 import {openGuestSearchFile} from "./sourceGuestSearchOpen";
+import {sourceSearchFileArtwork} from "./sourceSearchFileArtwork";
 import {sourceModernGroups,type SourceModernEntry} from "./sourceModernSearchGroups";
 
 const labels={best:"Best match",apps:"Apps",settings:"Settings",documents:"Documents",folders:"Folders",photos:"Photos",music:"Music",videos:"Videos"};
 export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch:Dispatch<DesktopAction>}){
   const desktop=sourceFilesystemRuntime.snapshot()?.desktopPath;
   const userPath=desktop?getParentDirectory(desktop):"";
-  const [results,setResults]=useState<{query:string;files:FileEntry[]}>({query:"",files:[]});
+  const [results,setResults]=useState<{query:string;files:{file:FileEntry;artwork:Awaited<ReturnType<typeof sourceSearchFileArtwork>>}[]}>({query:"",files:[]});
   const [revision,setRevision]=useState(0);
   const [error,setError]=useState("");
   const [busy,setBusy]=useState(false);
@@ -27,7 +28,13 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
     setBusy(true);
     const timer=window.setTimeout(()=>{
       void searchFiles(fileStore,{scope:userPath,text:query,subfolders:true,skipPaths:[userPath+"/AppData"],maxResults:500},{signal:controller.signal})
-        .then(found=>{if(!controller.signal.aborted){setResults({query,files:found.files.filter(file=>!file.originalPath)});setBusy(false);}})
+        .then(async found=>{
+          if(controller.signal.aborted)return;
+          const files=await Promise.all(found.files.filter(file=>!file.originalPath).map(async file=>({
+            file,artwork:await sourceSearchFileArtwork(fileStore,"win10",file)
+          })));
+          if(!controller.signal.aborted){setResults({query,files});setBusy(false);}
+        })
         .catch(cause=>{if(!controller.signal.aborted){setResults({query,files:[]});setBusy(false);setError(String(cause));}});
     },SOURCE_SEARCH_DEBOUNCE_MS);
     return()=>{window.clearTimeout(timer);controller.abort();};
@@ -39,8 +46,10 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
   };
   const icon=(id:string)=>sourceThemeProgramArt("win10",id)??legacySourceIconArtwork(id).src;
   const apps:SourceModernEntry[]=appRegistry.startMenu().map(app=>({key:app.id,label:app.label,icon:sourceThemeProgramArt("win10",app.id)??app.icon,kind:"app",detail:"App",open:()=>launch(app.id)}));
-  if(userPath)for(const name of ["Documents","Pictures","Music","Videos"]){
-    apps.push({key:name.toLowerCase(),label:name,icon:legacyArt.folder,kind:"app",detail:"App",open:()=>launch("computer",userPath+"/"+name)});
+  if(userPath)for(const [name,iconKey] of [["Documents","folder-docs"],["Pictures","folder-pics"],["Music","folder-music"],["Videos","folder-videos"]]){
+    const key=name.toLowerCase();
+    if(!apps.some(entry=>entry.key===key))
+      apps.push({key,label:name,icon:sourceThemeProgramArt("win10",iconKey)??legacyArt.folder,kind:"app",detail:"App",open:()=>launch("computer",userPath+"/"+name)});
   }
   const ranked=apps.map(entry=>({entry,score:sourceScoreSearch([{text:entry.label,weight:SOURCE_SEARCH_WEIGHT.Name},{text:entry.key,weight:SOURCE_SEARCH_WEIGHT.Keyword}],parsed)}))
     .filter(hit=>hit.score).sort((a,b)=>b.score-a.score).map(hit=>hit.entry);
@@ -48,7 +57,7 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
     {key:"setting:"+item.id,label:item.label,icon:icon(item.iconKey),kind:"setting" as const,detail:"Control Panel",disabled:!sourceCpanelIsSupported(item.id)&&!sourceCpanelIsMigratedProgram(item.id),open:()=>sourceCpanelIsSupported(item.id)?launch("cpanel",item.id):launch(item.id)},
     ...tasks.map(task=>({key:"task:"+item.id+":"+task.label,label:task.label,icon:icon(item.iconKey),kind:"setting" as const,detail:"Control Panel",disabled:!sourceCpanelCanOpenTask(task),open:()=>sourceCpanelIsSupported(task.id)?launch("cpanel",task.id):launch(task.id,sourceCpanelProgramTaskView(task)==="background"?"background":undefined)}))
   ]);
-  const files=(results.query===query?results.files:[]).map(file=>({file,entry:{key:file.uri,label:file.name,icon:file.type==="directory"?legacyArt.folder:legacyArt.file,kind:"file" as const,detail:file.type==="directory"?"Folder":"File",open:()=>{void openGuestSearchFile(dispatch,file).then(failure=>{if(failure)setError(failure);else dispatch({type:"CLOSE_START"});});}}}));
+  const files=(results.query===query?results.files:[]).map(({file,artwork})=>({file,entry:{key:file.uri,label:file.name,icon:artwork.src,kind:"file" as const,detail:file.type==="directory"?"Folder":"File",open:()=>{void openGuestSearchFile(dispatch,file).then(failure=>{if(failure)setError(failure);else dispatch({type:"CLOSE_START"});});}}}));
   const groups=sourceModernGroups(ranked,settings,files,userPath);
   const entries=groups.flatMap(group=>group.entries);
   const selected=selection.query===query&&selection.index<entries.length?selection.index:0;
