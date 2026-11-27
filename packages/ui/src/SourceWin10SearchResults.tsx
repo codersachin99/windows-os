@@ -1,13 +1,14 @@
 import {useEffect,useRef,useState,type Dispatch} from "react";
 import type {DesktopAction} from "@windows-os/contracts";
 import {sourceParseSearch,sourceScoreSearch,SOURCE_SEARCH_WEIGHT,SOURCE_SEARCH_DEBOUNCE_MS} from "@windows-os/engine";
-import {getParentDirectory,searchFiles,type FileEntry} from "@windows-os/filesystem";
+import {getParentDirectory,searchFiles,sourcePrograms,type FileEntry} from "@windows-os/filesystem";
 import {appRegistry,fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {legacyArt,sourceThemeProgramArt,legacySourceIconArtwork} from "@windows-os/assets";
 import {sourceCpanelSearchRegistry,sourceCpanelIsSupported,sourceCpanelIsMigratedProgram,sourceCpanelCanOpenTask,sourceCpanelProgramTaskView} from "@windows-os/apps/cpanel";
 import {openGuestSearchFile} from "./sourceGuestSearchOpen";
 import {sourceSearchFileArtwork} from "./sourceSearchFileArtwork";
 import {sourceModernGroups,type SourceModernEntry} from "./sourceModernSearchGroups";
+import {sourceWin11AllAppItems} from "./sourceWin11AllApps";
 
 const labels={best:"Best match",apps:"Apps",settings:"Settings",documents:"Documents",folders:"Folders",photos:"Photos",music:"Music",videos:"Videos"};
 export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch:Dispatch<DesktopAction>}){
@@ -45,7 +46,19 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
     dispatch({type:"OPEN_APP",app,...(path?{file:{path}}:{})});dispatch({type:"CLOSE_START"});
   };
   const icon=(id:string)=>sourceThemeProgramArt("win10",id)??legacySourceIconArtwork(id).src;
-  const apps:SourceModernEntry[]=appRegistry.startMenu().map(app=>({key:app.id,label:app.label,icon:sourceThemeProgramArt("win10",app.id)??app.icon,kind:"app",detail:"App",open:()=>launch(app.id)}));
+  // Frozen f0aa.searchablePrograms starts from allProgramItems, not the
+  // pinned/recent Start list. Keep unmigrated source apps visible, disabled.
+  const apps:SourceModernEntry[]=sourceWin11AllAppItems(sourcePrograms,appRegistry.list()).map(app=>({
+    key:app.id,label:app.label,
+    icon:sourceThemeProgramArt("win10",app.id)??appRegistry.get(app.id)?.icon??icon(app.id),
+    kind:"app",detail:"App",disabled:!app.available,open:()=>launch(app.id)
+  }));
+  for(const [id,label] of [["computer","Computer"],["cpanel","Control Panel"]]){
+    if(!apps.some(entry=>entry.key===id)){
+      apps.push({key:id,label,icon:icon(id),kind:"app",detail:"App",
+        disabled:!appRegistry.get(id),open:()=>launch(id)});
+    }
+  }
   if(userPath)for(const [name,iconKey] of [["Documents","folder-docs"],["Pictures","folder-pics"],["Music","folder-music"],["Videos","folder-videos"]]){
     const key=name.toLowerCase();
     if(!apps.some(entry=>entry.key===key))
