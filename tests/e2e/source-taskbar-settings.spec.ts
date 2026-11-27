@@ -155,10 +155,13 @@ test("source Win10 taskbar search opens Start, shares query and launches a regis
   await input.click();
   await expect(menu).toBeVisible();
   await input.fill("Notepad");
+  await expect(menu.locator('[data-test-start-group="best"]')).toHaveText("Best match");
   await expect(menu.locator('[data-test-program="notepad"]')).toBeVisible();
   await input.press("Escape");
-  await expect(menu).toHaveCount(0);
+  await expect(menu).toBeVisible();
   await expect(input).toHaveValue("");
+  await input.press("Escape");
+  await expect(menu).toHaveCount(0);
   await input.click();
   await input.fill("Notepad");
   await input.press("Enter");
