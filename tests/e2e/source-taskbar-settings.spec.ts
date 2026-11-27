@@ -185,3 +185,60 @@ test("Win10 Start search opens a supported Control Panel destination",async({pag
   await expect(page.locator('[data-test-window="cpanel"] [data-test-cpanel-notification]')).toBeVisible();
   await expect(results).toHaveCount(0);
 });
+
+/** Exercise real Desktop uploads and keyboard launch through the Guest VFS. */
+test("Win10 search selects actual Guest documents and opens the selected file",async({page})=>{
+  await guest(page,"win10");
+  const desktop=page.locator("#desktop-icons");
+  await desktop.click({button:"right",position:{x:260,y:200}});
+  await desktop.locator("[data-test-desktop-menu] [data-test-desktop-upload-here]").click();
+  await page.locator("[data-test-desktop-upload-input]").setInputFiles([
+    {name:"Win10 Scan Alpha.txt",mimeType:"text/plain",buffer:Buffer.from("Alpha Guest document")},
+    {name:"Win10 Scan Beta.txt",mimeType:"text/plain",buffer:Buffer.from("Beta Guest document")}
+  ]);
+  const root="/EXTERNAL/computer/drive0/Users/Guest/Desktop/";
+  await expect(page.locator('[data-test-desktop-file="'+root+'Win10 Scan Alpha.txt"]')).toBeVisible();
+  await expect(page.locator('[data-test-desktop-file="'+root+'Win10 Scan Beta.txt"]')).toBeVisible();
+  const input=page.locator("[data-test-taskbar-search-input]");
+  await input.click();await input.fill("Win10 Scan");
+  const results=page.locator("[data-test-start-results]");
+  const files=results.locator('[data-test-search-kind="file"]');
+  await expect(files).toHaveCount(2);
+  await expect(results).toHaveAttribute("data-search-state","ready");
+  await expect(files.first()).toHaveAttribute("aria-current","true");
+  await input.press("ArrowUp");
+  await expect(files.last()).toHaveAttribute("aria-current","true");
+  await input.press("ArrowDown");
+  await expect(files.first()).toHaveAttribute("aria-current","true");
+  await input.press("ArrowDown");
+  await expect(files.last()).toHaveAttribute("aria-current","true");
+  const chosen=await files.last().getAttribute("data-test-search-key");
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"] .cm-content')).toContainText(
+    chosen?.endsWith("Alpha.txt")?"Alpha Guest document":"Beta Guest document");
+  await expect(results).toHaveCount(0);
+});
+
+test("Win10 search displays uploaded shortcut artwork independently of launch target",async({page})=>{
+  await guest(page,"win10");
+  const desktop=page.locator("#desktop-icons");
+  await desktop.click({button:"right",position:{x:260,y:200}});
+  await desktop.locator("[data-test-desktop-menu] [data-test-desktop-upload-here]").click();
+  await page.locator("[data-test-desktop-upload-input]").setInputFiles({
+    name:"Search Artwork Probe.lnk",mimeType:"application/octet-stream",
+    buffer:Buffer.from(JSON.stringify({exe:"notepad",icon:"calc"}))
+  });
+  const path="/EXTERNAL/computer/drive0/Users/Guest/Desktop/Search Artwork Probe.lnk";
+  const shortcut=page.locator('[data-test-desktop-file="'+path+'"]');
+  await expect(shortcut).toBeVisible();
+  const artwork=await shortcut.locator("img").first().getAttribute("src");
+  expect(artwork).toBeTruthy();
+  const input=page.locator("[data-test-taskbar-search-input]");
+  await input.click();await input.fill("Search Artwork Probe");
+  const result=page.locator('[data-test-search-key="'+path+'"]');
+  await expect(result).toBeVisible();
+  await expect(result.locator("img")).toHaveAttribute("src",artwork!);
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await expect(page.locator('[data-test-window="calc"]')).toHaveCount(0);
+});
