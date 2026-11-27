@@ -26,6 +26,7 @@ import {SourceUbuntuLaunchpad} from "./SourceUbuntuLaunchpad";
 import {SourceKubuntuStartMenu} from "./SourceKubuntuStartMenu";
 import {SourceHistoricalProgramsFlyout} from "./SourceHistoricalProgramsFlyout";
 import {openGuestSearchFile} from "./sourceGuestSearchOpen";
+import {SourceWin10SearchResults} from "./SourceWin10SearchResults";
 
 interface StartMenuProps {
   dispatch: Dispatch<DesktopAction>;
@@ -281,6 +282,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper,taskbar
         setWin10AccountOpen(false);
         return;
       }
+      if(usesTaskbarSearch&&query){setQuery("");return;}
       // DesktopShell restores taskbar focus after the Start input has
       // actually unmounted, using a commit-time layout effect.
       onEscapeClose();
@@ -291,7 +293,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper,taskbar
       window.removeEventListener("pointerdown",outside);
       window.removeEventListener("keydown",escape);
     };
-  },[dispatch,programContext,historicalFlyoutOpen,win11PowerOpen,win10PowerOpen,win10AccountOpen,onEscapeClose]);
+  },[dispatch,programContext,historicalFlyoutOpen,win11PowerOpen,win10PowerOpen,win10AccountOpen,onEscapeClose,usesTaskbarSearch,query,onTaskbarSearchChange]);
   const openApp = (appId: string) => {
     const app = appRegistry.get(appId);
     if (app) dispatch({ type: "OPEN_APP", app });
@@ -392,6 +394,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper,taskbar
         if(event.key===" "&&event.target instanceof Element&&event.target.closest("button"))return;
         event.preventDefault();setQuery(query+event.key);onTaskbarSearchFocus?.();
       }}>
+      {usesTaskbarSearch&&query?<SourceWin10SearchResults query={query} dispatch={dispatch}/>:<>
       {isXpTheme&&<header className="windows-startmenu__xp-header"
         data-test-startmenu-xp-header="">
         {theme!=="winW"&&<img src={legacyArt.guestAvatar} alt="" width={48} height={48}/> }
@@ -696,6 +699,7 @@ export function StartMenu({dispatch,onEscapeClose,theme="win7",wallpaper,taskbar
         <button type="button" onClick={() => dispatch({type:"SHUTDOWN"})}>
           <img src={legacyXpPowerArtwork.shutdown} width={20} height={20} alt="" />Turn off computer</button>
       </footer>}
+      </>}
     </nav>}
     {programContext&&contextProgram&&createPortal(
       <div ref={contextRef} role="menu" aria-label={"Program actions for "+contextProgram.label}
