@@ -19,4 +19,4 @@ export {
   type SourceVisualEffects,type SourceVisualEffectsPreset
 } from "./sourceVisualEffects";
 
-export {sourceCpanelSearchRegistry,sourceCpanelIsSupported} from "./sourceRegistry";
+export {sourceCpanelSearchRegistry,sourceCpanelIsSupported,sourceCpanelIsMigratedProgram,sourceCpanelCanOpenTask,sourceCpanelProgramTaskView} from "./sourceRegistry";
