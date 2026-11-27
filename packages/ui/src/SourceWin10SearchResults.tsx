@@ -1,6 +1,6 @@
-import {useEffect,useRef,useState,type Dispatch} from "react";
+import {useEffect,useLayoutEffect,useMemo,useRef,useState,type Dispatch} from "react";
 import type {DesktopAction} from "@windows-os/contracts";
-import {sourceParseSearch,sourceScoreSearch,SOURCE_SEARCH_WEIGHT,SOURCE_SEARCH_DEBOUNCE_MS} from "@windows-os/engine";
+import {sourceParseSearch,sourceScoreSearch,SOURCE_SEARCH_WEIGHT,sourceCreateDelayedSearch} from "@windows-os/engine";
 import {getParentDirectory,searchFiles,sourcePrograms,type FileEntry} from "@windows-os/filesystem";
 import {appRegistry,fileStore,sourceFilesystemRuntime} from "@windows-os/sdk";
 import {legacyArt,sourceThemeProgramArt,legacySourceIconArtwork} from "@windows-os/assets";
@@ -20,15 +20,17 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
   const [busy,setBusy]=useState(false);
   const [selection,setSelection]=useState<{query:string;index:number}>({query:"",index:0});
   const pane=useRef<HTMLDivElement>(null);
-  const parsed=sourceParseSearch(query);
+  const [publishedQuery,setPublishedQuery]=useState("");
+  const delayed=useMemo(()=>sourceCreateDelayedSearch(setPublishedQuery),[]);
+  useLayoutEffect(()=>{delayed.type(query);return()=>delayed.cancel();},[query,delayed]);
   useEffect(()=>fileStore.subscribe(()=>setRevision(value=>value+1)),[]);
   useEffect(()=>{
     setError("");
+    const query=publishedQuery;
     if(!userPath||!sourceParseSearch(query).terms.length){setBusy(false);setResults({query,files:[]});return;}
     const controller=new AbortController();
     setBusy(true);
-    const timer=window.setTimeout(()=>{
-      void searchFiles(fileStore,{scope:userPath,text:query,subfolders:true,skipPaths:[userPath+"/AppData"],maxResults:500},{signal:controller.signal})
+    void searchFiles(fileStore,{scope:userPath,text:query,subfolders:true,skipPaths:[userPath+"/AppData"],maxResults:500},{signal:controller.signal})
         .then(async found=>{
           if(controller.signal.aborted)return;
           const files=await Promise.all(found.files.filter(file=>!file.originalPath).map(async file=>({
@@ -37,9 +39,8 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
           if(!controller.signal.aborted){setResults({query,files});setBusy(false);}
         })
         .catch(cause=>{if(!controller.signal.aborted){setResults({query,files:[]});setBusy(false);setError(String(cause));}});
-    },SOURCE_SEARCH_DEBOUNCE_MS);
-    return()=>{window.clearTimeout(timer);controller.abort();};
-  },[query,userPath,revision]);
+    return()=>controller.abort();
+  },[publishedQuery,userPath,revision]);
   const launch=(id:string,path?:string)=>{
     const app=appRegistry.get(id);
     if(!app){setError("The original application has not been migrated yet.");return;}
@@ -64,32 +65,42 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
     if(!apps.some(entry=>entry.key===key))
       apps.push({key,label:name,icon:sourceThemeProgramArt("win10",iconKey)??legacyArt.folder,kind:"app",detail:"App",open:()=>launch("computer",userPath+"/"+name)});
   }
+  const buildGroups=(text:string)=>{
+  const parsed=sourceParseSearch(text);
   const ranked=apps.map(entry=>({entry,score:sourceScoreSearch([{text:entry.label,weight:SOURCE_SEARCH_WEIGHT.Name},{text:entry.key,weight:SOURCE_SEARCH_WEIGHT.Keyword}],parsed)}))
     .filter(hit=>hit.score).sort((a,b)=>b.score-a.score).map(hit=>hit.entry);
-  const settings:SourceModernEntry[]=sourceCpanelSearchRegistry(query).flatMap(({item,tasks})=>[
+  const settings:SourceModernEntry[]=sourceCpanelSearchRegistry(text).flatMap(({item,tasks})=>[
     {key:"setting:"+item.id,label:item.label,icon:icon(item.iconKey),kind:"setting" as const,detail:"Control Panel",disabled:!sourceCpanelIsSupported(item.id)&&!sourceCpanelIsMigratedProgram(item.id),open:()=>sourceCpanelIsSupported(item.id)?launch("cpanel",item.id):launch(item.id)},
     ...tasks.map(task=>({key:"task:"+item.id+":"+task.label,label:task.label,icon:icon(item.iconKey),kind:"setting" as const,detail:"Control Panel",disabled:!sourceCpanelCanOpenTask(task),open:()=>sourceCpanelIsSupported(task.id)?launch("cpanel",task.id):launch(task.id,sourceCpanelProgramTaskView(task)==="background"?"background":undefined)}))
   ]);
-  const files=(results.query===query?results.files:[]).map(({file,artwork})=>({file,entry:{key:file.uri,label:file.name,icon:artwork.src,kind:"file" as const,detail:file.type==="directory"?"Folder":"File",open:()=>{void openGuestSearchFile(dispatch,file).then(failure=>{if(failure)setError(failure);else dispatch({type:"CLOSE_START"});});}}}));
-  const groups=sourceModernGroups(ranked,settings,files,userPath);
+  const files=(results.query===text?results.files:[]).map(({file,artwork})=>({file,entry:{key:file.uri,label:file.name,icon:artwork.src,kind:"file" as const,detail:file.type==="directory"?"Folder":"File",open:()=>{void openGuestSearchFile(dispatch,file).then(failure=>{if(failure)setError(failure);else dispatch({type:"CLOSE_START"});});}}}));
+  return sourceModernGroups(ranked,settings,files,userPath);
+  };
+  const groups=buildGroups(publishedQuery);
   const entries=groups.flatMap(group=>group.entries);
-  const selected=selection.query===query&&selection.index<entries.length?selection.index:0;
-  useEffect(()=>{
+  const selected=selection.query===publishedQuery&&selection.index<entries.length?selection.index:0;
+  const pending=query!==publishedQuery||busy||(Boolean(userPath)&&sourceParseSearch(publishedQuery).terms.length>0&&results.query!==publishedQuery);
+  useLayoutEffect(()=>{
     const handle=(event:KeyboardEvent)=>{
       if(!(event.target instanceof Element)||!event.target.closest("[data-test-taskbar-search-input]"))return;
       if(event.key==="ArrowDown"||event.key==="ArrowUp"){
         event.preventDefault();
         if(!entries.length)return;
         const index=(selected+(event.key==="ArrowDown"?1:-1)+entries.length)%entries.length;
-        setSelection({query,index});pane.current?.querySelectorAll("[data-test-start-result]")[index]?.scrollIntoView({block:"nearest"});
+        setSelection({query:publishedQuery,index});pane.current?.querySelectorAll("[data-test-start-result]")[index]?.scrollIntoView({block:"nearest"});
       }else if(event.key==="Enter"){
-        event.preventDefault();const entry=entries[selected];if(entry&&!entry.disabled)entry.open();
+        event.preventDefault();
+        // Frozen f0aa.handleSearchKey flushes 1902.now() before opening
+        // the new query\u2019s default; never launch an older visible selection.
+        const changed=delayed.now(query);
+        const entry=changed?buildGroups(query).flatMap(group=>group.entries)[0]:entries[selected];
+        if(entry&&!entry.disabled)entry.open();
       }
     };
     document.addEventListener("keydown",handle);return()=>document.removeEventListener("keydown",handle);
   });
   let index=0;
-  return <div ref={pane} className="source-win10-search-panel" data-test-start-results="" data-search-state={busy?"pending":"ready"}>
+  return <div ref={pane} className="source-win10-search-panel" data-test-start-results="" data-search-state={pending?"pending":"ready"}>
     <div className="source-win10-search-results">{groups.map(group=><section key={group.key}>
       <h3 data-test-start-group={group.key}>{labels[group.key]}</h3>
       <div>{group.entries.map(entry=>{
@@ -99,14 +110,14 @@ export function SourceWin10SearchResults({query,dispatch}:{query:string;dispatch
           data-test-search-key={entry.key} className={current===selected?"is-selected":""}
           aria-current={current===selected?true:undefined} disabled={entry.disabled}
           title={entry.disabled?"Original destination not yet migrated":undefined}
-          onMouseEnter={()=>setSelection({query,index:current})} onClick={entry.open}>
+          onMouseEnter={()=>setSelection({query:publishedQuery,index:current})} onClick={entry.open}>
           <img src={entry.icon} alt="" width={group.key==="best"?32:24} height={group.key==="best"?32:24}/>
           <span>{entry.label}{group.key==="best"&&<small>{entry.detail}</small>}</span>
         </button>;
       })}</div>
     </section>)}
-    {!groups.length&&!busy&&<p>No items match your search.</p>}
-    {busy&&<p role="status">Searching…</p>}
+    {!groups.length&&!pending&&<p>No items match your search.</p>}
+    {pending&&<p role="status">Searching…</p>}
     {error&&<p role="alert">{error}</p>}</div>
   </div>;
 }
