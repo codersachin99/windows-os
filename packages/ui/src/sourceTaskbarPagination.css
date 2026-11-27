@@ -166,3 +166,21 @@
 
 .windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar button:first-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(0 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%23fff"/></g></svg>') center no-repeat}
 .windows-desktop:is([data-theme="oxygen"]) .source-taskbar-scrollbar button:last-child::after{border:0;inset:0;width:100%;height:100%;transform:none;background:url('data:image/svg+xml,<svg width="9" height="6" version="1.1" viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-20,-14) rotate(180 24.5 17)"><path d="m24.5 14-4.5 4.5 1.5 1.5 3-3 3 3 1.5-1.5z" fill="%23fff"/></g></svg>') center no-repeat}
+
+/* Frozen taskbar-search.js 5aea and taskbar-search.css. Keep the input
+ * usable on narrow Guest screens rather than forcing a 256px overflow. */
+.windows-desktop[data-theme="win10"] .source-taskbar-search{
+  display:flex;align-items:center;gap:12px;padding:0 16px;
+  width:min(256px,25vw);height:100%;flex:none;box-sizing:border-box;
+  color:#000;background:#fff;min-width:0;
+}
+.windows-desktop[data-theme="win10"] .source-taskbar-search svg{flex:none}
+.windows-desktop[data-theme="win10"] .source-taskbar-search input{
+  min-width:0;width:100%;height:100%;padding:0;background:transparent;
+  border:0;border-radius:0;outline:none;color:#000;font:inherit;
+}
+.windows-desktop[data-theme="win10"] .source-taskbar-search input::placeholder{color:#000;opacity:1}
+.windows-desktop[data-theme="win10"] .source-taskbar-search:focus-within input::placeholder{color:#666}
+@media(max-width:600px){
+  .windows-desktop[data-theme="win10"] .source-taskbar-search{gap:4px;padding:0 4px}
+}
