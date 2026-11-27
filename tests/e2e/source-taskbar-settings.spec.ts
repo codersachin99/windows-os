@@ -152,6 +152,10 @@ test("source Win10 taskbar search opens Start, shares query and launches a regis
   const menu=page.locator("[data-test-start-menu]");
   await expect(input).toBeVisible();
   await expect(input).toHaveAttribute("placeholder","Type here to search");
+  const glyph=page.locator('[data-test-taskbar-search] svg[data-source-icon="la:search"]');
+  await expect(glyph).toHaveAttribute("viewBox","0 0 32 32");
+  await expect(glyph).toHaveAttribute("width","24");
+  await expect(glyph.locator("path")).toHaveAttribute("d",/^M 19 3 C 13\.488281/);
   await input.click();
   await expect(menu).toBeVisible();
   await input.fill("Notepad");
@@ -241,4 +245,35 @@ test("Win10 search displays uploaded shortcut artwork independently of launch ta
   await input.press("Enter");
   await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
   await expect(page.locator('[data-test-window="calc"]')).toHaveCount(0);
+});
+
+test("Win10 search includes the source catalog without fake launchers",async({page})=>{
+  await guest(page,"win10");
+  const input=page.locator("[data-test-taskbar-search-input]");
+  const results=page.locator("[data-test-start-results]");
+  await input.click();await input.fill("WordPad");
+  const pending=results.locator('[data-test-program="wordpad"]');
+  await expect(pending).toBeVisible();
+  await expect(pending).toBeDisabled();
+  await expect(pending).toHaveAttribute("title","Original destination not yet migrated");
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="wordpad"]')).toHaveCount(0);
+  await input.fill("Minesweeper");
+  const game=results.locator('[data-test-program="minesweeper"]');
+  await expect(game).toBeVisible();
+  await expect(game).toBeEnabled();
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="minesweeper"]')).toBeVisible();
+});
+
+test("Win10 search flushes the latest query on Enter instead of launching a stale match",async({page})=>{
+  await guest(page,"win10");
+  const input=page.locator("[data-test-taskbar-search-input]");
+  const results=page.locator("[data-test-start-results]");
+  await input.click();await input.fill("Notepad");
+  await expect(results.locator('[data-test-program="notepad"]')).toBeVisible();
+  await input.fill("Calculator");
+  await input.press("Enter");
+  await expect(page.locator('[data-test-window="calc"]')).toBeVisible();
+  await expect(page.locator('[data-test-window="notepad"]')).toHaveCount(0);
 });
