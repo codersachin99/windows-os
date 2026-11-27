@@ -394,6 +394,16 @@ export function DesktopShell({
   const [dockRecent,setDockRecent]=useState(()=>sourceRecentPrograms.snapshot());
   useEffect(()=>sourceRecentPrograms.subscribe(setDockRecent),[]);
   const [taskbarConfig,setTaskbarConfig]=useState(()=>sourceTaskbarPreferences.snapshot());
+  // Frozen 5aea shares searchText with the Win10 Start menu; no other
+  // base theme registers a standalone taskbar search component.
+  const [taskbarSearch,setTaskbarSearch]=useState("");
+  const taskbarSearchRef=useRef<HTMLInputElement>(null);
+  useLayoutEffect(()=>{
+    if(!state.startOpen||state.theme!=="win10"){
+      taskbarSearchRef.current?.blur();
+      setTaskbarSearch("");
+    }
+  },[state.startOpen,state.theme]);
   const [aeroPeeking,setAeroPeeking]=useState(false);
   const [livePreview,setLivePreview]=useState<{appId:string;left:number}|null>(null);
   const [peekWindowId,setPeekWindowId]=useState<string|null>(null);
@@ -433,7 +443,8 @@ export function DesktopShell({
       };
       const barWidth=bar.clientWidth-(parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0);
       const trayWidth=outer(tray)+outer(desktop)+gap;
-      const startWidth=outer(start)+gap;
+      const search=bar.querySelector<HTMLElement>(".source-taskbar-search");
+      const startWidth=outer(start)+gap+(search?outer(search)+gap:0);
       const available=barWidth-trayWidth-startWidth-gap;
       const item=lane.querySelector<HTMLElement>(".windows-taskbar__application");
       const itemGap=parseFloat(getComputedStyle(lane).columnGap)||0;
@@ -448,6 +459,7 @@ export function DesktopShell({
     observer.observe(bar);
     const tray=bar.querySelector(".windows-taskbar__tray");
     if(tray)observer.observe(tray);
+    if(taskbarSearchRef.current?.parentElement)observer.observe(taskbarSearchRef.current.parentElement);
     window.addEventListener("resize",measure);
     return()=>{observer.disconnect();window.removeEventListener("resize",measure);};
   },[paginateTaskbar,state.theme,buttonMode,taskbarGroupKeys,taskbarGroups.length,wantsCentered]);
@@ -707,7 +719,10 @@ export function DesktopShell({
       ))}
       {state.startOpen && <StartMenu dispatch={dispatch}
         onEscapeClose={closeStartOnEscape} theme={state.theme}
-        wallpaper={state.wallpaper} />}
+        wallpaper={state.wallpaper}
+        taskbarSearch={state.theme==="win10"?taskbarSearch:undefined}
+        onTaskbarSearchChange={setTaskbarSearch}
+        onTaskbarSearchFocus={()=>taskbarSearchRef.current?.focus({preventScroll:true})} />}
       </div>
       {/* The control surface remains independent of the transformed canvas;
           other programs and their windows zoom together with the desktop. */}
@@ -759,6 +774,24 @@ export function DesktopShell({
               style={{backgroundImage:`url("${legacyArt.startOrb}")`,"--source-start-sprite":`url("${legacyArt.startOrb}")`} as CSSProperties}/>:
             <img src={sourceShellAsset(state.theme,"start") ?? legacyArt.startOrb} alt="" draggable={false} />}
         </button>}
+        {state.theme==="win10"&&<label className="source-taskbar-search" data-test-taskbar-search=""
+          onContextMenu={event=>event.stopPropagation()}>
+          <svg aria-hidden="true" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <circle cx={10} cy={10} r={6.5}/><path d="m15 15 6 6"/>
+          </svg>
+          <input ref={taskbarSearchRef} value={taskbarSearch} placeholder="Type here to search"
+            aria-label="Type here to search" data-test-taskbar-search-input=""
+            onFocus={()=>{
+              setMacPopup(null);setShowHiddenTray(false);closeTaskbarContext();
+              if(!state.startOpen)dispatch({type:"TOGGLE_START"});
+            }}
+            onChange={event=>setTaskbarSearch(event.target.value)}
+            onKeyDown={event=>{
+              if(event.key!=="Enter"||!taskbarSearch.trim())return;
+              const app=appRegistry.startMenu().find(item=>item.label.toLowerCase().includes(taskbarSearch.toLowerCase()));
+              if(app){event.preventDefault();dispatch({type:"OPEN_APP",app});}
+            }}/>
+        </label>}
         {state.theme==="ubuntu"?<nav className="source-ubuntu-dock" data-test-dock="" aria-label="Application dock">
           <div className="source-ubuntu-dock-list">
             {sourceUbuntuDockItems(dockRecent,state.windows.map(win=>win.appId)).map(id=>{
