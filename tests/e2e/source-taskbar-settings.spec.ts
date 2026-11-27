@@ -171,3 +171,17 @@ test("source Win10 taskbar search opens Start, shares query and launches a regis
   await guest(page,"win11");
   await expect(page.locator("[data-test-taskbar-search]")).toHaveCount(0);
 });
+
+test("Win10 Start search opens a supported Control Panel destination",async({page})=>{
+  await guest(page,"win10");
+  const input=page.locator("[data-test-taskbar-search-input]");
+  await input.click();
+  await input.fill("Notification Area Icons");
+  const results=page.locator("[data-test-start-results]");
+  const setting=results.locator('[data-test-search-key="setting:notification"]');
+  await expect(setting).toBeVisible();
+  await expect(setting).toBeEnabled();
+  await setting.click();
+  await expect(page.locator('[data-test-window="cpanel"] [data-test-cpanel-notification]')).toBeVisible();
+  await expect(results).toHaveCount(0);
+});
