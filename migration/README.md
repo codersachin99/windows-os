@@ -1,3 +1,5 @@
+> **27 November 2026 — Win10 search artwork:** original file/shortcut icon resolution, real Guest upload and keyboard browser contracts. Tests authored; CI status unavailable.
+
 > **27 November 2026 — Win10 modern search results:** source grouping, Guest-home file search, supported settings routes and keyboard selection. Unit/browser tests authored; verification requested.
 
 > **27 November 2026 — Win10 taskbar search:** source registry, shared Start query, measured capacity and first app-launch contract. Full modern results overlay and verification pending.
