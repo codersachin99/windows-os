@@ -785,12 +785,7 @@ export function DesktopShell({
               setMacPopup(null);setShowHiddenTray(false);closeTaskbarContext();
               if(!state.startOpen)dispatch({type:"TOGGLE_START"});
             }}
-            onChange={event=>setTaskbarSearch(event.target.value)}
-            onKeyDown={event=>{
-              if(event.key!=="Enter"||!taskbarSearch.trim())return;
-              const app=appRegistry.startMenu().find(item=>item.label.toLowerCase().includes(taskbarSearch.toLowerCase()));
-              if(app){event.preventDefault();dispatch({type:"OPEN_APP",app});}
-            }}/>
+            onChange={event=>setTaskbarSearch(event.target.value)}/>
         </label>}
         {state.theme==="ubuntu"?<nav className="source-ubuntu-dock" data-test-dock="" aria-label="Application dock">
           <div className="source-ubuntu-dock-list">
