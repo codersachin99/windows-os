@@ -213,6 +213,13 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
               : globalThis.window.innerHeight) - 40 - window.height)))
         }
         : window) };
+    case "RESIZE_WINDOW": {
+      if (![action.x,action.y,action.width,action.height].every(Number.isFinite) ||
+          action.width<=0||action.height<=0||action.x<0||action.y<0) return state;
+      return {...state,windows:state.windows.map(win=>win.id===action.id &&
+        win.resizable!==false&&!win.maximized&&!win.minimized
+        ? {...win,x:action.x,y:action.y,width:action.width,height:action.height}:win)};
+    }
     case "MINIMIZE_WINDOW":
       return { ...state, windows: state.windows.map(window => window.id === action.id
         ? { ...window, minimized: true }
