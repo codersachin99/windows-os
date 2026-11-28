@@ -1,3 +1,5 @@
+> **28 November 2026 — Full green baseline:** 810 unit tests and 1,725 browser cases passed, 5 browser skips, zero failures on f8e7630. Ported original Aero Peek glass/stacked edge and requested focused checks for accumulated taskbar changes.
+
 > **28 November 2026 — Taskbar preview lifecycle:** visual clones made inert; context menus cancel pending/visible previews and removed targets no longer leave stale peek state. New verification pending.
 
 > **28 November 2026 — Program popup artwork:** original Open/Pin/Close icons restored, including Onebit overrides; byte-identical source assets verified by blob SHA. New browser checks pending; previous full CI still running.
