@@ -1,5 +1,7 @@
 import { useRef, type CSSProperties, type Dispatch, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import type { DesktopAction, DesktopWindow, ThemeId } from "@windows-os/contracts";
+import {sourceResizeBounds,SOURCE_WINDOW_RESIZE_EDGES,type SourceResizeEdge,type SourceResizeBounds} from "./sourceWindowResize";
+import "./sourceWindowResize.css";
 import { SourceWindowControlGlyph } from "./SourceWindowControlGlyph";
 
 interface WindowFrameProps {
@@ -15,6 +17,8 @@ interface WindowFrameProps {
 }
 
 export function WindowFrame({ window: win, theme, dispatch, children, onRequestClose,active=false,peekTarget=false }: WindowFrameProps) {
+  const frame=useRef<HTMLElement>(null);
+  const resize=useRef<{edge:SourceResizeEdge;pointerId:number;startX:number;startY:number;origin:SourceResizeBounds;area:SourceResizeBounds;scaleX:number;scaleY:number}|null>(null);
   const drag = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const style: CSSProperties = win.maximized
     ? { inset: theme==="macos"?"var(--taskbar-height, 28px) 0 var(--source-macos-dock-reserve, 74px) 0":theme==="ubuntu"?"var(--taskbar-height, 32px) 0 0 var(--source-ubuntu-dock-width, 64px)":"0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
@@ -44,9 +48,41 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
+  const resizeDown=(edge:SourceResizeEdge,event:ReactPointerEvent<HTMLDivElement>)=>{
+    const node=frame.current;
+    if(!node||event.button!==0||win.maximized||win.resizable===false||resize.current)return;
+    event.preventDefault();event.stopPropagation();
+    const rect=node.getBoundingClientRect();
+    const shell=node.closest<HTMLElement>(".windows-desktop");
+    if(!shell)return;
+    const styles=getComputedStyle(shell);
+    const taskbar=parseFloat(styles.getPropertyValue("--taskbar-height"))||40;
+    const top=theme==="ubuntu"||theme==="macos"?taskbar:0;
+    const left=theme==="ubuntu"?(parseFloat(styles.getPropertyValue("--source-ubuntu-dock-width"))||64):0;
+    const bottom=theme==="macos"?(parseFloat(styles.getPropertyValue("--source-macos-dock-reserve"))||74):theme==="ubuntu"?0:taskbar;
+    resize.current={edge,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,
+      origin:{x:node.offsetLeft,y:node.offsetTop,width:node.offsetWidth,height:node.offsetHeight},
+      area:{x:left,y:top,width:Math.max(1,shell.clientWidth-left),height:Math.max(1,shell.clientHeight-top-bottom)},
+      scaleX:rect.width/node.offsetWidth||1,scaleY:rect.height/node.offsetHeight||1};
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dispatch({type:"FOCUS_WINDOW",id:win.id});
+  };
+  const resizeMove=(event:ReactPointerEvent<HTMLDivElement>)=>{
+    const session=resize.current;
+    if(!session||session.pointerId!==event.pointerId)return;
+    const bounds=sourceResizeBounds(session.origin,session.edge,
+      (event.clientX-session.startX)/session.scaleX,(event.clientY-session.startY)/session.scaleY,session.area);
+    dispatch({type:"RESIZE_WINDOW",id:win.id,...bounds});
+  };
+  const resizeEnd=(event:ReactPointerEvent<HTMLDivElement>)=>{
+    if(resize.current?.pointerId!==event.pointerId)return;
+    resize.current=null;
+    if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+
   // Keep the app mounted while minimized so its unsaved document survives.
   return (
-    <section role="dialog" aria-label={win.title} aria-hidden={win.minimized || undefined}
+    <section ref={frame} role="dialog" aria-label={win.title} aria-hidden={win.minimized || undefined}
       data-test-window={win.minimized ? undefined : win.appId}
       data-test-window-id={win.id}
       data-source-taskbar-peek-active={peekTarget?"true":undefined}
@@ -54,7 +90,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
       data-source-window-active={active?"true":"false"}
       style={win.minimized ? { ...style, display: "none" } : style} onPointerDown={() => dispatch({ type: "FOCUS_WINDOW", id: win.id })}>
       <div className="windows-window__titlebar" onPointerDown={pointerDown} onPointerMove={pointerMove}
-        onPointerUp={pointerUp} onDoubleClick={() => {
+        onPointerUp={pointerUp} onPointerCancel={pointerUp} onLostPointerCapture={()=>{drag.current=null;}} onDoubleClick={() => {
           if (win.resizable !== false) dispatch({ type: "TOGGLE_MAXIMIZE", id: win.id });
         }}>
         {win.titlebarIcon !== false &&
@@ -82,6 +118,10 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
         </div>
       </div>
       <div className="windows-window__body">{children}</div>
+      {!win.maximized&&win.resizable!==false&&SOURCE_WINDOW_RESIZE_EDGES.map(edge=><div key={edge}
+        className={"source-window-resize source-window-resize--"+edge} data-test-window-resize={edge} aria-hidden="true"
+        onPointerDown={event=>resizeDown(edge,event)} onPointerMove={resizeMove}
+        onPointerUp={resizeEnd} onPointerCancel={resizeEnd} onLostPointerCapture={resizeEnd}/>)}
     </section>
   );
 }
