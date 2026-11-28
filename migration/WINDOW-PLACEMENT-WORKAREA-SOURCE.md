@@ -73,3 +73,15 @@ checking the underlying drag-resize module. Add a live viewport regression
 for existing maximized CSS insets and restoration of normal geometry.
 Request focused CI for this test and the fractional geometry tests.
 Next audit drag-resize container observers and responsive preview geometry.
+
+## Responsive active preview
+
+CI 46171025527 at d1e65d4 completed successfully. The source wrapper
+showPreview uses 0/50/100% positions and widths and 100% height; numeric
+arrange bounds are calculated at drop from getWorkArea(). Match this with
+CSS-relative preview geometry inside the migrated shell's reserved area
+and fresh work-area measurement on drop. Keep vertical preview x/width
+fixed as in source. Add live resize-during-drag browser regression.
+Underlying drag-resize registration has not yet been located in the
+inspected chunks; no automatic reflow of already snapped windows is added.
+Focused CI requested; original paired screenshots remain outstanding.

@@ -301,3 +301,20 @@ test("source maximized frame tracks viewport changes and restores normal geometr
   await expect(win).not.toHaveClass(/is-maximized/);
   expect(await win.boundingBox()).toEqual(original);
 });
+
+test("source active half-screen preview follows resized work area",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const title=(await win.locator(".windows-window__title").boundingBox())!;
+  await page.mouse.move(title.x+Math.min(80,title.width/2),title.y+title.height/2);
+  await page.mouse.down();
+  await page.mouse.move(3,300,{steps:8});
+  const preview=page.locator('[data-test-window-snap-preview="left"]');
+  await expect(preview).toBeVisible();
+  await expect.poll(()=>preview.boundingBox()).toEqual({x:0,y:0,width:640,height:860});
+  await page.setViewportSize({width:1000,height:750});
+  await expect.poll(()=>preview.boundingBox()).toEqual({x:0,y:0,width:500,height:710});
+  await page.mouse.up();
+  await expect(preview).toHaveCount(0);
+  await expect.poll(()=>win.boundingBox()).toEqual({x:0,y:0,width:500,height:710});
+});

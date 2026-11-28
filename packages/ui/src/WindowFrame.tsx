@@ -28,8 +28,20 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(!shell)return null;
     return sourceWindowWorkArea(shell,theme);
   };
+  const areaTop=theme==="macos"?"var(--taskbar-height, 28px)":theme==="ubuntu"?"var(--taskbar-height, 32px)":"0px";
+  const areaLeft=theme==="ubuntu"?"var(--source-ubuntu-dock-width, 64px)":"0px";
+  const areaBottom=theme==="macos"?"var(--source-macos-dock-reserve, 74px)":theme==="ubuntu"?"0px":"var(--taskbar-height, 40px)";
+  const areaInset=`${areaTop} 0 ${areaBottom} ${areaLeft}`;
+  const previewStyle:CSSProperties=snapPreview?{
+    top:areaTop,bottom:areaBottom,zIndex:win.z,
+    ...(snapPreview.mode==="vertical"
+      ?{left:snapPreview.bounds.x,width:snapPreview.bounds.width}
+      :snapPreview.mode==="maximize"?{left:areaLeft,right:0}
+      :{left:snapPreview.mode==="left"?areaLeft:`calc((100% + ${areaLeft}) / 2)`,
+        width:`calc((100% - ${areaLeft}) / 2)`})
+  }:{};
   const style: CSSProperties = win.maximized
-    ? { inset: theme==="macos"?"var(--taskbar-height, 28px) 0 var(--source-macos-dock-reserve, 74px) 0":theme==="ubuntu"?"var(--taskbar-height, 32px) 0 0 var(--source-ubuntu-dock-width, 64px)":"0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
+    ? { inset:areaInset, zIndex: win.z }
     : theme==="ubuntu"
       ? {left:`clamp(var(--source-ubuntu-dock-width, 64px), ${win.x}px, max(var(--source-ubuntu-dock-width, 64px), calc(100% - min(${win.width}px, calc(100% - var(--source-ubuntu-dock-width, 64px))))))`,
           top:`clamp(var(--taskbar-height, 32px), ${win.y}px, max(var(--taskbar-height, 32px), calc(100% - min(${win.height}px, calc(100% - var(--taskbar-height, 32px))))))`,
@@ -78,7 +90,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(session.mode==="maximize"){
       if(!win.maximized)dispatch({type:"TOGGLE_MAXIMIZE",id:win.id});
     }else{
-      dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:session.mode,bounds:sourceSnapBounds(session.mode,session.area,session.origin),restoreBounds:session.origin});
+      dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:session.mode,bounds:sourceSnapBounds(session.mode,workArea()??session.area,session.origin),restoreBounds:session.origin});
     }
   };
   const verticalSnap=()=>{
@@ -118,7 +130,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     const session=resize.current;
     if(!session||session.pointerId!==event.pointerId)return;
     resize.current=null;setSnapPreview(null);
-    if(commit&&session.vertical)dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:"vertical",bounds:sourceSnapBounds("vertical",session.area,session.last),restoreBounds:session.origin});
+    if(commit&&session.vertical)dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:"vertical",bounds:sourceSnapBounds("vertical",workArea()??session.area,session.last),restoreBounds:session.origin});
     else if(commit&&(session.last.x!==session.origin.x||session.last.y!==session.origin.y||session.last.width!==session.origin.width||session.last.height!==session.origin.height))dispatch({type:"SAVE_WINDOW_PLACEMENT",id:win.id});
     if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
   };
@@ -126,7 +138,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
   // Keep the app mounted while minimized so its unsaved document survives.
   return (<>
     {snapPreview&&<div aria-hidden="true" className="source-window-snap-preview" data-test-window-snap-preview={snapPreview.mode}
-      style={{left:snapPreview.bounds.x,top:snapPreview.bounds.y,width:snapPreview.bounds.width,height:snapPreview.bounds.height,zIndex:win.z}}/>}
+      style={previewStyle}/>}
     <section ref={frame} role="dialog" aria-label={win.title} aria-hidden={win.minimized || undefined}
       data-test-window={win.minimized ? undefined : win.appId}
       data-test-window-id={win.id}
