@@ -24,3 +24,22 @@ export function sourceDragRestoreBounds(saved:SourceResizeBounds,current:SourceR
     y:Math.round(Math.max(area.y,Math.min(y-Math.max(0,grabY-current.y),area.y+area.height-height))),
     width,height};
 }
+
+/** Source f(): repeat same direction moves to opposite side; opposing
+ * direction from a half-screen returns to the saved normal bounds. */
+export function sourceKeyboardSnap(current:SourceWindowSnap|undefined,direction:"left"|"right"):SourceWindowSnap|null{
+  if(current!=="left"&&current!=="right")return direction;
+  return current===direction?(direction==="left"?"right":"left"):null;
+}
+export function sourceVerticalResizeSnap(edge:string,y:number,area:SourceResizeBounds,touch=false,zoom=1):boolean{
+  const margin=touch?48/Math.max(zoom,0.01):8;
+  return edge==="n"?y<=area.y+margin:edge==="s"&&y>=area.y+area.height-margin;
+}
+export function sourceWindowWorkArea(shell:HTMLElement,theme:string):SourceResizeBounds{
+  const styles=getComputedStyle(shell);
+  const taskbar=parseFloat(styles.getPropertyValue("--taskbar-height"))||40;
+  const top=theme==="ubuntu"||theme==="macos"?taskbar:0;
+  const left=theme==="ubuntu"?(parseFloat(styles.getPropertyValue("--source-ubuntu-dock-width"))||64):0;
+  const bottom=theme==="macos"?(parseFloat(styles.getPropertyValue("--source-macos-dock-reserve"))||74):theme==="ubuntu"?0:taskbar;
+  return {x:left,y:top,width:Math.max(1,shell.clientWidth-left),height:Math.max(1,shell.clientHeight-top-bottom)};
+}
