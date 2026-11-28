@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { desktopReducer, initialDesktopState,SOURCE_ACTIVE_THEME_KEY,
-  SOURCE_ACTIVE_WALLPAPER_KEY } from "@windows-os/engine";
+  SOURCE_ACTIVE_WALLPAPER_KEY,SOURCE_WINDOW_PLACEMENTS_KEY } from "@windows-os/engine";
 import {sourceIsSystemWallpaper} from "@windows-os/assets";
 import { BootScreen, DesktopShell, LogonScreen, SourceBsodScreen } from "@windows-os/ui";
 import {sourceFilesystemRuntime,sourceRecentPrograms,sourceStartPreferences} from "@windows-os/sdk";
@@ -11,6 +11,11 @@ import {useState} from "react";
 
 export default function App() {
   const [state,reduce] = useReducer(desktopReducer, undefined, initialDesktopState);
+  useEffect(()=>{
+    if(!state.windowPlacements)return;
+    try{window.localStorage.setItem(SOURCE_WINDOW_PLACEMENTS_KEY,JSON.stringify(state.windowPlacements));}
+    catch{/* restricted browser: retain placement in Guest state */}
+  },[state.windowPlacements]);
   // Source ProgramEvent records launches from any shell surface (Start,
   // Desktop, Explorer, Run and taskbar), not only from Start menu clicks.
   const dispatch=useCallback((action:DesktopAction)=>{
