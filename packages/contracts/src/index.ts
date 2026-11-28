@@ -35,6 +35,9 @@ export interface AppDefinition {
   showInStart?: boolean;
 }
 
+export type SourceWindowSnap="left"|"right"|"vertical";
+export interface SourceWindowBounds{x:number;y:number;width:number;height:number}
+
 export interface DesktopWindow {
   id: string;
   appId: string;
@@ -48,6 +51,8 @@ export interface DesktopWindow {
   z: number;
   minimized: boolean;
   maximized: boolean;
+  snapped?:SourceWindowSnap;
+  restoreBounds?:SourceWindowBounds;
   resizable?: boolean;
   minimizable?: boolean;
   titlebarIcon?: boolean;
@@ -84,6 +89,8 @@ export type DesktopAction =
   | { type: "RESIZE_WINDOW"; id: string; x: number; y: number; width: number; height: number }
   | { type: "MINIMIZE_WINDOW"; id: string }
   | { type: "TOGGLE_MAXIMIZE"; id: string }
+  | { type: "ARRANGE_WINDOW"; id:string; mode:SourceWindowSnap|null; bounds:SourceWindowBounds; restoreBounds?:SourceWindowBounds }
+  | { type: "RESTORE_WINDOW_FOR_DRAG"; id:string; bounds:SourceWindowBounds }
   /** Source 245c fullscreen=true for Advanced, despite resizable=false. */
   | { type: "SET_MINESWEEPER_FULLSCREEN"; id: string; fullscreen: boolean }
   | { type: "CLOSE_WINDOW"; id: string }
