@@ -132,8 +132,15 @@ test("original Control Panel Action Center shows source empty history, not inven
   await expect(action).toContainText("Action Center has nothing to report.");
   await expect(action.locator("[data-test-no-messages]")).toHaveText("No messages");
   await expect(action.locator("[data-test-cpanel-action-message]")).toHaveCount(0);
-  await expect(action.getByRole("button",{name:"Change Action Center settings"})).toBeDisabled();
-  await expect(action.getByRole("button",{name:"View archived messages"})).toBeDisabled();
+  // Frozen cpanel handleResize: side pane only above 500px (or full).
+  const side=action.locator(".windows-cpanel__action-sidebar");
+  const width=await action.evaluate(el=>el.clientWidth);
+  if(width>500)await expect(side).toBeVisible();
+  else await expect(side).toBeHidden();
+  for(const name of ["Change Action Center settings","View archived messages"]){
+    const link=side.getByRole("button",{name,includeHidden:true});
+    await expect(link).toBeDisabled();
+  }
   await panel.locator("[data-test-cpanel-back]").click();
   await expect(panel.locator("[data-test-cpanel-items]")).toBeVisible();
   await panel.getByRole("searchbox",{name:"Search Control Panel"}).fill("action");
