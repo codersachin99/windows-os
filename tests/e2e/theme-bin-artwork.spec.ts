@@ -238,7 +238,8 @@ test("original Ubuntu Computer and Desktop files use theme-specific folder/gener
   await page.locator('[data-test-desktop-icon="computer"]').dblclick();
   const explorer=page.locator('[data-test-window="computer"]').first();
   await expect(explorer).toBeVisible();
-  await expect(page.locator('[data-test-start-button] img')).toHaveAttribute("src","/assets/images/start-button-ubuntu.a6d206e0.webp");
+  const dock=page.locator("[data-test-dock]");
+  await expect(dock.locator('[data-test-start-button] img')).toHaveAttribute("src","/assets/images/start-button-ubuntu.a6d206e0.webp");
   await expect(explorer.locator(".explorer-navigation__home").first().locator("img"))
     .toHaveAttribute("src","/assets/images/computer-ubuntu.ab0d9786.webp");
   for(const [label,art] of [["Documents","/assets/images/folder-docs-ubuntu.d9b020ee.svg"],["Downloads","/assets/images/folder-downloads-ubuntu.367c96da.svg"],["Music","/assets/images/folder-music-ubuntu.c191048c.svg"],["Pictures","/assets/images/folder-pics-ubuntu.f0402adf.svg"],["Videos","/assets/images/folder-videos-ubuntu.c9f591cb.svg"]]){
@@ -269,9 +270,14 @@ test("original Ubuntu Computer and Desktop files use theme-specific folder/gener
   await expect(unknown.locator(".desktop__icon-icon"))
     .toHaveAttribute("src","/assets/images/file-ubuntu.2f731416.svg");
 
+  // The desktop folder can sit underneath the open Explorer on small screens.
+  // Minimize via the real window control, then open from Desktop.
+  await explorer.locator('[data-source-window-control="minimize"]').click();
+  await expect(explorer).toHaveCount(0);
   await folder.dblclick();
-  await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
-  const opened=page.locator('[data-test-window="computer"]').last();
+  const opened=page.locator('[data-test-window="computer"]');
+  await expect(opened).toHaveCount(1);
+  await expect(dock.locator('[data-source-ubuntu-dock-id="computer"]')).toHaveClass(/is-running/);
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/Ubuntu Source Folder");
 });
