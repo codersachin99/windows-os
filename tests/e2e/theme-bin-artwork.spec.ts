@@ -272,11 +272,15 @@ test("original Ubuntu Computer and Desktop files use theme-specific folder/gener
 
   // The desktop folder can sit underneath the open Explorer on small screens.
   // Minimize via the real window control, then open from Desktop.
+  const originalId=await explorer.getAttribute("data-test-window-id");
+  expect(originalId).toBeTruthy();
   await explorer.locator('[data-source-window-control="minimize"]').click();
   await expect(explorer).toHaveCount(0);
   await folder.dblclick();
   const opened=page.locator('[data-test-window="computer"]');
   await expect(opened).toHaveCount(1);
+  expect(await opened.getAttribute("data-test-window-id")).not.toBe(originalId);
+  await expect(page.locator('[data-test-window-id="'+originalId+'"]')).toBeAttached();
   await expect(dock.locator('[data-source-ubuntu-dock-id="computer"]')).toHaveClass(/is-running/);
   await expect(opened.getByRole("textbox",{name:"Folder address"}))
     .toHaveValue(SOURCE_DESKTOP+"/Ubuntu Source Folder");
