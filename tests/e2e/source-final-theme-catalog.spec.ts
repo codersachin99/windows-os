@@ -434,8 +434,7 @@ test("basic-1 original non-glass Win7 window controls and taskbar remain operati
   await expect(bar).toHaveCSS("height","40px");
   await expect(bar).toHaveCSS("background-image",/linear-gradient\(to right/);
   const start=page.locator('[data-test-start-button]');
-  await expect(start.locator("img")).toHaveAttribute("src",
-    "/assets/images/start-button.b35eae12.webp");
+  await expect(start.locator("[data-test-source-start-sprite]")).toHaveCSS("background-image",/start-button\.b35eae12\.webp/);
   await start.click();
   await expect(page.locator('[data-test-start-menu]')).toBeVisible();
   await expect(page.locator('[data-test-start-menu] .windows-startmenu__right'))
@@ -529,8 +528,7 @@ for(const aero of ["aero-1","aero-2","aero-3","aero-4"] as const){
     await expect(page.locator('[data-test-taskbar="base"]'))
       .toHaveCSS("height","40px");
     const start=page.locator('[data-test-start-button]');
-    await expect(start.locator("img")).toHaveAttribute("src",
-      "/assets/images/start-button.b35eae12.webp");
+    await expect(start.locator("[data-test-source-start-sprite]")).toHaveCSS("background-image",/start-button\.b35eae12\.webp/);
     await start.click();
     await expect(page.locator('[data-test-start-menu]')).toBeVisible();
     await expect(start).toHaveAttribute("aria-expanded","true");
@@ -586,7 +584,10 @@ for(const theme of ["win7","aero-1","aero-2","aero-3","aero-4"] as const){
     expect(pseudo.shadow).toContain("inset");
     const start=page.locator('[data-test-start-button]');
     await expect(start).toHaveCSS("width","54px");
-    await expect(start.locator("img")).toHaveCSS("width","40px");
+    const sprite=start.locator("[data-test-source-start-sprite]");
+    await expect(sprite).toBeVisible();
+    await expect(sprite).toHaveCSS("background-image",/start-button\.b35eae12\.webp/);
+    await expect(sprite).toHaveCSS("background-position-y","-7px");
     await start.click();
     await expect(page.locator('[data-test-start-menu]')).toBeVisible();
     await start.click();
