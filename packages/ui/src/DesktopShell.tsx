@@ -495,7 +495,7 @@ export function DesktopShell({
     },SOURCE_TASKBAR_PEEK_HIDE_DELAY_MS);
   };
   const showTaskbarPreview=(appId:string,button:HTMLElement)=>{
-    if(!SOURCE_TASKBAR_FINAL_FEATURES.showPeekPreviews||
+    if(taskbarContext||!SOURCE_TASKBAR_FINAL_FEATURES.showPeekPreviews||
       window.matchMedia?.("(hover: none)").matches)return;
     const running=state.windows.filter(win=>win.appId===appId);
     if(!running.length)return;
@@ -535,8 +535,12 @@ export function DesktopShell({
   useEffect(()=>{
     if(livePreview&&!state.windows.some(win=>win.appId===livePreview.appId)){
       setLivePreview(null);setPeekWindowId(null);
+    }else if(peekWindowId&&!state.windows.some(win=>win.id===peekWindowId)){
+      // A different close route can remove one instance while the group
+      // survives. Never leave the remaining windows invisible.
+      setPeekWindowId(null);
     }
-  },[state.windows,livePreview]);
+  },[state.windows,livePreview,peekWindowId]);
   const restoreStartFocus=useRef(false);
   const closeStartOnEscape=useCallback(()=>{
     restoreStartFocus.current=true;
@@ -756,6 +760,7 @@ export function DesktopShell({
           if((event.target as HTMLElement).closest("button,[data-test-tray-icon]"))
             return;
           event.preventDefault();
+          dismissLivePreview();
           taskbarContextReturnFocus.current=event.currentTarget;
           setTaskbarContext({
             kind:"background",x:event.clientX,y:event.clientY
@@ -840,6 +845,7 @@ export function DesktopShell({
                   onMouseLeave={schedulePreviewHide}
                   onContextMenu={event=>{
                     event.preventDefault();event.stopPropagation();
+                    dismissLivePreview();
                     taskbarContextReturnFocus.current=event.currentTarget;
                     const rect=event.currentTarget.getBoundingClientRect();
                     setTaskbarContext({kind:"item",id,x:rect.left+rect.width/2,y:rect.top});
@@ -871,6 +877,7 @@ export function DesktopShell({
               onMouseLeave={schedulePreviewHide}
               onContextMenu={event=>{
                 event.preventDefault();event.stopPropagation();
+                dismissLivePreview();
                 taskbarContextReturnFocus.current=event.currentTarget;
                 const rect=event.currentTarget.getBoundingClientRect();
                 setTaskbarContext({
