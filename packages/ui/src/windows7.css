@@ -211,6 +211,10 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   background:linear-gradient(#fafcff,#eaf1fa);
   font:12px "Segoe UI",Tahoma,sans-serif;color:#203447;
 }
+.windows-taskbar__context hr{
+  flex:none;align-self:stretch;border:0;border-top:1px solid currentColor;
+  opacity:.2;margin:3px 4px;
+}
 .windows-taskbar__context button{
   text-align:left;min-height:28px;
   border:1px solid transparent;background:transparent;
