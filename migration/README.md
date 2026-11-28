@@ -1,3 +1,5 @@
+> **28 November 2026 — Snap migration:** prior resize checkpoint green (817 units/80 browser cases). Added titlebar snap, drag-to-restore and vertical handle double-click with original preview styling; focused checks requested.
+
 > **28 November 2026 — Window resizing:** previous taskbar checkpoint green (811 units/64 browser tests). Added shared eight-direction window resize with source minimum dimensions and responsive clamping; focused verification requested.
 
 > **28 November 2026 — Full green baseline:** 810 unit tests and 1,725 browser cases passed, 5 browser skips, zero failures on f8e7630. Ported original Aero Peek glass/stacked edge and requested focused checks for accumulated taskbar changes.
