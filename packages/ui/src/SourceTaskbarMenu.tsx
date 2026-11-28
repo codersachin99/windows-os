@@ -1,4 +1,4 @@
-import {useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
+import {Fragment,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
 import type {DesktopAction,DesktopWindow} from "@windows-os/contracts";
 import {appRegistry} from "@windows-os/sdk";
 import {taskbarPins} from "./sourceTaskbarPins";
@@ -36,6 +36,20 @@ export function sourceTaskbarPopupPosition(
   };
 }
 
+/** Frozen taskbar-menu offset watcher: background menus begin at the
+ * pointer or flip left when the right edge would exceed the viewport.
+ * Keep the existing viewport safety clamp for very narrow Guest screens. */
+export function sourceTaskbarBackgroundPosition(
+  anchor:{x:number;y:number},size:{width:number;height:number},
+  viewport:{width:number;height:number}
+):{left:number;top:number}{
+  const left=anchor.x+size.width<viewport.width?anchor.x:anchor.x-size.width;
+  return {
+    left:Math.max(0,Math.min(left,viewport.width-size.width)),
+    top:Math.max(0,Math.min(anchor.y-size.height,viewport.height-size.height))
+  };
+}
+
 export function SourceTaskbarMenu({
   context,windows,pinned,dispatch,onRequestCloseWindow,onClose,returnFocusTarget
 }:SourceTaskbarMenuProps){
@@ -50,7 +64,8 @@ export function SourceTaskbarMenu({
   useLayoutEffect(()=>{
     const node=ref.current;
     if(!node)return;
-    const align=()=>setPosition(sourceTaskbarPopupPosition(
+    const locate=context.kind==="background"?sourceTaskbarBackgroundPosition:sourceTaskbarPopupPosition;
+    const align=()=>setPosition(locate(
       context,{width:node.offsetWidth,height:node.offsetHeight},
       {width:window.innerWidth,height:window.innerHeight}));
     align();
@@ -117,10 +132,12 @@ export function SourceTaskbarMenu({
         event.preventDefault();
       }
     }}>
-    {options.map(item=><button key={item.id} type="button"
+    {options.map(item=><Fragment key={item.id}><button type="button"
       role="menuitem" disabled={item.disabled}
       data-test-taskbar-context-action={item.id}
       title={item.disabled?"Original action not yet migrated":undefined}
-      onClick={()=>act(item.id)}>{item.label}</button>)}
+      onClick={()=>act(item.id)}>{item.label}</button>
+      {item.dividerAfter&&<hr role="separator" data-test-taskbar-context-divider={item.id}/>}
+    </Fragment>)}
   </div>;
 }
