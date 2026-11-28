@@ -1,3 +1,11 @@
+## 28 November 2026 — Resize verified; original window snap and drag-to-restore
+
+Exact head 67437d1 run 46167937220/job 141049566006 succeeded: 817 units/169 files, 80 focused browser tests (1.8m), TypeScript, source inventory/artwork/Contacts checks and Vite build. This verifies previous resize slice.
+
+Frozen dcfced3e helpers z/c/m and p define top maximize, left/right half-screen, vertical full-height and mouse 8px/touch 48px/zoom margins. Added shared sourceWindowSnap geometry, snap state and pre-snap restore bounds in contracts/reducer, titlebar drag previews and release to snap/maximize, dragging away from snapped/maximized restores original dimensions under pointer, top/bottom handle double-click vertical stretch toggles. Actual pointer capture/cancellation preserved. Ported source Win7 glass preview rules (including RTL and effects gate) plus classic XP/9x outline; other themes use the neutral/classic outline pending source-specific audit. Work-area reservation and pointer-fraction restore are responsive React adapters. Added five geometry cases and two real pointer browser scenarios. Unverified on new head; original vertical resize-edge drag snapping (as distinct from handle double-click), keyboard snapping and persistent per-app placement remain pending. Request focused [run-ci] [taskbar-check] at checkpoint, keep normal full CI opt-in. Main/releases unchanged. Next inspect focused result, resolve failures and migrate remaining arrangement behavior.
+
+---
+
 ## 28 November 2026 — Taskbar green and eight-direction window resizing
 
 Exact head ab50d2b run 46167570520/job 141048401141 succeeded: 811 units/168 files and 64 focused browser tests (1.4m), TypeScript, source inventory/artwork/Contacts checks and Vite build passed. This verifies popup artwork, preview isolation/conflict handling, source glass dimensions and stacked edge on that checkpoint.
