@@ -21,12 +21,15 @@ test("source WinXP blue shell tokens reach taskbar, window chrome and Start",asy
   await expect(start).toHaveClass(/windows-startmenu--winxp/);
   await expect(start).toHaveCSS("border-top-color","rgb(22, 101, 203)");
 });
-test("source Win11 has 48px pale centered taskbar, 40px app cells and light window",async({page})=>{
+test("source Win11 has 48px pale left-aligned taskbar, 40px app cells and light window",async({page})=>{
   const shell=await guestTheme(page,"win11");
   const taskbar=shell.locator(".windows-taskbar");
   await expect(taskbar).toHaveCSS("height","48px");
   await expect(taskbar).toHaveCSS("background-color","rgb(240, 240, 240)");
-  await expect(taskbar).toHaveCSS("justify-content","center");
+  await expect(taskbar).toHaveAttribute("data-taskbar-centered","false");
+  const barBox=await taskbar.boundingBox();
+  const startBox=await taskbar.locator("[data-test-start-button]").boundingBox();
+  expect(Math.abs(startBox!.x-barBox!.x)).toBeLessThanOrEqual(12);
   await shell.locator('[data-test-desktop-icon="computer"]').dblclick();
   const win=shell.locator('[data-test-window="computer"]');
   await expect(win).toHaveCSS("background-color","rgb(240, 240, 240)");
@@ -38,8 +41,7 @@ test("source Win11 has 48px pale centered taskbar, 40px app cells and light wind
   await expect(start).toHaveClass(/windows-startmenu--win11/);
   const box=await start.boundingBox();
   expect(box).not.toBeNull();
-  expect(Math.abs(box!.x+box!.width/2-(await page.evaluate(()=>innerWidth/2))))
-    .toBeLessThanOrEqual(2);
+  expect(Math.abs(box!.x-4)).toBeLessThanOrEqual(2);
 });
 test("new theme skin imports do not contaminate the original Win7 shell",async({page})=>{
   const shell=await guestTheme(page,"win7");
@@ -200,7 +202,12 @@ test("XP and Win11 Computer sidebar shows pinned source drive and Guest folder a
   }
 });
 
-test("source XP notification tray uses pinned theme images, leaving unported icons honest",async({page})=>{
+test("source XP notification tray uses pinned theme artwork and live battery state",async({page})=>{
+  await page.addInitScript(()=>{
+    const battery=Object.assign(new EventTarget(),{level:.73,charging:false});
+    Object.defineProperty(navigator,"getBattery",{configurable:true,value:()=>Promise.resolve(battery)});
+    window.addEventListener("source-test-charging",()=>{battery.charging=true;battery.dispatchEvent(new Event("chargingchange"));});
+  });
   const xp=await guestTheme(page,"winxp");
   const tray=xp.locator("[data-test-taskbar='base']");
   for(const [id,path] of [
@@ -212,8 +219,9 @@ test("source XP notification tray uses pinned theme images, leaving unported ico
       .toHaveAttribute("src","/assets/images/"+path);
   }
   await expect(tray.locator('[data-test-tray-icon="TaskbarVolume"] img'))
-    .toHaveAttribute("src","/assets/images/volume-100.fb90d926.webp");
+    .toHaveAttribute("src","/assets/images/sound-winxp.1ff35c0e.webp");
+  await page.evaluate(()=>window.dispatchEvent(new Event("source-test-charging")));
+  await expect(tray.locator('[data-test-tray-icon="TaskbarBattery"] img')).toHaveAttribute("src","/assets/images/battery-charging-winxp.321f84b7.webp");
   const win11=await guestTheme(page,"win11");
-  await expect(win11.locator('[data-test-tray-icon="TaskbarNetwork"] img'))
-    .toHaveAttribute("src","/assets/images/network.21b75845.webp");
+  await expect(win11.locator('[data-test-tray-icon="TaskbarNetwork"] svg')).toBeVisible();
 });
