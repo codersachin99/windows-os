@@ -1,3 +1,5 @@
+> **28 November 2026 — CI regression repair:** recovered 807 green units and 1077 passing browser cases, 32 failed. Updated stale source UI contracts and Ubuntu desktop interaction; focused opt-in CI requested.
+
 > **28 November 2026 — Win10 search glyph/catalog/timing:** original Line Awesome artwork, source program catalog and 300ms published query with fresh Enter handling. Consolidated opt-in CI requested; verification pending.
 
 > **27 November 2026 — Win10 search artwork:** original file/shortcut icon resolution, real Guest upload and keyboard browser contracts. Tests authored; CI status unavailable.
