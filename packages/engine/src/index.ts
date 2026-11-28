@@ -1,4 +1,4 @@
-import {sourceWindowPlacementKey,sourceRemembersPlacement,sourceReadWindowPlacements,sourceCaptureWindowPlacement,sourceApplyWindowPlacement} from "./sourceWindowPlacement";
+import {sourceWindowPlacementKey,sourceRemembersPlacement,sourceReadWindowPlacements,sourceCaptureWindowPlacement,sourceApplyWindowPlacement,sourceWindowWorkAreaForTheme} from "./sourceWindowPlacement";
 export {SOURCE_WINDOW_PLACEMENTS_KEY} from "./sourceWindowPlacement";
 import {sourceIsKnownTheme} from "@windows-os/contracts";
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
@@ -140,8 +140,9 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
   const defaults=sourceWindowPlacement(app.window,ordinal,viewport);
   const remembersPlacement=sourceRemembersPlacement(app);
   const saved=remembersPlacement?state.windowPlacements?.[sourceWindowPlacementKey(app.id)]:undefined;
-  const placement=saved?sourceApplyWindowPlacement(saved,app.window,app.window.resizable!==false,
-    {width:Math.max(1,viewport.width),height:Math.max(1,viewport.height-40)}):{...defaults,maximized:false};
+  const area=sourceWindowWorkAreaForTheme(state.theme,viewport);
+  const placement=saved?sourceApplyWindowPlacement(saved,app.window,app.window.resizable!==false,area):
+    sourceApplyWindowPlacement({...defaults,maximized:false},defaults,true,area);
   const window = {
     id: `${app.id}-${ordinal}`,
     appId: app.id,
@@ -223,18 +224,15 @@ function reduceDesktop(state: DesktopState, action: DesktopAction): DesktopState
         startOpen: false
       };
     }
-    case "MOVE_WINDOW":
-      return { ...state, windows: state.windows.map(window => window.id === action.id
-        ? {
-          ...window,
-          x: Math.max(0, Math.min(action.x,
-            Math.max(0, (typeof globalThis.window === "undefined" ? 960
-              : globalThis.window.innerWidth) - window.width))),
-          y: Math.max(0, Math.min(action.y,
-            Math.max(0, (typeof globalThis.window === "undefined" ? 700
-              : globalThis.window.innerHeight) - 40 - window.height)))
-        }
-        : window) };
+    case "MOVE_WINDOW": {
+      const viewport={width:typeof globalThis.window==="undefined"?960:globalThis.window.innerWidth,
+        height:typeof globalThis.window==="undefined"?700:globalThis.window.innerHeight};
+      const area=sourceWindowWorkAreaForTheme(state.theme,viewport);
+      return {...state,windows:state.windows.map(win=>win.id===action.id
+        ? {...win,x:Math.max(area.x,Math.min(action.x,area.x+area.width-win.width)),
+          y:Math.max(area.y,Math.min(action.y,area.y+area.height-win.height))}
+        :win)};
+    }
     case "RESIZE_WINDOW": {
       if (![action.x,action.y,action.width,action.height].every(Number.isFinite) ||
           action.width<=0||action.height<=0||action.x<0||action.y<0) return state;

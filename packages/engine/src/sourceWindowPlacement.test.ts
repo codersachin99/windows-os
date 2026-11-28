@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {sourceWindowPlacementKey,sourceRemembersPlacement,sourceReadWindowPlacements,sourceCaptureWindowPlacement,sourceApplyWindowPlacement} from "./sourceWindowPlacement";
+import {sourceWindowPlacementKey,sourceRemembersPlacement,sourceReadWindowPlacements,sourceCaptureWindowPlacement,sourceApplyWindowPlacement,sourceWindowWorkAreaForTheme} from "./sourceWindowPlacement";
 import {desktopReducer,initialDesktopState} from "./index";
 import {appRegistry} from "@windows-os/sdk";
 describe("frozen Guest placement registry e4c9",()=>{
@@ -19,6 +19,32 @@ describe("frozen Guest placement registry e4c9",()=>{
   it("rejects corrupt storage and malformed entries",()=>{
     expect(sourceReadWindowPlacements({getItem:()=>"{oops"})).toEqual({});
     expect(sourceReadWindowPlacements({getItem:()=>JSON.stringify({bad:{x:-1,y:0,maximized:false},explorer:{x:20,y:30,maximized:false}})})).toEqual({explorer:{x:20,y:30,maximized:false}});
+  });
+  it("mirrors source work-area reservations for modern, classic and dock shells",()=>{
+    const viewport={width:1000,height:750};
+    expect(sourceWindowWorkAreaForTheme("win7",viewport)).toEqual({x:0,y:0,width:1000,height:710});
+    expect(sourceWindowWorkAreaForTheme("win11",viewport)).toEqual({x:0,y:0,width:1000,height:702});
+    expect(sourceWindowWorkAreaForTheme("chromeos",viewport)).toEqual({x:0,y:0,width:1000,height:702});
+    expect(sourceWindowWorkAreaForTheme("win95",viewport)).toEqual({x:0,y:0,width:1000,height:714});
+    expect(sourceWindowWorkAreaForTheme("macos",viewport)).toEqual({x:0,y:28,width:1000,height:648});
+    expect(sourceWindowWorkAreaForTheme("ubuntu",viewport)).toEqual({x:64,y:32,width:936,height:718});
+  });
+  it("clamps persisted physical bounds above menus and to the right of docks",()=>{
+    const saved={x:0,y:0,width:960,height:800,maximized:false};
+    expect(sourceApplyWindowPlacement(saved,{width:760,height:490},true,
+      sourceWindowWorkAreaForTheme("ubuntu",{width:1000,height:750})))
+      .toEqual({x:64,y:32,width:936,height:718,maximized:false});
+    expect(sourceApplyWindowPlacement(saved,{width:760,height:490},true,
+      sourceWindowWorkAreaForTheme("macos",{width:1000,height:750})))
+      .toEqual({x:0,y:28,width:960,height:648,maximized:false});
+  });
+  it("clamps ordinary window moves to the active themed workspace",()=>{
+    let state={...desktopReducer(initialDesktopState(),{type:"GUEST_LOGIN"}),theme:"ubuntu" as const};
+    state=desktopReducer(state,{type:"OPEN_APP",app:appRegistry.get("computer")!});
+    const id=state.windows[0].id;
+    state=desktopReducer(state,{type:"MOVE_WINDOW",id,x:0,y:0});
+    expect(state.windows[0].x).toBe(64);
+    expect(state.windows[0].y).toBe(32);
   });
   it("stores completed resize and shares saved geometry on reopen",()=>{
     let state=desktopReducer(initialDesktopState(),{type:"GUEST_LOGIN"});

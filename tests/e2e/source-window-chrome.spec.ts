@@ -229,3 +229,32 @@ test("source Explorer shared placement survives reopening and Guest reload",asyn
   await expect(win).toBeVisible();
   expect(await win.boundingBox()).toEqual(resized);
 });
+
+/** Reopening saved Guest windows must respect each real source shell's
+ * work-area edges, including top bars and side/bottom docks. */
+for(const {theme,avatar,minimumX,minimumY,bottom} of [
+  {theme:"ubuntu",avatar:"ubuntu",minimumX:64,minimumY:32,bottom:0},
+  {theme:"macos",avatar:"macos",minimumX:0,minimumY:28,bottom:74},
+  {theme:"win11",avatar:"win7",minimumX:0,minimumY:0,bottom:48},
+  {theme:"chromeos",avatar:"win7",minimumX:0,minimumY:0,bottom:48},
+  {theme:"win95",avatar:"win7",minimumX:0,minimumY:0,bottom:36}
+]){
+  test(theme+" saved Guest window respects source work-area edges",async({page})=>{
+    await page.setViewportSize({width:1000,height:750});
+    await page.addInitScript(()=>{
+      localStorage.setItem("windows-os:guest:window-placements:v1",
+        JSON.stringify({explorer:{x:0,y:0,width:960,height:800,maximized:false}}));
+    });
+    await page.goto("/?theme="+theme);
+    await page.locator(avatar==="win7"?'[data-test-avatar="win7"]':
+      '[data-test-source-logon-avatar="'+avatar+'"]').click({timeout:12000});
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]');
+    await expect(win).toBeVisible();
+    const bounds=(await win.boundingBox())!;
+    expect(bounds.x).toBeGreaterThanOrEqual(minimumX-1);
+    expect(bounds.y).toBeGreaterThanOrEqual(minimumY-1);
+    expect(bounds.x+bounds.width).toBeLessThanOrEqual(1001);
+    expect(bounds.y+bounds.height).toBeLessThanOrEqual(750-bottom+1);
+  });
+}
