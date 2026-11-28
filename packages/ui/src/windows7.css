@@ -239,3 +239,13 @@ button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* Final legacy source maxWindowsPerApp: Guest error above taskbar/windows. */
 .windows-desktop__limit-alert{position:fixed;inset:0;z-index:5500;pointer-events:auto}
+
+/* Source item popup-button: flex icon/label, gap-2, p-1, nowrap.
+ * Retain the current theme-specific menu surface and focus rules. */
+.windows-taskbar__context[data-test-taskbar-context="item"] > button{
+  display:flex;align-items:center;gap:8px;padding:4px;
+  white-space:nowrap;overflow:hidden;text-align:start;
+}
+.windows-taskbar__context[data-test-taskbar-context="item"] > button img{
+  display:block;flex:none;width:16px;height:16px;object-fit:contain;
+}
