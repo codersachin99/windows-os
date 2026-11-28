@@ -1,4 +1,5 @@
 import {expect,test,type Page} from "@playwright/test";
+import {openTaskbarBackgroundContext} from "./taskbarBackground";
 
 /**
  * Pinned original legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776
@@ -16,13 +17,7 @@ for(const theme of ["win7","winxp","win11dark","basic-1"] as const){
   test(theme+" taskbar background context enters first enabled action and restores background on Escape",async({page})=>{
     await logon(page,theme);
     const taskbar=page.locator(".windows-taskbar");
-    // Source Win11 centers Start and running items; the empty lane has no
-    // width, so use the left footer edge. Earlier themes have a Start
-    // button there, and the running lane is their empty background.
-    if(theme==="win11dark")
-      await taskbar.click({button:"right",position:{x:12,y:10}});
-    else await page.locator(".windows-taskbar__running")
-      .click({button:"right",position:{x:15,y:5}});
+    await openTaskbarBackgroundContext(page);
     const menu=page.locator('[data-test-taskbar-context="background"]');
     await expect(menu).toBeVisible();
     for(const name of ["toolbar","cascade","stack","side"])
