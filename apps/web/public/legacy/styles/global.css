@@ -1,0 +1,56 @@
+/**
+ * Win7 Simu - Global Core Stylesheet
+ *
+ * Defines OS canvas background and core typography font-faces for retro Windows / DOS emulation.
+ */
+
+/* ==========================================================================
+   Root Desktop Canvas
+   ========================================================================== */
+html {
+  background: #000000;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ==========================================================================
+   Windows System Typography & Font Faces
+   ========================================================================== */
+
+/* Lucidacons System Glyphs */
+@font-face {
+  font-family: "lucidacons";
+  src: url("/assets/fonts/lucidacons.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Segoe Script / Sticky Notes */
+@font-face {
+  font-family: "segoepr";
+  src: url("/assets/fonts/segoepr.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* DOS / BIOS VGA Terminal Font */
+@font-face {
+  font-family: "dos-vga";
+  src: url("/assets/fonts/dos-vga.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Classic Windows MS Sans Serif (Regular) */
+@font-face {
+  font-family: "ms-sans-serif";
+  font-weight: normal;
+  src: url("/assets/fonts/ms-sans-serif.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Classic Windows MS Sans Serif (Bold) */
+@font-face {
+  font-family: "ms-sans-serif";
+  font-weight: bold;
+  src: url("/assets/fonts/ms-sans-serif-bold.ttf") format("truetype");
+  font-display: swap;
+}

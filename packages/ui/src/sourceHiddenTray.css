@@ -1,0 +1,28 @@
+/* Shared base TaskbarHiddenItems adapter for migrated non-Win7
+ * taskbar-base themes. Top-bar themes have fixed tray items.
+ * Preserve source-specific popup paint and do not duplicate controls. */
+.windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .windows-taskbar__hidden-items{
+  display:flex;flex-direction:column;align-items:stretch;gap:0;
+  right:auto;inset-inline-end:0;z-index:4900;overflow:visible;
+}
+.windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-grid{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 4px;
+  padding:20px;
+}
+.windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-grid .windows-taskbar__tray-icon{
+  position:static;display:grid;place-items:center;width:24px;min-width:24px;height:24px;flex:0 0 24px;
+}
+.windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-grid :is(.source-macos-network-popup,.source-macos-action-center-popup,.source-macos-battery-popup,.source-macos-volume-popup){
+  position:absolute;top:auto;bottom:calc(100% + 4px);inset-inline-end:0;
+  max-width:min(calc(100vw - 24px),var(--source-hidden-popup-width,100vw));max-height:var(--source-hidden-popup-height,calc(100dvh - var(--taskbar-height,40px) - 150px));overflow:auto;
+}
+.windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-customize{
+  display:block;width:100%;padding:12px;border:0;border-top:1px solid currentColor;
+  background:none;color:var(--theme-color,#1967d2);font:inherit;white-space:nowrap;
+}
+.windows-desktop[data-source-interactive-hidden-tray]:not([data-source-win7-tray]) .source-hidden-tray-customize:hover{text-decoration:underline}
+.windows-desktop[data-theme="chromeos"][data-source-interactive-hidden-tray] .windows-taskbar__hidden-items{
+  background:#fff;color:#333;border:1px solid #dadce0;border-radius:8px;
+}
+.windows-desktop[data-theme="chromeos"][data-source-interactive-hidden-tray] .source-hidden-tray-customize{color:#1967d2}
+.windows-desktop[data-theme="aeroNoir"][data-source-interactive-hidden-tray] .source-hidden-tray-customize{color:#d1f1c9}

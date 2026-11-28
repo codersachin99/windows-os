@@ -1,0 +1,25 @@
+import {test,expect} from "@playwright/test";
+test("Kubuntu source base taskbar and desktop selection retain real window commands",async({page})=>{
+  await page.goto("/?theme=kubuntu");
+  await page.locator('[data-test-source-logon-avatar="kubuntu"]').click({timeout:12000});
+  const shell=page.locator('[data-test-main-screen][data-theme="kubuntu"]');
+  const bar=shell.locator(".windows-taskbar");
+  await expect(bar).toBeVisible();
+  await expect.poll(async()=>bar.evaluate(el=>getComputedStyle(el).backgroundColor)).toMatch(/^(rgb\(42, 46, 50\)|rgba\(42, 46, 50, 0\.867\))$/);
+  const icon=shell.locator('[data-test-desktop-icon="computer"]');
+  await icon.click();
+  await expect(icon).toHaveClass(/is-active/);
+  await expect.poll(()=>icon.evaluate(el=>getComputedStyle(el,"::before").opacity)).toBe("0.7");
+  await expect(icon).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
+  await icon.dblclick();
+  const win=shell.locator('[data-test-window="computer"]').first();
+  await expect(win).toBeVisible();
+  const task=bar.locator('[data-test-taskbar-pin="computer"],[data-test-taskbar-running-group="computer"]').first();
+  await expect(task).toHaveClass(/is-active/);
+  await expect(task).toHaveCSS("background-color","rgb(89, 134, 202)");
+  await expect(task).toHaveCSS("border-top-left-radius","0px");
+  await bar.getByRole("button",{name:"Show desktop",exact:true}).click();
+  await expect(win).toBeHidden();
+  await task.click();
+  await expect(win).toBeVisible();
+});

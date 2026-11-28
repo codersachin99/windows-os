@@ -1,0 +1,32 @@
+/* Source snap preview is an absolutely positioned sibling of the window.
+ * Default outline follows the XP/9x source; Win7 Aero and Vista retain source glass. */
+.source-window-snap-preview{position:absolute;pointer-events:none;border:1px solid #fff;box-shadow:inset 0 0 0 1px #000}
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"]) .source-window-snap-preview {
+  border-radius:6px;
+  border:1px solid rgba(0,0,0,.6666666667);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6666666667)
+}
+
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"]) .source-window-snap-preview {
+  background:linear-gradient(140deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px),linear-gradient(225deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px)
+}
+
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"]):dir(rtl) .source-window-snap-preview {
+  background:linear-gradient(-140deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px),linear-gradient(-225deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px)
+}
+
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"])[data-effect-enable-glass] .source-window-snap-preview {
+  backdrop-filter:blur(4px)
+}
+
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"])[data-effect-enable-glass] .source-window-snap-preview {
+  background:linear-gradient(140deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px),linear-gradient(225deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px),linear-gradient(54deg, rgba(0, 0, 0, 0.1333333333) 0 4%, rgba(102, 102, 102, 0.0666666667) 6% 6%, rgba(0, 0, 0, 0.1333333333) 8% 10%, rgba(0, 0, 0, 0.1333333333) 15% 16%, rgba(170, 170, 170, 0.0666666667) 17% 18%, rgba(0, 0, 0, 0.1333333333) 23% 24%, rgba(187, 187, 187, 0.1333333333) 25% 26%, rgba(0, 0, 0, 0.1333333333) 31% 33%, rgba(0, 0, 0, 0.1333333333) 34% 34.5%, rgba(187, 187, 187, 0.1333333333) 36% 40%, rgba(0, 0, 0, 0.1333333333) 41% 41.5%, rgba(187, 187, 187, 0.1333333333) 44% 45%, rgba(187, 187, 187, 0.1333333333) 46% 47%, rgba(0, 0, 0, 0.1333333333) 48% 49%, rgba(0, 0, 0, 0.1333333333) 50% 50.5%, rgba(0, 0, 0, 0.1333333333) 56% 56.5%, rgba(187, 187, 187, 0.1333333333) 57% 63%, rgba(0, 0, 0, 0.1333333333) 67% 69%, rgba(187, 187, 187, 0.1333333333) 69.5% 70%, rgba(0, 0, 0, 0.1333333333) 73.5% 74%, rgba(187, 187, 187, 0.1333333333) 74.5% 79%, rgba(0, 0, 0, 0.1333333333) 80% 84%, rgba(170, 170, 170, 0.1333333333) 85% 86%, rgba(0, 0, 0, 0.1333333333) 87%, rgba(187, 187, 187, 0.0666666667) 90%) left center/100vw 100vh
+}
+
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"]):dir(rtl)[data-effect-enable-glass] .source-window-snap-preview {
+  background:linear-gradient(-140deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px),linear-gradient(-225deg, rgba(255, 255, 255, 0.5333333333), rgba(0, 0, 0, 0) 100px),linear-gradient(-54deg, rgba(0, 0, 0, 0.1333333333) 0 4%, rgba(102, 102, 102, 0.0666666667) 6% 6%, rgba(0, 0, 0, 0.1333333333) 8% 10%, rgba(0, 0, 0, 0.1333333333) 15% 16%, rgba(170, 170, 170, 0.0666666667) 17% 18%, rgba(0, 0, 0, 0.1333333333) 23% 24%, rgba(187, 187, 187, 0.1333333333) 25% 26%, rgba(0, 0, 0, 0.1333333333) 31% 33%, rgba(0, 0, 0, 0.1333333333) 34% 34.5%, rgba(187, 187, 187, 0.1333333333) 36% 40%, rgba(0, 0, 0, 0.1333333333) 41% 41.5%, rgba(187, 187, 187, 0.1333333333) 44% 45%, rgba(187, 187, 187, 0.1333333333) 46% 47%, rgba(0, 0, 0, 0.1333333333) 48% 49%, rgba(0, 0, 0, 0.1333333333) 50% 50.5%, rgba(0, 0, 0, 0.1333333333) 56% 56.5%, rgba(187, 187, 187, 0.1333333333) 57% 63%, rgba(0, 0, 0, 0.1333333333) 67% 69%, rgba(187, 187, 187, 0.1333333333) 69.5% 70%, rgba(0, 0, 0, 0.1333333333) 73.5% 74%, rgba(187, 187, 187, 0.1333333333) 74.5% 79%, rgba(0, 0, 0, 0.1333333333) 80% 84%, rgba(170, 170, 170, 0.1333333333) 85% 86%, rgba(0, 0, 0, 0.1333333333) 87%, rgba(187, 187, 187, 0.0666666667) 90%) right center/100vw 100vh
+}
+
+.windows-desktop:is([data-theme="win7"],[data-theme="aero-1"],[data-theme="aero-2"],[data-theme="aero-3"],[data-theme="aero-4"],[data-theme="winvista"])[data-effect-enable-glass] .source-window-snap-preview {
+  background-attachment:scroll,scroll,fixed
+}

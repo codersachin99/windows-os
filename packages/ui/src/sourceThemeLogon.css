@@ -1,0 +1,212 @@
+/*
+ * Guest-only React adapters of pinned legacy-win7
+ * src/modules/themes/logon-winxp.js + src/styles/themes/logon-winxp.css
+ * src/modules/themes/logon-win11.js + src/styles/themes/logon-win11.css
+ * src/modules/themes/logon-win10.js + src/styles/themes/logon-win10.css.
+ * Source art is byte-imported; external account auth is deliberately unavailable.
+ * Full CSS screenshot parity remains pending for every family; all other
+ * original screen families require independent migration and acceptance.
+ */
+.windows-logon.source-xp-logon{
+  display:flex;flex-direction:column;align-items:stretch;justify-content:stretch;
+  color:#fff;background:#00309c;background-image:none;
+  font:15px Tahoma,"Trebuchet MS",sans-serif;
+}
+.source-xp-logon__top,.source-xp-logon__bottom{
+  height:13%;flex:none;position:relative;background:#00309c;
+}
+.source-xp-logon__top::after,.source-xp-logon__bottom::before{
+  content:"";position:absolute;left:0;right:0;height:2px;pointer-events:none;
+}
+.source-xp-logon__top::after{
+  bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8) 25%,transparent);
+}
+.source-xp-logon__bottom::before{
+  top:0;background:linear-gradient(90deg,transparent,orange 25%,transparent);
+}
+.source-xp-logon__body{
+  position:relative;flex:1;min-height:0;display:flex;align-items:stretch;
+  background:radial-gradient(circle at 5% 10%,rgba(255,255,255,.4),transparent 28%),#5a7edc;
+}
+.source-xp-logon__intro,.source-xp-logon__accounts{
+  flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;
+}
+.source-xp-logon__intro{align-items:flex-end;padding:12px 40px 12px 12px;text-align:right;gap:32px}
+.source-xp-logon__intro img{width:150px;height:89px;object-fit:contain}
+.source-xp-logon__intro span{font-size:16px;max-width:260px}
+.source-xp-logon__divider{
+  position:absolute;left:50%;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.3),transparent);
+}
+.source-xp-logon__accounts{padding:12px 12px 12px 40px;align-items:flex-start}
+.source-xp-logon__guest{
+  appearance:none;background:transparent;border:1px solid transparent;
+  color:inherit;font:500 20px Tahoma,"Segoe UI",sans-serif;
+  display:flex;gap:12px;align-items:center;min-height:58px;
+  padding:5px 8px;cursor:pointer;text-align:left;transition:opacity .5s;
+  max-width:100%;
+}
+.source-xp-logon__guest img{
+  width:48px;height:48px;object-fit:cover;flex:none;
+  border:1px solid #d5d3e8;border-radius:2px;
+  box-shadow:1px 0 #d5d3e8,-1px 0 #d5d3e8,0 1px #d5d3e8,0 -1px #d5d3e8,2px 2px 3px #0003;
+}
+.source-xp-logon__guest:hover img,.source-xp-logon__guest:focus-visible img{
+  border-color:#fe0;box-shadow:1px 0 #ffb600,-1px 0 #ffb600,0 1px #ffb600,0 -1px #ffb600,2px 2px 3px #0003;
+}
+.source-xp-logon__guest:focus-visible{outline:2px solid #ffec4b;outline-offset:2px}
+.source-xp-logon__bottom{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:16px 32px;gap:12px;
+}
+.source-xp-logon__create{
+  color:#fff;font:16px Tahoma,sans-serif;background:transparent;border:0;cursor:pointer;
+}
+.source-xp-logon__create:hover,.source-xp-logon__create:focus-visible{text-decoration:underline}
+.source-theme-logon__power,.source-win11-logon__power{position:relative;display:flex;align-items:center;gap:4px}
+.source-theme-logon__power>button{
+  display:flex;align-items:center;gap:7px;background:transparent;color:#fff;border:0;
+  font:14px Tahoma,sans-serif;padding:4px 6px;cursor:pointer;
+}
+.source-theme-logon__power>button:first-child:first-letter{color:#f66}
+.source-theme-logon__power>button:hover{background:#ffffff22}
+.source-theme-logon__power-menu{
+  position:absolute;z-index:6;right:0;bottom:calc(100% + 4px);
+  min-width:125px;background:#edf2fa;color:#202c42;
+  border:1px solid #475b74;padding:4px;box-shadow:0 4px 12px #0005;
+}
+.source-theme-logon__power-menu button{
+  display:block;background:transparent;border:0;color:inherit;
+  padding:7px 10px;cursor:pointer;text-align:left;width:100%;
+}
+.source-theme-logon__power-menu button:hover,.source-theme-logon__power-menu button:focus-visible{
+  background:#c4e0fa;color:#122e4a;
+}
+.windows-logon.source-win11-logon{
+  background-color:#162139;background-position:center center;background-size:cover;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-win11-logon.source-win10-logon{
+  /* Source Win10 retains natural wallpaper cover and square login controls. */
+  background-size:cover;
+}
+.source-win10-logon .source-win11-logon__account h1{font-weight:400}
+.source-win10-logon .source-win11-logon__signin{
+  border-radius:0;padding:6px 12px;
+}
+.source-win10-logon .source-win11-logon__avatar:hover,
+.source-win10-logon .source-win11-logon__avatar:focus-visible{
+  box-shadow:0 0 0 4px rgba(255,255,255,.2);
+  outline:2px solid rgba(255,255,255,.2);outline-offset:2px;
+}
+.source-win11-logon__overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.5);
+  pointer-events:none;backdrop-filter:none;
+}
+.source-win11-logon__account{
+  z-index:1;position:relative;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;
+  width:min(95vw,440px);padding:28px 20px 60px;
+  text-align:center;
+}
+.source-win11-logon__avatar{
+  display:grid;place-items:center;appearance:none;cursor:pointer;
+  background:transparent;border:0;border-radius:50%;
+  padding:0;width:150px;height:150px;overflow:hidden;
+  transition:box-shadow .1s;
+}
+.source-win11-logon__avatar img{
+  border-radius:50%;width:150px;height:150px;object-fit:contain;
+}
+.source-win11-logon__avatar:hover,.source-win11-logon__avatar:focus-visible{
+  box-shadow:0 0 0 6px rgba(255,255,255,.4);outline:none;
+}
+.source-win11-logon__account h1{
+  color:#fff;font-size:30px;font-weight:500;margin:2px 0 0;
+  text-shadow:0 2px 5px #0006;
+}
+.source-win11-logon__signin{
+  color:#fff;min-width:140px;cursor:pointer;padding:8px 16px;
+  background:linear-gradient(#ffffff66,#ffffff66),#0006;
+  border:2px solid transparent;border-radius:6px;
+  font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-win11-logon__signin:hover,.source-win11-logon__signin:focus-visible{
+  border-color:#ffffff99;box-shadow:inset 0 0 0 2px #0003;
+}
+.source-win11-logon__signin:active{transform:scale(.95)}
+.source-win11-logon__other{
+  margin-top:2px;border:0;color:#fff;background:transparent;
+  font:13px "Segoe UI",Tahoma,sans-serif;cursor:pointer;
+}
+.source-win11-logon__other:hover,.source-win11-logon__other:focus-visible{text-decoration:underline}
+.source-win11-logon__power{position:absolute;right:24px;bottom:20px;z-index:2}
+.source-win11-logon__power>button{
+  border:1px solid transparent;background:#0005;color:#fff;
+  font-size:18px;cursor:pointer;min-width:36px;min-height:32px;border-radius:4px;
+}
+.source-win11-logon__power>button:hover,.source-win11-logon__power>button:focus-visible{
+  background:#fff4;border-color:#fff8;
+}
+.source-theme-logon__unavailable{
+  position:absolute;z-index:8;left:50%;top:50%;
+  transform:translate(-50%,-50%);max-width:min(90vw,360px);
+  width:320px;padding:18px;color:#fff;text-align:center;
+  background:#16437aea;border:1px solid #bbd9f9;border-radius:3px;
+  box-shadow:0 8px 25px #0005;
+}
+.source-theme-logon__unavailable p{margin:0 0 14px}
+.source-theme-logon__unavailable button{padding:5px 15px;cursor:pointer}
+@media(max-width:640px){
+  .source-xp-logon__top,.source-xp-logon__bottom{height:11%}
+  .source-xp-logon__body{flex-direction:column;justify-content:center}
+  .source-xp-logon__intro,.source-xp-logon__accounts{flex:none;align-items:center;text-align:center;padding:14px;gap:12px}
+  .source-xp-logon__divider{
+    left:10%;right:10%;top:50%;bottom:auto;width:auto;height:1px;
+    background:linear-gradient(90deg,transparent,#ffffff55,transparent);
+  }
+  .source-xp-logon__guest{min-width:0}
+  .source-xp-logon__bottom{padding:10px 12px;align-items:center}
+  .source-xp-logon__create{font-size:12px}
+}
+@media(max-height:500px){
+  .source-xp-logon__top,.source-xp-logon__bottom{height:10%}
+  .source-xp-logon__intro{gap:8px}
+  .source-xp-logon__intro img{width:110px;height:auto}
+  .source-xp-logon__bottom{padding:6px 16px}
+  .source-win11-logon__account{gap:10px;padding:10px}
+  .source-win11-logon__avatar,.source-win11-logon__avatar img{width:100px;height:100px}
+}
+
+
+/* Source logon-win7.js 8ba0d branches on Vista: original cover wallpaper,
+ * shared Win7 avatar and source 32px brand, 30px title and 24px suffix.
+ * Power art is the original common 42px + 24px group, not a new skin. */
+.windows-logon.source-vista-logon{background-size:cover}
+.source-vista-logon .windows-logon__footer{
+  bottom:24px;gap:8px;font-size:30px;font-weight:400;
+  text-shadow:1px 3px 3px rgba(0,0,0,.5333333333);
+}
+.source-vista-logon .windows-logon__footer sup{font-size:12px}
+.source-vista-logon .windows-logon__footer .windows-logon__simulator{
+  align-self:flex-end;font-size:24px;font-weight:100;
+}
+.source-vista-logon .windows-logon__power{
+  right:32px;bottom:24px;background-size:cover;background-repeat:no-repeat;
+}
+.source-vista-logon .windows-logon__shutdown,
+.source-vista-logon .windows-logon__power-arrow{
+  border:0;background:transparent;box-shadow:none;color:transparent;
+}
+.source-vista-logon .windows-logon__shutdown{width:42px}
+.source-vista-logon .windows-logon__power-arrow{width:24px}
+@media(max-width:650px){
+  .source-vista-logon .windows-logon__footer{bottom:56px;gap:4px;font-size:20px}
+  .source-vista-logon .windows-logon__footer .windows-logon__simulator{font-size:16px}
+  .source-vista-logon .windows-logon__power{right:8px;bottom:10px}
+}
+@media(max-width:340px){
+  .source-vista-logon .windows-logon__footer{font-size:17px}
+  .source-vista-logon .windows-logon__footer .windows-logon__simulator{font-size:14px}
+}

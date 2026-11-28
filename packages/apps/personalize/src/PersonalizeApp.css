@@ -1,0 +1,326 @@
+.windows-personalize{
+  box-sizing:border-box;width:100%;height:100%;min-height:0;
+  display:flex;background:#fff;color:#182b43;
+  font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-personalize__sidebar{
+  box-sizing:border-box;width:185px;flex:none;display:flex;
+  flex-direction:column;gap:15px;padding:24px 13px;
+  background:linear-gradient(#f7f9fb,#e4edf7);
+  border-right:1px solid #bdd0e4;
+}
+.windows-personalize__sidebar strong{color:#184b82;font-weight:600}
+.windows-personalize__sidebar span{font-size:12px;line-height:1.45}
+.windows-personalize__main{
+  min-width:0;flex:1;overflow:auto;padding:23px 22px;
+}
+.windows-personalize__main h2{
+  font-size:18px;font-weight:400;color:#23629b;margin:0 0 9px;
+}
+.windows-personalize__main p{margin:0 0 22px}
+.windows-personalize__group{margin-bottom:22px;border:1px solid #becbd9}
+.windows-personalize__group h3{
+  margin:0;background:#eff5fc;padding:7px 10px;
+  font-size:13px;color:#344f71;font-weight:500;
+}
+.windows-personalize__tiles{
+  display:flex;flex-wrap:wrap;gap:10px;padding:12px;
+}
+.windows-personalize__theme{
+  display:flex;flex-direction:column;align-items:center;
+  width:130px;min-height:116px;box-sizing:border-box;gap:8px;
+  padding:8px;border:1px solid transparent;background:transparent;
+  text-align:center;font:12px "Segoe UI",Tahoma,sans-serif;color:#1a3452;
+}
+.windows-personalize__theme img{
+  width:112px;height:70px;object-fit:cover;
+  border:1px solid #a7b7c6;
+}
+.windows-personalize__theme:hover,.windows-personalize__theme:focus-visible{
+  border-color:#8db7db;background:#e4f2fc;
+}
+.windows-personalize__theme.is-selected{
+  border-color:#5e97ca;background:#c9e4f9;
+  box-shadow:inset 0 0 0 1px #fff;
+}
+.windows-personalize__preview{
+  border-top:1px solid #d8e0e8;padding:14px 0;
+  display:flex;align-items:center;gap:12px;
+}
+.windows-personalize__preview span{font-size:12px;color:#617383}
+@media(max-width:530px){
+  .windows-personalize__sidebar{display:none}
+  .windows-personalize__main{padding:13px 10px}
+  .windows-personalize__tiles{gap:5px;padding:7px}
+  .windows-personalize__theme{width:112px}
+  .windows-personalize__theme img{width:98px;height:62px}
+}
+
+/* First source ChangeBackground pane: the original system list uses 160x96
+ * thumbnails and a separate Save/Cancel footer, not instant preview commits. */
+.windows-personalize__navigation{
+  padding:4px 0;border:0;background:none;color:#1764a3;
+  text-align:left;text-decoration:underline;cursor:pointer;
+  font:12px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-personalize__navigation:focus-visible{
+  outline:2px solid #3279af;outline-offset:2px;
+}
+.windows-personalize__backgrounds{
+  display:flex;flex-wrap:wrap;gap:12px;padding:13px;
+}
+.windows-personalize__background{
+  display:block;width:176px;height:112px;padding:6px;
+  border:1px solid transparent;background:transparent;
+  box-sizing:border-box;cursor:pointer;
+}
+.windows-personalize__background img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  border:1px solid #afbac8;box-sizing:border-box;
+  box-shadow:2px 2px 3px 1px #0003;
+}
+.windows-personalize__background:hover,
+.windows-personalize__background:focus-visible{
+  background:#e4f2fc;border-color:#8db7db;
+}
+.windows-personalize__background.is-selected{
+  background:#c9e4f9;border-color:#5e97ca;
+  box-shadow:inset 0 0 0 1px #fff;
+}
+.windows-personalize__actions{
+  display:flex;justify-content:flex-end;gap:10px;margin-top:15px;
+}
+.windows-personalize__actions button{
+  min-width:74px;min-height:27px;
+  border:1px solid #899eae;border-radius:2px;
+  background:linear-gradient(#fff,#e2e8f0);color:#182b43;
+  cursor:pointer;font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-personalize__actions button:hover,
+.windows-personalize__actions button:focus-visible{
+  background:#d9edff;border-color:#4d98cb;
+}
+@media(max-width:530px){
+  .windows-personalize__backgrounds{gap:5px;padding:7px}
+  .windows-personalize__background{width:130px;height:85px;padding:4px}
+  .windows-personalize__actions{position:sticky;bottom:0;padding:10px 0;background:#fff}
+}
+
+/* Pinned original src/styles/system/personalize.css (26b9f0ce):
+ * Each XP color variant reuses its actual original 96x64 desktop image and
+ * paints a separate 25x25 accent sample at x=0,y=36 in a 112x70 preview.
+ * Keep unrelated non-XP cards untouched until their original preview rules
+ * and theme data have been migrated. */
+.windows-personalize__theme-preview.is-xp{
+  position:relative;flex:none;width:112px;height:70px;
+}
+.windows-personalize__theme-preview.is-xp>img{
+  position:absolute;top:0;right:0;width:96px;height:64px;border:0;
+}
+.windows-personalize__theme-preview.is-xp .windows-personalize__theme-color{
+  position:absolute;top:36px;left:0;width:25px;height:25px;
+  box-sizing:border-box;border:1px solid #888;border-radius:4px;
+  box-shadow:inset 0 0 0 1px #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="winxp"] .windows-personalize__theme-color{
+  border-color:#0055e6;box-shadow:none;background-color:#0055e6;
+  background-image:
+    linear-gradient(90deg,rgba(0,0,0,.2),transparent 10%),
+    linear-gradient(270deg,rgba(0,0,0,.2),transparent 10%),
+    linear-gradient(hsla(0,0%,100%,.5019607843) 2%,transparent 6%,hsla(0,0%,100%,.3019607843) 93%,rgba(0,0,0,.0509803922));
+}
+.windows-personalize__theme[data-test-personalize-theme="winxpE"] .windows-personalize__theme-color{
+  border-color:#012f54;
+  background:linear-gradient(#347bb3,#1c639b 50%,#054c84 0,#01345d);
+}
+.windows-personalize__theme[data-test-personalize-theme="winxpG"] .windows-personalize__theme-color{
+  border-color:#bac891;background-color:#bac891;
+  background-image:
+    linear-gradient(90deg,rgba(0,0,0,.2),transparent 10%),
+    linear-gradient(270deg,rgba(0,0,0,.2),transparent 10%),
+    linear-gradient(hsla(0,0%,100%,.6666666667) 2%,transparent 6%,hsla(0,0%,100%,.3019607843) 93%,rgba(0,0,0,.0509803922));
+}
+.windows-personalize__theme[data-test-personalize-theme="winxpN"] .windows-personalize__theme-color{
+  border-color:#161d2d;
+  background:linear-gradient(#66737c,#4c5868 50%,#334151 0,#232a3d);
+}
+.windows-personalize__theme[data-test-personalize-theme="winxpR"] .windows-personalize__theme-color{
+  border-color:#2a4dab;
+  background:linear-gradient(#99c6f1,#5895e0 50%,#397ace 0,#2c55b1);
+}
+.windows-personalize__theme[data-test-personalize-theme="winxpS"] .windows-personalize__theme-color{
+  border-color:#e0dfe3;background-color:#e0dfe3;
+  background-image:
+    linear-gradient(90deg,rgba(0,0,0,.2),transparent 10%),
+    linear-gradient(270deg,rgba(0,0,0,.2),transparent 10%),
+    linear-gradient(#fff 2%,rgba(0,0,0,.3333333333) 6%,hsla(0,0%,100%,.6666666667) 93%,rgba(0,0,0,.2));
+}
+.windows-personalize__theme[data-test-personalize-theme="winxpZ"] .windows-personalize__theme-color{
+  border-color:#252525;
+  background:linear-gradient(#6f6f6f,#545454 50%,#3d3d3d 0,#1b1b1b);
+}
+
+
+/* Immutable source src/styles/system/personalize.css @ 26b9f0ce:
+ * Aero/Basic use the same 112x70 thumbnail, right 96x64 background and
+ * bottom-left 25x25 foreground sample as XP; original Basic swatches
+ * draw two distinct 35%/65% internal window panes.
+ * The Aero color variable comes from pinned registry 3b8c and palette 2299,
+ * not a guessed color or an inferred wallpaper image. */
+.windows-personalize__theme-preview.is-win7-family{
+  position:relative;width:112px;height:70px;flex:none;
+}
+.windows-personalize__theme-preview.is-win7-family>img{
+  position:absolute;right:0;top:0;width:96px;height:64px;
+  border:0;object-fit:cover;
+}
+.windows-personalize__theme-preview.is-win7-family .windows-personalize__theme-color{
+  box-sizing:border-box;position:absolute;left:0;top:36px;
+  display:flex;flex-direction:column;
+  width:25px;height:25px;
+  border:1px solid #888;
+  box-shadow:inset 0 0 0 1px #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme^="aero-"] .windows-personalize__theme-color{
+  border-radius:3px;
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 90% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color,var(--theme-color,#6a9eb9));
+}
+.windows-personalize:dir(rtl) .windows-personalize__theme-preview.is-win7-family>img{
+  right:auto;left:0;
+}
+.windows-personalize:dir(rtl) .windows-personalize__theme-preview.is-win7-family .windows-personalize__theme-color{
+  left:auto;right:0;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="aero-"] .windows-personalize__theme-color{
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(-135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 90% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color,var(--theme-color,#6a9eb9));
+}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color{
+  border-radius:0;border-color:transparent;box-shadow:none;
+}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::before,
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::after{
+  content:"";display:block;flex:none;width:100%;box-sizing:border-box;
+}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::before{height:35%}
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::after{height:65%}
+/* Source's separate Basic 1 (blue), 2 (classic), 3 (purple) and
+ * 4 (black-white) faux-window 25px sample strokes. */
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color{
+  background:#a7c0dc;border-radius:4px 4px 0 0;padding:4px;
+  box-shadow:.5px .5px 0 1px #000,inset 0 0 0 .5px #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color::before{
+  background:#000;
+  box-shadow:inset 0 0 0 4px #a7c0dc,inset -8px -8px 0 #a7c0dc;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color::after{
+  background:#000;box-shadow:inset 0 0 0 6px #fff,inset -15px -22px 0 #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-2"] .windows-personalize__theme-color{
+  background:#d4d0c8;padding:1px;box-shadow:.5px .5px 0 1px #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-2"] .windows-personalize__theme-color::before{
+  background:#fff;box-shadow:inset 0 0 0 7px #0f75c9,inset -8px -8px 0 #0f75c9;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-2"] .windows-personalize__theme-color::after{
+  background:#000;box-shadow:inset 0 0 0 7px #fff,inset -16px -25px 0 #fff;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-3"] .windows-personalize__theme-color{
+  background:#fff;padding:.5px;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-3"] .windows-personalize__theme-color::before{
+  background:#fff;box-shadow:inset 0 0 0 7px purple,inset -8px -8px 0 purple;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-3"] .windows-personalize__theme-color::after{
+  background:#fff;box-shadow:inset 0 0 0 7px #000,inset -16px -25px 0 #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-4"] .windows-personalize__theme-color{
+  background:#fff;padding:.5px;box-shadow:.5px .5px 0 1px #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-4"] .windows-personalize__theme-color::before{
+  background:#fff;box-shadow:inset 0 0 0 7px #000,inset -8px -8px 0 #000;
+}
+.windows-personalize__theme[data-test-personalize-theme="basic-4"] .windows-personalize__theme-color::after{
+  background:#000;box-shadow:inset 0 0 0 7px #fff,inset -16px -25px 0 #fff;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color{
+  box-shadow:-.5px .5px 0 1px #000;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme="basic-1"] .windows-personalize__theme-color{
+  box-shadow:-.5px .5px 0 1px #000,inset 0 0 0 .5px #fff;
+}
+/* Original RTL source flips every faux-window diagonal inset direction. */
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::before{
+  transform:scaleX(-1);
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme[data-test-personalize-theme^="basic-"] .windows-personalize__theme-color::after{
+  transform:scaleX(-1);
+}
+@media(max-width:530px){
+  .windows-personalize__theme-preview.is-win7-family{
+    max-width:100%;width:100%;height:70px;
+  }
+}
+
+/* Source 3b8c Basic 2/3/4 theme backgrounds are literal colors,
+ * not default Win7 wallpapers. Preserve source thumbnail geometry. */
+.windows-personalize__theme-preview.is-win7-family>.windows-personalize__theme-solid{
+  position:absolute;right:0;top:0;width:96px;height:64px;border:0;
+}
+.windows-personalize:dir(rtl)
+.windows-personalize__theme-preview.is-win7-family>.windows-personalize__theme-solid{
+  right:auto;left:0;
+}
+
+/* Pinned source ChangeAppearance: 32 colored 64px previews in 8 columns,
+ * an enableTransparency checkbox and independent Save/Cancel. */
+.windows-personalize__color-list{
+  display:grid;grid-template-columns:repeat(8,64px);gap:5px;
+  list-style:none;padding:0;margin:0 0 20px;max-width:100%;
+}
+.windows-personalize__color-list li{
+  box-sizing:border-box;list-style:none;padding:4px;width:64px;height:64px;
+}
+.windows-personalize__color-list li.is-selected{background:rgba(0,0,0,.2)}
+.windows-personalize__color-chip{
+  display:block;box-sizing:border-box;width:100%;height:100%;
+  padding:0;border:1px solid #8a8a8a;border-radius:4px;cursor:pointer;
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 90% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color);
+}
+.windows-personalize:dir(rtl) .windows-personalize__color-chip{
+  background:linear-gradient(transparent 70%,rgba(255,255,255,.4666666667) 99%),
+    linear-gradient(-135deg,#fff 10%,transparent 40% 100%),
+    radial-gradient(circle at 10% 100%,transparent 60%,rgba(255,255,255,.2) 63%),
+    var(--preview-color);
+}
+.windows-personalize__color-chip:focus-visible{
+  outline:2px solid #3279af;outline-offset:1px;
+}
+.windows-personalize__transparency{
+  display:flex;align-items:center;gap:8px;cursor:pointer;padding:3px 0;
+}
+@media(max-width:760px){
+  .windows-personalize__color-list{grid-template-columns:repeat(4,64px);gap:4px}
+}
+
+/* Source classic registry uses solid background previews, not bitmap art. */
+.windows-personalize__theme-preview:not(.is-win7-family)>.windows-personalize__theme-solid{
+  display:block;width:112px;height:70px;border:1px solid #a7b7c6;
+}
+@media(max-width:530px){
+  .windows-personalize__theme-preview:not(.is-win7-family)>.windows-personalize__theme-solid{width:98px;height:62px}
+}

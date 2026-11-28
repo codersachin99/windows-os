@@ -1,0 +1,23 @@
+/* Shared source listview-extra (c162), used by original details and tiles. */
+.listview__item-extra{
+  display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;opacity:.7;font-size:12px;line-height:20px;
+}
+.listview__view.has-tiles{column-gap:8px;}
+
+/* Source a321: reusable column-header buttons with original width rules. */
+.source-listview-header:not(.explorer-columns){display:flex;align-items:stretch;min-width:max-content;}
+.source-listview-header:not(.explorer-columns) .listview__header-column{
+  flex:0 0 auto;padding:4px;border:1px solid #0003;
+  text-align:left;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* Pinned shell/listview-list.js (00d7): column wrapping, gap-1 and h-full. */
+.listview__view.has-list {
+  display:flex; flex-direction:column;flex-wrap:wrap;align-content:flex-start;
+  gap:4px;height:100%;
+}
+/* Pinned shell/listview-content.js (27b9): flex-col w-full, every item extra. */
+.listview__view.has-content {
+  display:flex;flex-direction:column;flex-wrap:nowrap;width:100%;
+}

@@ -1,0 +1,5 @@
+# Control Panel Action Center history
+
+Frozen legacy-win7@26b9f0ce7: src/modules/apps/cpanel.js (38f2ad53f2d822ffc684a5472a746a81141690a3), te/oe and handleResize; src/styles/apps/cpanel.css; icons.registry.json.
+
+Frozen cpanel.js te/oe, handleResize and cpanel.css: Action Center history uses shared original theme-specific 32px severity icons, flex rows (16px gap), 6px logical leading severity border (#c00/#e8a200/#4a4), exact content padding, 768px maximum, preserved whitespace and empty notice. Extracted ActionCenterPanel; source mounted MarkAllRead now runs only when entering page, not every parent rerender. Sidebar hidden at <=500px panel width via container query; full-screen source special case and exact sidebar theme paint still pending. Shared artwork resolver moved to assets and re-exported from tray helper. Source inline links intentionally remain escaped plain text pending safe parser/URL adapter; archived/settings remain disabled as source. Two SSR contracts authored. No runtime testing yet, no duplicate CI requested. Next icon-relative notification anchoring and consolidated CI. Main/pin/releases unchanged.

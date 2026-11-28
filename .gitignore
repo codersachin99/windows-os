@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+*.log
+.env
+.env.*
+!.env.example
+artifacts/
+coverage/
+.DS_Store
+
+services/api/db.config.json
+services/api/data/
+**/__pycache__/
+*.pyc

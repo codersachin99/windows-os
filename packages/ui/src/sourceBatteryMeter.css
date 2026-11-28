@@ -1,0 +1,6 @@
+/* Frozen a88c / chunk-391f23b6.css: 32px meter frames and charging overlay. */
+.source-macos-battery-popup .source-battery-meter-summary{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.source-battery-meter,.source-battery-plug{background-image:url("/assets/images/battery-meter.66984ffe.webp");background-repeat:no-repeat}
+.source-battery-meter{position:relative;display:inline-block;flex:0 0 32px;width:32px;height:32px}
+.source-battery-plug{position:absolute;inset:0;background-position-x:-960px}
+.source-battery-icon-shadow{filter:drop-shadow(0 0 1px #000)}

@@ -1,0 +1,5 @@
+# Notification feed selection
+
+Frozen legacy-win7@26b9f0ce7, src/modules/runtime/vue-app.js module 779a functions i/g/b/m/h/u/f/k/w/l and SetEntries mutation. Source feed load and cache A() deferred.
+
+Ported frozen 779a pure feed targeting/date/version comparisons, localized text fallback, descending history/ascending unseen queue, default success, first-install suppression and version announcement metadata, session count and push eligibility. Explicit SourceNotificationStore.replaceFeed implements original SetEntries using existing flags; it replaces active history/queue and is not automatically invoked. Duplicate IDs are rejected after first eligible entry (React keys/queue safety). Six unit contracts authored. No actual feed URL, remote fetching, cache, push permission, analytics, or version-state persistence wired; no synthetic announcements or permission prompts. Next implement injected feed/cache service and persist version/session metadata, then batch CI. New tests unexecuted; last green 4f6e09f. Main/pin/releases unchanged.

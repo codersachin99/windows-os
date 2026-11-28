@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "WindowsOS",
+    "shortName": "WindowsOS",
+    "title": "WindowsOS | Legacy Experience",
+    "version": "1.0.0",
+    "description": "WindowsOS - Ultimate Experience",
+    "themeColor": "#000000",
+    "orientation": "landscape"
+  },
+  "author": {
+    "name": "CoderWindows",
+    "title": "Software Architect"
+  },
+  "website": {
+    "url": "https://legacy.windows-os.com",
+    "apiUrl": "http://127.0.0.1:8099/api",
+    "ogImage": "/splash-logo.png",
+    "fallbackOrigin": "https://legacy.windows-os.com/",
+    "privacyUrl": "https://legacy.windows-os.com/privacy",
+    "changelogUrl": "https://legacy.windows-os.com/changelog",
+    "creditsUrl": "https://legacy.windows-os.com/credits",
+    "helpUrl": "https://legacy.windows-os.com/help",
+    "blogUrl": "https://legacy.windows-os.com/blog"
+  },
+  "externalUrls": {
+    "youtubeThemeTutorials": "https://youtube.com",
+    "youtubeGeneralTutorials": "https://youtube.com",
+    "currencyRatesApi": "https://exchange-rates-ecb.herokuapp.com",
+    "currencyEcbInfo": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+    "weatherApi": "https://wttr.in/",
+    "localesCdn": "/assets/locales",
+    "iconifyApi": "https://api.iconify.design",
+    "lemonSqueezySdk": "https://app.lemonsqueezy.com/js/lemon.js",
+    "browserHome": "https://msn.com",
+    "browserSearch": "https://bing.com/search?q=",
+    "suggestGameIssue": "https://legacy.windows-os.com/issues/new?template=suggest-game.yaml",
+    "reportIssue": "https://legacy.windows-os.com/issues/new/choose",
+    "notificationFeedUrl": "/api/feed"
+  },
+  "socialMedia": {
+    "facebook": "https://facebook.com/WindowsOS",
+    "twitter": "https://twitter.com/WindowsOS",
+    "reddit": "https://reddit.com/r/WindowsOS",
+    "telegram": "https://t.me/WindowsOS",
+    "discord": "https://discord.gg/WindowsOS",
+    "youtube": "https://youtube.com/WindowsOS",
+    "github": "https://github.com/WindowsOS"
+  },
+  "firebase": {
+    "enabled": true,
+    "apiKey": "AIzaSyCJZVQSRzzvI3Oa2eUy7Mutjbun9j84-Ng",
+    "authDomain": "legacy-windows-os.firebaseapp.com",
+    "databaseURL": "https://legacy-windows-os.firebaseio.com",
+    "projectId": "windows-os",
+    "storageBucket": "legacy-windows-os.appspot.com",
+    "messagingSenderId": "9999999999",
+    "appId": "1:9999999999:web:30376b9804b409a43c8df4",
+    "measurementId": "G-WZJNTCX4LP"
+  },
+  "security": {
+    "allowedHosts": "*"
+  },
+  "defaults": {
+    "skipBoot": false,
+    "nativeCursor": false,
+    "theme": "win7",
+    "soundVolume": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+/* Pinned legacy-win7 theme-onebit-scss.js + logon-onebit.css:
+ * --theme-accent #352b30, --theme-surface #e6d4bf. Onebit uses
+ * square 2px offset borders and a 4px depressed-button shadow.
+ * Limited to the original Guest/power logon slice; source captcha,
+ * pixel avatarComponent and rest of theme are not represented as complete.
+ */
+.windows-logon.source-onebit-logon{
+  --theme-accent:#352b30;
+  --theme-surface:#e6d4bf;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:var(--theme-accent);background-image:none;
+  color:var(--theme-surface);
+  font:16px "MS Sans Serif",Tahoma,sans-serif;
+  min-height:100%;overflow:auto;
+}
+.source-onebit-logon__pane{
+  flex:none;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;
+  min-width:0;max-width:min(100vw - 24px,420px);
+  padding:28px 24px 96px;text-align:center;
+}
+.source-onebit-logon__instruction{margin:0 0 4px;line-height:1.5}
+.source-onebit-logon__avatar{
+  position:relative;
+  appearance:none;display:grid;place-items:center;
+  flex:none;width:96px;height:96px;padding:12px;
+  background:transparent;border:0;border-radius:0;
+  color:var(--theme-surface);
+  box-shadow:0 0 0 2px var(--theme-surface);
+  cursor:pointer;
+}
+.source-onebit-logon__avatar img{
+  display:block;width:64px;height:64px;object-fit:contain;
+}
+.source-onebit-logon__pixel-avatar{
+  position:absolute;left:12px;top:12px;width:64px;height:64px;
+  image-rendering:pixelated;pointer-events:none;
+}
+.source-onebit-logon__avatar:hover,
+.source-onebit-logon__avatar:focus-visible{
+  outline:none;background:var(--theme-surface);color:var(--theme-accent);
+  box-shadow:0 0 0 2px var(--theme-surface),inset 0 0 0 2px var(--theme-accent);
+}
+.source-onebit-logon__name{
+  font:600 22px "MS Sans Serif",Tahoma,sans-serif;color:inherit;
+}
+.source-onebit-logon__account-button,
+.source-onebit-logon__power button,
+.source-onebit-logon__unavailable button{
+  appearance:none;min-width:80px;padding:6px 8px;
+  background:transparent;color:var(--theme-surface);
+  border:0;border-radius:0;cursor:pointer;
+  font:14px "MS Sans Serif",Tahoma,sans-serif;
+  box-shadow:0 0 0 2px var(--theme-surface),0 4px var(--theme-surface);
+}
+.source-onebit-logon__account-button:hover,
+.source-onebit-logon__power button:hover,
+.source-onebit-logon__unavailable button:hover{background:transparent}
+.source-onebit-logon__account-button:active,
+.source-onebit-logon__account-button:focus-visible,
+.source-onebit-logon__power button:active,
+.source-onebit-logon__power button:focus-visible,
+.source-onebit-logon__unavailable button:active,
+.source-onebit-logon__unavailable button:focus-visible{
+  color:var(--theme-accent);outline:none;background:var(--theme-surface);
+  box-shadow:0 0 0 2px var(--theme-surface),inset 0 0 0 2px var(--theme-accent);
+  transform:translateY(2px);
+}
+.source-onebit-logon__power{
+  position:absolute;bottom:24px;left:0;right:0;
+  display:flex;justify-content:center;align-items:center;
+  flex-wrap:wrap;gap:18px;padding:4px 16px;
+}
+.source-onebit-logon__power button{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.source-onebit-logon__power button span:first-child{font-size:20px}
+.source-onebit-logon__unavailable{
+  position:absolute;z-index:8;top:50%;left:50%;
+  transform:translate(-50%,-50%);width:min(320px,calc(100vw - 40px));
+  background:var(--theme-accent);color:var(--theme-surface);
+  box-shadow:0 0 0 2px var(--theme-surface);
+  padding:20px;text-align:center;
+}
+.source-onebit-logon__unavailable p{margin:0 0 20px}
+@media(max-height:460px){
+  .source-onebit-logon__pane{padding:16px 16px 76px;gap:10px}
+  .source-onebit-logon__power{bottom:12px}
+}

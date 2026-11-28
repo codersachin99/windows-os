@@ -1,0 +1,27 @@
+import {test,expect} from "@playwright/test";
+test("ChromeOS original launcher lists core programs, searches and opens real applications",async({page})=>{
+  await page.goto("/?theme=chromeos");
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator("[data-test-start-button]").click();
+  const launcher=page.locator("[data-test-chromeos-launcher]");
+  await expect(launcher).toBeVisible();
+  await expect(launcher.locator('[data-test-program="computer"]')).toBeVisible();
+  await expect(launcher.locator('[data-test-program="cpanel"]')).toBeVisible();
+  const bounds=await launcher.boundingBox();
+  expect(bounds!.width).toBeLessThanOrEqual(470);
+  const search=launcher.getByRole("textbox",{name:"Search programs and files"});
+  await search.fill("Notepad");
+  await expect(launcher.locator("[data-test-start-menu-all]")).toHaveCount(0);
+  await expect(launcher.locator('[data-test-program="notepad"]')).toBeVisible();
+  await search.press("Enter");
+  await expect(page.locator('[data-test-window="notepad"]')).toBeVisible();
+  await page.locator("[data-test-start-button]").click();
+  await expect(launcher.locator('[data-test-recent-program="notepad"]')).toBeVisible();
+  await launcher.locator("[data-test-chromeos-power]").click();
+  await expect(launcher.getByRole("menuitem",{name:"Restart"})).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(launcher.locator("[data-test-chromeos-power-menu]")).toHaveCount(0);
+  await expect(launcher).toBeVisible();
+  await launcher.locator("[data-test-chromeos-account]").click();
+  await expect(page.locator('[data-test-window="cpanel"]')).toBeVisible();
+});

@@ -1,0 +1,82 @@
+/* Dedicated React module for legacy src/modules/shell/shortcutwiz.js.
+ * Uses the existing Win7 window shell and native dialog look, not a select box.
+ */
+.windows-shortcut {
+  height:100%; display:flex; flex-direction:column; background:white; color:#1e1e1e;
+  font:13px "Segoe UI",Tahoma,sans-serif; text-shadow:none;
+}
+.windows-shortcut__main { flex:1; min-height:0; padding:15px 20px; }
+.windows-shortcut__main h2 {
+  font-size:19px; font-weight:400; margin:0 0 13px;
+}
+.windows-shortcut__main p { font-size:13px; margin:0 0 15px; line-height:1.4; }
+.windows-shortcut__main label { display:block; margin:0 0 8px; }
+.windows-shortcut__selection {
+  display:flex; align-items:center; gap:9px; margin-bottom:18px;
+}
+.windows-shortcut__selection input {
+  flex:1; min-width:0; height:26px; border:1px solid #8ba2bb;
+  padding:4px 6px; background:#fff; color:#222; font:inherit;
+}
+.windows-shortcut button {
+  font:12px "Segoe UI",Tahoma,sans-serif; border:1px solid #7893ab;
+  color:#1c2730; background:linear-gradient(#f9fbfe,#dfeaf3);
+  border-radius:3px; min-height:26px; min-width:74px; padding:4px 10px;
+}
+.windows-shortcut button:disabled { opacity:.5; cursor:default; }
+.windows-shortcut button:not(:disabled):hover {
+  background:linear-gradient(#f6fcff,#c3e4fc);
+  border-color:#5198ca;
+}
+.windows-shortcut button.windows-shortcut__default {
+  border-color:#5294c5; box-shadow:0 0 0 1px #b8e4ff inset;
+}
+.windows-shortcut__chosen { font-size:12px !important; color:#455b6f; }
+.windows-shortcut__error {
+  color:#9a2525; background:#ffefee; padding:4px 6px; border:1px solid #e4a9a0;
+}
+.windows-shortcut__footer {
+  background:linear-gradient(#f8fafc,#e9eef4); border-top:1px solid #cbd3da;
+  padding:11px 14px; display:flex; justify-content:flex-end; gap:8px;
+}
+.windows-shortcut__browse-overlay {
+  position:absolute; inset:0 0 40px 0; z-index:5000; display:grid; place-items:center;
+  background:rgba(0,0,0,.16);
+}
+.windows-shortcut__browse-window {
+  position:relative; width:min(520px,calc(100vw - 16px)); height:min(390px,calc(100vh - 54px));
+  display:flex; flex-direction:column; padding:5px;
+}
+.windows-shortcut__browse-titlebar { flex:0 0 25px; cursor:default; }
+.windows-shortcut__browse-body {
+  min-height:0; flex:1; background:#fff; border:1px solid #7392ad;
+  padding:12px; display:flex; flex-direction:column; gap:10px; color:#1c242c;
+}
+.windows-shortcut__browse-scroll {
+  flex:1; min-height:0; overflow-y:auto; border:1px solid #888;
+  padding:3px; background:#fff;
+}
+.windows-shortcut__program {
+  display:flex; align-items:center; gap:9px; width:100%; min-height:35px;
+  background:transparent; border:1px solid transparent; color:#1c2430;
+  padding:3px 6px; text-align:left; font:13px "Segoe UI",Tahoma,sans-serif;
+}
+.windows-shortcut__program:focus-visible,
+.windows-shortcut__program.is-selected {
+  background:linear-gradient(#d7edff,#a8d3f6); border-color:#6daee1;
+}
+.windows-shortcut__program img { flex-shrink:0; object-fit:contain; }
+.windows-shortcut__program-name { flex:1; }
+.windows-shortcut__program-pending { font-size:11px; color:#696969; }
+.windows-shortcut__actions { display:flex; justify-content:flex-end; gap:8px; }
+.windows-shortcut__actions button {
+  border:1px solid #8a9cab; border-radius:2px; color:#243646; font:12px "Segoe UI",Tahoma,sans-serif;
+  padding:4px 16px; min-height:27px; min-width:70px;
+  background:linear-gradient(#fff,#dce7f0);
+}
+.windows-shortcut__actions button:disabled { opacity:.5; }
+@media(max-width:650px) {
+  .windows-shortcut__main {padding:12px;}
+  .windows-shortcut__browse-body {padding:7px;}
+  .windows-shortcut__program-pending {font-size:10px;}
+}

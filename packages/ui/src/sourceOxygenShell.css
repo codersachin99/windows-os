@@ -1,0 +1,167 @@
+/* Frozen legacy-win7@26b9f0ce7 theme-oxygen-scss.js.
+ * Original base taskbar and embedded WebP selection border. */
+.windows-desktop[data-theme="oxygen"] .windows-taskbar{
+  color:#fff;background-color:#2a2e32;
+  background-image:linear-gradient(to right,#000,#fff,#000),radial-gradient(ellipse at 50% 100%,#fff3 15%,transparent 80%);
+  background-size:100% 1px,100% 100%;background-position:50% 0,center;
+  background-repeat:no-repeat;border:0;box-shadow:0 0 5px #000d;backdrop-filter:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start{background:none;border-radius:0;margin-top:0}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start img{filter:none}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application{
+  margin:0 1px;color:#fff;background:none;border:1px solid transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]){
+  background-color:transparent;background-image:linear-gradient(to right,transparent,#fff,transparent);
+  background-size:100% 2px;background-position:50% 100%;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application.is-active{
+  background-color:transparent;
+  background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 100%,#fffa 7%,transparent 70%);
+  background-size:100% 2px,100% 100%;background-position:50% 100%,center;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group]):hover{filter:brightness(1.1)}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__tray-icon:not(:has(button)):hover{
+  background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 0%,#fff5 15%,transparent 80%);
+  background-size:100% 1px,100% 100%;background-position:50% 0,center;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__show-desktop{background:none;border-color:transparent}
+.windows-desktop[data-theme="oxygen"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target){
+  background:none;border:1px solid transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:hover){
+  background:none;
+  border-image-source:url("data:image/webp;base64,UklGRq4CAABXRUJQVlA4WAoAAAAQAAAAHwAAHwAAQUxQSFABAAABkJxt27FHT7yySjB2aiEr2+mBW6cA81dsPO/n74tt2/awg/n0HtNAREwAqEZWDCtrnLJ89v11uiSTZam/JAx0hg1cnh9tr02Ks1sXF5uzwtjK5sHpWU+wRtrl/ekcg2hBTQsiM3d8e56ukvv2skkQjSCS9aeXDACIfv3aQFUjiGsfzxEA87/O0Sw8/SlD/N8fgnn8jz8xHX9O0Tw8+d2093uRxvzPzdtPQoN5v3y5Rxp4+3iza9NusGg22LQ3L3dXUduKmlbUXt1VRDqiInJ0OJFj6bAcQTpIkJb+/8Ru1dlg1Wyw6rSPoE4LalpQ57CFVlc9rbokng6f6E0IDUK8oVimIRcCeHRIxCwitbsDQNCwzJjDyMNB8K9/kyKyxlhRaQsCdbf8CVkSeAcnL+3sLMmcgxckeSLXDXR6JlRaxnvE2e3Ly61ZsWfcUpXgCapWUDggOAEAAFAIAJ0BKiAAIAA+MRSIQqIhIRgEACADBLSACeYvpNcp/dcyq8mb03PkTz9fRvsCfqR1JfQAHyRD0IiP3vOA+efsYkkuPtE8H5QdQAD+3agQdmb1Pdq//RhX/afySvpwfQrC6HTPf3AmXXYwR+LI1WxVG1/74DOOe5Oz9QIzMt6ERM9n+FKxjtNMmB98PPuthEpWkvkgrub8Lr/I+vkVqHk7aBHSxX+OcQMmCWcUEXj4fF/i5zEhiZEXoxt+R/A5BmV9moL8WWUH/9I6iikl03AxV7cnGDMkLrLMOHdVXUZblvTKnfB1OmvKZ0EnWd9GcbqUcJFKKBmc88ET/g3+TB5LMg8ySQi9fBhyioIy8bftujPeBZ785p89e3Sft6/+lmotD2EUZe38aNES+V07re/gJbLvjMAAAA==");
+  border-image-slice:40% fill;border-image-width:8px;border-image-repeat:stretch;
+}
+.windows-desktop[data-theme="oxygen"] .desktop__icon-name:not(:has(input)){color:#fff;text-shadow:1px 1px 2px #000}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) .desktop__icon-name:not(:has(input)){text-shadow:-1px 1px 2px #000}
+
+/* Frozen Oxygen WindowMain and ControlItem from theme-oxygen-scss.js.
+ * The source gradient, dimensions, logical spacing and glow are preserved.
+ * Theme registry accent is palette index 4; keep the separate source link color. */
+.windows-desktop[data-theme="oxygen"]{
+  --border-color:#474c55;--theme-color:#b3e165;--link-color:#3c92c8;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window{
+  color:#fff;background:#31363b;border:1px solid var(--border-color);
+  border-radius:4px;box-shadow:0 0 5px #000;backdrop-filter:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window.is-active{
+  box-shadow:0 0 10px 5px var(--theme-color);
+}
+.windows-desktop[data-theme="oxygen"]:not([data-effect-show-window-shadows]) .windows-window{
+  box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__titlebar{background:none;color:#fff;min-height:24px}
+.windows-desktop[data-theme="oxygen"] .windows-window__title{color:#fff;text-shadow:none}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons{
+  align-self:center;align-items:center;justify-content:flex-end;height:24px;
+  flex:none;gap:0;margin:0;border-radius:0;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons button{
+  display:grid;place-items:center;box-sizing:border-box;flex:none;
+  width:20px;min-width:20px;height:20px;margin-inline-end:10px;padding:0;
+  color:#fff;border:1px solid #474c55;border-radius:50%;
+  background:linear-gradient(#40464d,#2f3438) #2a2e32;box-shadow:0 0 2px #000;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons button:not(:disabled):hover{
+  color:var(--theme-color);box-shadow:0 0 3px 1px var(--theme-color);
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__buttons button.windows-window__close:not(:disabled):hover{
+  color:#da4453;box-shadow:0 0 3px 1px #da4453;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window__body{
+  background:#2a2e32;color:#fff;border:0;
+}
+.windows-desktop[data-theme="oxygen"] .windows-window.is-maximized{border-radius:0}
+
+/* Oxygen WinUI menu source: dark gradient, double separator and inset
+ * accent highlight. Preserve shared root/child positioning and sizes. */
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]){
+  --oxygen-menu-accent:var(--theme-color,#b3e165);
+  box-sizing:border-box;color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;
+  border:1px solid #474c55;border-radius:4px;box-shadow:0 0 10px 1px #000;
+  font:10pt "Segoe UI",Arial,sans-serif;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"])::before{content:none}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button{
+  color:#fff;background:none;border:1px solid transparent;border-radius:4px;
+  box-shadow:none;text-shadow:none;text-align:start;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button:not(:disabled):is(:hover,:focus,.is-selected,.is-active){
+  background:var(--oxygen-menu-accent);border-color:transparent;box-shadow:inset 0 1px #0005,inset 0 -1px #fff5;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button:not(:disabled)[aria-haspopup]:is(:hover,:focus,[aria-expanded="true"]){
+  background:linear-gradient(to right,var(--oxygen-menu-accent) 50% 80%,transparent);
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]):dir(rtl) button:not(:disabled)[aria-haspopup]:is(:hover,:focus,[aria-expanded="true"]){
+  background:linear-gradient(to left,var(--oxygen-menu-accent) 50% 80%,transparent);
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) button:disabled{color:#fff;opacity:.3;cursor:default}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) :is(hr,.windows-desktop__menu-divider,.explorer-organize__separator){
+  border:0;height:2px;margin:0;background-color:transparent;
+  background-image:linear-gradient(to right,transparent,#4a5158,transparent),linear-gradient(to right,transparent,#0003,transparent);
+  background-position:50% 100%,50% 0%;background-size:100% 1px;background-repeat:no-repeat;box-shadow:none;
+}
+:is(.windows-desktop[data-theme="oxygen"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="oxygen"]) kbd{color:inherit}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu,.explorer-command){
+  background:#2a2e32;color:#fff;border:0;border-bottom:1px solid var(--border-color);box-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button){
+  background:none;color:#fff;border:1px solid transparent;box-shadow:none;text-shadow:none;
+}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):not(:disabled):is(:hover,:focus,[aria-expanded="true"]){
+  background:var(--theme-color);box-shadow:inset 0 1px #0003,inset 0 -1px #fff3;
+}
+.windows-desktop[data-theme="oxygen"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button,.explorer-view>button):disabled{opacity:.3}
+.windows-desktop[data-theme="oxygen"] .explorer-command select{
+  color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;border:1px solid #474c55;border-radius:4px;box-shadow:0 0 2px #000;
+}
+.windows-desktop[data-theme="oxygen"] .notepad-status{
+  color:#fff;background:#2a2e32;border-top:1px solid var(--border-color);box-shadow:none;
+}
+
+/* Original Oxygen taskbar-popup and ColorCalendar skin over shared base tray.
+ * Keep the verified static icon wrappers so hover never changes the popup
+ * containing block. Apply visual states only to the interactive trigger. */
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  color:#fff;background:linear-gradient(#40464d,#2f3438) #2a2e32;
+  border:1px solid #474c55;border-radius:4px;box-shadow:1px 1px 5px #000;
+}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  box-shadow:-1px 1px 5px #000;
+}
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){
+  background-color:transparent;
+  background-image:linear-gradient(to right,transparent,#fff,transparent),radial-gradient(ellipse at 50% 0%,#fff5 15%,transparent 80%);
+  background-size:100% 1px,100% 100%;background-position:50% 0,center;background-repeat:no-repeat;
+}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-weekdays{background:none;border:0}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-days button{border:1px solid transparent}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-days button:not(:disabled):hover{border-color:var(--border-color)}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar button.is-today{background:var(--theme-color);border-color:var(--theme-color)}
+.windows-desktop[data-theme="oxygen"] .source-macos-calendar-picker{background:#2a2e32;border:1px solid var(--border-color);padding:3px}
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-calendar-picker,.source-macos-calendar-year-arrows) button{border:1px solid transparent}
+.windows-desktop[data-theme="oxygen"] :is(.source-macos-calendar-picker,.source-macos-calendar-year-arrows) button:hover{border-color:var(--border-color)}
+
+/* Source StartButton 2159: w-14, full-size icon and inherited base
+ * 108x324 three-frame sprite. Hover and open both use its last frame. */
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start{
+  display:flex;align-items:center;justify-content:flex-start;
+  flex:0 0 56px;width:56px;height:100%;margin-top:0;border-radius:0;
+  background:none;
+}
+.windows-desktop[data-theme="oxygen"] .source-startbutton-sprite{
+  display:block;width:100%;height:100%;pointer-events:none;
+  background-repeat:no-repeat;background-size:100% 300%;background-position:0 0;
+}
+.windows-desktop[data-theme="oxygen"] .windows-taskbar__start:is(:hover,.is-active) .source-startbutton-sprite{
+  background-position:0 100%;
+}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) .source-startbutton-sprite{
+  background-position:100% 0;
+}
+.windows-desktop[data-theme="oxygen"]:dir(rtl) .windows-taskbar__start:is(:hover,.is-active) .source-startbutton-sprite{
+  background-position:100% 100%;
+}

@@ -1,0 +1,57 @@
+/* Source src/modules/apps/taskmgr.js and src/styles/system/taskmgr.css:
+ * Three source tabs, detail-list tables, 0px listview interior padding,
+ * white settings panel and bottom-right Win7 system buttons. */
+.windows-taskmgr {
+  display:flex; flex-direction:column; height:100%; min-height:0;
+  box-sizing:border-box; padding:8px 9px 9px; font:12px "Segoe UI",Tahoma,sans-serif;
+  background:#f0f0f0; color:#222;
+}
+.windows-taskmgr__tabs {display:flex;align-items:flex-end;gap:3px;flex:none;}
+.windows-taskmgr__tabs button {
+  min-width:75px;padding:6px 10px 5px;border:1px solid #94a1ad;
+  border-radius:4px 4px 0 0;background:linear-gradient(#f6f6f6,#e7e7e7);
+  color:#333;font:12px "Segoe UI",Tahoma,sans-serif;cursor:pointer;
+}
+.windows-taskmgr__tabs button.is-selected {
+  position:relative;z-index:2; margin-bottom:-1px;padding-bottom:6px;
+  border-bottom-color:#fff;background:white;
+}
+.windows-taskmgr__panel {
+  display:flex;flex-direction:column; flex:1; min-height:0;
+  padding:8px; border:1px solid #94a1ad; background:#fff;
+}
+.windows-taskmgr__scroll {flex:1;min-height:0;overflow:auto;
+  border:1px solid #888;background:white;padding:0;}
+.windows-taskmgr__table {border-collapse:collapse;width:100%;font:12px "Segoe UI",Tahoma,sans-serif;}
+.windows-taskmgr__table thead {position:sticky;top:0;z-index:1;background:#f3f3f3;}
+.windows-taskmgr__table th {white-space:nowrap;text-align:left;font-weight:400;
+  padding:3px 7px;border-bottom:1px solid #999;border-right:1px solid #c4c4c4;
+  background:linear-gradient(#fafafa,#e4e4e4);}
+.windows-taskmgr__table td {padding:3px 7px;white-space:nowrap;overflow:hidden;
+  max-width:260px;text-overflow:ellipsis;}
+.windows-taskmgr__table tr {cursor:default;}
+.windows-taskmgr__table tr.is-active,.windows-taskmgr__table tr[aria-selected="true"] {
+  background:#cfe6fc;color:#131e25;
+}
+.windows-taskmgr__table .windows-taskmgr__row-button {
+  display:flex;gap:5px;align-items:center;width:100%;border:0;
+  background:none;padding:0;color:inherit;font:inherit;text-align:left;cursor:default;
+}
+.windows-taskmgr__row-button img {object-fit:contain;flex:none;}
+.windows-taskmgr__actions {display:flex;gap:8px;justify-content:flex-end;
+  align-items:center;flex:none;min-height:30px;padding-top:10px;}
+.windows-taskmgr__actions button {
+  min-width:86px;padding:4px 12px;border-radius:3px;
+  border:1px solid #889cae;color:#222;
+  background:linear-gradient(#fff,#ddebf5);
+  font:12px "Segoe UI",Tahoma,sans-serif;cursor:pointer;
+}
+.windows-taskmgr__actions button:disabled {opacity:.55;cursor:default;}
+.windows-taskmgr__empty {text-align:center;margin:10px 0;}
+.windows-taskmgr__pending {font-size:11px;color:#666;margin:4px 0 0;}
+@media(max-width:400px) {
+  .windows-taskmgr {padding:4px;}
+  .windows-taskmgr__panel {padding:5px;}
+  .windows-taskmgr__table {width:max-content;min-width:100%;}
+  .windows-taskmgr__tabs button {min-width:0;padding:5px 7px;}
+}

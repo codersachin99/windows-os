@@ -1,0 +1,28 @@
+/* Frozen theme-winvista-scss.js: opaque taskbar-popup, transparent
+ * popup-menu and original popup-button hover. Calendar/clock paint is
+ * shared with Win7 because the pinned source values match. */
+.windows-desktop[data-source-vista-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  background:#f0f0f0;color:#000;border:1px solid #0006;border-radius:0;
+  box-shadow:none;backdrop-filter:none;text-align:start;
+}
+.windows-desktop[data-source-vista-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){background:none;color:#fff;border:1px solid transparent;border-radius:3px}
+.windows-desktop[data-source-vista-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){
+  border-color:#aaddfa;background:linear-gradient(#fff9,rgba(230,236,245,.8) 90%,#fffc);color:#000;
+}
+.windows-desktop[data-source-vista-tray] .source-macos-datetime-trigger{color:#fff}
+.windows-desktop[data-source-vista-tray] .source-macos-datetime-popup>button:first-child{color:#000}
+.windows-desktop[data-source-vista-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-datetime-popup)>button,
+.windows-desktop[data-source-vista-tray] .source-macos-notification-history button,
+.windows-desktop[data-source-vista-tray] .source-hidden-tray-customize{color:#1171d2}
+.windows-desktop[data-source-vista-tray] .source-macos-action-center-summary{font-size:14px}
+.windows-desktop[data-source-vista-tray] :is(.source-macos-volume-meter,.source-macos-volume-mute){color:#000}
+.windows-desktop[data-source-vista-tray] .source-macos-volume-mute img{filter:none}
+.windows-desktop[data-source-vista-tray] .source-macos-volume-mute:hover{
+  border:1px solid #aaddfa;border-radius:3px;
+  background:linear-gradient(#fff9,rgba(230,236,245,.8) 90%,#fffc);
+}
+.windows-desktop[data-source-vista-tray] .source-macos-notification button{color:#000}
+.windows-desktop[data-source-vista-tray] :is(.source-macos-battery-popup,.source-macos-volume-meter) input{accent-color:#1171d2}
+.windows-desktop[data-source-vista-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:#000}
+.windows-desktop[data-source-vista-tray][data-source-interactive-hidden-tray] .source-hidden-tray-customize{color:#1171d2}
+.windows-desktop[data-source-vista-tray] .source-chromeos-clock svg>line[data-test-clock-hand="hour"]{stroke-width:4}

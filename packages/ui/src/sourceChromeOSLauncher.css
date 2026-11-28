@@ -1,0 +1,34 @@
+/* Frozen startmenu-chromeos.css and f5a6. Responsive clipping is an adapter. */
+.source-chromeos-launcher{
+ position:absolute;inset-inline-start:4px;bottom:calc(var(--taskbar-height,48px) + 8px);
+ z-index:3500;display:flex;flex-direction:column;box-sizing:border-box;
+ width:min(470px,calc(100vw - 8px));max-height:calc(100dvh - 64px);
+ background:#f5fafff2;color:#333;border-radius:16px;overflow:hidden;
+ font:10pt "Segoe UI",Arial,sans-serif;
+}
+.source-chromeos-launcher>header{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid #0001;flex:none}
+.source-chromeos-launcher>header>img{flex:none}
+.source-chromeos-launcher>header>input{width:100%;min-width:0;height:24px;border:0;padding:0;background:none;color:inherit;font:inherit;outline:none}
+.source-chromeos-launcher>header button{display:grid;place-items:center;width:32px;height:32px;flex:none;padding:0;border:0;border-radius:50%;background:#0002;color:inherit}
+.source-chromeos-launcher>header>button{overflow:hidden}
+.source-chromeos-launcher>header button:hover{background:#0003}
+.source-chromeos-power{position:relative}
+.source-chromeos-power>button{font-size:20px}
+.source-chromeos-power>div{position:absolute;inset-inline-end:0;top:100%;z-index:2;background:#fff;color:#333;border-radius:6px;box-shadow:0 2px 8px #0004;min-width:140px;padding:4px}
+.source-chromeos-power>div button{display:block;text-align:start;width:100%;height:auto;border-radius:3px;background:none;padding:8px 12px;font:inherit}
+.source-chromeos-launcher .source-chromeos-grid{display:flex;flex-wrap:wrap;gap:32px;padding:16px}
+.source-chromeos-grid>button{display:flex;flex-direction:column;align-items:center;gap:8px;width:64px;height:64px;padding:0;border:0;background:none;color:inherit;font:inherit;border-radius:6px;flex:none}
+.source-chromeos-grid>button img{object-fit:contain;width:32px;height:32px}
+.source-chromeos-grid>button span{width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center}
+.source-chromeos-grid>button:disabled{opacity:.5}
+.source-chromeos-grid>button:not(:disabled):is(:hover,:focus-visible){background:#0001}
+.source-chromeos-launcher>hr{width:calc(100% - 48px);height:1px;border:0;background:#0001;margin:0 auto;flex:none}
+.source-chromeos-recent{flex:none;max-height:116px;overflow:auto}
+.source-chromeos-all{height:300px;overflow:auto;scrollbar-width:thin;min-height:0}
+.source-chromeos-results{height:405px;overflow:auto;padding:16px;min-height:0}
+.source-chromeos-results h3{font-size:inherit;margin:0 0 4px;font-weight:700;border-bottom:1px solid #0001;padding:4px}
+.source-chromeos-results button{display:flex;align-items:center;gap:8px;text-align:start;width:100%;border:0;background:none;color:inherit;font:inherit;padding:4px;border-radius:8px}
+.source-chromeos-results button:is(:hover,.is-selected,:focus-visible){background:#0001}
+.source-chromeos-results button span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.source-chromeos-results small{display:block;opacity:.7;overflow-wrap:anywhere;font-size:11px}
+@media(max-width:470px){.source-chromeos-launcher .source-chromeos-grid{gap:16px}.source-chromeos-recent{max-height:96px}}

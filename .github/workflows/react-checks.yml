@@ -1,0 +1,233 @@
+name: React migration checks
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+  workflow_dispatch:
+    inputs:
+      capture_visual:
+        description: "Capture source/React screenshot evidence (instead of full CI)"
+        type: boolean
+        default: false
+
+concurrency:
+  # Include commit SHA: normal skipped pushes cannot cancel an opted-in CI run.
+  group: windows-os-${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  browser-and-contracts:
+    # Push checks are opt-in; the triggering commit must contain [run-ci].
+    # Explicit manual workflow dispatch also runs checks when requested.
+    if: contains(github.event.head_commit.message, '[run-ci]') || (github.event_name == 'workflow_dispatch' && inputs.capture_visual != true)
+    runs-on: ubuntu-latest
+    # Allow time for the full browser step and failure artifact collection.
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install npm dependencies
+        run: npm install --no-audit --no-fund --include=optional
+      # Without a committed lockfile npm can skip Rollup's platform-specific
+      # optional dependency on Ubuntu even when the JS package installs.
+      # Repair only that missing native binary, at EXACTLY the installed
+      # Rollup version, without changing package.json or generating a lock.
+      - name: Verify or restore Rollup native binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! node -e "require('@rollup/rollup-linux-x64-gnu')" >/dev/null 2>&1; then
+            ROLLUP_VERSION="$(node -p "require('./node_modules/rollup/package.json').version")"
+            npm install --no-save --no-package-lock --no-audit --no-fund \
+              "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
+          fi
+          node -e "require('@rollup/rollup-linux-x64-gnu')"
+      - name: Verify TypeScript
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Check original source migration inventory
+        run: npm run audit:legacy
+      - name: Verify byte-identical original theme artwork
+        run: python3 scripts/import-source-theme-assets.py --verify-target-only
+      - name: Verify original Contacts source style and shortcut fidelity
+        run: npm run test:source
+      - name: Build Vite application
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      # Explicit [macos-check] opt-in exercises the accumulated macOS batch
+      # on both Chromium projects without repeating the broad browser suite.
+      # All preceding build, unit and original-source gates still run.
+      - name: macOS focused browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[macos-check]')
+        run: npx playwright test tests/e2e/theme-bin-artwork.spec.ts tests/e2e/player.spec.ts tests/e2e/source-macos-logon.spec.ts --grep 'macOS|macos|MacOS'
+      # ChromeOS batch plus the earlier repaired XP/Win11 Explorer artwork.
+      - name: ChromeOS focused browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[chromeos-check]')
+        run: npx playwright test tests/e2e/source-chromeos-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts
+      # Ubuntu batch: shared shell, launcher, Explorer, tray and cascade checks.
+      - name: Ubuntu focused browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[ubuntu-check]')
+        run: npx playwright test tests/e2e/source-ubuntu-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts
+      # Kubuntu batch preserves the same build and unit gates.
+      - name: Kubuntu focused browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[kubuntu-check]')
+        run: npx playwright test tests/e2e/source-kubuntu-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts tests/e2e/source-personalize-theme.spec.ts tests/e2e/source-oxygen-shell.spec.ts
+      - name: Oxygen focused browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[oxygen-check]')
+        run: npx playwright test tests/e2e/source-oxygen-*.spec.ts tests/e2e/source-kubuntu-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts tests/e2e/source-personalize-theme.spec.ts
+      # Aero Noir accumulated shell/Start/Explorer/tray source batch.
+      - name: Aero Noir focused browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[aeronoir-check]')
+        run: npx playwright test tests/e2e/source-aeronoir-*.spec.ts tests/e2e/source-oxygen-*.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/theme-shell-source.spec.ts tests/e2e/source-personalize-theme.spec.ts tests/e2e/source-ubuntu-*.spec.ts tests/e2e/source-kubuntu-*.spec.ts tests/e2e/source-theme-registry-palette.spec.ts tests/e2e/source-start-button-sprite.spec.ts tests/e2e/source-win7-tray.spec.ts tests/e2e/source-system-performance.spec.ts tests/e2e/source-taskbar-settings.spec.ts tests/e2e/source-win7-classic-rtl-context-themes.spec.ts
+      # Consolidated tray-only browser batch, retaining every build and unit gate.
+      - name: All migrated tray browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[tray-check]')
+        run: npx playwright test tests/e2e/source-*-tray.spec.ts tests/e2e/source-taskbar-settings.spec.ts tests/e2e/source-system-performance.spec.ts
+      # Recheck the previously failing shell suites without repeating 1100+ cases.
+      - name: Shell regression repair browser checks
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[shell-fix-check]')
+        run: npx playwright test tests/e2e/source-desktop-context-theme.spec.ts tests/e2e/source-final-theme-catalog.spec.ts tests/e2e/source-taskbar-button-mode.spec.ts tests/e2e/source-taskbar-context-keyboard.spec.ts tests/e2e/source-taskbar-context.spec.ts tests/e2e/theme-bin-artwork.spec.ts tests/e2e/source-start-button-sprite.spec.ts tests/e2e/source-taskbar-settings.spec.ts tests/e2e/theme-shell-source.spec.ts tests/e2e/cpanel.spec.ts --reporter=list
+      # Narrow verification for program popup artwork, group previews and settings.
+      - name: Taskbar program and window preview regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[taskbar-check]')
+        run: npx playwright test tests/e2e/source-taskbar-context.spec.ts tests/e2e/source-taskbar-context-keyboard.spec.ts tests/e2e/source-taskbar-live-preview-final.spec.ts tests/e2e/source-taskbar-settings.spec.ts tests/e2e/source-taskbar-button-mode.spec.ts tests/e2e/source-window-chrome.spec.ts tests/e2e/source-window-control-glyphs.spec.ts --reporter=list
+      # Opt-in broad shell subset for iteration. The normal full suite already
+      # contains these files, so do not execute them twice on [run-ci].
+      - name: Source shell targeted browser regressions
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[shell-check]')
+        run: npx playwright test tests/e2e/startmenu-keyboard-source.spec.ts tests/e2e/source-start-search-touch-focus.spec.ts tests/e2e/source-win7-start-user-libraries.spec.ts tests/e2e/source-win7-start-library-artwork.spec.ts tests/e2e/source-start-program-context.spec.ts tests/e2e/source-start-context-keyboard-themes.spec.ts tests/e2e/source-start-context-theme-families.spec.ts tests/e2e/source-start-context-classic-win8.spec.ts tests/e2e/source-start-context-modern.spec.ts tests/e2e/source-vista-start.spec.ts tests/e2e/source-vista-context-themes.spec.ts tests/e2e/source-win7-aero-context-themes.spec.ts tests/e2e/source-win7-classic-rtl-context-themes.spec.ts tests/e2e/source-classic-explorer-disabled-rtl.spec.ts tests/e2e/source-taskbar-context.spec.ts tests/e2e/source-taskbar-context-keyboard.spec.ts tests/e2e/desktop-item-source-menu.spec.ts tests/e2e/source-desktop-send-to-compressed.spec.ts tests/e2e/source-desktop-extract-here.spec.ts tests/e2e/source-desktop-multi-download.spec.ts tests/e2e/source-desktop-shortcut-clipboard.spec.ts tests/e2e/source-desktop-shortcut-delete.spec.ts tests/e2e/source-desktop-bin-drag-guard.spec.ts tests/e2e/source-desktop-context-path-count.spec.ts tests/e2e/source-recent-start.spec.ts tests/e2e/source-win11-start-pages.spec.ts tests/e2e/source-win11-start-power.spec.ts tests/e2e/source-bin-item-context.spec.ts tests/e2e/source-bin-folder-open-guard.spec.ts tests/e2e/source-win11-all-apps.spec.ts tests/e2e/source-personalize-theme.spec.ts tests/e2e/source-personalize-background.spec.ts tests/e2e/source-desktop-wallpaper-defaults.spec.ts tests/e2e/source-personalize-appearance.spec.ts tests/e2e/source-taskbar-settings.spec.ts tests/e2e/source-taskbar-button-mode.spec.ts tests/e2e/source-cpanel-program-launch.spec.ts tests/e2e/source-explorer-item-menu.spec.ts tests/e2e/source-explorer-send-to-compressed.spec.ts tests/e2e/source-explorer-extract-here.spec.ts tests/e2e/source-explorer-send-to-desktop.spec.ts tests/e2e/explorer-context-source.spec.ts tests/e2e/source-explorer-context-keyboard.spec.ts tests/e2e/source-win7-vista-explorer-rtl.spec.ts tests/e2e/desktop-files.spec.ts tests/e2e/source-computer-icon-metrics.spec.ts tests/e2e/source-explorer-context-themes.spec.ts tests/e2e/source-win10-explorer-toolbar.spec.ts tests/e2e/source-desktop-context-theme.spec.ts tests/e2e/source-window-chrome.spec.ts tests/e2e/source-window-control-glyphs.spec.ts tests/e2e/source-window-appearance-effects.spec.ts tests/e2e/source-system-performance.spec.ts tests/e2e/desktop-context-source.spec.ts tests/e2e/source-desktop-context-keyboard.spec.ts tests/e2e/source-menu-cascade-edge-placement.spec.ts tests/e2e/source-explorer-open-menu-resize.spec.ts tests/e2e/source-window-limit-final.spec.ts tests/e2e/source-taskbar-live-preview-final.spec.ts tests/e2e/listview-source-checkbox.spec.ts tests/e2e/notepad.spec.ts tests/e2e/shell.spec.ts tests/e2e/source-final-theme-catalog.spec.ts tests/e2e/source-classic-logon.spec.ts tests/e2e/source-onebit-logon.spec.ts tests/e2e/source-winl-logon.spec.ts tests/e2e/source-winw-logon.spec.ts tests/e2e/source-aeronoir-logon.spec.ts tests/e2e/source-oxygen-logon.spec.ts tests/e2e/source-kubuntu-logon.spec.ts tests/e2e/source-ubuntu-logon.spec.ts tests/e2e/source-chromeos-logon.spec.ts tests/e2e/source-macos-logon.spec.ts tests/e2e/source-vista-logon.spec.ts tests/e2e/source-win31-program-manager.spec.ts tests/e2e/source-win31-shell.spec.ts tests/e2e/source-win31-explorer.spec.ts tests/e2e/source-win9x-shell.spec.ts tests/e2e/source-win9x-explorer.spec.ts tests/e2e/source-win8-start.spec.ts tests/e2e/source-win8-context-menus.spec.ts tests/e2e/source-win8-explorer-toolbar.spec.ts tests/e2e/source-win10-shell.spec.ts tests/e2e/theme-bin-artwork.spec.ts tests/e2e/source-win10-start.spec.ts tests/e2e/photo.spec.ts tests/e2e/cmd-source-files.spec.ts --reporter=list
+      - name: Complete desktop and mobile browser acceptance suite
+        if: github.event_name != 'push' || (!contains(github.event.head_commit.message, '[macos-check]') && !contains(github.event.head_commit.message, '[chromeos-check]') && !contains(github.event.head_commit.message, '[ubuntu-check]') && !contains(github.event.head_commit.message, '[kubuntu-check]') && !contains(github.event.head_commit.message, '[oxygen-check]') && !contains(github.event.head_commit.message, '[aeronoir-check]') && !contains(github.event.head_commit.message, '[tray-check]') && !contains(github.event.head_commit.message, '[shell-fix-check]') && !contains(github.event.head_commit.message, '[shell-check]') && !contains(github.event.head_commit.message, '[taskbar-check]'))
+        timeout-minutes: 60
+        run: npm run test:e2e -- --reporter=list
+      - name: Preserve test failure artifacts
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 2
+
+  visual-capture:
+    # Neither ordinary pushes nor [run-ci] commits capture screenshots.
+    # Opt in with [capture-visual] in a commit, or manual dispatch input.
+    if: contains(github.event.head_commit.message, '[capture-visual]') || (github.event_name == 'workflow_dispatch' && inputs.capture_visual == true)
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install frontend dependencies
+        run: npm install --no-audit --no-fund --include=optional
+      - name: Verify or restore Rollup native binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! node -e "require('@rollup/rollup-linux-x64-gnu')" >/dev/null 2>&1; then
+            ROLLUP_VERSION="$(node -p "require('./node_modules/rollup/package.json').version")"
+            npm install --no-save --no-package-lock --no-audit --no-fund \
+              "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
+          fi
+          node -e "require('@rollup/rollup-linux-x64-gnu')"
+      - name: Verify visual capture JavaScript syntax
+        run: node --check scripts/capture-visual-parity.mjs
+      - name: Assert pinned source assets before capture
+        run: npm run audit:legacy
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Detect optional read-only legacy source access
+        id: legacy
+        shell: bash
+        env:
+          SOURCE_TOKEN: ${{ secrets.LEGACY_SOURCE_READ_TOKEN }}
+        run: |
+          if [ -n "$SOURCE_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "No legacy read token: target-only screenshot evidence, not paired parity."
+          fi
+
+      - name: Checkout exact pinned legacy source (optional)
+        if: steps.legacy.outputs.available == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: codersachin99/legacy-win7
+          ref: 26b9f0ce7a1665dee89a7c81824bec09e2c75776
+          path: legacy-reference
+          token: ${{ secrets.LEGACY_SOURCE_READ_TOKEN }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        if: steps.legacy.outputs.available == 'true'
+        with:
+          python-version: "3.12"
+      - name: Prepare image comparison (source available only)
+        if: steps.legacy.outputs.available == 'true'
+        run: python -m pip install Pillow
+      # Final pinned source moved start.py to archive/ and serves through
+      # service/api/server.php (Slim 4). The previous Python command could
+      # never start this new immutable reference.
+      - name: Prepare pinned PHP source server (source available only)
+        if: steps.legacy.outputs.available == 'true'
+        run: |
+          php --version
+          cd legacy-reference/service/api
+          composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Capture fixed React and optional pinned source scenes
+        shell: bash
+        env:
+          LEGACY_AVAILABLE: ${{ steps.legacy.outputs.available }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/visual-parity
+          npm run dev > /tmp/windowsos-visual-target.log 2>&1 &
+          TARGET_PID=$!
+          SOURCE_PID=""
+          trap 'kill "$TARGET_PID" 2>/dev/null || true; if [ -n "$SOURCE_PID" ]; then kill "$SOURCE_PID" 2>/dev/null || true; fi' EXIT
+          ready() {
+            local url="$1"
+            for attempt in $(seq 1 60); do
+              if curl -fsS -o /dev/null "$url"; then return 0; fi
+              sleep 1
+            done
+            echo "Server did not start at $url" >&2
+            return 1
+          }
+          ready http://127.0.0.1:1420/
+          if [ "$LEGACY_AVAILABLE" = "true" ]; then
+            (cd legacy-reference && php -S 127.0.0.1:8099 -t . service/api/server.php) > /tmp/windowsos-visual-source.log 2>&1 &
+            SOURCE_PID=$!
+            ready http://127.0.0.1:8099/
+            # This SHA is checked out by actions/checkout, not merely assumed.
+            test "$(git -C legacy-reference rev-parse HEAD)" = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
+            node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420 --source-url http://127.0.0.1:8099 --source-sha 26b9f0ce7a1665dee89a7c81824bec09e2c75776
+            python scripts/compare-visual-parity.py
+          else
+            node scripts/capture-visual-parity.mjs --target-url http://127.0.0.1:1420
+          fi
+
+      - name: Upload visual evidence even if capture fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-parity-${{ github.sha }}
+          path: artifacts/visual-parity/
+          if-no-files-found: warn
+          retention-days: 3

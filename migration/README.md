@@ -1,0 +1,371 @@
+> **28 November 2026 — Window placement:** Guest profile remembers normal window bounds and maximized state, including shared Explorer placement and fixed-size rules. New verification pending; prior focused CI in progress.
+
+> **28 November 2026 — Keyboard/vertical snap:** previous snapping checkpoint green (822 units, 84 browser cases). Original Alt-arrow/Alt+4 window commands and vertical resize-edge snap implemented; focused verification requested.
+
+> **28 November 2026 — Snap migration:** prior resize checkpoint green (817 units/80 browser cases). Added titlebar snap, drag-to-restore and vertical handle double-click with original preview styling; focused checks requested.
+
+> **28 November 2026 — Window resizing:** previous taskbar checkpoint green (811 units/64 browser tests). Added shared eight-direction window resize with source minimum dimensions and responsive clamping; focused verification requested.
+
+> **28 November 2026 — Full green baseline:** 810 unit tests and 1,725 browser cases passed, 5 browser skips, zero failures on f8e7630. Ported original Aero Peek glass/stacked edge and requested focused checks for accumulated taskbar changes.
+
+> **28 November 2026 — Taskbar preview lifecycle:** visual clones made inert; context menus cancel pending/visible previews and removed targets no longer leave stale peek state. New verification pending.
+
+> **28 November 2026 — Program popup artwork:** original Open/Pin/Close icons restored, including Onebit overrides; byte-identical source assets verified by blob SHA. New browser checks pending; previous full CI still running.
+
+> **28 November 2026 — Focused green:** 807 units and 384 browser cases passed; restored source taskbar background context-menu anchoring and dividers. Full CI requested.
+
+> **28 November 2026 — Full browser run:** 1,718 passed, 5 failed, 5 skipped. Corrected Win11 Start alignment against original source and stale XP battery/Action Center contracts; focused verification requested.
+
+> **28 November 2026 — CI execution optimization:** 1,109 browser tests passed, 3 skipped in broad shell batch; complete run cancelled. Standard CI now runs full Playwright suite once, with named diagnostics and a larger timeout budget. Full opt-in rerun requested.
+
+> **28 November 2026 — Focused CI:** all 32 previous browser failures cleared; 328/332 focused tests passed. Corrected equivalent CSS zero serialization in the four remaining sprite tests; full opt-in CI requested.
+
+> **28 November 2026 — CI regression repair:** recovered 807 green units and 1077 passing browser cases, 32 failed. Updated stale source UI contracts and Ubuntu desktop interaction; focused opt-in CI requested.
+
+> **28 November 2026 — Win10 search glyph/catalog/timing:** original Line Awesome artwork, source program catalog and 300ms published query with fresh Enter handling. Consolidated opt-in CI requested; verification pending.
+
+> **27 November 2026 — Win10 search artwork:** original file/shortcut icon resolution, real Guest upload and keyboard browser contracts. Tests authored; CI status unavailable.
+
+> **27 November 2026 — Win10 modern search results:** source grouping, Guest-home file search, supported settings routes and keyboard selection. Unit/browser tests authored; verification requested.
+
+> **27 November 2026 — Win10 taskbar search:** source registry, shared Start query, measured capacity and first app-launch contract. Full modern results overlay and verification pending.
+
+> **26 November 2026 — Centered taskbar:** source default-off preference and measured fit/fallback. [Source trace](TASKBAR-CENTERED-SOURCE.md).
+
+> **26 November 2026 — Taskbar pagination skins:** original theme gradients, borders and embedded arrow artwork. [Source trace](TASKBAR-PAGINATION-SKINS-SOURCE.md).
+
+> **26 November 2026 — Taskbar overflow:** measured capacity, original row navigation and active group selection. [Source trace](TASKBAR-PAGINATION-SOURCE.md).
+
+> **26 November 2026 — Notification checkpoint:** 795 unit and 106 browser tests passed; original Marked module located and common safe inline formatting migrated. [Source trace](NOTIFICATION-INLINE-FORMAT-SOURCE.md).
+
+> **25 November 2026 — Notification browser contracts:** responsive breadcrumb fix and end-to-end lifecycle test. [Source trace](NOTIFICATION-BROWSER-SOURCE.md).
+
+> **25 November 2026 — Notification links:** safe shared inline parser and source read behavior. [Source trace](NOTIFICATION-LINKS-SOURCE.md).
+
+> **25 November 2026 — Notification anchoring:** measured tray icon and hidden-toggle placement. [Source trace](NOTIFICATION-ANCHOR-SOURCE.md).
+
+> **25 November 2026 — Action Center history:** original message rows, theme artwork and entry lifecycle. [Source trace](ACTION-CENTER-HISTORY-SOURCE.md).
+
+> **25 November 2026 — Notification balloons:** shared geometry and original theme-family paint. [Source trace](NOTIFICATION-BALLOON-SOURCE.md).
+
+> **25 November 2026 — Action Center popup:** source geometry and headline selection; consolidated notification CI green. [Source trace](ACTION-CENTER-POPUP-SOURCE.md).
+
+> **25 November 2026 — Notification service:** injectable timeout/cache and persistent version metadata. [Source trace](NOTIFICATION-SERVICE-SOURCE.md).
+
+> **25 November 2026 — Notification feed:** targeting, localization, version and session rules. [Source trace](NOTIFICATION-FEED-SOURCE.md).
+
+> **25 November 2026 — Notification state:** original 779a queue/severity and bounded device flags. [Source trace](NOTIFICATION-STATE-SOURCE.md).
+
+> **25 November 2026 — Notification artwork:** battery/tray CI green; four original toast icon families imported. [Source trace](NOTIFICATION-ARTWORK-SOURCE.md).
+
+> **25 November 2026 — Battery popup:** original sprite meter, charging overlay, theme-specific status and consolidated verification. [Source trace](BATTERY-TRAY-SOURCE.md).
+
+> **25 November 2026 — Action Center/network artwork:** original severity flag and distinct tray/popup network selection.
+
+> **25 November 2026 — Tray artwork:** source registry volume inheritance and Longhorn XP artwork corrected.
+
+> **25 November 2026 — Tray audit:** measured nested popup geometry, keyboard dismissal and calendar focus fixes.
+
+> **25 November 2026 — Onebit tray:** original palette/artwork and consolidated tray CI. [Source trace](ONEBIT-TRAY-SOURCE.md).
+
+> **25 November 2026 — Historical trays:** Win31/95/98/2000, Whistler and Longhorn shared controls. [Source trace](HISTORICAL-TRAY-SOURCE.md).
+
+> **25 November 2026 — Modern trays:** Win8/81/10/11/11dark functional tray and source-family calendar styling. [Source trace](MODERN-TRAY-SOURCE.md).
+
+> **25 November 2026 — XP tray:** seven XP variants use shared controls and exact registry artwork. [Source trace](XP-TRAY-SOURCE.md).
+
+> **25 November 2026 — Vista tray:** original flat popup and shared calendar/clock paint with interactive Guest controls. [Source trace](VISTA-TRAY-SOURCE.md).
+
+> **25 November 2026 — Shared hidden tray:** remaining migrated base families plus dedicated top-bar source routing. [Source trace](SHARED-HIDDEN-TRAY-SOURCE.md).
+
+> **25 November 2026 — Hidden tray:** real hidden Win7-family components, keyboard lifecycle and Customize link. [Source trace](HIDDEN-TRAY-SOURCE.md).
+
+> **25 November 2026 — Classic tray:** Basic 2–4 interactive opaque tray and calendar palettes; consolidated opt-in CI requested. [Source trace](CLASSIC-TRAY-SOURCE.md).
+
+> **25 November 2026 — Win7 interactive tray:** Aero/Basic 1 source glass, calendar and clock; shared Guest functionality. [Source trace](WIN7-TRAY-SOURCE.md).
+
+> **25 November 2026 — Taskbar animation:** independent Performance Options switch, persisted v1 migration and Start orb fade. [Source trace](TASKBAR-ANIMATION-SOURCE.md).
+
+> **25 November 2026 — Win7 Start orb:** original three-state sprite for Win7/Aero 1–4/Basic 1; classic artwork retained. [Source trace](WIN7-START-SPRITE-SOURCE.md).
+
+> **25 November 2026 — Source Start sprite:** byte-verified inherited Aero Noir/Oxygen Start states and expanded exact-head CI request. [Source trace](START-SPRITE-SOURCE.md).
+
+> **25 November 2026 — Source palette correction:** Ubuntu, Kubuntu, Oxygen registry accents and Aero Noir inactive glass alpha corrected; tests pending. [Source trace](THEME-REGISTRY-PALETTE-SOURCE.md).
+
+> **25 November 2026 — Aero Noir tray and focused verification:** shared interactive tray, original calendar paint and explicit opt-in CI. [Source trace](AERONOIR-TRAY-SOURCE.md). Results pending.
+
+> **25 November 2026 — Aero Noir context/Explorer:** original WinUI menus and list/navigation/address selection, edge regression extended; tests pending. [Source trace](AERONOIR-CONTEXT-EXPLORER-SOURCE.md).
+
+> **24 November 2026 — Aero Noir Start:** source two-column paint and Guest library navigation; browser regression pending. [Source trace](AERONOIR-START-SOURCE.md).
+
+> **24 November 2026 — Oxygen verified / Aero Noir WindowMain:** 89 browser tests passed (1 skipped); original Aero Noir frame and caption buttons ported, new tests pending. [Source trace](AERONOIR-WINDOW-SOURCE.md).
+
+> **24 November 2026 — Aero Noir base shell:** original gloss taskbar and icon selection, verified palette, browser tests pending. [Source trace](AERONOIR-SHELL-SOURCE.md).
+
+> **24 November 2026 — Oxygen CI:** 757 units and 85 browser tests passed; 4 failures traced to two selector defects. Corrected test selectors, rerun pending.
+
+> **24 November 2026 — Oxygen tray/DateTime:** shared interactive tray and original gradient calendar, focused CI pending. [Source trace](OXYGEN-TRAY-SOURCE.md).
+
+> **24 November 2026 — Oxygen context/Explorer:** original gradients and WinUI selection, tests pending. [Source trace](OXYGEN-CONTEXT-EXPLORER-SOURCE.md).
+
+> **24 November 2026 — Oxygen Start:** shared original Kubuntu-family layout with Oxygen gradient and artwork, browser tests pending. [Source trace](OXYGEN-START-SOURCE.md).
+
+> **24 November 2026 — Kubuntu / Personalize verified:** 757 units, 73 browsers passed (1 skipped). Oxygen WindowMain port awaiting verification. [Source trace](OXYGEN-WINDOW-SOURCE.md).
+
+> **24 November 2026 — Personalize full theme selection:** 35 original non-duplicate theme cards; Kubuntu tray hover fix; focused CI pending.
+
+> **24 November 2026 — Oxygen base shell:** source taskbar gradients and original embedded selection WebP, tests pending; Kubuntu CI browser verification running.
+
+> **24 November 2026 — Kubuntu tray/DateTime:** shared functional tray, calendar and focused CI batch, results pending. [Source trace](KUBUNTU-TRAY-SOURCE.md).
+
+> **24 November 2026 — Kubuntu context/Explorer:** dark WinUI menus, shared menubar, navigation, list selection and status, tests pending. [Source trace](KUBUNTU-CONTEXT-EXPLORER-SOURCE.md).
+
+> **24 November 2026 — Kubuntu Start:** original list/recent grid/search/footer, tests pending. [Source trace](KUBUNTU-START-SOURCE.md).
+
+> **24 November 2026 — Ubuntu verified / Kubuntu WindowMain:** Ubuntu 757 unit tests and 53 browser tests passed, 1 browser skipped; Kubuntu frame/control port pending verification. [Source trace](KUBUNTU-WINDOW-SOURCE.md).
+
+> **24 November 2026 — Kubuntu base shell:** original dark taskbar and desktop selection, tests pending; Ubuntu CI remains in progress. [Source trace](KUBUNTU-SHELL-SOURCE.md).
+
+> **24 November 2026 — Ubuntu CI regression repair:** 49 passed / 4 failed / 1 skipped; corrected clock containing block and view-specific double-tap state. Focused rerun pending.
+
+> **24 November 2026 — Ubuntu verification:** explicit focused CI batch, centered clock CSS corrected; results pending.
+
+> **24 November 2026 — Ubuntu tray:** source system menu and interactive Guest tray/DateTime; tests pending. [Source trace](UBUNTU-TRAY-SOURCE.md).
+
+> **24 November 2026 — Ubuntu Explorer/menubar:** source address, navigation, list selection and status styling; tests pending. [Source trace](UBUNTU-EXPLORER-SOURCE.md).
+
+> **24 November 2026 — Ubuntu Desktop/context:** source icon selection and dark WinUI menus; shared cascade regression extended. Tests pending. [Source trace](UBUNTU-CONTEXT-SOURCE.md).
+
+> **24 November 2026 — Ubuntu WindowMain:** source frame, caption controls and bounded windows; tests pending. [Source trace](UBUNTU-WINDOW-SOURCE.md).
+
+> **24 November 2026 — Ubuntu Activities:** source Launchpad grid, paging, app/settings/file search; tests pending. [Source trace](UBUNTU-LAUNCHPAD-SOURCE.md).
+
+> **24 November 2026 — Ubuntu shell:** original top bar and vertical recent/running dock, maximized bounds; prior ChromeOS focused CI passed. New tests pending. [Source trace](UBUNTU-SHELL-SOURCE.md).
+
+> **24 November 2026 — ChromeOS DateTime:** source calendar and live analog/digital clocks; opt-in focused ChromeOS CI includes previous XP/Win11 regression. [Source trace](CHROMEOS-DATETIME-SOURCE.md). Results pending.
+
+> **24 November 2026 — ChromeOS tray:** shared functional Action Center, Network, Battery, Volume, light popups and exact network artwork. [Source trace](CHROMEOS-TRAY-SOURCE.md). Tests pending.
+
+> **24 November 2026 — ChromeOS Explorer:** original navigation, addressbar, list selection and menubar paint. [Source trace](CHROMEOS-EXPLORER-SOURCE.md). Tests pending.
+
+> **24 November 2026 — ChromeOS context:** original inherited desktop selection and WinUI menu paint, including Start portal and cascade edge regression. [Source trace](CHROMEOS-CONTEXT-SOURCE.md). Tests pending.
+
+> **24 November 2026 — ChromeOS launcher:** original panel/grid, recent programs, Guest search, power/account controls. [Source trace](CHROMEOS-LAUNCHER-SOURCE.md). Verification pending.
+
+> **24 November 2026 — ChromeOS shell:** original shelf and WindowMain chrome, real window lifecycle regression authored. [Source trace](CHROMEOS-SHELL-SOURCE.md). Tests pending.
+
+> **24 November 2026 — regression repair:** full CI 1507 passed, 5 skipped, 2 failed (same stale XP Desktop navigation assertion). Source-verified XP and inherited Win11 artwork now explicitly tested; new-head verification pending.
+
+> **24 November 2026 — verification checkpoint:** opt-in `[run-ci] [macos-check]` retains all non-browser gates and runs focused macOS browser cases on both Chromium projects. Full CI remains opt-in via `[run-ci]`. Latest batch pending results.
+
+> **24 November 2026 — notifications:** shared SDK history and timed macOS toast; source remote feed pending. [Source trace](MACOS-NOTIFICATION-SOURCE.md).
+
+> **24 November 2026 — macOS Volume:** original meter, five exact icons and functional Guest media mixer. [Source trace](MACOS-VOLUME-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS Battery:** original battery popup, browser capability and functional Guest display brightness; unit/browser contracts authored. [Source trace](MACOS-BATTERY-SOURCE.md).
+
+> **24 November 2026 — macOS Action Center:** original empty summary, shared lifecycle and real Control Panel route; notification delivery pending. [Source trace](MACOS-ACTION-CENTER-SOURCE.md).
+
+> **24 November 2026 — macOS popup lifecycle:** shared source-style active popup owner, stale close guards and keyboard switching contracts. [Source trace](MACOS-POPUP-OWNERSHIP-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS tray/network:** source order/40px slots, live browser connectivity popup and regression. [Source trace](MACOS-TRAY-NETWORK-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS DateTime:** original calendar-only clock popup and navigation; unit/browser regression authored. [Source trace](MACOS-DATETIME-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS menubars:** source active/inactive Notepad and Computer/Bin menubar/status paint and regression contracts. [Source trace](MACOS-MENUBAR-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS Explorer:** original active/inactive Computer/Bin chrome, navigation and selection paint; browser regression authored. [Source trace](MACOS-EXPLORER-SOURCE.md). Previous CI running browsers; new head pending.
+
+> **24 November 2026 — macOS context and CI repair:** original dark WinUI palettes across Desktop/Dock/Explorer/Launchpad; corrected one stale Vista unit expectation from CI #45387916534. [Source trace](MACOS-CONTEXT-SOURCE.md). Consolidated opt-in CI requested.
+
+> **24 November 2026 — macOS dock details:** real empty/full Bin artwork, original tooltip and pointer, responsive overflow handling. [Source trace](MACOS-DOCK-DETAILS-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS Launchpad:** source fullscreen program grid, search, paging and real application launch. [Source trace](MACOS-LAUNCHPAD-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS Spotlight:** source-style search surface, registered apps and mounted Guest files, shared association resolver and regression contract. [Source trace](MACOS-SPOTLIGHT-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS Apple menu:** original seven-command menu, exact glyph and Guest actions (external Help pending). [Source trace](MACOS-APPLE-MENU-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS dock groups:** original fixed/recent/running/Bin groups, source dividers and actual window actions. [Source trace](MACOS-DOCK-GROUPS-SOURCE.md). Tests pending.
+
+> **24 November 2026 — macOS top bar/dock:** distinct top bar and bottom dock geometry, shared launch/window actions and regression contract. [Source trace](MACOS-TOPBAR-DOCK-SOURCE.md). Verification pending.
+
+> **24 November 2026 — macOS desktop/window:** original selection and dark traffic-light frame styling, browser regression contract. [Source trace](MACOS-DESKTOP-WINDOW-SOURCE.md). CI conclusion unavailable.
+
+> **24 November 2026 — Consolidated verification:** static artwork inventory comparison (301 checksum entries matched); historical flyout height correction; one opt-in full CI requested. Results pending.
+
+> **24 November 2026 — Historical All Programs flyout:** Slate/Plex/Whistler flat source list with viewport bounds, keyboard and app launch. [Source trace](HISTORICAL-ALL-PROGRAMS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn/Whistler application menubars:** Notepad and Computer/Bin toolbar source palettes and dropdown styles, real action regression contracts. [Source trace](LONGHORN-WHISTLER-MENUBAR-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn/Whistler Explorer:** source navigation, address, selection and status palettes implemented; regression contracts added. [Source trace](LONGHORN-WHISTLER-EXPLORER-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn/Whistler context menus:** distinct source WinUI palettes across Desktop, taskbar, Explorer and Start portal; regression contracts added. [Source trace](LONGHORN-WHISTLER-CONTEXT-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn/Whistler window chrome:** original frames, caption states and embedded Whistler PNG plus lifecycle regression coverage. [Source trace](LONGHORN-WHISTLER-WINDOW-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn/Whistler Start:** shared XP structure and distinct source skins, Restart control and regression coverage. [Source trace](LONGHORN-WHISTLER-START-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn/Whistler shell styling:** original desktop selection and taskbar state palettes now implemented in a shared stylesheet; regression contracts added. [Source trace](LONGHORN-WHISTLER-SHELL-SOURCE.md). Visual and exact-head CI pending.
+
+> **24 November 2026 — XP-family complete registry:** 66 exact source override keys, shared with Slate/Plex/Whistler except Start, 15 newly verified assets. [Source trace](XP-COMPLETE-ICONS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Slate icon inheritance resolved:** Frozen theme catalog explicitly inherits XP. Existing 43 shared source mappings plus XP Start and distinct Slate wallpaper wired; unit and browser regression tests added. [Source evidence](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Onebit core artwork:** 29 exact registry keys, 17 hash-matched SVGs, original aliases and actual trash/file regressions. [Source trace](ONEBIT-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Vista icon overrides:** All eleven theme-specific source keys imported byte-identically; shared fallback artwork preserved, regression coverage and full audit updated. [Source trace](VISTA-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Longhorn Plex and Whistler artwork:** 43 shared exact source keys plus distinct Start icons, five new files and one verified reuse. Previous login-fix CI green; combined opt-in verification requested for newer packs and expanded audit. [Source trace](LONGHORN-WHISTLER-CORE-ICONS-SOURCE.md).
+
+> **24 November 2026 — Oxygen core artwork:** 28 original keys, 25 hash-matched paths (23 new, 2 reused), original aliases and lifecycle regression coverage. [Source trace](OXYGEN-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Aero Noir core artwork:** 26 original keys, 21 hash-matched paths, original aliases and lifecycle regressions. Artwork CLI now audits all registered groups by default. [Source trace](AERONOIR-CORE-ICONS-SOURCE.md). Exact-head CI pending.
+
+> **24 November 2026 — Kubuntu core artwork:** 27 source keys, 26 exact paths (19 new, seven reused), intentional source aliases and lifecycle regression coverage. [Source trace](KUBUNTU-CORE-ICONS-SOURCE.md). Existing CI running; exact-head tests pending.
+
+> **24 November 2026 — Ubuntu core artwork:** 27 source registry keys, 26 new hash-verified assets and one reused shortcut alias. Unit and browser lifecycle regressions. [Source trace](UBUNTU-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
+
+> **24 November 2026 — browser verification repair:** CI #45364747459 passed 724 unit tests, failed six targeted browser cases (947 passed, 3 skipped). Restore six full-viewport logon roots, update stale wallpaper count, add viewport and hit-target geometry regressions. New opt-in CI requested with macOS/ChromeOS icons; exact-head pending.
+
+> **24 November 2026 — ChromeOS core icon artwork:** 27 original registry keys, 20 exact paths (19 imported, one reused). Shared empty/full Bin and folder aliases preserved, actual trash lifecycle tests. [Source trace](CHROMEOS-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
+
+> **24 November 2026 — macOS core icon artwork:** 24 pinned registry keys, 20 exact original file paths, shared desktop/Explorer/Bin resolution with unit and browser regressions. [Source trace](MACOS-CORE-ICONS-SOURCE.md). Prior combined CI running; new slice unverified.
+
+> **24 November 2026 — classic/XP desktop defaults:** Four exact XP variant wallpapers plus four classic source solid colors, corrected existing gallery previews; 30 available system images. [Source trace](CLASSIC-XP-WALLPAPER-SOURCE.md). CI #45363645210 failed only stale Ubuntu fallback assertion (721 passed); corrected, next opt-in combined check requested.
+
+> **24 November 2026 — desktop wallpaper default batch:** 12 source registry defaults corrected; ten actual image paths added to system gallery (26 total), five new exact binary assets, unit and desktop/mobile paint/reload coverage. [Source trace](DESKTOP-WALLPAPER-DEFAULTS-SOURCE.md). Combined login CI #45363645210 active; shell status unchanged.
+
+> **24 November 2026 — all 19 original login families routed:** Vista uses shared original Win7 source branch, original Vista wallpaper and power sprite verified by Git hash. All 37 IDs covered by new SSR contract. Prior Personalize CI #45360503128 failed only hidden mobile sidebar click (892 passed, 3 skipped); actual mobile Cancel/gallery navigation corrected without removing tint checks. [Vista source trace](VISTA-LOGON-SOURCE.md). Combined opt-in CI requested for all six newest slices. Full parity remains pending.
+
+> **24 November 2026 — original macOS Guest logon:** Two original assets with Git SHA equality, cover wallpaper, 150px avatar, source centered action order and real simulator callbacks. SSR/browser regressions. 18/19 partial logon families; macOS shell pending. [Source trace](MACOS-LOGON-SOURCE.md). Previous CI still running; batch latest theme slices. No full parity claim.
+
+> **24 November 2026 — original ChromeOS Guest logon:** Two original assets with Git SHA equality, double 24px blur, 100px avatar-only Guest and source footer actions with live clock. SSR/browser regressions. 17/19 partial logon families; ChromeOS shell pending. [Source trace](CHROMEOS-LOGON-SOURCE.md). Previous CI still running; batch latest theme slices. No full parity claim.
+
+> **24 November 2026 — original Ubuntu Guest logon:** Original guest and logo SVGs with Git SHA equality, 88px avatar, source logon-only top System menu and Guest/power lifecycle, SSR and browser regression coverage. 16/19 partial logon families; Ubuntu shell pending. [Source trace](UBUNTU-LOGON-SOURCE.md). Prior Personalize CI still running; batch latest three theme slices. No full parity claim.
+
+> **24 November 2026 — original Kubuntu Guest logon:** Original 300% wallpaper with Git SHA equality, 150px avatar, 48px circular power art and icon-only hover. Real Guest and power lifecycle, SSR and browser regressions. 15/19 partial logon families; shell remains pending. [Source trace](KUBUNTU-LOGON-SOURCE.md). Prior Personalize CI still running; batch Oxygen/Kubuntu next. No full parity claim.
+
+> **24 November 2026 — original Oxygen Guest logon:** Original 128px avatar, blur overlay, 40px Restart/Shutdown artwork copied by exact source Git SHA, original source controls and partial Guest renderer; SSR and desktop/mobile regression coverage. 14/19 partial logon families; full shell remains pending. [Source trace](OXYGEN-LOGON-SOURCE.md). Previous Personalize CI #45360503128 is running; batch next opt-in CI after result. No merge/release or pixel-perfect claim.
+
+> **24 November 2026 — verified Explorer resize gate; Appearance rollback acceptance [run-ci]:** [CI #45355394198](https://github.com/codersachin99/windows-os/actions/runs/45355394198) **SUCCESS** for the prior Explorer coordinate correction, including full desktop/mobile Chromium. New Personalize sidebar and independent Control Panel Background launch restore committed Aero color/transparency before leaving or opening Background, with actual browser tests for saved vs unsaved color. The existing Appearance spec is now included in the focused gate as well as the full suite. This exact head requests one deliberate opt-in CI run; previous green does not certify new changes. [Handoff](HANDOFF.md). Frozen reference, main, draft PR and releases unchanged; original paired screenshots remain unverified. Temporary cleanup workflow stays deleted.
+
+> **24 November 2026 — one-time Actions storage cleanup finished and workflow removed:** [Successful cleanup #45355161254](https://github.com/codersachin99/windows-os/actions/runs/45355161254) deleted 105 artifacts (1,068,010,786 bytes) with zero failures and zero remaining artifacts/caches at completion. User requested removal of the one-time workflow; deletion commit `0d3ff09e` removes it. Keep the 2/3-day failure/visual artifact retention and normal opt-in CI. [Desktop hover CI #45353856723](https://github.com/codersachin99/windows-os/actions/runs/45353856723) passed its new hover cases but had four Explorer resize failures; coordinate correction [CI #45355394198](https://github.com/codersachin99/windows-os/actions/runs/45355394198) is still running. Additional Personalize source `back()` contract fix discards unsaved color/transparency on direct sidebar Desktop Background navigation, with real desktop/mobile regression. Batch this change into next verification rather than launching another concurrent full run. Frozen source, main and draft PR unchanged.
+
+> **24 November 2026 — Desktop adjacent cascade hover correction [run-ci]:** Prior live-resize run [#45352806191](https://github.com/codersachin99/windows-os/actions/runs/45352806191) had passed TypeScript, unit/source/artwork/Contacts checks and Vite, with focused browser regressions still running when inspected. Desktop View/Sort/New now close adjacent flyouts when hovering normal root commands (matching Explorer behavior) without blocking traversal to stacked flyouts on narrow screens. Added real desktop/mobile cases for Refresh, all three branches, 320px stacked New, and ArrowLeft/Escape focus. [Source and regression notes](CONTEXT-SUBMENU-CASCADE-EDGE-SOURCE.md). This exact head must pass its own opt-in CI; last green head is `089e56e6`. Original paired screenshots still blocked by absent `LEGACY_SOURCE_READ_TOKEN`. Draft PR, frozen source, main and releases unchanged.
+
+> **24 November 2026 — source Desktop / Explorer / Bin cascade live resize verification [run-ci]:** Exact previous head `089e56e6` [CI #45341894836](https://github.com/codersachin99/windows-os/actions/runs/45341894836) **SUCCESS**: TS, 132 + 715 units, pinned inventory/original artwork/Contacts, Vite, 873 focused browser passing (3 skipped) and 1325 full desktop/mobile browser passing (5 skipped); original pixel comparison still skipped without `LEGACY_SOURCE_READ_TOKEN`. Next parity gap: open Computer/Bin context **View/New/Send to** menus previously measured current viewport only on mount/open, not after browser resize. `ExplorerApp.tsx` now listens to viewport resize only while a context is open, updates root clamp and separately measured child placement on resize, keeping source right-side default, left-side edge flip, mobile stacking and menu keyboard focus. Added live 1100→320→1100 Chromium regressions for Computer/Bin View, a real Guest Documents file Send to and Desktop View; included in opt-in focused and full browser tests. **This new head requires its own successful CI**; no green claim for new code or complete theme pixel parity. [Source and coverage](OPEN-CONTEXT-MENU-RESIZE-SOURCE.md). Keep frozen legacy source, draft PR #1, main and releases unchanged.
+
+> **24 November 2026 — source Appearance rollback + Aero Noir canonical CSS acceptance [run-ci]:** WinW [Actions #45333123563](https://github.com/codersachin99/windows-os/actions/runs/45333123563) **SUCCESS** (131+713 units, 871 targeted browsers passed, 1321 full browsers passed). WinL [#45330433060](https://github.com/codersachin99/windows-os/actions/runs/45330433060) had just one true full-suite failure amid 1,318 passing browsers: unsaved Aero window color persisted momentarily after titlebar close. Source `personalize.js` requires discard; centralized `DesktopShell.requestClose` now discards live preview synchronously on titlebar Close and Alt+F4, retaining the original failing E2E and adding Alt+F4 regression. Aero Noir [#45333920227](https://github.com/codersachin99/windows-os/actions/runs/45333920227) passed 871 targeted tests but its two new checks assumed browser CSS serialization `300%` instead of actual `300% auto`; updated assertion only, not the source 300% paint. This commit opts into one fresh **exact-head TypeScript/units/inventory/artwork/Contacts/Vite/targeted/full desktop+mobile** verification; no green claim until it completes. [Detailed source/CI evidence](PERSONALIZE-APPEARANCE-CLOSE-SOURCE.md). PR #1 draft, main and frozen source untouched; screenshots and 37-theme exact visuals remain unverified.
+
+> **24 November 2026 — original Aero Noir logon source + regression [run-ci]:** Frozen `legacy-win7@26b9f0ce7` `logon-aeronoir.js` is a distinct Guest/power screen with 300% wallpaper, black/50 10px-blurred overlay, circular 150px `guest-win10` avatar, and 36px KDE restart/shutdown images—not Win7 logon. Imported three original binaries with Git SHA equality (`6ae97abb`, `e689418c`, `26b83d0f`) and added them to source-artwork audit. Added `SourceAeroNoirLogon`, scoped CSS, unit and focused/full desktop-mobile browser tests. Source module stays **in-progress** and shell `pending`; **13/19** logon-family renderers are partial and six explicit fallback. New exact-head CI must run TS/units/source asset and Contacts audits/Vite/focused and full E2E; previous running WinL/WinW checks do not certify this head. [Frozen source trace and remaining functionality](AERONOIR-LOGON-SOURCE.md). No original screenshot/37-theme full parity assertion; draft PR/main/source/release unchanged.
+
+> **24 November 2026 — original WinW Whistler logon parity [run-ci]:** Source `logon-winw.js`/`logon-winw.css` has its own Guest screen; `winW` no longer quietly renders Win7 login. Original byte-identical `logowhistler.73c9045c.webp` (verified SHA `c0528d4a`) is imported and included in pinned artwork audit; React has source white body, blue vertical Windows brand, orange Welcome, navy instruction, direct Restart/Shutdown and functional Guest login. Added unit + desktop/mobile browser tests into focused/full suite. The 37 exact source theme IDs remain recognized; **12 of 19** logon families now have bounded source renderers, 7 explicit fallback; source form/captcha/spinner, full theme shells, and 37-theme paired image comparisons remain unverified. The previous `096d6c38` CI #45330433060 was already passing targeted/source checks but had not yet finished full suite when inspected; this new head requires its **own** opt-in exact-head full acceptance. [WinW source evidence](WINW-LOGON-SOURCE.md). Keep draft PR, source lock, main and releases unchanged.
+
+> **24 November 2026 — Onebit + WinL/WinLP Guest source logon acceptance [run-ci]:** Both prior Onebit Actions [#45327784052](https://github.com/codersachin99/windows-os/actions/runs/45327784052) and [#45328094689](https://github.com/codersachin99/windows-os/actions/runs/45328094689) passed TS/units/source/artwork/Contacts/Vite and 863 targeted browser cases but failed only 2 desktop/mobile old theme-catalog assertions still expecting `onebit` to be Win7 fallback. Corrected to source Onebit renderer while keeping shell pending. Also added original shared WinL logon for winLS/winLP, exact `fd229041`-verified original wallpaper, source 512×320 frame, shared source Guest/power icons, mobile bounds, unit/browser tests and SHA asset importer check. New exact-head CI must verify source audits, all units, Vite, focused and full desktop/mobile E2E. [WinL source trace](WINL-LOGON-SOURCE.md); [Onebit trace](ONEBIT-LOGON-SOURCE.md). Original 37-theme paired screenshots still unverified; draft PR/main/source/release unchanged.
+
+> **24 November 2026 — source Pixelit Onebit Guest avatar exact-head regression [run-ci]:** The original `src/modules/chunks/shared~cpanel~logon-onebit.js` modules `a2e5/f830` do more than show the Guest image: they scale to 24%, expand without smoothing and quantize to `#352b30/#e6d4bf/#806572/#aa9883`. Added a canvas renderer preserving alpha, source palette unit checks and real desktop/mobile 2D pixel-color browser assertions. This commit explicitly requests TS/units/source inventory/artwork/Contacts/Vite/focused/full browser re-verification; the older CI #45327784052 checked the pre-pixelation Onebit head and cannot validate these additional changes. Full Onebit shell, auth captcha, original power glyphs and paired screenshot parity remain pending. Do not merge/release.
+
+> **24 November 2026 — verified full cascade parity gate; next Onebit theme logon [run-ci]:** [CI #45144237553](https://github.com/codersachin99/windows-os/actions/runs/45144237553) **SUCCESS** at `0ddcfb62`: 863 focused browser passed (3 skipped), 1313 full browser passed (5 skipped), TS, 831 unit tests, frozen source/artwork/Contacts audits and production Vite build. Building on this green branch, source `onebit` now uses an original dark `#352b30` / sand `#e6d4bf` Guest/power logon adapter instead of silently showing Win7, with unit + real desktop/mobile tests, the source four-color pixel-avatar renderer and explicit pending status for captcha/full shell. Exact-head opt-in CI must verify this NEW slice; green old head cannot certify it. [Frozen source, code and limits](ONEBIT-LOGON-SOURCE.md). Keep draft PR, main, immutable source and releases unchanged, and do not claim 37-theme pixel-perfect parity.
+
+> **23 November 2026 — full CI browser regressions after detached New menu [run-ci]:** [#45110895627](https://github.com/codersachin99/windows-os/actions/runs/45110895627) passed TS, all units, pinned source/artwork/Contacts, Vite, and 863 source-shell focused cases (3 skipped); full browser ran 1301 passed / 12 failed / 5 skipped. All failures were old root-inline selectors in Shortcut Wizard (5 tests per viewport) and Control Panel Backup (one per viewport). Updated these tests to operate the actual detached New popup and retained original real Guest .lnk wizard plus ZIP Backup/Restore safety assertions. Request exact-head opt-in CI, not yet marked green; PR #1 draft, main/source/release untouched, 37-theme paired source visuals remain unverified.
+
+> **23 November 2026 — exact-head Start stacked-pointer verification [run-ci]:** The mobile viewport regression now measures width **after** WindowsOS navigation, correcting Chromium `about:blank`'s 980px default layout viewport (prior 856 pass/1 fail). The subsequent classic Win95/98/2k narrow Start fix preserves Programs/Power above/below flyouts across incidental parent-row pointer travel while retaining intentional click and desktop side-opening. Full Win9x source-sized click/hover/Notepad/Log off browser cases are added to an existing focused CI file. Verify TypeScript/units/source SHA/artwork/Contacts/Vite/focused and full browser for this exact head, not prior run #45110555028. Keep PR #1 draft and source/main/release untouched; original paired screenshots pending.
+
+> **22 November 2026 — full submenu selector repair gate [run-ci]:** Previous [Actions #45040528367](https://github.com/codersachin99/windows-os/actions/runs/45040528367) at 8c179c9 had 834 focused Playwright passes / 22 failures / 2 skips: all 22 failed due to historical inline-root Desktop New/View queries in three suites after the correct sibling cascade refactor. Updated those suites and additionally seven full-suite-only Desktop New/View/hover/clipboard/drag/drop suites to query measured sibling popups while retaining real Guest actions, keyboard and original theme style assertions. Verify this new head: TypeScript, all units, source inventory/byte-identical artwork/Contacts, Vite, focused tests and complete desktop/mobile browser. Old opt-in runs at 306e050 and 9706c46 predate these complete fixes. PR #1 stays draft; no source/main changes or pixel-acceptance/release claim.
+
+> **22 November 2026 — required exact-head cascade parity acceptance [run-ci]:** Validate shared BaseMenu geometry for Desktop View/Sort/New/Send-to and Computer/Bin, default right-opening and automatic left-flipping near screen edges; no clipped or inline expanding submenu; keyboard ArrowLeft/Escape and small mobile stacking. CI must pass TypeScript, full units, frozen source inventory + original-artwork hashes + Contacts audit, Vite build, focused new and existing Desktop/Explorer/Start/Bin browser tests, and full desktop/mobile Playwright. Prior #45038369243 belongs to prior Bin slice. No original-vs-React 37-theme screenshot acceptance without LEGACY_SOURCE_READ_TOKEN; no merge or release.
+
+> **22 November 2026 — Desktop, Computer and Recycle Bin cascade edge parity:** A user-reported problem was confirmed: Desktop View / Sort by / New child items rendered inline, increasing the parent popup height rather than opening on its right (or flipping left near the screen edge), and Desktop Send to used a guessed 27px row offset. Added shared `@windows-os/ui/menu-cascade` source-measured placement, made Explorer/Bin use it through its existing API, and moved Desktop View/Sort/New to detached sibling popups with correct right/left flip, vertical clamp, narrow mobile stacking, independent keyboard focus and scroll bounds; Send-to now uses actual trigger geometry. Updated prior Desktop browser assertions and added pure positioning plus real Win7/XP/Win11 Desktop and Explorer/Bin desktop/mobile edge regressions in focused CI. [Full source/layout proof, tests and limitations](CONTEXT-SUBMENU-CASCADE-EDGE-SOURCE.md). Previous Recycle Bin open-guard run [#45038369243](https://github.com/codersachin99/windows-os/actions/runs/45038369243) predates this submenu refactor and was still finishing full browser checks when started. New `[run-ci]` exact-head acceptance required. Keep draft PR #1, pinned source/main and release unchanged; 37-theme original paired visuals pending.
+
+> **22 November 2026 — frozen Recycle Bin deleted-directory open guard [run-ci]:** Prior green [#45018661202](https://github.com/codersachin99/windows-os/actions/runs/45018661202) verifies previous Start artwork only. This exact-head opt-in must verify source `computer.js` refusing to open deleted directories as well as files, targeted nested-directory recycle/Enter/double-click/Restore tests on win7/winxp/win11 desktop/mobile, all prior focused and full browser regressions, TypeScript, all units, pinned source/artwork SHA/Contacts audits, and Vite. No claim of original-vs-React 37-theme paired pixel parity; PR #1 stays draft, original SHA/main untouched, no release.
+
+> **22 November 2026 — Recycle Bin deleted-folder opening guard:** Previous exact-head [CI #45018661202](https://github.com/codersachin99/windows-os/actions/runs/45018661202) **SUCCESS** at `7d162af` (original Win7 Start library hover artwork, TS/units/artwork SHA/source/Contacts/Vite/focused+full desktop/mobile browser). Frozen `src/modules/apps/computer.js` rejects opening any item whose URI is inside `trashPath` before dispatching `file`/`directory`, inherited by `bin.js`. React previously allowed deleted directories to navigate in Bin while blocking deleted files. Fixed `ExplorerApp.tsx` to check `isBin` before directory navigation, preserving Restore/Delele and Guest VFS metadata. Added focused desktop/mobile tests across win7/winxp/win11 that double-click and Enter on a recycled nested folder, assert Bin path and Back history unchanged, then Restore and inspect its nested contents. [Source audit and tests](BIN-OPEN-GUARD-SOURCE.md). This new Bin fix requires its own CI acceptance. PR #1 draft, frozen SHA/main unchanged; 37-theme original paired screenshots remain blocked by missing read-only access.
+
+> **22 November 2026 — exact-head original Win7 library hover assets acceptance [run-ci]:** Verify all six byte-identical imported pinned standard WebP and Basic SVG Git blobs via `import-source-theme-assets.py --verify-target-only`; TypeScript, all unit tests, source inventory and Contacts audits, Vite build, focused Win7/Vista hover preview and Basic no-preview tests plus existing Guest library navigation, and full desktop/mobile Playwright. Prior green #45002955097 only verified the Guest links before artwork import. React preserves original delayed 400-ms hover and cancels/restores avatar; 37-theme source-vs-candidate paired screenshots remain unavailable. Do not merge PR #1, alter main/frozen legacy source, or release.
+
+> **22 November 2026 — original Win7/Vista Start library hover artwork:** Prior exact-head [CI #45002955097](https://github.com/codersachin99/windows-os/actions/runs/45002955097) **SUCCESS** at `48383e4` (working Documents/Pictures/Music Guest navigation). Imported all six original hashed library images from pinned `legacy-win7@26b9f0ce7` into `apps/web/public/assets/images/` via Git blobs; verified SHA equality before commit [`7ec98fca`](https://github.com/codersachin99/windows-os/commit/7ec98fca44ff6a85e17f42ff0983fc90eeb81251). Added `sourceWin7StartLibraryArtwork`, original 400-ms library hover preview replacing Guest avatar for non-Basic Win7-family Start, original Basic SVG icon mappings, source asset-manifest hash checks, unit + desktop/mobile image-load/hover regressions in focused CI. [Source proofs, hashes and remaining visual limits](WIN7-START-LIBRARY-HOVER-ARTWORK-SOURCE.md). This later slice is **not** verified by prior green run. Draft PR #1, `main` and frozen source remain unchanged, no release or full 37-theme paired screenshot parity claim.
+
+> **22 November 2026 — Win7 Start Guest library functional parity acceptance [run-ci]:** Deliberate exact-head TypeScript, all unit tests, pinned source inventory, original artwork/Contacts audits, Vite build, targeted `source-win7-start-user-libraries.spec.ts` (win7/Vista/Basic and Win10 non-regression on desktop/mobile) and full browser suite. Frozen `startmenu-base.js` right shortcuts open Computer in Guest Documents/Pictures/Music; React now routes these from mounted Guest home, without host paths. Prior [green #44995958802](https://github.com/codersachin99/windows-os/actions/runs/44995958802) predates this addition. Keep draft PR #1, main and source unchanged. No claim of original library glyph/hover or 37-theme paired pixel parity.
+
+> **22 November 2026 — Win7/Vista/Aero/Basic Start Guest libraries:** Frozen `src/modules/shell/startmenu-base.js` renders `t.shortcuts` with Documents, Pictures and Music first, each opening Computer at `this.userPath/<folder>`. React lacked these three right-pane buttons. Added source-keyed links in `StartMenu.tsx` using the permissioned mounted Guest home (parent of `desktopPath`), with real Computer initial folder; Win10's distinct Documents → Computer-home behavior left unchanged. New desktop/mobile Playwright tests cover actual Explorer folder address for all three links across win7/winvista/basic-1, and Win10 non-regression. Included in focused CI. [Source proof, limits and tests](WIN7-START-USER-LIBRARIES-SOURCE.md). Last green checkpoints: [#44994511592](https://github.com/codersachin99/windows-os/actions/runs/44994511592) and [#44995958802](https://github.com/codersachin99/windows-os/actions/runs/44995958802); both preceded this slice. Theme-specific shortcut art and paired 37-theme screenshot parity are not yet accepted. PR draft/main/frozen reference unchanged, no release.
+
+> **22 November 2026 — Win7/Vista/Basic Start non-touch focus acceptance [run-ci]:** Deliberate exact-head TypeScript, unit, pinned source inventory and byte-identical theme artwork/Contacts audit, Vite build, focused `source-start-search-touch-focus.spec.ts` across desktop/mobile, and full browser. Source `startmenu-base.js` focuses Search after Start opens ONLY on non-touch devices. React now preserves that, including explicit tap-to-focus and unchanged Win10/Win11 path. Earlier mixed Desktop CI #44994511592 predates this Start change. Keep draft PR, main and immutable source untouched, and no paired screenshot parity claim for all 37 themes.
+
+> **22 November 2026 — Win7/Vista/Basic Start search touch focus:** Pinned `src/modules/shell/startmenu-base.js` watches `isOpen` and calls `focusSearch` on next tick **only when not a touch device**. React's unconditional Win7-family Search `autoFocus` contradicted this on touch phones/tablets. `StartMenu.tsx` now uses a Win7-family ref and non-touch-only layout focus, leaving Win10/Win11 rules unchanged. Added browser desktop/mobile tests for `win7`, `winvista`, `basic-1` with explicit tap-to-focus on mobile; included in focused opt-in CI. See [source contract](START-SEARCH-TOUCH-FOCUS-SOURCE.md). Previous Desktop mixed-selection CI #44994511592 had passed focused browser tests but its full browser gate was running at the time of this later Start slice; it cannot validate new Start changes. Keep PR draft, main/pinned source unchanged, no release; original paired 37-theme visuals pending.
+
+> **22 November 2026 — corrected mixed Desktop path-count test acceptance [run-ci]:** The prior #44990550774 failed two obsolete desktop/mobile expectations asserting Computer + one real file must hide Open/Rename; pinned source says the opposite. Revised the old test to verify Computer + one file shows the single-item menu, and Computer + two real files hides it, without weakening the new source ZIP/link path-count tests. Deliberately run full TypeScript, units, frozen inventory/artwork/Contacts audits, Vite, focused and full desktop/mobile Playwright. No product code rollback, release, merge or 37-theme paired screenshot parity assertion.
+
+> **22 November 2026 — mixed Desktop path-count CI diagnosis:** [CI #44990550774](https://github.com/codersachin99/windows-os/actions/runs/44990550774) failed only the existing `desktop-item-source-menu.spec.ts` **two cases** (desktop/mobile), which incorrectly expected selected Computer + one real file to hide Open/Rename. Frozen `DesktopItemMenu.isMultiple` instead counts selected real `shortcut.path` values; new path-count behavior and other focused source scenarios passed. Corrected this obsolete test to assert single-path commands remain when Computer is selected; also added a two-real-file + Computer check hiding them. See [source proof](DESKTOP-CONTEXT-PATH-COUNT-SOURCE.md). Pending new exact-head opt-in CI; previous run does not validate corrected test. No product behavior rollback, no merge/release.
+
+> **22 November 2026 — exact-head mixed Desktop selection acceptance [run-ci]:** Deliberate TypeScript, all units, frozen source inventory/artwork/Contacts audits, Vite, focused Desktop context path-count tests (Computer plus ZIP, multi-real selection, program-only link plus Guest file), and full desktop/mobile browser. Source `isMultiple` counts actual selected `shortcut.path` entries, not highlighted icons or clipboard-distinct target URIs. Previous green CI #44984857015 is older Bin-drag snapshot; this new slice is not accepted until this run passes. PR #1 draft; `main`, frozen legacy source and releases untouched. No unverified side-by-side screenshot parity claim for all 37 themes.
+
+> **22 November 2026 — source Desktop mixed-selection menu parity:** Original `DesktopItemMenu` calculates `isMultiple` from **selected real shortcut.path entries** rather than highlighted icon count. React now uses `desktopSourceItemMenuPathCount` for Open/Rename/Properties/Extract here gating; Computer/Bin/program-only `.lnk` do not inflate counts, while two different aliases sharing one target do count twice as in source. Added unit and desktop/mobile E2E mixed-selection ZIP extraction + menu regressions to the focused CI list. [Source proof and tests](DESKTOP-CONTEXT-PATH-COUNT-SOURCE.md). Prior exact-head [CI #44984857015](https://github.com/codersachin99/windows-os/actions/runs/44984857015) SUCCESS at `d8b5efb` verifies earlier Bin drag safeguards, **not this new slice**. Draft PR #1, pinned source, main, original paired 37-theme screenshots remain unchanged/unverified.
+
+> **22 November 2026 — exact-head Bin drag safety acceptance [run-ci]:** Deliberately run TypeScript, all units, pinned original source inventory/artwork/Contacts audits, Vite, focused Desktop pointer regressions including new `source-desktop-bin-drag-guard.spec.ts`, and complete desktop/mobile browser. The pinned `dropIcons()` repositions rather than deletes; React's pre-existing Bin drag convenience now excludes both program-only and path-backed `.lnk` to prevent silent link/target data loss, while retaining direct Guest folder/batch Bin tests. Previous [green CI #44938100831](https://github.com/codersachin99/windows-os/actions/runs/44938100831) is earlier ZIP/Delete snapshot. Keep draft PR, main and frozen source unchanged; no release or unverified 37-theme paired screenshot claim.
+
+> **22 November 2026 — Desktop pointer-drag Bin safeguard:** Frozen legacy `src/modules/system/main.js` `dropIcons()` only repositions shortcuts (no trash/delete), whereas React already supports a separate direct-Guest pointer drop to Bin. The existing extension could silently trash `.lnk` JSON instead of the source-linked target. [Source audit and regression](DESKTOP-BIN-DRAG-SAFETY-SOURCE.md) adds a canonical mounted direct-file/folder-only gate; program-only/path-backed `.lnk`, system and mixed selections are rejected without changing files, while explicit source Delete still confirms/recycles real target. Existing direct folder/batch Bin drag tests remain. Prior [CI #44938100831](https://github.com/codersachin99/windows-os/actions/runs/44938100831) **SUCCESS** at `6741bed` for earlier compression/Delete code; new safeguard still needs exact-head acceptance. PR #1 draft, main and source untouched; visual capture across 37 themes unverified.
+
+> **22 November 2026 — exact-head ZIP + Delete verification [run-ci]:** This deliberate opt-in checks the frozen Desktop source `getShortcut(key).path` for compressed ZIP and Delete on the real mounted Guest target. Verify TypeScript, all unit tests, pinned source inventory/artwork/Contacts audits, Vite, focused browser suites including the new `source-desktop-shortcut-delete.spec.ts` and extended `source-desktop-send-to-compressed.spec.ts`, then complete desktop/mobile Playwright. Prior CI #44937841704 is only the pre-Delete compression snapshot; do not count it as acceptance for this head. Recycle Bin Restore must preserve original binary bytes, shortcut must remain, and program-only links cannot delete. PR draft, main and immutable source unchanged; visual comparisons for 37 theme IDs still unverified.
+
+> **22 November 2026 — Desktop source path-backed shortcut Delete:** Frozen `src/modules/system/main.js` DesktopItemMenu uses `deleteItems(this.paths)` where `this.paths` is selected `getShortcut(key).path`, and keyboard Delete uses the same targets. React now confirms and recycles the real mounted Guest target (not on-Desktop `.lnk` backing JSON), retaining the shortcut for restore; a program-only `.lnk` has disabled Delete and ignored keyboard Delete. New [source Delete proof and reversible Bin test](DESKTOP-SHORTCUT-DELETE-SOURCE.md) includes real Explorer-created link, original binary restore and no-path gating on desktop/mobile. **Pending its own exact-head CI**; prior clipboard [CI #44931334630](https://github.com/codersachin99/windows-os/actions/runs/44931334630) SUCCESS is earlier code, and compressed ZIP [CI #44937841704](https://github.com/codersachin99/windows-os/actions/runs/44937841704) is also earlier snapshot. Keep PR #1 draft and source/main fixed, no release or unsupported screenshot parity claim.
+
+> **22 November 2026 — exact-head acceptance [run-ci]:** Opt in once to full TypeScript, unit, source inventory/artwork/Contacts audits, Vite, focused source Desktop context and compressed ZIP cases (including path-backed `.lnk` to Documents), and complete desktop/mobile Playwright. The frozen source's `compress(this.paths)` now archives real selected source Guest targets rather than on-Desktop `.lnk` JSON. The accepted previous run #44931334630 verifies only the older Copy/Cut snapshot. Mixed-parent selection stays a bounded safety restriction, not claimed original behavior. Keep PR #1 draft, main and pinned source unmodified, no release; paired 37-theme original screenshots remain missing.
+
+> **22 November 2026 — Desktop shortcut compressed-folder parity:** Frozen `src/modules/system/main.js` DesktopItemMenu passes all selected `shortcut.path` values to `compress`, not Desktop `.lnk` JSON paths. `desktopSourceArchiveSelection` now resolves those real mounted Guest targets, determines the source folder, and delegates to the shared atomic ZIP adapter. Explorer-created `.lnk` to Documents archives the real target beside it; program-only links hide Send to, mixed parents are safely blocked. Added unit + actual desktop/mobile browser byte checks to existing focused suite. See [source proof and acceptance](DESKTOP-SHORTCUT-COMPRESS-SOURCE.md). Prior exact-head [CI #44931334630](https://github.com/codersachin99/windows-os/actions/runs/44931334630) SUCCESS on `7af9b85` verifies *earlier clipboard* changes, not this later ZIP slice. Keep PR #1 draft, frozen legacy/main untouched; all 37-theme paired visuals unverified.
+
+> **Exact-head Desktop shortcut clipboard acceptance [run-ci] — 21 Nov 2026:** This commit intentionally starts TypeScript, all unit tests, pinned-source/artwork/Contacts audits, production build, focused shell browser regressions including `source-desktop-shortcut-clipboard.spec.ts`, and complete desktop/mobile Playwright. New code resolves selected source path-backed .lnk `shortcut.path` for context Cut/Copy and Ctrl+C/X; direct Guest icons and program-only link gating retain frozen behavior. Prior #44913862521 SUCCESS is earlier ZIP/Download-only snapshot, not verification of these changes. No source rewrite, visual parity assertion, merge or release.
+
+> **21 November 2026 — source Desktop path-backed shortcut Copy/Cut:** [Prior exact-head CI #44913862521](https://github.com/codersachin99/windows-os/actions/runs/44913862521) SUCCESS at e0dde5b for Desktop ZIP/Download; new selected .lnk target Copy/Cut behavior is implemented separately and **pending new acceptance**. React now uses validated Guest shortcut.path for context Cut/Copy and Ctrl+C/X, hides operations for program-only .lnk with no source path, and retains shared Explorer clipboard. [Exact source trace, safety and new desktop/mobile tests](DESKTOP-SHORTCUT-CLIPBOARD-SOURCE.md). Draft PR #1, frozen legacy and main unchanged; pixel comparison of all 37 themes not verified.
+
+> **21 Nov 2026 — Desktop selection/shortcut exact-head acceptance [run-ci]:** Frozen DesktopItemMenu uses getShortcut(id).path for Download, including real source path-backed .lnk target Guest ZIPs. React now dereferences validated mounted Guest targets instead of incorrectly excluding every .lnk. This head also retains the corrected Desktop Extract here one-vs-multiple selection test and multi-file byte download. Validate full TypeScript, unit, source/artwork/Contacts audits, Vite, focused Desktop/Explorer, and complete browser desktop/mobile; never claim visual source parity without pinned original screenshots. Prior CI #44913595324 predates the .lnk fix. Draft PR, frozen legacy, main and releases unchanged.  > **21 Nov 2026 — exact-head Desktop ZIP browser acceptance [run-ci]:**  Earlier focused CI #44908838690 and #44909579800 passed all TypeScript/unit/audits/build, but failed four Playwright cases because their helper treated right-clicking one of multiple uploaded/selected icons as a single selection. The frozen DesktopItemMenu deliberately retains multi-selection and hides Extract here; test helper corrected at 4aa5439 without weakening that product behavior or any assertions. Run full focused and complete desktop/mobile Chromium, all contracts and audits at this exact SHA; preserve draft PR, main, pinned legacy source, and no release. Paired visual source still inaccessible.  > **Exact-head combined Desktop ZIP extraction + multi-file Download acceptance — 21 Nov 2026:** This commit deliberately opts into the full existing CI gate using `[run-ci]`. Verify TypeScript, unit tests, source migration inventory, original artwork/Contacts audits, production Vite, focused source desktop/mobile tests including `source-desktop-extract-here.spec.ts` and `source-desktop-multi-download.spec.ts`, and complete desktop/mobile Playwright. Earlier run #44908838690 is a different, older snapshot and cannot verify the current head. Preserve all tests, draft PR, source reference, main and zero release changes.
+
+> **21 November 2026 — original Desktop multi-file Download migration:** Frozen `main.js` DesktopItemMenu downloads `this.downloadablePaths` from the entire selection; the former React handler downloaded only the clicked item. `desktopDownloadableFiles` now filters source-eligible selected Guest file bytes, enables Download when any eligible selection exists (including a clicked `.lnk`), and the real handler downloads the selected files. New units and desktop/mobile Playwright cases are added to focused CI. The older Desktop Extract here [CI #44908838690](https://github.com/codersachin99/windows-os/actions/runs/44908838690) was still processing focused browser regressions on `caf815e` at this handoff and **does not cover** later ZIP shortcut-test correction `2565b61` or multi-Download commits. [Exact source trace and test contract](DESKTOP-MULTI-DOWNLOAD-SOURCE.md). Pending exact-head acceptance; original-vs-React screenshots unverified; keep draft PR #1/no release.
+
+> **Exact-head Desktop Extract here CI request — 21 Nov 2026:** Run TypeScript, all unit tests, original migration/artwork/Contacts audits, Vite build, focused original shell tests including `source-desktop-extract-here.spec.ts`, and complete desktop/mobile Chromium. Reuse original source without changes. Verify ZIP bytes, shortcut destination, text, empty folders and failed-transaction rollback; do not weaken tests on failure. This commit opts into CI via `[run-ci]`. No original/React pixel-parity claim, merge or release.
+
+> **21 November 2026 — Desktop Extract here implementation, pending acceptance:** Prior Explorer Extract here exact-head [CI #44905733445](https://github.com/codersachin99/windows-os/actions/runs/44905733445) **SUCCESS**. Frozen `main.js` DesktopItemMenu additionally supports `Extract here` for direct Desktop ZIP files and archive-targeting `.lnk` shortcuts. React now gates the original action by real mounted Guest ZIP eligibility and delegates to the already-verified, atomic Guest extractor; 7z/RAR/TAR/GZ remain unavailable. New unit and browser desktop/mobile byte/Notepad/empty-directory/collision/shortcut coverage is staged. [Desktop Extract here source spec](DESKTOP-EXTRACT-HERE-SOURCE.md). **Do not treat the earlier Explorer CI as verification for new Desktop code.** Draft PR #1, frozen source, target main and releases unchanged; pixel parity still unverified.
+
+> **Exact-head ZIP extraction acceptance requested — 21 November 2026:** Verify the new Explorer Extract here ZIP engine, atomic VFS tree writes, non-overwrite/traversal tests, valid UTF-8 Guest reads, source menu gate, full desktop/mobile Chromium and all TypeScript/unit/source/artwork/Contacts/Vite checks at this exact commit. This commit explicitly opts into CI. A green older Desktop ZIP run is not acceptance for new extraction. Original-vs-React screenshot parity still needs the private original access token. PR #1 remains draft; no merge/release.
+
+> **21 November 2026 — Explorer ZIP Extract here implementation:** The previous Desktop Compressed ZIP exact-head [CI #44898625505](https://github.com/codersachin99/windows-os/actions/runs/44898625505) completed **SUCCESS** (browser-and-contracts); visual source capture was skipped. New source `main.js` ExplorerItemMenu `Extract here` is now backed by a bounded Guest-only ZIP extractor with atomic VFS folder/file writes, no-overwrite/anti-traversal checks, nested binary bytes, source menu availability and unit/desktop/mobile regression tests. `.rar/.7z/.tar/.gz`, Desktop extraction, source-paired screenshots and final 37-theme parity remain pending. [Detailed extraction source trace](EXPLORER-EXTRACT-HERE-SOURCE.md). The extraction work is **committed but not yet verified by its own exact-head CI**; retain draft PR #1 and no release.
+
+> **Desktop ZIP exact-head acceptance request — 21 November 2026:** the source-backed Desktop `Send to → Compressed (zipped) folder` implementation, new unit cases, real desktop/mobile ZIP byte and collision tests, focused workflow inclusion, source audit and handoff are committed. Trigger a single deliberate opt-in check of TypeScript, all unit tests, source/artwork audits, Vite build, focused Playwright and full desktop/mobile Chromium at **this commit**. No test outcome is asserted until the run finishes. Preserve draft PR #1 and no release.\n\n> **21 November 2026 checkpoint (Desktop Send to Compressed ZIP):** Frozen `src/modules/system/main.js` DesktopItemMenu exposes a real `Send to → Compressed (zipped) folder` child. React now reuses the mounted-Guest-only, bounded Explorer ZIP engine for Desktop files and multi-select, with source submenu keyboard/pointer behavior and desktop/mobile browser byte/collision regressions. [Frozen source contract, limitations, and acceptance](DESKTOP-SEND-TO-ZIP-SOURCE.md). New work requires its own opt-in exact-head CI; prior [ZIP run #44889309855](https://github.com/codersachin99/windows-os/actions/runs/44889309855) does not cover it. No paired original screenshots or release. Draft PR #1, `main`, and immutable original remain unchanged.\n\n> **21 November 2026 checkpoint (Windows 2000 Start Search):** pinned `startmenu-win9x.js` opens Computer in Search mode, not the ordinary Computer folder. The React Start/Explorer adapter now opens its real Search Companion (Win95/98 Find remains distinct), with unit and desktop/mobile Playwright regression updates. [Source contract and limitations](WIN2K-START-SEARCH-SOURCE.md). Latest prior exact-head ZIP [CI #44889309855](https://github.com/codersachin99/windows-os/actions/runs/44889309855) passed; this new code must receive its **own** opt-in acceptance. Draft PR #1 stays open; immutable source and `main` unchanged; screenshot parity not claimed. See the source audit document instead of rewriting the historical 6,000-line handoff log.
+
+# Source-locked React conversion of legacy-win7
+
+**Canonical product/source:** [codersachin99/legacy-win7](https://github.com/codersachin99/legacy-win7), immutable commit `26b9f0ce7a1665dee89a7c81824bec09e2c75776`.
+**Target:** [codersachin99/windows-os](https://github.com/codersachin99/windows-os), React + TypeScript + Vite.
+**Non-negotiable:** do not redesign, replace icons with emojis or approximate source behavior. Preserve login, themes, boot, windows, apps, games, gadgets, settings, keyboard/touch behavior, backend and files.
+
+`legacy-files.tsv` is a complete inventory of **3348** tracked files. It records the source Git blob SHA1 and size of every file, including **2395 assets**, **290 source module bundles**, and **158 original stylesheets**. Every file must be tracked through to replacement/retention; presence in this inventory is **not** evidence a feature has been ported.
+
+## Reuse original resources first
+
+Run from this repo root:
+
+```powershell
+node scripts/import-legacy.mjs --from "C:\Sandbox\UNCLEOS\parity\legacy-win7"
+node scripts/import-legacy.mjs --from "C:\Sandbox\UNCLEOS\parity\legacy-win7" --check
+npm install
+npm run dev
+```
+
+The importer verifies the *clean* pinned source Git revision and every imported blob SHA before copying the original, untouched `assets/` and `apps/` to `apps/web/public/`; original CSS goes to `apps/web/public/legacy/styles/`. It does **not** copy Vue executable bundles into the React application or change the old project. Commit imported asset files into `windows-os` after provenance/license review (third-party components may have separate rights). Until the import is performed, exact wallpaper, avatars, styles, sound and icon resources **will not render**.
+
+The target includes a loopback-only Python development API under `services/api/`, but the final pinned original uses a **PHP Slim 4** backend under `service/api/`. The Python adapter is not certified as functionally or security-equivalent to that source. The original standalone Contacts app is now a native React port under `packages/apps/contacts` with the same CSS and API CRUD; it is **implemented pending tests**, not full acceptance. The original Photoshop and Illustrator standalone `index.html` files are zero bytes at the pinned checkpoint; their runtime capability requires investigation rather than an invented implementation. This new React application is **incomplete**, not a replacement for the full legacy product.
+
+## Standalone source applications
+
+All three `apps/*/index.html` entries from the original source are now recorded in `module-tracker.json.externalApps`, and `npm run audit:legacy` verifies the SHA and status for each. Contacts uses the exact original CSS extracted from its source HTML and React components instead of a legacy iframe. The existing target Python development API is preserved separately; full parity with the pinned original PHP endpoints is still pending. **Original module bundles are still predominantly pending**: the tracker reflects this instead of treating basic shell screenshots as full functionality.
+
+## Migration order
+
+1. Exact boot and Win7 logon, Guest and account flows, first-run behavior.
+2. Desktop and taskbar/window management: grid, wallpaper, selection, drag/drop, menus, Start, tray, clock, theme changes.
+3. Full source application registry and *one-by-one real ports* of apps with shared Window SDK, storage, commands and events.
+4. Games/gadgets/media/assets, all 36 original `defaults.themeScreens` IDs (plus canonical Win7 runtime alias), responsive/mobile and input accessibility.
+5. Backend/API parity with the original PHP Slim 4 contract (auth, contacts, store, themes, feed), using permissioned Python adapters where appropriate, persistence and browser/native host boundaries.
+6. Audit every source module and asset against the checkpoint; functional behavior tests and screenshot acceptance per state.
+
+Do not label a React placeholder, a compatibility iframe, or a screenshot as a completed app.

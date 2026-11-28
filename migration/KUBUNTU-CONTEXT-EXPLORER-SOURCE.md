@@ -1,0 +1,3 @@
+# Kubuntu context and Explorer
+
+Frozen `4e63290d783009e1293433c6ccf252abba9c1187`. Ported source 582b dark translucent WinUI context/menu paint, 3px borders, disabled/hover/focus states, shared menubars and Explorer address/search/nav/list/status across Computer and Bin. Accent row layer remains separate from content; portal fallback accent is provisional #3daee9. Menu color-mix is a paint adapter; original optional popup glass blur deferred to avoid establishing a new containing block for fixed cascades. Existing measured cascade geometry unchanged, expanded regression to Kubuntu. No CI requested this slice; tests unexecuted. Next: Kubuntu interactive tray/DateTime and consolidated verification.

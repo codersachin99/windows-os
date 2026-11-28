@@ -1,0 +1,4 @@
+# Longhorn/Whistler application menubar adapters — 24 November 2026
+
+Pinned legacy-win7@26b9f0ce7a1665dee89a7c81824bec09e2c75776: theme-winlonghorn-scss.js (16222a96acbeb3e4645dfc31689e412f3754eeb4), theme-winW-scss.js (70bf83d82d033065c1458bb6b73a96bf9e2a4a69), Notepad source src/modules/apps/notepad.js (2a3a22ca61eb1834a9777128830dca9b7411f853, window-menubar binding). Plex blue gradient and white text, Slate horizontal steel gradient and gray item hover, Whistler cream and #004e98 item hover. Shared WinUI popup palettes extend to Notepad dropdown and Explorer Organize/View adapters, with RTL styles and disabled states. Current Notepad and Explorer menu structures and actions remain unchanged; no claim of full source menu geometry, all application menu bars, or exact keyboard semantics. Browser contracts cover Notepad status toggle and Explorer Organize Escape/focus restoration. Tests authored, not executed here.
+

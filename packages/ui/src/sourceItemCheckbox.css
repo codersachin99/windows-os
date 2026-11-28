@@ -1,0 +1,22 @@
+/* Original fa65 source uses winui-checkbox item-checkbox and an inner label.
+ * Until source theme pixels are compared, only common Windows 7 checkbox
+ * geometry is implemented; its source classes remain exposed to each theme.
+ */
+.item-checkbox{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:24px;min-width:24px;height:28px;flex-shrink:0;cursor:pointer;
+}
+.item-checkbox .source-item-checkbox__native{
+  position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;
+}
+.item-checkbox>label{
+  position:relative;display:block;box-sizing:border-box;width:14px;height:14px;
+  background:linear-gradient(#fff,#eaf1f7);border:1px solid #7f96ac;
+  border-radius:2px;pointer-events:none;
+}
+.item-checkbox[aria-checked="true"]>label::after{
+  content:"✓";position:absolute;inset:-5px -2px 0;
+  color:#17578b;font:bold 17px/20px "Segoe UI",Arial,sans-serif;
+  text-align:center;
+}
+.item-checkbox:focus-visible>label{outline:2px solid #348ddd;outline-offset:2px;}

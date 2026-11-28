@@ -1,0 +1,97 @@
+/* Frozen src/styles/themes/logon-aeronoir.css:
+ * source 300% scaled original wallpaper, black 50% backdrop with 10px blur,
+ * 150px rounded guest-win10 avatar, white text and 36px restart-kubuntu
+ * / shutdown-kubuntu artwork. Only the bounded Guest login is ported.
+ */
+.windows-logon.source-aeronoir-logon{
+  display:flex;align-items:center;justify-content:center;position:fixed;inset:0;
+  overflow:hidden;background-color:#111;background-size:300%;background-position:center center;
+  color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-aeronoir-logon__overlay{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(10px);
+}
+.source-aeronoir-logon__account{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;z-index:1;position:relative;text-align:center;
+  min-width:0;max-width:min(95vw,440px);padding:28px 20px 96px;
+}
+.source-aeronoir-logon__avatar{
+  width:150px;height:150px;flex:none;border-radius:50%;
+  display:grid;place-items:center;background:transparent;border:0;
+  padding:0;cursor:pointer;transition:box-shadow .1s;
+}
+.source-aeronoir-logon__avatar img{
+  width:150px;height:150px;object-fit:contain;border-radius:50%;opacity:.8;
+}
+.source-aeronoir-logon__avatar:focus-visible,
+.source-aeronoir-logon__avatar:hover{
+  outline:none;box-shadow:0 0 0 6px rgba(255,255,255,.2);
+}
+.source-aeronoir-logon__account h1{
+  font-size:30px;font-weight:500;margin:2px 0 0;color:#fff;
+  text-shadow:0 0 5px #000;
+}
+.source-aeronoir-logon__signin{
+  min-width:140px;padding:6px 10px;cursor:pointer;
+  color:#fff;background:linear-gradient(#555,#333);
+  border:1px solid rgba(255,255,255,.2);border-radius:4px;
+  font:14px "Segoe UI",Tahoma,sans-serif;text-shadow:0 0 5px #000;
+  transition:transform .1s;
+}
+.source-aeronoir-logon__signin:focus-visible{
+  border-color:rgba(255,255,255,.6);
+}
+.source-aeronoir-logon__signin:active{transform:scale(.95)}
+.source-aeronoir-logon__switch{
+  color:#fff;background:transparent;border:1px solid transparent;
+  font:14px "Segoe UI",Tahoma,sans-serif;cursor:pointer;
+  text-decoration:underline;padding:5px 10px;
+}
+.source-aeronoir-logon__switch:hover,
+.source-aeronoir-logon__switch:focus-visible{text-decoration:none}
+.source-aeronoir-logon__power{
+  position:absolute;right:64px;bottom:32px;z-index:2;
+  display:flex;align-items:center;gap:4px;
+}
+.source-aeronoir-logon__power-item{
+  min-width:90px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;gap:5px;
+  padding:6px;border:1px solid transparent;border-radius:6px;
+  color:#fff;background:transparent;cursor:pointer;
+  font:13px "Segoe UI",Tahoma,sans-serif;transition:transform .1s;
+}
+.source-aeronoir-logon__power-item img{
+  display:block;width:36px;height:36px;object-fit:contain;
+}
+.source-aeronoir-logon__power-item:hover,
+.source-aeronoir-logon__power-item:focus-visible{
+  outline:none;background-image:linear-gradient(rgba(85,85,85,.6666666667),rgba(51,51,51,.6666666667));
+  border-color:rgba(255,255,255,.3333333333);
+  box-shadow:2px 2px 3px 1px rgba(0,0,0,.3333333333);
+}
+.source-aeronoir-logon__power-item:active{transform:scale(.95)}
+.source-aeronoir-logon__unavailable{
+  position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);
+  box-sizing:border-box;width:min(360px,calc(100vw - 32px));
+  background:linear-gradient(#555,#333);color:#fff;
+  border:1px solid rgba(255,255,255,.5);border-radius:4px;
+  box-shadow:0 8px 20px #0008;padding:20px;text-align:center;
+}
+.source-aeronoir-logon__unavailable p{margin:0 0 16px}
+.source-aeronoir-logon__unavailable button{
+  min-width:80px;border:1px solid #fff7;padding:6px;
+  background:linear-gradient(#555,#333);color:#fff;cursor:pointer;border-radius:4px;
+}
+@media(max-width:640px){
+  .source-aeronoir-logon__account{gap:10px;padding:15px 12px 125px}
+  .source-aeronoir-logon__power{right:12px;bottom:12px}
+}
+@media(max-height:450px){
+  .source-aeronoir-logon__account{gap:8px;padding:8px 12px 72px}
+  .source-aeronoir-logon__avatar,.source-aeronoir-logon__avatar img{
+    width:100px;height:100px;
+  }
+  .source-aeronoir-logon__power{bottom:6px}
+}

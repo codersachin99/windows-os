@@ -1,0 +1,98 @@
+/* Frozen vue-app.css .winui-balloon, f0ed and theme-*-scss.js.
+ * Toasts are rendered outside the tray tree in React. Keep their edge
+ * placement bounded without changing the popup or hidden-tray skins. */
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{
+  --source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%23fff' stroke='%23fff'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='rgba(0,0,0,0.2)'/%3E%3C/svg%3E");
+  position:fixed;z-index:4901;inset-inline-end:12px;top:auto;
+  bottom:calc(var(--taskbar-height,40px) + 18px);
+  display:flex;align-items:flex-start;gap:8px;box-sizing:border-box;
+  width:360px;max-width:min(380px,calc(100vw - 24px));
+  max-height:calc(100dvh - var(--taskbar-height,40px) - 38px);
+  padding:12px 12px 12px 16px;background:#fff;color:#000;
+  border:0;border-radius:0;box-shadow:0 2px 10px #0006;backdrop-filter:none;
+}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]:dir(rtl){padding:12px 16px 12px 12px}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{
+  content:"";position:absolute;width:18px;height:18px;
+  top:auto;bottom:-18px;inset-inline-end:16px;
+  background:var(--source-balloon-arrow);transform:scale(-1);pointer-events:none;
+}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]:dir(rtl)::before{transform:scaleY(-1)}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="bottom"]{top:calc(var(--taskbar-height,40px) + 18px);bottom:auto}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="bottom"]::before{top:-18px;bottom:auto;transform:scaleX(-1)}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="bottom"]:dir(rtl)::before{transform:none}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-artwork{flex:0 0 32px;width:32px;height:32px;object-fit:contain}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>.source-notification-copy{
+  flex:1;min-width:0;padding:0;padding-inline-end:20px;background:none;
+  color:inherit;border:0;box-shadow:none;overflow:auto;overflow-wrap:anywhere;
+  max-height:calc(100dvh - var(--taskbar-height,40px) - 64px);
+}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy>strong{display:block;margin:0 0 4px}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy p{font:inherit;white-space:pre-wrap;margin:0}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{
+  position:absolute;top:0;inset-inline-start:auto;inset-inline-end:0;
+  width:32px;height:32px;padding:0;border:0;border-radius:0;
+  background:none;color:inherit;font:24px/1 monospace;box-shadow:none;opacity:.6;
+  cursor:pointer;transition:none;
+}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button:is(:hover,:focus-visible){opacity:1}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{
+  --source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%23ebebeb' stroke='%23ebebeb'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='rgba(0,0,0,0.2)'/%3E%3C/svg%3E");
+  border:1px solid #8e8f8f;border-radius:4px;background:linear-gradient(#fff,#ebebeb);
+  box-shadow:5px 5px 3px -3px #0006;
+}
+.windows-desktop:is([data-source-win7-tray],[data-source-vista-tray],[data-source-win8-tray]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]:dir(rtl){box-shadow:-5px 5px 3px -3px #0006}
+.windows-desktop:is([data-theme="basic-1"],[data-source-classic-tray],[data-source-xp-tray],[data-source-retro-tray]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{
+  --source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%23ffffe1' stroke='%23ffffe1'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='%23000'/%3E%3C/svg%3E");
+  background:#ffffe1;border:1px solid #000;border-radius:8px;box-shadow:5px 5px 3px -3px #0006;
+}
+.windows-desktop:is([data-theme="basic-1"],[data-source-classic-tray],[data-source-xp-tray],[data-source-retro-tray]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]:dir(rtl){box-shadow:-5px 5px 3px -3px #0006}
+.windows-desktop[data-source-retro-tray][data-theme="win31"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{--source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%23fff' stroke='%23fff'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='%23000'/%3E%3C/svg%3E");background:#fff;border-radius:0;box-shadow:none}
+.windows-desktop[data-source-prototype-tray] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{--source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%23fff' stroke='%23fff'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='rgba(0,0,0,0.2)'/%3E%3C/svg%3E");background:#ffffe1;border:1px solid #000;border-radius:4px}
+.windows-desktop[data-source-prototype-tray] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{filter:drop-shadow(1px 0 #000) drop-shadow(-1px 0 #000)}
+.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{--source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%23000' stroke='%23000'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='%23fff'/%3E%3C/svg%3E");background:var(--theme-surface);color:var(--text-color);border-color:currentColor}
+.windows-desktop:is([data-theme="basic-3"],[data-theme="basic-4"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{top:4px;inset-inline-end:4px;width:20px;height:20px;opacity:1;border:1px solid currentColor}
+.windows-desktop[data-source-xp-tray] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{top:4px;inset-inline-end:4px;width:20px;height:20px;color:#c7bea6;opacity:1;background:#fffff7;border:1px solid #c7bea6;border-radius:4px;font-weight:bold}
+.windows-desktop[data-source-xp-tray] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button:hover{background:#ffad31;color:#fff}
+.windows-desktop[data-theme="macos"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{--source-balloon-arrow:url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 1.5V19.5H18.5L0.5 1.5Z' fill='%234b4b4b' stroke='%234b4b4b'/%3E%3Cpath d='M1 19.5H0.5V1.5L18.5 19.5H18' stroke='rgba(255,255,255,0.2)'/%3E%3C/svg%3E");background:#4b4b4b;color:#fff;border:1px solid #fff3;border-radius:10px;box-shadow:0 0 0 1px #0006}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{background:#2c2c2c;color:#fff;border:1px solid var(--border-color);border-radius:4px}
+.windows-desktop[data-theme="ubuntu"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{filter:brightness(.15)}
+.windows-desktop[data-theme="kubuntu"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{background:linear-gradient(#444,#222);color:#fff;border:1px solid var(--border-color);border-radius:4px}
+.windows-desktop[data-theme="kubuntu"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{filter:brightness(.15) drop-shadow(1px 0 #fff5) drop-shadow(-1px 0 #fff5)}
+.windows-desktop[data-theme="oxygen"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{background:#2a2e32;color:#fff;border:1px solid var(--border-color);border-radius:4px}
+.windows-desktop[data-theme="oxygen"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{filter:brightness(.15) drop-shadow(0 -1px 1px var(--border-color))}
+.windows-desktop[data-theme="aeroNoir"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{background:linear-gradient(#555,#333);color:#fff;border:1px solid var(--border-color);border-radius:4px}
+.windows-desktop[data-theme="aeroNoir"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{filter:brightness(.2) drop-shadow(1px 0 var(--border-color)) drop-shadow(-1px 0 var(--border-color))}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="card"]{bottom:calc(var(--taskbar-height,40px) + 8px);gap:16px;width:400px}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="card"]::before{content:none}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="card"]{bottom:calc(var(--taskbar-height,40px) + 12px);background:#1f1f1f;color:#fff;box-shadow:-2px 2px 4px #0006}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]:dir(rtl){box-shadow:2px 2px 4px #0006}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-balloon="card"]{inset-inline-end:8px;background:var(--theme-surface--bright,var(--modern-tray-bright,#f9f9f9));color:var(--text-color);border:1px solid var(--border-color--bright,#0001);border-radius:6px;box-shadow:-2px 2px 4px var(--item-shadow,#0003)}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]:dir(rtl){box-shadow:2px 2px 4px var(--item-shadow,#0003)}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-artwork,.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-artwork{width:40px;height:40px;flex-basis:40px;margin-top:8px}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy>strong{font-weight:500}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy p,.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy p{font-size:1.125rem;line-height:1.75rem}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy p{color:#a5a5a5}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-copy p{opacity:.8}
+.windows-desktop[data-theme="win10"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{color:transparent;background:url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.353551 0.353557L8.83883 8.83884M8.83883 0.353557L0.35355 8.83884' stroke='%23fff'/%3E%3C/svg%3E") no-repeat center/12px}
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{color:transparent;background:url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.353551 0.353557L8.83883 8.83884M8.83883 0.353557L0.35355 8.83884' stroke='%23999'/%3E%3C/svg%3E") no-repeat center/10px}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{background:var(--startmenu-bg,var(--source-chromeos-shelf));color:var(--text-color,#333);border-radius:10px}
+.windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]{background:#e6d4bf;color:#352b30;box-shadow:0 0 0 4px #e6d4bf,inset 0 0 0 4px #352b30;border:0;border-radius:0}
+.windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]::before{width:24px;height:24px;bottom:-20px;background:url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 4V22H0M12 10H8M12 14H16M18 16V22H24' stroke='%23352B30' stroke-width='4'/%3E%3Cpath d='M2 20V2H10V6H14V10H18V14H22V20M10 24V12M14 24V16' stroke='%23E6D4BF' stroke-width='4'/%3E%3C/svg%3E")}
+.windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon] .source-notification-artwork{filter:brightness(0) saturate(100%) invert(16%) sepia(1%) saturate(5799%) hue-rotate(277deg) brightness(97%) contrast(94%)}
+.windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button{top:2px;inset-inline-end:2px;color:transparent;opacity:1;background:url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2h4m8 0h4M0 14h4m8 0h4' stroke='%23352b30' stroke-width='4'/%3E%3Cpath d='M4 8h8' stroke='%23352b30' stroke-width='8'/%3E%3C/svg%3E") center/16px no-repeat}
+.windows-desktop[data-theme="onebit"] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon]>button:is(:hover,:focus-visible){box-shadow:0 0 0 2px #e6d4bf,inset 0 0 0 2px #352b30}
+
+/* f0ed: relative to the Action Center item, not the desktop corner.
+ * Use measured desktop-local coordinates to avoid clipping inside hidden tray.
+ * Modern fixed cards retain their own source offsets. */
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-anchor]{
+  position:absolute;left:var(--source-balloon-left);right:auto;
+  top:var(--source-balloon-top);bottom:auto;
+}
+.windows-desktop[data-theme] .source-macos-notification.source-notification-balloon[data-test-system-notification][data-notification-balloon][data-notification-anchor]::before{
+  inset-inline-end:auto;left:var(--source-balloon-tail-left);right:auto;
+}
+
+.windows-desktop[data-theme] .source-notification-balloon .source-notification-copy a{color:var(--link-color,inherit);text-decoration:underline;text-underline-offset:2px}
+.windows-desktop[data-theme="win10"] .source-notification-balloon .source-notification-copy a{color:var(--theme-color--light,#8bc8ff)}

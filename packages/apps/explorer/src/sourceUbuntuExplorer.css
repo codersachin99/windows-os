@@ -1,0 +1,79 @@
+/* Frozen legacy-win7@4e63290 theme-ubuntu-scss.js 709b:
+ * WindowMain, Treeview and Listview; shared Guest commands unchanged. */
+.windows-desktop[data-theme="ubuntu"] .explorer-stage{
+  --ubuntu-explorer-border:#181818;
+  color:#fff;background:#2c2c2c;font:10pt/1.4 "Segoe UI",Arial,sans-serif;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-address{
+  margin:0;padding:5px;background:#2c2c2c;color:#fff;
+  border-bottom:1px solid var(--ubuntu-explorer-border);flex:0 0 auto;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-address__location-wrapper{
+  background:#272727;border-color:var(--ubuntu-explorer-border);box-shadow:none;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-address__location-wrapper input{
+  color:#f7f7f7;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-address__location-wrapper input:focus{
+  outline:2px solid var(--theme-color);outline-offset:-2px;
+}
+.windows-desktop[data-theme="ubuntu"] :is(.explorer-address__search,.explorer-search-controls input:not([type="checkbox"])){
+  background:#272727;color:#fff;border:1px solid transparent;
+  outline:1px solid var(--ubuntu-explorer-border);border-radius:4px;
+  transition:outline-color .3s;
+}
+.windows-desktop[data-theme="ubuntu"] :is(.explorer-address__search,.explorer-search-controls input:not([type="checkbox"])):focus{
+  outline:2px solid var(--theme-color);transition:outline-color .1s;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-address__search::placeholder{color:#fff9}
+.windows-desktop[data-theme="ubuntu"] :is(.explorer-address button,.explorer-search-controls>button){
+  background:#373737;color:#fff;border:1px solid var(--ubuntu-explorer-border);
+  border-radius:5px;box-shadow:none;transition:background-color .15s;
+}
+.windows-desktop[data-theme="ubuntu"] :is(.explorer-address button,.explorer-search-controls>button):not(:disabled):hover{background:#424242}
+.windows-desktop[data-theme="ubuntu"] :is(.explorer-address button,.explorer-search-controls>button):not(:disabled):active{background:#151515}
+.windows-desktop[data-theme="ubuntu"] .explorer-search-controls{
+  background:#2c2c2c;color:#fff;border-color:var(--ubuntu-explorer-border);
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-search-controls [role="status"]{color:inherit}
+.windows-desktop[data-theme="ubuntu"] .explorer-navigation{
+  background:#2c2c2c;border:0;border-inline-end:1px solid var(--ubuntu-explorer-border);
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-navigation__home{color:#f9f9f9;text-align:start}
+.windows-desktop[data-theme="ubuntu"] .explorer-navigation__home:not(:disabled):hover{background:#2f2f2f}
+.windows-desktop[data-theme="ubuntu"] .explorer-navigation__home:not(:disabled):is(:focus,[aria-current="location"]){
+  background:var(--theme-color);color:#f9f9f9;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-navigation small{color:#fff9}
+.windows-desktop[data-theme="ubuntu"] .explorer-content:not(.is-drop-target){background:#2c2c2c;color:#fff}
+.windows-desktop[data-theme="ubuntu"] .explorer-empty{color:#fff9}
+.windows-desktop[data-theme="ubuntu"] .explorer-columns{
+  background:none;color:#fff;border:0;border-bottom:1px solid var(--ubuntu-explorer-border);
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-columns .listview__header-column{
+  color:#fff;border-color:var(--ubuntu-explorer-border);
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item:not(.is-drop-target){
+  color:#f9f9f9;background:none;border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item:hover .listview__item-iconbox img{filter:brightness(1.1)}
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item :is(.listview__item-info,.listview__item-label){
+  color:#f9f9f9;border-radius:5px;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item .listview__item-info{padding:3px}
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item:not(:has(.listview__item-info))>.listview__item-label{
+  padding-block:3px;padding-inline-end:3px;
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item:is(.is-active,.is-selected,:focus,:active):not(.is-drop-target)>.listview__item-info,
+.windows-desktop[data-theme="ubuntu"] .explorer-list .explorer-item:is(.is-active,.is-selected,:focus,:active):not(.is-drop-target):not(:has(.listview__item-info))>.listview__item-label{
+  background:var(--theme-color);
+}
+.windows-desktop[data-theme="ubuntu"] .explorer-list.has-details .explorer-item>.listview__item-iconbox{z-index:1}
+.windows-desktop[data-theme="ubuntu"] .explorer-status{
+  background:#2c2c2c;color:#fff;border-top:1px solid var(--ubuntu-explorer-border);
+  border-radius:0 0 15px 15px;
+}
+.windows-desktop[data-theme="ubuntu"] .windows-window.is-maximized .explorer-status{border-radius:0}
+@media(max-width:580px){
+  .windows-desktop[data-theme="ubuntu"] .explorer-navigation{border:0;border-bottom:1px solid var(--ubuntu-explorer-border)}
+}

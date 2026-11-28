@@ -1,0 +1,68 @@
+import {expect,test} from "@playwright/test";
+
+test("Ubuntu login has original Guest icon, footer logo and logon-only top system menu",async({page})=>{
+  await page.goto("/?theme=ubuntu");
+  const login=page.locator("[data-test-logon-screen]");
+  await expect(login).toBeVisible({timeout:12000});
+  await expect(login).toHaveAttribute("data-source-logon-renderer","ubuntu");
+  await expect(login).toHaveAttribute("data-source-shell-status","pending");
+  const bar=login.locator('[data-test-taskbar="ubuntu"]');
+  await expect(bar).toHaveCSS("height","32px");
+  await expect(bar).toHaveCSS("background-color","rgb(19, 19, 19)");
+  expect((await bar.boundingBox())!.y).toBe(0);
+  await expect(bar.locator("[data-test-activities-button]")).toHaveCount(0);
+  await expect(bar.locator("[data-test-taskbar-datetime]")).toHaveCount(0);
+  const guest=login.locator('[data-test-source-logon-avatar="ubuntu"]');
+  await expect(guest.locator("img")).toHaveAttribute("src","/assets/images/guest-ubuntu.e2037acf.svg");
+  await expect(guest.locator("img")).toHaveCSS("width","88px");
+  await expect(guest).toHaveCSS("background-color","rgb(43, 43, 43)");
+  await guest.hover();
+  await expect(guest).toHaveCSS("box-shadow",/rgba\(255, 255, 255, 0\.2\)/);
+  const logo=login.locator(".source-ubuntu-logon__brand img");
+  await expect(logo).toHaveAttribute("src","/assets/images/logo-ubuntu.b06d4c47.svg");
+  for(const filename of ["guest-ubuntu.e2037acf.svg","logo-ubuntu.b06d4c47.svg"])
+    expect((await page.request.get("/assets/images/"+filename)).ok()).toBeTruthy();
+  const trigger=bar.getByRole("button",{name:"System menu"});
+  await trigger.click();
+  const menu=bar.getByRole("menu");
+  await expect(menu.getByRole("menuitem")).toHaveText(["Restart","Shutdown"]);
+  await expect(menu).toHaveCSS("background-color","rgb(29, 29, 29)");
+  await expect(menu).toHaveCSS("border-radius","8px");
+  await trigger.press("ArrowDown");
+  await expect(menu.getByRole("menuitem",{name:"Restart"})).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(menu.getByRole("menuitem",{name:"Shutdown"})).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  const switchUser=login.getByRole("button",{name:"Switch User"});
+  const bounds=(await switchUser.boundingBox())!;
+  const menuBounds=(await menu.boundingBox())!;
+  expect(bounds.y).toBeGreaterThan(menuBounds.y+menuBounds.height);
+  await switchUser.click();
+  await expect(menu).toHaveCount(0);
+  await expect(login.getByRole("dialog",{name:"Account login"})).toBeVisible();
+  await login.getByRole("button",{name:"Back"}).click();
+  await guest.click();
+  await expect(page.locator('[data-test-main-screen][data-theme="ubuntu"]')).toBeVisible();
+});
+
+test("Ubuntu login System menu performs simulator shutdown and restart without bypassing Guest",async({page})=>{
+  await page.goto("/?theme=ubuntu");
+  const login=page.locator("[data-test-logon-screen]");
+  await expect(login).toBeVisible({timeout:12000});
+  const trigger=login.getByRole("button",{name:"System menu"});
+  await trigger.click();
+  await login.locator("[data-test-logon-shutdown]").click();
+  await expect(page.getByText("Windows is shutting down")).toBeVisible();
+  await page.getByRole("button",{name:"Restart WindowsOS"}).click();
+  await expect(login).toHaveAttribute("data-source-logon-renderer","ubuntu");
+  await trigger.click();
+  await login.locator("[data-test-logon-restart]").click();
+  await expect(login).toHaveAttribute("data-source-logon-renderer","ubuntu");
+  await expect(login.locator("[data-test-menu-popup]")).toHaveCount(0);
+  await expect(page.locator("[data-test-main-screen]")).toHaveCount(0);
+  await login.locator('[data-test-avatar="win7"]').click();
+  await expect(page.locator('[data-test-main-screen][data-theme="ubuntu"]')).toBeVisible();
+});

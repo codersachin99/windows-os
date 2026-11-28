@@ -1,0 +1,62 @@
+/* Frozen logon-macos.css, ff91, and the shared Guest pane.
+ * Source glyph names are retained by role; local SVG shapes approximate Iconify. */
+.windows-logon.source-macos-logon{
+  display:flex;position:fixed;inset:0;align-items:center;justify-content:center;
+  overflow:hidden;background-size:cover;background-position:center;
+  color:#fff;font:14px "Segoe UI",Tahoma,sans-serif;
+}
+.source-macos-logon__overlay{
+  position:absolute;inset:0;pointer-events:none;
+  background-color:rgba(0,0,0,.5);backdrop-filter:blur(10px);
+}
+.source-macos-logon__account{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:16px;transform:translateY(-48px);
+}
+.source-macos-logon__avatar{
+  display:grid;place-items:center;width:150px;height:150px;
+  padding:0;border:0;border-radius:50%;background:transparent;
+  cursor:pointer;transition:.1s;
+}
+.source-macos-logon__avatar img{
+  display:block;width:150px;height:150px;object-fit:contain;border-radius:50%;
+}
+.source-macos-logon__avatar:hover,.source-macos-logon__avatar:focus{
+  box-shadow:0 0 0 6px rgba(255,255,255,.2);
+}
+.source-macos-logon__account h1{margin:0;font-size:30px;font-weight:700}
+.source-macos-logon__actions{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;justify-content:space-between;max-width:100%;
+}
+.source-macos-logon__actions button{
+  min-width:100px;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:0;padding:0;background:transparent;color:inherit;
+  font:inherit;white-space:nowrap;cursor:pointer;
+}
+.source-macos-logon__action-icon{
+  display:grid;place-items:center;box-sizing:border-box;width:36px;height:36px;
+  padding:4px;border-radius:50%;background-color:rgba(230,228,228,.2);
+  color:rgba(255,255,255,.6);
+}
+.source-macos-logon__action-icon[data-source-action="restart"]{transform:rotate(180deg)}
+.source-macos-logon__actions button:focus .source-macos-logon__action-icon{
+  background-color:rgba(230,228,228,.4);
+}
+.source-macos-logon__unavailable{
+  position:absolute;z-index:2;box-sizing:border-box;width:min(360px,calc(100% - 32px));
+  padding:20px;background:#303030;color:#fff;border:1px solid #fff6;border-radius:12px;text-align:center;
+}
+.source-macos-logon__unavailable button{
+  background:transparent;color:inherit;border:1px solid #fff;border-radius:99px;
+  padding:4px 16px;font:inherit;cursor:pointer;
+}
+.source-macos-logon__unavailable button:hover{background:rgba(255,255,255,.2)}
+@media(max-width:320px){
+  .source-macos-logon__actions button{min-width:0;flex:1;padding:0 5px;font-size:12px}
+}
+@media(max-height:420px){
+  .source-macos-logon__account{gap:8px;transform:translateY(-35px)}
+  .source-macos-logon__avatar,.source-macos-logon__avatar img{width:100px;height:100px}
+  .source-macos-logon__actions{bottom:8px}
+}

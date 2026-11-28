@@ -1,0 +1,339 @@
+{
+  "sourceRevision": "4e63290d783009e1293433c6ccf252abba9c1187",
+  "variant": "base",
+  "programs": [
+    {
+      "id": "about",
+      "name": "About",
+      "category": "system",
+      "aliases": [
+        "winver"
+      ],
+      "installPath": "Windows/System32/winver.exe"
+    },
+    {
+      "id": "bin",
+      "name": "Recycle Bin",
+      "category": "system",
+      "hidden": true
+    },
+    {
+      "id": "bsod",
+      "name": "BSOD Customizer",
+      "category": "system",
+      "installPath": "Program Files/WindowsOS/BSOD Customizer/bsod.exe"
+    },
+    {
+      "id": "calc",
+      "name": "Calculator",
+      "category": "accessories",
+      "aliases": [
+        "calculator"
+      ],
+      "installPath": "Windows/System32/calc.exe",
+      "appData": "Calculator"
+    },
+    {
+      "id": "camera",
+      "name": "Camera",
+      "category": "accessories",
+      "installPath": "Program Files/WindowsOS/Camera/camera.exe"
+    },
+    {
+      "id": "chess",
+      "name": "Chess Titans",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Microsoft Corporation",
+      "installPath": "Program Files/Microsoft Games/Chess Titans/Chess.exe",
+      "appData": "Chess Titans"
+    },
+    {
+      "id": "chrome",
+      "name": "Chrome",
+      "category": "internet",
+      "installPath": "Program Files/Google/Chrome/Application/chrome.exe",
+      "appData": "Chrome"
+    },
+    {
+      "id": "cmd",
+      "name": "Command Prompt",
+      "category": "accessories",
+      "installPath": "Windows/System32/cmd.exe"
+    },
+    {
+      "id": "computer",
+      "name": "Computer",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "explorer",
+        "documents",
+        "music",
+        "pictures"
+      ]
+    },
+    {
+      "id": "cpanel",
+      "name": "Control Panel",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "control"
+      ],
+      "installPath": "Windows/System32/control.exe"
+    },
+    {
+      "id": "find",
+      "name": "Find...",
+      "category": "system",
+      "hidden": true
+    },
+    {
+      "id": "gadgets",
+      "name": "Gadgets",
+      "category": "system",
+      "hidden": true,
+      "installPath": "Program Files/Windows Sidebar/sidebar.exe"
+    },
+    {
+      "id": "games",
+      "name": "Games",
+      "category": "system",
+      "hidden": true
+    },
+    {
+      "id": "ie",
+      "name": "Internet Explorer",
+      "category": "internet",
+      "installPath": "Program Files/Internet Explorer/iexplore.exe",
+      "appData": "Internet Explorer"
+    },
+    {
+      "id": "installer",
+      "name": "Program Installer",
+      "category": "system",
+      "installPath": "Program Files/WindowsOS/Program Installer/installer.exe"
+    },
+    {
+      "id": "magnifier",
+      "name": "Magnifier",
+      "category": "accessories",
+      "installPath": "Windows/System32/Magnify.exe"
+    },
+    {
+      "id": "mahjong",
+      "name": "Mahjong Titans",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Microsoft Corporation",
+      "installPath": "Program Files/Microsoft Games/Mahjong Titans/Mahjong.exe",
+      "appData": "Mahjong Titans"
+    },
+    {
+      "id": "mediacenter",
+      "name": "Windows Media Center",
+      "category": "media",
+      "installPath": "Program Files/Windows Media Center/ehshell.exe",
+      "appData": "Windows Media Center"
+    },
+    {
+      "id": "minesweeper",
+      "name": "Minesweeper",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Microsoft Corporation",
+      "installPath": "Program Files/Microsoft Games/Minesweeper/Minesweeper.exe",
+      "appData": "Minesweeper"
+    },
+    {
+      "id": "mouse",
+      "name": "Mouse",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "main.cpl"
+      ],
+      "installPath": "Windows/System32/main.cpl"
+    },
+    {
+      "id": "notepad",
+      "name": "Notepad",
+      "category": "accessories",
+      "installPath": "Windows/System32/notepad.exe",
+      "appData": "Notepad"
+    },
+    {
+      "id": "paint",
+      "name": "Paint",
+      "category": "accessories",
+      "aliases": [
+        "mspaint"
+      ],
+      "installPath": "Windows/System32/mspaint.exe",
+      "appData": "Paint"
+    },
+    {
+      "id": "personalize",
+      "name": "Personalize",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "desk.cpl"
+      ],
+      "installPath": "Windows/System32/desk.cpl"
+    },
+    {
+      "id": "photo",
+      "name": "Windows Photo Viewer",
+      "category": "media",
+      "hidden": true,
+      "installPath": "Program Files/Windows Photo Viewer/PhotoViewer.exe"
+    },
+    {
+      "id": "player",
+      "name": "Windows Media Player",
+      "category": "media",
+      "aliases": [
+        "wmplayer"
+      ],
+      "installPath": "Program Files/Windows Media Player/wmplayer.exe",
+      "appData": "Windows Media Player"
+    },
+    {
+      "id": "purbleplace",
+      "name": "Purble Place",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Microsoft Corporation",
+      "installPath": "Program Files/Microsoft Games/Purble Place/PurblePlace.exe",
+      "appData": "Purble Place"
+    },
+    {
+      "id": "recorder",
+      "name": "Sound Recorder",
+      "category": "accessories",
+      "installPath": "Windows/System32/SoundRecorder.exe"
+    },
+    {
+      "id": "region",
+      "name": "Region",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "intl.cpl"
+      ],
+      "installPath": "Windows/System32/intl.cpl"
+    },
+    {
+      "id": "run",
+      "name": "Run",
+      "category": "accessories"
+    },
+    {
+      "id": "screensaver",
+      "name": "Screen Saver",
+      "category": "system",
+      "hidden": true
+    },
+    {
+      "id": "shortcut",
+      "name": "Shortcut",
+      "category": "system",
+      "hidden": true
+    },
+    {
+      "id": "snipping",
+      "name": "Snipping Tool",
+      "category": "accessories",
+      "aliases": [
+        "snippingtool"
+      ],
+      "installPath": "Windows/System32/SnippingTool.exe"
+    },
+    {
+      "id": "solitaire",
+      "name": "Solitaire",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Microsoft Corporation",
+      "installPath": "Program Files/Microsoft Games/Solitaire/Solitaire.exe",
+      "appData": "Solitaire"
+    },
+    {
+      "id": "sound",
+      "name": "Sound",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "mmsys.cpl"
+      ],
+      "installPath": "Windows/System32/mmsys.cpl"
+    },
+    {
+      "id": "spidersolitaire",
+      "name": "Spider Solitaire",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Microsoft Corporation",
+      "installPath": "Program Files/Microsoft Games/Spider Solitaire/SpiderSolitaire.exe",
+      "appData": "Spider Solitaire"
+    },
+    {
+      "id": "sticky",
+      "name": "Sticky Notes",
+      "category": "accessories",
+      "aliases": [
+        "notes",
+        "stickynotes"
+      ],
+      "installPath": "Windows/System32/StikyNot.exe",
+      "appData": "Sticky Notes"
+    },
+    {
+      "id": "system",
+      "name": "System",
+      "category": "system",
+      "hidden": true,
+      "aliases": [
+        "sysdm.cpl"
+      ],
+      "installPath": "Windows/System32/sysdm.cpl"
+    },
+    {
+      "id": "taskbar",
+      "name": "Taskbar",
+      "category": "system",
+      "hidden": true
+    },
+    {
+      "id": "taskmgr",
+      "name": "Task Manager",
+      "category": "system",
+      "hidden": true,
+      "installPath": "Windows/System32/taskmgr.exe"
+    },
+    {
+      "id": "tetris",
+      "name": "Classic Tetris",
+      "category": "games",
+      "kind": "game",
+      "publisher": "Albert Lobo",
+      "installPath": "Program Files/Albert Lobo/Classic Tetris/Tetris.exe",
+      "appData": "Classic Tetris"
+    },
+    {
+      "id": "themestudio",
+      "name": "Theme Studio",
+      "category": "system",
+      "installPath": "Program Files/WindowsOS/Theme Studio/themestudio.exe",
+      "appData": "Theme Studio"
+    },
+    {
+      "id": "wordpad",
+      "name": "WordPad",
+      "category": "accessories",
+      "installPath": "Program Files/Windows NT/Accessories/wordpad.exe"
+    }
+  ]
+}

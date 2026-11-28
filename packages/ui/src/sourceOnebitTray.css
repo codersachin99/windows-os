@@ -1,0 +1,19 @@
+/* Frozen theme-onebit-scss.js: tray popups invert the source two-color palette. */
+.windows-desktop[data-source-onebit-tray]{--onebit-tray-dark:#352b30;--onebit-tray-light:#e6d4bf}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){background:var(--onebit-tray-dark);color:var(--onebit-tray-light);border:0;border-radius:0;box-shadow:0 0 0 2px var(--onebit-tray-light);backdrop-filter:none}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:var(--onebit-tray-dark);border-radius:0}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){background:var(--onebit-tray-light);outline:1px solid var(--onebit-tray-dark)}
+.windows-desktop[data-source-onebit-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger){color:var(--onebit-tray-light)}
+.windows-desktop[data-source-onebit-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger,.source-macos-datetime-trigger):is(:hover,:focus-visible,[aria-expanded="true"]){color:var(--onebit-tray-dark)}
+.windows-desktop[data-source-onebit-tray] .source-macos-calendar-picker{background:var(--onebit-tray-dark);border:0}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-calendar-days,.source-macos-calendar-picker) button:hover{background:none}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-calendar-days,.source-macos-calendar-picker) button:is(.is-today,[aria-pressed="true"]){background:var(--onebit-tray-light);color:var(--onebit-tray-dark);border-radius:0}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-calendar-days,.source-macos-calendar-picker) button.is-today{box-shadow:0 0 0 2px var(--onebit-tray-light),inset 0 0 0 2px var(--onebit-tray-dark)}
+.windows-desktop[data-source-onebit-tray] .source-macos-calendar-weekdays{background:none;border:0}
+.windows-desktop[data-source-onebit-tray] .source-chromeos-clock{color:var(--onebit-tray-light)}
+.windows-desktop[data-source-onebit-tray] .source-chromeos-clock svg{background:none;box-shadow:none}
+.windows-desktop[data-source-onebit-tray] .source-chromeos-clock svg>line{stroke:var(--onebit-tray-light)}
+.windows-desktop[data-source-onebit-tray] .source-chromeos-clock svg>circle{fill:var(--onebit-tray-light)}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-datetime-popup)>button,.windows-desktop[data-source-onebit-tray] .source-macos-notification-history button,.windows-desktop[data-source-onebit-tray] .source-hidden-tray-customize{color:var(--onebit-tray-light)}
+.windows-desktop[data-source-onebit-tray] :is(.source-macos-battery-popup,.source-macos-volume-meter) input{accent-color:var(--onebit-tray-light)}
+.windows-desktop[data-source-onebit-tray] .source-macos-volume-mute img{filter:brightness(0) saturate(100%) invert(89%) sepia(12%) saturate(497%) hue-rotate(345deg) brightness(99%) contrast(85%)}

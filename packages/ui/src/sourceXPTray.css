@@ -1,0 +1,36 @@
+/* Pinned theme-winxp-scss.js, original family palette and tray bevel.
+ * Scope palette tokens to the tray rather than changing other app surfaces. */
+.windows-desktop[data-source-xp-tray]{--xp-tray-surface:#ece9d8;--xp-tray-header:#7a96df;--xp-tray-accent:#316ac5;--xp-tray-weekday-text:#fff}
+.windows-desktop[data-source-xp-tray][data-theme="winxpG"]{--xp-tray-header:#daddbf;--xp-tray-accent:#93a070}
+.windows-desktop[data-source-xp-tray][data-theme="winxpE"]{--xp-tray-surface:#ebe9ed;--xp-tray-accent:#3e9de8}
+.windows-desktop[data-source-xp-tray][data-theme="winxpN"]{--xp-tray-surface:#ebe9ed;--xp-tray-accent:#5e81bc}
+.windows-desktop[data-source-xp-tray][data-theme="winxpR"]{--xp-tray-surface:#ebe9ed;--xp-tray-accent:#335ea8}
+.windows-desktop[data-source-xp-tray][data-theme="winxpS"]{--xp-tray-surface:#e0dfe3;--xp-tray-accent:#bbb7c7;--xp-tray-weekday-text:#a1a192}
+.windows-desktop[data-source-xp-tray][data-theme="winxpZ"]{--xp-tray-surface:#e2e2e2;--xp-tray-accent:#bebebe}
+.windows-desktop[data-source-xp-tray]:is([data-theme="winxpE"],[data-theme="winxpN"],[data-theme="winxpR"],[data-theme="winxpZ"]){--xp-tray-header:#6fa1d9}
+.windows-desktop[data-source-xp-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){
+  background:var(--xp-tray-surface);color:#000;border:0;border-radius:0;padding:8px;
+  box-shadow:inset -1px -1px #716f64,inset 1px 1px var(--xp-tray-surface),inset -2px -2px #aca899,inset 2px 2px #fff;
+  backdrop-filter:none;font:11px Tahoma,Arial,sans-serif;
+}
+.windows-desktop[data-source-xp-tray]:dir(rtl) :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup,.source-macos-datetime-popup,.source-macos-notification,.windows-taskbar__hidden-items){box-shadow:inset 1px -1px #716f64,inset -1px 1px var(--xp-tray-surface),inset 2px -2px #aca899,inset -2px 2px #fff}
+.windows-desktop[data-source-xp-tray] .source-macos-datetime-popup{width:max-content;max-width:calc(100vw - 24px)}
+.windows-desktop[data-source-xp-tray] .source-datetime-content{gap:8px;padding:8px 0}
+.windows-desktop[data-source-xp-tray] :is(.source-macos-calendar,.source-chromeos-clock){
+  box-sizing:border-box;border-radius:4px;box-shadow:inset 0 0 0 1px #0003;padding:16px 24px;color:#000;
+}
+.windows-desktop[data-source-xp-tray] .source-macos-calendar{width:252px;max-width:100%}
+.windows-desktop[data-source-xp-tray] .source-macos-calendar-weekdays{background:var(--xp-tray-header);color:var(--xp-tray-weekday-text);border:0;font-weight:normal}
+.windows-desktop[data-source-xp-tray] .source-macos-calendar-picker{background:var(--xp-tray-surface);border:1px solid #aca899}
+.windows-desktop[data-source-xp-tray] .source-macos-calendar button:is(.is-today,[aria-pressed="true"]){background:var(--xp-tray-accent);color:#fff;border-color:var(--xp-tray-accent)}
+.windows-desktop[data-source-xp-tray] .source-chromeos-clock svg{margin-bottom:16px}
+.windows-desktop[data-source-xp-tray] .source-xp-clock-mark{fill:#808080;stroke:#fff;stroke-width:.5px}
+.windows-desktop[data-source-xp-tray] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-datetime-popup)>button,
+.windows-desktop[data-source-xp-tray] .source-macos-notification-history button,
+.windows-desktop[data-source-xp-tray][data-source-interactive-hidden-tray] .source-hidden-tray-customize{color:#000080}
+.windows-desktop[data-source-xp-tray] .source-macos-datetime-popup>button:first-child{color:#000}
+.windows-desktop[data-source-xp-tray] .source-macos-action-center-summary{font-size:14px}
+.windows-desktop[data-source-xp-tray] .source-macos-notification button{color:#000}
+.windows-desktop[data-source-xp-tray] .source-hidden-tray-grid :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger){color:#000}
+.windows-desktop[data-source-xp-tray] .source-macos-volume-mute img{filter:none}
+.windows-desktop[data-source-xp-tray] :is(.source-macos-battery-popup,.source-macos-volume-meter) input{accent-color:var(--xp-tray-accent)}

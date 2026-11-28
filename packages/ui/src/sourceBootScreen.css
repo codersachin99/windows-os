@@ -1,0 +1,64 @@
+/*
+ * Pinned boot-win31.js h-5/6; boot-win9x.js w-full h-full;
+ * boot-win-mixed.js max-h-full; boot-win-x.js 100px logo,
+ * h-64 column, 25px SpinnerBall and boot-win-x.css five-ball orbit.
+ * Source boot completion duration is still pending exact parity audit.
+ */
+.windows-boot[data-source-boot-renderer="win31"],
+.windows-boot[data-source-boot-renderer="win9x"],
+.windows-boot[data-source-boot-renderer="win-mixed"]{
+  background:#000;overflow:hidden;
+}
+.windows-boot .source-boot__image{
+  display:block;pointer-events:none;user-select:none;
+}
+.windows-boot .source-boot__image--win31{
+  height:83.333333%;max-width:100%;width:auto;object-fit:contain;
+}
+.windows-boot .source-boot__image--win9x{
+  width:100%;height:100%;object-fit:fill;
+}
+.windows-boot .source-boot__image--win-mixed{
+  max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+}
+.windows-boot .source-boot__win-x{
+  height:256px;max-height:90dvh;display:flex;flex-direction:column;
+  justify-content:space-between;align-items:center;
+}
+.windows-boot .source-boot__win-x-logo{
+  display:block;width:100px;height:auto;
+  max-height:calc(100% - 25px);object-fit:contain;
+}
+.windows-boot .source-boot__spinner{
+  --spinner-size:25px;--ball-size:calc(var(--spinner-size) / 9);
+  width:var(--spinner-size);height:var(--spinner-size);
+  position:relative;flex:none;pointer-events:none;
+}
+.windows-boot .source-boot__spinner-ball{
+  position:absolute;opacity:0;
+  width:calc(var(--spinner-size) - var(--ball-size));
+  height:calc(var(--spinner-size) - var(--ball-size));
+  animation:source-boot-orbit 4.4s infinite;
+  transform:rotate(225deg);
+}
+.windows-boot .source-boot__spinner-ball span{
+  position:absolute;top:0;left:0;
+  width:var(--ball-size);height:var(--ball-size);
+  background:#fff;border-radius:50%;
+}
+.windows-boot .source-boot__spinner-ball:first-child{animation-delay:.96s}
+.windows-boot .source-boot__spinner-ball:nth-child(2){animation-delay:.19s}
+.windows-boot .source-boot__spinner-ball:nth-child(3){animation-delay:.38s}
+.windows-boot .source-boot__spinner-ball:nth-child(4){animation-delay:.58s}
+.windows-boot .source-boot__spinner-ball:nth-child(5){animation-delay:.77s}
+.windows-boot:dir(rtl) .source-boot__spinner-ball{transform:rotate(-225deg)}
+@keyframes source-boot-orbit{
+  0%{opacity:1;transform:rotate(180deg);animation-timing-function:ease-out}
+  7%{opacity:1;transform:rotate(300deg);animation-timing-function:linear}
+  30%{opacity:1;transform:rotate(410deg);animation-timing-function:ease-in-out}
+  39%{opacity:1;transform:rotate(645deg);animation-timing-function:linear}
+  70%{opacity:1;transform:rotate(770deg);animation-timing-function:ease-out}
+  75%{opacity:1;transform:rotate(900deg);animation-timing-function:ease-out}
+  76%{opacity:0;transform:rotate(900deg)}
+  to{opacity:0;transform:rotate(900deg)}
+}

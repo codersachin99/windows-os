@@ -1,0 +1,23 @@
+/* Pinned search-companion.js 7a5f: Explorer side pane controls. */
+.windows-companion {box-sizing:border-box;display:flex;flex-direction:column;gap:12px;
+  flex:0 0 225px;max-width:100%;min-width:0;height:100%;overflow:auto;
+  padding:12px;background:linear-gradient(#e7f2fb,#d6e9f7);
+  color:#163e5d;font:12px "Segoe UI",Tahoma,sans-serif;border-right:1px solid #adc7db;}
+.windows-companion > label,.windows-companion__section-body > label:not(.windows-companion__choice)
+  {display:flex;flex-direction:column;gap:4px;}
+.windows-companion input:not([type=checkbox]):not([type=radio]),
+.windows-companion select {font:inherit;box-sizing:border-box;min-width:0;width:100%;padding:4px;
+  border:1px solid #adc1d3;color:#243b4c;background:#fff;}
+.windows-companion__section {border:1px solid #b4ccdd;border-radius:3px;background:#f6faff;}
+.windows-companion__section summary {cursor:pointer;padding:7px;background:linear-gradient(#fff,#e9f3fa);}
+.windows-companion__section-body {display:flex;flex-direction:column;gap:8px;padding:8px;}
+.windows-companion__choice {display:flex;gap:5px;align-items:center;}
+.windows-companion__custom-size {display:flex;gap:4px;}
+.windows-companion__custom-size input {max-width:65px;}
+.windows-companion__actions {display:flex;gap:6px;justify-content:flex-end;margin-top:auto;}
+.windows-companion__actions button {font:inherit;padding:5px 9px;border:1px solid #a1bad1;
+  border-radius:2px;background:linear-gradient(#fff,#d7eaf8);cursor:pointer;}
+.windows-companion__actions button.is-default {border-color:#4988c6;}
+@media(max-width:580px){.windows-companion{flex:0 0 auto;width:100%;max-height:210px;
+  overflow:auto;border-right:0;border-bottom:1px solid #adc7db;}
+ .windows-companion__actions{margin-top:0;}}

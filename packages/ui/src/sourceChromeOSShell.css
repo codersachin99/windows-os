@@ -1,0 +1,232 @@
+/* Frozen legacy-win7@26b9f0c theme-chromeos-scss.js (48a9).
+ * Source shelf and WindowMain paint, retaining shared Guest window state. */
+.windows-desktop[data-theme="chromeos"]{
+  --taskbar-height:48px;
+  --source-chromeos-shelf:#f5fafff2;
+  --source-chromeos-accent:#254fae;
+  color:#333;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar{
+  height:var(--taskbar-height);box-sizing:border-box;gap:0;padding:0;
+  background:var(--source-chromeos-shelf);border:0;box-shadow:none;
+  backdrop-filter:none;color:#333;border-radius:24px 24px 0 0;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar[data-source-chromeos-maximized="true"]{border-radius:0}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__start{
+  width:36px;height:36px;flex:0 0 36px;margin:6px;
+  background:#0002;border:0;border-radius:50%;padding:0;
+  display:grid;place-items:center;color:#333;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__start img{display:none}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__start::before{
+  content:"";box-sizing:border-box;width:16px;height:16px;
+  border:1px solid currentColor;border-radius:50%;
+  background:currentColor;box-shadow:inset 0 0 0 1px #fffc;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__start:is(:active,.is-active){background:#0004}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__running{gap:3px;overflow-x:auto;scrollbar-width:none}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application{
+  position:relative;box-sizing:border-box;flex:0 0 48px;width:48px;
+  height:48px;min-width:48px;padding:0;border:0;border-radius:50%;
+  background:none;box-shadow:none;color:#333;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application.is-full-size{
+  flex:0 0 145px;width:145px;min-width:145px;display:flex;gap:6px;justify-content:start;padding-inline:6px;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application img{width:36px;height:36px;object-fit:contain;z-index:1}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application::after{
+  content:"";position:absolute;inset:0;border-radius:999px;background:#0002;
+  transform:scale(0);opacity:0;pointer-events:none;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application:is(:active,:focus-visible)::after{transform:scale(1);opacity:1}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application:is(.is-running,[data-test-taskbar-running-group])::before{
+  content:"";position:absolute;bottom:2px;inset-inline-start:43.75%;
+  width:12.5%;height:2px;background:currentColor;opacity:.5;z-index:2;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__application.is-active::before{width:20%;inset-inline-start:40%;opacity:1}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__tray{
+  height:36px;margin:6px;gap:0;border-radius:99px;background:#0002;
+  color:#333;flex-shrink:0;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__tray-icon{
+  width:36px;min-width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__tray>button{color:#333;width:24px}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__clock{
+  width:56px;min-width:56px;color:#333;font-weight:600;
+}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__clock>:last-child{display:none}
+.windows-desktop[data-theme="chromeos"] .windows-taskbar__show-desktop{display:none}
+.windows-desktop[data-theme="chromeos"] .windows-window{
+  padding:0;border:0;border-radius:0;background:#fff;box-shadow:none;
+  backdrop-filter:none;color:#333;
+}
+.windows-desktop[data-theme="chromeos"][data-effect-show-window-shadows] .windows-window.is-active{box-shadow:0 0 20px #0004}
+.windows-desktop[data-theme="chromeos"] .windows-window__titlebar{
+  box-sizing:border-box;flex:0 0 32px;height:32px;padding:2px;
+  margin:0;justify-content:flex-end;background:#fff;color:#333;
+}
+.windows-desktop[data-theme="chromeos"] .windows-window.is-active .windows-window__titlebar{background:var(--source-chromeos-accent);color:#fff}
+.windows-desktop[data-theme="chromeos"] .windows-window__titlebar>img,
+.windows-desktop[data-theme="chromeos"] .windows-window__title{display:none}
+.windows-desktop[data-theme="chromeos"] .windows-window__buttons{
+  margin:0;gap:4px;align-self:center;
+}
+.windows-desktop[data-theme="chromeos"] .windows-window__buttons button{
+  display:grid;place-items:center;box-sizing:border-box;width:28px;min-width:28px;height:28px;
+  padding:0;border:0;border-radius:99px;background:none;color:inherit;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] .windows-window__buttons button:not(:disabled):hover{background:#0002}
+.windows-desktop[data-theme="chromeos"] .windows-window.is-active .windows-window__buttons button:not(:disabled):hover{background:#fff3}
+.windows-desktop[data-theme="chromeos"] .windows-window__body{border:0;border-radius:0;background:#fff}
+@media(max-width:650px){
+  .windows-desktop[data-theme="chromeos"] .windows-taskbar__tray-icon{width:24px;min-width:24px;flex-basis:24px}
+  .windows-desktop[data-theme="chromeos"] .windows-taskbar__running{min-width:48px}
+  .windows-desktop[data-theme="chromeos"] .windows-window:not(.is-maximized){max-height:calc(100dvh - 48px)}
+}
+
+/* Source main.css desktop__icon-item: ChromeOS inherits these base
+ * selection tokens; it does not override them in theme-chromeos-scss. */
+.windows-desktop[data-theme="chromeos"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):hover{
+  background:rgba(0,0,0,.1333333333);border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] .windows-desktop__shortcut:not(.is-drop-target):not(.is-native-icon-drop-target):is(.is-active,:focus-visible){
+  background:rgba(0,0,0,.2666666667);border-color:transparent;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] .windows-desktop__band{
+  border:1px solid #39f;background:rgba(51,153,255,.2);box-shadow:none;
+}
+
+/* Frozen 48a9 WinUI menu paint, shared by actual desktop, shelf,
+ * Explorer, Notepad and portaled Start actions. Preserve measured
+ * menu positions, source commands and existing cascade side logic. */
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]){
+  box-sizing:border-box;width:min(200px,calc(100vw - 8px));min-width:0;
+  max-width:calc(100vw - 8px);background:#fff;color:#333;
+  border:0;border-radius:2px;padding:8px 0;box-shadow:0 0 6px rgba(0,0,0,.4);
+  font:10pt "Segoe UI",Arial,sans-serif;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"])::before{content:none}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) button{
+  box-sizing:border-box;color:#333;border:0;border-radius:0;
+  background:none;box-shadow:none;text-shadow:none;line-height:20px;
+  min-height:32px;padding:6px 6px 6px 28px;text-align:start;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]):dir(rtl) button{padding:6px 28px 6px 6px}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) button:not(:disabled):is(:hover,:focus,:focus-visible){
+  color:#333;background:rgba(0,0,0,.0666666667);box-shadow:none;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) button:disabled{opacity:.5;filter:grayscale(1);cursor:default}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) :is(hr,.windows-desktop__menu-divider,.explorer-organize__separator){
+  border:0;height:1px;background:#dbdbdb;margin:4px 0;
+}
+:is(.windows-desktop[data-theme="chromeos"] :is(.windows-desktop__menu,.windows-taskbar__context,.explorer-context-menu,.explorer-context-menu__submenu,.notepad-menu__dropdown,.explorer-organize__menu,.explorer-view__menu),.windows-startmenu__context[data-source-start-context-theme="chromeos"]) kbd{color:inherit}
+
+/* Source 48a9 shared WinUI menubar and WindowMain body/footer. */
+.windows-desktop[data-theme="chromeos"] .windows-window__body{background:#f5f5f5}
+.windows-desktop[data-theme="chromeos"] :is(.notepad-menu,.explorer-command){
+  color:#333;background:#fff;border:0;border-bottom:1px solid #dadce0;
+  padding:0;gap:0;box-shadow:none;
+}
+.windows-desktop[data-theme="chromeos"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button){
+  color:inherit;background:none;border:0;border-radius:0;
+  padding:5px 10px;box-shadow:none;text-shadow:none;font:inherit;
+}
+.windows-desktop[data-theme="chromeos"] :is(.notepad-menu__section>button,.notepad-menu__help,.explorer-command>button,.explorer-organize>button):not(:disabled):is(:hover,:focus-visible,[aria-expanded="true"]){
+  background:rgba(0,0,0,.0666666667);
+}
+.windows-desktop[data-theme="chromeos"] .explorer-command label{padding-inline:8px}
+.windows-desktop[data-theme="chromeos"] .explorer-command select{
+  border:1px solid #dadce0;background:#fff;color:#333;border-radius:3px;
+}
+.windows-desktop[data-theme="chromeos"] .notepad-status{background:#f5f5f5;color:#333;border-color:#dadce0}
+
+/* Base taskbar f0ed/e0ee/a88c/c561 components, shared with macOS.
+ * ChromeOS retains the original 36px round shelf targets and 10px
+ * light popups above the shelf; placement is viewport-bounded. */
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger){
+  display:grid;place-items:center;width:100%;height:36px;padding:0;
+  border:0;border-radius:50%;background:none;color:#fff;
+}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-trigger,.source-macos-network-trigger,.source-macos-battery-trigger,.source-macos-volume-trigger):is(:focus,[aria-expanded="true"]){background:#0002}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup,.source-macos-volume-popup){
+  position:fixed;top:auto;bottom:calc(var(--taskbar-height) + 16px);inset-inline-end:12px;
+  z-index:4900;box-sizing:border-box;max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - var(--taskbar-height) - 28px);overflow:auto;
+  background:var(--source-chromeos-shelf);color:#333;border:0;border-radius:10px;
+  text-align:start;font:10pt/1.4 "Segoe UI",Arial,sans-serif;box-shadow:0 2px 8px #0003;
+}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-popup,.source-macos-network-popup,.source-macos-battery-popup){width:250px;padding:12px}
+.windows-desktop[data-theme="chromeos"] .source-macos-action-center-summary{display:flex;align-items:center;gap:12px;font-size:20px;padding:8px 0}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-action-center-popup,.source-macos-network-popup)>button{
+  display:block;width:100%;padding:12px;border:0;background:none;color:#1967d2;font:inherit;text-align:center;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-action-center-popup>button:hover{text-decoration:underline}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-popup>button:disabled{opacity:.5;cursor:default}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-status{display:flex;align-items:center;gap:12px;padding-block:12px}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-status img{flex:none;object-fit:contain}
+.windows-desktop[data-theme="chromeos"] .source-macos-network-status p{margin:4px 0}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup>div{padding:8px 4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-heading{display:flex;justify-content:space-between;margin-bottom:8px}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup fieldset{display:flex;flex-direction:column;gap:4px;padding:8px 4px;border:0;margin:0}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-display{display:flex;flex-direction:column;gap:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup input{accent-color:#1a73e8}
+.windows-desktop[data-theme="chromeos"] .source-macos-battery-popup small{display:block;opacity:.75}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-popup{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 16px}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-meter{display:grid;place-items:center;width:32px;height:146px;flex:none}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-meter input{writing-mode:vertical-lr;direction:rtl;width:20px;height:130px;margin:0;accent-color:#1a73e8}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-mute{display:grid;place-items:center;width:48px;height:48px;border:0;border-radius:50%;background:none;color:inherit}
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-mute:is(:hover,:focus-visible){background:#0002}
+/* The source white volume icon is legible on its darkened shelf;
+   the light popup uses an adaptive dark tint for the same exact glyph. */
+.windows-desktop[data-theme="chromeos"] .source-macos-volume-mute img{filter:brightness(0)}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification-history{display:flex;flex-direction:column;max-height:40vh;overflow:auto}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification-history button{border:0;background:none;color:#1967d2;text-align:start;padding:6px;overflow-wrap:anywhere}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification{
+  position:fixed;bottom:calc(var(--taskbar-height) + 8px);inset-inline-end:12px;
+  z-index:4901;display:flex;gap:16px;width:min(400px,calc(100vw - 24px));
+  box-sizing:border-box;background:var(--source-chromeos-shelf);color:#333;
+  border-radius:10px;padding:12px;box-shadow:0 2px 8px #0003;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification>div{flex:1;min-width:0;overflow-wrap:anywhere}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification p{margin:4px 0;white-space:pre-wrap}
+.windows-desktop[data-theme="chromeos"] .source-macos-notification button{align-self:start;border:0;background:none;color:#333;font-size:18px}
+
+/* Base 4e5e/ada7 DateTime uses calendar beside a 128px marked analog
+ * clock and digital seconds. ChromeOS inherits base calendar paint. */
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime{height:36px;flex:0 0 56px}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-trigger{
+  display:grid;place-items:center;width:56px;height:36px;padding:0;border:0;border-radius:99px;background:none;color:#333;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-trigger:is(:focus,[aria-expanded="true"]){background:#0002}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-popup{
+  position:fixed;top:auto;bottom:calc(var(--taskbar-height) + 16px);inset-inline-end:12px;
+  z-index:4900;box-sizing:border-box;width:max-content;max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - var(--taskbar-height) - 28px);overflow:auto;
+  background:var(--source-chromeos-shelf);color:#333;border-radius:10px;
+  padding:12px;box-shadow:0 2px 8px #0003;text-align:start;
+  font:10pt/1.4 "Segoe UI",Arial,sans-serif;
+}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-popup button{border:0;background:none;color:inherit;font:inherit}
+.windows-desktop[data-theme="chromeos"] .source-macos-datetime-popup>button{display:block;text-align:start;padding:4px 0;color:#1967d2}
+.windows-desktop[data-theme="chromeos"] .source-datetime-content{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:12px 0}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar{width:252px;max-width:100%;text-align:center}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar header{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:center;margin-bottom:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-monthyear{grid-column:2/span 5;grid-row:1;display:flex;justify-content:center}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-monthyear button{padding:4px 2px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-arrow{width:32px;height:32px;font-size:20px!important}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-arrow:nth-child(2){grid-column:1;grid-row:1}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-arrow:nth-child(3){grid-column:7;grid-row:1}
+.windows-desktop[data-theme="chromeos"] :is(.source-macos-calendar-weekdays,.source-macos-calendar-days){display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-weekdays{font-weight:600;margin-bottom:4px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-days button{padding:4px 8px;min-width:0}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-days button.is-outside{opacity:.4}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,1fr);background:#fff;min-height:168px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-picker button{padding:8px}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar button:not(:disabled):is(:hover,:focus-visible){background:#0001}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar button[aria-pressed="true"]{background:#0002}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar button.is-today{background:#0004;opacity:1}
+.windows-desktop[data-theme="chromeos"] .source-macos-calendar-year-arrows{display:flex;justify-content:space-between}
+.windows-desktop[data-theme="chromeos"] .source-chromeos-clock{display:flex;flex-direction:column;align-items:center;gap:8px;color:#000;flex:none}
+.windows-desktop[data-theme="chromeos"] .source-chromeos-clock time{font-variant-numeric:tabular-nums}
+.windows-desktop[data-theme="chromeos"] .source-chromeos-date-settings:disabled{opacity:.5;cursor:default}

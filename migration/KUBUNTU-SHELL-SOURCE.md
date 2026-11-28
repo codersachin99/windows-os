@@ -1,0 +1,3 @@
+# Kubuntu base shell source slice
+
+Frozen `4e63290d783009e1293433c6ccf252abba9c1187`. Kubuntu starts from original theme-kubuntu-scss.js module 582b and uses the source base taskbar, not the Ubuntu dock. Ported isolated taskbar/desktop paint, 47px compact tasks, active/inactive group states, optional glass blur and icon selection alpha layer. #3daee9 is the provisional Breeze accent pending exact registry verification. Shared base geometry and commands retained. Kubuntu shell browser regression authored, not run; no new CI while Ubuntu rerun 45409926204 is active. Next Kubuntu window chrome and launcher after checking Ubuntu results.
