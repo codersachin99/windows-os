@@ -47,7 +47,8 @@ import { FindApp } from "@windows-os/apps/find";
 import { ExplorerApp, RecycleBinApp } from "@windows-os/apps/explorer";
 import { WindowFrame } from "./WindowFrame";
 import {SourceMessageDialog} from "./sourceMessage";
-import { sourceDesktopShortcut } from "./sourceDesktopHotkeys";
+import { sourceDesktopShortcut,sourceWindowShortcut } from "./sourceDesktopHotkeys";
+import {sourceKeyboardSnap,sourceSnapBounds,sourceWindowWorkArea} from "./sourceWindowSnap";
 import { StartMenu } from "./StartMenu";
 import { DesktopIcons } from "./DesktopIcons";
 import {SourceTaskbarMenu,type SourceTaskbarContext} from "./SourceTaskbarMenu";
@@ -607,6 +608,28 @@ export function DesktopShell({
         }
         return;
       }
+      const windowShortcut=sourceWindowShortcut(event);
+      if(windowShortcut&&!event.defaultPrevented&&!state.startOpen&&!taskbarContext){
+        const focused=[...state.windows].filter(win=>!win.minimized).sort((a,b)=>b.z-a.z)[0];
+        if(focused){
+          event.preventDefault();
+          if(windowShortcut==="close")requestClose(focused.id);
+          else if(windowShortcut==="maximize"){
+            if(!focused.maximized&&focused.resizable!==false)dispatch({type:"TOGGLE_MAXIMIZE",id:focused.id});
+          }else if(windowShortcut==="minimize-or-restore"){
+            if(focused.maximized&&focused.resizable!==false)dispatch({type:"TOGGLE_MAXIMIZE",id:focused.id});
+            else if(focused.resizable!==false||focused.minimizable===true)dispatch({type:"MINIMIZE_WINDOW",id:focused.id});
+          }else if(focused.resizable!==false){
+            const shell=taskbarRef.current?.closest<HTMLElement>(".windows-desktop");
+            if(shell){
+              const mode=sourceKeyboardSnap(focused.snapped,windowShortcut);
+              const area=sourceWindowWorkArea(shell,state.theme);
+              dispatch({type:"ARRANGE_WINDOW",id:focused.id,mode,bounds:mode?sourceSnapBounds(mode,area,focused):focused.restoreBounds??focused});
+            }
+          }
+          return;
+        }
+      }
       // Windows+R is the original Win7 quick launcher. It is a shell command
       // palette only: RunApp opens registered applications, never host programs.
       if (event.metaKey && !event.ctrlKey && !event.altKey
@@ -634,7 +657,7 @@ export function DesktopShell({
     };
     window.addEventListener("keydown", keydown);
     return () => window.removeEventListener("keydown", keydown);
-  }, [state.windows, state.phase, requestClose, dispatch]);
+  }, [state.windows, state.phase, state.theme,state.startOpen,taskbarContext,requestClose, dispatch]);
 
   const win7Colors=sourceWin7ThemeChromeColors(
     state.theme,aeroAppearancePreview??aeroAppearance,visualEffects.enableGlass);
