@@ -1,3 +1,5 @@
+> **28 November 2026 — Program popup artwork:** original Open/Pin/Close icons restored, including Onebit overrides; byte-identical source assets verified by blob SHA. New browser checks pending; previous full CI still running.
+
 > **28 November 2026 — Focused green:** 807 units and 384 browser cases passed; restored source taskbar background context-menu anchoring and dividers. Full CI requested.
 
 > **28 November 2026 — Full browser run:** 1,718 passed, 5 failed, 5 skipped. Corrected Win11 Start alignment against original source and stale XP battery/Action Center contracts; focused verification requested.
