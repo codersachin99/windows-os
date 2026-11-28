@@ -1,3 +1,9 @@
+## 28 November 2026 — Guest window placement persistence
+
+Prior keyboard/vertical snap CI 46168643808 still in progress at latest check; do not duplicate it. Frozen d493ad97 modules 3eac/e4c9 use base instance ID, shared explorer key for computer/bin/games, eligibility id/nonparent/no explicit location/draggable/not fullscreen, save normal/restore bounds and maximized flag on dragstop/resizestop/maximized change; fixed-size placement saves coordinates only. Ported shared placement helpers and validated storage parsing, optional placement map in engine, save action on completed ordinary move/resize and maximize/restore, apply on app opening, Guest localStorage via App effect. Preserves in-session placement across logoff/restart and reload; source snap-only arrangements do not themselves save. Current app registry is top-level only and supports centered/location/fullscreen opt-outs; per-app nondraggable and child-dialog metadata not yet modeled. Current placement clamp uses existing engine viewport minus 40px taskbar; theme-specific work-area placement, RTL logical coordinate adaptation and actual touch still need audit. Added five unit cases plus Explorer shared placement/reload browser regression. No new CI while previous run active; next inspect 46168643808 then focused verify new head and repair regressions. Main/releases/source pin unchanged.
+
+---
+
 ## 28 November 2026 — Snap verified; original scoped keyboard and vertical resize-edge snapping
 
 Exact head 9fd7f01 run 46168337538/job 141050826588 SUCCESS: 822 units/170 files, 84 browser cases (1.6m), TypeScript, original inventory/artwork/Contacts checks and production build green. Verifies previous titlebar snapping, drag restore and vertical handle double-click slice.
