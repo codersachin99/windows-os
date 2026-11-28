@@ -1,3 +1,28 @@
+## 28 November 2026 — Exact-head theme-aware window placement green
+
+Focused [CI #46169500807](https://github.com/codersachin99/windows-os/actions/runs/46169500807)
+completed **SUCCESS** at `442a514b59770127df28de6dbe004e9e59b684ba`.
+TypeScript passed; **833 unit tests / 171 files** passed; immutable
+source inventory, byte-identical artwork and Contacts checks passed;
+Vite production build passed; **100 focused desktop/mobile Chromium
+browser tests** passed (2.2 minutes). Original paired screenshot
+capture was intentionally skipped. This verifies the source Guest
+window placement persistence and theme-aware work-area fixes through
+that exact commit, not full source visual parity.
+
+The failed first attempt was TS2322 in new test inference only and was
+repaired in `a811ef2` with strict assertions retained. No other
+failures remained in the exact-head follow-up.
+
+**Next priority:** audit original theme-specific snap and maximize
+preview painting, RTL/window zoom alignment, touch work-area bounds,
+and dynamic viewport/dock reflow. Keep PR #1 draft, original source
+pinned at `26b9f0ce7`, main and releases untouched. Full browser
+suite should be opt-in at an appropriate stable checkpoint rather
+than repeated after each small slice.
+
+---
+
 ## 28 November 2026 — Theme-aware placement CI failure and targeted repair
 
 The first work-area checkpoint `3a6be9c`, focused
