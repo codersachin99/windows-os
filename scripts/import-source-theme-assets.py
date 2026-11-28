@@ -19,6 +19,12 @@ from pathlib import Path
 LEGACY_SHA = "26b9f0ce7a1665dee89a7c81824bec09e2c75776"
 # Git blob SHA from the pinned original repository's recursive tree.
 FILES: dict[str, dict[str, str]] = {
+    "taskbar-popup": {
+        "pin.356eaf87.webp": "60b65c5608cb76650c53ceac52a08da071318cb8",
+        "close.15c502bb.webp": "e1a9ad1ca2072705748533675abad78984264cbf",
+        "pin-onebit.d565a303.svg": "34b026ad8a1395053a0159c8014d838981102b55",
+        "close-onebit.a1490e2c.svg": "e443506cb38041175865aa8137f87f0fd7a0db42",
+    },
     "desktop-defaults": {
         "autumn.41774694.webp": "c26ab7b1be0c6532ab1e7a84a90d713ed9d4f79d",
         "follows.3e030a12.webp": "125a6c75c12dcb47054eada034328c5d11c9aaa7",
