@@ -59,3 +59,28 @@ test("source taskbar context dismisses on Escape and outside pointer",async({pag
   await page.locator("#desktop-icons").click({position:{x:320,y:220}});
   await expect(page.locator("[data-test-taskbar-context]")).toHaveCount(0);
 });
+
+// Frozen taskbar-menu watcher anchors the background popup to the pointer;
+// the separate running-program jump menu remains centered on its button.
+test("source taskbar background context anchors to pointer and preserves divider order",async({page})=>{
+  await logon(page,"win7");
+  const lane=page.locator(".windows-taskbar__running");
+  const bounds=await lane.boundingBox();
+  expect(bounds).not.toBeNull();
+  const viewport=page.viewportSize()!;
+  const x=Math.round(bounds!.x+15),y=Math.round(bounds!.y+5);
+  await page.mouse.click(x,y,{button:"right"});
+  const menu=page.locator('[data-test-taskbar-context="background"]');
+  await expect(menu).toBeVisible();
+  const divider=menu.locator("[data-test-taskbar-context-divider]");
+  await expect(divider).toHaveCount(2);
+  expect(await divider.evaluateAll(nodes=>nodes.map(node=>node.previousElementSibling?.getAttribute("data-test-taskbar-context-action")))).toEqual(["toolbar","show-desktop"]);
+  await expect.poll(async()=>{
+    const box=await menu.boundingBox();
+    if(!box)return Infinity;
+    const left=Math.max(0,Math.min(x+box.width<viewport.width?x:x-box.width,viewport.width-box.width));
+    return Math.max(Math.abs(box.x-left),Math.abs(box.y+box.height-y));
+  }).toBeLessThanOrEqual(2);
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+});
