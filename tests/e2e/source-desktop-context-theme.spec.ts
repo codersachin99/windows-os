@@ -1,4 +1,5 @@
 import {expect,test,type Page} from "@playwright/test";
+import {openTaskbarBackgroundContext} from "./taskbarBackground";
 
 /** Exact source menu palettes pinned to original legacy-win7 at
  * 26b9f0ce7a1665dee89a7c81824bec09e2c75776:
@@ -70,14 +71,7 @@ for(const source of variants){
 
   test(source.theme+" taskbar background popup uses source skin and working Task Manager action",async({page})=>{
     await login(page,source.theme);
-    const taskbar=page.locator(".windows-taskbar");
-    if(source.theme==="win11"){
-      await taskbar.click({button:"right",position:{x:12,y:10}});
-    }else{
-      await page.locator(".windows-taskbar__running").click({
-        button:"right",position:{x:15,y:5}
-      });
-    }
+    await openTaskbarBackgroundContext(page);
     const menu=page.locator('[data-test-taskbar-context="background"]');
     await expect(menu).toBeVisible();
     await expect(menu).toHaveCSS("background-color",source.surface);
