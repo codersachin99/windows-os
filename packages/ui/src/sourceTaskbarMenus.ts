@@ -1,13 +1,13 @@
 /**
- * Original legacy-win7@4e63290 taskbar-base.js (module "2ae5").
+ * Original legacy-win7@26b9f0ce7 taskbar-base.js (module "2ae5").
  * Keep its actual taskbar item and background menu order. Unimplemented
- * Properties/arrangement actions remain disabled rather than faked.
+ * arrangement/toolbar commands are disabled in the frozen source.
  */
 export type SourceTaskbarAction =
   "open"|"pin"|"close"|"toolbar"|"cascade"|"stack"|"side"|
   "show-desktop"|"taskmgr"|"properties";
 export interface SourceTaskbarMenuItem{
-  id:SourceTaskbarAction;label:string;disabled:boolean;
+  id:SourceTaskbarAction;label:string;disabled:boolean;dividerAfter?:boolean;
 }
 export function sourceTaskbarItemMenu(
   pinned:boolean,running:boolean
@@ -20,11 +20,11 @@ export function sourceTaskbarItemMenu(
 }
 export function sourceTaskbarBackgroundMenu():SourceTaskbarMenuItem[]{
   return [
-    {id:"toolbar",label:"Toolbars",disabled:true},
+    {id:"toolbar",label:"Toolbars",disabled:true,dividerAfter:true},
     {id:"cascade",label:"Cascade windows",disabled:true},
     {id:"stack",label:"Show windows stacked",disabled:true},
     {id:"side",label:"Show windows side by side",disabled:true},
-    {id:"show-desktop",label:"Show desktop",disabled:false},
+    {id:"show-desktop",label:"Show desktop",disabled:false,dividerAfter:true},
     {id:"taskmgr",label:"Start Task Manager",disabled:false},
     {id:"properties",label:"Properties",disabled:false}
   ];
