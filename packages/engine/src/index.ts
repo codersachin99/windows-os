@@ -1,3 +1,5 @@
+import {sourceWindowPlacementKey,sourceRemembersPlacement,sourceReadWindowPlacements,sourceCaptureWindowPlacement,sourceApplyWindowPlacement} from "./sourceWindowPlacement";
+export {SOURCE_WINDOW_PLACEMENTS_KEY} from "./sourceWindowPlacement";
 import {sourceIsKnownTheme} from "@windows-os/contracts";
 import type { AppDefinition, DesktopAction, DesktopState } from "@windows-os/contracts";
 import {sourceShellWallpaper,sourceIsSystemWallpaper} from "@windows-os/assets";
@@ -63,6 +65,7 @@ export function initialDesktopState(config?:{skipBoot?:boolean}): DesktopState {
     theme,
     session: null,
     windows: [],
+    windowPlacements:sourceReadWindowPlacements(typeof globalThis.window==="undefined"?undefined:globalThis.window.localStorage),
     nextWindowId: 1,
     topZ: 10,
     startOpen: false,
@@ -132,19 +135,24 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
         ?{...win,minimized:false,z:state.topZ+1}:win)};
   }
   const ordinal = state.nextWindowId;
+  const viewport={width:typeof globalThis.window==="undefined"?960:globalThis.window.innerWidth,
+    height:typeof globalThis.window==="undefined"?700:globalThis.window.innerHeight};
+  const defaults=sourceWindowPlacement(app.window,ordinal,viewport);
+  const remembersPlacement=sourceRemembersPlacement(app);
+  const saved=remembersPlacement?state.windowPlacements?.[sourceWindowPlacementKey(app.id)]:undefined;
+  const placement=saved?sourceApplyWindowPlacement(saved,app.window,app.window.resizable!==false,
+    {width:Math.max(1,viewport.width),height:Math.max(1,viewport.height-40)}):{...defaults,maximized:false};
   const window = {
     id: `${app.id}-${ordinal}`,
     appId: app.id,
     file,
     title: app.label,
     icon: app.icon,
-    ...sourceWindowPlacement(app.window, ordinal, {
-      width: typeof globalThis.window === "undefined" ? 960 : globalThis.window.innerWidth,
-      height: typeof globalThis.window === "undefined" ? 700 : globalThis.window.innerHeight
-    }),
+    ...placement,
     z: state.topZ + 1,
     minimized: false,
-    maximized: app.window.fullscreen===true,
+    maximized: app.window.fullscreen===true||placement.maximized,
+    remembersPlacement,
     resizable: app.window.resizable,
     minimizable: app.window.minimizable,
     titlebarIcon: app.window.titlebarIcon
@@ -158,8 +166,22 @@ function openWindow(state: DesktopState, app: AppDefinition, file?: { path: stri
   };
 }
 
+function savePlacement(state:DesktopState,id:string):DesktopState{
+  const win=state.windows.find(w=>w.id===id);
+  if(!win?.remembersPlacement)return state;
+  const key=sourceWindowPlacementKey(win.appId),next=sourceCaptureWindowPlacement(win);
+  const previous=state.windowPlacements?.[key];
+  if(previous&&previous.x===next.x&&previous.y===next.y&&previous.width===next.width&&previous.height===next.height&&previous.maximized===next.maximized)return state;
+  return {...state,windowPlacements:{...state.windowPlacements,[key]:next}};
+}
 export function desktopReducer(state: DesktopState, action: DesktopAction): DesktopState {
+  const next=reduceDesktop(state,action);
+  return action.type==="TOGGLE_MAXIMIZE"||action.type==="SAVE_WINDOW_PLACEMENT"
+    ?savePlacement(next,action.id):next;
+}
+function reduceDesktop(state: DesktopState, action: DesktopAction): DesktopState {
   switch (action.type) {
+    case "SAVE_WINDOW_PLACEMENT":return state;
     case "BOOT_COMPLETE":
       return state.phase === "boot" ? { ...state, phase: "logon" } : state;
     case "GUEST_LOGIN":
@@ -184,7 +206,7 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
         :state;
     case "RESTART": {
       const restored = initialDesktopState();
-      return { ...restored, theme: state.theme, wallpaper: state.wallpaper };
+      return { ...restored, theme: state.theme, wallpaper: state.wallpaper,windowPlacements:state.windowPlacements };
     }
     case "OPEN_APP":
       return openWindow(state, action.app, action.file);
