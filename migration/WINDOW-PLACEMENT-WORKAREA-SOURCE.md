@@ -58,3 +58,18 @@ offset work-area touch thresholds at zoom 2. The physical-coordinate adapter
 remains unchanged; this is not a complete RTL or responsive dock audit.
 No additional CI marker while Vista focused run 46170565431 is active;
 these new tests are not covered by that earlier run.
+
+## Viewport behavior audit
+
+CI 46170565431 (ba6c841) completed successfully, including the focused
+browser suite and Vista/Win7/XP preview tests. Full acceptance and visual
+comparison were skipped. The later fractional geometry commit was excluded.
+
+The pinned window wrapper's handleMaximizedChange emits full/full on
+maximize, while arrange() calculates numeric half/vertical bounds once.
+Its watch block has no viewport-resize watcher for snapped windows.
+Do not invent automatic half-screen reflow as a source requirement without
+checking the underlying drag-resize module. Add a live viewport regression
+for existing maximized CSS insets and restoration of normal geometry.
+Request focused CI for this test and the fractional geometry tests.
+Next audit drag-resize container observers and responsive preview geometry.

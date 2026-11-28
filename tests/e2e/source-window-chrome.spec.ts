@@ -286,3 +286,18 @@ for(const theme of ["winvista","win7","winxp"] as const){
     await expect(win).toHaveAttribute("data-source-window-snapped","left");
   });
 }
+
+test("source maximized frame tracks viewport changes and restores normal geometry",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const original=(await win.boundingBox())!;
+  await win.getByRole("button",{name:"Maximize Computer"}).click();
+  await expect(win).toHaveClass(/is-maximized/);
+  for(const size of [{width:1001,height:751},{width:1440,height:960},{width:1280,height:900}]){
+    await page.setViewportSize(size);
+    await expect.poll(()=>win.boundingBox()).toEqual({x:0,y:0,width:size.width,height:size.height-40});
+  }
+  await win.getByRole("button",{name:"Maximize Computer"}).click();
+  await expect(win).not.toHaveClass(/is-maximized/);
+  expect(await win.boundingBox()).toEqual(original);
+});
