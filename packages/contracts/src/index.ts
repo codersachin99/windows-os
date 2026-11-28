@@ -81,6 +81,7 @@ export type DesktopAction =
   | { type: "CLEAR_WINDOW_LIMIT_ERROR" }
   | { type: "FOCUS_WINDOW"; id: string }
   | { type: "MOVE_WINDOW"; id: string; x: number; y: number }
+  | { type: "RESIZE_WINDOW"; id: string; x: number; y: number; width: number; height: number }
   | { type: "MINIMIZE_WINDOW"; id: string }
   | { type: "TOGGLE_MAXIMIZE"; id: string }
   /** Source 245c fullscreen=true for Advanced, despite resizable=false. */
