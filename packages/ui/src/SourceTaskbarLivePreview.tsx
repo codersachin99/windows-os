@@ -75,6 +75,9 @@ export function SourceTaskbarPreviewCard({
     clone.classList.add("is-preview-clone");
     clone.classList.remove("is-maximized");
     clone.setAttribute("aria-hidden","true");
+    // Pointer-events alone does not remove copied inputs/buttons from the
+    // sequential tab order. The snapshot is visual only, never a second app.
+    clone.inert=true;
     clone.style.cssText=[
       "position:absolute","inset:0 auto auto 0",
       "transform:none","margin:0","opacity:1","visibility:visible",
@@ -117,7 +120,7 @@ export function SourceTaskbarPreviewCard({
         }
       }}>
       <div ref={host} className="windows-taskbar__preview-clone-host"
-        aria-hidden="true"/>
+        aria-hidden="true" inert={true}/>
     </div>
   </article>;
 }
