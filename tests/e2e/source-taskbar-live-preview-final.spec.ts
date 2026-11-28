@@ -44,6 +44,14 @@ test("final source taskbar hover shows safe scaled thumbnails, peeks and switche
   const cards=preview.locator('[data-test-taskbar-preview-window]');
   await expect(cards).toHaveCount(2);
   await expect(preview.locator(".is-preview-clone")).toHaveCount(2);
+  await expect(preview.locator(".is-preview-clone[inert]")).toHaveCount(2);
+  const cloneControls=preview.locator(".is-preview-clone button");
+  expect(await cloneControls.count()).toBeGreaterThan(0);
+  // A visual clone must not receive focus, even via a direct focus attempt.
+  expect(await cloneControls.first().evaluate(node=>{
+    (node as HTMLButtonElement).focus();
+    return document.activeElement===node;
+  })).toBe(false);
   const target=await cards.first().getAttribute("data-test-taskbar-preview-window");
   expect(target).not.toBeNull();
   // DOM clones must never duplicate running Guest window selectors or
@@ -93,4 +101,36 @@ test("singleton running label retains unsaved window title; grouped label is pro
   await win.getByRole("button",{name:/^Close /}).click();
   const prompt=win.getByRole("alertdialog",{name:"Save changes"});
   await prompt.getByRole("button",{name:"No"}).click();
+});
+
+// Right-clicking a running pin cancels both already-visible and scheduled
+// thumbnail popups, so the real program menu owns keyboard focus.
+test("source taskbar context takes precedence over a running pin preview",async({page})=>{
+  await guest(page);
+  if(await page.evaluate(()=>matchMedia("(hover: none)").matches))return;
+  const desktop=page.locator('[data-test-desktop-icon="computer"]');
+  await desktop.click({button:"right"});
+  await page.locator('[data-test-desktop-item-action="pin"]').click();
+  const pin=page.locator('[data-test-taskbar-pin="computer"]');
+  await pin.click();
+  await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
+  await page.mouse.move(200,100);
+  await pin.hover();
+  const preview=page.locator('[data-test-taskbar-preview-group="computer"]');
+  await expect(preview).toBeVisible({timeout:3500});
+  await pin.click({button:"right"});
+  const menu=page.locator('[data-test-taskbar-context="item"]');
+  await expect(menu).toBeVisible();
+  await expect(preview).toHaveCount(0);
+  await expect(menu.locator('[data-test-taskbar-context-action="pin"]')).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await page.mouse.move(200,100);
+  await pin.click({button:"right"});
+  await expect(menu).toBeVisible();
+  // Wait past the source 200ms show delay to catch an uncancelled timer.
+  await page.waitForTimeout(250);
+  await expect(preview).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await expect(pin).toBeFocused();
 });
