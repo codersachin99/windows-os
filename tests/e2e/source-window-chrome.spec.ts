@@ -203,3 +203,29 @@ test("source middle resize handle drag previews and commits vertical snap",async
   await handle.dblclick();
   expect(await win.boundingBox()).toEqual(original);
 });
+
+test("source Explorer shared placement survives reopening and Guest reload",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const handle=win.locator('[data-test-window-resize="se"]');
+  const box=(await handle.boundingBox())!;
+  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+  await page.mouse.down();
+  await page.mouse.move(box.x+box.width/2+35,box.y+box.height/2+25,{steps:5});
+  await page.mouse.up();
+  const resized=(await win.boundingBox())!;
+  await expect.poll(()=>page.evaluate(()=>{
+    const data=JSON.parse(localStorage.getItem("windows-os:guest:window-placements:v1")??"{}");
+    return data.explorer;
+  })).toEqual({x:resized.x,y:resized.y,width:resized.width,height:resized.height,maximized:false});
+  await win.getByRole("button",{name:"Close Computer"}).click();
+  await page.locator('[data-test-desktop-icon="bin"]').dblclick();
+  const bin=page.locator('[data-test-window="bin"]');
+  await expect(bin).toBeVisible();
+  expect(await bin.boundingBox()).toEqual(resized);
+  await page.reload();
+  await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+  await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+  await expect(win).toBeVisible();
+  expect(await win.boundingBox()).toEqual(resized);
+});
