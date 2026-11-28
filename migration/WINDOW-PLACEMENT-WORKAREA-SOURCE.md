@@ -85,3 +85,13 @@ fixed as in source. Add live resize-during-drag browser regression.
 Underlying drag-resize registration has not yet been located in the
 inspected chunks; no automatic reflow of already snapped windows is added.
 Focused CI requested; original paired screenshots remain outstanding.
+
+## Shell-relative pointer coordinates
+
+Use measured shell client origin/scale for drag and resize sessions instead
+of deriving scale from integer-rounded window offsets. This preserves
+fractional snapped geometry and avoids window-dependent zoom rounding.
+Unit regression covers a translated 1.5x shell. Physical x coordinates
+remain intentional for the React adapter; full original RTL/zoom behavior
+requires browser verification. CI 46171813726 was still running when this
+slice was started; no duplicate focused CI requested in this commit.

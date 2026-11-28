@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest";
-import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,sourceKeyboardSnap,sourceVerticalResizeSnap} from "./sourceWindowSnap";
+import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,sourceKeyboardSnap,sourceVerticalResizeSnap,sourceShellPointerSpace} from "./sourceWindowSnap";
 describe("frozen window snapping",()=>{
   const area={x:0,y:0,width:1280,height:860},origin={x:100,y:80,width:600,height:400};
   it("detects mouse edges and prioritizes top",()=>{
@@ -59,5 +59,13 @@ describe("source fractional half-screen geometry",()=>{
     expect(sourceDragSnap(500,56,area,true,2)).toBe("maximize");
     expect(sourceVerticalResizeSnap("s",709,area,true,2)).toBe(true);
     expect(sourceVerticalResizeSnap("s",708,area,true,2)).toBe(false);
+  });
+});
+
+describe("shell pointer coordinate space",()=>{
+  it("uses the shell origin and scale independently of fractional window geometry",()=>{
+    const shell={getBoundingClientRect:()=>({left:20,top:40,width:1500,height:900}),
+      offsetWidth:1000,offsetHeight:600,clientLeft:0,clientTop:0} as unknown as HTMLElement;
+    expect(sourceShellPointerSpace(shell)).toEqual({left:20,top:40,scaleX:1.5,scaleY:1.5});
   });
 });

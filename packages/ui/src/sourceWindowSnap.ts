@@ -43,3 +43,13 @@ export function sourceWindowWorkArea(shell:HTMLElement,theme:string):SourceResiz
   const bottom=theme==="macos"?(parseFloat(styles.getPropertyValue("--source-macos-dock-reserve"))||74):theme==="ubuntu"?0:taskbar;
   return {x:left,y:top,width:Math.max(1,shell.clientWidth-left),height:Math.max(1,shell.clientHeight-top-bottom)};
 }
+
+/** Convert the physical client pointer to the shell's local CSS coordinates.
+ * Measure the shell rather than the window: offsetWidth/offsetLeft round
+ * fractional snap geometry, and window-local transforms can distort scale. */
+export function sourceShellPointerSpace(shell:HTMLElement){
+  const rect=shell.getBoundingClientRect();
+  return {left:rect.left+shell.clientLeft*(rect.width/shell.offsetWidth||1),
+    top:rect.top+shell.clientTop*(rect.height/shell.offsetHeight||1),
+    scaleX:rect.width/shell.offsetWidth||1,scaleY:rect.height/shell.offsetHeight||1};
+}

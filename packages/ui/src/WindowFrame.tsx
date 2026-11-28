@@ -2,7 +2,7 @@ import { useRef, useState, type CSSProperties, type Dispatch, type PointerEvent 
 import type { DesktopAction, DesktopWindow, ThemeId,SourceWindowSnap } from "@windows-os/contracts";
 import {sourceResizeBounds,SOURCE_WINDOW_RESIZE_EDGES,type SourceResizeEdge,type SourceResizeBounds} from "./sourceWindowResize";
 import "./sourceWindowResize.css";
-import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,sourceVerticalResizeSnap,sourceWindowWorkArea,type SourceDragSnap} from "./sourceWindowSnap";
+import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,sourceVerticalResizeSnap,sourceWindowWorkArea,sourceShellPointerSpace,type SourceDragSnap} from "./sourceWindowSnap";
 import "./sourceWindowSnap.css";
 import { SourceWindowControlGlyph } from "./SourceWindowControlGlyph";
 
@@ -49,12 +49,11 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
       : { left: win.x, top: win.y, width: win.width, height: win.height, zIndex: win.z };
 
   const pointerDown=(event:ReactPointerEvent<HTMLDivElement>)=>{
-    const node=frame.current,area=workArea();
-    if(!node||!area||event.button!==0||drag.current||(event.target as HTMLElement).closest("button"))return;
+    const node=frame.current,area=workArea(),shell=node?.closest<HTMLElement>(".windows-desktop");
+    if(!node||!area||!shell||event.button!==0||drag.current||(event.target as HTMLElement).closest("button"))return;
     const rect=node.getBoundingClientRect();
-    const scaleX=rect.width/node.offsetWidth||1,scaleY=rect.height/node.offsetHeight||1;
-    const origin={x:node.offsetLeft,y:node.offsetTop,width:node.offsetWidth,height:node.offsetHeight};
-    const shellLeft=rect.left-origin.x*scaleX,shellTop=rect.top-origin.y*scaleY;
+    const {left:shellLeft,top:shellTop,scaleX,scaleY}=sourceShellPointerSpace(shell);
+    const origin={x:(rect.left-shellLeft)/scaleX,y:(rect.top-shellTop)/scaleY,width:rect.width/scaleX,height:rect.height/scaleY};
     drag.current={pointerId:event.pointerId,startX:(event.clientX-shellLeft)/scaleX,startY:(event.clientY-shellTop)/scaleY,
       origin,area,scaleX,scaleY,shellLeft,shellTop,touch:event.pointerType==="touch",
       restore:win.maximized||win.snapped?win.restoreBounds??{x:win.x,y:win.y,width:win.width,height:win.height}:null,mode:null,moved:false};
@@ -104,12 +103,12 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(!node||event.button!==0||win.maximized||win.resizable===false||resize.current)return;
     event.preventDefault();event.stopPropagation();
     const rect=node.getBoundingClientRect();
-    const area=workArea();
-    if(!area)return;
-    const origin={x:node.offsetLeft,y:node.offsetTop,width:node.offsetWidth,height:node.offsetHeight};
-    const scaleX=rect.width/node.offsetWidth||1,scaleY=rect.height/node.offsetHeight||1;
+    const area=workArea(),shell=node.closest<HTMLElement>(".windows-desktop");
+    if(!area||!shell)return;
+    const {left:shellLeft,top:shellTop,scaleX,scaleY}=sourceShellPointerSpace(shell);
+    const origin={x:(rect.left-shellLeft)/scaleX,y:(rect.top-shellTop)/scaleY,width:rect.width/scaleX,height:rect.height/scaleY};
     resize.current={edge,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,origin,area,scaleX,scaleY,
-      shellTop:rect.top-origin.y*scaleY,touch:event.pointerType==="touch",vertical:false,last:origin};
+      shellTop,touch:event.pointerType==="touch",vertical:false,last:origin};
     event.currentTarget.setPointerCapture(event.pointerId);
     dispatch({type:"FOCUS_WINDOW",id:win.id});
   };
