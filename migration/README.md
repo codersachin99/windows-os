@@ -1,3 +1,5 @@
+> **28 November 2026 — Keyboard/vertical snap:** previous snapping checkpoint green (822 units, 84 browser cases). Original Alt-arrow/Alt+4 window commands and vertical resize-edge snap implemented; focused verification requested.
+
 > **28 November 2026 — Snap migration:** prior resize checkpoint green (817 units/80 browser cases). Added titlebar snap, drag-to-restore and vertical handle double-click with original preview styling; focused checks requested.
 
 > **28 November 2026 — Window resizing:** previous taskbar checkpoint green (811 units/64 browser tests). Added shared eight-direction window resize with source minimum dimensions and responsive clamping; focused verification requested.
