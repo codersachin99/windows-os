@@ -1,3 +1,5 @@
+> **28 November 2026 — Full browser run:** 1,718 passed, 5 failed, 5 skipped. Corrected Win11 Start alignment against original source and stale XP battery/Action Center contracts; focused verification requested.
+
 > **28 November 2026 — CI execution optimization:** 1,109 browser tests passed, 3 skipped in broad shell batch; complete run cancelled. Standard CI now runs full Playwright suite once, with named diagnostics and a larger timeout budget. Full opt-in rerun requested.
 
 > **28 November 2026 — Focused CI:** all 32 previous browser failures cleared; 328/332 focused tests passed. Corrected equivalent CSS zero serialization in the four remaining sprite tests; full opt-in CI requested.
