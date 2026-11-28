@@ -138,7 +138,8 @@ test("original Control Panel Action Center shows source empty history, not inven
   if(width>500)await expect(side).toBeVisible();
   else await expect(side).toBeHidden();
   for(const name of ["Change Action Center settings","View archived messages"]){
-    const link=side.getByRole("button",{name,includeHidden:true});
+    const link=side.locator("button").filter({hasText:name});
+    await expect(link).toHaveCount(1);
     await expect(link).toBeDisabled();
   }
   await panel.locator("[data-test-cpanel-back]").click();
