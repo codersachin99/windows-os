@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest";
-import {sourceTaskbarBackgroundMenu,sourceTaskbarItemMenu} from "./sourceTaskbarMenus";
+import {sourceTaskbarBackgroundMenu,sourceTaskbarItemMenu,sourceTaskbarCommandArtwork} from "./sourceTaskbarMenus";
 describe("source taskbar-base.js menu order and executable actions",()=>{
   it("pinned closed apps offer Open and Unpin, running apps offer Unpin and Close",()=>{
     expect(sourceTaskbarItemMenu(true,false)).toEqual([
@@ -22,4 +22,15 @@ describe("source taskbar-base.js menu order and executable actions",()=>{
       "show-desktop","taskmgr","properties"
     ]);
   });
+});
+
+it("resolves original base and Onebit command icons without generic substitutions",()=>{
+  for(const theme of ["win7","winxp","win11","oxygen","aeroNoir"]){
+    expect(sourceTaskbarCommandArtwork(theme,"pin")).toBe("/assets/images/pin.356eaf87.webp");
+    expect(sourceTaskbarCommandArtwork(theme,"close")).toBe("/assets/images/close.15c502bb.webp");
+  }
+  expect(sourceTaskbarCommandArtwork("onebit","pin")).toBe("/assets/images/pin-onebit.d565a303.svg");
+  expect(sourceTaskbarCommandArtwork("onebit","close")).toBe("/assets/images/close-onebit.a1490e2c.svg");
+  expect(sourceTaskbarCommandArtwork("win7","open")).toBeUndefined();
+  expect(sourceTaskbarCommandArtwork("win7","properties")).toBeUndefined();
 });
