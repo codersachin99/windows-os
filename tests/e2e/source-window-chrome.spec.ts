@@ -112,3 +112,51 @@ test("source eight-direction window resizing preserves opposite edges and restor
   await expect(handles).toHaveCount(8);
   expect(await win.boundingBox()).toEqual(reduced);
 });
+
+test("source titlebar drag snaps left and right, restores and maximizes",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const original=(await win.boundingBox())!;
+  const preview=page.locator("[data-test-window-snap-preview]");
+  async function dragTo(x:number,y:number,mode:string|null){
+    const title=win.locator(".windows-window__title");
+    const box=(await title.boundingBox())!;
+    await page.mouse.move(box.x+Math.min(80,box.width/2),box.y+box.height/2);
+    await page.mouse.down();
+    await page.mouse.move(x,y,{steps:8});
+    if(mode)await expect(preview).toHaveAttribute("data-test-window-snap-preview",mode);
+    else await expect(preview).toHaveCount(0);
+    await page.mouse.up();
+    await expect(preview).toHaveCount(0);
+  }
+  await dragTo(3,300,"left");
+  await expect(win).toHaveAttribute("data-source-window-snapped","left");
+  expect(await win.boundingBox()).toEqual({x:0,y:0,width:640,height:860});
+  await dragTo(700,300,null);
+  await expect(win).not.toHaveAttribute("data-source-window-snapped",/./);
+  const restored=(await win.boundingBox())!;
+  expect(restored.width).toBe(original.width);
+  expect(restored.height).toBe(original.height);
+  await dragTo(1277,300,"right");
+  await expect(win).toHaveAttribute("data-source-window-snapped","right");
+  expect(await win.boundingBox()).toEqual({x:640,y:0,width:640,height:860});
+  await dragTo(700,3,"maximize");
+  await expect(win).toHaveClass(/is-maximized/);
+  await dragTo(700,300,null);
+  await expect(win).not.toHaveClass(/is-maximized/);
+  const final=(await win.boundingBox())!;
+  expect(final.width).toBe(original.width);
+  expect(final.height).toBe(original.height);
+});
+test("source top resize handle double click toggles vertical stretch",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const original=(await win.boundingBox())!;
+  const handle=win.locator('[data-test-window-resize="n"]');
+  await handle.dblclick();
+  await expect(win).toHaveAttribute("data-source-window-snapped","vertical");
+  expect(await win.boundingBox()).toEqual({x:original.x,y:0,width:original.width,height:860});
+  await handle.dblclick();
+  await expect(win).not.toHaveAttribute("data-source-window-snapped",/./);
+  expect(await win.boundingBox()).toEqual(original);
+});
