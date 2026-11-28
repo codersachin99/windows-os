@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {sourceDesktopShortcut,sourceHotkeyAcceptsTarget} from "./sourceDesktopHotkeys";
+import {sourceDesktopShortcut,sourceHotkeyAcceptsTarget,sourceWindowShortcut} from "./sourceDesktopHotkeys";
 
 const key=(letter:string,options:Partial<{
   altKey:boolean;ctrlKey:boolean;metaKey:boolean;shiftKey:boolean;
@@ -35,4 +35,14 @@ describe("original source main.js we hotkeys and hotkey.js editable filter",()=>
     expect(sourceDesktopShortcut(key("w",{target:content}))).toBeNull();
     expect(sourceDesktopShortcut(key("w",{target:{tagName:"BUTTON"} as unknown as EventTarget}))).toBe("toggle-start");
   });
+});
+
+it("matches scoped source window commands without intercepting editable fields",()=>{
+  expect(sourceWindowShortcut(key("ArrowUp"))).toBe("maximize");
+  expect(sourceWindowShortcut(key("ArrowDown"))).toBe("minimize-or-restore");
+  expect(sourceWindowShortcut(key("ArrowLeft"))).toBe("left");
+  expect(sourceWindowShortcut(key("ArrowRight"))).toBe("right");
+  expect(sourceWindowShortcut(key("4"))).toBe("close");
+  expect(sourceWindowShortcut(key("ArrowLeft",{ctrlKey:true}))).toBeNull();
+  expect(sourceWindowShortcut(key("ArrowLeft",{target:{tagName:"INPUT"} as unknown as EventTarget}))).toBeNull();
 });
