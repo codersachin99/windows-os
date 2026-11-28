@@ -37,6 +37,7 @@ export interface AppDefinition {
 
 export type SourceWindowSnap="left"|"right"|"vertical";
 export interface SourceWindowBounds{x:number;y:number;width:number;height:number}
+export interface SourceWindowPlacement{x:number;y:number;width?:number;height?:number;maximized:boolean}
 
 export interface DesktopWindow {
   id: string;
@@ -53,6 +54,7 @@ export interface DesktopWindow {
   maximized: boolean;
   snapped?:SourceWindowSnap;
   restoreBounds?:SourceWindowBounds;
+  remembersPlacement?:boolean;
   resizable?: boolean;
   minimizable?: boolean;
   titlebarIcon?: boolean;
@@ -65,6 +67,7 @@ export interface DesktopState {
   theme: ThemeId;
   session: { kind: "guest"; label: "Guest" } | null;
   windows: DesktopWindow[];
+  windowPlacements?:Record<string,SourceWindowPlacement>;
   nextWindowId: number;
   topZ: number;
   startOpen: boolean;
@@ -88,6 +91,7 @@ export type DesktopAction =
   | { type: "MOVE_WINDOW"; id: string; x: number; y: number }
   | { type: "RESIZE_WINDOW"; id: string; x: number; y: number; width: number; height: number }
   | { type: "MINIMIZE_WINDOW"; id: string }
+  | { type: "SAVE_WINDOW_PLACEMENT"; id:string }
   | { type: "TOGGLE_MAXIMIZE"; id: string }
   | { type: "ARRANGE_WINDOW"; id:string; mode:SourceWindowSnap|null; bounds:SourceWindowBounds; restoreBounds?:SourceWindowBounds }
   | { type: "RESTORE_WINDOW_FOR_DRAG"; id:string; bounds:SourceWindowBounds }
