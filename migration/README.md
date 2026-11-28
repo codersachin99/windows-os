@@ -1,3 +1,5 @@
+> **28 November 2026 — Focused CI:** all 32 previous browser failures cleared; 328/332 focused tests passed. Corrected equivalent CSS zero serialization in the four remaining sprite tests; full opt-in CI requested.
+
 > **28 November 2026 — CI regression repair:** recovered 807 green units and 1077 passing browser cases, 32 failed. Updated stale source UI contracts and Ubuntu desktop interaction; focused opt-in CI requested.
 
 > **28 November 2026 — Win10 search glyph/catalog/timing:** original Line Awesome artwork, source program catalog and 300ms published query with fresh Enter handling. Consolidated opt-in CI requested; verification pending.
