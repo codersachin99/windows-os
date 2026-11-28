@@ -11,7 +11,9 @@ for(const theme of ["aeroNoir","oxygen"] as const){
     await expect(sprite).toHaveCSS("background-image",/start-button\.b35eae12\.webp/);
     await expect(sprite).toHaveCSS("background-size","100% 300%");
     await expect(button).toHaveCSS("width","56px");
-    await expect(sprite).toHaveCSS("background-position-y","0%");
+    // CSS zero length and zero percentage produce the same first frame.
+    // Chromium serializes the source background-position:0 0 as 0px.
+    await expect(sprite).toHaveCSS("background-position-y",/^0(?:px|%)$/);
     const dimensions=await sprite.evaluate(async el=>{
       const url=getComputedStyle(el).backgroundImage.slice(5,-2);
       const image=new Image();image.src=url;await image.decode();
@@ -22,7 +24,7 @@ for(const theme of ["aeroNoir","oxygen"] as const){
       await button.hover();
       await expect(sprite).toHaveCSS("background-position-y","100%");
       await page.mouse.move(200,100);
-      await expect(sprite).toHaveCSS("background-position-y","0%");
+      await expect(sprite).toHaveCSS("background-position-y",/^0(?:px|%)$/);
     }
     // Keyboard activation works independently of hover.
     await button.press("Enter");
