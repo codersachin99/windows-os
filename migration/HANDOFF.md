@@ -1,3 +1,34 @@
+## 28 November 2026 — Theme-aware placement CI failure and targeted repair
+
+The first work-area checkpoint `3a6be9c`, focused
+[CI #46169411308](https://github.com/codersachin99/windows-os/actions/runs/46169411308),
+**failed at TypeScript**, with TS2322 on lines 43/45 in
+`sourceWindowPlacement.test.ts`: a narrow inferred `theme:"ubuntu"`
+variable was overwritten by general `DesktopState` reducer results.
+The implementation was not type-checked beyond that stop, and no unit,
+build or browser acceptance ran. `a811ef2` fixes only this test typing,
+using separate typed reducer result variables and keeping the original
+assertions strict.
+
+The source work-area implementation in `3a6be9c` spans reducer
+restored/default window positions and ordinary move, using the original
+Win11/ChromeOS 48px bottom, Win95/98/2k 36px bottom, macOS 28px top +
+74px bottom, Ubuntu 32px top + 64px left and normal Win7 40px bottom.
+The same batch added pure regressions and five theme-specific browser
+placement cases to the already focused window-chrome spec. See
+[work-area source trace](WINDOW-PLACEMENT-WORKAREA-SOURCE.md).
+
+This checkpoint intentionally requests **one** new
+`[run-ci] [taskbar-check]` to verify the *exact new head* with TypeScript,
+units, original inventory/artwork/Contacts audits, Vite build, and focused
+desktop/mobile window/taskbar Chromium suites. Do not infer a pass from
+the previous failed SHA. Next: inspect this new run and repair actual
+source/React parity defects; original paired screenshot fidelity and
+touch/RTL/dynamic dock resize still require audit. Preserve original
+`legacy-win7@26b9f0ce7`, draft PR #1, `main` and release state.
+
+---
+
 ## 28 November 2026 — Guest window placement persistence
 
 Prior keyboard/vertical snap CI 46168643808 still in progress at latest check; do not duplicate it. Frozen d493ad97 modules 3eac/e4c9 use base instance ID, shared explorer key for computer/bin/games, eligibility id/nonparent/no explicit location/draggable/not fullscreen, save normal/restore bounds and maximized flag on dragstop/resizestop/maximized change; fixed-size placement saves coordinates only. Ported shared placement helpers and validated storage parsing, optional placement map in engine, save action on completed ordinary move/resize and maximize/restore, apply on app opening, Guest localStorage via App effect. Preserves in-session placement across logoff/restart and reload; source snap-only arrangements do not themselves save. Current app registry is top-level only and supports centered/location/fullscreen opt-outs; per-app nondraggable and child-dialog metadata not yet modeled. Current placement clamp uses existing engine viewport minus 40px taskbar; theme-specific work-area placement, RTL logical coordinate adaptation and actual touch still need audit. Added five unit cases plus Explorer shared placement/reload browser regression. No new CI while previous run active; next inspect 46168643808 then focused verify new head and repair regressions. Main/releases/source pin unchanged.

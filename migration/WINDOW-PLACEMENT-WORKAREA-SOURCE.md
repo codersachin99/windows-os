@@ -30,3 +30,8 @@ source/artwork/Contacts audits, Vite build and focused real desktop/mobile
 window chrome + taskbar browser tests. Do not claim green before run completes.
 Next: inspect this CI and fix any actual failures; audit window arrangement
 against remaining theme variants, RTL, dynamic work-area resizing and touch.
+
+Verification note: CI #46169411308 at 3a6be9c failed TypeScript TS2322
+in a new unit test before any browser execution. The follow-up a811ef2
+corrected the test's inferred state type without weakening assertions.
+An exact new-head focused CI is requested in the handoff checkpoint.
