@@ -1,10 +1,11 @@
 import {Fragment,useEffect,useLayoutEffect,useRef,useState,type Dispatch} from "react";
 import type {DesktopAction,DesktopWindow} from "@windows-os/contracts";
+import {sourceThemeProgramArt} from "@windows-os/assets";
 import {appRegistry} from "@windows-os/sdk";
 import {taskbarPins} from "./sourceTaskbarPins";
 import {sourceMenuArrowFocus} from "./sourceMenuKeyboard";
 import {
-  sourceTaskbarBackgroundMenu,sourceTaskbarItemMenu,type SourceTaskbarAction
+  sourceTaskbarBackgroundMenu,sourceTaskbarItemMenu,sourceTaskbarCommandArtwork,type SourceTaskbarAction
 } from "./sourceTaskbarMenus";
 
 export type SourceTaskbarContext =
@@ -12,6 +13,7 @@ export type SourceTaskbarContext =
   | {kind:"item";id:string;x:number;y:number};
 interface SourceTaskbarMenuProps{
   context:SourceTaskbarContext;
+  theme:string;
   windows:readonly DesktopWindow[];
   pinned:readonly string[];
   dispatch:Dispatch<DesktopAction>;
@@ -51,7 +53,7 @@ export function sourceTaskbarBackgroundPosition(
 }
 
 export function SourceTaskbarMenu({
-  context,windows,pinned,dispatch,onRequestCloseWindow,onClose,returnFocusTarget
+  context,theme,windows,pinned,dispatch,onRequestCloseWindow,onClose,returnFocusTarget
 }:SourceTaskbarMenuProps){
   const ref=useRef<HTMLDivElement>(null);
   const [position,setPosition]=useState({left:0,top:0});
@@ -125,6 +127,7 @@ export function SourceTaskbarMenu({
   };
   return <div ref={ref} className="windows-taskbar__context"
     data-test-taskbar-context={context.kind}
+    data-test-taskbar-popup={context.kind==="item"?"":undefined}
     role="menu" aria-label={context.kind==="item"?"Taskbar program actions":"Taskbar actions"}
     style={{left:position.left,top:position.top}}
     onKeyDown={event=>{
@@ -132,12 +135,16 @@ export function SourceTaskbarMenu({
         event.preventDefault();
       }
     }}>
-    {options.map(item=><Fragment key={item.id}><button type="button"
+    {options.map(item=>{
+      const icon=context.kind==="item"?(item.id==="open"&&app
+        ?sourceThemeProgramArt(theme,app.id)??app.icon
+        :sourceTaskbarCommandArtwork(theme,item.id)):undefined;
+      return <Fragment key={item.id}><button type="button"
       role="menuitem" disabled={item.disabled}
       data-test-taskbar-context-action={item.id}
       title={item.disabled?"Original action not yet migrated":undefined}
-      onClick={()=>act(item.id)}>{item.label}</button>
+      onClick={()=>act(item.id)}>{icon&&<img src={icon} width={16} height={16} alt="" aria-hidden="true"/>}<span>{item.label}</span></button>
       {item.dividerAfter&&<hr role="separator" data-test-taskbar-context-divider={item.id}/>}
-    </Fragment>)}
+    </Fragment>;})}
   </div>;
 }
