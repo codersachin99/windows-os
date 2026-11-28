@@ -1,8 +1,8 @@
 import { useRef, useState, type CSSProperties, type Dispatch, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
-import type { DesktopAction, DesktopWindow, ThemeId } from "@windows-os/contracts";
+import type { DesktopAction, DesktopWindow, ThemeId,SourceWindowSnap } from "@windows-os/contracts";
 import {sourceResizeBounds,SOURCE_WINDOW_RESIZE_EDGES,type SourceResizeEdge,type SourceResizeBounds} from "./sourceWindowResize";
 import "./sourceWindowResize.css";
-import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,type SourceDragSnap} from "./sourceWindowSnap";
+import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,sourceVerticalResizeSnap,sourceWindowWorkArea,type SourceDragSnap} from "./sourceWindowSnap";
 import "./sourceWindowSnap.css";
 import { SourceWindowControlGlyph } from "./SourceWindowControlGlyph";
 
@@ -20,18 +20,13 @@ interface WindowFrameProps {
 
 export function WindowFrame({ window: win, theme, dispatch, children, onRequestClose,active=false,peekTarget=false }: WindowFrameProps) {
   const frame=useRef<HTMLElement>(null);
-  const resize=useRef<{edge:SourceResizeEdge;pointerId:number;startX:number;startY:number;origin:SourceResizeBounds;area:SourceResizeBounds;scaleX:number;scaleY:number}|null>(null);
+  const resize=useRef<{edge:SourceResizeEdge;pointerId:number;startX:number;startY:number;origin:SourceResizeBounds;area:SourceResizeBounds;scaleX:number;scaleY:number;shellTop:number;touch:boolean;vertical:boolean;last:SourceResizeBounds}|null>(null);
   const drag=useRef<{pointerId:number;startX:number;startY:number;origin:SourceResizeBounds;area:SourceResizeBounds;scaleX:number;scaleY:number;shellLeft:number;shellTop:number;touch:boolean;restore:SourceResizeBounds|null;mode:SourceDragSnap|null;moved:boolean}|null>(null);
-  const [snapPreview,setSnapPreview]=useState<{mode:SourceDragSnap;bounds:SourceResizeBounds}|null>(null);
+  const [snapPreview,setSnapPreview]=useState<{mode:SourceDragSnap|SourceWindowSnap;bounds:SourceResizeBounds}|null>(null);
   const workArea=()=>{
     const shell=frame.current?.closest<HTMLElement>(".windows-desktop");
     if(!shell)return null;
-    const styles=getComputedStyle(shell);
-    const taskbar=parseFloat(styles.getPropertyValue("--taskbar-height"))||40;
-    const top=theme==="ubuntu"||theme==="macos"?taskbar:0;
-    const left=theme==="ubuntu"?(parseFloat(styles.getPropertyValue("--source-ubuntu-dock-width"))||64):0;
-    const bottom=theme==="macos"?(parseFloat(styles.getPropertyValue("--source-macos-dock-reserve"))||74):theme==="ubuntu"?0:taskbar;
-    return {x:left,y:top,width:Math.max(1,shell.clientWidth-left),height:Math.max(1,shell.clientHeight-top-bottom)};
+    return sourceWindowWorkArea(shell,theme);
   };
   const style: CSSProperties = win.maximized
     ? { inset: theme==="macos"?"var(--taskbar-height, 28px) 0 var(--source-macos-dock-reserve, 74px) 0":theme==="ubuntu"?"var(--taskbar-height, 32px) 0 0 var(--source-ubuntu-dock-width, 64px)":"0 0 var(--taskbar-height, 40px) 0", zIndex: win.z }
@@ -96,17 +91,12 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(!node||event.button!==0||win.maximized||win.resizable===false||resize.current)return;
     event.preventDefault();event.stopPropagation();
     const rect=node.getBoundingClientRect();
-    const shell=node.closest<HTMLElement>(".windows-desktop");
-    if(!shell)return;
-    const styles=getComputedStyle(shell);
-    const taskbar=parseFloat(styles.getPropertyValue("--taskbar-height"))||40;
-    const top=theme==="ubuntu"||theme==="macos"?taskbar:0;
-    const left=theme==="ubuntu"?(parseFloat(styles.getPropertyValue("--source-ubuntu-dock-width"))||64):0;
-    const bottom=theme==="macos"?(parseFloat(styles.getPropertyValue("--source-macos-dock-reserve"))||74):theme==="ubuntu"?0:taskbar;
-    resize.current={edge,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,
-      origin:{x:node.offsetLeft,y:node.offsetTop,width:node.offsetWidth,height:node.offsetHeight},
-      area:{x:left,y:top,width:Math.max(1,shell.clientWidth-left),height:Math.max(1,shell.clientHeight-top-bottom)},
-      scaleX:rect.width/node.offsetWidth||1,scaleY:rect.height/node.offsetHeight||1};
+    const area=workArea();
+    if(!area)return;
+    const origin={x:node.offsetLeft,y:node.offsetTop,width:node.offsetWidth,height:node.offsetHeight};
+    const scaleX=rect.width/node.offsetWidth||1,scaleY=rect.height/node.offsetHeight||1;
+    resize.current={edge,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,origin,area,scaleX,scaleY,
+      shellTop:rect.top-origin.y*scaleY,touch:event.pointerType==="touch",vertical:false,last:origin};
     event.currentTarget.setPointerCapture(event.pointerId);
     dispatch({type:"FOCUS_WINDOW",id:win.id});
   };
@@ -115,11 +105,19 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(!session||session.pointerId!==event.pointerId)return;
     const bounds=sourceResizeBounds(session.origin,session.edge,
       (event.clientX-session.startX)/session.scaleX,(event.clientY-session.startY)/session.scaleY,session.area);
+    session.last=bounds;
+    const vertical=sourceVerticalResizeSnap(session.edge,(event.clientY-session.shellTop)/session.scaleY,session.area,session.touch,session.scaleY);
+    if(vertical!==session.vertical){
+      session.vertical=vertical;
+      setSnapPreview(vertical?{mode:"vertical",bounds:sourceSnapBounds("vertical",session.area,bounds)}:null);
+    }
     dispatch({type:"RESIZE_WINDOW",id:win.id,...bounds});
   };
-  const resizeEnd=(event:ReactPointerEvent<HTMLDivElement>)=>{
-    if(resize.current?.pointerId!==event.pointerId)return;
-    resize.current=null;
+  const resizeEnd=(event:ReactPointerEvent<HTMLDivElement>,commit:boolean)=>{
+    const session=resize.current;
+    if(!session||session.pointerId!==event.pointerId)return;
+    resize.current=null;setSnapPreview(null);
+    if(commit&&session.vertical)dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:"vertical",bounds:sourceSnapBounds("vertical",session.area,session.last),restoreBounds:session.origin});
     if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
@@ -167,7 +165,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
       {!win.maximized&&win.resizable!==false&&SOURCE_WINDOW_RESIZE_EDGES.map(edge=><div key={edge}
         className={"source-window-resize source-window-resize--"+edge} data-test-window-resize={edge} aria-hidden="true"
         onPointerDown={event=>resizeDown(edge,event)} onPointerMove={resizeMove}
-        onPointerUp={resizeEnd} onPointerCancel={resizeEnd} onLostPointerCapture={resizeEnd}
+        onPointerUp={event=>resizeEnd(event,true)} onPointerCancel={event=>resizeEnd(event,false)} onLostPointerCapture={event=>resizeEnd(event,false)}
         onDoubleClick={edge==="n"||edge==="s"?verticalSnap:undefined}/>)}
     </section>
   </>);
