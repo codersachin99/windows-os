@@ -1,3 +1,11 @@
+## 28 November 2026 — Snap verified; original scoped keyboard and vertical resize-edge snapping
+
+Exact head 9fd7f01 run 46168337538/job 141050826588 SUCCESS: 822 units/170 files, 84 browser cases (1.6m), TypeScript, original inventory/artwork/Contacts checks and production build green. Verifies previous titlebar snapping, drag restore and vertical handle double-click slice.
+
+Frozen dcfced3e registers Alt+Up (maximize, not toggle), Alt+Down (restore maximized else minimize), Alt+Left/Right (f() cycle: repeat current side switches to opposite, opposite command restores original), Alt+4 close. Implemented shared shortcut parser with existing editable target filter; central DesktopShell routes to front visible window, preserves fixed-size guards and real close handlers; suppresses while Start/taskbar context owns interaction, preserves existing Alt+F4. Original v() top-middle/bottom-middle resize-edge snap only: preview on entry within 8px mouse / 48px touch adjusted for scale, commit vertical full-height bounds preserving pre-resize geometry, cancel clears preview. Shared work-area calculation extracted. Three new unit tests and two browser scenarios added, unverified until new focused CI. Active visible window scoping (rather than source hotkey scope object), existing editable filtering, and dock-aware area are React adaptations; actual touch interaction and modal/dialog keyboard scope parity remain pending. Persistent application placement and source preview paint for remaining themes are next. Main, frozen reference and releases unchanged. Request focused [run-ci] [taskbar-check] on new head.
+
+---
+
 ## 28 November 2026 — Resize verified; original window snap and drag-to-restore
 
 Exact head 67437d1 run 46167937220/job 141049566006 succeeded: 817 units/169 files, 80 focused browser tests (1.8m), TypeScript, source inventory/artwork/Contacts checks and Vite build. This verifies previous resize slice.
