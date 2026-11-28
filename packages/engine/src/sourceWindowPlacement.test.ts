@@ -39,12 +39,11 @@ describe("frozen Guest placement registry e4c9",()=>{
       .toEqual({x:0,y:28,width:960,height:648,maximized:false});
   });
   it("clamps ordinary window moves to the active themed workspace",()=>{
-    let state={...desktopReducer(initialDesktopState(),{type:"GUEST_LOGIN"}),theme:"ubuntu" as const};
-    state=desktopReducer(state,{type:"OPEN_APP",app:appRegistry.get("computer")!});
-    const id=state.windows[0].id;
-    state=desktopReducer(state,{type:"MOVE_WINDOW",id,x:0,y:0});
-    expect(state.windows[0].x).toBe(64);
-    expect(state.windows[0].y).toBe(32);
+    const initial={...desktopReducer(initialDesktopState(),{type:"GUEST_LOGIN"}),theme:"ubuntu" as const};
+    const opened=desktopReducer(initial,{type:"OPEN_APP",app:appRegistry.get("computer")!});
+    const moved=desktopReducer(opened,{type:"MOVE_WINDOW",id:opened.windows[0].id,x:0,y:0});
+    expect(moved.windows[0].x).toBe(64);
+    expect(moved.windows[0].y).toBe(32);
   });
   it("stores completed resize and shares saved geometry on reopen",()=>{
     let state=desktopReducer(initialDesktopState(),{type:"GUEST_LOGIN"});
