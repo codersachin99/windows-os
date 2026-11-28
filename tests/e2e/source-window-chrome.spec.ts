@@ -79,3 +79,36 @@ test("source focused window chrome follows actual nonminimized z-order",async({p
   await page.getByRole("button",{name:"Switch to Computer"}).click();
   await expect(computer).toHaveAttribute("data-source-window-active","true");
 });
+
+test("source eight-direction window resizing preserves opposite edges and restore bounds",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const handles=win.locator("[data-test-window-resize]");
+  await expect(handles).toHaveCount(8);
+  const original=(await win.boundingBox())!;
+  async function resize(edge:string,dx:number,dy:number){
+    const handle=win.locator('[data-test-window-resize="'+edge+'"]');
+    const box=(await handle.boundingBox())!;
+    await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+    await page.mouse.down();
+    await page.mouse.move(box.x+box.width/2+dx,box.y+box.height/2+dy,{steps:5});
+    await page.mouse.up();
+  }
+  await resize("se",40,30);
+  const expanded=(await win.boundingBox())!;
+  expect(Math.abs(expanded.width-original.width-40)).toBeLessThanOrEqual(2);
+  expect(Math.abs(expanded.height-original.height-30)).toBeLessThanOrEqual(2);
+  expect(expanded.x).toBe(original.x);
+  expect(expanded.y).toBe(original.y);
+  await resize("nw",20,15);
+  const reduced=(await win.boundingBox())!;
+  expect(Math.abs(reduced.x-expanded.x-20)).toBeLessThanOrEqual(2);
+  expect(Math.abs(reduced.y-expanded.y-15)).toBeLessThanOrEqual(2);
+  expect(Math.abs(reduced.x+reduced.width-expanded.x-expanded.width)).toBeLessThanOrEqual(2);
+  expect(Math.abs(reduced.y+reduced.height-expanded.y-expanded.height)).toBeLessThanOrEqual(2);
+  await win.getByRole("button",{name:"Maximize Computer"}).click();
+  await expect(handles).toHaveCount(0);
+  await win.getByRole("button",{name:"Maximize Computer"}).click();
+  await expect(handles).toHaveCount(8);
+  expect(await win.boundingBox()).toEqual(reduced);
+});
