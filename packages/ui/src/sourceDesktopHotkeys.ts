@@ -26,3 +26,17 @@ export function sourceDesktopShortcut(event:SourceHotkeyEvent):SourceDesktopShor
   if(key==="l")return "switch-user";
   return null;
 }
+
+/** Frozen window wrapper dcfced3e scope: alt+up/down/left/right/4. */
+export type SourceWindowShortcut="maximize"|"minimize-or-restore"|"left"|"right"|"close";
+export function sourceWindowShortcut(event:SourceHotkeyEvent):SourceWindowShortcut|null{
+  if(!event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!sourceHotkeyAcceptsTarget(event.target))return null;
+  switch(event.key.toLowerCase()){
+    case "arrowup":return "maximize";
+    case "arrowdown":return "minimize-or-restore";
+    case "arrowleft":return "left";
+    case "arrowright":return "right";
+    case "4":return "close";
+    default:return null;
+  }
+}
