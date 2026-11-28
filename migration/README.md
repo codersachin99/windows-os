@@ -1,3 +1,5 @@
+> **28 November 2026 — Focused green:** 807 units and 384 browser cases passed; restored source taskbar background context-menu anchoring and dividers. Full CI requested.
+
 > **28 November 2026 — Full browser run:** 1,718 passed, 5 failed, 5 skipped. Corrected Win11 Start alignment against original source and stale XP battery/Action Center contracts; focused verification requested.
 
 > **28 November 2026 — CI execution optimization:** 1,109 browser tests passed, 3 skipped in broad shell batch; complete run cancelled. Standard CI now runs full Playwright suite once, with named diagnostics and a larger timeout budget. Full opt-in rerun requested.
