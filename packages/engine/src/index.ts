@@ -218,7 +218,19 @@ export function desktopReducer(state: DesktopState, action: DesktopAction): Desk
           action.width<=0||action.height<=0||action.x<0||action.y<0) return state;
       return {...state,windows:state.windows.map(win=>win.id===action.id &&
         win.resizable!==false&&!win.maximized&&!win.minimized
-        ? {...win,x:action.x,y:action.y,width:action.width,height:action.height}:win)};
+        ? {...win,x:action.x,y:action.y,width:action.width,height:action.height,snapped:undefined,restoreBounds:undefined}:win)};
+    }
+    case "ARRANGE_WINDOW":
+    case "RESTORE_WINDOW_FOR_DRAG": {
+      const bounds=action.bounds;
+      if(![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite)||bounds.width<=0||bounds.height<=0||bounds.x<0||bounds.y<0)return state;
+      return {...state,windows:state.windows.map(win=>{
+        if(win.id!==action.id||win.resizable===false||win.minimized)return win;
+        if(action.type==="RESTORE_WINDOW_FOR_DRAG")return {...win,...bounds,maximized:false,snapped:undefined,restoreBounds:undefined};
+        if(action.mode===null)return {...win,...(win.restoreBounds??bounds),maximized:false,snapped:undefined,restoreBounds:undefined};
+        return {...win,...bounds,maximized:false,snapped:action.mode,
+          restoreBounds:win.restoreBounds??action.restoreBounds??{x:win.x,y:win.y,width:win.width,height:win.height}};
+      })};
     }
     case "MINIMIZE_WINDOW":
       return { ...state, windows: state.windows.map(window => window.id === action.id
