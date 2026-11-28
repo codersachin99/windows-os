@@ -22,6 +22,8 @@ test("final source stacks Computer instances into one running taskbar button",as
   await expect(group).toHaveCount(1);
   await expect(group).toHaveAttribute("data-test-taskbar-group-size","2");
   await expect(group).toHaveClass(/is-stacked/);
+  expect(await group.evaluate(node=>getComputedStyle(node,"::after").width)).toBe("3px");
+  expect(await group.evaluate(node=>getComputedStyle(node,"::after").right)).toBe("-3px");
   await expect(page.locator('[data-test-window="computer"]')).toHaveCount(2);
   await group.click();
   await expect(page.locator('[data-test-window="computer"]')).toHaveCount(0);
@@ -43,6 +45,13 @@ test("final source taskbar hover shows safe scaled thumbnails, peeks and switche
   await expect(preview).toBeVisible({timeout:3500});
   const cards=preview.locator('[data-test-taskbar-preview-window]');
   await expect(cards).toHaveCount(2);
+  await expect(cards.first()).toHaveCSS("width","220px");
+  await expect(cards.first()).toHaveCSS("border-radius","6px");
+  await expect(cards.first()).toHaveCSS("backdrop-filter","blur(12px) saturate(1.8)");
+  await expect(cards.first().locator(".windows-taskbar__preview-titlebar")).toHaveCSS("height","22px");
+  await expect(cards.first().locator(".windows-taskbar__preview-body")).toHaveCSS("height","125px");
+  await expect(cards.first().locator("[data-test-taskbar-preview-close]")).toHaveCSS("width","20px");
+  await expect(preview).toHaveCSS("column-gap","8px");
   await expect(preview.locator(".is-preview-clone")).toHaveCount(2);
   await expect(preview.locator(".is-preview-clone[inert]")).toHaveCount(2);
   const cloneControls=preview.locator(".is-preview-clone button");
