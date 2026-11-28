@@ -73,7 +73,8 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(!session||session.pointerId!==event.pointerId)return;
     drag.current=null;setSnapPreview(null);
     if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
-    if(!commit||!session.moved||!session.mode)return;
+    if(!commit||!session.moved)return;
+    if(!session.mode){dispatch({type:"SAVE_WINDOW_PLACEMENT",id:win.id});return;}
     if(session.mode==="maximize"){
       if(!win.maximized)dispatch({type:"TOGGLE_MAXIMIZE",id:win.id});
     }else{
@@ -118,6 +119,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(!session||session.pointerId!==event.pointerId)return;
     resize.current=null;setSnapPreview(null);
     if(commit&&session.vertical)dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:"vertical",bounds:sourceSnapBounds("vertical",session.area,session.last),restoreBounds:session.origin});
+    else if(commit&&(session.last.x!==session.origin.x||session.last.y!==session.origin.y||session.last.width!==session.origin.width||session.last.height!==session.origin.height))dispatch({type:"SAVE_WINDOW_PLACEMENT",id:win.id});
     if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
