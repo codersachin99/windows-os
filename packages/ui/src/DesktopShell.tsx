@@ -649,6 +649,7 @@ export function DesktopShell({
 
   return (
     <main className="windows-desktop" data-test-main-screen="" data-theme={state.theme}
+      data-source-start-centered={wantsCentered?"true":"false"}
       data-source-win7-tray={win7Tray?"":undefined}
       data-source-vista-tray={vistaTray?"":undefined}
       data-source-xp-tray={xpTray?"":undefined}
