@@ -1,3 +1,9 @@
+## 28 November 2026 — Source taskbar program popup artwork
+
+Previous exact-head f8e7630 run 46137927880 was still running the complete browser acceptance suite at the last check; TypeScript, unit, original-source and build gates passed. Do not cancel or start another run just for this slice. Frozen taskbar-base.js program popup uses base-icon for Open (program icon), Pin/Unpin (pin) and Close window (close); icons.registry.json has base pin/close and Onebit-specific overrides. Imported three missing original assets via base64 Git blob transfer (a29ec3b), verified matching source and target blob SHAs; existing close-onebit also matched. Registered all four in target artwork verification manifest. Added pure sourceTaskbarCommandArtwork, explicit theme prop and program art resolver to popup, original icon/label spacing and semantic decorative artwork, and source data-test-taskbar-popup selector; background menu unaffected. Existing action semantics and keyboard/focus preserved. Added unit assertions for base/Onebit artwork and XP actual browser Open/Pin/Close asset URLs and image decode; tests not executed on new head. Existing theme popup surfaces preserved; exact source typography, per-theme chrome and icon dimensions remain unverified, so no visual acceptance claim. Main/pin/releases unchanged. No [run-ci] tag for this checkpoint while previous full CI runs. Next inspect run 46137927880, then continue source taskbar/window behavior audit and verify accumulated new changes in a deliberate CI run.
+
+---
+
 ## 28 November 2026 — Focused green checkpoint and source taskbar menu placement
 
 Exact head 375f15f run 46132436845/job 140940337878 succeeded: TypeScript, 807 units/168 files, source inventory, byte-identical artwork, Contacts checks, Vite build, and all 384 focused browser tests passed. All five previously failed full-suite cases cleared. Full acceptance still pending exact new head.
