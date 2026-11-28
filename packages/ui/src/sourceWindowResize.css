@@ -1,0 +1,14 @@
+/* Invisible pointer hit regions; no invented visible resize affordances.
+ * The source drag-resize wrapper provides eight physical edge/corner handles. */
+.source-window-resize{position:absolute;z-index:20;touch-action:none;user-select:none}
+.source-window-resize--n,.source-window-resize--s{left:9px;right:9px;height:4px}
+.source-window-resize--w,.source-window-resize--e{top:9px;bottom:9px;width:4px}
+.source-window-resize--n{top:0;cursor:n-resize}
+.source-window-resize--s{bottom:0;cursor:s-resize}
+.source-window-resize--w{left:0;cursor:w-resize}
+.source-window-resize--e{right:0;cursor:e-resize}
+.source-window-resize--nw,.source-window-resize--ne,.source-window-resize--sw,.source-window-resize--se{width:9px;height:9px}
+.source-window-resize--nw{top:0;left:0;cursor:nw-resize}
+.source-window-resize--ne{top:0;right:0;cursor:ne-resize}
+.source-window-resize--sw{bottom:0;left:0;cursor:sw-resize}
+.source-window-resize--se{bottom:0;right:0;cursor:se-resize}
