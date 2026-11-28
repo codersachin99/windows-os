@@ -144,6 +144,23 @@ test("Win11 center setting is transactional, persistent and falls back when grou
   await expect(bar).toHaveAttribute("data-taskbar-centered","false");
   await page.setViewportSize({width:1280,height:800});
   await expect(bar).toHaveAttribute("data-taskbar-centered","true");
+  // 18ee uses the saved preference, not the transient fit calculation.
+  const start=page.locator("[data-test-start-button]");
+  const menu=page.locator("[data-test-start-menu]");
+  await start.click();await expect(menu).toBeVisible();
+  await expect.poll(async()=>{
+    const box=await menu.boundingBox();
+    return box?Math.abs(box.x+box.width/2-page.viewportSize()!.width/2):Infinity;
+  }).toBeLessThanOrEqual(2);
+  await start.click();
+  await page.setViewportSize({width:320,height:640});
+  await expect(bar).toHaveAttribute("data-taskbar-centered","false");
+  await start.click();await expect(menu).toBeVisible();
+  await expect.poll(async()=>{
+    const box=await menu.boundingBox();
+    return box?Math.abs(box.x+box.width/2-page.viewportSize()!.width/2):Infinity;
+  }).toBeLessThanOrEqual(2);
+  await start.click();
 });
 
 test("source Win10 taskbar search opens Start, shares query and launches a registered app",async({page})=>{
