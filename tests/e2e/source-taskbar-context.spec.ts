@@ -1,4 +1,5 @@
 import {expect,test,type Page} from "@playwright/test";
+import {openTaskbarBackgroundContext} from "./taskbarBackground";
 async function logon(page:Page,theme:"win7"|"winxp"|"win11"="win7"){
   await page.goto("/?theme="+theme);
   await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
@@ -29,12 +30,7 @@ test("source pinned app item context can Open/Unpin and running app can Close",a
 });
 test("source taskbar background menu keeps unavailable controls disabled",async({page})=>{
   await logon(page,"win11");
-  // Source Win11 centers its Start and running items; with no running
-  // windows, the running-items lane has zero width. Right-click the actual
-  // empty taskbar background instead.
-  await page.locator(".windows-taskbar").click({
-    button:"right",position:{x:12,y:10}
-  });
+  await openTaskbarBackgroundContext(page);
   let menu=page.locator('[data-test-taskbar-context="background"]');
   await expect(menu.locator("[data-test-taskbar-context-action]")).toHaveText([
     "Toolbars","Cascade windows","Show windows stacked",
@@ -47,12 +43,7 @@ test("source taskbar background menu keeps unavailable controls disabled",async(
   await menu.locator('[data-test-taskbar-context-action="taskmgr"]').click();
   await expect(page.locator('[data-test-window="taskmgr"]')).toBeVisible();
   await expect(menu).toHaveCount(0);
-  // Source Win11 centers its Start and running items; with no running
-  // windows, the running-items lane has zero width. Right-click the actual
-  // empty taskbar background instead.
-  await page.locator(".windows-taskbar").click({
-    button:"right",position:{x:12,y:10}
-  });
+  await openTaskbarBackgroundContext(page);
   menu=page.locator('[data-test-taskbar-context="background"]');
   await menu.locator('[data-test-taskbar-context-action="show-desktop"]').click();
   await expect(page.locator('[data-test-window="taskmgr"]')).not.toBeVisible();
