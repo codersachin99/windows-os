@@ -17,6 +17,7 @@ describe("source taskbar-base.js menu order and executable actions",()=>{
     expect(menu.map(v=>v.id)).toEqual([
       "toolbar","cascade","stack","side","show-desktop","taskmgr","properties"
     ]);
+    expect(menu.filter(v=>v.dividerAfter).map(v=>v.id)).toEqual(["toolbar","show-desktop"]);
     expect(menu.filter(v=>!v.disabled).map(v=>v.id)).toEqual([
       "show-desktop","taskmgr","properties"
     ]);
