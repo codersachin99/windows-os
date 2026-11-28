@@ -29,3 +29,12 @@ export function sourceTaskbarBackgroundMenu():SourceTaskbarMenuItem[]{
     {id:"properties",label:"Properties",disabled:false}
   ];
 }
+
+/** Frozen icons.registry.json: only Onebit overrides the base pin/close art.
+ * Open uses the same themed program art as its launcher. */
+export function sourceTaskbarCommandArtwork(theme:string,action:SourceTaskbarAction):string|undefined{
+  const onebit=theme==="onebit";
+  if(action==="pin")return "/assets/images/"+(onebit?"pin-onebit.d565a303.svg":"pin.356eaf87.webp");
+  if(action==="close")return "/assets/images/"+(onebit?"close-onebit.a1490e2c.svg":"close.15c502bb.webp");
+  return undefined;
+}
