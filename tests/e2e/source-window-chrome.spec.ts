@@ -258,3 +258,31 @@ for(const {theme,avatar,minimumX,minimumY,bottom} of [
     expect(bounds.y+bounds.height).toBeLessThanOrEqual(750-bottom+1);
   });
 }
+
+/** Vista and Win7 use identical source preview paint; XP keeps the outline. */
+for(const theme of ["winvista","win7","winxp"] as const){
+  test(theme+" source snap preview paint follows theme family",async({page})=>{
+    await page.setViewportSize({width:1280,height:900});
+    await page.goto("/?theme="+theme);
+    await page.locator('[data-test-avatar="win7"]').click({timeout:12000});
+    await page.locator('[data-test-desktop-icon="computer"]').dblclick();
+    const win=page.locator('[data-test-window="computer"]');
+    await expect(win).toBeVisible();
+    const title=(await win.locator(".windows-window__title").boundingBox())!;
+    await page.mouse.move(title.x+Math.min(80,title.width/2),title.y+title.height/2);
+    await page.mouse.down();
+    await page.mouse.move(3,300,{steps:8});
+    const preview=page.locator('[data-test-window-snap-preview="left"]');
+    await expect(preview).toBeVisible();
+    if(theme==="winxp"){
+      await expect(preview).toHaveCSS("border-top-color","rgb(255, 255, 255)");
+      await expect(preview).toHaveCSS("background-image","none");
+    }else{
+      await expect(preview).toHaveCSS("border-top-left-radius","6px");
+      await expect(preview).toHaveCSS("background-image",/linear-gradient/);
+    }
+    await page.mouse.up();
+    await expect(preview).toHaveCount(0);
+    await expect(win).toHaveAttribute("data-source-window-snapped","left");
+  });
+}

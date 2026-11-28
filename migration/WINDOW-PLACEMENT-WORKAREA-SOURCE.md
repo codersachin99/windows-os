@@ -35,3 +35,16 @@ Verification note: CI #46169411308 at 3a6be9c failed TypeScript TS2322
 in a new unit test before any browser execution. The follow-up a811ef2
 corrected the test's inferred state type without weakening assertions.
 An exact new-head focused CI is requested in the handoff checkpoint.
+
+## Theme preview paint continuation
+
+The frozen `src/modules/themes/theme-winvista-scss.js` and
+`theme-win7-scss.js` contain identical seven snap-preview rules (rounded
+border, LTR/RTL highlights, optional glass blur/texture and attachment).
+Apply the existing source Aero rules to Vista as well. XP, Win31, Win9x,
+Win7 classic and Whistler have explicit white/black outline rules; the
+existing outline is retained. Other theme families still require auditing
+the shared window stylesheet before claiming exact paint parity.
+Browser regressions exercise actual drag preview for Vista, Win7 and XP.
+Focused CI requested; visual comparison against the running original remains
+unverified. Next audit shared preview defaults and theme effect/RTL mapping.
