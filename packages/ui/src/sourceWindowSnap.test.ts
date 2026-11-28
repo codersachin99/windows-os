@@ -43,3 +43,21 @@ describe("source keyboard and vertical edge arrangement",()=>{
     expect(sourceVerticalResizeSnap("s",837,area,true,2)).toBe(true);
   });
 });
+
+describe("source fractional half-screen geometry",()=>{
+  it("divides odd-width work areas equally without rounding or a seam",()=>{
+    const area={x:64,y:32,width:1001,height:701};
+    const origin={x:100,y:80,width:600,height:400};
+    expect(sourceSnapBounds("left",area,origin)).toEqual({x:64,y:32,width:500.5,height:701});
+    expect(sourceSnapBounds("right",area,origin)).toEqual({x:564.5,y:32,width:500.5,height:701});
+  });
+  it("uses reserved work-area edges for zoomed touch and mouse snapping",()=>{
+    const area={x:64,y:32,width:1001,height:701};
+    expect(sourceDragSnap(88,300,area,true,2)).toBe("left");
+    expect(sourceDragSnap(89,300,area,true,2)).toBeNull();
+    expect(sourceDragSnap(1041,300,area,true,2)).toBe("right");
+    expect(sourceDragSnap(500,56,area,true,2)).toBe("maximize");
+    expect(sourceVerticalResizeSnap("s",709,area,true,2)).toBe(true);
+    expect(sourceVerticalResizeSnap("s",708,area,true,2)).toBe(false);
+  });
+});

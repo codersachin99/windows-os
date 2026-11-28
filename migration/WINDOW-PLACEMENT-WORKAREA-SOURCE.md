@@ -48,3 +48,13 @@ the shared window stylesheet before claiming exact paint parity.
 Browser regressions exercise actual drag preview for Vista, Win7 and XP.
 Focused CI requested; visual comparison against the running original remains
 unverified. Next audit shared preview defaults and theme effect/RTL mapping.
+
+## Fractional snap geometry
+
+Frozen shared window wrapper chunk `dcfced3e`, helper c(), divides the
+work-area width by two without integer rounding. Preserve equal fractional
+halves for odd viewport/dock widths. Add unit coverage for odd widths and
+offset work-area touch thresholds at zoom 2. The physical-coordinate adapter
+remains unchanged; this is not a complete RTL or responsive dock audit.
+No additional CI marker while Vista focused run 46170565431 is active;
+these new tests are not covered by that earlier run.

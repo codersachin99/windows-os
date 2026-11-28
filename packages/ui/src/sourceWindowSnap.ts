@@ -13,8 +13,8 @@ export function sourceDragSnap(x:number,y:number,area:SourceResizeBounds,touch=f
 export function sourceSnapBounds(mode:SourceWindowSnap|"maximize",area:SourceResizeBounds,current:SourceResizeBounds):SourceResizeBounds{
   if(mode==="maximize")return {...area};
   if(mode==="vertical")return {x:current.x,y:area.y,width:current.width,height:area.height};
-  const half=Math.floor(area.width/2);
-  return {x:area.x+(mode==="right"?half:0),y:area.y,width:mode==="left"?half:area.width-half,height:area.height};
+  const half=area.width/2;
+  return {x:area.x+(mode==="right"?half:0),y:area.y,width:half,height:area.height};
 }
 /** Keep the titlebar under the pointer when leaving snapped/maximized state. */
 export function sourceDragRestoreBounds(saved:SourceResizeBounds,current:SourceResizeBounds,area:SourceResizeBounds,x:number,y:number,grabX:number,grabY:number):SourceResizeBounds{
