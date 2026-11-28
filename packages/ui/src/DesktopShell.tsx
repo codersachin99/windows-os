@@ -1006,7 +1006,7 @@ export function DesktopShell({
             dismissLivePreview();
             requestClose(id);
           }}/>}
-      {taskbarContext&&<SourceTaskbarMenu context={taskbarContext}
+      {taskbarContext&&<SourceTaskbarMenu context={taskbarContext} theme={state.theme}
         windows={state.windows} pinned={pinnedPrograms} dispatch={dispatch}
         onRequestCloseWindow={requestClose} onClose={closeTaskbarContext}
         returnFocusTarget={taskbarContextReturnFocus.current}/>}
