@@ -82,7 +82,7 @@ export function WindowFrame({ window: win, theme, dispatch, children, onRequestC
     if(session.mode==="maximize"){
       if(!win.maximized)dispatch({type:"TOGGLE_MAXIMIZE",id:win.id});
     }else{
-      dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:session.mode,bounds:sourceSnapBounds(session.mode,session.area,session.origin)});
+      dispatch({type:"ARRANGE_WINDOW",id:win.id,mode:session.mode,bounds:sourceSnapBounds(session.mode,session.area,session.origin),restoreBounds:session.origin});
     }
   };
   const verticalSnap=()=>{
