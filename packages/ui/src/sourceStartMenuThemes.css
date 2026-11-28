@@ -63,8 +63,8 @@
  * grid (90x80 cells, 32px icons), and an account/power footer.
  * Current Guest program data remains a conservative interim source adapter. */
 .windows-desktop:is([data-theme="win11"],[data-theme="win11dark"]) .windows-startmenu--win11{
-  left:50%;bottom:calc(var(--taskbar-height,40px) + 8px);
-  transform:translateX(-50%);
+  left:auto;right:auto;inset-inline-start:4px;bottom:calc(var(--taskbar-height,40px) + 8px);
+  transform:none;
   display:flex;flex-direction:column;gap:0;
   width:min(620px,calc(100vw - 16px));max-height:calc(100dvh - 65px);
   min-height:0;box-sizing:border-box;overflow:hidden;
@@ -608,3 +608,10 @@ button:not(:disabled):hover{
 .source-win10-search-results button span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .source-win10-search-results button small{display:block;opacity:.7;font-size:12px}
 .source-win10-search-results p{opacity:.7}
+
+/* Frozen startmenu-win11 18ee: right-1 left-1 aligner; center only
+ * when the saved taskbar.centered preference is enabled, even when the
+ * running taskbar groups fall back to left alignment for lack of space. */
+.windows-desktop:is([data-theme="win11"],[data-theme="win11dark"])[data-source-start-centered="true"] .windows-startmenu--win11{
+  inset-inline-start:auto;left:50%;right:auto;transform:translateX(-50%);
+}
