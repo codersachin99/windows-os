@@ -160,3 +160,46 @@ test("source top resize handle double click toggles vertical stretch",async({pag
   await expect(win).not.toHaveAttribute("data-source-window-snapped",/./);
   expect(await win.boundingBox()).toEqual(original);
 });
+
+test("source Alt arrow window commands cycle sides, restore, maximize and minimize",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const original=(await win.boundingBox())!;
+  await page.keyboard.press("Alt+ArrowLeft");
+  await expect(win).toHaveAttribute("data-source-window-snapped","left");
+  expect(await win.boundingBox()).toEqual({x:0,y:0,width:640,height:860});
+  await page.keyboard.press("Alt+ArrowLeft");
+  await expect(win).toHaveAttribute("data-source-window-snapped","right");
+  await page.keyboard.press("Alt+ArrowLeft");
+  await expect(win).not.toHaveAttribute("data-source-window-snapped",/./);
+  expect(await win.boundingBox()).toEqual(original);
+  await page.keyboard.press("Alt+ArrowUp");
+  await expect(win).toHaveClass(/is-maximized/);
+  await page.keyboard.press("Alt+ArrowUp");
+  await expect(win).toHaveClass(/is-maximized/);
+  await page.keyboard.press("Alt+ArrowDown");
+  await expect(win).not.toHaveClass(/is-maximized/);
+  await page.keyboard.press("Alt+ArrowDown");
+  await expect(win).toHaveCount(0);
+  await page.getByRole("button",{name:"Switch to Computer"}).click();
+  await expect(win).toBeVisible();
+  await page.keyboard.press("Alt+4");
+  await expect(win).toHaveCount(0);
+});
+test("source middle resize handle drag previews and commits vertical snap",async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  const win=await guestWindow(page,"win7");
+  const original=(await win.boundingBox())!;
+  const handle=win.locator('[data-test-window-resize="n"]');
+  const box=(await handle.boundingBox())!;
+  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+  await page.mouse.down();
+  await page.mouse.move(box.x+box.width/2,3,{steps:5});
+  await expect(page.locator('[data-test-window-snap-preview="vertical"]')).toBeVisible();
+  await page.mouse.up();
+  await expect(win).toHaveAttribute("data-source-window-snapped","vertical");
+  expect(await win.boundingBox()).toEqual({x:original.x,y:0,width:original.width,height:860});
+  await expect(page.locator("[data-test-window-snap-preview]")).toHaveCount(0);
+  await handle.dblclick();
+  expect(await win.boundingBox()).toEqual(original);
+});
