@@ -1,3 +1,5 @@
+> **28 November 2026 — Window placement:** Guest profile remembers normal window bounds and maximized state, including shared Explorer placement and fixed-size rules. New verification pending; prior focused CI in progress.
+
 > **28 November 2026 — Keyboard/vertical snap:** previous snapping checkpoint green (822 units, 84 browser cases). Original Alt-arrow/Alt+4 window commands and vertical resize-edge snap implemented; focused verification requested.
 
 > **28 November 2026 — Snap migration:** prior resize checkpoint green (817 units/80 browser cases). Added titlebar snap, drag-to-restore and vertical handle double-click with original preview styling; focused checks requested.
