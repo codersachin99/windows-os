@@ -15,12 +15,17 @@ test("source pinned app item context can Open/Unpin and running app can Close",a
   let menu=page.locator('[data-test-taskbar-context="item"]');
   await expect(menu.locator("[data-test-taskbar-context-action]"))
     .toHaveText(["Open","Unpin from taskbar"]);
+  await expect(menu.locator('[data-test-taskbar-context-action="open"] img')).toHaveAttribute("src","/assets/images/computer-winxp.8cbae9da.webp");
+  await expect(menu.locator('[data-test-taskbar-context-action="pin"] img')).toHaveAttribute("src","/assets/images/pin.356eaf87.webp");
+  await expect(menu).toHaveAttribute("data-test-taskbar-popup","");
   await menu.locator('[data-test-taskbar-context-action="open"]').click();
   await expect(page.locator('[data-test-window="computer"]')).toBeVisible();
   await pin.click({button:"right"});
   menu=page.locator('[data-test-taskbar-context="item"]');
   await expect(menu.locator("[data-test-taskbar-context-action]"))
     .toHaveText(["Unpin from taskbar","Close window"]);
+  await expect(menu.locator('[data-test-taskbar-context-action="close"] img')).toHaveAttribute("src","/assets/images/close.15c502bb.webp");
+  await expect.poll(()=>menu.locator("img").evaluateAll(nodes=>nodes.every(node=>(node as HTMLImageElement).complete&&(node as HTMLImageElement).naturalWidth>0))).toBe(true);
   await menu.locator('[data-test-taskbar-context-action="close"]').click();
   await expect(page.locator('[data-test-window="computer"]')).toHaveCount(0);
   await expect(pin).toBeVisible();
