@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest";
-import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds} from "./sourceWindowSnap";
+import {sourceDragSnap,sourceSnapBounds,sourceDragRestoreBounds,sourceKeyboardSnap,sourceVerticalResizeSnap} from "./sourceWindowSnap";
 describe("frozen window snapping",()=>{
   const area={x:0,y:0,width:1280,height:860},origin={x:100,y:80,width:600,height:400};
   it("detects mouse edges and prioritizes top",()=>{
@@ -23,5 +23,23 @@ describe("frozen window snapping",()=>{
   });
   it("clamps restored bounds to a smaller work area",()=>{
     expect(sourceDragRestoreBounds(origin,area,{x:64,y:32,width:256,height:200},0,0,640,10)).toEqual({x:64,y:32,width:256,height:200});
+  });
+});
+
+describe("source keyboard and vertical edge arrangement",()=>{
+  it("cycles repeated directions and restores on the opposite direction",()=>{
+    expect(sourceKeyboardSnap(undefined,"left")).toBe("left");
+    expect(sourceKeyboardSnap("left","left")).toBe("right");
+    expect(sourceKeyboardSnap("right","left")).toBeNull();
+    expect(sourceKeyboardSnap("right","right")).toBe("left");
+    expect(sourceKeyboardSnap("vertical","right")).toBe("right");
+  });
+  it("only triggers vertical snap on the two middle resize handles",()=>{
+    const area={x:0,y:0,width:1280,height:860};
+    expect(sourceVerticalResizeSnap("n",8,area)).toBe(true);
+    expect(sourceVerticalResizeSnap("n",9,area)).toBe(false);
+    expect(sourceVerticalResizeSnap("s",852,area)).toBe(true);
+    expect(sourceVerticalResizeSnap("se",860,area)).toBe(false);
+    expect(sourceVerticalResizeSnap("s",837,area,true,2)).toBe(true);
   });
 });
