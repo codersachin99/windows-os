@@ -1,3 +1,11 @@
+## 28 November 2026 — Taskbar green and eight-direction window resizing
+
+Exact head ab50d2b run 46167570520/job 141048401141 succeeded: 811 units/168 files and 64 focused browser tests (1.4m), TypeScript, source inventory/artwork/Contacts checks and Vite build passed. This verifies popup artwork, preview isolation/conflict handling, source glass dimensions and stacked edge on that checkpoint.
+
+Frozen shared window wrapper dcfced3e passes minWidth 320/minHeight 240 and allowResize to drag-resize eec2253e, which exposes eight handles and mouse/touch support. Added RESIZE_WINDOW action and guarded reducer, shared sourceWindowResize geometry, invisible eight edge/corner hit regions, pointer capture/cancel cleanup, physical opposite-edge preservation, 320x240 minimum bounded by available work area, theme dock/taskbar reservations, scale-aware deltas and real stored window bounds (maximize/restore retains them). No handles for maximized or fixed-size windows. This work-area clamp and hit-region implementation are responsive React adaptations; original snapping, placement persistence and drag-to-restore behavior remain to be audited/migrated. Added six geometry unit cases and desktop/mobile-project pointer regression with 1280x900 viewport; actual touch resize and screenshot parity unverified. Extended taskbar-check to window-chrome/control-glyph suites. Request focused [run-ci] [taskbar-check] to verify new implementation, not full run; main, releases and frozen source unchanged. Next inspect exact-head CI and repair any resize regressions before porting source snapping.
+
+---
+
 ## 28 November 2026 — Full green baseline and original Aero Peek appearance
 
 Exact head f8e7630, run 46137927880/job 140957286967 completed SUCCESS: TypeScript, 810 units/168 files, source inventory, artwork/Contacts checks, production build, full browser acceptance 1725 passed, 5 skipped, zero failures (1730 total, 36.1m). This validates earlier Win11/XP/Action Center corrections and taskbar background placement/dividers, not later artwork/preview changes. Visual capture remains skipped.
